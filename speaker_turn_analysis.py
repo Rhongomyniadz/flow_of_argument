@@ -96,7 +96,6 @@ def main():
     ollama_client = OllamaGeneration()
     min_word_threshold = 30
 
-    # Step 1: Load and group by episode title
     episode_buffer = defaultdict(list)
     episode_speakers = defaultdict(set)
 
@@ -113,8 +112,7 @@ def main():
             except Exception:
                 continue
 
-            # Limit memory: once we have 10 good episodes, break
-            if len(episode_buffer) >= 30:  # check only first 30 unique episodes
+            if len(episode_buffer) >= 30:
                 break
 
     # Filter down to those with 2 speakers and at least 1 long turn
@@ -127,22 +125,9 @@ def main():
 
     selected_episodes = random.sample(filtered, min(10, len(filtered)))
 
-    # Step 2: Filter episodes with exactly 2 unique speakers and interesting long turns
-    filtered = []
-    for ep, turns in episode_buffer.items():
-        if len(episode_speakers[ep]) != 2:
-            continue
-        if any(count_words(t.get("turnText", "")) >= 30 for t in turns):
-            filtered.append((ep, turns))
-
-    selected_episodes = random.sample(filtered, min(10, len(filtered)))
-
-    # Step 3: Sample ~10 such episodes
-    selected_episodes = random.sample(filtered, min(10, len(filtered)))
-
     results = []
 
-    # Step 4: Process each qualifying turn in selected episodes
+    # Process each qualifying turn in selected episodes
     for ep_title, turns in selected_episodes:
         for turn in turns:
             turn_text = turn.get("turnText", "").strip()
