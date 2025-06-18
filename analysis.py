@@ -1,3 +1,4 @@
+import argparse
 import gzip
 import json
 import logging
@@ -93,12 +94,28 @@ def normalize_output(raw_response: str) -> Dict[str, List[str]]:
         cleaned["key_points_assumed"] = parsed["key_points_assumed"]
     return cleaned
 
+def get_input_path(env: str) -> str:
+    if env == "local":
+        return "data/speakerTurnData.jsonl.gz"
+    elif env == "cluster":
+        return "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz"
+    else:
+        raise ValueError(f"Unknown environment: {env}. Choose 'local' or 'cluster'.")
 
 def main():
-    input_path = "data/episodeLevelData.jsonl.gz"
-    output_path = "3_stride2.json"
-    ollama_client = OllamaGeneration()
+    parser = argparse.ArgumentParser(description="Run speaker turn processing with environment option.")
+    parser.add_argument(
+        "--env",
+        type=str,
+        choices=["local", "cluster"],
+        default="local",
+        help="Environment where code is run: 'local' (default) or 'cluster'"
+    )
+    args = parser.parse_args()
+    input_path = get_input_path(args.env)
+    output_path = "results/3_stride2.json"
 
+    ollama_client = OllamaGeneration()
     cleaned_entries = []
     total_count = 0
     success_count = 0
