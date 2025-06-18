@@ -95,36 +95,50 @@ def main():
 
     ollama_client = OllamaGeneration()
     min_word_threshold = 30
-    max_episodes = 10
 
     # Step 1: Load and group by episode title
-    episodes = defaultdict(list)
+    episode_buffer = defaultdict(list)
+    episode_speakers = defaultdict(set)
 
     with gzip.open(input_path, "rt", encoding="utf-8") as infile:
         for line in infile:
             try:
                 record = json.loads(line)
-                episode = record.get("episodeTitle")
-                if episode:
-                    episodes[episode].append(record)
-            except json.JSONDecodeError:
+                ep_title = record.get("episodeTitle")
+                speaker_ids = record.get("speaker", [])
+                if not ep_title:
+                    continue
+                episode_buffer[ep_title].append(record)
+                episode_speakers[ep_title].update(speaker_ids)
+            except Exception:
                 continue
 
+            # Limit memory: once we have 10 good episodes, break
+            if len(episode_buffer) >= 30:  # check only first 30 unique episodes
+                break
+
+    # Filter down to those with 2 speakers and at least 1 long turn
+    filtered = []
+    for ep, turns in episode_buffer.items():
+        if len(episode_speakers[ep]) != 2:
+            continue
+        if any(count_words(t.get("turnText", "")) >= 30 for t in turns):
+            filtered.append((ep, turns))
+
+    selected_episodes = random.sample(filtered, min(10, len(filtered)))
+
     # Step 2: Filter episodes with exactly 2 unique speakers and interesting long turns
-    filtered_episodes = []
-    for ep_title, turns in episodes.items():
-        speakers = set()
-        long_turns = 0
-        for turn in turns:
-            speaker_ids = turn.get("speaker", [])
-            speakers.update(speaker_ids)
-            if count_words(turn.get("turnText", "")) >= min_word_threshold:
-                long_turns += 1
-        if len(speakers) == 2 and long_turns >= 1:
-            filtered_episodes.append((ep_title, turns))
+    filtered = []
+    for ep, turns in episode_buffer.items():
+        if len(episode_speakers[ep]) != 2:
+            continue
+        if any(count_words(t.get("turnText", "")) >= 30 for t in turns):
+            filtered.append((ep, turns))
+
+    selected_episodes = random.sample(filtered, min(10, len(filtered)))
 
     # Step 3: Sample ~10 such episodes
-    selected_episodes = random.sample(filtered_episodes, min(max_episodes, len(filtered_episodes)))
+    selected_episodes = random.sample(filtered, min(10, len(filtered)))
 
     results = []
 
