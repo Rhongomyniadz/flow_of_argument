@@ -1,8 +1,8 @@
 import gzip
 import json
 
-speaker_turn_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz'
-
+cluster_speaker_turn_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz'
+local_speaker_turn_path = 'data/speakerTurnData.jsonl.gz'
 def print_sample(file_path):
     """
     Opens a gzipped JSONL file, reads the first two lines,
@@ -20,6 +20,6 @@ def print_sample(file_path):
         except json.JSONDecodeError as e:
             print(f"Failed to parse JSON line: {e}")
             
-print_sample(speaker_turn_path)
+print_sample(local_speaker_turn_path)
 
 
