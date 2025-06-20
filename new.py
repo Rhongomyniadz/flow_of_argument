@@ -81,7 +81,8 @@ def main():
     )
     args = parser.parse_args()
 
-    sporc = SPORCDataset(streaming=True)
+    d = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=d, streaming=True)
     sporc.load_podcast_subset(categories=args.categories)
 
     episodes = sporc.get_all_episodes()
