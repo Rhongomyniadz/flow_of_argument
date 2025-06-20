@@ -80,79 +80,83 @@ def get_input_path(env: str) -> str:
 def count_words(text: str) -> int:
     return len(re.findall(r'\w+', text))
 
+def load_politics_episodes(env: str) -> set:
+    """Returns the set of episode titles whose category1..10 includes 'politics'."""
+    path = (
+        "data/episodeLevelData.jsonl.gz"
+        if env == "local"
+        else "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/episodeLevelData.jsonl.gz"
+    )
+    logging.info(f"Loading episode metadata from {path}")
+    politics_eps = set()
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        for line in f:
+            rec = json.loads(line)
+            title = rec.get("epTitle") or rec.get("episodeTitle")
+            for i in range(1, 11):
+                cat = rec.get(f"category{i}")
+                if cat and cat.lower() == "politics":
+                    politics_eps.add(title)
+                    break
+    logging.info(f"Found {len(politics_eps)} politics-category episodes")
+    return politics_eps
+
 def main():
-    parser = argparse.ArgumentParser(description="Run speaker turn processing with environment option.")
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--env",
-        type=str,
         choices=["local", "cluster"],
         default="local",
-        help="Environment where code is run: 'local' (default) or 'cluster'"
+        help="Choose 'local' or 'cluster' to pick data paths"
     )
     args = parser.parse_args()
     input_path = get_input_path(args.env)
     output_csv = "results/episode_analysis.csv"
 
-    ollama_client = OllamaGeneration()
-    min_word_threshold = 30
+    politics_eps = load_politics_episodes(args.env)
 
-    episode_buffer = defaultdict(list)
-    episode_speakers = defaultdict(set)
-
+    # 2) read speaker‐turn data and filter to politics episodes
+    input_path = get_input_path(args.env)
+    all_turns = []
     with gzip.open(input_path, "rt", encoding="utf-8") as infile:
         for line in infile:
-            try:
-                record = json.loads(line)
-                ep_title = record.get("episodeTitle")
-                speaker_ids = record.get("speaker", [])
-                if not ep_title:
-                    continue
-                episode_buffer[ep_title].append(record)
-                episode_speakers[ep_title].update(speaker_ids)
-            except Exception:
+            rec = json.loads(line)
+            ep = rec.get("episodeTitle")
+            if ep not in politics_eps:
                 continue
+            if count_words(rec.get("turnText", "")) < 30:
+                continue
+            all_turns.append(rec)
 
-            if len(episode_buffer) >= 30:
-                break
+    if not all_turns:
+        logging.warning("No speaker turns found for politics episodes!")
+        return
 
-    # Filter down to those with 2 speakers and at least 1 long turn
-    filtered = []
-    for ep, turns in episode_buffer.items():
-        if len(episode_speakers[ep]) != 2:
-            continue
-        if any(count_words(t.get("turnText", "")) >= 30 for t in turns):
-            filtered.append((ep, turns))
+    # 3) sample 10 turns
+    sample_size = min(10, len(all_turns))
+    sampled_turns = random.sample(all_turns, sample_size)
+    logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total politics turns")
 
-    selected_episodes = random.sample(filtered, min(10, len(filtered)))
-
+    # 4) process each sampled turn with the model
+    ollama = OllamaGeneration()
     results = []
+    for turn in sampled_turns:
+        text = turn["turnText"].strip()
+        prompt = (
+            "Please analyze the following text and output a JSON object with two keys:\n"
+            "\"key_points_discussed_or_proposed\": [...],\n"
+            "\"key_points_assumed\": [...]\n\n"
+            f"Text:\n\"\"\"{text}\"\"\""
+        )
+        raw = ollama.generate(prompt)
+        cleaned = normalize_output(raw)
+        results.append({
+            "Podcast": turn["episodeTitle"],
+            "Turn Text": text,
+            "Key Points": "; ".join(cleaned.get("key_points_discussed_or_proposed", [])),
+            "Assumptions": "; ".join(cleaned.get("key_points_assumed", [])),
+        })
 
-    # Process each qualifying turn in selected episodes
-    for ep_title, turns in selected_episodes:
-        for turn in turns:
-            turn_text = turn.get("turnText", "").strip()
-            if count_words(turn_text) < min_word_threshold:
-                continue
-
-            prompt = (
-                "Please analyze the following text and output a JSON object with two keys:\n"
-                "\"key_points_discussed_or_proposed\": an array of strings, each string being a main idea, "
-                "argument, or proposal explicitly presented in the text.\n"
-                "\"key_points_assumed\": an array of strings, each string being an underlying assumption or "
-                "implicit premise taken for granted by the text.\n\n"
-                f"Text:\n\"\"\"{turn_text}\"\"\""
-            )
-
-            raw_response = ollama_client.generate(prompt)
-            cleaned = normalize_output(raw_response)
-
-            results.append({
-                "Podcast": ep_title,
-                "Turn Text": turn_text,
-                "Turn Number": turn.get("turnCount", ""),
-                "Key Points": "; ".join(cleaned.get("key_points_discussed_or_proposed", [])),
-                "Assumptions": "; ".join(cleaned.get("key_points_assumed", []))
-            })
 
     # Step 5: Write results to CSV
     with open(output_csv, "w", encoding="utf-8", newline="") as csvfile:
@@ -161,8 +165,7 @@ def main():
         writer.writeheader()
         writer.writerows(results)
 
-    print(f"\n✅ Processed {len(results)} long turns from {len(selected_episodes)} episodes.")
-    print(f"📁 Output saved to: {output_csv}")
+    print(f"Output saved to: {output_csv}")
 
 if __name__ == "__main__":
     main()

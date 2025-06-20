@@ -3,6 +3,9 @@ import json
 
 cluster_speaker_turn_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz'
 local_speaker_turn_path = 'data/speakerTurnData.jsonl.gz'
+cluster_episode_level_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/episodeLevelData.jsonl.gz'
+local_episode_level_path = 'data/episodeLevelData.jsonl.gz'
+
 def print_sample(file_path):
     """
     Opens a gzipped JSONL file, reads the first two lines,
