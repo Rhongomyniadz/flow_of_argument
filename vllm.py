@@ -6,54 +6,33 @@ from sporc import SPORCDataset
 import re
 from typing import List, Optional, Dict
 
+# vllm-based LLM interface (do not modify)
+import pandas as pd
+import numpy as np
 from vllm import LLM, SamplingParams
+import matplotlib.pyplot as plt
+import os
+
+class LLMInterface:
+    def __init__(self, model_name: str = "Qwen/Qwen3-0.6B", temperature: float = 0.1, top_p: float = 0.95, gpu_id: int = 0, gpu_memory_utilization: float = 0.9):
+        self.llm = LLM(
+            model=model_name,
+            tensor_parallel_size=1,
+            gpu_memory_utilization=gpu_memory_utilization,
+            trust_remote_code=True,
+            device=f"cuda:{gpu_id}"
+        )
+        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p)
+    def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        if max_tokens:
+            self.sampling_params.max_tokens = max_tokens
+        outputs = self.llm.generate(prompt, self.sampling_params)
+        return outputs[0].outputs[0].text.strip()
 
 # Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class VLLMGeneration:
-    """Class for generating text using vLLM's Python API."""
-
-    def __init__(self,
-                 model_name: str = "qwen3:1.7b",
-                 tensor_parallel_size: int = 1,
-                 pipeline_parallel_size: int = 1):
-        # Initialize the vLLM backend
-        self.client = LLM(
-            model=model_name,
-            tensor_parallel_size=tensor_parallel_size,
-            pipeline_parallel_size=pipeline_parallel_size
-        )
-
-    def generate(self,
-                 prompt: str,
-                 system_prompt: Optional[str] = None,
-                 temperature: float = 0.1,
-                 max_tokens: int = 20000) -> str:
-        # If you have a separate system prompt, prepend it
-        full_prompt = f"{system_prompt}\n{prompt}" if system_prompt else prompt
-
-        # Set up sampling parameters
-        sampling_params = SamplingParams(
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-
-        # vLLM expects a list of prompts, but we're doing one at a time here
-        try:
-            outputs = self.client.generate(
-                [full_prompt],
-                params=sampling_params
-            )
-            # outputs is a generator of BatchLLMOutput; grab the first
-            for batch_output in outputs:
-                # generated_text includes both prompt + completion;
-                # if you only want the completion, you can subtract len(full_prompt)
-                return batch_output.outputs[0].text[len(full_prompt):].strip()
-        except Exception as e:
-            logger.error(f"Exception during vLLM generate call: {e}")
-        return ""
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
     """
@@ -78,8 +57,10 @@ def normalize_output(raw_response: str) -> Dict[str, List[str]]:
         cleaned["key_points_assumed"] = parsed["key_points_assumed"]
     return cleaned
 
+
 def count_words(text: str) -> int:
     return len(re.findall(r'\w+', text))
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -98,7 +79,6 @@ def main():
     episodes = sporc.get_all_episodes()
     logging.info(f"Loaded {len(episodes)} episodes for categories {args.categories}")
 
-    # Gather all turns from these episodes
     all_turns = []
     for ep in episodes:
         for turn in ep.get_all_turns():
@@ -117,13 +97,13 @@ def main():
         logging.warning("No speaker turns found for specified categories!")
         return
 
-    # Sample up to 10 turns
     sample_size = min(10, len(all_turns))
     sampled = random.sample(all_turns, sample_size)
     logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
-    # Process each sampled turn with the model
-    vllm_gen = VLLMGeneration()
+    # Instantiate the vllm interface
+    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=1)
+
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
@@ -132,7 +112,7 @@ def main():
             "- key_points_assumed\n\n"
             f"Text:\n\"\"\"{text}\"\"\""
         )
-        raw = vllm_gen.generate(prompt)
+        raw = llm.generate_response(prompt)
         cleaned = normalize_output(raw)
         output = {
             "Podcast": rec["episodeTitle"],
