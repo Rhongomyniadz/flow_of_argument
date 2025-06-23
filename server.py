@@ -1,6 +1,6 @@
 import os
+# Redirect Hugging Face cache to shared partition via HF_HOME only
 os.environ['HF_HOME'] = '/shared/3/edenzhang'
-os.environ['TRANSFORMERS_CACHE'] = '/shared/3/edenzhang'
 
 import argparse
 import random
@@ -16,24 +16,22 @@ import torch
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Load Qwen3 model and tokenizer, using shared cache
+# Load Qwen3 model and tokenizer, using shared HF_HOME as cache location
 MODEL_NAME = "Qwen/Qwen3-1.7B"
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_NAME,
-    cache_dir=os.environ['TRANSFORMERS_CACHE']
+    cache_dir=os.environ['HF_HOME']
 )
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
-    cache_dir=os.environ['TRANSFORMERS_CACHE'],
+    cache_dir=os.environ['HF_HOME'],
     torch_dtype=torch.bfloat16,
     device_map="auto"
 )
 
 # Helper to generate using Transformers
 def transformer_generate(prompt: str, max_new_tokens: int = 2048, enable_thinking: bool = True) -> str:
-    # prepare chat template messages
     messages = [{"role": "user", "content": prompt}]
-    # apply chat template (handles <think> blocks)
     text = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -49,7 +47,6 @@ def transformer_generate(prompt: str, max_new_tokens: int = 2048, enable_thinkin
         top_p=0.8,
         top_k=20
     )[0][len(inputs.input_ids[0]):]
-    # decode full output
     gen_text = tokenizer.decode(output_ids, skip_special_tokens=True)
     return gen_text.strip()
 
