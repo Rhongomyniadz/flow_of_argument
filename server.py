@@ -1,3 +1,7 @@
+import os
+os.environ['HF_HOME'] = '/shared/3/edenzhang'
+os.environ['TRANSFORMERS_CACHE'] = '/shared/3/edenzhang'
+
 import argparse
 import random
 import json
@@ -12,11 +16,15 @@ import torch
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Load Qwen3 model and tokenizer
+# Load Qwen3 model and tokenizer, using shared cache
 MODEL_NAME = "Qwen/Qwen3-1.7B"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_NAME,
+    cache_dir=os.environ['TRANSFORMERS_CACHE']
+)
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
+    cache_dir=os.environ['TRANSFORMERS_CACHE'],
     torch_dtype=torch.bfloat16,
     device_map="auto"
 )
@@ -70,7 +78,9 @@ def count_words(text: str) -> int:
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Sample speaker turns via Transformers with Qwen3"
+    )
     parser.add_argument(
         "--categories", "-c",
         nargs='+',
