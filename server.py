@@ -1,5 +1,4 @@
 import os
-# Redirect Hugging Face cache to shared partition via HF_HOME only
 os.environ['HF_HOME'] = '/shared/3/edenzhang'
 
 import argparse
@@ -87,22 +86,14 @@ def main():
     args = parser.parse_args()
 
     # Initialize SPORC in streaming mode
-    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
+    d = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=d, streaming=True)
+    sporc.load_podcast_subset(categories=args.categories)
 
-    # Search episodes by category
-    episodes = []
-    seen = set()
-    for cat in args.categories:
-        logger.info(f"Searching episodes in category: {cat}")
-        found = sporc.search_episodes(category=cat)
-        for ep in found:
-            if ep.title not in seen:
-                episodes.append(ep)
-                seen.add(ep.title)
-    logger.info(f"Collected {len(episodes)} unique episodes for categories {args.categories}")
+    episodes = sporc.get_all_episodes()
+    logger.info(f"Loaded {len(episodes)} episodes for categories {args.categories}")
 
-    # Gather turns
+    # Gather all turns from these episodes
     all_turns = []
     for ep in episodes:
         for turn in ep.get_all_turns():
@@ -121,11 +112,12 @@ def main():
         logger.warning("No speaker turns found for specified categories!")
         return
 
+    # Sample up to 10 turns
     sample_size = min(10, len(all_turns))
     sampled = random.sample(all_turns, sample_size)
     logger.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
-    # Process turns with Transformers
+# Process turns with Transformers
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
