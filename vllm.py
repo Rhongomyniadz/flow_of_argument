@@ -6,43 +6,54 @@ from sporc import SPORCDataset
 import re
 from typing import List, Optional, Dict
 
-import requests
+from vllm import LLM, SamplingParams
 
 # Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class OllamaGeneration:
-    """Class for generating text using Ollama models via the local API."""
+class VLLMGeneration:
+    """Class for generating text using vLLM's Python API."""
 
-    def __init__(self, model_name: str = "qwen3:1.7b", base_url: str = "http://localhost:8889"):
-        self.model_name = model_name
-        self.base_url = base_url.rstrip('/')
+    def __init__(self,
+                 model_name: str = "qwen3:1.7b",
+                 tensor_parallel_size: int = 1,
+                 pipeline_parallel_size: int = 1):
+        # Initialize the vLLM backend
+        self.client = LLM(
+            model=model_name,
+            tensor_parallel_size=tensor_parallel_size,
+            pipeline_parallel_size=pipeline_parallel_size
+        )
 
-    def generate(self, prompt: str, system_prompt: Optional[str] = None,
-                 temperature: float = 0.1, max_tokens: int = 20000) -> str:
-        request_data = {
-            "model": self.model_name,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": temperature,
-                "num_predict": max_tokens
-            }
-        }
-        if system_prompt:
-            request_data["system"] = system_prompt
+    def generate(self,
+                 prompt: str,
+                 system_prompt: Optional[str] = None,
+                 temperature: float = 0.1,
+                 max_tokens: int = 20000) -> str:
+        # If you have a separate system prompt, prepend it
+        full_prompt = f"{system_prompt}\n{prompt}" if system_prompt else prompt
 
+        # Set up sampling parameters
+        sampling_params = SamplingParams(
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+
+        # vLLM expects a list of prompts, but we're doing one at a time here
         try:
-            resp = requests.post(f"{self.base_url}/api/generate", json=request_data, timeout=60)
-            if resp.status_code != 200:
-                logger.error(f"Ollama generation error {resp.status_code}: {resp.text}")
-                return ""
-            result = resp.json()
-            return result.get("response", "").strip()
+            outputs = self.client.generate(
+                [full_prompt],
+                params=sampling_params
+            )
+            # outputs is a generator of BatchLLMOutput; grab the first
+            for batch_output in outputs:
+                # generated_text includes both prompt + completion;
+                # if you only want the completion, you can subtract len(full_prompt)
+                return batch_output.outputs[0].text[len(full_prompt):].strip()
         except Exception as e:
-            logger.error(f"Exception during Ollama generate call: {e}")
-            return ""
+            logger.error(f"Exception during vLLM generate call: {e}")
+        return ""
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
     """
@@ -112,7 +123,7 @@ def main():
     logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
     # Process each sampled turn with the model
-    ollama = OllamaGeneration()
+    vllm_gen = VLLMGeneration()
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
@@ -121,7 +132,7 @@ def main():
             "- key_points_assumed\n\n"
             f"Text:\n\"\"\"{text}\"\"\""
         )
-        raw = ollama.generate(prompt)
+        raw = vllm_gen.generate(prompt)
         cleaned = normalize_output(raw)
         output = {
             "Podcast": rec["episodeTitle"],
