@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 from vllm import LLM, SamplingParams
 import matplotlib.pyplot as plt
 from typing import Optional
@@ -12,9 +10,9 @@ from sporc import SPORCDataset
 import re
 from typing import List, Dict
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
+
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
@@ -112,6 +110,8 @@ def main():
             f"Text:\n\"\"\"{text}\"\"\""
         )
         raw = llm.generate_response(prompt)
+        logging.debug("Raw LLM output for \"%s\" (start %s):\n%s",
+                      rec["episodeTitle"], rec["startTime"], raw)
         cleaned = normalize_output(raw)
         rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
         rec["Assumptions"] = cleaned.get("key_points_assumed", [])
