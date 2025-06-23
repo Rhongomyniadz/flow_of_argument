@@ -4,63 +4,59 @@ import json
 import logging
 from sporc import SPORCDataset
 import re
-from collections import defaultdict
-from typing import List, Optional, Dict
-
-import requests
+from typing import List, Dict
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
 
 # Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class OllamaGeneration:
-    """Class for generating text using Ollama models via the local API."""
+# Load Qwen3 model and tokenizer
+MODEL_NAME = "Qwen/Qwen3-1.7B"
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
+)
 
-    def __init__(self, model_name: str = "qwen3:1.7b", base_url: str = "http://localhost:8889"):
-        self.model_name = model_name
-        self.base_url = base_url.rstrip('/')
+# Helper to generate using Transformers
+def transformer_generate(prompt: str, max_new_tokens: int = 2048, enable_thinking: bool = True) -> str:
+    # prepare chat template messages
+    messages = [{"role": "user", "content": prompt}]
+    # apply chat template (handles <think> blocks)
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=enable_thinking
+    )
+    inputs = tokenizer(text, return_tensors="pt").to(model.device)
+    output_ids = model.generate(
+        **inputs,
+        max_new_tokens=max_new_tokens,
+        do_sample=True,
+        temperature=0.7,
+        top_p=0.8,
+        top_k=20
+    )[0][len(inputs.input_ids[0]):]
+    # decode full output
+    gen_text = tokenizer.decode(output_ids, skip_special_tokens=True)
+    return gen_text.strip()
 
-    def generate(self, prompt: str, system_prompt: Optional[str] = None,
-                 temperature: float = 0.1, max_tokens: int = 20000) -> str:
-        request_data = {
-            "model": self.model_name,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": temperature,
-                "num_predict": max_tokens
-            }
-        }
-        if system_prompt:
-            request_data["system"] = system_prompt
-
-        try:
-            resp = requests.post(f"{self.base_url}/api/generate", json=request_data, timeout=60)
-            if resp.status_code != 200:
-                logger.error(f"Ollama generation error {resp.status_code}: {resp.text}")
-                return ""
-            result = resp.json()
-            return result.get("response", "").strip()
-        except Exception as e:
-            logger.error(f"Exception during Ollama generate call: {e}")
-            return ""
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    """
-    Remove <think> blocks and parse out the two keys (arrays of strings).
-    """
     without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
     json_start = without_think.find('{')
     json_end = without_think.rfind('}')
     if json_start == -1 or json_end == -1 or json_end <= json_start:
         return {}
-
     json_str = without_think[json_start:json_end + 1]
     try:
         parsed = json.loads(json_str)
     except json.JSONDecodeError:
         return {}
-
     cleaned = {}
     if "key_points_discussed_or_proposed" in parsed:
         cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
@@ -68,8 +64,10 @@ def normalize_output(raw_response: str) -> Dict[str, List[str]]:
         cleaned["key_points_assumed"] = parsed["key_points_assumed"]
     return cleaned
 
+
 def count_words(text: str) -> int:
-    return len(re.findall(r'\w+', text))
+    return len(re.findall(r"\w+", text))
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -81,14 +79,23 @@ def main():
     )
     args = parser.parse_args()
 
-    d = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=d, streaming=True)
-    sporc.load_podcast_subset(categories=args.categories)
+    # Initialize SPORC in streaming mode
+    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
 
-    episodes = sporc.get_all_episodes()
-    logging.info(f"Loaded {len(episodes)} episodes for categories {args.categories}")
+    # Search episodes by category
+    episodes = []
+    seen = set()
+    for cat in args.categories:
+        logger.info(f"Searching episodes in category: {cat}")
+        found = sporc.search_episodes(category=cat)
+        for ep in found:
+            if ep.title not in seen:
+                episodes.append(ep)
+                seen.add(ep.title)
+    logger.info(f"Collected {len(episodes)} unique episodes for categories {args.categories}")
 
-    # Gather all turns from these episodes
+    # Gather turns
     all_turns = []
     for ep in episodes:
         for turn in ep.get_all_turns():
@@ -104,16 +111,14 @@ def main():
             all_turns.append(rec)
 
     if not all_turns:
-        logging.warning("No speaker turns found for specified categories!")
+        logger.warning("No speaker turns found for specified categories!")
         return
 
-    # Sample up to 10 turns
     sample_size = min(10, len(all_turns))
     sampled = random.sample(all_turns, sample_size)
-    logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
+    logger.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
-    # Process each sampled turn with the model
-    ollama = OllamaGeneration()
+    # Process turns with Transformers
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
@@ -122,7 +127,7 @@ def main():
             "- key_points_assumed\n\n"
             f"Text:\n\"\"\"{text}\"\"\""
         )
-        raw = ollama.generate(prompt)
+        raw = transformer_generate(prompt)
         cleaned = normalize_output(raw)
         output = {
             "Podcast": rec["episodeTitle"],
