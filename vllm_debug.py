@@ -63,7 +63,7 @@ class LLMInterface:
 def main():
     # Set CUDA device order to avoid warnings
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=1)
+    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=0)
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", "-c",
@@ -101,7 +101,8 @@ def main():
     sample_size = min(10, len(all_turns))
     sampled = random.sample(all_turns, sample_size)
     logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
-
+    
+    results = []
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
@@ -112,13 +113,14 @@ def main():
         )
         raw = llm.generate_response(prompt)
         cleaned = normalize_output(raw)
-        output = {
-            "Podcast": rec["episodeTitle"],
-            "Speaker": rec["speaker"],
-            "Turn": text,
-            "KeyPoints": cleaned.get("key_points_discussed_or_proposed", []),
-            "Assumptions": cleaned.get("key_points_assumed", [])
-        }
-    
+        rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
+        rec["Assumptions"] = cleaned.get("key_points_assumed", [])
+        results.append(rec)
+
+    df = pd.DataFrame(results)
+    output_path = 'podcast_analysis_results.csv'
+    df.to_csv(output_path, index=False)
+    logging.info(f"Results saved to {output_path}")
+
 if __name__ == "__main__":
     main()

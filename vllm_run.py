@@ -1,38 +1,18 @@
+import pandas as pd
+import numpy as np
+from vllm import LLM, SamplingParams
+import matplotlib.pyplot as plt
+from typing import Optional, List, Dict
+import os
 import argparse
 import random
 import json
 import logging
 from sporc import SPORCDataset
 import re
-from typing import List, Optional, Dict
 
-# vllm-based LLM interface (do not modify)
-import pandas as pd
-import numpy as np
-from vllm import LLM, SamplingParams
-import matplotlib.pyplot as plt
-import os
-
-class LLMInterface:
-    def __init__(self, model_name: str = "Qwen/Qwen3-0.6B", temperature: float = 0.1, top_p: float = 0.95, gpu_id: int = 0, gpu_memory_utilization: float = 0.9):
-        self.llm = LLM(
-            model=model_name,
-            tensor_parallel_size=1,
-            gpu_memory_utilization=gpu_memory_utilization,
-            trust_remote_code=True,
-            device=f"cuda:{gpu_id}"
-        )
-        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p)
-    def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
-        if max_tokens:
-            self.sampling_params.max_tokens = max_tokens
-        outputs = self.llm.generate(prompt, self.sampling_params)
-        return outputs[0].outputs[0].text.strip()
-
-# Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
     """
@@ -62,7 +42,33 @@ def count_words(text: str) -> int:
     return len(re.findall(r'\w+', text))
 
 
+class LLMInterface:
+    def __init__(self,
+                 model_name: str = "Qwen/Qwen3-0.6B",
+                 temperature: float = 0.1,
+                 top_p: float = 0.95,
+                 gpu_id: int = 0,
+                 gpu_memory_utilization: float = 0.9):
+        self.llm = LLM(
+            model=model_name,
+            tensor_parallel_size=1,
+            gpu_memory_utilization=gpu_memory_utilization,
+            trust_remote_code=True,
+            device=f"cuda:{gpu_id}"
+        )
+        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p)
+
+    def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        if max_tokens:
+            self.sampling_params.max_tokens = max_tokens
+        outputs = self.llm.generate(prompt, self.sampling_params)
+        return outputs[0].outputs[0].text.strip()
+
+
 def main():
+    # Set CUDA device order to avoid warnings
+    os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
+    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=1)
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", "-c",
@@ -85,11 +91,11 @@ def main():
             if count_words(turn.text) < 30:
                 continue
             rec = {
-                "episodeTitle": ep.title,
-                "turnText": turn.text,
-                "speaker": turn.speaker,
-                "startTime": turn.start_time,
-                "duration": turn.duration
+                "Podcast": ep.title,
+                "Speaker": turn.speaker,
+                "Turn": turn.text,
+                "KeyPoints": [],
+                "Assumptions": []
             }
             all_turns.append(rec)
 
@@ -101,11 +107,9 @@ def main():
     sampled = random.sample(all_turns, sample_size)
     logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
-    # Instantiate the vllm interface
-    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=1)
-
+    results = []
     for rec in sampled:
-        text = rec["turnText"].strip()
+        text = rec["Turn"].strip()
         prompt = (
             "Please analyze the following text and return a JSON with:\n"
             "- key_points_discussed_or_proposed\n"
@@ -114,14 +118,15 @@ def main():
         )
         raw = llm.generate_response(prompt)
         cleaned = normalize_output(raw)
-        output = {
-            "Podcast": rec["episodeTitle"],
-            "Speaker": rec["speaker"],
-            "Turn": text,
-            "KeyPoints": cleaned.get("key_points_discussed_or_proposed", []),
-            "Assumptions": cleaned.get("key_points_assumed", [])
-        }
-        print(json.dumps(output, ensure_ascii=False))
+        rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
+        rec["Assumptions"] = cleaned.get("key_points_assumed", [])
+        results.append(rec)
+
+    # Create DataFrame and save to CSV
+    df = pd.DataFrame(results)
+    output_path = 'podcast_analysis_results.csv'
+    df.to_csv(output_path, index=False)
+    logging.info(f"Results saved to {output_path}")
 
 if __name__ == "__main__":
     main()
