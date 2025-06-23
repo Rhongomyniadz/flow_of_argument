@@ -46,7 +46,7 @@ def count_words(text: str) -> int:
 
 
 class LLMInterface:
-    def __init__(self, model_name: str = "Qwen/Qwen3-0.6B", temperature: float = 0.1, top_p: float = 0.95, gpu_id: int = 0, gpu_memory_utilization: float = 0.9):
+    def __init__(self, model_name: str = "Qwen/Qwen3-1.7B", temperature: float = 0.1, top_p: float = 0.95, gpu_id: int = 0, gpu_memory_utilization: float = 0.9):
         self.llm = LLM(
             model=model_name,
             tensor_parallel_size=1,
@@ -117,10 +117,10 @@ def main():
         rec["Assumptions"] = cleaned.get("key_points_assumed", [])
         results.append(rec)
 
-    df = pd.DataFrame(results)
-    output_path = 'podcast_analysis_results.csv'
-    df.to_csv(output_path, index=False)
-    logging.info(f"Results saved to {output_path}")
+    output_path = 'podcast_analysis_results.json'
+    with open(output_path, 'w') as f:
+        json.dump(results, f, indent=2)
+    logging.info(f"Results saved to %s", output_path)
 
 if __name__ == "__main__":
     main()
