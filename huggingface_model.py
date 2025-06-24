@@ -118,6 +118,7 @@ def main():
     logger.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
     # Process turns with Transformers
+    results = []
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
@@ -135,7 +136,12 @@ def main():
             "KeyPoints": cleaned.get("key_points_discussed_or_proposed", []),
             "Assumptions": cleaned.get("key_points_assumed", [])
         }
-        print(json.dumps(output, ensure_ascii=False))
+        results.append(output)
 
+    output_path = 'results/news_sample.json'
+    with open(output_path, 'w') as f:
+        json.dump(results, f, indent=2)
+    logger.info(f"Results saved to {output_path}")
+    
 if __name__ == "__main__":
     main()
