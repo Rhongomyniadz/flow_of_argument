@@ -5,6 +5,7 @@ import argparse
 import random
 import json
 import logging
+import csv
 from sporc import SPORCDataset
 import re
 from typing import List, Dict
@@ -86,8 +87,8 @@ def main():
     args = parser.parse_args()
 
     # Initialize SPORC in streaming mode
-    d = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=d, streaming=True)
+    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset(categories=args.categories)
 
     episodes = sporc.get_all_episodes()
@@ -100,11 +101,11 @@ def main():
             if count_words(turn.text) < 30:
                 continue
             rec = {
-                "episodeTitle": ep.title,
-                "turnText": turn.text,
-                "speaker": turn.speaker,
-                "startTime": turn.start_time,
-                "duration": turn.duration
+                "Podcast": ep.title,
+                "Speaker": ','.join(turn.speaker) if isinstance(turn.speaker, list) else turn.speaker,
+                "Turn": turn.text,
+                "KeyPoints": [],
+                "Assumptions": []
             }
             all_turns.append(rec)
 
@@ -120,28 +121,34 @@ def main():
     # Process turns with Transformers
     results = []
     for rec in sampled:
-        text = rec["turnText"].strip()
+        text = rec["Turn"].strip()
         prompt = (
-            "Please analyze the following text and return a JSON with:\n"
+            "Please analyze the following text and return a JSON with two keys:\n"
             "- key_points_discussed_or_proposed\n"
             "- key_points_assumed\n\n"
             f"Text:\n\"\"\"{text}\"\"\""
+            "Only return the JSON object without any additional text or explanations."
         )
         raw = transformer_generate(prompt)
         cleaned = normalize_output(raw)
-        output = {
-            "Podcast": rec["episodeTitle"],
-            "Speaker": rec["speaker"],
-            "Turn": text,
-            "KeyPoints": cleaned.get("key_points_discussed_or_proposed", []),
-            "Assumptions": cleaned.get("key_points_assumed", [])
-        }
-        results.append(output)
+        rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
+        rec["Assumptions"] = cleaned.get("key_points_assumed", [])
+        results.append(rec)
 
-    output_path = 'results/news_sample.json'
-    with open(output_path, 'w') as f:
-        json.dump(results, f, indent=2)
-    logger.info(f"Results saved to {output_path}")
-    
+    # Write results to CSV
+    os.makedirs('results', exist_ok=True)
+    csv_path = 'results/news_sample.csv'
+    fieldnames = ['Podcast', 'Speaker', 'Turn', 'KeyPoints', 'Assumptions']
+    with open(csv_path, mode='w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in results:
+            # Join list fields into semicolon-separated strings
+            row['KeyPoints'] = '; '.join(row['KeyPoints'])
+            row['Assumptions'] = '; '.join(row['Assumptions'])
+            writer.writerow(row)
+
+    logger.info(f"Results saved to {csv_path}")
+
 if __name__ == "__main__":
     main()
