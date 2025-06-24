@@ -117,7 +117,7 @@ def main():
     sampled = random.sample(all_turns, sample_size)
     logger.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
 
-# Process turns with Transformers
+    # Process turns with Transformers
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
