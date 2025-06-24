@@ -8,6 +8,7 @@ import csv
 import re
 import json
 from typing import List, Dict
+from tqdm import tqdm
 from sporc import SPORCDataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
@@ -71,7 +72,7 @@ def count_words(text: str) -> int:
 
 # Main processing
 def main():
-    parser = argparse.ArgumentParser(description="Analyze two-speaker episodes")
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", "-c", nargs='+', required=True,
         help="Podcast categories to load"
@@ -97,30 +98,29 @@ def main():
     sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
     logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
-    # Analyze turns above word threshold
     results = []
-    for ep in sample_eps:
-        for turn in ep.get_all_turns():
+    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
+        title = ep.title
+        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+        for turn in tqdm(turns, desc=f"  Turns in {title}", leave=False, unit="turn"):
             text = turn.text.strip()
-            if count_words(text) <= args.min_words:
-                continue
             prompt = (
-                "Please analyze the following text and return a JSON list with two keys:\n"
+                "Please analyze the following text and return a JSON with two keys:\n"
                 "- key_points_discussed_or_proposed\n"
                 "- key_points_assumed\n\n"
-                f"This is the text:\n\"\"\"{text}\"\"\""
+                f"Text:\n\"\"\"{text}\"\"\""
+                "\n\nReturn the JSON without any additional text or explanation."
             )
             raw = transformer_generate(prompt)
             data = normalize_output(raw)
             results.append({
-                "Podcast": ep.title,
+                "Podcast": title,
                 "Speaker": ','.join(turn.speaker) if isinstance(turn.speaker, list) else turn.speaker,
                 "Turn": text,
                 "KeyPoints": '; '.join(data.get("key_points_discussed_or_proposed", [])),
                 "Assumptions": '; '.join(data.get("key_points_assumed", []))
             })
 
-    # Write to CSV
     csv_path = 'results/news_sample.csv'
     with open(csv_path, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=["Podcast", "Speaker", "Turn", "KeyPoints", "Assumptions"])
