@@ -1,5 +1,3 @@
-from vllm import LLM, SamplingParams
-import matplotlib.pyplot as plt
 from typing import Optional
 import os
 import argparse
@@ -9,10 +7,10 @@ import logging
 from sporc import SPORCDataset
 import re
 from typing import List, Dict
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from vllm import LLM, SamplingParams
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
@@ -104,20 +102,26 @@ def main():
     for rec in sampled:
         text = rec["turnText"].strip()
         prompt = (
-            "Please analyze the following text and return a JSON with:\n"
+            "Please analyze the following text and return a JSON object with two keys:\n"
             "- key_points_discussed_or_proposed\n"
             "- key_points_assumed\n\n"
             f"Text:\n\"\"\"{text}\"\"\""
+            "\n\nRespond with a JSON object like:\n"
+            "{\n"
+            "  \"key_points_discussed_or_proposed\": [\"point1\", \"point2\"],\n"
+            "  \"key_points_assumed\": [\"assumption1\", \"assumption2\"]\n"
+            "}\n\n"
+            "Don't include any additional text or explanations.\n"
         )
         raw = llm.generate_response(prompt)
-        logging.debug("Raw LLM output for \"%s\" (start %s):\n%s",
+        logging.info("Raw LLM output for \"%s\" (start %s):\n%s",
                       rec["episodeTitle"], rec["startTime"], raw)
         cleaned = normalize_output(raw)
         rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
         rec["Assumptions"] = cleaned.get("key_points_assumed", [])
         results.append(rec)
 
-    output_path = 'podcast_analysis_results.json'
+    output_path = 'results/news_sample.json'
     with open(output_path, 'w') as f:
         json.dump(results, f, indent=2)
     logging.info(f"Results saved to %s", output_path)
