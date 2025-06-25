@@ -3,12 +3,13 @@ os.environ['HF_HOME'] = '/shared/3/edenzhang'
 
 import argparse
 import random
-import json
 import logging
 import csv
-from sporc import SPORCDataset
 import re
+import json
 from typing import List, Dict
+from tqdm import tqdm
+from sporc import SPORCDataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
@@ -16,7 +17,7 @@ import torch
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Load Qwen3 model and tokenizer, using shared HF_HOME as cache location
+# Model and tokenizer setup
 MODEL_NAME = "Qwen/Qwen3-1.7B"
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_NAME,
@@ -29,8 +30,8 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto"
 )
 
-# Helper to generate using Transformers
-def transformer_generate(prompt: str, max_new_tokens: int = 2048, enable_thinking: bool = True) -> str:
+# Generation helper
+def transformer_generate(prompt: str, max_new_tokens: int = 20000, enable_thinking: bool = True) -> str:
     messages = [{"role": "user", "content": prompt}]
     text = tokenizer.apply_chat_template(
         messages,
@@ -47,108 +48,85 @@ def transformer_generate(prompt: str, max_new_tokens: int = 2048, enable_thinkin
         top_p=0.8,
         top_k=20
     )[0][len(inputs.input_ids[0]):]
-    gen_text = tokenizer.decode(output_ids, skip_special_tokens=True)
-    return gen_text.strip()
+    return tokenizer.decode(output_ids, skip_special_tokens=True).strip()
 
-
+# Normalize raw model output to JSON fields
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
-    json_start = without_think.find('{')
-    json_end = without_think.rfind('}')
-    if json_start == -1 or json_end == -1 or json_end <= json_start:
-        return {}
-    json_str = without_think[json_start:json_end + 1]
-    try:
-        parsed = json.loads(json_str)
-    except json.JSONDecodeError:
-        return {}
     cleaned = {}
-    if "key_points_discussed_or_proposed" in parsed:
-        cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
-    if "key_points_assumed" in parsed:
-        cleaned["key_points_assumed"] = parsed["key_points_assumed"]
+    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
+    start, end = without_think.find('{'), without_think.rfind('}')
+    if start == -1 or end == -1 or end <= start:
+        return cleaned
+    try:
+        parsed = json.loads(without_think[start:end+1])
+    except json.JSONDecodeError:
+        return cleaned
+    for key in ("key_points_discussed_or_proposed", "key_points_assumed"):
+        if key in parsed:
+            cleaned[key] = parsed[key]
     return cleaned
 
-
+# Word count utility
 def count_words(text: str) -> int:
     return len(re.findall(r"\w+", text))
 
-
+# Main processing
 def main():
-    parser = argparse.ArgumentParser(
-        description="Sample speaker turns via Transformers with Qwen3"
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--categories", "-c", nargs='+', required=True,
+        help="Podcast categories to load"
     )
     parser.add_argument(
-        "--categories", "-c",
-        nargs='+',
-        required=True,
-        help="List of podcast categories to load"
+        "--min_words", type=int, default=50,
+        help="Minimum word count threshold for turns"
     )
     args = parser.parse_args()
 
-    # Initialize SPORC in streaming mode
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset(categories=args.categories)
 
-    episodes = sporc.get_all_episodes()
-    logger.info(f"Loaded {len(episodes)} episodes for categories {args.categories}")
-
-    # Gather all turns from these episodes
-    all_turns = []
-    for ep in episodes:
-        for turn in ep.get_all_turns():
-            if count_words(turn.text) < 30:
-                continue
-            rec = {
-                "Podcast": ep.title,
-                "Speaker": ','.join(turn.speaker) if isinstance(turn.speaker, list) else turn.speaker,
-                "Turn": turn.text,
-                "KeyPoints": [],
-                "Assumptions": []
-            }
-            all_turns.append(rec)
-
-    if not all_turns:
-        logger.warning("No speaker turns found for specified categories!")
+    # Use built-in search to find two-speaker episodes
+    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+    if not two_speaker_eps:
+        logger.warning("No two-speaker episodes found.")
         return
 
-    # Sample up to 10 turns
-    sample_size = min(10, len(all_turns))
-    sampled = random.sample(all_turns, sample_size)
-    logger.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
+    # Randomly sample up to 10 episodes
+    sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
+    logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
-    # Process turns with Transformers
     results = []
-    for rec in sampled:
-        text = rec["Turn"].strip()
-        prompt = (
-            "Please analyze the following text and return a JSON with two keys:\n"
-            "- key_points_discussed_or_proposed\n"
-            "- key_points_assumed\n\n"
-            f"Text:\n\"\"\"{text}\"\"\""
-            "Only return the JSON object without any additional text or explanations."
-        )
-        raw = transformer_generate(prompt)
-        cleaned = normalize_output(raw)
-        rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
-        rec["Assumptions"] = cleaned.get("key_points_assumed", [])
-        results.append(rec)
+    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
+        title = ep.title
+        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+        for turn in tqdm(turns, desc=f"  Turns in {title}", leave=False, unit="turn"):
+            text = turn.text.strip()
+            prompt = (
+                "Please analyze the following text and return a JSON with two keys:\n"
+                "- key_points_discussed_or_proposed\n"
+                "- key_points_assumed\n\n"
+                f"Text:\n\"\"\"{text}\"\"\""
+                "\n\nReturn the JSON without any additional text or explanation."
+            )
+            raw = transformer_generate(prompt)
+            data = normalize_output(raw)
+            results.append({
+                "Podcast": title,
+                "Speaker": ','.join(turn.speaker) if isinstance(turn.speaker, list) else turn.speaker,
+                "Turn": text,
+                "KeyPoints": '; '.join(data.get("key_points_discussed_or_proposed", [])),
+                "Assumptions": '; '.join(data.get("key_points_assumed", []))
+            })
 
-    # Write results to CSV
-    os.makedirs('results', exist_ok=True)
     csv_path = 'results/news_sample.csv'
-    fieldnames = ['Podcast', 'Speaker', 'Turn', 'KeyPoints', 'Assumptions']
-    with open(csv_path, mode='w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=["Podcast", "Speaker", "Turn", "KeyPoints", "Assumptions"])
         writer.writeheader()
-        for row in results:
-            # Join list fields into semicolon-separated strings
-            row['KeyPoints'] = '; '.join(row['KeyPoints'])
-            row['Assumptions'] = '; '.join(row['Assumptions'])
-            writer.writerow(row)
+        writer.writerows(results)
 
-    logger.info(f"Results saved to {csv_path}")
+    logger.info(f"Analysis complete. Results saved to {csv_path}")
 
 if __name__ == "__main__":
     main()

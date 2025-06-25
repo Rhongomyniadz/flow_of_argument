@@ -1,210 +1,152 @@
+import os
+os.environ['HF_HOME'] = '/shared/3/edenzhang'
+
 import argparse
-import gzip
-import json
+import random
 import logging
+import csv
 import re
-from typing import List, Optional, Dict
+import json
+from typing import List, Dict
+from tqdm import tqdm
+from sporc import SPORCDataset
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
 
-import requests
-
+# Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class OllamaGeneration:
-    """Class for generating text using Ollama models via the local API."""
-    
-    def __init__(self, model_name: str = "qwen3:1.7b", base_url: str = "http://localhost:11434"):
-        self.model_name = model_name
-        self.base_url = base_url.rstrip('/')
-    
-    def generate(self, prompt: str, system_prompt: Optional[str] = None,
-                 temperature: float = 0.1, max_tokens: int = 20000) -> str:
-        request_data = {
-            "model": self.model_name,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": temperature,
-                "num_predict": max_tokens
-            }
-        }
-        if system_prompt:
-            request_data["system"] = system_prompt
-        
-        try:
-            resp = requests.post(f"{self.base_url}/api/generate", json=request_data, timeout=60)
-            if resp.status_code != 200:
-                logger.error(f"Ollama generation error {resp.status_code}: {resp.text}")
-                return ""
-            result = resp.json()
-            return result.get("response", "").strip()
-        except Exception as e:
-            logger.error(f"Exception during Ollama generate call: {e}")
-            return ""
+# Model and tokenizer setup
+MODEL_NAME = "Qwen/Qwen3-1.7B"
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_NAME,
+    cache_dir=os.environ['HF_HOME']
+)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    cache_dir=os.environ['HF_HOME'],
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
+)
 
+# Generation helper
+def transformer_generate(prompt: str, max_new_tokens: int = 20000, enable_thinking: bool = True) -> str:
+    messages = [{"role": "user", "content": prompt}]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=enable_thinking
+    )
+    inputs = tokenizer(text, return_tensors="pt").to(model.device)
+    output_ids = model.generate(
+        **inputs,
+        max_new_tokens=max_new_tokens,
+        do_sample=True,
+        temperature=0.7,
+        top_p=0.8,
+        top_k=20
+    )[0][len(inputs.input_ids[0]):]
+    return tokenizer.decode(output_ids, skip_special_tokens=True).strip()
 
-def split_transcript_sliding(text: str,
-                             window_size: int = 3,
-                             stride: int = 2) -> List[str]:
-    """
-    Split `text` into overlapping chunks of `window_size` sentences,
-    advancing by `stride` sentences each time.
-    """
-    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
-    chunks = []
-    n = len(sentences)
-    
-    if n == 0:
-        return chunks
-    
-    for start in range(0, n, stride):
-        end = start + window_size
-        window = sentences[start:end]
-        if not window:
-            break
-        chunks.append(" ".join(window))
-        if end >= n:
-            break
-
-    return chunks
-
-
+# Normalize raw model output to JSON fields
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    """
-    Remove <think> blocks and parse out the two keys (arrays of strings).
-    """
-    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
-
-    json_start = without_think.find('{')
-    json_end = without_think.rfind('}')
-    if json_start == -1 or json_end == -1 or json_end <= json_start:
-        return {}
-
-    json_str = without_think[json_start : json_end + 1]
-
-    try:
-        parsed = json.loads(json_str)
-    except json.JSONDecodeError:
-        return {}
-
     cleaned = {}
-    if "key_points_discussed_or_proposed" in parsed:
-        cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
-    if "key_points_assumed" in parsed:
-        cleaned["key_points_assumed"] = parsed["key_points_assumed"]
+    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
+    start, end = without_think.find('{'), without_think.rfind('}')
+    if start == -1 or end == -1 or end <= start:
+        return cleaned
+    try:
+        parsed = json.loads(without_think[start:end+1])
+    except json.JSONDecodeError:
+        return cleaned
+    for key in ("key_points_discussed_or_proposed", "key_points_assumed"):
+        if key in parsed:
+            cleaned[key] = parsed[key]
     return cleaned
 
-def get_input_path(env: str) -> str:
-    if env == "local":
-        return "data/speakerTurnData.jsonl.gz"
-    elif env == "cluster":
-        return "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz"
-    else:
-        raise ValueError(f"Unknown environment: {env}. Choose 'local' or 'cluster'.")
+# Word count utility
+def count_words(text: str) -> int:
+    return len(re.findall(r"\w+", text))
 
+# Main processing
 def main():
-    parser = argparse.ArgumentParser(description="Run speaker turn processing with environment option.")
+    parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--env",
-        type=str,
-        choices=["local", "cluster"],
-        default="local",
-        help="Environment where code is run: 'local' (default) or 'cluster'"
+        "--categories", "-c", nargs='+', required=True,
+        help="Podcast categories to load"
+    )
+    parser.add_argument(
+        "--min_words", type=int, default=50,
+        help="Minimum word count threshold for turns"
     )
     args = parser.parse_args()
-    input_path = get_input_path(args.env)
-    output_path = "results/3_stride2.json"
 
-    ollama_client = OllamaGeneration()
-    cleaned_entries = []
-    total_count = 0
-    success_count = 0
+    # Sliding window parameters
+    WINDOW_SIZE = 6
+    STRIDE = 3
 
-    with gzip.open(input_path, "rt", encoding="utf-8") as infile:
-        for line_num, line in enumerate(infile, start=1):
-            if line_num > 10:
-                break
+    # Initialize SPORC dataset in streaming mode and select categories
+    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
+    sporc.load_podcast_subset(categories=args.categories)
 
-            total_count += 1
-            try:
-                record = json.loads(line)
-            except json.JSONDecodeError:
-                print(f"[Line {line_num}] Skipping: invalid JSON.")
-                cleaned_entries.append({})
-                continue
+    # Use built-in search to find two-speaker episodes
+    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+    if not two_speaker_eps:
+        logger.warning("No two-speaker episodes found.")
+        return
 
-            title = record.get("epTitle", f"<no title, line {line_num}>")
-            transcript = record.get("transcript", "").strip()
-            print(f"[Line {line_num}] Processing episode: {title}")
+    # Randomly sample up to 10 episodes
+    sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
+    logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
-            entry = {
-                "epTitle": title,
-                "transcript": transcript
-            }
-
-            if not transcript:
-                print(f"  -> Skipped: no transcript.")
-                cleaned_entries.append(entry)
-                continue
-            
-            chunks = split_transcript_sliding(transcript, window_size=3, stride=2)
-            print(f"  -> Transcript split into {len(chunks)} sliding-window chunks.")
-
-            all_discussed: List[str] = []
-            all_assumed: List[str] = []
-            any_success = False
-
-            for idx, chunk in enumerate(chunks, start=1):
-                print(f"    -> Chunk {idx}/{len(chunks)} length: {len(chunk)} chars")
-                prompt = (
-                    "Please analyze the following text and output a JSON object with two keys:\n"
-                    "\"key_points_discussed_or_proposed\": an array of strings, each string being a main idea, "
-                    "argument, or proposal explicitly presented in the text.\n"
-                    "\"key_points_assumed\": an array of strings, each string being an underlying assumption or "
-                    "implicit premise taken for granted by the text.\n\n"
-                    f"Text:\n\"\"\"{chunk}\"\"\""
-                )
-                raw_response = ollama_client.generate(prompt, system_prompt=None)
-                if not raw_response:
-                    print(f"      -> Warning: empty response for chunk {idx}.")
-                    continue
-
-                first_brace = raw_response.find('{')
-                last_brace = raw_response.rfind('}')
-                if first_brace == -1 or last_brace == -1 or last_brace <= first_brace:
-                    print(f"      -> Warning: no JSON block found in model output for chunk {idx}.")
-                    continue
-
-                json_block = raw_response[first_brace : last_brace + 1]
-                print(f"      -> JSON block from chunk {idx}:\n{json_block}")
-
-                cleaned = normalize_output(raw_response)
-                if cleaned:
-                    any_success = True
-                    discussed = cleaned.get("key_points_discussed_or_proposed", [])
-                    assumed = cleaned.get("key_points_assumed", [])
-                    all_discussed.extend(discussed)
-                    all_assumed.extend(assumed)
-                    print(f"      -> Extracted {len(discussed)} discussed and {len(assumed)} assumed points.")
+    results = []
+    # Iterate with progress bars
+    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
+        title = ep.title
+        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+        # Create sliding windows of turns
+        windows = [turns[i:i+WINDOW_SIZE] for i in range(0, len(turns) - WINDOW_SIZE + 1, STRIDE)]
+        for win_idx, win in enumerate(tqdm(windows, desc=f"  Windows in {title}", leave=False, unit="window")):
+            # Combine the 6 turns into one text block
+            combined_text = "\n\n".join([f"{t.speaker}: {t.text.strip()}" for t in win])
+            prompt = (
+                "Please analyze the following 6-turn window and return a JSON with two keys:\n"
+                "- key_points_discussed_or_proposed\n"
+                "- key_points_assumed\n\n"
+                f"Window #{win_idx} Text:\n\"\"\"{combined_text}\"\"\"\n\n"
+                "Return only the JSON object without extra text."
+            )
+            raw = transformer_generate(prompt)
+            data = normalize_output(raw)
+            # Collect unique speakers in this window
+            spks = set()
+            for t in win:
+                if isinstance(t.speaker, list):
+                    spks.update(t.speaker)
                 else:
-                    print(f"      -> Warning: could not extract expected keys from chunk {idx}.")
+                    spks.add(t.speaker)
+            results.append({
+                "Podcast": title,
+                "Speakers": ','.join(spks),
+                "WindowIndex": win_idx,
+                "WindowText": combined_text,
+                "KeyPoints": '; '.join(data.get("key_points_discussed_or_proposed", [])),
+                "Assumptions": '; '.join(data.get("key_points_assumed", []))
+            })
 
-            if any_success:
-                # Keep all results, including duplicates
-                entry["key_points_discussed_or_proposed"] = all_discussed
-                entry["key_points_assumed"] = all_assumed
-                success_count += 1
-                print(f"  -> Success: merged {len(all_discussed)} discussed, {len(all_assumed)} assumed points.")
-                cleaned_entries.append(entry)
-            else:
-                print(f"  -> Warning: no successful extraction for entire transcript.")
-                cleaned_entries.append({})
+    # Write to CSV
+    os.makedirs('results', exist_ok=True)
+    csv_path = 'results/news_sample.csv'
+    fieldnames = ["Podcast", "Speakers", "WindowIndex", "WindowText", "KeyPoints", "Assumptions"]
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(results)
 
-    with open(output_path, "w", encoding="utf-8") as outfile:
-        json.dump(cleaned_entries, outfile, ensure_ascii=False, indent=2)
-
-    print(f"\nProcessing complete. Total episodes processed: {total_count}, Successful extractions: {success_count}")
-    print(f"Cleaned data saved to {output_path}")
+    logger.info(f"Analysis complete. Results saved to {csv_path}")
 
 if __name__ == "__main__":
     main()
