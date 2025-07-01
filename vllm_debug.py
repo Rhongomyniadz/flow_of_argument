@@ -1,48 +1,49 @@
-from typing import Optional
 import os
 import argparse
 import random
 import json
 import logging
-from sporc import SPORCDataset
 import re
-from typing import List, Dict
+from typing import List, Dict, Optional
+from tqdm import tqdm
+from sporc import SPORCDataset
 from vllm import LLM, SamplingParams
 
+# Logging setup
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-
+# Normalization helper
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    """
-    Remove <think> blocks and parse out the two keys (arrays of strings).
-    """
     without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
-    json_start = without_think.find('{')
-    json_end = without_think.rfind('}')
-    if json_start == -1 or json_end == -1 or json_end <= json_start:
+    start, end = without_think.find('{'), without_think.rfind('}')
+    if start == -1 or end == -1 or end <= start:
         return {}
-
-    json_str = without_think[json_start:json_end + 1]
     try:
-        parsed = json.loads(json_str)
+        parsed = json.loads(without_think[start:end+1])
     except json.JSONDecodeError:
         return {}
-
-    cleaned = {}
+    cleaned: Dict[str, List[str]] = {}
     if "key_points_discussed_or_proposed" in parsed:
         cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
     if "key_points_assumed" in parsed:
         cleaned["key_points_assumed"] = parsed["key_points_assumed"]
     return cleaned
 
-
+# Word count utility
 def count_words(text: str) -> int:
-    return len(re.findall(r'\w+', text))
+    return len(re.findall(r"\w+", text))
 
-
+# VLLM wrapper
 class LLMInterface:
-    def __init__(self, model_name: str = "Qwen/Qwen3-1.7B", temperature: float = 0.1, top_p: float = 0.95, gpu_id: int = 0, gpu_memory_utilization: float = 0.9):
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen3-1.7B",
+        temperature: float = 0.3,
+        top_p: float = 0.9,
+        gpu_id: int = 0,
+        gpu_memory_utilization: float = 0.9
+    ):
         self.llm = LLM(
             model=model_name,
             tensor_parallel_size=1,
@@ -51,80 +52,89 @@ class LLMInterface:
             device=f"cuda:{gpu_id}"
         )
         self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p)
+
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
-        if max_tokens:
+        if max_tokens is not None:
             self.sampling_params.max_tokens = max_tokens
         outputs = self.llm.generate(prompt, self.sampling_params)
         return outputs[0].outputs[0].text.strip()
+
+
 def main():
-    # Set CUDA device order to avoid warnings
+    # Ensure CUDA ordering
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-    llm = LLMInterface(model_name="Qwen/Qwen3-1.7B", gpu_id=1)
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", "-c",
         nargs='+',
         required=True,
-        help="List of podcast categories to load"
+        help="Podcast categories to load"
+    )
+    parser.add_argument(
+        "--min_words", type=int, default=50,
+        help="Minimum word count threshold for turns"
+    )
+    parser.add_argument(
+        "--window_size", type=int, default=6,
+        help="Number of turns per sliding window"
+    )
+    parser.add_argument(
+        "--stride", type=int, default=3,
+        help="Stride size for sliding window"
     )
     args = parser.parse_args()
 
-    d = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=d, streaming=True)
+    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset(categories=args.categories)
 
-    episodes = sporc.get_all_episodes()
-    logging.info(f"Loaded {len(episodes)} episodes for categories {args.categories}")
-
-    all_turns = []
-    for ep in episodes:
-        for turn in ep.get_all_turns():
-            if count_words(turn.text) < 30:
-                continue
-            rec = {
-                "episodeTitle": ep.title,
-                "turnText": turn.text,
-                "speaker": turn.speaker,
-                "startTime": turn.start_time,
-                "duration": turn.duration
-            }
-            all_turns.append(rec)
-
-    if not all_turns:
-        logging.warning("No speaker turns found for specified categories!")
+    # Find two-speaker episodes
+    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+    if not two_speaker_eps:
+        logger.warning("No two-speaker episodes found.")
         return
 
-    sample_size = min(10, len(all_turns))
-    sampled = random.sample(all_turns, sample_size)
-    logging.info(f"Sampling {sample_size} turns from {len(all_turns)} total turns")
-    
-    results = []
-    for rec in sampled:
-        text = rec["turnText"].strip()
-        prompt = (
-            "Please analyze the following text and return a JSON object with two keys:\n"
-            "- key_points_discussed_or_proposed\n"
-            "- key_points_assumed\n\n"
-            f"Text:\n\"\"\"{text}\"\"\""
-            "\n\nRespond with a JSON object like:\n"
-            "{\n"
-            "  \"key_points_discussed_or_proposed\": [\"point1\", \"point2\"],\n"
-            "  \"key_points_assumed\": [\"assumption1\", \"assumption2\"]\n"
-            "}\n\n"
-            "Don't include any additional text or explanations.\n"
-        )
-        raw = llm.generate_response(prompt)
-        logging.info("Raw LLM output for \"%s\" (start %s):\n%s",
-                      rec["episodeTitle"], rec["startTime"], raw)
-        cleaned = normalize_output(raw)
-        rec["KeyPoints"] = cleaned.get("key_points_discussed_or_proposed", [])
-        rec["Assumptions"] = cleaned.get("key_points_assumed", [])
-        results.append(rec)
+    # Sample episodes
+    sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
+    logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
-    output_path = 'results/news_sample.json'
-    with open(output_path, 'w') as f:
+    llm = LLMInterface(model_name="Qwen/Qwen3-1.7B", gpu_id=0)
+
+    results = []
+    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
+        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+        windows = [turns[i:i+args.window_size]
+                   for i in range(0, len(turns) - args.window_size + 1, args.stride)]
+        for idx, win in enumerate(tqdm(windows, desc=f" Windows in {ep.title}", leave=False)):
+            combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
+            prompt = (
+                "Please analyze the following 6-turn window and return a JSON with two keys:\n"
+                "- key_points_discussed_or_proposed\n"
+                "- key_points_assumed\n\n"
+                f"Window #{idx} Text:\n\"\"\"{combined}\"\"\"\n\n"
+                "Return only the JSON object without extra text."
+            )
+            raw = llm.generate_response(prompt)
+            data = normalize_output(raw)
+            spks = set(s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker]))
+            results.append({
+                "Podcast": ep.title,
+                "Speakers": ','.join(spks),
+                "WindowIndex": idx,
+                "WindowText": combined,
+                "KeyPoints": data.get("key_points_discussed_or_proposed", []),
+                "Assumptions": data.get("key_points_assumed", [])
+            })
+
+    # Ensure results directory
+    os.makedirs('results', exist_ok=True)
+    out_csv = 'results/news_sample_sliding_window_vllm.json'
+    with open(out_csv, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2)
-    logging.info(f"Results saved to %s", output_path)
+
+    logger.info(f"Analysis complete. Results saved to {out_csv}")
+
 
 if __name__ == "__main__":
     main()
