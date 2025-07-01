@@ -59,7 +59,7 @@ class LLMInterface:
 def main():
     # Set CUDA device order to avoid warnings
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-    llm = LLMInterface(model_name="Qwen/Qwen3-0.6B", gpu_id=0)
+    llm = LLMInterface(model_name="Qwen/Qwen3-1.7B", gpu_id=1)
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", "-c",

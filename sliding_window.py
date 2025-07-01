@@ -139,7 +139,7 @@ def main():
 
     # Write to CSV
     os.makedirs('results', exist_ok=True)
-    csv_path = 'results/news_sample.csv'
+    csv_path = 'results/news_sample_sliding_window.csv'
     fieldnames = ["Podcast", "Speakers", "WindowIndex", "WindowText", "KeyPoints", "Assumptions"]
     with open(csv_path, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
