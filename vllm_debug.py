@@ -101,7 +101,9 @@ def main():
 
     llm = LLMInterface(model_name="Qwen/Qwen3-1.7B", gpu_id=0)
 
-    results = []
+    results: List[Dict] = []
+    raw_results: List[Dict] = []
+
     for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
         turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
         windows = [turns[i:i+args.window_size]
@@ -116,6 +118,12 @@ def main():
                 "Return only the JSON object without extra text."
             )
             raw = llm.generate_response(prompt)
+            # Save raw response
+            raw_results.append({
+                "Podcast": ep.title,
+                "WindowIndex": idx,
+                "RawOutput": raw
+            })
             data = normalize_output(raw)
             spks = set(s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker]))
             results.append({
@@ -129,11 +137,18 @@ def main():
 
     # Ensure results directory
     os.makedirs('results', exist_ok=True)
+
+    # Save processed results
     out_csv = 'results/news_sample_sliding_window_vllm.json'
     with open(out_csv, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2)
+    logger.info(f"Processed results saved to {out_csv}")
 
-    logger.info(f"Analysis complete. Results saved to {out_csv}")
+    # Save raw LLM outputs
+    raw_out = 'results/vllm_raw.json'
+    with open(raw_out, 'w', encoding='utf-8') as f:
+        json.dump(raw_results, f, indent=2)
+    logger.info(f"Raw LLM outputs saved to {raw_out}")
 
 
 if __name__ == "__main__":
