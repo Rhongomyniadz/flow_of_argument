@@ -53,6 +53,7 @@ class LLMInterface:
             tensor_parallel_size=1,
             gpu_memory_utilization=gpu_memory_utilization,
             trust_remote_code=True,
+            download_dir="/shared/4/models",
             device=f"cuda:{gpu_id}"
         )
         self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, 
