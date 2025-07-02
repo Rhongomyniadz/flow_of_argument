@@ -46,7 +46,7 @@ class LLMInterface:
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         top_k: int = 0,
-        max_toekns: int = 2048
+        max_toekns: int = 20000
     ):
         self.llm = LLM(
             model=model_name,
@@ -55,7 +55,11 @@ class LLMInterface:
             trust_remote_code=True,
             device=f"cuda:{gpu_id}"
         )
-        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p)
+        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, 
+                                              min_p=min_p,
+                                              repetition_penalty=repetition_penalty, 
+                                              top_k=top_k,
+                                              max_tokens=max_toekns)
 
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
         if max_tokens is not None:
