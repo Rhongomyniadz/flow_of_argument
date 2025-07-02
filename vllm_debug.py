@@ -15,12 +15,12 @@ logging.basicConfig(level=logging.INFO)
 
 # Normalization helper
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
-    start, end = without_think.find('{'), without_think.rfind('}')
+    # without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
+    start, end = raw_response.find('{'), raw_response.rfind('}')
     if start == -1 or end == -1 or end <= start:
         return {}
     try:
-        parsed = json.loads(without_think[start:end+1])
+        parsed = json.loads(raw_response[start:end+1])
     except json.JSONDecodeError:
         return {}
     cleaned: Dict[str, List[str]] = {}
@@ -118,13 +118,41 @@ def main():
                    for i in range(0, len(turns) - args.window_size + 1, args.stride)]
         for idx, win in enumerate(tqdm(windows, desc=f" Windows in {ep.title}", leave=False)):
             combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
-            prompt = (
-                "Please analyze the following 6-turn window and return a JSON with two keys:\n"
-                "- key_points_discussed_or_proposed\n"
-                "- key_points_assumed\n\n"
-                f"Window #{idx} Text:\n\"\"\"{combined}\"\"\"\n\n"
-                "Return only the JSON object without extra text."
-            )
+            prompt = f"""
+            You are a podcast conversation analyst. Your job is to read a block of six consecutive speaker turns, identify (1) the main points discussed or proposed, and (2) any implicit assumptions underlying the speakers’ remarks. You must respond only with a single JSON object—nothing else.
+
+            JSON schema:
+            {{
+            "key_points_discussed_or_proposed": [string, …],
+            "key_points_assumed": [string, …]
+            }}
+
+            Example:
+            Input:
+            Speaker A: We should build more charging stations for electric cars.
+            Speaker B: That would require significant public funding.
+            …
+            Speaker F: If adoption accelerates, the infrastructure will pay for itself.
+
+            Output:
+            {{
+            "key_points_discussed_or_proposed": [
+                "Proposal to build more EV charging stations",
+                "Need for public funding to support infrastructure",
+                "Expectation that increased adoption will offset costs"
+            ],
+            "key_points_assumed": [
+                "Electric vehicle adoption will continue to grow",
+                "Taxpayers are willing to fund public charging",
+                "Cost savings from usage will cover initial investment"
+            ]
+            }}
+
+            Now analyze Window #{idx}:
+            {combined}
+
+            Respond with a valid JSON that strictly follows the schema above.
+            """
             raw = llm.generate_response(prompt)
             # Save raw response
             raw_results.append({
@@ -143,21 +171,15 @@ def main():
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
-    # Ensure results directory
-    os.makedirs('results', exist_ok=True)
-
-    # Save processed results
     out_csv = 'results/news_sample_sliding_window_vllm.json'
     with open(out_csv, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2)
     logger.info(f"Processed results saved to {out_csv}")
 
-    # Save raw LLM outputs
     raw_out = 'results/vllm_raw.json'
     with open(raw_out, 'w', encoding='utf-8') as f:
         json.dump(raw_results, f, indent=2)
     logger.info(f"Raw LLM outputs saved to {raw_out}")
-
 
 if __name__ == "__main__":
     main()
