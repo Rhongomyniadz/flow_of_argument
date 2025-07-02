@@ -39,10 +39,14 @@ class LLMInterface:
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-1.7B",
+        min_p: float = 0.1,
         temperature: float = 0.3,
-        top_p: float = 0.9,
+        top_p: float = 0.8,
+        repetition_penalty: float = 1.05,
         gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.9
+        gpu_memory_utilization: float = 0.9,
+        top_k: int = 0,
+        max_toekns: int = 2048
     ):
         self.llm = LLM(
             model=model_name,
@@ -76,11 +80,11 @@ def main():
         help="Minimum word count threshold for turns"
     )
     parser.add_argument(
-        "--window_size", type=int, default=6,
+        "--window_size", type=int, default=4,
         help="Number of turns per sliding window"
     )
     parser.add_argument(
-        "--stride", type=int, default=3,
+        "--stride", type=int, default=2,
         help="Stride size for sliding window"
     )
     args = parser.parse_args()
@@ -99,7 +103,7 @@ def main():
     sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
     logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
-    llm = LLMInterface(model_name="Qwen/Qwen3-1.7B", gpu_id=0)
+    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=1)
 
     results: List[Dict] = []
     raw_results: List[Dict] = []
