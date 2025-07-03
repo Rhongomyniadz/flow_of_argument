@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 # Ensure results directory exists
 os.makedirs('results', exist_ok=True)
 
-# 1) Load the processed results
+# Load the processed results
 with open('results/news_sample_sliding_window_vllm.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
 
-# 2) Flatten assumptions into a DataFrame
+# Flatten assumptions into a DataFrame
 records = []
 for entry in data:
     podcast = entry.get("Podcast", "Unknown")
@@ -21,36 +21,44 @@ for entry in data:
 
 df = pd.DataFrame(records)
 
-# Basic EDA
-print("Total assumptions:", len(df))
-print("Assumptions per podcast:")
-print(df["Podcast"].value_counts(), "\n")
-
-# 3) Embed each assumption
+# Embed assumptions
 model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder=os.getenv('HF_HOME'))
 embeddings = model.encode(df["Assumption"].tolist(), show_progress_bar=True)
 
-# 4) t-SNE reduction
+# t-SNE reduction
 tsne = TSNE(n_components=2, random_state=42)
 tsne_results = tsne.fit_transform(embeddings)
 
-# 5) Scatter plot
-plt.figure(figsize=(8, 6))
+# Swap axes: dim2→x, dim1→y
+x_vals = tsne_results[:, 1]
+y_vals = tsne_results[:, 0]
+
+# Plot with larger figure
+plt.figure(figsize=(12, 10))
 labels, uniques = pd.factorize(df["Podcast"])
-scatter = plt.scatter(
-    tsne_results[:, 0], tsne_results[:, 1],
-    c=labels, alpha=0.7
-)
-plt.title("t-SNE of Podcast-Assumption Embeddings")
-plt.xlabel("t-SNE dim 1")
-plt.ylabel("t-SNE dim 2")
+scatter = plt.scatter(x_vals, y_vals, c=labels, alpha=0.7, s=50)
+
+# Compute margins (20% extra)
+x_min, x_max = x_vals.min(), x_vals.max()
+y_min, y_max = y_vals.min(), y_vals.max()
+x_margin = (x_max - x_min) * 0.2
+y_margin = (y_max - y_min) * 0.2
+plt.xlim(x_min - x_margin, x_max + x_margin)
+plt.ylim(y_min - y_margin, y_max + y_margin)
+
+plt.title("t-SNE of Assumption Embeddings (Axes Swapped & Scaled)")
+plt.xlabel("t-SNE dim 2")
+plt.ylabel("t-SNE dim 1")
 
 # Legend
-handles, _ = scatter.legend_elements()
+handles, _ = scatter.legend_elements(prop="sizes", num=None)
 plt.legend(handles, uniques, title="Podcast", bbox_to_anchor=(1.05, 1), loc='upper left')
+
 plt.tight_layout()
 
 # Save to file
 plot_path = 'results/assumptions_tsne.png'
 plt.savefig(plot_path, dpi=300)
 print(f"Plot saved to {plot_path}")
+
+plt.show()
