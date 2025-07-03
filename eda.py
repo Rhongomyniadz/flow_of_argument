@@ -29,36 +29,45 @@ embeddings = model.encode(df["Assumption"].tolist(), show_progress_bar=True)
 tsne = TSNE(n_components=2, random_state=42)
 tsne_results = tsne.fit_transform(embeddings)
 
-# Swap axes: dim2→x, dim1→y
-x_vals = tsne_results[:, 1]
-y_vals = tsne_results[:, 0]
+x_vals = tsne_results[:, 0]
+y_vals = tsne_results[:, 1]
 
-# Plot with larger figure
-plt.figure(figsize=(12, 10))
-labels, uniques = pd.factorize(df["Podcast"])
-scatter = plt.scatter(x_vals, y_vals, c=labels, alpha=0.7, s=50)
+# Choose a discrete colormap with enough distinct colors
+cmap = plt.get_cmap('tab10')
+labels, podcasts = pd.factorize(df["Podcast"])
+n_categories = len(podcasts)
 
-# Compute margins (20% extra)
+# Map each label index to a color from the colormap
+colors = [cmap(i % cmap.N) for i in range(n_categories)]
+
+plt.figure(figsize=(12,10))
+# scatter with our discrete colors
+for idx, podcast in enumerate(podcasts):
+    mask = (labels == idx)
+    plt.scatter(
+        x_vals[mask], y_vals[mask],
+        c=[colors[idx]],
+        label=podcast,
+        s=50,
+        alpha=0.7
+    )
+
+# Expand the axes by 20%
 x_min, x_max = x_vals.min(), x_vals.max()
 y_min, y_max = y_vals.min(), y_vals.max()
-x_margin = (x_max - x_min) * 0.2
-y_margin = (y_max - y_min) * 0.2
-plt.xlim(x_min - x_margin, x_max + x_margin)
-plt.ylim(y_min - y_margin, y_max + y_margin)
+plt.xlim(x_min - 0.2*(x_max-x_min), x_max + 0.2*(x_max-x_min))
+plt.ylim(y_min - 0.2*(y_max-y_min), y_max + 0.2*(y_max-y_min))
 
-plt.title("t-SNE of Assumption Embeddings (Axes Swapped & Scaled)")
+plt.title("t-SNE of Assumption Embeddings (Discrete Colors + Swapped Axes)")
 plt.xlabel("t-SNE dim 2")
 plt.ylabel("t-SNE dim 1")
 
-# Legend
-handles, _ = scatter.legend_elements(prop="sizes", num=None)
-plt.legend(handles, uniques, title="Podcast", bbox_to_anchor=(1.05, 1), loc='upper left')
-
+# Manual legend from the same handles/labels above
+plt.legend(title="Podcast", bbox_to_anchor=(1.05,1), loc='upper left')
 plt.tight_layout()
 
-# Save to file
-plot_path = 'results/assumptions_tsne.png'
-plt.savefig(plot_path, dpi=300)
-print(f"Plot saved to {plot_path}")
-
+# Save & show
+out_path = 'results/assumptions_tsne_corrected.png'
+plt.savefig(out_path, dpi=300)
+print(f"Saved corrected TSNE plot to {out_path}")
 plt.show()
