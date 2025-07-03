@@ -58,7 +58,7 @@ y_min, y_max = y_vals.min(), y_vals.max()
 plt.xlim(x_min - 0.2*(x_max-x_min), x_max + 0.2*(x_max-x_min))
 plt.ylim(y_min - 0.2*(y_max-y_min), y_max + 0.2*(y_max-y_min))
 
-plt.title("t-SNE of Assumption Embeddings (Discrete Colors + Swapped Axes)")
+plt.title("t-SNE of Assumption Embeddings")
 plt.xlabel("t-SNE dim 2")
 plt.ylabel("t-SNE dim 1")
 
@@ -67,7 +67,7 @@ plt.legend(title="Podcast", bbox_to_anchor=(1.05,1), loc='upper left')
 plt.tight_layout()
 
 # Save & show
-out_path = 'results/assumptions_tsne_corrected.png'
+out_path = 'results/assumptions_tsne.png'
 plt.savefig(out_path, dpi=300)
 print(f"Saved corrected TSNE plot to {out_path}")
 plt.show()
