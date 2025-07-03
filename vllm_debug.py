@@ -38,7 +38,7 @@ def count_words(text: str) -> int:
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-1.7B",
+        model_name: str = "Qwen/Qwen3-8B",
         min_p: float = 0.1,
         temperature: float = 0.3,
         top_p: float = 0.8,
