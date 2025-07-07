@@ -7,15 +7,15 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
-def plot_tsne(coords, labels, podcasts, title, out_path):
+def plot_tsne(coords, labels, podcasts, selected_indices, title, out_path):
     """
-    Plots a t-SNE scatter of the given coords,
-    color-coded by Podcast, without annotations.
+    Plots a t-SNE scatter of all context windows (coords), color-coded by Podcast,
+    and annotates the selected windows by their filtered-index.
     """
     plt.figure(figsize=(12, 10))
     cmap = plt.get_cmap('tab10')
 
-    # Plot all points by podcast
+    # Plot all points per podcast
     for idx, podcast in enumerate(podcasts):
         mask = (labels == idx)
         plt.scatter(
@@ -23,7 +23,21 @@ def plot_tsne(coords, labels, podcasts, title, out_path):
             c=[cmap(idx)],
             label=podcast,
             s=40,
-            alpha=0.5
+            alpha=0.3
+        )
+
+    # Annotate only selected windows
+    for sel in selected_indices:
+        x, y = coords[sel]
+        plt.scatter(x, y, c='black', s=80, marker='x')
+        plt.annotate(
+            str(sel),
+            (x, y),
+            textcoords="offset points",
+            xytext=(5, 5),
+            fontsize=9,
+            weight='bold',
+            color='black'
         )
 
     plt.title(title)
@@ -40,8 +54,8 @@ def main():
     # --- CONFIG ---
     INPUT_PATH    = 'results/news_sample_sliding_window_vllm.json'
     SELECTED_JSON = 'results/selected_windows.json'
-    OUT_ASS_PLOT  = 'results/assumptions_tsne_selected.png'
-    OUT_KP_PLOT   = 'results/keypoints_tsne_selected.png'
+    OUT_ASS_PLOT  = 'results/assumptions_tsne_all.png'
+    OUT_KP_PLOT   = 'results/keypoints_tsne_all.png'
     SEED          = 42
     MODEL_NAME    = 'all-MiniLM-L6-v2'
     HF_CACHE      = os.getenv('HF_HOME', None)
@@ -52,16 +66,17 @@ def main():
     os.makedirs('results', exist_ok=True)
     random.seed(SEED)
 
-    # 1) Load and filter windows
+    # 1) Load and filter windows with non-empty fields
     with open(INPUT_PATH, 'r', encoding='utf-8') as f:
         all_windows = json.load(f)
 
     filtered = [
         w for w in all_windows
-        if w.get("KeyPoints") and w.get("Assumptions")
+        if w.get("KeyPoints") and len(w["KeyPoints"]) > 0
+        and w.get("Assumptions") and len(w["Assumptions"]) > 0
     ]
-    n = len(filtered)
-    print(f"Kept {n} windows after filtering non-empty KeyPoints & Assumptions.")
+    n_total = len(filtered)
+    print(f"Filtered to {n_total} windows with non-empty KeyPoints & Assumptions.")
 
     # 2) Sample up to MAX_SAMPLES windows per podcast
     by_podcast = defaultdict(list)
@@ -75,36 +90,42 @@ def main():
         else:
             selected_indices.extend(random.sample(idxs, MAX_SAMPLES))
 
+    # Save selected windows
     selected_windows = [filtered[i] for i in selected_indices]
     with open(SELECTED_JSON, 'w', encoding='utf-8') as f:
         json.dump(selected_windows, f, indent=2)
     print(f"Saved {len(selected_windows)} sampled windows to {SELECTED_JSON}")
 
-    # 3) Prepare DataFrame
-    df = pd.DataFrame(selected_windows)
-    df['AssumpText'] = df['Assumptions'].apply(lambda lst: ' '.join(lst))
-    df['KPText']     = df['KeyPoints'].apply(lambda lst: ' '.join(lst))
+    # 3) Prepare DataFrame of all filtered windows
+    df_all = pd.DataFrame(filtered)
+    df_all['AssumpText'] = df_all['Assumptions'].apply(lambda lst: ' '.join(lst))
+    df_all['KPText']     = df_all['KeyPoints'].apply(lambda lst: ' '.join(lst))
 
     # 4) Embedding
     embedder = SentenceTransformer(MODEL_NAME, cache_folder=HF_CACHE)
+    ass_emb = embedder.encode(df_all['AssumpText'].tolist(), show_progress_bar=True)
+    kp_emb  = embedder.encode(df_all['KPText'].tolist(), show_progress_bar=True)
 
-    ass_emb = embedder.encode(df['AssumpText'].tolist(), show_progress_bar=True)
-    kp_emb  = embedder.encode(df['KPText'].tolist(), show_progress_bar=True)
+    # Determine valid perplexity (< n_samples)
+    perplexity = min(30, max(2, n_total - 1))
 
-    # Determine appropriate perplexity (must be < n_samples)
-    perplexity = min(30, max(2, len(ass_emb) - 1))
-
-    # 5) TSNE on same random embedding init
+    # 5) TSNE fits
     tsne = TSNE(n_components=2, perplexity=perplexity, random_state=RANDOM_STATE)
     tsne_ass = tsne.fit_transform(ass_emb)
     tsne_kp  = tsne.fit_transform(kp_emb)
 
     # 6) Labels for plotting
-    labels, podcasts = pd.factorize(df['Podcast'])
+    labels, podcasts = pd.factorize(df_all['Podcast'])
 
-    # 7) Plot both
-    plot_tsne(tsne_ass, labels, podcasts, "t-SNE of Assumption Embeddings (Selected)", OUT_ASS_PLOT)
-    plot_tsne(tsne_kp,  labels, podcasts, "t-SNE of Key-Point Embeddings (Selected)", OUT_KP_PLOT)
+    # 7) Plot all windows, highlight selected
+    plot_tsne(
+        tsne_ass, labels, podcasts, selected_indices,
+        "t-SNE of All Assumption Embeddings (Selected Highlighted)", OUT_ASS_PLOT
+    )
+    plot_tsne(
+        tsne_kp, labels, podcasts, selected_indices,
+        "t-SNE of All Key-Point Embeddings (Selected Highlighted)", OUT_KP_PLOT
+    )
 
 if __name__ == "__main__":
     main()
