@@ -7,10 +7,12 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
-def plot_tsne(coords, labels, podcasts, selected_indices, title, out_path):
+def plot_tsne(coords, labels, podcasts, selected_info, title, out_path):
     """
     Plots a t-SNE scatter of all context windows (coords), color-coded by Podcast,
-    and annotates the selected windows by their filtered-index.
+    and annotates the selected windows by their WindowIndex.
+
+    selected_info: list of (filtered_idx, window_index)
     """
     plt.figure(figsize=(12, 10))
     cmap = plt.get_cmap('tab10')
@@ -26,12 +28,11 @@ def plot_tsne(coords, labels, podcasts, selected_indices, title, out_path):
             alpha=0.3
         )
 
-    # Annotate only selected windows
-    for sel in selected_indices:
-        x, y = coords[sel]
-        plt.scatter(x, y, c='black', s=80, marker='x')
+    # Annotate only selected windows with their true WindowIndex
+    for filtered_idx, win_idx in selected_info:
+        x, y = coords[filtered_idx]
         plt.annotate(
-            str(sel),
+            str(win_idx),
             (x, y),
             textcoords="offset points",
             xytext=(5, 5),
@@ -62,11 +63,11 @@ def main():
     MAX_SAMPLES   = 3
     RANDOM_STATE  = 42
 
-    # ensure results dir
+    # Ensure results dir
     os.makedirs('results', exist_ok=True)
     random.seed(SEED)
 
-    # 1) Load and filter windows with non-empty fields
+    # 1) Load and filter windows with non-empty KeyPoints & Assumptions
     with open(INPUT_PATH, 'r', encoding='utf-8') as f:
         all_windows = json.load(f)
 
@@ -83,15 +84,15 @@ def main():
     for i, w in enumerate(filtered):
         by_podcast[w['Podcast']].append(i)
 
-    selected_indices = []
+    # Build selected info: list of tuples (filtered_idx, WindowIndex)
+    selected_info = []  # (filtered_idx, original WindowIndex)
     for idxs in by_podcast.values():
-        if len(idxs) <= MAX_SAMPLES:
-            selected_indices.extend(idxs)
-        else:
-            selected_indices.extend(random.sample(idxs, MAX_SAMPLES))
+        sampled = idxs if len(idxs) <= MAX_SAMPLES else random.sample(idxs, MAX_SAMPLES)
+        for fi in sampled:
+            selected_info.append((fi, filtered[fi]['WindowIndex']))
 
     # Save selected windows
-    selected_windows = [filtered[i] for i in selected_indices]
+    selected_windows = [filtered[fi] for fi, _ in selected_info]
     with open(SELECTED_JSON, 'w', encoding='utf-8') as f:
         json.dump(selected_windows, f, indent=2)
     print(f"Saved {len(selected_windows)} sampled windows to {SELECTED_JSON}")
@@ -117,13 +118,13 @@ def main():
     # 6) Labels for plotting
     labels, podcasts = pd.factorize(df_all['Podcast'])
 
-    # 7) Plot all windows, highlight selected
+    # 7) Plot all windows, label selected by WindowIndex
     plot_tsne(
-        tsne_ass, labels, podcasts, selected_indices,
+        tsne_ass, labels, podcasts, selected_info,
         "t-SNE of All Assumption Embeddings (Selected Highlighted)", OUT_ASS_PLOT
     )
     plot_tsne(
-        tsne_kp, labels, podcasts, selected_indices,
+        tsne_kp, labels, podcasts, selected_info,
         "t-SNE of All Key-Point Embeddings (Selected Highlighted)", OUT_KP_PLOT
     )
 
