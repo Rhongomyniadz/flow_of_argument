@@ -85,11 +85,11 @@ def main():
         help="Minimum word count threshold for turns"
     )
     parser.add_argument(
-        "--window_size", type=int, default=4,
+        "--window_size", type=int, default=6,
         help="Number of turns per sliding window"
     )
     parser.add_argument(
-        "--stride", type=int, default=2,
+        "--stride", type=int, default=3,
         help="Stride size for sliding window"
     )
     args = parser.parse_args()
@@ -105,7 +105,7 @@ def main():
         return
 
     # Sample episodes
-    sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
+    sample_eps = random.sample(two_speaker_eps, k=min(20, len(two_speaker_eps)))
     logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=1)
