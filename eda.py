@@ -7,52 +7,71 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 
 def main():
-    # Configuration
-    INPUT_PATH   = 'results/politics.json'
-    OUTPUT_PLOT  = 'results/individual_assumptions_tsne.png'
-    SEED         = 42
-    MODEL_NAME   = 'all-MiniLM-L6-v2'
-    HF_CACHE     = os.getenv('HF_HOME', None)
-
-    # Ensure output directory
-    os.makedirs('results', exist_ok=True)
+    # ─── Config ────────────────────────────────────────────────────────────────
+    INPUT_PATH        = 'results/politics.json'
+    OUTPUT_PLOT       = 'results/individual_assumptions_tsne.png'
+    OUTPUT_SELECTED   = 'results/selected_assumption.json'
+    SEED              = 42
+    MODEL_NAME        = 'all-MiniLM-L6-v2'
+    HF_CACHE          = os.getenv('HF_HOME', None)
+    SAMPLE_PER_PODCAST = 3
     random.seed(SEED)
 
-    # Load all windows
+    # ─── Load & Flatten ───────────────────────────────────────────────────────
+    os.makedirs('results', exist_ok=True)
     with open(INPUT_PATH, 'r', encoding='utf-8') as f:
         windows = json.load(f)
 
-    # Flatten each individual assumption into its own record
     records = []
     for w in windows:
-        podcast = w.get('Podcast', 'Unknown')
-        win_idx = w.get('WindowIndex', -1)
-        for asm_idx, asm in enumerate(w.get('Assumptions', [])):
+        pod = w.get('Podcast', 'Unknown')
+        win = w.get('WindowIndex', -1)
+        for a_idx, asm in enumerate(w.get('Assumptions', [])):
             records.append({
-                'Podcast': podcast,
-                'WindowIndex': win_idx,
-                'AssumptionIndex': asm_idx,
+                'Podcast': pod,
+                'WindowIndex': win,
+                'AssumptionIndex': a_idx,
                 'Text': asm
             })
     df = pd.DataFrame(records)
     print(f"Total individual assumptions: {len(df)}")
 
-    # Initialize encoder & embed
+    # ─── Embed & t-SNE ─────────────────────────────────────────────────────────
     embedder   = SentenceTransformer(MODEL_NAME, cache_folder=HF_CACHE)
-    texts      = df['Text'].tolist()
-    embeddings = embedder.encode(texts, show_progress_bar=True)
+    embeddings = embedder.encode(df['Text'].tolist(), show_progress_bar=True)
 
-    # Run t-SNE
-    tsne   = TSNE(n_components=2, random_state=SEED)
+    tsne = TSNE(n_components=2, random_state=SEED)
     coords = tsne.fit_transform(embeddings)
-    df['x'], df['y'] = coords[:, 0], coords[:, 1]
+    df['x'], df['y'] = coords[:,0], coords[:,1]
 
-    # Prepare coloring
+    # ─── Sample up to 3 per podcast ─────────────────────────────────────────────
+    def sample_three(group):
+        n = min(len(group), SAMPLE_PER_PODCAST)
+        return group.sample(n=n, random_state=SEED)
+
+    selected_df = (
+        df
+        .groupby('Podcast', group_keys=False)
+        .apply(sample_three)
+        .reset_index(drop=True)
+    )
+
+    # ─── Save selected assumptions ──────────────────────────────────────────────
+    # we’ll save the identifying metadata + text
+    out_records = selected_df[[
+        'Podcast','WindowIndex','AssumptionIndex','Text'
+    ]].to_dict(orient='records')
+    with open(OUTPUT_SELECTED, 'w', encoding='utf-8') as f:
+        json.dump(out_records, f, ensure_ascii=False, indent=2)
+    print(f"Saved {len(out_records)} sampled assumptions to {OUTPUT_SELECTED}")
+
+    # ─── Plot ──────────────────────────────────────────────────────────────────
     labels, podcast_names = pd.factorize(df['Podcast'])
-    cmap = plt.get_cmap('tab20')  # up to 20 distinct colors
+    cmap = plt.get_cmap('tab20')
 
-    # Plot each point, colored by podcast, on a wide canvas
     fig, ax = plt.subplots(figsize=(20, 10))
+
+    # plot all points
     for idx, name in enumerate(podcast_names):
         mask = (labels == idx)
         ax.scatter(
@@ -60,29 +79,43 @@ def main():
             df.loc[mask, 'y'],
             color=cmap(idx),
             label=name,
-            s=40,
-            alpha=0.6
+            s=30,
+            alpha=0.5
         )
 
-    # Automatically add a 10% data margin on each axis
-    ax.margins(x=0.1, y=0.1)
+    # highlight sampled points
+    ax.scatter(
+        selected_df['x'],
+        selected_df['y'],
+        marker='x',
+        s=100,
+        linewidths=2,
+        color='black',
+        label='_nolegend_'  # no extra legend entry
+    )
 
-    # Keep 1:1 data-unit aspect ratio so X and Y scales aren’t skewed
+    # annotate each with WindowIndex-AssumptionIndex
+    for _, row in selected_df.iterrows():
+        ax.text(
+            row['x'],
+            row['y'],
+            f"{row['WindowIndex']}-{row['AssumptionIndex']}",
+            fontsize=8,
+            weight='bold',
+            va='center', ha='center',
+            color='black'
+        )
+
+    # pad and equalize aspect
+    ax.margins(x=0.1, y=0.1)
     ax.set_aspect('equal', adjustable='box')
 
-    # Labels, legend, layout
-    ax.set_title('t-SNE of Individual Assumption Embeddings')
+    ax.set_title('t-SNE of Individual Assumption Embeddings\n(× = sampled assumptions)')
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
-    ax.legend(
-        title='Podcast',
-        bbox_to_anchor=(1.05, 1),
-        loc='upper left',
-        fontsize='small'
-    )
-    plt.tight_layout()
+    ax.legend(title='Podcast', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small')
 
-    # Save
+    plt.tight_layout()
     plt.savefig(OUTPUT_PLOT, dpi=300)
     print(f"Saved plot to {OUTPUT_PLOT}")
 
