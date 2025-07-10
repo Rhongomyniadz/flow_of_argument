@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 import json
 import random
@@ -7,14 +6,13 @@ from sentence_transformers import SentenceTransformer
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 
-
 def main():
     # Configuration
-    INPUT_PATH = 'results/politics.json'
-    OUTPUT_PLOT = 'results/individual_assumptions_tsne.png'
-    SEED = 42
-    MODEL_NAME = 'all-MiniLM-L6-v2'
-    HF_CACHE = os.getenv('HF_HOME', None)
+    INPUT_PATH   = 'results/politics.json'
+    OUTPUT_PLOT  = 'results/individual_assumptions_tsne.png'
+    SEED         = 42
+    MODEL_NAME   = 'all-MiniLM-L6-v2'
+    HF_CACHE     = os.getenv('HF_HOME', None)
 
     # Ensure output directory
     os.makedirs('results', exist_ok=True)
@@ -39,49 +37,52 @@ def main():
     df = pd.DataFrame(records)
     print(f"Total individual assumptions: {len(df)}")
 
-    # Initialize encoder
-    embedder = SentenceTransformer(MODEL_NAME, cache_folder=HF_CACHE)
-
-    # Encode each assumption separately
-    texts = df['Text'].tolist()
+    # Initialize encoder & embed
+    embedder   = SentenceTransformer(MODEL_NAME, cache_folder=HF_CACHE)
+    texts      = df['Text'].tolist()
     embeddings = embedder.encode(texts, show_progress_bar=True)
 
-    # Run t-SNE on individual embeddings
-    tsne = TSNE(n_components=2, random_state=SEED)
+    # Run t-SNE
+    tsne   = TSNE(n_components=2, random_state=SEED)
     coords = tsne.fit_transform(embeddings)
-    df['x'] = coords[:, 0]
-    df['y'] = coords[:, 1]
+    df['x'], df['y'] = coords[:, 0], coords[:, 1]
 
-    # Plot each point, colored by podcast
+    # Prepare coloring
     labels, podcast_names = pd.factorize(df['Podcast'])
     cmap = plt.get_cmap('tab20')  # up to 20 distinct colors
 
-    plt.figure(figsize=(12, 10))
+    # Plot each point, colored by podcast, on a wide canvas
+    fig, ax = plt.subplots(figsize=(20, 10))
     for idx, name in enumerate(podcast_names):
         mask = (labels == idx)
-        plt.scatter(
-            df.loc[mask, 'x'], df.loc[mask, 'y'],
-            c=[cmap(idx)], label=name,
-            s=40, alpha=0.6
+        ax.scatter(
+            df.loc[mask, 'x'],
+            df.loc[mask, 'y'],
+            color=cmap(idx),
+            label=name,
+            s=40,
+            alpha=0.6
         )
 
-    # Expand x-axis limits for better spread
-    x_min, x_max = df['x'].min(), df['x'].max()
-    x_margin = (x_max - x_min) * 0.1  # 10% margin
-    plt.xlim(x_min - x_margin, x_max + x_margin)
+    # Automatically add a 10% data margin on each axis
+    ax.margins(x=0.1, y=0.1)
 
-    # Optional: similarly expand y-axis if needed
-    y_min, y_max = df['y'].min(), df['y'].max()
-    y_margin = (y_max - y_min) * 0.1
-    plt.ylim(y_min - y_margin, y_max + y_margin)
+    # Keep 1:1 data-unit aspect ratio so X and Y scales aren’t skewed
+    ax.set_aspect('equal', adjustable='box')
 
-    plt.title('t-SNE of Individual Assumption Embeddings')
-    plt.xlabel('t-SNE dim 1')
-    plt.ylabel('t-SNE dim 2')
-    plt.legend(title='Podcast', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small')
+    # Labels, legend, layout
+    ax.set_title('t-SNE of Individual Assumption Embeddings')
+    ax.set_xlabel('t-SNE dim 1')
+    ax.set_ylabel('t-SNE dim 2')
+    ax.legend(
+        title='Podcast',
+        bbox_to_anchor=(1.05, 1),
+        loc='upper left',
+        fontsize='small'
+    )
     plt.tight_layout()
 
-    # Save the plot
+    # Save
     plt.savefig(OUTPUT_PLOT, dpi=300)
     print(f"Saved plot to {OUTPUT_PLOT}")
 
