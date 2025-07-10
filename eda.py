@@ -51,7 +51,7 @@ def plot_tsne(coords, labels, podcasts, title, out_path, annotate=None):
 
 def main():
     # --- CONFIG ---
-    INPUT_PATH    = 'results/news_sample_sliding_window_vllm.json'
+    INPUT_PATH    = 'results/politics.json'
     ASS_PLOT      = 'results/assumptions_individual_tsne.png'
     KP_PLOT       = 'results/keypoints_individual_tsne.png'
     SEED          = 42
