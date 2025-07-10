@@ -172,10 +172,10 @@ def main():
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
-    out_csv = 'results/news_sample_sliding_window_vllm.json'
-    with open(out_csv, 'w', encoding='utf-8') as f:
+    out = 'results/politics.json'
+    with open(out, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2)
-    logger.info(f"Processed results saved to {out_csv}")
+    logger.info(f"Processed results saved to {out}")
 
     raw_out = 'results/vllm_raw.json'
     with open(raw_out, 'w', encoding='utf-8') as f:
