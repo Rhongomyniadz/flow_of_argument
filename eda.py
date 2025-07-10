@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import json
 import random
@@ -5,6 +6,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
+
 
 def main():
     # Configuration
@@ -62,6 +64,16 @@ def main():
             c=[cmap(idx)], label=name,
             s=40, alpha=0.6
         )
+
+    # Expand x-axis limits for better spread
+    x_min, x_max = df['x'].min(), df['x'].max()
+    x_margin = (x_max - x_min) * 0.1  # 10% margin
+    plt.xlim(x_min - x_margin, x_max + x_margin)
+
+    # Optional: similarly expand y-axis if needed
+    y_min, y_max = df['y'].min(), df['y'].max()
+    y_margin = (y_max - y_min) * 0.1
+    plt.ylim(y_min - y_margin, y_max + y_margin)
 
     plt.title('t-SNE of Individual Assumption Embeddings')
     plt.xlabel('t-SNE dim 1')
