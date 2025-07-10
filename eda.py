@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 
 def main():
     # ─── Config ────────────────────────────────────────────────────────────────
-    INPUT_PATH        = 'results/politics.json'
-    OUTPUT_PLOT       = 'results/individual_assumptions_tsne.png'
-    OUTPUT_SELECTED   = 'results/selected_assumption.json'
-    SEED              = 42
-    MODEL_NAME        = 'all-MiniLM-L6-v2'
-    HF_CACHE          = os.getenv('HF_HOME', None)
+    INPUT_PATH         = 'results/politics.json'
+    OUTPUT_PLOT        = 'results/individual_assumptions_tsne.png'
+    OUTPUT_SELECTED    = 'results/selected_assumption.json'
+    SEED               = 42
+    MODEL_NAME         = 'all-MiniLM-L6-v2'
+    HF_CACHE           = os.getenv('HF_HOME', None)
     SAMPLE_PER_PODCAST = 3
     random.seed(SEED)
 
@@ -57,7 +57,6 @@ def main():
     )
 
     # ─── Save selected assumptions ──────────────────────────────────────────────
-    # we’ll save the identifying metadata + text
     out_records = selected_df[[
         'Podcast','WindowIndex','AssumptionIndex','Text'
     ]].to_dict(orient='records')
@@ -83,18 +82,7 @@ def main():
             alpha=0.5
         )
 
-    # highlight sampled points
-    ax.scatter(
-        selected_df['x'],
-        selected_df['y'],
-        marker='x',
-        s=100,
-        linewidths=2,
-        color='black',
-        label='_nolegend_'  # no extra legend entry
-    )
-
-    # annotate each with WindowIndex-AssumptionIndex
+    # annotate each sampled point by its WindowIndex-AssumptionIndex
     for _, row in selected_df.iterrows():
         ax.text(
             row['x'],
@@ -110,10 +98,15 @@ def main():
     ax.margins(x=0.1, y=0.1)
     ax.set_aspect('equal', adjustable='box')
 
-    ax.set_title('t-SNE of Individual Assumption Embeddings\n(× = sampled assumptions)')
+    ax.set_title('t-SNE of Individual Assumption Embeddings\n(annotated samples)')
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
-    ax.legend(title='Podcast', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small')
+    ax.legend(
+        title='Podcast',
+        bbox_to_anchor=(1.05, 1),
+        loc='upper left',
+        fontsize='small'
+    )
 
     plt.tight_layout()
     plt.savefig(OUTPUT_PLOT, dpi=300)
