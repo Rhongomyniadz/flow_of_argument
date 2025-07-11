@@ -60,12 +60,11 @@ def main():
     df['x'], df['y'] = coords[:,0], coords[:,1]
 
     # ─── Plot ──────────────────────────────────────────────────────────────────
-    podcasts = list(df['Podcast'].unique())
+    # first, draw all ORIGINAL in one pass
+    podcasts = df['Podcast'].unique()
     cmap     = plt.get_cmap('tab20')
 
     fig, ax = plt.subplots(figsize=(20, 10))
-
-    # 1) original assumptions: solid circles, colored by podcast
     for i, pod in enumerate(podcasts):
         mask = (df['Dataset']=='Original') & (df['Podcast']==pod)
         ax.scatter(
@@ -78,29 +77,31 @@ def main():
             alpha=0.8
         )
 
-    # 2) random assumptions: unfilled rings, red for positives (even WindowIndex), blue for negatives (odd)
-    rand_df = df[df['Dataset']=='Random']
-    pos = rand_df['WindowIndex'] % 2 == 0
-    neg = rand_df['WindowIndex'] % 2 == 1
+    # now overlay RANDOM as unfilled rings
+    random_df = df[df['Dataset']=='Random']
+    pos_mask  = random_df['WindowIndex'] % 2 == 0  # even → “positive”
+    neg_mask  = random_df['WindowIndex'] % 2 == 1  # odd  → “negative”
 
+    # lime rings for positives
     ax.scatter(
-        rand_df.loc[pos, 'x'],
-        rand_df.loc[pos, 'y'],
+        random_df.loc[pos_mask, 'x'],
+        random_df.loc[pos_mask, 'y'],
         marker='o',
         facecolors='none',
-        edgecolors='red',
-        linewidths=1.5,
-        s=100,
+        edgecolors='lime',
+        linewidths=2,
+        s=120,
         label='Random Positive'
     )
+    # magenta rings for negatives
     ax.scatter(
-        rand_df.loc[neg, 'x'],
-        rand_df.loc[neg, 'y'],
+        random_df.loc[neg_mask, 'x'],
+        random_df.loc[neg_mask, 'y'],
         marker='o',
         facecolors='none',
-        edgecolors='blue',
-        linewidths=1.5,
-        s=100,
+        edgecolors='magenta',
+        linewidths=2,
+        s=120,
         label='Random Negative'
     )
 
