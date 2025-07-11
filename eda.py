@@ -98,7 +98,7 @@ def main():
     ax.margins(x=0.1, y=0.1)
     ax.set_aspect('equal', adjustable='box')
 
-    ax.set_title('t-SNE of Individual Assumption Embeddings\n(annotated samples)')
+    ax.set_title('t-SNE of Individual Assumption Embeddings')
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
     ax.legend(
