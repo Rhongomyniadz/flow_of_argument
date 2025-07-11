@@ -67,45 +67,65 @@ def main():
 
     fig, ax = plt.subplots(figsize=(20, 10))
 
-    # plot originals as circles
+    # 1) plot ORIGINAL assumptions as light circles
     for i, pod in enumerate(podcasts):
         mask = (df['Dataset']=='Original') & (df['Podcast']==pod)
         if not mask.any(): 
             continue
-        ax.scatter(df.loc[mask, 'x'],
-                   df.loc[mask, 'y'],
-                   marker='o',
-                   color=cmap(i),
-                   label=pod,
-                   s=30,
-                   alpha=0.6)
+        ax.scatter(
+            df.loc[mask, 'x'],
+            df.loc[mask, 'y'],
+            marker='o',
+            facecolors=cmap(i),
+            edgecolors='none',
+            label=pod,
+            s=30,
+            alpha=0.3
+        )
 
-    # plot randoms as crosses
+    # 2) plot RANDOM assumptions as deeper, opaque circles with black edge
     for i, pod in enumerate(podcasts):
         mask = (df['Dataset']=='Random') & (df['Podcast']==pod)
         if not mask.any():
             continue
-        ax.scatter(df.loc[mask, 'x'],
-                   df.loc[mask, 'y'],
-                   marker='x',
-                   color=cmap(i),
-                   s=60,
-                   alpha=0.8)
+        ax.scatter(
+            df.loc[mask, 'x'],
+            df.loc[mask, 'y'],
+            marker='o',
+            facecolors=cmap(i),
+            edgecolors='black',
+            linewidths=1.2,
+            s=80,
+            alpha=1.0
+        )
+        # annotate each random point with its podcast name
+        for _, row in df.loc[mask].iterrows():
+            ax.text(
+                row['x'], row['y']+0.5,      # slight vertical offset
+                pod,
+                fontsize=7,
+                weight='bold',
+                ha='center',
+                va='bottom',
+                color=cmap(i)
+            )
 
-    # pad and equalize
+    # 3) finish styling
     ax.margins(0.1)
     ax.set_aspect('equal', adjustable='box')
-
-    ax.set_title('t-SNE of Original (o) vs Random (×) Assumptions', fontsize=16)
+    ax.set_title('t-SNE: Assumptions Embedding', fontsize=16)
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
-
-    ax.legend(title='Podcast', bbox_to_anchor=(1.05, 1),
-              loc='upper left', fontsize='small')
+    ax.legend(
+        title='Podcast',
+        bbox_to_anchor=(1.05, 1),
+        loc='upper left',
+        fontsize='small'
+    )
 
     plt.tight_layout()
-    plt.savefig(OUTPUT_PLOT, dpi=300)
-    print(f"Saved combined plot to {OUTPUT_PLOT}")
+    plt.savefig('results/combined_assumptions_tsne.png', dpi=300)
+    print("Saved plot → results/combined_assumptions_tsne.png")
 
 if __name__ == '__main__':
     main()
