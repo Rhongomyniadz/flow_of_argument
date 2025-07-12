@@ -105,7 +105,7 @@ def main():
         return
 
     # Sample episodes
-    sample_eps = random.sample(two_speaker_eps, k=min(20, len(two_speaker_eps)))
+    sample_eps = random.sample(two_speaker_eps, k=min(30, len(two_speaker_eps)))
     logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
 
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=1)
