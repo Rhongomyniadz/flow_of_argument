@@ -63,14 +63,15 @@ def main():
 
     # ─── Plot ──────────────────────────────────────────────────────────────────
     podcasts = df['Podcast'].unique()
-    cmap     = plt.get_cmap('tab20')
+    # create a discrete colormap of length = number of podcasts
+    cmap = plt.get_cmap('tab20', len(podcasts))
 
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plt.subplots(figsize=(24, 12))  # wider for 30 legends
 
     # 1) plot ORIGINAL assumptions as light circles
     for i, pod in enumerate(podcasts):
         mask = (df['Dataset']=='Original') & (df['Podcast']==pod)
-        if not mask.any(): 
+        if not mask.any():
             continue
         ax.scatter(
             df.loc[mask, 'x'],
@@ -98,12 +99,11 @@ def main():
             s=80,
             alpha=1.0
         )
-        # annotate each random point with its podcast name
         for _, row in df.loc[mask].iterrows():
             ax.text(
-                row['x'], row['y']+0.5,      # slight vertical offset
+                row['x'], row['y']+0.5,
                 pod,
-                fontsize=7,
+                fontsize=6,
                 weight='bold',
                 ha='center',
                 va='bottom',
@@ -120,11 +120,12 @@ def main():
         title='Podcast',
         bbox_to_anchor=(1.05, 1),
         loc='upper left',
-        fontsize='small'
+        fontsize='x-small',
+        ncol=2
     )
 
     plt.tight_layout()
-    plt.savefig('results/combined_assumptions_tsne.png', dpi=300)
+    plt.savefig(OUTPUT_PLOT, dpi=300)
     print("Saved plot → results/combined_assumptions_tsne.png")
 
 if __name__ == '__main__':
