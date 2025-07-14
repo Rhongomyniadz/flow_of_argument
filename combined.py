@@ -51,7 +51,11 @@ def main():
 
     # ─── Combine into one DataFrame ────────────────────────────────────────────
     df = pd.DataFrame(orig_records + rand_records)
-    print(f"Total points (orig + random): {len(df)}")
+    print(f"Total points before filtering: {len(df)}")
+
+    # ─── Filter out empty assumptions ───────────────────────────────────────────
+    df = df[df['Text'].str.strip().astype(bool)]
+    print(f"Total points after filtering empties: {len(df)}")
 
     # ─── Embed & run t-SNE ─────────────────────────────────────────────────────
     embedder = SentenceTransformer(MODEL_NAME,
@@ -63,10 +67,9 @@ def main():
 
     # ─── Plot ──────────────────────────────────────────────────────────────────
     podcasts = df['Podcast'].unique()
-    # create a discrete colormap of length = number of podcasts
     cmap = plt.get_cmap('tab20', len(podcasts))
 
-    fig, ax = plt.subplots(figsize=(24, 12))  # wider for 30 legends
+    fig, ax = plt.subplots(figsize=(24, 12))
 
     # 1) plot ORIGINAL assumptions as light circles
     for i, pod in enumerate(podcasts):
@@ -110,7 +113,7 @@ def main():
                 color=cmap(i)
             )
 
-    # 3) finish styling
+    # ─── finish styling ─────────────────────────────────────────────────────────
     ax.margins(0.1)
     ax.set_aspect('equal', adjustable='box')
     ax.set_title('t-SNE: Assumptions Embedding', fontsize=16)
@@ -126,7 +129,7 @@ def main():
 
     plt.tight_layout()
     plt.savefig(OUTPUT_PLOT, dpi=300)
-    print("Saved plot → results/combined_assumptions_tsne.png")
+    print(f"Saved plot → {OUTPUT_PLOT}")
 
 if __name__ == '__main__':
     main()
