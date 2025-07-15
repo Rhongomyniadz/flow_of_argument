@@ -105,9 +105,15 @@ def main():
     # Load podcasts for specified hosts
     sporc.load_podcast_subset(hosts=args.hosts)
     logger.info(f"Loaded podcasts for hosts: {', '.join(args.hosts)}")
+    logger.info("Host names in dataset:")
+    all_hosts = set()
+    for podcast in sporc.get_all_podcasts():
+        all_hosts.update(podcast.host_names)
+    logger.info(f"Available hosts: {', '.join(sorted(all_hosts))}")
 
     # Get all episodes first
     all_episodes = sporc.search_episodes()
+    logger.info(f"Total episodes found: {len(all_episodes)}")
     
     if args.two_speakers_only:
         # Filter for two-speaker episodes if flag is set
@@ -128,12 +134,22 @@ def main():
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=0)
 
     for host in args.hosts:
+        # Filter episodes for current host
+        host_episodes = [ep for ep in sample_eps if host in ep.host_names]
+        logger.info(f"Found {len(host_episodes)} episodes for host '{host}'")
+        if not host_episodes:
+            logger.warning(f"No episodes found for host '{host}'. Check host name spelling.")
+            continue
+        
+        # Log episode details
+        for ep in host_episodes:
+            logger.info(f"Episode: {ep.title}")
+            logger.info(f"  Hosts: {', '.join(ep.host_names)}")
+            logger.info(f"  Speakers: {', '.join(ep.main_speakers)}")
+        
         host_results: List[Dict] = []
         host_raw_results: List[Dict] = []
 
-        # Filter episodes for current host
-        host_episodes = [ep for ep in sample_eps if host in ep.host_names]
-        
         for ep in tqdm(host_episodes, desc=f"Episodes for {host}", unit="episode"):
             turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
             windows = [turns[i:i+args.window_size]
