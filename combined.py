@@ -84,7 +84,7 @@ def main():
             edgecolors='none',
             label=pod,
             s=30,
-            alpha=0.6
+            alpha=0.8
         )
 
     # 2) plot RANDOM assumptions as deeper, opaque circles with black edge
