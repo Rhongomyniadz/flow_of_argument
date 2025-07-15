@@ -75,10 +75,10 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--categories", "-c",
+        "--hosts", "-H",
         nargs='+',
         required=True,
-        help="Podcast categories to load"
+        help="List of podcast hosts to analyze"
     )
     parser.add_argument(
         "--min_words", type=int, default=50,
@@ -96,7 +96,10 @@ def main():
 
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
-    sporc.load_podcast_subset(categories=args.categories)
+    
+    # Load podcasts for specified hosts
+    sporc.load_podcast_subset(hosts=args.hosts)
+    logger.info(f"Loaded podcasts for hosts: {', '.join(args.hosts)}")
 
     # Find two-speaker episodes
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
@@ -113,74 +116,66 @@ def main():
     results: List[Dict] = []
     raw_results: List[Dict] = []
 
-    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
-        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
-        windows = [turns[i:i+args.window_size]
-                   for i in range(0, len(turns) - args.window_size + 1, args.stride)]
-        for idx, win in enumerate(tqdm(windows, desc=f" Windows in {ep.title}", leave=False)):
-            combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
-            prompt = f"""
-            You are a podcast conversation analyst. Your job is to read a block of six consecutive speaker turns, identify (1) the main points discussed or proposed, and (2) any implicit assumptions underlying the speakers’ remarks. You must respond only with a single JSON object—nothing else.
+    # Create results directory if it doesn't exist
+    os.makedirs('results', exist_ok=True)
 
-            JSON schema:
-            {{
-            "key_points_discussed_or_proposed": [string, …],
-            "key_points_assumed": [string, …]
-            }}
+    for host in args.hosts:
+        host_results: List[Dict] = []
+        host_raw_results: List[Dict] = []
 
-            Example:
-            Input:
-            Speaker A: We should build more charging stations for electric cars.
-            Speaker B: That would require significant public funding.
-            …
-            Speaker F: If adoption accelerates, the infrastructure will pay for itself.
+        # Filter episodes for current host
+        host_episodes = [ep for ep in sample_eps if host in ep.host_names]
+        
+        for ep in tqdm(host_episodes, desc=f"Episodes for {host}", unit="episode"):
+            turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+            windows = [turns[i:i+args.window_size]
+                      for i in range(0, len(turns) - args.window_size + 1, args.stride)]
+            
+            for idx, win in enumerate(tqdm(windows, desc=f" Windows in {ep.title}", leave=False)):
+                combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
+                prompt = f"""
+                You are a podcast conversation analyst. Your job is to read a block of six consecutive speaker turns, identify (1) the main points discussed or proposed, and (2) any implicit assumptions underlying the speakers' remarks. You must respond only with a single JSON object—nothing else.
 
-            Output:
-            {{
-            "key_points_discussed_or_proposed": [
-                "Proposal to build more EV charging stations",
-                "Need for public funding to support infrastructure",
-                "Expectation that increased adoption will offset costs"
-            ],
-            "key_points_assumed": [
-                "Electric vehicle adoption will continue to grow",
-                "Taxpayers are willing to fund public charging",
-                "Cost savings from usage will cover initial investment"
-            ]
-            }}
+                JSON schema:
+                {{
+                "key_points_discussed_or_proposed": [string, …],
+                "key_points_assumed": [string, …]
+                }}
 
-            Now analyze Window #{idx}:
-            {combined}
+                Now analyze Window #{idx}:
+                {combined}
 
-            Respond with a valid JSON that strictly follows the schema above.
-            """
-            raw = llm.generate_response(prompt)
-            # Save raw response
-            raw_results.append({
-                "Podcast": ep.title,
-                "WindowIndex": idx,
-                "RawOutput": raw
-            })
-            data = normalize_output(raw)
-            spks = set(s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker]))
-            results.append({
-                "Podcast": ep.title,
-                "Speakers": ','.join(spks),
-                "WindowIndex": idx,
-                "WindowText": combined,
-                "KeyPoints": data.get("key_points_discussed_or_proposed", []),
-                "Assumptions": data.get("key_points_assumed", [])
-            })
+                Respond with a valid JSON that strictly follows the schema above.
+                """
+                raw = llm.generate_response(prompt)
+                # Save raw response
+                host_raw_results.append({
+                    "Podcast": ep.title,
+                    "WindowIndex": idx,
+                    "RawOutput": raw
+                })
+                data = normalize_output(raw)
+                spks = set(s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker]))
+                host_results.append({
+                    "Podcast": ep.title,
+                    "Speakers": ','.join(spks),
+                    "WindowIndex": idx,
+                    "WindowText": combined,
+                    "KeyPoints": data.get("key_points_discussed_or_proposed", []),
+                    "Assumptions": data.get("key_points_assumed", [])
+                })
 
-    out = 'results/politics.json'
-    with open(out, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2)
-    logger.info(f"Processed results saved to {out}")
+        # Save results for current host
+        host_filename = f"results/{host.replace(' ', '_').lower()}.json"
+        with open(host_filename, 'w', encoding='utf-8') as f:
+            json.dump(host_results, f, indent=2)
+        logger.info(f"Processed results for {host} saved to {host_filename}")
 
-    raw_out = 'results/vllm_raw.json'
-    with open(raw_out, 'w', encoding='utf-8') as f:
-        json.dump(raw_results, f, indent=2)
-    logger.info(f"Raw LLM outputs saved to {raw_out}")
+        # Save raw results for current host
+        raw_host_filename = f"results/{host.replace(' ', '_').lower()}_raw.json"
+        with open(raw_host_filename, 'w', encoding='utf-8') as f:
+            json.dump(host_raw_results, f, indent=2)
+        logger.info(f"Raw LLM outputs for {host} saved to {raw_host_filename}")
 
 if __name__ == "__main__":
     main()
