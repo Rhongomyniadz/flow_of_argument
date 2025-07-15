@@ -125,13 +125,7 @@ def main():
     sample_eps = random.sample(episodes_to_process, k=min(30, len(episodes_to_process)))
     logger.info(f"Selected {len(sample_eps)} episodes for analysis.")
 
-    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=5)
-
-    results: List[Dict] = []
-    raw_results: List[Dict] = []
-
-    # Create results directory if it doesn't exist
-    os.makedirs('results', exist_ok=True)
+    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=0)
 
     for host in args.hosts:
         host_results: List[Dict] = []
