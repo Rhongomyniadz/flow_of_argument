@@ -8,9 +8,8 @@ import matplotlib.pyplot as plt
 
 def main():
     # ─── Config ────────────────────────────────────────────────────────────────
-    INPUT_PATH         = 'results/politics.json'
-    OUTPUT_PLOT        = 'results/individual_assumptions_tsne.png'
-    OUTPUT_SELECTED    = 'results/selected_assumption.json'
+    INPUT_PATH         = 'results/john_doe.json'
+    OUTPUT_PLOT        = 'results/john_doe.png'
     SEED               = 42
     MODEL_NAME         = 'all-MiniLM-L6-v2'
     HF_CACHE           = os.getenv('HF_HOME', None)
@@ -55,14 +54,6 @@ def main():
         .apply(sample_three)
         .reset_index(drop=True)
     )
-
-    # ─── Save selected assumptions ──────────────────────────────────────────────
-    out_records = selected_df[[
-        'Podcast','WindowIndex','AssumptionIndex','Text'
-    ]].to_dict(orient='records')
-    with open(OUTPUT_SELECTED, 'w', encoding='utf-8') as f:
-        json.dump(out_records, f, ensure_ascii=False, indent=2)
-    print(f"Saved {len(out_records)} sampled assumptions to {OUTPUT_SELECTED}")
 
     # ─── Plot ──────────────────────────────────────────────────────────────────
     labels, podcast_names = pd.factorize(df['Podcast'])
