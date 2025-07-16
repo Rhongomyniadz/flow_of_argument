@@ -145,7 +145,7 @@ def main():
         for ep in host_episodes:
             logger.info(f"Episode: {ep.title}")
             logger.info(f"  Hosts: {', '.join(ep.host_names)}")
-            logger.info(f"  Speakers: {', '.join(ep.main_speakers)}")
+            logger.info(f"  Speakers: {', '.join(ep.main_ep_speakers)}")
         
         host_results: List[Dict] = []
         host_raw_results: List[Dict] = []
