@@ -121,51 +121,17 @@ def main():
         for idx, win in enumerate(windows):
             combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
             prompt = f"""
-You are an expert podcast conversation analyst. 
-Your job is to read a block of six consecutive speaker turns from a single episode and produce a single JSON object with two fields:
-  1. "key_points_discussed_or_proposed": a list of the main ideas, topics, or arguments that the speakers explicitly discuss or propose.
-  2. "key_points_assumed": a list of the implicit premises or assumptions that underlie what they say (i.e. what they’re taking for granted but haven’t stated outright).
+            You are an expert podcast conversation analyst.
+            You must output *only* valid JSON matching exactly this schema:
 
-RULES:
-• Output ONLY valid JSON matching exactly the schema below—no extra text, no markdown, no commentary.  
-• If you detect no implicit assumptions, return an empty list for "key_points_assumed". Similarly for "key_points_discussed_or_proposed".  
-• Do not invent facts: every item must be grounded in the text.  
+            {{
+            "key_points_discussed_or_proposed": [ string, … ],
+            "key_points_assumed":           [ string, … ]
+            }}
 
-JSON schema:
-{
-  "key_points_discussed_or_proposed": [ string, … ],
-  "key_points_assumed":           [ string, … ]
-}
-
-MINI EXAMPLE
-----------------------------------------
-Input turns:
-Speaker A: “We should invest in solar—electricity costs keep rising.”
-Speaker B: “Yes. Panels pay for themselves in five years, and homeowners want lower bills.”
-... (4 more turns) ...
-
-Correct output:
-{
-  "key_points_discussed_or_proposed": [
-    "Electricity rates are increasing",
-    "Solar panels have a 5‑year payback period",
-    "Solar reduces homeowners’ monthly bills"
-  ],
-  "key_points_assumed": [
-    "Homeowners can afford the upfront cost of solar installation",
-    "Solar power is a reliable energy source over time"
-  ]
-}
-
-NOW ANALYZE:
-Window #<IDX> from episode "<EPISODE TITLE>":
-<TURN 1>
-<TURN 2>
-…
-<TURN 6>
-
-Respond with valid JSON following the schema exactly.
-"""
+            Now analyze Window #{idx} of "{ep.title}":
+            {combined}
+            """
             raw = llm.generate_response(prompt)
             raw_results.append({"Podcast": ep.title, "WindowIndex": idx, "RawOutput": raw})
 
