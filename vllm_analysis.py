@@ -15,7 +15,6 @@ logging.basicConfig(level=logging.INFO)
 
 # Normalization helper
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    # without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
     start, end = raw_response.find('{'), raw_response.rfind('}')
     if start == -1 or end == -1 or end <= start:
         return {}
@@ -56,11 +55,14 @@ class LLMInterface:
             download_dir="/shared/4/models",
             device=f"cuda:{gpu_id}"
         )
-        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, 
-                                              min_p=min_p,
-                                              repetition_penalty=repetition_penalty, 
-                                              top_k=top_k,
-                                              max_tokens=max_toekns)
+        self.sampling_params = SamplingParams(
+            temperature=temperature,
+            top_p=top_p,
+            min_p=min_p,
+            repetition_penalty=repetition_penalty,
+            top_k=top_k,
+            max_tokens=max_toekns
+        )
 
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
         if max_tokens is not None:
@@ -68,18 +70,6 @@ class LLMInterface:
         outputs = self.llm.generate(prompt, self.sampling_params)
         return outputs[0].outputs[0].text.strip()
 
-import os
-import argparse
-import random
-import json
-import logging
-import re
-from typing import List, Dict, Optional
-from tqdm import tqdm
-from sporc import SPORCDataset
-from vllm import LLM, SamplingParams
-
-# … (normalize_output, count_words, LLMInterface as before) …
 
 def main():
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
@@ -90,6 +80,10 @@ def main():
         type=str,
         required=True,
         help="Name of the podcast host to analyze"
+    )
+    parser.add_argument(
+        "--gpu_id", type=int, default=0,
+        help="CUDA GPU device ID to use for inference"
     )
     parser.add_argument(
         "--min_words", type=int, default=50,
@@ -105,35 +99,24 @@ def main():
     )
     args = parser.parse_args()
 
-    # Initialize SPORC in streaming/selective mode
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
-
-    # Selectively load only the podcasts hosted by args.host
     sporc.load_podcast_subset(hosts=[args.host])
     episodes = sporc.get_all_episodes()
     if not episodes:
-        logging.error(f"No episodes found for host '{args.host}'")
+        logger.error(f"No episodes found for host '{args.host}'")
         return
+    logger.info(f"Loaded {len(episodes)} episodes for host '{args.host}'")
 
-    logging.info(f"Loaded {len(episodes)} episodes for host '{args.host}'")
-
-    # Sample up to 30
     sample_eps = random.sample(episodes, k=min(30, len(episodes)))
-    logging.info(f"Analyzing {len(sample_eps)} episodes for host '{args.host}'")
+    logger.info(f"Analyzing {len(sample_eps)} episodes for host '{args.host}'")
 
-    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=0)
+    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
 
     results, raw_results = [], []
-
     for ep in tqdm(sample_eps, desc=f"Episodes for {args.host}", unit="episode"):
-        turns = [t for t in ep.get_all_turns()
-                 if count_words(t.text.strip()) > args.min_words]
-
-        windows = [
-            turns[i : i + args.window_size]
-            for i in range(0, len(turns) - args.window_size + 1, args.stride)
-        ]
+        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+        windows = [turns[i:i+args.window_size] for i in range(0, len(turns)-args.window_size+1, args.stride)]
 
         for idx, win in enumerate(windows):
             combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
@@ -141,22 +124,14 @@ def main():
 You are a podcast conversation analyst…
 (JSON schema as before)
 
-Now analyze Window #{idx} of "{ep.title}":
+Now analyze Window #{idx} of \"{ep.title}\":
 {combined}
 """
             raw = llm.generate_response(prompt)
-            raw_results.append({
-                "Podcast": ep.title,
-                "WindowIndex": idx,
-                "RawOutput": raw
-            })
+            raw_results.append({"Podcast": ep.title, "WindowIndex": idx, "RawOutput": raw})
 
             data = normalize_output(raw)
-            speakers = {
-                s
-                for t in win
-                for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
-            }
+            speakers = {s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])}
             results.append({
                 "Podcast": ep.title,
                 "Speakers": ",".join(speakers),
@@ -170,12 +145,12 @@ Now analyze Window #{idx} of "{ep.title}":
     out_file = f"results/{args.host.replace(' ', '_').lower()}.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
-    logging.info(f"Structured results → {out_file}")
+    logger.info(f"Structured results → {out_file}")
 
     raw_file = f"results/{args.host.replace(' ', '_').lower()}_raw.json"
     with open(raw_file, "w", encoding="utf-8") as f:
         json.dump(raw_results, f, indent=2)
-    logging.info(f"Raw LLM outputs → {raw_file}")
+    logger.info(f"Raw LLM outputs → {raw_file}")
 
 if __name__ == "__main__":
     main()
