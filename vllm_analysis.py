@@ -68,17 +68,15 @@ class LLMInterface:
         outputs = self.llm.generate(prompt, self.sampling_params)
         return outputs[0].outputs[0].text.strip()
 
-
 def main():
-    # Ensure CUDA ordering
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--hosts", "-H",
-        nargs='+',
+        "--host", "-H",
+        type=str,
         required=True,
-        help="List of podcast hosts to analyze"
+        help="Name of the podcast host to analyze"
     )
     parser.add_argument(
         "--min_words", type=int, default=50,
@@ -94,101 +92,85 @@ def main():
     )
     args = parser.parse_args()
 
+    # Initialize SPoRC in selective (streaming) mode
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
-    
-    # Load podcasts for specified hosts
-    sporc.load_podcast_subset(hosts=args.hosts)
-    logger.info(f"Loaded podcasts for hosts: {', '.join(args.hosts)}")
-    logger.info("Host names in dataset:")
-    all_hosts = set()
-    for podcast in sporc.get_all_podcasts():
-        all_hosts.update(podcast.host_names)
-    logger.info(f"Available hosts: {', '.join(sorted(all_hosts))}")
 
-    # Get all episodes first
-    all_episodes = sporc.search_episodes()
-    logger.info(f"Total episodes found: {len(all_episodes)}")
-    
-    episodes_to_process = all_episodes
-    logger.info(f"Processing all {len(episodes_to_process)} episodes")
+    # Fetch only episodes hosted by the specified host
+    host = args.host
+    episodes = sporc.search_episodes(host_name=host)
+    if not episodes:
+        logger.error(f"No episodes found for host '{host}'.")
+        return
 
-    # Sample episodes
-    sample_eps = random.sample(episodes_to_process, k=min(30, len(episodes_to_process)))
-    logger.info(f"Selected {len(sample_eps)} episodes for analysis.")
+    logger.info(f"Found {len(episodes)} episodes for host '{host}'")
+
+    # Optionally sample up to 30 episodes
+    sample_eps = random.sample(episodes, k=min(30, len(episodes)))
+    logger.info(f"Analyzing {len(sample_eps)} episodes for host '{host}'")
 
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=0)
 
-    for host in args.hosts:
-        # Filter episodes for current host
-        host_episodes = [ep for ep in sample_eps if host in ep.host_names]
-        logger.info(f"Found {len(host_episodes)} episodes for host '{host}'")
-        if not host_episodes:
-            logger.warning(f"No episodes found for host '{host}'. Check host name spelling.")
-            continue
-        
-        # Log episode details
-        for ep in host_episodes:
-            logger.info(f"Episode: {ep.title}")
-            logger.info(f"  Hosts: {', '.join(ep.host_names)}")
-            logger.info(f"  Speakers: {', '.join(ep.main_ep_speakers)}")
-        
-        host_results: List[Dict] = []
-        host_raw_results: List[Dict] = []
+    results = []
+    raw_results = []
 
-        for ep in tqdm(host_episodes, desc=f"Episodes for {host}", unit="episode"):
-            turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
-            windows = [turns[i:i+args.window_size]
-                      for i in range(0, len(turns) - args.window_size + 1, args.stride)]
-            
-            for idx, win in enumerate(tqdm(windows, desc=f" Windows in {ep.title}", leave=False)):
-                combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
-                prompt = f"""
-                You are a podcast conversation analyst. Your job is to read a block of six consecutive speaker turns, identify (1) the main points discussed or proposed, and (2) any implicit assumptions underlying the speakers' remarks. You must respond only with a single JSON object—nothing else.
+    for ep in tqdm(sample_eps, desc=f"Episodes for {host}", unit="episode"):
+        # filter out very short turns
+        turns = [t for t in ep.get_all_turns()
+                 if count_words(t.text.strip()) > args.min_words]
 
-                JSON schema:
-                {{
-                "key_points_discussed_or_proposed": [string, …],
-                "key_points_assumed": [string, …]
-                }}
+        # sliding windows
+        windows = [
+            turns[i : i + args.window_size]
+            for i in range(0, len(turns) - args.window_size + 1, args.stride)
+        ]
 
-                Now analyze Window #{idx}:
-                {combined}
+        for idx, win in enumerate(windows):
+            combined = "\n\n".join(
+                f"{t.speaker}: {t.text.strip()}"
+                for t in win
+            )
 
-                Respond with a valid JSON that strictly follows the schema above.
-                """
-                raw = llm.generate_response(prompt)
-                # Print raw response to terminal
-                logger.info(f"\nWindow #{idx} Raw LLM Output:\n{raw}\n{'-'*80}")
-                
-                # Save raw response
-                host_raw_results.append({
-                    "Podcast": ep.title,
-                    "WindowIndex": idx,
-                    "RawOutput": raw
-                })
-                data = normalize_output(raw)
-                spks = set(s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker]))
-                host_results.append({
-                    "Podcast": ep.title,
-                    "Speakers": ','.join(spks),
-                    "WindowIndex": idx,
-                    "WindowText": combined,
-                    "KeyPoints": data.get("key_points_discussed_or_proposed", []),
-                    "Assumptions": data.get("key_points_assumed", [])
-                })
+            prompt = f"""
+You are a podcast conversation analyst…
+(JSON schema as before)
 
-        # Save results for current host
-        host_filename = f"results/{host.replace(' ', '_').lower()}.json"
-        with open(host_filename, 'w', encoding='utf-8') as f:
-            json.dump(host_results, f, indent=2)
-        logger.info(f"Processed results for {host} saved to {host_filename}")
+Now analyze Window #{idx} of "{ep.title}":
+{combined}
+"""
+            raw = llm.generate_response(prompt)
+            raw_results.append({
+                "Podcast": ep.title,
+                "WindowIndex": idx,
+                "RawOutput": raw
+            })
 
-        # Save raw results for current host
-        raw_host_filename = f"results/{host.replace(' ', '_').lower()}_raw.json"
-        with open(raw_host_filename, 'w', encoding='utf-8') as f:
-            json.dump(host_raw_results, f, indent=2)
-        logger.info(f"Raw LLM outputs for {host} saved to {raw_host_filename}")
+            data = normalize_output(raw)
+            speakers = {
+                s for t in win
+                for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
+            }
+            results.append({
+                "Podcast": ep.title,
+                "Speakers": ",".join(speakers),
+                "WindowIndex": idx,
+                "WindowText": combined,
+                "KeyPoints": data.get("key_points_discussed_or_proposed", []),
+                "Assumptions": data.get("key_points_assumed", [])
+            })
+
+    # Write out
+    os.makedirs("results", exist_ok=True)
+    out_file = f"results/{host.replace(' ', '_').lower()}.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+    logger.info(f"Structured results → {out_file}")
+
+    raw_file = f"results/{host.replace(' ', '_').lower()}_raw.json"
+    with open(raw_file, "w", encoding="utf-8") as f:
+        json.dump(raw_results, f, indent=2)
+    logger.info(f"Raw LLM outputs → {raw_file}")
+
 
 if __name__ == "__main__":
     main()
