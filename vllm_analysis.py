@@ -82,7 +82,7 @@ def main():
         help="Name of the podcast host to analyze"
     )
     parser.add_argument(
-        "--gpu_id", type=int, default=0,
+        "--gpu_id", "-g", type=int, default=0,
         help="CUDA GPU device ID to use for inference"
     )
     parser.add_argument(
