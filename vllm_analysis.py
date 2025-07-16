@@ -92,11 +92,6 @@ def main():
         "--stride", type=int, default=3,
         help="Stride size for sliding window"
     )
-    parser.add_argument(
-        "--two-speakers-only", 
-        action="store_true",
-        help="Only analyze episodes with exactly two speakers"
-    )
     args = parser.parse_args()
 
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
@@ -115,17 +110,8 @@ def main():
     all_episodes = sporc.search_episodes()
     logger.info(f"Total episodes found: {len(all_episodes)}")
     
-    if args.two_speakers_only:
-        # Filter for two-speaker episodes if flag is set
-        filtered_eps = [ep for ep in all_episodes if len(ep.main_speakers) == 2]
-        logger.info(f"Found {len(filtered_eps)} two-speaker episodes")
-        if not filtered_eps:
-            logger.warning("No two-speaker episodes found.")
-            return
-        episodes_to_process = filtered_eps
-    else:
-        episodes_to_process = all_episodes
-        logger.info(f"Processing all {len(episodes_to_process)} episodes")
+    episodes_to_process = all_episodes
+    logger.info(f"Processing all {len(episodes_to_process)} episodes")
 
     # Sample episodes
     sample_eps = random.sample(episodes_to_process, k=min(30, len(episodes_to_process)))
@@ -172,6 +158,9 @@ def main():
                 Respond with a valid JSON that strictly follows the schema above.
                 """
                 raw = llm.generate_response(prompt)
+                # Print raw response to terminal
+                logger.info(f"\nWindow #{idx} Raw LLM Output:\n{raw}\n{'-'*80}")
+                
                 # Save raw response
                 host_raw_results.append({
                     "Podcast": ep.title,
