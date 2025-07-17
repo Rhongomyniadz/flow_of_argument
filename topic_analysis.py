@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-"""
-Analyze podcast episodes focused on George Floyd using SPoRC topic modeling and VLLM.
-"""
 import os
 import argparse
 import random
@@ -146,9 +142,8 @@ def main():
     results, raw_results = [], []
 
     # ─── Analyze each episode with sliding windows ────────────────────────────
-    for ep in pd.util.testing.notnull(sample_eps) and sample_eps or []:
-        turns = [t for t in ep.get_all_turns()
-                 if count_words(t.text) > args.min_words]
+    for ep in sample_eps:
+        turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
         windows = [
             turns[i : i + args.window_size]
             for i in range(0, len(turns) - args.window_size + 1, args.stride)
