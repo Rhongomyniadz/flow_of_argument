@@ -127,7 +127,11 @@ def main():
             {{
             "key_points_discussed_or_proposed": [ string, … ],
             "key_points_assumed":           [ string, … ]
-            }}
+            }}            results/
+            ├── hosts/
+            │   ├── john_doe.json
+            │   └── john_doe_raw.json
+            └── plots/
 
             Now analyze Window #{idx} of "{ep.title}":
             {combined}
@@ -146,13 +150,13 @@ def main():
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
-    os.makedirs("results", exist_ok=True)
-    out_file = f"results/{args.host.replace(' ', '_').lower()}.json"
+    os.makedirs(f"results/hosts", exist_ok=True)
+    out_file = f"results/hosts/{args.host.replace(' ', '_').lower()}.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     logger.info(f"Structured results → {out_file}")
 
-    raw_file = f"results/{args.host.replace(' ', '_').lower()}_raw.json"
+    raw_file = f"results/hosts/{args.host.replace(' ', '_').lower()}_raw.json"
     with open(raw_file, "w", encoding="utf-8") as f:
         json.dump(raw_results, f, indent=2)
     logger.info(f"Raw LLM outputs → {raw_file}")
