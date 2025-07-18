@@ -10,12 +10,17 @@ from tqdm import tqdm
 from sporc import SPORCDataset
 from vllm import LLM, SamplingParams
 
+# -----------------------------------------------------------------------------
 # Logging setup
+# -----------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-# Normalization helper
+# -----------------------------------------------------------------------------
+# Helpers
+# -----------------------------------------------------------------------------
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
+    """Extract the JSON payload from the model’s raw text and return only the two lists."""
     start, end = raw_response.find('{'), raw_response.rfind('}')
     if start == -1 or end == -1 or end <= start:
         return {}
@@ -30,12 +35,12 @@ def normalize_output(raw_response: str) -> Dict[str, List[str]]:
         cleaned["key_points_assumed"] = parsed["key_points_assumed"]
     return cleaned
 
-# Word count utility
 def count_words(text: str) -> int:
+    """Count words by matching alphanumeric sequences."""
     return len(re.findall(r"\w+", text))
 
-# VLLM wrapper
 class LLMInterface:
+    """Light wrapper around vLLM for generation with fixed sampling parameters."""
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-8B",
@@ -46,7 +51,7 @@ class LLMInterface:
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         top_k: int = 0,
-        max_toekns: int = 2048
+        max_tokens: int = 2048
     ):
         self.llm = LLM(
             model=model_name,
@@ -62,7 +67,7 @@ class LLMInterface:
             min_p=min_p,
             repetition_penalty=repetition_penalty,
             top_k=top_k,
-            max_tokens=max_toekns
+            max_tokens=max_tokens
         )
 
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
@@ -71,13 +76,27 @@ class LLMInterface:
         outputs = self.llm.generate(prompt, self.sampling_params)
         return outputs[0].outputs[0].text.strip()
 
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
 def main():
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Analyze the top N podcast hosts via sliding-window LLM summarization."
+    )
+    parser.add_argument(
+        "--data_dir", type=str,
+        default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
+        help="Path to SPoRC processed data"
+    )
+    parser.add_argument(
+        "--top_n_hosts", type=int, default=5,
+        help="Number of hosts (by episode count) to analyze"
+    )
     parser.add_argument(
         "--min_words", type=int, default=50,
-        help="Minimum word count threshold for turns"
+        help="Minimum word count threshold for including a turn"
     )
     parser.add_argument(
         "--window_size", type=int, default=6,
@@ -85,32 +104,30 @@ def main():
     )
     parser.add_argument(
         "--stride", type=int, default=3,
-        help="Stride size for sliding window"
-    )
-    parser.add_argument(
-        "--top_n_hosts", type=int, default=5,
-        help="Analyze the top N hosts by episode count"
+        help="Stride size for the sliding window"
     )
     parser.add_argument(
         "--gpu_id", "-g", type=int, default=0,
-        help="CUDA GPU device ID to use for inference"
+        help="CUDA GPU device ID for LLM inference"
     )
     args = parser.parse_args()
 
-    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
+    # Initialize dataset (streaming mode)
+    sporc = SPORCDataset(local_data_dir=args.data_dir, streaming=True)
 
-    # 1) Load ALL episodes (no host filter) so we can count per-host
-    sporc.load_podcast_subset(hosts=None)
+    # -------------------------------------------------------------------------
+    # STEP 1: Load all episodes (no host filter) and group by host
+    # -------------------------------------------------------------------------
+    logger.info("Loading all episodes (no host filter)…")
+    sporc.load_podcast_subset()  # do NOT pass hosts=None
     all_eps = sporc.get_all_episodes()
     if not all_eps:
-        logger.error("No episodes found in the dataset!")
+        logger.error("No episodes found in the dataset—exiting.")
         return
 
-    # 2) Count episodes per host
     episodes_by_host: Dict[str, List] = defaultdict(list)
     for ep in all_eps:
-        # assumes each ep has a `.host` attribute; adjust if it's `.hosts` or in metadata
+        # adjust if your Episode object stores host differently
         host = getattr(ep, "host", None) or ep.meta.get("host")
         episodes_by_host[host].append(ep)
 
@@ -118,29 +135,35 @@ def main():
     top_hosts = [h for h, _ in host_counts.most_common(args.top_n_hosts)]
     logger.info(f"Top {args.top_n_hosts} hosts by episode count: {top_hosts}")
 
-    # 3) Prepare LLM
+    # -------------------------------------------------------------------------
+    # STEP 2: Set up LLM
+    # -------------------------------------------------------------------------
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
 
-    # 4) Analyze each top host in turn
     all_results, all_raw = [], []
-    for host in top_hosts:
-        host_eps = episodes_by_host[host]
-        sample_eps = random.sample(host_eps, k=min(30, len(host_eps)))
-        logger.info(f"Analyzing {len(sample_eps)} episodes for host '{host}'")
 
-        for ep in tqdm(sample_eps, desc=f"Host: {host}", unit="episode"):
-            # filter turns by word count
-            turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
+    # -------------------------------------------------------------------------
+    # STEP 3: Analyze each top host separately
+    # -------------------------------------------------------------------------
+    for host in top_hosts:
+        logger.info(f"Reloading episodes for host {host!r}…")
+        sporc.load_podcast_subset(hosts=[host])
+        host_eps = sporc.get_all_episodes()
+        logger.info(f"  → {len(host_eps)} episodes for {host!r}; sampling up to 30…")
+        sample_eps = random.sample(host_eps, k=min(30, len(host_eps)))
+
+        for ep in tqdm(sample_eps, desc=f"Host {host}", unit="episode"):
+            turns = [
+                t for t in ep.get_all_turns()
+                if count_words(t.text.strip()) > args.min_words
+            ]
             windows = [
-                turns[i:i+args.window_size]
-                for i in range(0, len(turns)-args.window_size+1, args.stride)
+                turns[i : i + args.window_size]
+                for i in range(0, len(turns) - args.window_size + 1, args.stride)
             ]
 
             for idx, win in enumerate(windows):
-                combined = "\n\n".join(
-                    f"{t.speaker}: {t.text.strip()}"
-                    for t in win
-                )
+                combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
                 prompt = f"""
 You are an expert podcast conversation analyst.
 You must output *only* valid JSON matching exactly this schema:
@@ -154,10 +177,19 @@ Analyze Window #{idx} of "{ep.title}" (host: {host}):
 {combined}
 """
                 raw = llm.generate_response(prompt)
-                all_raw.append({"Host": host, "Podcast": ep.title, "WindowIndex": idx, "RawOutput": raw})
+                all_raw.append({
+                    "Host": host,
+                    "Podcast": ep.title,
+                    "WindowIndex": idx,
+                    "RawOutput": raw
+                })
 
                 data = normalize_output(raw)
-                speakers = {s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])}
+                speakers = {
+                    s
+                    for t in win
+                    for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
+                }
                 all_results.append({
                     "Host": host,
                     "Podcast": ep.title,
@@ -168,14 +200,16 @@ Analyze Window #{idx} of "{ep.title}" (host: {host}):
                     "Assumptions": data.get("key_points_assumed", [])
                 })
 
-    # 5) Write out
+    # -------------------------------------------------------------------------
+    # STEP 4: Write outputs
+    # -------------------------------------------------------------------------
     os.makedirs("results/hosts", exist_ok=True)
-    results_path = f"results/hosts/top_{args.top_n_hosts}_hosts_analysis.json"
+    summary_path = f"results/hosts/top_{args.top_n_hosts}_hosts_summary.json"
     raw_path     = f"results/hosts/top_{args.top_n_hosts}_hosts_raw.json"
 
-    with open(results_path, "w", encoding="utf-8") as f:
+    with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2)
-    logger.info(f"Structured results → {results_path}")
+    logger.info(f"Structured results → {summary_path}")
 
     with open(raw_path, "w", encoding="utf-8") as f:
         json.dump(all_raw, f, indent=2)
