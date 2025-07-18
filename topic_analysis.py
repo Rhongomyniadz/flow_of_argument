@@ -93,17 +93,14 @@ def main():
                         help="Min topic proportion to select an episode")
     args = parser.parse_args()
 
-    # ─── Load topic proportions from file ───────────────────────────────────────
     cols = ['row_id', 'url'] + [f'topic_{i}' for i in range(100)]
     doc_topics = pd.read_csv('doc_topics.txt', sep='\t', header=None, names=cols)
 
-    # ─── Load topic keywords for interpretation ────────────────────────────────
     topic_keys = pd.read_csv(
         'topic_keys.txt', sep='\t', header=None,
         names=['topic_id', 'overall_prop', 'keywords']
     )
 
-    # ─── Identify topics mentioning 'george' or 'floyd' ────────────────────────
     mask = (
         topic_keys['keywords'].str.contains('george', case=False) |
         topic_keys['keywords'].str.contains('floyd', case=False)
@@ -114,18 +111,15 @@ def main():
         return
     logger.info(f"Relevant topic IDs for George Floyd: {gf_topic_ids}")
 
-    # ─── Filter episodes with high proportion on those topics ──────────────────
     topic_cols = [f'topic_{i}' for i in gf_topic_ids]
     gf_docs = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
     gf_urls = set(gf_docs['url'])
     logger.info(f"Selected {len(gf_urls)} episodes above threshold {args.topic_threshold}")
 
-    # ─── Load SPoRC dataset in streaming/selective mode ────────────────────────
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()  # metadata only
 
-    # ─── Match SPoRC episodes by URL ──────────────────────────────────────────
     all_eps = sporc.get_all_episodes()
     gf_eps = [ep for ep in all_eps if getattr(ep, 'url', None) in gf_urls]
     logger.info(f"Found {len(gf_eps)} matching SPoRC episodes")
