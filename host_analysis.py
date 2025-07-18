@@ -76,6 +76,7 @@ class LLMInterface:
 # Main
 # -----------------------------------------------------------------------------
 def main():
+    os.environ["VLLM_USE_FLASHINFER_SAMPLER"] = "0"
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
 
     parser = argparse.ArgumentParser(
