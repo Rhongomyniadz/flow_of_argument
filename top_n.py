@@ -11,47 +11,47 @@ from sporc import SPORCDataset
 from vllm import LLM, SamplingParams
 
 # -----------------------------------------------------------------------------
-# Logging setup
+# Logging
 # -----------------------------------------------------------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 # -----------------------------------------------------------------------------
 # Helpers
 # -----------------------------------------------------------------------------
-def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    """Extract the JSON payload from the model’s raw text and return only the two lists."""
-    start, end = raw_response.find('{'), raw_response.rfind('}')
-    if start == -1 or end == -1 or end <= start:
+def normalize_output(raw: str) -> Dict[str, List[str]]:
+    start, end = raw.find('{'), raw.rfind('}')
+    if start < 0 or end <= start:
         return {}
     try:
-        parsed = json.loads(raw_response[start:end+1])
+        obj = json.loads(raw[start:end+1])
     except json.JSONDecodeError:
         return {}
-    cleaned: Dict[str, List[str]] = {}
-    if "key_points_discussed_or_proposed" in parsed:
-        cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
-    if "key_points_assumed" in parsed:
-        cleaned["key_points_assumed"] = parsed["key_points_assumed"]
-    return cleaned
+    out = {}
+    if "key_points_discussed_or_proposed" in obj:
+        out["key_points_discussed_or_proposed"] = obj["key_points_discussed_or_proposed"]
+    if "key_points_assumed" in obj:
+        out["key_points_assumed"] = obj["key_points_assumed"]
+    return out
 
 def count_words(text: str) -> int:
-    """Count words by matching alphanumeric sequences."""
     return len(re.findall(r"\w+", text))
 
 class LLMInterface:
-    """Light wrapper around vLLM for generation with fixed sampling parameters."""
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-8B",
-        min_p: float = 0.1,
+        gpu_id: int = 0,
         temperature: float = 0.3,
         top_p: float = 0.8,
+        min_p: float = 0.1,
         repetition_penalty: float = 1.05,
-        gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.9,
         top_k: int = 0,
-        max_tokens: int = 2048
+        max_tokens: int = 2048,
+        gpu_memory_utilization: float = 0.9,
     ):
         self.llm = LLM(
             model=model_name,
@@ -59,22 +59,22 @@ class LLMInterface:
             gpu_memory_utilization=gpu_memory_utilization,
             trust_remote_code=True,
             download_dir="/shared/4/models",
-            device=f"cuda:{gpu_id}"
+            device=f"cuda:{gpu_id}",
         )
-        self.sampling_params = SamplingParams(
+        self.params = SamplingParams(
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
             repetition_penalty=repetition_penalty,
             top_k=top_k,
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
         )
 
-    def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+    def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
         if max_tokens is not None:
-            self.sampling_params.max_tokens = max_tokens
-        outputs = self.llm.generate(prompt, self.sampling_params)
-        return outputs[0].outputs[0].text.strip()
+            self.params.max_tokens = max_tokens
+        out = self.llm.generate(prompt, self.params)
+        return out[0].outputs[0].text.strip()
 
 # -----------------------------------------------------------------------------
 # Main
@@ -82,91 +82,66 @@ class LLMInterface:
 def main():
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
 
-    parser = argparse.ArgumentParser(
-        description="Analyze the top N podcast hosts via sliding-window LLM summarization."
+    p = argparse.ArgumentParser(
+        description="Analyze top-N podcast hosts with a sliding-window LLM pipeline"
     )
-    parser.add_argument(
-        "--data_dir", type=str,
-        default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
-        help="Path to SPoRC processed data"
-    )
-    parser.add_argument(
-        "--top_n_hosts", type=int, default=5,
-        help="Number of hosts (by episode count) to analyze"
-    )
-    parser.add_argument(
-        "--min_words", type=int, default=50,
-        help="Minimum word count threshold for including a turn"
-    )
-    parser.add_argument(
-        "--window_size", type=int, default=6,
-        help="Number of turns per sliding window"
-    )
-    parser.add_argument(
-        "--stride", type=int, default=3,
-        help="Stride size for the sliding window"
-    )
-    parser.add_argument(
-        "--gpu_id", "-g", type=int, default=0,
-        help="CUDA GPU device ID for LLM inference"
-    )
-    args = parser.parse_args()
+    p.add_argument("--data_dir",    type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/")
+    p.add_argument("--top_n_hosts", type=int, default=5)
+    p.add_argument("--min_words",   type=int, default=50)
+    p.add_argument("--window_size", type=int, default=6)
+    p.add_argument("--stride",      type=int, default=3)
+    p.add_argument("--gpu_id",      type=int, default=0)
+    args = p.parse_args()
 
-    # Initialize dataset (streaming mode)
-    sporc = SPORCDataset(local_data_dir=args.data_dir, streaming=True)
-
-    # -------------------------------------------------------------------------
-    # STEP 1: Load all episodes (no host filter) and group by host
-    # -------------------------------------------------------------------------
-    logger.info("Loading all episodes (no host filter)…")
-    sporc.load_podcast_subset()  # do NOT pass hosts=None
-    all_eps = sporc.get_all_episodes()
+    # ─── 1) COUNT EPISODES PER HOST ─────────────────────────────────────────────
+    logger.info("Loading *all* episodes for host counting…")
+    sporc_all = SPORCDataset(local_data_dir=args.data_dir, streaming=True)
+    sporc_all.load_podcast_subset()
+    all_eps = sporc_all.get_all_episodes()
     if not all_eps:
-        logger.error("No episodes found in the dataset—exiting.")
+        logger.error("No episodes found; check your data_dir!")
         return
 
-    episodes_by_host: Dict[str, List] = defaultdict(list)
+    by_host: Dict[str, List] = defaultdict(list)
     for ep in all_eps:
-        # adjust if your Episode object stores host differently
-        host = getattr(ep, "host", None) or ep.meta.get("host")
-        episodes_by_host[host].append(ep)
+        # Use the first predicted host name rather than metadata.host
+        host_list = getattr(ep, "host_names", None) or getattr(ep, "hostPredictedNames", None)
+        if isinstance(host_list, list) and host_list:
+            host = host_list[0]
+        else:
+            host = "Unknown"
+        by_host[host].append(ep)
 
-    host_counts = Counter({h: len(eps) for h, eps in episodes_by_host.items()})
-    top_hosts = [h for h, _ in host_counts.most_common(args.top_n_hosts)]
-    logger.info(f"Top {args.top_n_hosts} hosts by episode count: {top_hosts}")
+    counts = Counter({h: len(eps) for h, eps in by_host.items()})
+    top_hosts = [h for h, _ in counts.most_common(args.top_n_hosts)]
+    logger.info(f"Top {args.top_n_hosts} hosts: {top_hosts}")
 
-    # -------------------------------------------------------------------------
-    # STEP 2: Set up LLM
-    # -------------------------------------------------------------------------
-    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
+    # ─── 2) SET UP LLM ──────────────────────────────────────────────────────────
+    llm = LLMInterface(gpu_id=args.gpu_id)
 
     all_results, all_raw = [], []
 
-    # -------------------------------------------------------------------------
-    # STEP 3: Analyze each top host separately
-    # -------------------------------------------------------------------------
+    # ─── 3) ANALYZE EACH TOP HOST ──────────────────────────────────────────────
     for host in top_hosts:
-        logger.info(f"Reloading episodes for host {host!r}…")
-        sporc.load_podcast_subset(hosts=[host])
-        host_eps = sporc.get_all_episodes()
-        logger.info(f"  → {len(host_eps)} episodes for {host!r}; sampling up to 30…")
-        sample_eps = random.sample(host_eps, k=min(30, len(host_eps)))
+        logger.info(f"Loading episodes for host={host!r}…")
+        sporc = SPORCDataset(local_data_dir=args.data_dir, streaming=True)
+        sporc.load_podcast_subset(hosts=[host])   # ← always a non-empty list
+        eps = sporc.get_all_episodes()
+        logger.info(f"  → {len(eps)} episodes found; sampling up to 30…")
+        sample = random.sample(eps, k=min(30, len(eps)))
 
-        for ep in tqdm(sample_eps, desc=f"Host {host}", unit="episode"):
-            turns = [
-                t for t in ep.get_all_turns()
-                if count_words(t.text.strip()) > args.min_words
-            ]
+        for ep in tqdm(sample, desc=f"Host {host}", unit="ep"):
+            turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
             windows = [
                 turns[i : i + args.window_size]
                 for i in range(0, len(turns) - args.window_size + 1, args.stride)
             ]
 
             for idx, win in enumerate(windows):
-                combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
+                joined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
                 prompt = f"""
 You are an expert podcast conversation analyst.
-You must output *only* valid JSON matching exactly this schema:
+Output *only* valid JSON matching exactly this schema:
 
 {{
   "key_points_discussed_or_proposed": [ string, … ],
@@ -174,9 +149,9 @@ You must output *only* valid JSON matching exactly this schema:
 }}
 
 Analyze Window #{idx} of "{ep.title}" (host: {host}):
-{combined}
+{joined}
 """
-                raw = llm.generate_response(prompt)
+                raw = llm.generate(prompt)
                 all_raw.append({
                     "Host": host,
                     "Podcast": ep.title,
@@ -186,8 +161,7 @@ Analyze Window #{idx} of "{ep.title}" (host: {host}):
 
                 data = normalize_output(raw)
                 speakers = {
-                    s
-                    for t in win
+                    s for t in win
                     for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
                 }
                 all_results.append({
@@ -195,25 +169,23 @@ Analyze Window #{idx} of "{ep.title}" (host: {host}):
                     "Podcast": ep.title,
                     "Speakers": ",".join(speakers),
                     "WindowIndex": idx,
-                    "WindowText": combined,
+                    "WindowText": joined,
                     "KeyPoints": data.get("key_points_discussed_or_proposed", []),
                     "Assumptions": data.get("key_points_assumed", [])
                 })
 
-    # -------------------------------------------------------------------------
-    # STEP 4: Write outputs
-    # -------------------------------------------------------------------------
+    # ─── 4) WRITE OUTPUTS ────────────────────────────────────────────────────────
     os.makedirs("results/hosts", exist_ok=True)
-    summary_path = f"results/hosts/top_{args.top_n_hosts}_hosts_summary.json"
-    raw_path     = f"results/hosts/top_{args.top_n_hosts}_hosts_raw.json"
+    summary = f"results/hosts/top_{args.top_n_hosts}_hosts_summary.json"
+    raw_out = f"results/hosts/top_{args.top_n_hosts}_hosts_raw.json"
 
-    with open(summary_path, "w", encoding="utf-8") as f:
+    with open(summary, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2)
-    logger.info(f"Structured results → {summary_path}")
+    logger.info(f"Wrote parsed results → {summary}")
 
-    with open(raw_path, "w", encoding="utf-8") as f:
+    with open(raw_out, "w", encoding="utf-8") as f:
         json.dump(all_raw, f, indent=2)
-    logger.info(f"Raw LLM outputs → {raw_path}")
+    logger.info(f"Wrote raw outputs      → {raw_out}")
 
 if __name__ == "__main__":
     main()
