@@ -19,18 +19,29 @@ logger = logging.getLogger(__name__)
 # Helpers
 # -----------------------------------------------------------------------------
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    start, end = raw_response.find('{'), raw_response.rfind('}')
-    if start < 0 or end <= start:
+    # Extract the first JSON-like object from the response
+    json_match = re.search(r'\{[\s\S]*\}', raw_response)
+    if not json_match:
         return {}
+
+    json_str = json_match.group(0).strip()
+
+    # Attempt to fix common JSON issues (e.g., trailing commas)
+    json_str = re.sub(r',\s*]', ']', json_str)
+    json_str = re.sub(r',\s*}', '}', json_str)
+
     try:
-        parsed = json.loads(raw_response[start:end+1])
+        parsed = json.loads(json_str)
     except json.JSONDecodeError:
         return {}
+
+    # Ensure output structure
     out: Dict[str, List[str]] = {}
-    if "key_points_discussed_or_proposed" in parsed:
+    if isinstance(parsed.get("key_points_discussed_or_proposed"), list):
         out["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
-    if "key_points_assumed" in parsed:
+    if isinstance(parsed.get("key_points_assumed"), list):
         out["key_points_assumed"] = parsed["key_points_assumed"]
+
     return out
 
 def count_words(text: str) -> int:
@@ -47,7 +58,7 @@ class LLMInterface:
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         top_k: int = 30,
-        max_tokens: int = 10000
+        max_tokens: int = 2048
     ):
         self.llm = LLM(
             model=model_name,
