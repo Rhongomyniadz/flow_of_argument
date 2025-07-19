@@ -47,7 +47,7 @@ class LLMInterface:
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         top_k: int = 0,
-        max_tokens: int = 2048
+        max_tokens: int = 20000
     ):
         self.llm = LLM(
             model=model_name,
@@ -77,7 +77,7 @@ class LLMInterface:
 # -----------------------------------------------------------------------------
 def main():
     os.environ["VLLM_USE_FLASHINFER_SAMPLER"] = "0"
-    os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
     parser = argparse.ArgumentParser(
         description="Analyze episodes for each of multiple podcast hosts"
