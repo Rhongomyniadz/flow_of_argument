@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def main():
     # ─── Config ────────────────────────────────────────────────────────────────
     INPUT_PATH         = 'results/hosts/ryan_reynolds.json'
-    OUTPUT_PLOT        = 'results/hosts/ryan_reynolds.png'
+    OUTPUT_PLOT        = 'results/plots/ryan_reynolds.png'
     SEED               = 42
     MODEL_NAME         = 'all-MiniLM-L6-v2'
     HF_CACHE           = os.getenv('HF_HOME', None)
@@ -17,7 +17,6 @@ def main():
     random.seed(SEED)
 
     # ─── Load & Flatten ───────────────────────────────────────────────────────
-    os.makedirs('results', exist_ok=True)
     with open(INPUT_PATH, 'r', encoding='utf-8') as f:
         windows = json.load(f)
 

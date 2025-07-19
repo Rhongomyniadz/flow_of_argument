@@ -47,7 +47,7 @@ class LLMInterface:
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         top_k: int = 30,
-        max_tokens: int = 20000
+        max_tokens: int = 10000
     ):
         self.llm = LLM(
             model=model_name,
