@@ -41,12 +41,12 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-8B",
         min_p: float = 0.1,
-        temperature: float = 0.3,
+        temperature: float = 0.7,
         top_p: float = 0.8,
-        repetition_penalty: float = 1.05,
+        repetition_penalty: float = 1.1,
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
-        top_k: int = 0,
+        top_k: int = 30,
         max_tokens: int = 20000
     ):
         self.llm = LLM(
