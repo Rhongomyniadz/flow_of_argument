@@ -58,7 +58,7 @@ def main():
     labels, podcast_names = pd.factorize(df['Podcast'])
     cmap = plt.get_cmap('tab20')
 
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plt.subplots(figsize=(16, 12))  # Increase figure size
 
     # plot all points
     for idx, name in enumerate(podcast_names):
@@ -66,10 +66,10 @@ def main():
         ax.scatter(
             df.loc[mask, 'x'],
             df.loc[mask, 'y'],
-            color=cmap(idx),
-            label=name,
-            s=30,
-            alpha=0.8
+            color=cmap(idx % 20),  # tab20 only has 20 colors, use modulo
+            label=name if name in selected_df['Podcast'].values else None,  # only label sampled
+            s=20,
+            alpha=0.7
         )
 
     # annotate each sampled point by its WindowIndex-AssumptionIndex
@@ -88,17 +88,24 @@ def main():
     ax.margins(x=0.1, y=0.1)
     ax.set_aspect('equal', adjustable='box')
 
-    ax.set_title('t-SNE of Individual Assumption Embeddings')
+    ax.set_title('t-SNE of Individual Assumption Embeddings', fontsize=14)
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
+
+    # smaller, multi-column legend outside plot
+    handles, labels = ax.get_legend_handles_labels()
     ax.legend(
+        handles,
+        labels,
         title='Podcast',
         bbox_to_anchor=(1.05, 1),
         loc='upper left',
-        fontsize='small'
+        fontsize='x-small',
+        title_fontsize='small',
+        ncol=1 if len(labels) < 20 else 2,  # auto-multi-column if many labels
     )
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 0.85, 1])  # leave space on right for legend
     plt.savefig(OUTPUT_PLOT, dpi=300)
     print(f"Saved plot to {OUTPUT_PLOT}")
 
