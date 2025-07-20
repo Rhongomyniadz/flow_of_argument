@@ -24,7 +24,7 @@ def print_sample(file_path):
             print(f"Failed to parse JSON line: {e}")
             
             
-print_sample(local_episode_level_path)
+print_sample(cluster_episode_level_path)
 
 
 from itertools import islice
