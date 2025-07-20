@@ -13,7 +13,7 @@ def main():
     SEED               = 42
     MODEL_NAME         = 'all-MiniLM-L6-v2'
     HF_CACHE           = os.getenv('HF_HOME', None)
-    SAMPLE_PER_PODCAST = 2
+    SAMPLE_PER_PODCAST = 1
     random.seed(SEED)
 
     # ─── Load & Flatten ───────────────────────────────────────────────────────
