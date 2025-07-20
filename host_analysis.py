@@ -153,17 +153,25 @@ def main():
             for idx, win in enumerate(windows):
                 combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
                 prompt = f"""
-You are an expert podcast conversation analyst.
-You must output *only* valid JSON matching exactly this schema:
+                You are a professional podcast analyst specializing in summarizing discussions. Your task is to extract two types of key points from the transcript below.
 
-{{
-  "key_points_discussed_or_proposed": [ string, … ],
-  "key_points_assumed":           [ string, … ]
-}}
+                Output **only** valid JSON that strictly follows this schema:
 
-Analyze Window #{idx} of "{ep.title}" (host: {host}):
-{combined}
-"""
+                {{
+                "key_points_discussed_or_proposed": [ string, ... ],  // Explicit topics, arguments, or suggestions made by speakers
+                "key_points_assumed": [ string, ... ]                 // Background knowledge, implicit beliefs, or unspoken assumptions
+                }}
+
+                Instructions:
+                - Carefully read and analyze Window #{idx} of the episode "{ep.title}" hosted by {host}.
+                - Be concise, factual, and specific.
+                - Use direct quotes only if necessary; otherwise, paraphrase accurately.
+                - Do not add commentary or interpretation beyond the text.
+                - Do not include nulls, placeholders, or extra fields.
+
+                Transcript:
+                {combined}
+                """
                 raw = llm.generate_response(prompt)
                 raw_results.append({
                     "Host": host,
