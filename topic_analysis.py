@@ -137,7 +137,7 @@ def main():
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
     all_eps = sporc.get_all_episodes()
-    gf_eps = [ep for ep in all_eps if ep.mp3url in gf_mp3urls]
+    gf_eps = [ep for ep in all_eps if ep.mp3_url in gf_mp3urls]
     logger.info(f"Found {len(gf_eps)} matching SPoRC episodes")
     if not gf_eps:
         return
