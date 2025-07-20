@@ -135,7 +135,7 @@ def main():
             continue
 
         logger.info(f"Found {len(episodes)} episodes for {host!r}; sampling up to 30…")
-        sample_eps = random.sample(episodes, k=min(30, len(episodes)))
+        sample_eps = random.sample(episodes, k=len(episodes))
 
         results: List[Dict] = []
         raw_results: List[Dict] = []
