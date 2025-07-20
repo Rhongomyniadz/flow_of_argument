@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 
 def main():
     # ─── Config ────────────────────────────────────────────────────────────────
-    INPUT_PATH         = 'results/hosts/adam_torres.json'
-    OUTPUT_PLOT        = 'results/plots/adam_torres.png'
+    INPUT_PATH         = 'results/hosts/christopher_kai.json'
+    OUTPUT_PLOT        = 'results/plots/christopher_kai.png'
     SEED               = 42
     MODEL_NAME         = 'all-MiniLM-L6-v2'
     HF_CACHE           = os.getenv('HF_HOME', None)
-    SAMPLE_PER_PODCAST = 3
+    SAMPLE_PER_PODCAST = 2
     random.seed(SEED)
 
     # ─── Load & Flatten ───────────────────────────────────────────────────────
