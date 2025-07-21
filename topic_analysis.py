@@ -89,7 +89,7 @@ def main():
                         help="Sliding window stride size")
     parser.add_argument("--sample_n", type=int, default=10,
                         help="Max number of episodes to sample")
-    parser.add_argument("--topic_threshold", type=float, default=0.05,
+    parser.add_argument("--topic_threshold", type=float, default=0,
                         help="Min topic proportion to select an episode")
     args = parser.parse_args()
 
