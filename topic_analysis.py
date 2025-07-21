@@ -15,24 +15,26 @@ from vllm import LLM, SamplingParams
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Reverse‐mapping helper
 def canonical_to_raw(canonical_url: str) -> str:
     """
     Turn a Buzzsprout mp3_url like
       https://www.buzzsprout.com/783020/4252475-best-of-singout-speakout-no-3.mp3
-    back into the SPoRC‐style merged slug:
+    into the SPoRC merged‐slug form:
       /www.buzzsprout.com/o3/httpswww.buzzsprout.com7830204252475bestofsingoutspeakoutno3.mp3MERGED
     """
     p = urlparse(canonical_url)
-    # path = "/783020/4252475-best-of-singout-speakout-no-3.mp3"
-    series_id, rest = p.path.lstrip("/").split("/", 1)
-    ep_id, slug_ext = rest.split("-", 1)
-    slug = slug_ext.removesuffix(".mp3")
-    raw_slug = slug.replace("-", "")
-    return f"/www.buzzsprout.com/o3/httpswww.buzzsprout.com{series_id}{ep_id}{raw_slug}.mp3MERGED"
+    domain = p.netloc            # e.g. "www.buzzsprout.com"
+    scheme = p.scheme            # "https"
+    # path = "783020/4252475-best-of-singout-speakout-no-3.mp3"
+    path = p.path.lstrip("/")
+    # remove all slashes and hyphens
+    collapsed = path.replace("/", "").replace("-", "")
+    # assemble the host+domain without "://"
+    host_noslash = f"{scheme}{domain}"  # "httpswww.buzzsprout.com"
+    # build the raw slug + extension
+    raw_body = f"{host_noslash}{collapsed}"
+    return f"/{domain}/o3/{raw_body}MERGED"
 
-
-# Normalization helper
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
     start, end = raw_response.find('{'), raw_response.rfind('}')
     if start == -1 or end == -1 or end <= start:
@@ -41,18 +43,16 @@ def normalize_output(raw_response: str) -> Dict[str, List[str]]:
         parsed = json.loads(raw_response[start:end+1])
     except json.JSONDecodeError:
         return {}
-    cleaned: Dict[str, List[str]] = {}
+    out: Dict[str, List[str]] = {}
     if "key_points_discussed_or_proposed" in parsed:
-        cleaned["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
+        out["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
     if "key_points_assumed" in parsed:
-        cleaned["key_points_assumed"] = parsed["key_points_assumed"]
-    return cleaned
+        out["key_points_assumed"] = parsed["key_points_assumed"]
+    return out
 
-# Word count utility
 def count_words(text: str) -> int:
     return len(re.findall(r"\w+", text))
 
-# VLLM wrapper
 class LLMInterface:
     def __init__(
         self,
@@ -73,7 +73,7 @@ class LLMInterface:
             download_dir="/shared/4/models",
             device=f"cuda:{gpu_id}"
         )
-        self.sampling_params = SamplingParams(
+        self.params = SamplingParams(
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
@@ -84,10 +84,9 @@ class LLMInterface:
 
     def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
         if max_tokens is not None:
-            self.sampling_params.max_tokens = max_tokens
-        outputs = self.llm.generate(prompt, self.sampling_params)
+            self.params.max_tokens = max_tokens
+        outputs = self.llm.generate(prompt, self.params)
         return outputs[0].outputs[0].text.strip()
-
 
 def main():
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
@@ -95,85 +94,69 @@ def main():
     parser = argparse.ArgumentParser(
         description="Analyze podcast episodes about George Floyd via topic modeling"
     )
-    parser.add_argument("--gpu_id", type=int, default=0,
-                        help="CUDA GPU device ID for inference")
-    parser.add_argument("--min_words", type=int, default=50,
-                        help="Minimum word count for speaker turns")
-    parser.add_argument("--window_size", type=int, default=6,
-                        help="Number of consecutive turns per analysis window")
-    parser.add_argument("--stride", type=int, default=3,
-                        help="Sliding window stride size")
-    parser.add_argument("--sample_n", type=int, default=10,
-                        help="Max number of episodes to sample")
-    parser.add_argument("--topic_threshold", type=float, default=0.001,
-                        help="Min topic proportion to select an episode")
+    parser.add_argument("--gpu_id", type=int, default=0)
+    parser.add_argument("--min_words", type=int, default=50)
+    parser.add_argument("--window_size", type=int, default=6)
+    parser.add_argument("--stride", type=int, default=3)
+    parser.add_argument("--sample_n", type=int, default=10)
+    parser.add_argument("--topic_threshold", type=float, default=0.001)
     args = parser.parse_args()
 
-    # ─── Load topic proportions from file ─────────────────────────────────────
+    # ─── Load topic proportions ───────────────────────────────────────────────
     cols = ['row_id', 'url'] + [f'topic_{i}' for i in range(100)]
     doc_topics = pd.read_csv('doc_topics.txt', sep='\t', header=None, names=cols)
 
-    # ─── Load topic keywords ─────────────────────────────────────────────────
+    # ─── Load topic keywords ────────────────────────────────────────────────
     topic_keys = pd.read_csv(
         'topic_keys.txt', sep='\t', header=None,
         names=['topic_id', 'overall_prop', 'keywords']
     )
 
-    # ─── Identify George Floyd topics ────────────────────────────────────────
+    # ─── Find George/Floyd topics ───────────────────────────────────────────
     mask = (
         topic_keys['keywords'].str.contains('george', case=False) |
         topic_keys['keywords'].str.contains('floyd', case=False)
     )
-    gf_topic_ids = topic_keys.loc[mask, 'topic_id'].tolist()
-    if not gf_topic_ids:
-        logger.error("No topics found matching 'george' or 'floyd'. Exiting.")
+    gf_ids = topic_keys.loc[mask, 'topic_id'].tolist()
+    if not gf_ids:
+        logger.error("No 'george' or 'floyd' topics found.")
         return
-    logger.info(f"Relevant topic IDs for George Floyd: {gf_topic_ids}")
+    topic_cols = [f'topic_{i}' for i in gf_ids]
 
-    # ─── Pre‐filter by topic proportion ───────────────────────────────────────
-    topic_cols = [f'topic_{i}' for i in gf_topic_ids]
-    pre_docs = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
-    logger.info(f"{len(pre_docs)} candidate docs above threshold {args.topic_threshold}")
+    # ─── Pre-filter docs by threshold ───────────────────────────────────────
+    filtered = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
+    logger.info(f"{len(filtered)} docs above topic threshold")
 
-    # ─── Load SPoRC episodes and build raw‐url lookup ─────────────────────────
+    # ─── Load SPoRC episodes ────────────────────────────────────────────────
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
     all_eps = sporc.get_all_episodes()
 
-    # map from raw URL → SPoRC episode
-    raw2ep = {
-        canonical_to_raw(ep.mp3_url): ep
-        for ep in all_eps
-    }
+    # build raw_url → episode map
+    raw2ep = { canonical_to_raw(ep.mp3_url): ep for ep in all_eps }
 
-    # ─── Keep only docs whose 'url' appears in our SPoRC raw URLs ─────────────
-    gf_docs = pre_docs[pre_docs['url'].isin(raw2ep)]
-    logger.info(f"{len(gf_docs)} docs match SPoRC episodes")
+    # ─── Keep only docs whose raw‐url matches an episode ─────────────────────
+    matched = filtered[filtered['url'].isin(raw2ep)]
+    logger.info(f"{len(matched)} docs match SPoRC raw URLs")
 
-    # ─── Now get the actual SPoRC Episode objects ────────────────────────────
-    matched_raws = set(gf_docs['url'])
-    gf_eps = [raw2ep[r] for r in matched_raws if r in raw2ep]
-    logger.info(f"Found {len(gf_eps)} matching SPoRC episode objects")
-    if not gf_eps:
+    eps = [ raw2ep[r] for r in matched['url'] ]
+    if not eps:
+        logger.warning("No episodes found after mapping. Exiting.")
         return
 
-    # ─── Sample episodes ──────────────────────────────────────────────────────
+    # ─── Sample and analyze ─────────────────────────────────────────────────
     random.seed(42)
-    sample_eps = random.sample(gf_eps, k=min(args.sample_n, len(gf_eps)))
-    logger.info(f"Analyzing {len(sample_eps)} sampled episodes")
-
-    # ─── Initialize LLM and analyze ───────────────────────────────────────────
+    sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
-    results, raw_results = [], []
 
+    results, raw_results = [], []
     for ep in sample_eps:
         turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
         windows = [
-            turns[i:i + args.window_size]
-            for i in range(0, len(turns) - args.window_size + 1, args.stride)
+            turns[i:i+args.window_size]
+            for i in range(0, len(turns)-args.window_size+1, args.stride)
         ]
-
         for idx, win in enumerate(windows):
             text_block = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
             prompt = f"""
@@ -215,7 +198,6 @@ Now analyze Window #{idx} from episode "{ep.epTitle}":
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
-    # ─── Save outputs ─────────────────────────────────────────────────────────
     os.makedirs("results", exist_ok=True)
     base = "george_floyd_topic_analysis"
     with open(f"results/{base}.json", "w", encoding="utf-8") as f:
@@ -224,7 +206,6 @@ Now analyze Window #{idx} from episode "{ep.epTitle}":
         json.dump(raw_results, f, indent=2, ensure_ascii=False)
 
     logger.info("Analysis complete.")
-
 
 if __name__ == "__main__":
     main()
