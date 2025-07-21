@@ -5,6 +5,8 @@ import json
 import logging
 import re
 from typing import List, Dict, Optional
+from urllib.parse import urlparse
+
 import pandas as pd
 from sporc import SPORCDataset
 from vllm import LLM, SamplingParams
@@ -13,11 +15,25 @@ from vllm import LLM, SamplingParams
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+# Reverse‐mapping helper
+def canonical_to_raw(canonical_url: str) -> str:
+    """
+    Turn a Buzzsprout mp3_url like
+      https://www.buzzsprout.com/783020/4252475-best-of-singout-speakout-no-3.mp3
+    back into the SPoRC‐style merged slug:
+      /www.buzzsprout.com/o3/httpswww.buzzsprout.com7830204252475bestofsingoutspeakoutno3.mp3MERGED
+    """
+    p = urlparse(canonical_url)
+    # path = "/783020/4252475-best-of-singout-speakout-no-3.mp3"
+    series_id, rest = p.path.lstrip("/").split("/", 1)
+    ep_id, slug_ext = rest.split("-", 1)
+    slug = slug_ext.removesuffix(".mp3")
+    raw_slug = slug.replace("-", "")
+    return f"/www.buzzsprout.com/o3/httpswww.buzzsprout.com{series_id}{ep_id}{raw_slug}.mp3MERGED"
+
+
 # Normalization helper
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    """
-    Extracts the JSON object from the LLM's raw text and returns only the two target keys.
-    """
     start, end = raw_response.find('{'), raw_response.rfind('}')
     if start == -1 or end == -1 or end <= start:
         return {}
@@ -89,33 +105,21 @@ def main():
                         help="Sliding window stride size")
     parser.add_argument("--sample_n", type=int, default=10,
                         help="Max number of episodes to sample")
-    parser.add_argument("--topic_threshold", type=float, default=0,
+    parser.add_argument("--topic_threshold", type=float, default=0.001,
                         help="Min topic proportion to select an episode")
     args = parser.parse_args()
 
-    # ─── Load topic proportions from file and clean URLs ───────────────────────
+    # ─── Load topic proportions from file ─────────────────────────────────────
     cols = ['row_id', 'url'] + [f'topic_{i}' for i in range(100)]
     doc_topics = pd.read_csv('doc_topics.txt', sep='\t', header=None, names=cols)
-    # strip leading slash and trailing 'MERGED'
-    doc_topics['url_clean'] = (
-        doc_topics['url']
-            .str.lstrip('/')
-            .str.replace(r'MERGED$', '', regex=True)
-    )
-    # convert to standard mp3 URLs matching ep.mp3url
-    doc_topics['mp3url'] = (
-        doc_topics['url_clean']
-            .str.replace(r'^www\.buzzsprout\.com/o3/', 'https://', regex=True)
-            .str.replace('httpswww', 'https://www', regex=False)
-    )
 
-    # ─── Load topic keywords for interpretation ────────────────────────────────
+    # ─── Load topic keywords ─────────────────────────────────────────────────
     topic_keys = pd.read_csv(
         'topic_keys.txt', sep='\t', header=None,
         names=['topic_id', 'overall_prop', 'keywords']
     )
 
-    # ─── Identify topics mentioning 'george' or 'floyd' ────────────────────────
+    # ─── Identify George Floyd topics ────────────────────────────────────────
     mask = (
         topic_keys['keywords'].str.contains('george', case=False) |
         topic_keys['keywords'].str.contains('floyd', case=False)
@@ -126,19 +130,31 @@ def main():
         return
     logger.info(f"Relevant topic IDs for George Floyd: {gf_topic_ids}")
 
-    # ─── Filter episodes with high proportion on those topics ──────────────────
+    # ─── Pre‐filter by topic proportion ───────────────────────────────────────
     topic_cols = [f'topic_{i}' for i in gf_topic_ids]
-    gf_docs = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
-    gf_mp3urls = set(gf_docs['mp3url'])
-    logger.info(f"Selected {len(gf_mp3urls)} episodes above threshold {args.topic_threshold}")
+    pre_docs = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
+    logger.info(f"{len(pre_docs)} candidate docs above threshold {args.topic_threshold}")
 
-    # ─── Load SPoRC and match by mp3url ────────────────────────────────────────
+    # ─── Load SPoRC episodes and build raw‐url lookup ─────────────────────────
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
     all_eps = sporc.get_all_episodes()
-    gf_eps = [ep for ep in all_eps if ep.mp3_url in gf_mp3urls]
-    logger.info(f"Found {len(gf_eps)} matching SPoRC episodes")
+
+    # map from raw URL → SPoRC episode
+    raw2ep = {
+        canonical_to_raw(ep.mp3_url): ep
+        for ep in all_eps
+    }
+
+    # ─── Keep only docs whose 'url' appears in our SPoRC raw URLs ─────────────
+    gf_docs = pre_docs[pre_docs['url'].isin(raw2ep)]
+    logger.info(f"{len(gf_docs)} docs match SPoRC episodes")
+
+    # ─── Now get the actual SPoRC Episode objects ────────────────────────────
+    matched_raws = set(gf_docs['url'])
+    gf_eps = [raw2ep[r] for r in matched_raws if r in raw2ep]
+    logger.info(f"Found {len(gf_eps)} matching SPoRC episode objects")
     if not gf_eps:
         return
 
@@ -153,8 +169,11 @@ def main():
 
     for ep in sample_eps:
         turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
-        windows = [turns[i:i+args.window_size]
-                   for i in range(0, len(turns)-args.window_size+1, args.stride)]
+        windows = [
+            turns[i:i + args.window_size]
+            for i in range(0, len(turns) - args.window_size + 1, args.stride)
+        ]
+
         for idx, win in enumerate(windows):
             text_block = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
             prompt = f"""
@@ -163,28 +182,36 @@ You are an expert podcast conversation analyst.
 
 TASK:
   • Given exactly six consecutive turns, extract two arrays:
-    1) \"key_points_discussed_or_proposed\"
-    2) \"key_points_assumed\"
+    1) "key_points_discussed_or_proposed"
+    2) "key_points_assumed"
 
 OUTPUT only valid JSON matching this schema:
 {{
-  \"key_points_discussed_or_proposed\": [ string, … ],
-  \"key_points_assumed\":           [ string, … ]
+  "key_points_discussed_or_proposed": [ string, … ],
+  "key_points_assumed":           [ string, … ]
 }}
 
-Now analyze Window #{idx} from episode \"{ep.epTitle}\":
+Now analyze Window #{idx} from episode "{ep.epTitle}":
 {text_block}
 """
             raw = llm.generate_response(prompt)
-            raw_results.append({"Podcast": ep.epTitle, "WindowIndex": idx, "RawOutput": raw})
-            data = normalize_output(raw)
-            speakers = {s for t in win for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])}
-            results.append({
+            raw_results.append({
                 "Podcast": ep.epTitle,
-                "Speakers": ",".join(speakers),
                 "WindowIndex": idx,
-                "WindowText": text_block,
-                "KeyPoints": data.get("key_points_discussed_or_proposed", []),
+                "RawOutput": raw
+            })
+            data = normalize_output(raw)
+            speakers = {
+                s
+                for t in win
+                for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
+            }
+            results.append({
+                "Podcast":     ep.epTitle,
+                "Speakers":    ",".join(speakers),
+                "WindowIndex": idx,
+                "WindowText":  text_block,
+                "KeyPoints":   data.get("key_points_discussed_or_proposed", []),
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
@@ -196,7 +223,8 @@ Now analyze Window #{idx} from episode \"{ep.epTitle}\":
     with open(f"results/{base}_raw.json", "w", encoding="utf-8") as f:
         json.dump(raw_results, f, indent=2, ensure_ascii=False)
 
-    logger.info("Analysis complete. Results saved in 'results/' directory.")
+    logger.info("Analysis complete.")
+
 
 if __name__ == "__main__":
     main()
