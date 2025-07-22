@@ -32,7 +32,6 @@ def main():
                 'Text': asm
             })
     df = pd.DataFrame(records)
-    print(f"Total individual assumptions: {len(df)}")
 
     # ─── Embed & t-SNE ─────────────────────────────────────────────────────────
     embedder   = SentenceTransformer(MODEL_NAME, cache_folder=HF_CACHE)
@@ -42,15 +41,14 @@ def main():
     coords = tsne.fit_transform(embeddings)
     df['x'], df['y'] = coords[:,0], coords[:,1]
 
-    # ─── Sample up to 3 per podcast ─────────────────────────────────────────────
-    def sample_three(group):
-        n = min(len(group), SAMPLE_PER_PODCAST)
-        return group.sample(n=n, random_state=SEED)
+    # ─── Sample up to 1 per podcast ────────────────────────────────────────────
+    def sample_one(group):
+        return group.sample(n=min(len(group), SAMPLE_PER_PODCAST), random_state=SEED)
 
     selected_df = (
         df
         .groupby('Podcast', group_keys=False)
-        .apply(sample_three)
+        .apply(sample_one)
         .reset_index(drop=True)
     )
 
@@ -58,54 +56,54 @@ def main():
     labels, podcast_names = pd.factorize(df['Podcast'])
     cmap = plt.get_cmap('tab20')
 
-    fig, ax = plt.subplots(figsize=(16, 12))  # Increase figure size
+    # 1) Much larger figure
+    fig, ax = plt.subplots(figsize=(24, 18), dpi=300)
 
-    # plot all points
+    # 2) scatter
     for idx, name in enumerate(podcast_names):
         mask = (labels == idx)
         ax.scatter(
             df.loc[mask, 'x'],
             df.loc[mask, 'y'],
-            color=cmap(idx % 20),  # tab20 only has 20 colors, use modulo
-            label=name if name in selected_df['Podcast'].values else None,  # only label sampled
+            color=cmap(idx % 20),
+            label=name if name in selected_df['Podcast'].values else None,
             s=20,
             alpha=0.7
         )
 
-    # annotate each sampled point by its WindowIndex-AssumptionIndex
+    # 3) annotations
     for _, row in selected_df.iterrows():
         ax.text(
-            row['x'],
-            row['y'],
+            row['x'], row['y'],
             f"{row['WindowIndex']}-{row['AssumptionIndex']}",
-            fontsize=8,
-            weight='bold',
+            fontsize=8, weight='bold',
             va='center', ha='center',
             color='black'
         )
 
-    # pad and equalize aspect
-    ax.margins(x=0.1, y=0.1)
+    ax.margins(0.1)
     ax.set_aspect('equal', adjustable='box')
-
-    ax.set_title('t-SNE of Individual Assumption Embeddings', fontsize=14)
+    ax.set_title('t-SNE of Individual Assumption Embeddings', fontsize=16)
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
 
-    # smaller, multi-column legend outside plot
+    # 4) Move legend to bottom, 4 columns
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(
-        handles,
-        labels,
+        handles, labels,
         title='Podcast',
-        bbox_to_anchor=(1.05, 1),
-        loc='upper left',
-        fontsize='x-small',
-        title_fontsize='small',
-        ncol=1 if len(labels) < 20 else 2,  # auto-multi-column if many labels
+        loc='lower center',
+        bbox_to_anchor=(0.5, -0.15),
+        ncol=4,
+        fontsize='small',
+        title_fontsize='medium',
+        frameon=False
     )
 
-    plt.tight_layout(rect=[0, 0, 0.85, 1])  # leave space on right for legend
+    # 5) leave room for that bottom legend
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.2)
+
     plt.savefig(OUTPUT_PLOT, dpi=300)
     print(f"Saved plot to {OUTPUT_PLOT}")
 
