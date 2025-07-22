@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 def main():
     # ─── Config ────────────────────────────────────────────────────────────────
-    INPUT_PATH         = 'results/hosts/christopher_kai.json'
-    OUTPUT_PLOT        = 'results/plots/christopher_kai.png'
+    INPUT_PATH         = 'results/hosts/ryan_reynolds.json'
+    OUTPUT_PLOT        = 'results/plots/ryan_reynolds.png'
     SEED               = 42
     MODEL_NAME         = 'all-MiniLM-L6-v2'
     HF_CACHE           = os.getenv('HF_HOME', None)
