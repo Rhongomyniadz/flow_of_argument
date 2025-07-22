@@ -12,10 +12,10 @@ def main():
     # (host name, path to that host's JSON)
     INPUT_FILES = [
         ('Ryan Reynolds',  'results/hosts/ryan_reynolds.json'),
-        ('Tom Hanks',      'results/hosts/adam_torres.json'),
-        ('Scarlett Johansson', 'results/hosts/john_doe.json'),
-        ('Dwayne Johnson', 'results/hosts/marshall_poe.json'),
-        ('Emma Stone',     'results/hosts/christopher_kai.json'),
+        ('Adam Torres',      'results/hosts/adam_torres.json'),
+        ('John Doe', 'results/hosts/john_doe.json'),
+        ('Marshall Poe', 'results/hosts/marshall_poe.json'),
+        ('Christopher Kai',     'results/hosts/christopher_kai.json'),
     ]
     OUTPUT_PLOT        = 'results/plots/five_hosts_tsne.png'
     SEED               = 42
