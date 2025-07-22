@@ -54,8 +54,11 @@ def main():
     )
 
     # ─── Plot ──────────────────────────────────────────────────────────────────
+    # factorize to get integer codes and unique podcast names
     labels, podcast_names = pd.factorize(df['Podcast'])
-    cmap = plt.get_cmap('tab20')
+
+    # UPDATED: sample a colormap with as many discrete colors as you have podcasts
+    cmap = plt.cm.get_cmap('tab20', len(podcast_names))
 
     # 1) Create a large figure
     fig, ax = plt.subplots(figsize=(24, 18), dpi=300)
@@ -66,7 +69,7 @@ def main():
         ax.scatter(
             df.loc[mask, 'x'],
             df.loc[mask, 'y'],
-            color=cmap(idx % 20),
+            color=cmap(idx),
             label=name if name in selected_df['Podcast'].values else None,
             s=20,
             alpha=0.7
@@ -92,24 +95,24 @@ def main():
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
 
-    # 5) Legend at bottom in 4 columns, pushed down
+    # 5) FIGURE-LEVEL legend below the plot
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(
+    fig.legend(
         handles, labels,
         title='Podcast',
         loc='lower center',
-        bbox_to_anchor=(0.5, -0.30),  # push the legend further down
+        bbox_to_anchor=(0.5, -0.12),  # y offset below the axes
         ncol=4,
         fontsize='small',
         title_fontsize='medium',
         frameon=False
     )
 
-    # 6) Make room under the axes so nothing overlaps
-    fig.subplots_adjust(bottom=0.30)
+    # 6) Make room under & around the axes so the legend isn’t clipped
+    fig.subplots_adjust(left=0.05, right=0.95, bottom=0.20)
 
-    # 7) Save
-    plt.savefig(OUTPUT_PLOT, dpi=300)
+    # 7) Save with tight bounding box so nothing gets cut off
+    plt.savefig(OUTPUT_PLOT, dpi=300, bbox_inches='tight')
     print(f"Saved plot to {OUTPUT_PLOT}")
 
 if __name__ == '__main__':
