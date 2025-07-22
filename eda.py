@@ -2,6 +2,7 @@ import os
 import json
 import random
 import pandas as pd
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
@@ -58,18 +59,18 @@ def main():
     labels, podcast_names = pd.factorize(df['Podcast'])
 
     # UPDATED: sample a colormap with as many discrete colors as you have podcasts
-    cmap = plt.cm.get_cmap('tab20', len(podcast_names))
+    cmap = plt.colormaps['tab20']
+    # precompute a color array
+    colors = cmap(np.linspace(0, 1, len(podcast_names)))
 
-    # 1) Create a large figure
     fig, ax = plt.subplots(figsize=(24, 18), dpi=300)
 
-    # 2) Plot all points, only label the sampled ones
     for idx, name in enumerate(podcast_names):
         mask = (labels == idx)
         ax.scatter(
             df.loc[mask, 'x'],
             df.loc[mask, 'y'],
-            color=cmap(idx),
+            color=colors[idx],
             label=name if name in selected_df['Podcast'].values else None,
             s=20,
             alpha=0.7
