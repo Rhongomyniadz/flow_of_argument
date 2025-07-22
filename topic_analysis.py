@@ -94,10 +94,10 @@ def main():
     )
     parser.add_argument("--gpu_id", type=int, default=0)
     parser.add_argument("--min_words", type=int, default=50)
-    parser.add_argument("--window_size", type=int, default=6)
-    parser.add_argument("--stride", type=int, default=3)
-    parser.add_argument("--sample_n", type=int, default=10)
-    parser.add_argument("--topic_threshold", type=float, default=0.001)
+    parser.add_argument("--window_size", type=int, default=4)
+    parser.add_argument("--stride", type=int, default=2)
+    parser.add_argument("--sample_n", type=int, default=30)
+    parser.add_argument("--topic_threshold", type=float, default=0.03)
     args = parser.parse_args()
 
     # Load topic proportions
