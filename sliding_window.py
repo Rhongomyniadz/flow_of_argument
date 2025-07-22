@@ -1,152 +1,215 @@
 import os
-os.environ['HF_HOME'] = '/shared/3/edenzhang'
-
 import argparse
 import random
-import logging
-import csv
-import re
 import json
-from typing import List, Dict
+import logging
+import re
+from typing import List, Dict, Optional
 from tqdm import tqdm
 from sporc import SPORCDataset
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
+from vllm import LLM, SamplingParams
 
+# -----------------------------------------------------------------------------
 # Logging setup
+# -----------------------------------------------------------------------------
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
-# Model and tokenizer setup
-MODEL_NAME = "Qwen/Qwen3-1.7B"
-tokenizer = AutoTokenizer.from_pretrained(
-    MODEL_NAME,
-    cache_dir=os.environ['HF_HOME']
-)
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    cache_dir=os.environ['HF_HOME'],
-    torch_dtype=torch.bfloat16,
-    device_map="auto"
-)
-
-# Generation helper
-def transformer_generate(prompt: str, max_new_tokens: int = 20000, enable_thinking: bool = True) -> str:
-    messages = [{"role": "user", "content": prompt}]
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-        enable_thinking=enable_thinking
-    )
-    inputs = tokenizer(text, return_tensors="pt").to(model.device)
-    output_ids = model.generate(
-        **inputs,
-        max_new_tokens=max_new_tokens,
-        do_sample=True,
-        temperature=0.7,
-        top_p=0.8,
-        top_k=20
-    )[0][len(inputs.input_ids[0]):]
-    return tokenizer.decode(output_ids, skip_special_tokens=True).strip()
-
-# Normalize raw model output to JSON fields
+# -----------------------------------------------------------------------------
+# Helpers
+# -----------------------------------------------------------------------------
 def normalize_output(raw_response: str) -> Dict[str, List[str]]:
-    cleaned = {}
-    without_think = re.sub(r"<think>.*?</think>\s*", "", raw_response, flags=re.DOTALL)
-    start, end = without_think.find('{'), without_think.rfind('}')
-    if start == -1 or end == -1 or end <= start:
-        return cleaned
-    try:
-        parsed = json.loads(without_think[start:end+1])
-    except json.JSONDecodeError:
-        return cleaned
-    for key in ("key_points_discussed_or_proposed", "key_points_assumed"):
-        if key in parsed:
-            cleaned[key] = parsed[key]
-    return cleaned
+    # Extract the first JSON-like object from the response
+    json_match = re.search(r'\{[\s\S]*\}', raw_response)
+    if not json_match:
+        return {}
 
-# Word count utility
+    json_str = json_match.group(0).strip()
+
+    # Attempt to fix common JSON issues (e.g., trailing commas)
+    json_str = re.sub(r',\s*]', ']', json_str)
+    json_str = re.sub(r',\s*}', '}', json_str)
+
+    try:
+        parsed = json.loads(json_str)
+    except json.JSONDecodeError:
+        return {}
+
+    # Ensure output structure
+    out: Dict[str, List[str]] = {}
+    if isinstance(parsed.get("key_points_discussed_or_proposed"), list):
+        out["key_points_discussed_or_proposed"] = parsed["key_points_discussed_or_proposed"]
+    if isinstance(parsed.get("key_points_assumed"), list):
+        out["key_points_assumed"] = parsed["key_points_assumed"]
+
+    return out
+
 def count_words(text: str) -> int:
     return len(re.findall(r"\w+", text))
 
-# Main processing
+def is_host_turn(t, host_name: str) -> bool:
+    return (
+        str(getattr(t, "inferred_speaker_role", "")).lower() == "host"
+        and str(getattr(t, "inferred_speaker_name", "")).strip().lower() == host_name.strip().lower()
+    )
+
+class LLMInterface:
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen3-8B",
+        min_p: float = 0.1,
+        temperature: float = 0.7,
+        top_p: float = 0.8,
+        repetition_penalty: float = 1.1,
+        gpu_id: int = 0,
+        gpu_memory_utilization: float = 0.9,
+        top_k: int = 30,
+        max_tokens: int = 2048
+    ):
+        self.llm = LLM(
+            model=model_name,
+            tensor_parallel_size=1,
+            gpu_memory_utilization=gpu_memory_utilization,
+            trust_remote_code=True,
+            download_dir="/shared/4/models",
+            device=f"cuda:{gpu_id}"
+        )
+        self.params = SamplingParams(
+            temperature=temperature,
+            top_p=top_p,
+            min_p=min_p,
+            repetition_penalty=repetition_penalty,
+            top_k=top_k,
+            max_tokens=max_tokens
+        )
+
+    def generate_response(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        if max_tokens is not None:
+            self.params.max_tokens = max_tokens
+        outputs = self.llm.generate(prompt, self.params)
+        return outputs[0].outputs[0].text.strip()
+
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
 def main():
-    parser = argparse.ArgumentParser()
+    os.environ["VLLM_USE_FLASHINFER_SAMPLER"] = "0"
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+
+    parser = argparse.ArgumentParser(
+        description="Analyze episodes for each of multiple podcast hosts"
+    )
     parser.add_argument(
-        "--categories", "-c", nargs='+', required=True,
-        help="Podcast categories to load"
+        "--hosts", "-H",
+        nargs="+",
+        required=True,
+        help="One or more host names, e.g. -H 'Simon Shapiro' 'John Doe'"
+    )
+    parser.add_argument(
+        "--gpu_id", "-g", type=int, default=0,
+        help="CUDA GPU device ID for inference"
     )
     parser.add_argument(
         "--min_words", type=int, default=50,
-        help="Minimum word count threshold for turns"
+        help="Minimum word count threshold for including a turn"
+    )
+    parser.add_argument(
+        "--window_size", type=int, default=6,
+        help="Number of turns per sliding window"
+    )
+    parser.add_argument(
+        "--stride", type=int, default=3,
+        help="Stride size for the sliding window"
     )
     args = parser.parse_args()
 
-    # Sliding window parameters
-    WINDOW_SIZE = 6
-    STRIDE = 3
-
-    # Initialize SPORC dataset in streaming mode and select categories
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
-    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
-    sporc.load_podcast_subset(categories=args.categories)
+    llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
 
-    # Use built-in search to find two-speaker episodes
-    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
-    if not two_speaker_eps:
-        logger.warning("No two-speaker episodes found.")
-        return
+    os.makedirs("results/hosts", exist_ok=True)
 
-    # Randomly sample up to 10 episodes
-    sample_eps = random.sample(two_speaker_eps, k=min(10, len(two_speaker_eps)))
-    logger.info(f"Selected {len(sample_eps)} two-speaker episodes.")
+    for host in args.hosts:
+        host_key = host.replace(" ", "_").lower()
+        logger.info(f"Loading episodes for host={host!r}…")
 
-    results = []
-    # Iterate with progress bars
-    for ep in tqdm(sample_eps, desc="Episodes", unit="episode"):
-        title = ep.title
-        turns = [t for t in ep.get_all_turns() if count_words(t.text.strip()) > args.min_words]
-        # Create sliding windows of turns
-        windows = [turns[i:i+WINDOW_SIZE] for i in range(0, len(turns) - WINDOW_SIZE + 1, STRIDE)]
-        for win_idx, win in enumerate(tqdm(windows, desc=f"  Windows in {title}", leave=False, unit="window")):
-            # Combine the 6 turns into one text block
-            combined_text = "\n\n".join([f"{t.speaker}: {t.text.strip()}" for t in win])
-            prompt = (
-                "Please analyze the following 6-turn window and return a JSON with two keys:\n"
-                "- key_points_discussed_or_proposed\n"
-                "- key_points_assumed\n\n"
-                f"Window #{win_idx} Text:\n\"\"\"{combined_text}\"\"\"\n\n"
-                "Return only the JSON object without extra text."
-            )
-            raw = transformer_generate(prompt)
-            data = normalize_output(raw)
-            # Collect unique speakers in this window
-            spks = set()
-            for t in win:
-                if isinstance(t.speaker, list):
-                    spks.update(t.speaker)
-                else:
-                    spks.add(t.speaker)
-            results.append({
-                "Podcast": title,
-                "Speakers": ','.join(spks),
-                "WindowIndex": win_idx,
-                "WindowText": combined_text,
-                "KeyPoints": '; '.join(data.get("key_points_discussed_or_proposed", [])),
-                "Assumptions": '; '.join(data.get("key_points_assumed", []))
-            })
+        sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
+        sporc.load_podcast_subset(hosts=[host])
+        episodes = sporc.get_all_episodes()
+        if not episodes:
+            logger.warning(f"No episodes found for host {host!r}, skipping.")
+            continue
 
-    # Write to CSV
-    os.makedirs('results', exist_ok=True)
-    csv_path = 'results/news_sample_sliding_window.csv'
-    fieldnames = ["Podcast", "Speakers", "WindowIndex", "WindowText", "KeyPoints", "Assumptions"]
-    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(results)
+        logger.info(f"Found {len(episodes)} episodes for {host!r}; sampling up to 30…")
+        sample_eps = random.sample(episodes, k=len(episodes))
 
-    logger.info(f"Analysis complete. Results saved to {csv_path}")
+        results: List[Dict] = []
+        raw_results: List[Dict] = []
+
+        for ep in tqdm(sample_eps, desc=f"Host {host}", unit="episode"):
+            turns = [
+                t for t in ep.get_all_turns()
+                if is_host_turn(t, host) and count_words(t.text.strip()) > args.min_words
+            ]
+            windows = [
+                turns[i : i + args.window_size]
+                for i in range(0, len(turns) - args.window_size + 1, args.stride)
+            ]
+
+            for idx, win in enumerate(windows):
+                combined = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
+                prompt = f"""
+                You are a professional podcast analyst specializing in summarizing discussions. Your task is to extract two types of key points from the transcript below.
+
+                Output **only** valid JSON that strictly follows this schema:
+
+                {{
+                "key_points_discussed_or_proposed": [ string, ... ],  // Explicit topics, arguments, or suggestions made by speakers
+                "key_points_assumed": [ string, ... ]                 // Background knowledge, implicit beliefs, or unspoken assumptions
+                }}
+
+                Instructions:
+                - Carefully read and analyze Window #{idx} of the episode \"{ep.title}\" hosted by {host}.
+                - Be concise, factual, and specific.
+                - Use direct quotes only if necessary; otherwise, paraphrase accurately.
+                - Do not add commentary or interpretation beyond the text.
+                - Do not include nulls, placeholders, or extra fields.
+
+                Transcript:
+                {combined}
+                """
+                raw = llm.generate_response(prompt)
+                raw_results.append({
+                    "Host": host,
+                    "Podcast": ep.title,
+                    "WindowIndex": idx,
+                    "RawOutput": raw
+                })
+
+                data = normalize_output(raw)
+                speakers = {
+                    s for t in win
+                    for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
+                }
+                results.append({
+                    "Host": host,
+                    "Podcast": ep.title,
+                    "Speakers": ",".join(speakers),
+                    "WindowIndex": idx,
+                    "WindowText": combined,
+                    "KeyPoints": data.get("key_points_discussed_or_proposed", []),
+                    "Assumptions": data.get("key_points_assumed", [])
+                })
+
+        out_file = f"results/hosts/{host_key}.json"
+        raw_file = f"results/hosts/{host_key}_raw.json"
+
+        with open(out_file, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2)
+        logger.info(f"Structured results saved → {out_file}")
+
+        with open(raw_file, "w", encoding="utf-8") as f:
+            json.dump(raw_results, f, indent=2)
+        logger.info(f"Raw results saved       → {raw_file}")
 
 if __name__ == "__main__":
     main()
