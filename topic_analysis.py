@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 import pandas as pd
 from sporc import SPORCDataset
 from vllm import LLM, SamplingParams
+from tqdm import tqdm  # Added for progress tracking
 
 # Logging setup
 logger = logging.getLogger(__name__)
@@ -23,15 +24,11 @@ def canonical_to_raw(canonical_url: str) -> str:
       /www.buzzsprout.com/o3/httpswww.buzzsprout.com7830204252475bestofsingoutspeakoutno3.mp3MERGED
     """
     p = urlparse(canonical_url)
-    domain = p.netloc            # e.g. "www.buzzsprout.com"
-    scheme = p.scheme            # "https"
-    # path = "783020/4252475-best-of-singout-speakout-no-3.mp3"
+    domain = p.netloc
+    scheme = p.scheme
     path = p.path.lstrip("/")
-    # remove all slashes and hyphens
     collapsed = path.replace("/", "").replace("-", "")
-    # assemble the host+domain without "://"
-    host_noslash = f"{scheme}{domain}"  # "httpswww.buzzsprout.com"
-    # build the raw slug + extension
+    host_noslash = f"{scheme}{domain}"
     raw_body = f"{host_noslash}{collapsed}"
     return f"/{domain}/o3/{raw_body}MERGED"
 
@@ -88,6 +85,7 @@ class LLMInterface:
         outputs = self.llm.generate(prompt, self.params)
         return outputs[0].outputs[0].text.strip()
 
+
 def main():
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
 
@@ -102,17 +100,17 @@ def main():
     parser.add_argument("--topic_threshold", type=float, default=0.001)
     args = parser.parse_args()
 
-    # ─── Load topic proportions ───────────────────────────────────────────────
+    # Load topic proportions
     cols = ['row_id', 'url'] + [f'topic_{i}' for i in range(100)]
     doc_topics = pd.read_csv('doc_topics.txt', sep='\t', header=None, names=cols)
 
-    # ─── Load topic keywords ────────────────────────────────────────────────
+    # Load topic keywords
     topic_keys = pd.read_csv(
         'topic_keys.txt', sep='\t', header=None,
         names=['topic_id', 'overall_prop', 'keywords']
     )
 
-    # ─── Find George/Floyd topics ───────────────────────────────────────────
+    # Find George/Floyd topics
     mask = (
         topic_keys['keywords'].str.contains('george', case=False) |
         topic_keys['keywords'].str.contains('floyd', case=False)
@@ -123,20 +121,20 @@ def main():
         return
     topic_cols = [f'topic_{i}' for i in gf_ids]
 
-    # ─── Pre-filter docs by threshold ───────────────────────────────────────
+    # Pre-filter docs
     filtered = doc_topics[doc_topics[topic_cols].max(axis=1) > args.topic_threshold]
     logger.info(f"{len(filtered)} docs above topic threshold")
 
-    # ─── Load SPoRC episodes ────────────────────────────────────────────────
+    # Load SPoRC episodes
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
     all_eps = sporc.get_all_episodes()
 
-    # build raw_url → episode map
+    # Map raw URLs to episodes
     raw2ep = { canonical_to_raw(ep.mp3_url): ep for ep in all_eps }
 
-    # ─── Keep only docs whose raw‐url matches an episode ─────────────────────
+    # Keep only matching docs
     matched = filtered[filtered['url'].isin(raw2ep)]
     logger.info(f"{len(matched)} docs match SPoRC raw URLs")
 
@@ -145,19 +143,19 @@ def main():
         logger.warning("No episodes found after mapping. Exiting.")
         return
 
-    # ─── Sample and analyze ─────────────────────────────────────────────────
+    # Sample episodes and analyze with progress bars
     random.seed(42)
     sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
     llm = LLMInterface(model_name="Qwen/Qwen3-8B", gpu_id=args.gpu_id)
 
     results, raw_results = [], []
-    for ep in sample_eps:
+    for ep in tqdm(sample_eps, desc="Analyzing Episodes"):  # Outer loop progress
         turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
         windows = [
             turns[i:i+args.window_size]
             for i in range(0, len(turns)-args.window_size+1, args.stride)
         ]
-        for idx, win in enumerate(windows):
+        for idx, win in enumerate(tqdm(windows, desc=f"Windows for {ep.title}")):  # Inner loop progress
             text_block = "\n\n".join(f"{t.speaker}: {t.text.strip()}" for t in win)
             prompt = f"""
 SYSTEM:
@@ -198,6 +196,7 @@ Now analyze Window #{idx} from episode "{ep.title}":
                 "Assumptions": data.get("key_points_assumed", [])
             })
 
+    # Save results
     os.makedirs("results", exist_ok=True)
     base = "george_floyd_topic_analysis"
     with open(f"results/{base}.json", "w", encoding="utf-8") as f:
