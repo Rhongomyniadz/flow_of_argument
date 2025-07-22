@@ -42,14 +42,14 @@ def main():
     coords = tsne.fit_transform(embeddings)
     df['x'], df['y'] = coords[:,0], coords[:,1]
 
-    # ─── Sample up to 1 per podcast ────────────────────────────────────────────
-    def sample_one(group):
+    # ─── Sample up to N per podcast ────────────────────────────────────────────
+    def sample_n(group):
         return group.sample(n=min(len(group), SAMPLE_PER_PODCAST), random_state=SEED)
 
     selected_df = (
         df
         .groupby('Podcast', group_keys=False)
-        .apply(sample_one)
+        .apply(sample_n)
         .reset_index(drop=True)
     )
 
@@ -57,10 +57,10 @@ def main():
     labels, podcast_names = pd.factorize(df['Podcast'])
     cmap = plt.get_cmap('tab20')
 
-    # 1) Large canvas
+    # 1) Create a large figure
     fig, ax = plt.subplots(figsize=(24, 18), dpi=300)
 
-    # 2) Draw points, only label the sampled ones
+    # 2) Plot all points, only label the sampled ones
     for idx, name in enumerate(podcast_names):
         mask = (labels == idx)
         ax.scatter(
@@ -72,38 +72,41 @@ def main():
             alpha=0.7
         )
 
-    # 3) Annotate samples
+    # 3) Annotate each sampled point
     for _, row in selected_df.iterrows():
         ax.text(
-            row['x'], row['y'],
+            row['x'],
+            row['y'],
             f"{row['WindowIndex']}-{row['AssumptionIndex']}",
-            fontsize=8, weight='bold',
-            va='center', ha='center',
+            fontsize=8,
+            weight='bold',
+            va='center',
+            ha='center',
             color='black'
         )
 
-    # 4) Axes styling
-    ax.margins(0.1)
+    # 4) Tidy up axes
+    ax.margins(x=0.1, y=0.1)
     ax.set_aspect('equal', adjustable='box')
     ax.set_title('t-SNE of Individual Assumption Embeddings', fontsize=16)
     ax.set_xlabel('t-SNE dim 1')
     ax.set_ylabel('t-SNE dim 2')
 
-    # 5) Put legend above the plot in 8 columns
+    # 5) Legend at bottom in 4 columns, pushed down
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(
         handles, labels,
         title='Podcast',
-        loc='upper center',
-        bbox_to_anchor=(0.5, 1.20),   # 20% above the top of the axes
-        ncol=8,                       # eight columns
-        fontsize='xx-small',
-        title_fontsize='small',
+        loc='lower center',
+        bbox_to_anchor=(0.5, -0.30),  # push the legend further down
+        ncol=4,
+        fontsize='small',
+        title_fontsize='medium',
         frameon=False
     )
 
-    # 6) Make room for the legend at the top
-    plt.tight_layout(rect=[0, 0, 1, 0.85])  # leave top 15% for legend
+    # 6) Make room under the axes so nothing overlaps
+    fig.subplots_adjust(bottom=0.30)
 
     # 7) Save
     plt.savefig(OUTPUT_PLOT, dpi=300)
