@@ -28,7 +28,6 @@ def canonical_to_raw(canonical_url: str) -> str:
 
 
 def normalize_output(raw_response: str) -> List[str]:
-    """Extract only the 'key_points_assumed' array, or return [] if missing."""
     start, end = raw_response.find("{"), raw_response.rfind("}")
     if start == -1 or end <= start:
         return []
@@ -88,115 +87,96 @@ def main():
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
     parser = argparse.ArgumentParser(
-        description="Analyze SPORC episodes for COVID and George Floyd topics"
+        description="Analyze SPORC episodes for COVID topic"
     )
     parser.add_argument("--min_words", type=int, default=50)
-    parser.add_argument("--window_size", type=int, default=6)
-    parser.add_argument("--stride", type=int, default=1)
     parser.add_argument("--sample_n", type=int, default=30)
     parser.add_argument("--topic_threshold", type=float, default=0.03)
     parser.add_argument("--gpu_id", type=int, default=0)
     args = parser.parse_args()
 
-    # 1) Load doc-topic and topic-keys
+    # Load topic proportions
     cols = ["row_id", "url"] + [f"topic_{i}" for i in range(100)]
     doc_topics = pd.read_csv("doc_topic.txt", sep="\t", header=None, names=cols)
+
+    # Load topic keywords
     topic_keys = pd.read_csv(
-        "topic_keys.txt", sep="\t", header=None, names=["topic_id", "overall_prop", "keywords"]
+        "topic_keys.txt", sep="\t", header=None,
+        names=["topic_id", "overall_prop", "keywords"]
     )
 
-    # 2) Define the two target topics and find their topic‐IDs
-    topics_to_find = {
-        "covid": ["covid"],
-        "george_floyd": ["george", "floyd"],
-    }
+    # Only COVID topic
+    topics_to_find = {"covid": ["covid"]}
 
-    # 3) Initialize SPORC
+    # Initialize SPORC
     data_dir = "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/"
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
-    all_episodes = sporc.get_all_episodes()
 
-    # 4) Build URL→Episode map
-    raw2ep = {canonical_to_raw(ep.mp3_url): ep for ep in all_episodes}
+    # Filter episodes by exactly two speakers
+    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+    eps_map = {canonical_to_raw(ep.mp3_url): ep for ep in two_speaker_eps}
 
-    # 5) Prepare LLM
+    # Prepare LLM
     llm = LLMInterface(gpu_id=args.gpu_id)
 
     for topic_name, keywords in topics_to_find.items():
-        # 5a) find matching topic IDs
-        mask = topic_keys["keywords"].apply(
+        # Identify topic IDs
+        mask = topic_keys['keywords'].apply(
             lambda s: any(kw.lower() in s.lower() for kw in keywords)
         )
-        topic_ids = topic_keys.loc[mask, "topic_id"].tolist()
-        if not topic_ids:
-            logger.warning(f"No topics found for '{topic_name}', skipping.")
-            continue
-
+        topic_ids = topic_keys.loc[mask, 'topic_id'].tolist()
         topic_cols = [f"topic_{i}" for i in topic_ids]
 
-        # 5b) filter doc_topics by threshold
+        # Filter docs by threshold
         filtered_docs = doc_topics[
             doc_topics[topic_cols].max(axis=1) > args.topic_threshold
         ]
         logger.info(f"[{topic_name}] {len(filtered_docs)} docs above threshold")
 
-        # 5c) map to SPORC episodes, then keep only those with exactly 1 host + 1 guest
-        matched = filtered_docs[filtered_docs["url"].isin(raw2ep)]
-        eps = [raw2ep[u] for u in matched["url"]]
-        eps_2spk = [
-            e
-            for e in eps
-            if len(e.host_names) == 1 and len(e.guest_names) == 1
-        ]
-        logger.info(f"[{topic_name}] {len(eps_2spk)} episodes with 2 speakers")
+        # Map to SPORC two-speaker episodes
+        matched = filtered_docs[filtered_docs['url'].isin(eps_map)]
+        eps = [eps_map[u] for u in matched['url']]
+        logger.info(f"[{topic_name}] {len(eps)} episodes matched and two-speaker")
 
-        # 5d) sample if too many
+        # Sample if needed
         random.seed(42)
-        sample_eps = random.sample(eps_2spk, k=min(args.sample_n, len(eps_2spk)))
+        sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
 
-        # 5e) analyze windows
         per_podcast_results: Dict[str, List[Dict]] = {}
         for ep in tqdm(sample_eps, desc=f"Analyzing {topic_name}"):
+            # process each turn individually
             turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
-            windows = [
-                turns[i : i + args.window_size]
-                for i in range(0, len(turns) - args.window_size + 1, args.stride)
-            ]
-            for idx, win in enumerate(windows):
-                # separate host & guest turns
-                host_texts = [t.text.strip() for t in win if t.inferred_role == "host"]
-                guest_texts = [t.text.strip() for t in win if t.inferred_role == "guest"]
+            for idx, t in enumerate(turns):
+                # separate roles
+                host_text = t.text.strip() if t.inferred_role == 'host' else None
+                guest_text = t.text.strip() if t.inferred_role == 'guest' else None
 
-                # build prompt on full window (you can also tailor to host/guest separately)
-                text_block = "\n\n".join(
-                    f"{t.inferred_role.upper()}: {t.text.strip()}" for t in win
-                )
+                # build prompt for single turn
                 prompt = f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
 
 TASK:
-  • Given exactly {args.window_size} consecutive turns, extract only the array
-    "key_points_assumed".
+  • Given a single speaker turn, extract only the array "key_points_assumed".
 
 OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
 
-Now analyze Window #{idx} from episode "{ep.title}":
-{text_block}
+Now analyze Turn #{idx} from episode "{ep.title}":
+{t.inferred_role.upper()}: {t.text.strip()}
 """
                 raw = llm.generate(prompt)
                 assumptions = normalize_output(raw)
 
                 rec = {
-                    "WindowIndex": idx,
-                    "HostTurns": host_texts,
-                    "GuestTurns": guest_texts,
+                    "TurnIndex": idx,
+                    "HostTurn": host_text,
+                    "GuestTurn": guest_text,
                     "Assumptions": assumptions,
                 }
                 per_podcast_results.setdefault(ep.title, []).append(rec)
 
-        # 5f) write out one JSON per podcast
+        # Write per-podcast JSON
         out_dir = os.path.join("results", topic_name)
         os.makedirs(out_dir, exist_ok=True)
         for podcast_name, records in per_podcast_results.items():
