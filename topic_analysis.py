@@ -174,12 +174,12 @@ OUTPUT only valid JSON matching this schema:
   "key_points_assumed":           [ string, … ]
 }}
 
-Now analyze Window #{idx} from episode "{ep.epTitle}":
+Now analyze Window #{idx} from episode "{ep.title}":
 {text_block}
 """
             raw = llm.generate_response(prompt)
             raw_results.append({
-                "Podcast": ep.epTitle,
+                "Podcast": ep.title,
                 "WindowIndex": idx,
                 "RawOutput": raw
             })
@@ -190,7 +190,7 @@ Now analyze Window #{idx} from episode "{ep.epTitle}":
                 for s in (t.speaker if isinstance(t.speaker, list) else [t.speaker])
             }
             results.append({
-                "Podcast":     ep.epTitle,
+                "Podcast":     ep.title,
                 "Speakers":    ",".join(speakers),
                 "WindowIndex": idx,
                 "WindowText":  text_block,
