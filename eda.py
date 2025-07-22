@@ -50,7 +50,7 @@ def main():
     selected_df = (
         df
         .groupby('Podcast', group_keys=False)
-        .apply(sample_n)
+        .apply(sample_n, include_groups=False)
         .reset_index(drop=True)
     )
 
