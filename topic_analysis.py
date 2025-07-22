@@ -97,11 +97,15 @@ def main():
 
     # Load topic proportions
     cols = ["row_id", "url"] + [f"topic_{i}" for i in range(100)]
-    doc_topics = pd.read_csv("doc_topic.txt", sep="\t", header=None, names=cols)
+    doc_topics = pd.read_csv(
+        "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
+        sep="\t", header=None, names=cols
+    )
 
     # Load topic keywords
     topic_keys = pd.read_csv(
-        "topic_keys.txt", sep="\t", header=None,
+        "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
+        sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"]
     )
 
