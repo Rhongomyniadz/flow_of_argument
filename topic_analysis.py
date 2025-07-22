@@ -47,7 +47,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-8B",
         gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.9,
+        gpu_memory_utilization: float = 0.8,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
@@ -91,7 +91,7 @@ def main():
     )
     parser.add_argument("--min_words", type=int, default=50)
     parser.add_argument("--sample_n", type=int, default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.03)
+    parser.add_argument("--topic_threshold", type=float, default=0.01)
     parser.add_argument("--gpu_id", type=int, default=0)
     args = parser.parse_args()
 
