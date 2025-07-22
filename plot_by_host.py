@@ -57,7 +57,7 @@ def main():
     selected_df = (
         df
         .groupby('Host', group_keys=False)
-        .apply(sample_n, include_groups=False)
+        .sample(n=min(SAMPLE_PER_HOST, df.shape[0]), random_state=SEED)
         .reset_index(drop=True)
     )
 
