@@ -114,11 +114,11 @@ def main():
         help="Minimum word count threshold for including a turn"
     )
     parser.add_argument(
-        "--window_size", type=int, default=6,
+        "--window_size", type=int, default=4,
         help="Number of turns per sliding window"
     )
     parser.add_argument(
-        "--stride", type=int, default=3,
+        "--stride", type=int, default=2,
         help="Stride size for the sliding window"
     )
     args = parser.parse_args()
