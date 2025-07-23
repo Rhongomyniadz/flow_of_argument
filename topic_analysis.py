@@ -1,4 +1,8 @@
 import os
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["VLLM_USE_FLASHINFER_SAMPLER"] = "0"
+os.environ["VLLM_ATTENTION_BACKEND"] = "XFORMERS"
 import argparse
 import random
 import json
@@ -47,7 +51,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-8B",
         gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.5,
+        gpu_memory_utilization: float = 0.9,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
@@ -84,14 +88,13 @@ def sanitize_filename(name: str) -> str:
 
 
 def main():
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
     parser = argparse.ArgumentParser(
         description="Analyze SPORC episodes for COVID topic"
     )
     parser.add_argument("--min_words", type=int, default=50)
     parser.add_argument("--sample_n", type=int, default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.01)
+    parser.add_argument("--topic_threshold", type=float, default=0.03)
     parser.add_argument("--gpu_id", type=int, default=0)
     args = parser.parse_args()
 
@@ -148,25 +151,24 @@ def main():
         sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
 
         per_podcast_results: Dict[str, List[Dict]] = {}
-        for ep in tqdm(sample_eps, desc=f"Analyzing {topic_name}"):
-            # process each turn individually
+        # Track overall episode progress
+        for ep in tqdm(sample_eps, desc=f"Episodes for {topic_name}"):
             turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
-            for idx, t in enumerate(turns):
-                # separate roles
+            # Track turn-level progress per episode
+            for idx, t in enumerate(tqdm(turns, desc=f"Turns in {sanitize_filename(ep.title)}", leave=False)):
                 host_text = t.text.strip() if t.inferred_role == 'host' else None
                 guest_text = t.text.strip() if t.inferred_role == 'guest' else None
 
-                # build prompt for single turn
                 prompt = f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
 
 TASK:
-  • Given a single speaker turn, extract only the array "key_points_assumed".
+  • Given a single speaker turn, extract only the array \"key_points_assumed\".
 
-OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
+OUTPUT a JSON object with exactly one key \"key_points_assumed\" mapping to a list of strings.
 
-Now analyze Turn #{idx} from episode "{ep.title}":
+Now analyze Turn #{idx} from episode \"{ep.title}\":
 {t.inferred_role.upper()}: {t.text.strip()}
 """
                 raw = llm.generate(prompt)
