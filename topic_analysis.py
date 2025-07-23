@@ -47,7 +47,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-8B",
         gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.8,
+        gpu_memory_utilization: float = 0.5,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
