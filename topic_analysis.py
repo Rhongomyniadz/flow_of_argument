@@ -50,7 +50,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-8B",
         gpu_id: int = 0,
-        gpu_memory_utilization: float = 0.8,
+        gpu_memory_utilization: float = 0.2,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
@@ -87,7 +87,6 @@ def sanitize_filename(name: str) -> str:
 
 
 def main():
-
     parser = argparse.ArgumentParser(
         description="Analyze SPORC episodes for COVID topic"
     )
@@ -97,91 +96,79 @@ def main():
     parser.add_argument("--gpu_id", type=int, default=0)
     args = parser.parse_args()
 
-    # Load topic proportions
     cols = ["row_id", "url"] + [f"topic_{i}" for i in range(100)]
     doc_topics = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
         sep="\t", header=None, names=cols
     )
 
-    # Load topic keywords
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"]
     )
 
-    # Only COVID topic
     topics_to_find = {"covid": ["covid"]}
 
-    # Initialize SPORC
     data_dir = "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/"
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
 
-    # Filter episodes by exactly two speakers
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
     eps_map = {canonical_to_raw(ep.mp3_url): ep for ep in two_speaker_eps}
 
-    # Prepare LLM
     llm = LLMInterface(gpu_id=args.gpu_id)
 
     for topic_name, keywords in topics_to_find.items():
-        # Identify topic IDs
         mask = topic_keys['keywords'].apply(
             lambda s: any(kw.lower() in s.lower() for kw in keywords)
         )
         topic_ids = topic_keys.loc[mask, 'topic_id'].tolist()
         topic_cols = [f"topic_{i}" for i in topic_ids]
 
-        # Filter docs by threshold
         filtered_docs = doc_topics[
             doc_topics[topic_cols].max(axis=1) > args.topic_threshold
         ]
         logger.info(f"[{topic_name}] {len(filtered_docs)} docs above threshold")
 
-        # Map to SPORC two-speaker episodes
         matched = filtered_docs[filtered_docs['url'].isin(eps_map)]
         eps = [eps_map[u] for u in matched['url']]
         logger.info(f"[{topic_name}] {len(eps)} episodes matched and two-speaker")
 
-        # Sample if needed
         random.seed(42)
         sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
 
         per_podcast_results: Dict[str, List[Dict]] = {}
-        # Track overall episode progress
         for ep in tqdm(sample_eps, desc=f"Episodes for {topic_name}"):
             turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
-            # Track turn-level progress per episode
-            for idx, t in enumerate(tqdm(turns, desc=f"Turns in {sanitize_filename(ep.title)}", leave=False)):
-                host_text = t.text.strip() if t.inferred_role == 'host' else None
-                guest_text = t.text.strip() if t.inferred_role == 'guest' else None
+            for idx, t in enumerate(tqdm(turns, desc=f"Turns in {sanitize_filename(ep.podTitle)}", leave=False)):
+                role = t.inferredSpeakerRole
+                name = t.inferredSpeakerName
+                text = t.text.strip()
 
                 prompt = f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
 
 TASK:
-  • Given a single speaker turn, extract only the array \"key_points_assumed\".
+Given a single speaker turn, extract the \"key_points_assumed\".
 
 OUTPUT a JSON object with exactly one key \"key_points_assumed\" mapping to a list of strings.
 
-Now analyze Turn #{idx} from episode \"{ep.title}\":
-{t.inferred_role.upper()}: {t.text.strip()}
+Now analyze Turn #{idx} from episode \"{ep.epTitle}\":
+{role.upper()}: {text}
 """
                 raw = llm.generate(prompt)
                 assumptions = normalize_output(raw)
 
                 rec = {
-                    "TurnIndex": idx,
-                    "HostTurn": host_text,
-                    "GuestTurn": guest_text,
-                    "Assumptions": assumptions,
+                    "turn_text": text,
+                    "inferred_speaker_name": name,
+                    "inferred_speaker_role": role,
+                    "assumptions": assumptions,
                 }
-                per_podcast_results.setdefault(ep.title, []).append(rec)
+                per_podcast_results.setdefault(ep.epTitle, []).append(rec)
 
-        # Write per-podcast JSON
         out_dir = os.path.join("results", topic_name)
         os.makedirs(out_dir, exist_ok=True)
         for podcast_name, records in per_podcast_results.items():
