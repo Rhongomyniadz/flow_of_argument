@@ -48,7 +48,7 @@ def count_words(text: str) -> int:
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-4B",
+        model_name: str = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.5,
         temperature: float = 0.7,
