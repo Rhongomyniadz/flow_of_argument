@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.001)
+    parser.add_argument("--topic_threshold", type=float, default=0.03)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
 
@@ -101,22 +101,22 @@ def main():
     covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
     topic_cols = [f"topic_{i}" for i in covid_ids]
 
-    # 2) Chunk-read doc_topics.txt and build matched_urls set
+    # 2) Load entire doc_topics.txt and build matched_urls set
     matched_urls = set()
     usecols = ["url"] + topic_cols
     dtype = {c: "float32" for c in topic_cols}
 
-    logger.info("Reading doc_topics in chunks…")
-    reader = pd.read_csv(
+    logger.info("Reading doc_topics.txt in full…")
+    doc_topics = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
         sep="\t", header=None,
         names=["row_id", "url"] + [f"topic_{i}" for i in range(100)],
         usecols=usecols, dtype=dtype,
-        chunksize=100_000,
     )
-    for chunk in tqdm(reader, desc="chunks"):
-        mask = chunk[topic_cols].max(axis=1) > args.topic_threshold
-        matched_urls.update(chunk.loc[mask, "url"])
+
+    # Filter doc_topics based on the threshold for COVID-related topics
+    mask = doc_topics[topic_cols].max(axis=1) > args.topic_threshold
+    matched_urls.update(doc_topics.loc[mask, "url"])
 
     logger.info(f"{len(matched_urls)} docs match threshold")
 
