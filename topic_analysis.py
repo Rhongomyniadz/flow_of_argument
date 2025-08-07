@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.03)
+    parser.add_argument("--topic_threshold", type=float, default=0.001)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
 
@@ -121,10 +121,10 @@ def main():
     logger.info(f"{len(matched_urls)} docs match threshold")
 
     # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
-    sporc = SPORCDataset(
-        local_data_dir="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
-        streaming=True
-    )
+    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+
+    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
+    sporc.load_podcast_subset()
 
     # Episodes with exactly 2 speakers
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
