@@ -120,13 +120,21 @@ def main():
         local_data_dir="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
         streaming=True
     )
+
+    # Episodes with exactly 2 speakers
+    two_speaker_episodes = sporc.search_episodes(min_speakers=2, max_speakers=2)
+
+    # Episodes with 3 or more speakers
+    multi_speaker_episodes = sporc.search_episodes(min_speakers=3)
+
+    logger.info(f"Found {len(two_speaker_episodes)} two-speaker episodes.")
+    logger.info(f"Found {len(multi_speaker_episodes)} multi-speaker episodes.")
+
     reservoir: List = []
     total_seen = 0
 
     logger.info("Scanning SPORC episodes…")
-    for ep in tqdm(sporc.iterate_episodes(), desc="Episodes scanned"):
-        if len(ep.main_speakers) != 2:
-            continue
+    for ep in tqdm(two_speaker_episodes, desc="Two-speaker episodes"):
         raw_url = canonical_to_raw(ep.mp3_url)
         if raw_url not in matched_urls:
             continue
