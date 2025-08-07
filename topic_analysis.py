@@ -1,14 +1,11 @@
 import os
-
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-
 import argparse
 import random
 import json
 import logging
 import re
 from urllib.parse import urlparse
-from typing import List, Dict, Optional
+from typing import List
 
 import pandas as pd
 from sporc import SPORCDataset
@@ -26,18 +23,14 @@ def canonical_to_raw(canonical_url: str) -> str:
     path = p.path.lstrip("/")
     collapsed = path.replace("/", "").replace("-", "")
     host_noslash = f"{scheme}{domain}"
-    raw_body = f"{host_noslash}{collapsed}"
-    return f"/{domain}/o3/{raw_body}MERGED"
+    return f"/{domain}/o3/{host_noslash}{collapsed}MERGED"
 
 
-def normalize_output(raw_response: str) -> List[str]:
-    start, end = raw_response.find("{"), raw_response.rfind("}")
-    if start == -1 or end <= start:
-        return []
+def normalize_output(raw: str) -> List[str]:
     try:
-        parsed = json.loads(raw_response[start : end + 1])
-        return parsed.get("key_points_assumed", [])
-    except json.JSONDecodeError:
+        obj = json.loads(raw[raw.find("{") : raw.rfind("}") + 1])
+        return obj.get("key_points_assumed", [])
+    except Exception:
         return []
 
 
@@ -75,110 +68,131 @@ class LLMInterface:
             max_tokens=max_tokens,
         )
 
-    def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
-        if max_tokens is not None:
-            self.params.max_tokens = max_tokens
-        out = self.llm.generate(prompt, self.params)
-        return out[0].outputs[0].text.strip()
-
-
-def sanitize_filename(name: str) -> str:
-    return re.sub(r"[^\w\-]", "_", name)
+    def generate_batch(self, prompts: List[str]) -> List[str]:
+        out = self.llm.generate(prompts, self.params)
+        return [o.outputs[0].text.strip() for o in out]
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Analyze SPORC episodes for COVID topic"
-    )
+    parser = argparse.ArgumentParser(description="Analyze SPORC episodes for COVID topic")
     parser.add_argument("--min_words", type=int, default=50)
     parser.add_argument("--sample_n", type=int, default=30)
     parser.add_argument("--topic_threshold", type=float, default=0.03)
     parser.add_argument("--gpu_id", type=int, default=0)
     args = parser.parse_args()
 
-    cols = ["row_id", "url"] + [f"topic_{i}" for i in range(100)]
-    doc_topics = pd.read_csv(
-        "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
-        sep="\t", header=None, names=cols
-    )
+    random.seed(42)
 
+    # 1) Load topic_keys and pick covid-related topic columns
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
-        sep="\t", header=None,
-        names=["topic_id", "overall_prop", "keywords"]
+        sep="\t",
+        header=None,
+        names=["topic_id", "overall_prop", "keywords"],
     )
+    covid_ids = topic_keys[
+        topic_keys.keywords.str.contains("covid", case=False)
+    ].topic_id.tolist()
+    topic_cols = [f"topic_{i}" for i in covid_ids]
 
-    topics_to_find = {"covid": ["covid"]}
+    # 2) Chunk-read doc_topics.txt, keep only 'url' + our topic cols, build a set
+    matched_urls = set()
+    usecols = ["url"] + topic_cols
+    dtype = {c: "float32" for c in topic_cols}
 
-    data_dir = "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/"
-    sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
-    sporc.load_podcast_subset()
+    logger.info("Reading doc_topics in chunks…")
+    chunks = pd.read_csv(
+        "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
+        sep="\t",
+        header=None,
+        names=["row_id", "url"] + [f"topic_{i}" for i in range(100)],
+        usecols=usecols,
+        dtype=dtype,
+        chunksize=100_000,
+    )
+    for chunk in tqdm(chunks, desc="Chunks processed"):
+        mask = chunk[topic_cols].max(axis=1) > args.topic_threshold
+        matched_urls.update(chunk.loc[mask, "url"])
+    logger.info(f"{len(matched_urls)} docs match the COVID threshold")
 
-    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
-    eps_map = {canonical_to_raw(ep.mp3_url): ep for ep in two_speaker_eps}
+    # 3) Stream SPORC, reservoir-sample among two-speaker episodes that are in matched_urls
+    sporc = SPORCDataset(
+        local_data_dir="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
+        streaming=True
+    )
+    reservoir: List = []
+    total_seen = 0
+
+    logger.info("Scanning SPORC episodes…")
+    for ep in tqdm(sporc.iterate_episodes(), desc="Episodes scanned"):
+        if len(ep.main_speakers) != 2:
+            continue
+        raw_url = canonical_to_raw(ep.mp3_url)
+        if raw_url not in matched_urls:
+            continue
+
+        total_seen += 1
+        if len(reservoir) < args.sample_n:
+            reservoir.append(ep)
+        else:
+            j = random.randint(0, total_seen - 1)
+            if j < args.sample_n:
+                reservoir[j] = ep
+
+    logger.info(f"Sampled {len(reservoir)} episodes for analysis")
 
     llm = LLMInterface(gpu_id=args.gpu_id)
 
-    for topic_name, keywords in topics_to_find.items():
-        mask = topic_keys['keywords'].apply(
-            lambda s: any(kw.lower() in s.lower() for kw in keywords)
-        )
-        topic_ids = topic_keys.loc[mask, 'topic_id'].tolist()
-        topic_cols = [f"topic_{i}" for i in topic_ids]
+    # 4) Process each sampled episode, write its JSON out immediately
+    out_dir = "results/covid"
+    os.makedirs(out_dir, exist_ok=True)
 
-        filtered_docs = doc_topics[
-            doc_topics[topic_cols].max(axis=1) > args.topic_threshold
-        ]
-        logger.info(f"[{topic_name}] {len(filtered_docs)} docs above threshold")
+    logger.info("Analyzing sampled episodes…")
+    for ep in tqdm(reservoir, desc="Processing episodes"):
+        episode_label = re.sub(r"[^\w\-]", "_", ep.epTitle)
+        prompts = []
+        turns_meta = []
 
-        matched = filtered_docs[filtered_docs['url'].isin(eps_map)]
-        eps = [eps_map[u] for u in matched['url']]
-        logger.info(f"[{topic_name}] {len(eps)} episodes matched and two-speaker")
-
-        random.seed(42)
-        sample_eps = random.sample(eps, k=min(args.sample_n, len(eps)))
-
-        per_podcast_results: Dict[str, List[Dict]] = {}
-        for ep in tqdm(sample_eps, desc=f"Episodes for {topic_name}"):
-            turns = [t for t in ep.get_all_turns() if count_words(t.text) > args.min_words]
-            for idx, t in enumerate(tqdm(turns, desc=f"Turns in {sanitize_filename(ep.podTitle)}", leave=False)):
-                role = t.inferredSpeakerRole
-                name = t.inferredSpeakerName
-                text = t.text.strip()
-
-                prompt = f"""
+        for idx, t in enumerate(tqdm(ep.get_all_turns(),
+                                     desc=f"Turns in {episode_label}",
+                                     leave=False)):
+            if count_words(t.text) < args.min_words:
+                continue
+            prompts.append(f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
 
 TASK:
-Given a single speaker turn, extract the \"key_points_assumed\".
+Given a single speaker turn, extract the "key_points_assumed".
 
-OUTPUT a JSON object with exactly one key \"key_points_assumed\" mapping to a list of strings.
+OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
 
-Now analyze Turn #{idx} from episode \"{ep.epTitle}\":
-{role.upper()}: {text}
-"""
-                raw = llm.generate(prompt)
-                assumptions = normalize_output(raw)
+Now analyze Turn #{idx} from episode "{ep.epTitle}":
+{t.inferredSpeakerRole.upper()}: {t.text.strip()}
+""")
+            turns_meta.append((t.text, t.inferredSpeakerName, t.inferredSpeakerRole))
 
-                rec = {
-                    "turn_text": text,
-                    "inferred_speaker_name": name,
-                    "inferred_speaker_role": role,
-                    "assumptions": assumptions,
-                }
-                per_podcast_results.setdefault(ep.epTitle, []).append(rec)
+        if not prompts:
+            continue
 
-        out_dir = os.path.join("results", topic_name)
-        os.makedirs(out_dir, exist_ok=True)
-        for podcast_name, records in per_podcast_results.items():
-            fname = sanitize_filename(podcast_name) + ".json"
-            with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
-                json.dump(records, f, indent=2, ensure_ascii=False)
+        outputs = llm.generate_batch(prompts)
+        records = []
+        for (text, name, role), raw in zip(turns_meta, outputs):
+            records.append({
+                "turn_text": text,
+                "inferred_speaker_name": name,
+                "inferred_speaker_role": role,
+                "assumptions": normalize_output(raw),
+            })
 
-        logger.info(f"[{topic_name}] done; results in {out_dir}/")
+        fname = f"{episode_label}.json"
+        with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
+            json.dump(records, f, indent=2, ensure_ascii=False)
 
-    logger.info("All topics processed.")
+        # free memory for this episode
+        del prompts, turns_meta, outputs, records
+
+    logger.info("All done.")
 
 
 if __name__ == "__main__":
