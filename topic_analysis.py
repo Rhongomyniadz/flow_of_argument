@@ -6,6 +6,7 @@ import logging
 import re
 from urllib.parse import urlparse
 from typing import List
+import gc
 
 import pandas as pd
 from sporc import SPORCDataset
@@ -119,6 +120,9 @@ def main():
     matched_urls.update(doc_topics.loc[mask, "url"])
 
     logger.info(f"{len(matched_urls)} docs match threshold")
+
+    del doc_topics, topic_keys
+    gc.collect()
 
     # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
     data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
