@@ -83,7 +83,7 @@ def main():
 
     random.seed(42)
 
-    # 1) Identify COVID-related topic columns
+    # 1) Load topic_keys and pick covid-related topic columns
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
         sep="\t", header=None,
@@ -115,6 +115,8 @@ def main():
         local_data_dir="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
         streaming=True
     )
+
+    # Episodes with exactly 2 speakers
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
     logger.info(f"Found {len(two_speaker_eps)} two-speaker episodes")
 
@@ -137,7 +139,7 @@ def main():
     llm = LLMInterface(gpu_id=args.gpu_id)
 
     # 5) Process sampled episodes and save results immediately
-    out_dir = "results/topics/covid"
+    out_dir = "results/covid"
     os.makedirs(out_dir, exist_ok=True)
 
     for ep in tqdm(reservoir, desc="processing eps"):
