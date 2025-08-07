@@ -175,7 +175,7 @@ Given a single speaker turn, extract the "key_points_assumed".
 
 OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
 
-Now analyze Turn #{idx} from episode "{ep.epTitle}":
+Now analyze Turn #{idx}":
 {t.inferredSpeakerRole.upper()}: {t.text.strip()}
 """)
             meta.append((t.text, t.inferredSpeakerName, t.inferredSpeakerRole))
