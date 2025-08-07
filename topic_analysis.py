@@ -74,71 +74,57 @@ class LLMInterface:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Analyze SPORC episodes for COVID topic")
-    parser.add_argument("--min_words", type=int, default=50)
-    parser.add_argument("--sample_n", type=int, default=30)
+    parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
+    parser.add_argument("--min_words",       type=int,   default=50)
+    parser.add_argument("--sample_n",        type=int,   default=30)
     parser.add_argument("--topic_threshold", type=float, default=0.03)
-    parser.add_argument("--gpu_id", type=int, default=0)
+    parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
 
     random.seed(42)
 
-    # 1) Load topic_keys and pick covid-related topic columns
+    # 1) Identify COVID-related topic columns
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
-        sep="\t",
-        header=None,
+        sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
-    covid_ids = topic_keys[
-        topic_keys.keywords.str.contains("covid", case=False)
-    ].topic_id.tolist()
-    topic_cols = [f"topic_{i}" for i in covid_ids]
+    covid_ids   = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    topic_cols  = [f"topic_{i}" for i in covid_ids]
 
-    # 2) Chunk-read doc_topics.txt, keep only 'url' + our topic cols, build a set
+    # 2) Chunk-read doc_topics.txt and build matched_urls set
     matched_urls = set()
     usecols = ["url"] + topic_cols
-    dtype = {c: "float32" for c in topic_cols}
+    dtype   = {c: "float32" for c in topic_cols}
 
     logger.info("Reading doc_topics in chunks…")
-    chunks = pd.read_csv(
+    reader = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
-        sep="\t",
-        header=None,
-        names=["row_id", "url"] + [f"topic_{i}" for i in range(100)],
-        usecols=usecols,
-        dtype=dtype,
+        sep="\t", header=None,
+        names=["row_id","url"] + [f"topic_{i}" for i in range(100)],
+        usecols=usecols, dtype=dtype,
         chunksize=100_000,
     )
-    for chunk in tqdm(chunks, desc="Chunks processed"):
+    for chunk in tqdm(reader, desc="chunks"):
         mask = chunk[topic_cols].max(axis=1) > args.topic_threshold
         matched_urls.update(chunk.loc[mask, "url"])
-    logger.info(f"{len(matched_urls)} docs match the COVID threshold")
+    logger.info(f"{len(matched_urls)} docs match threshold")
 
-    # 3) Stream SPORC, reservoir-sample among two-speaker episodes that are in matched_urls
+    # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
     sporc = SPORCDataset(
         local_data_dir="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/",
         streaming=True
     )
+    two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+    logger.info(f"Found {len(two_speaker_eps)} two-speaker episodes")
 
-    # Episodes with exactly 2 speakers
-    two_speaker_episodes = sporc.search_episodes(min_speakers=2, max_speakers=2)
-
-    # Episodes with 3 or more speakers
-    multi_speaker_episodes = sporc.search_episodes(min_speakers=3)
-
-    logger.info(f"Found {len(two_speaker_episodes)} two-speaker episodes.")
-    logger.info(f"Found {len(multi_speaker_episodes)} multi-speaker episodes.")
-
-    reservoir: List = []
+    # 4) Reservoir-sample up to sample_n episodes that also match our URLs
+    reservoir = []
     total_seen = 0
-
-    logger.info("Scanning SPORC episodes…")
-    for ep in tqdm(two_speaker_episodes, desc="Two-speaker episodes"):
-        raw_url = canonical_to_raw(ep.mp3_url)
-        if raw_url not in matched_urls:
+    for ep in tqdm(two_speaker_eps, desc="sampling eps"):
+        raw = canonical_to_raw(ep.mp3_url)
+        if raw not in matched_urls:
             continue
-
         total_seen += 1
         if len(reservoir) < args.sample_n:
             reservoir.append(ep)
@@ -146,24 +132,19 @@ def main():
             j = random.randint(0, total_seen - 1)
             if j < args.sample_n:
                 reservoir[j] = ep
-
-    logger.info(f"Sampled {len(reservoir)} episodes for analysis")
+    logger.info(f"Reservoir sampled {len(reservoir)} episodes")
 
     llm = LLMInterface(gpu_id=args.gpu_id)
 
-    # 4) Process each sampled episode, write its JSON out immediately
-    out_dir = "results/covid"
+    # 5) Process sampled episodes and save results immediately
+    out_dir = "results/topics/covid"
     os.makedirs(out_dir, exist_ok=True)
 
-    logger.info("Analyzing sampled episodes…")
-    for ep in tqdm(reservoir, desc="Processing episodes"):
-        episode_label = re.sub(r"[^\w\-]", "_", ep.epTitle)
-        prompts = []
-        turns_meta = []
-
+    for ep in tqdm(reservoir, desc="processing eps"):
+        label = re.sub(r"[^\w\-]", "_", ep.epTitle)
+        prompts, meta = [], []
         for idx, t in enumerate(tqdm(ep.get_all_turns(),
-                                     desc=f"Turns in {episode_label}",
-                                     leave=False)):
+                                     desc=f"turns {label}", leave=False)):
             if count_words(t.text) < args.min_words:
                 continue
             prompts.append(f"""
@@ -178,14 +159,14 @@ OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list
 Now analyze Turn #{idx} from episode "{ep.epTitle}":
 {t.inferredSpeakerRole.upper()}: {t.text.strip()}
 """)
-            turns_meta.append((t.text, t.inferredSpeakerName, t.inferredSpeakerRole))
+            meta.append((t.text, t.inferredSpeakerName, t.inferredSpeakerRole))
 
         if not prompts:
             continue
 
         outputs = llm.generate_batch(prompts)
         records = []
-        for (text, name, role), raw in zip(turns_meta, outputs):
+        for (text, name, role), raw in zip(meta, outputs):
             records.append({
                 "turn_text": text,
                 "inferred_speaker_name": name,
@@ -193,14 +174,14 @@ Now analyze Turn #{idx} from episode "{ep.epTitle}":
                 "assumptions": normalize_output(raw),
             })
 
-        fname = f"{episode_label}.json"
+        fname = f"{label}.json"
         with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
             json.dump(records, f, indent=2, ensure_ascii=False)
 
-        # free memory for this episode
-        del prompts, turns_meta, outputs, records
+        # free up memory
+        del prompts, meta, outputs, records
 
-    logger.info("All done.")
+    logger.info("Analysis complete.")
 
 
 if __name__ == "__main__":
