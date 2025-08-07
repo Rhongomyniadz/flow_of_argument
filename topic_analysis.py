@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.03)
+    parser.add_argument("--topic_threshold", type=float, default=0.001)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
 
@@ -89,25 +89,35 @@ def main():
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
-    covid_ids   = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    topic_cols  = [f"topic_{i}" for i in covid_ids]
+
+    # Check if 'covid' exists in the topic_keys
+    logger.info("COVID topic check in topic_keys:")
+    if topic_keys['keywords'].str.contains("covid", case=False).any():
+        logger.info("Found COVID-related topics in topic_keys.")
+    else:
+        logger.warning("No 'covid' topics found in topic_keys.")
+
+    # Retrieve topic_ids that mention "covid"
+    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    topic_cols = [f"topic_{i}" for i in covid_ids]
 
     # 2) Chunk-read doc_topics.txt and build matched_urls set
     matched_urls = set()
     usecols = ["url"] + topic_cols
-    dtype   = {c: "float32" for c in topic_cols}
+    dtype = {c: "float32" for c in topic_cols}
 
     logger.info("Reading doc_topics in chunks…")
     reader = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
         sep="\t", header=None,
-        names=["row_id","url"] + [f"topic_{i}" for i in range(100)],
+        names=["row_id", "url"] + [f"topic_{i}" for i in range(100)],
         usecols=usecols, dtype=dtype,
         chunksize=100_000,
     )
     for chunk in tqdm(reader, desc="chunks"):
         mask = chunk[topic_cols].max(axis=1) > args.topic_threshold
         matched_urls.update(chunk.loc[mask, "url"])
+
     logger.info(f"{len(matched_urls)} docs match threshold")
 
     # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
@@ -135,6 +145,9 @@ def main():
             if j < args.sample_n:
                 reservoir[j] = ep
     logger.info(f"Reservoir sampled {len(reservoir)} episodes")
+
+    if len(reservoir) == 0:
+        logger.warning("No episodes found that match the criteria.")
 
     llm = LLMInterface(gpu_id=args.gpu_id)
 
