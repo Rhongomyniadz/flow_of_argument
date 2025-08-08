@@ -152,7 +152,7 @@ def main():
     llm = LLMInterface(gpu_id=args.gpu_id)
 
     # 5) Process sampled episodes and save results immediately
-    out_dir = "results/covid"
+    out_dir = "results/george_floyd"
     os.makedirs(out_dir, exist_ok=True)
 
     for ep in tqdm(reservoir, desc="processing eps"):
