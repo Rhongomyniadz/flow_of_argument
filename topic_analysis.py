@@ -78,7 +78,7 @@ def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=30)
-    parser.add_argument("--topic_threshold", type=float, default=0.001)
+    parser.add_argument("--topic_threshold", type=float, default=0.02)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
 
@@ -160,7 +160,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
 
     for ep in tqdm(reservoir, desc="processing eps"):
-        label = re.sub(r"[^\w\-]", "_", ep.epTitle)
+        label = re.sub(r"[^\w\-]", "_", ep.title)
         prompts, meta = [], []
         for idx, t in enumerate(tqdm(ep.get_all_turns(),
                                      desc=f"turns {label}", leave=False)):
