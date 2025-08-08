@@ -75,7 +75,7 @@ class LLMInterface:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes for COVID topic")
+    parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=30)
     parser.add_argument("--topic_threshold", type=float, default=0.02)
@@ -91,23 +91,19 @@ def main():
         names=["topic_id", "overall_prop", "keywords"],
     )
 
-    # Check if 'covid' exists in the topic_keys
-    logger.info("COVID topic check in topic_keys:")
-    if topic_keys['keywords'].str.contains("covid", case=False).any():
-        logger.info("Found COVID-related topics in topic_keys.")
-    else:
-        logger.warning("No 'covid' topics found in topic_keys.")
-
     # Retrieve topic_ids that mention "covid"
-    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    topic_cols = [f"topic_{i}" for i in covid_ids]
+    # covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
+                                           case=False, regex=True, na=False)
+    gf_ids = topic_keys.loc[mask_gf, "topic_id"]
+    topic_cols = [f"topic_{i}" for i in gf_ids]
 
     # 2) Load entire doc_topics.txt and build matched_urls set
     matched_urls = set()
     usecols = ["url"] + topic_cols
     dtype = {c: "float32" for c in topic_cols}
 
-    logger.info("Reading doc_topics.txt in full…")
+    logger.info("Reading doc_topics.txt…")
     doc_topics = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
         sep="\t", header=None,
@@ -115,7 +111,7 @@ def main():
         usecols=usecols, dtype=dtype,
     )
 
-    # Filter doc_topics based on the threshold for COVID-related topics
+    # Filter doc_topics based on the threshold for related topics
     mask = doc_topics[topic_cols].max(axis=1) > args.topic_threshold
     matched_urls.update(doc_topics.loc[mask, "url"])
 
