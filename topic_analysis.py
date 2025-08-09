@@ -92,12 +92,13 @@ def main():
     )
 
     # Retrieve topic_ids that mention "covid"
-    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    topic_cols = [f"topic_{i}" for i in covid_ids]
-    # mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
-    #                                        case=False, regex=True, na=False)
-    # gf_ids = topic_keys.loc[mask_gf, "topic_id"]
-    # topic_cols = [f"topic_{i}" for i in gf_ids]
+    # covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    # topic_cols = [f"topic_{i}" for i in covid_ids]
+    # Retrieve topic_ids that mention "george floyd"
+    mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
+                                           case=False, regex=True, na=False)
+    gf_ids = topic_keys.loc[mask_gf, "topic_id"]
+    topic_cols = [f"topic_{i}" for i in gf_ids]
 
     # 2) Load entire doc_topics.txt and build matched_urls set
     matched_urls = set()
