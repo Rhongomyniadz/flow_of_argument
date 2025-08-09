@@ -77,7 +77,7 @@ class LLMInterface:
 def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes")
     parser.add_argument("--min_words",       type=int,   default=50)
-    parser.add_argument("--sample_n",        type=int,   default=30)
+    parser.add_argument("--sample_n",        type=int,   default=50)
     parser.add_argument("--topic_threshold", type=float, default=0.02)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
@@ -92,11 +92,12 @@ def main():
     )
 
     # Retrieve topic_ids that mention "covid"
-    # covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
-                                           case=False, regex=True, na=False)
-    gf_ids = topic_keys.loc[mask_gf, "topic_id"]
-    topic_cols = [f"topic_{i}" for i in gf_ids]
+    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    topic_cols = [f"topic_{i}" for i in covid_ids]
+    # mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
+    #                                        case=False, regex=True, na=False)
+    # gf_ids = topic_keys.loc[mask_gf, "topic_id"]
+    # topic_cols = [f"topic_{i}" for i in gf_ids]
 
     # 2) Load entire doc_topics.txt and build matched_urls set
     matched_urls = set()
@@ -152,7 +153,7 @@ def main():
     llm = LLMInterface(gpu_id=args.gpu_id)
 
     # 5) Process sampled episodes and save results immediately
-    out_dir = "results/george_floyd"
+    out_dir = "results/covid"
     os.makedirs(out_dir, exist_ok=True)
 
     for ep in tqdm(reservoir, desc="processing eps"):
@@ -174,16 +175,17 @@ OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list
 Now analyze Turn #{idx}":
 {t.inferred_speaker_role.upper()}: {t.text.strip()}
 """)
-            meta.append((t.text, t.inferred_speaker_name, t.inferred_speaker_role))
+            meta.append((t.text, t.speaker, t.inferred_speaker_name, t.inferred_speaker_role))
 
         if not prompts:
             continue
 
         outputs = llm.generate_batch(prompts)
         records = []
-        for (text, name, role), raw in zip(meta, outputs):
+        for (text, speaker, name, role), raw in zip(meta, outputs):
             records.append({
                 "turn_text": text,
+                "speaker_id": speaker,
                 "inferred_speaker_name": name,
                 "inferred_speaker_role": role,
                 "assumptions": normalize_output(raw),
