@@ -94,7 +94,7 @@ def main():
     # Retrieve topic_ids that mention "covid"
     # covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
     # topic_cols = [f"topic_{i}" for i in covid_ids]
-    # Retrieve topic_ids that mention "george floyd"
+    # Retrieve topic_ids that mention "george floydd"
     mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
                                            case=False, regex=True, na=False)
     gf_ids = topic_keys.loc[mask_gf, "topic_id"]
