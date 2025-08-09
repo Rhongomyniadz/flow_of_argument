@@ -134,12 +134,13 @@ def load_metadata(meta_csv: Optional[Path]) -> Optional[pd.DataFrame]:
         return None
 
 
-# --------------------------- Role Imputation ---------------------------
+# --------------------------- Role Imputation (kept for completeness) ---------------------------
 
 def impute_roles(turns: pd.DataFrame) -> pd.DataFrame:
     """
     Fill missing/unknown roles by taking the per-(episode, speaker_key) majority role
     among observed roles in that episode. Falls back to 'unknown'.
+    (Not used by the time plots anymore, but harmless to keep.)
     """
     df = turns.copy()
 
@@ -374,13 +375,15 @@ def podcast_similarity_graph(podcast_vecs: Dict[str, np.ndarray],
     log.info(f"Wrote podcast similarity graph: {out_path}")
 
 
-def host_guest_similarity_over_time(ep_df: pd.DataFrame,
-                                    turn_vectors: Dict[Tuple[str, int], np.ndarray],
-                                    out_dir: Path,
-                                    window: int = 5,
-                                    max_plots: int = 9999) -> None:
+def speaker_pair_similarity_over_time(ep_df: pd.DataFrame,
+                                      turn_vectors: Dict[Tuple[str, int], np.ndarray],
+                                      out_dir: Path,
+                                      window: int = 5,
+                                      max_plots: int = 9999,
+                                      name_by_id: Optional[Dict[str, str]] = None) -> None:
     """
-    For each episode, compute rolling host vs guest similarity over turn index.
+    NEW: For each episode, select the two most frequent speaker_ids and compute a rolling
+    cosine similarity between their embeddings over turn order.
     Saves one line plot per episode (up to max_plots).
     """
     ensure_out_dir(out_dir)
@@ -393,12 +396,24 @@ def host_guest_similarity_over_time(ep_df: pd.DataFrame,
         if df_e.empty:
             continue
 
-        sim_series = []
-        xs = []
+        # Use only rows with a speaker_id; if none, fall back to speaker_key
+        df_e["sid_used"] = df_e["speaker_id"].fillna("")
+        if (df_e["sid_used"] == "").all():
+            # Fallback: try speaker_key so we still separate two speakers if ids missing
+            df_e["sid_used"] = df_e["speaker_key"]
+        # Get top-2 speaker ids by count
+        counts = df_e["sid_used"].value_counts()
+        if len(counts) < 2:
+            # Not enough distinct speakers
+            continue
+        sidA, sidB = counts.index[:2].tolist()
 
-        # Maintain rolling lists of role-specific vectors
-        H_roll: List[np.ndarray] = []
-        G_roll: List[np.ndarray] = []
+        # Rolling windows for each speaker
+        A_roll: List[np.ndarray] = []
+        B_roll: List[np.ndarray] = []
+
+        xs = []
+        sim_series = []
 
         def avg(V: List[np.ndarray]) -> Optional[np.ndarray]:
             if not V:
@@ -410,23 +425,24 @@ def host_guest_similarity_over_time(ep_df: pd.DataFrame,
             v = turn_vectors.get(key, None)
             if v is None:
                 continue
-            role = (row["role_used"] or "unknown").lower()
-            if "host" in role:
-                H_roll.append(v)
-                if len(H_roll) > window:
-                    H_roll.pop(0)
-            elif "guest" in role:
-                G_roll.append(v)
-                if len(G_roll) > window:
-                    G_roll.pop(0)
+
+            sid = row["sid_used"]
+            if sid == sidA:
+                A_roll.append(v)
+                if len(A_roll) > window:
+                    A_roll.pop(0)
+            elif sid == sidB:
+                B_roll.append(v)
+                if len(B_roll) > window:
+                    B_roll.pop(0)
             else:
-                # other roles don't change rolling windows
+                # Ignore other speakers (should be rare if your data is 2-speaker episodes)
                 pass
 
-            h_avg = avg(H_roll)
-            g_avg = avg(G_roll)
-            if h_avg is not None and g_avg is not None:
-                sim = cosine(h_avg, g_avg)
+            a_avg = avg(A_roll)
+            b_avg = avg(B_roll)
+            if a_avg is not None and b_avg is not None:
+                sim = cosine(a_avg, b_avg)
                 sim_series.append(sim)
             else:
                 sim_series.append(np.nan)
@@ -435,16 +451,21 @@ def host_guest_similarity_over_time(ep_df: pd.DataFrame,
         if len(xs) < 3:
             continue
 
+        # Build readable labels
+        def lab(sid: str) -> str:
+            name = (name_by_id or {}).get(sid, "")
+            return f"{sid}" if not name else f"{sid} ({name})"
+
         plt.figure(figsize=(9, 4))
         plt.plot(xs, sim_series)
         plt.ylim(0, 1)
         plt.xlabel("Turn index")
-        plt.ylabel("Host–Guest similarity (cosine)")
-        plt.title(f"Host vs Guest Assumption Alignment Over Time\n{ep}")
-        out_path = out_dir / f"{Path(ep).stem}_host_guest_similarity.png"
+        plt.ylabel("Speaker-pair similarity (cosine)")
+        plt.title(f"{lab(sidA)}  vs  {lab(sidB)}\n{ep}")
+        out_path = out_dir / f"{Path(ep).stem}_host_guest_similarity.png"  # keep filename pattern
         save_fig(out_path)
         plotted += 1
-        log.info(f"Wrote host/guest time plot: {out_path}")
+        log.info(f"Wrote speaker-pair time plot: {out_path}")
 
 
 # --------------------------- Main Pipeline ---------------------------
@@ -461,7 +482,7 @@ def main():
     ap.add_argument("--device", type=str, default=None, help="Device hint for SBERT (e.g., 'cuda' or 'cpu').")
     ap.add_argument("--sim_threshold", type=float, default=0.70, help="Similarity threshold for graphs.")
     ap.add_argument("--knn_k", type=int, default=8, help="k for kNN fallback/graphs.")
-    ap.add_argument("--rolling_w", type=int, default=5, help="Window for host/guest rolling similarity.")
+    ap.add_argument("--rolling_w", type=int, default=5, help="Window for rolling similarity.")
     ap.add_argument("--max_timeplots", type=int, default=9999, help="Max episodes to plot for time series.")
     args = ap.parse_args()
 
@@ -489,7 +510,7 @@ def main():
         turns["podcast_id"] = turns["episode_file"]  # fallback to episode-level
         turns["podcast_category"] = "unknown"
 
-    # 3) Impute roles so host/guest timelines are robust
+    # 3) (Optional) role imputation — not used for time plots anymore
     turns = impute_roles(turns)
 
     # 4) Fit embeddings on per-turn doc_text, then encode all turns
@@ -514,6 +535,7 @@ def main():
         speaker_global_vec = {}
         episodes_per_speaker = {}
         label_map = {}
+        speaker_name_by_id = {}
     else:
         # (speaker_id, episode) vectors
         se_groups = turns_id.groupby(["speaker_id", "episode_file"])["_row_ix"].apply(list)
@@ -529,12 +551,13 @@ def main():
         episodes_per_speaker: Dict[str, int] = turns_id.groupby("speaker_id")["episode_file"].nunique().to_dict()
 
         # Labels: "SPEAKER_ID | Most-common non-NO name"
-        name_by_id = (
+        name_by_id_series = (
             turns_id.loc[turns_id["inferred_speaker_name"] != "NO_INFERRED_SPEAKER"]
                     .groupby("speaker_id")["inferred_speaker_name"]
                     .agg(lambda s: s.value_counts().idxmax())
         )
-        label_map: Dict[str, str] = {sid: f"{sid} | {name_by_id.get(sid, '')}".strip(" |") for sid in speaker_global_vec}
+        label_map: Dict[str, str] = {sid: f"{sid} | {name_by_id_series.get(sid, '')}".strip(" |") for sid in speaker_global_vec}
+        speaker_name_by_id: Dict[str, str] = name_by_id_series.to_dict()
 
     # 6) -------- Podcast aggregates --------
     p_groups = turns.groupby("podcast_id")["_row_ix"].apply(list)
@@ -577,13 +600,14 @@ def main():
         seed=42,
     )
 
-    # 7d) Host vs Guest similarity over time (one file per episode, up to max)
-    host_guest_similarity_over_time(
+    # 7d) Speaker-pair similarity over time (uses speaker_id, not roles)
+    speaker_pair_similarity_over_time(
         ep_df=turns,
         turn_vectors=turn_vectors,
-        out_dir=out_dir / "host_guest_over_time",
+        out_dir=out_dir / "host_guest_over_time",  # keep folder name for continuity
         window=args.rolling_w,
         max_plots=args.max_timeplots,
+        name_by_id=speaker_name_by_id,
     )
 
     log.info("All done. Check output images in: %s", out_dir)
