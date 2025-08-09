@@ -387,7 +387,7 @@ def host_guest_similarity_over_time(ep_df: pd.DataFrame,
 
 def main():
     ap = argparse.ArgumentParser(description="Visualize assumption similarity using graphs and timelines.")
-    ap.add_argument("--input_dir", type=str, required=True, help="Directory of per-episode JSON files.")
+    ap.add_argument("--input_dir", type=str, default="results/covid", help="Directory of per-episode JSON files.")
     ap.add_argument("--meta_csv", type=str, default=None, help="Optional metadata CSV (episode_file,podcast_id,podcast_category,topic).")
     ap.add_argument("--out_dir", type=str, default="viz_out", help="Output directory for plots.")
     ap.add_argument("--embed_backend", type=str, default="sbert", choices=["sbert", "tfidf"], help="Embedding backend.")
@@ -396,10 +396,14 @@ def main():
     ap.add_argument("--sim_threshold", type=float, default=0.70, help="Similarity threshold for graphs.")
     ap.add_argument("--knn_k", type=int, default=8, help="k for kNN graphs.")
     ap.add_argument("--rolling_w", type=int, default=5, help="Window for host/guest rolling similarity.")
-    ap.add_argument("--max_timeplots", type=int, default=10, help="Max episodes to plot for time series.")
+    ap.add_argument("--max_timeplots", type=int, default=30, help="Max episodes to plot for time series.")
     args = ap.parse_args()
 
-    input_dir = Path(args.input_dir)
+    input_dir = Path(args.input_dir).expanduser().resolve()
+    if not input_dir.exists():
+        log.error("Input dir not found: %s", input_dir)
+        return
+    log.info("Using input dir: %s", input_dir)
     out_dir = Path(args.out_dir)
     ensure_out_dir(out_dir)
 
