@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize as sk_normalize
 from sklearn.neighbors import NearestNeighbors
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Try to import SentenceTransformer; fall back to TF-IDF if unavailable
 _HAS_SBERT = True
@@ -20,8 +21,6 @@ try:
     from sentence_transformers import SentenceTransformer
 except Exception:
     _HAS_SBERT = False
-
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("assumption-visualizer")
@@ -70,7 +69,6 @@ def load_turns(input_dir: Path) -> pd.DataFrame:
                 continue
             for i, rec in enumerate(data):
                 assumptions = rec.get("assumptions") or []
-                # Join assumptions into one doc per turn (cheaper than embedding each assumption separately)
                 doc_text = " ; ".join([a for a in assumptions if isinstance(a, str) and a.strip()])
                 if not doc_text.strip():
                     continue
@@ -79,7 +77,7 @@ def load_turns(input_dir: Path) -> pd.DataFrame:
                 sid_raw = rec.get("speaker_id", None)
                 sid_norm: Optional[str] = None
                 if isinstance(sid_raw, list):
-                    # most files have a single id like ["SPEAKER_01"]
+                    # common case: ["SPEAKER_01"]
                     sid_norm = "-".join(str(x) for x in sid_raw) if sid_raw else None
                 elif isinstance(sid_raw, dict):
                     sid_norm = sid_raw.get("id") or sid_raw.get("speaker_id")
@@ -271,21 +269,25 @@ def speaker_similarity_graph(speaker_global_vec: Dict[str, np.ndarray],
                              label_map: Optional[Dict[str, str]],
                              out_path: Path,
                              sim_threshold: float = 0.70,
-                             seed: int = 0) -> None:
-    """Build and plot a speaker-similarity graph based on global vectors (speaker_key)."""
+                             seed: int = 0,
+                             knn_k: int = 8) -> None:
+    """
+    Speaker-similarity graph using cosine; falls back to k-NN if threshold yields no edges.
+    Nodes are speaker_id strings; roles are ignored.
+    """
     speakers = list(speaker_global_vec.keys())
     if len(speakers) < 2:
         log.warning("Not enough speakers for a graph.")
         return
 
-    # Build adjacency by threshold
+    X = np.vstack([speaker_global_vec[s] for s in speakers])
+    S = cosine_similarity(X)
+
     G = nx.Graph()
     for s in speakers:
         G.add_node(s, episodes=episodes_per_speaker.get(s, 1))
 
-    # Precompute matrix for speed
-    X = np.vstack([speaker_global_vec[s] for s in speakers])
-    S = cosine_similarity(X)
+    # First try thresholded edges
     n = len(speakers)
     for i in range(n):
         for j in range(i + 1, n):
@@ -293,14 +295,22 @@ def speaker_similarity_graph(speaker_global_vec: Dict[str, np.ndarray],
             if w >= sim_threshold:
                 G.add_edge(speakers[i], speakers[j], weight=w)
 
+    # Fallback: k-NN if nothing passed threshold
     if G.number_of_edges() == 0:
-        log.warning("No edges above similarity threshold; lower --sim_threshold to see connections.")
+        log.info("No edges above threshold (%.2f). Falling back to k-NN (k=%d).", sim_threshold, knn_k)
+        nbrs = NearestNeighbors(n_neighbors=min(knn_k, len(speakers)), metric="cosine").fit(X)
+        dist, idx = nbrs.kneighbors(X)
+        for i, sid in enumerate(speakers):
+            for j, neighbor_ix in enumerate(idx[i][1:], start=1):  # skip self
+                sim = 1.0 - float(dist[i][j])
+                G.add_edge(sid, speakers[neighbor_ix], weight=sim)
+
     sizes = [5 + 45 * math.log1p(G.nodes[s]["episodes"]) for s in G.nodes]
     pos = nx.spring_layout(G, seed=seed, weight="weight", k=1.0 / math.sqrt(max(1, G.number_of_nodes())))
     plt.figure(figsize=(11, 9))
     nx.draw_networkx_edges(G, pos, alpha=0.25, width=[2 * G.edges[e]["weight"] for e in G.edges])
     nx.draw_networkx_nodes(G, pos, node_size=sizes)
-    # Label top-degree nodes only (to avoid clutter)
+    # Label top-degree nodes
     deg = dict(G.degree())
     label_nodes = {n for n, d in sorted(deg.items(), key=lambda kv: kv[1], reverse=True)[:25]}
     if label_map:
@@ -308,7 +318,7 @@ def speaker_similarity_graph(speaker_global_vec: Dict[str, np.ndarray],
     else:
         labels = {n: n for n in label_nodes}
     nx.draw_networkx_labels(G, pos, labels=labels, font_size=8)
-    plt.title("Speaker–Speaker Assumption Similarity Graph (speaker_id-aware)")
+    plt.title("Speaker–Speaker Assumption Similarity Graph (by speaker_id)")
     plt.axis("off")
     save_fig(out_path)
     log.info(f"Wrote speaker similarity graph: {out_path}")
@@ -440,7 +450,7 @@ def host_guest_similarity_over_time(ep_df: pd.DataFrame,
 # --------------------------- Main Pipeline ---------------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Visualize assumption similarity using graphs and timelines (speaker_id-aware).")
+    ap = argparse.ArgumentParser(description="Visualize assumption similarity using graphs and timelines (speaker_id–strict).")
     ap.add_argument("--input_dir", type=str, default="results/covid",
                     help="Directory of per-episode JSON files (default: results/covid).")
     ap.add_argument("--meta_csv", type=str, default=None,
@@ -450,7 +460,7 @@ def main():
     ap.add_argument("--sbert_model", type=str, default="all-MiniLM-L6-v2", help="Sentence-Transformer model name.")
     ap.add_argument("--device", type=str, default=None, help="Device hint for SBERT (e.g., 'cuda' or 'cpu').")
     ap.add_argument("--sim_threshold", type=float, default=0.70, help="Similarity threshold for graphs.")
-    ap.add_argument("--knn_k", type=int, default=8, help="k for kNN graphs.")
+    ap.add_argument("--knn_k", type=int, default=8, help="k for kNN fallback/graphs.")
     ap.add_argument("--rolling_w", type=int, default=5, help="Window for host/guest rolling similarity.")
     ap.add_argument("--max_timeplots", type=int, default=9999, help="Max episodes to plot for time series.")
     args = ap.parse_args()
@@ -494,61 +504,70 @@ def main():
     turn_key = list(zip(turns["episode_file"], turns["turn_idx"]))
     turn_vectors: Dict[Tuple[str, int], np.ndarray] = {k: v for k, v in zip(turn_key, X_turns)}
 
-    # 5) Aggregate to (speaker_key, episode) and (speaker_key) and (podcast) levels
+    # 5) -------- Speaker aggregates STRICTLY by speaker_id (ignore roles) --------
     turns["_row_ix"] = np.arange(len(turns))
 
-    # (speaker, episode)
-    se_groups = turns.groupby(["speaker_key", "episode_file"])["_row_ix"].apply(list)
-    speaker_episode_vecs: Dict[Tuple[str, str], np.ndarray] = {}
-    for (speaker_key, ep), idxs in se_groups.items():
-        speaker_episode_vecs[(speaker_key, ep)] = aggregate_mean(X_turns, idxs)
+    turns_id = turns[turns["speaker_id"].notna() & (turns["speaker_id"] != "")].copy()
+    if turns_id.empty:
+        log.warning("No turns have a speaker_id — skipping speaker graphs.")
+        speaker_episode_vecs = {}
+        speaker_global_vec = {}
+        episodes_per_speaker = {}
+        label_map = {}
+    else:
+        # (speaker_id, episode) vectors
+        se_groups = turns_id.groupby(["speaker_id", "episode_file"])["_row_ix"].apply(list)
+        speaker_episode_vecs: Dict[Tuple[str, str], np.ndarray] = {
+            (sid, ep): aggregate_mean(X_turns, idxs) for (sid, ep), idxs in se_groups.items()
+        }
 
-    # (speaker) global
-    s_groups = turns.groupby("speaker_key")["_row_ix"].apply(list)
-    speaker_global_vec: Dict[str, np.ndarray] = {}
-    episodes_per_speaker: Dict[str, int] = turns.groupby("speaker_key")["episode_file"].nunique().to_dict()
-    for speaker_key, idxs in s_groups.items():
-        speaker_global_vec[speaker_key] = aggregate_mean(X_turns, idxs)
+        # Global per speaker_id vectors
+        s_groups = turns_id.groupby("speaker_id")["_row_ix"].apply(list)
+        speaker_global_vec: Dict[str, np.ndarray] = {
+            sid: aggregate_mean(X_turns, idxs) for sid, idxs in s_groups.items()
+        }
+        episodes_per_speaker: Dict[str, int] = turns_id.groupby("speaker_id")["episode_file"].nunique().to_dict()
 
-    # (podcast) level vectors (average of all turns for that podcast in these files)
+        # Labels: "SPEAKER_ID | Most-common non-NO name"
+        name_by_id = (
+            turns_id.loc[turns_id["inferred_speaker_name"] != "NO_INFERRED_SPEAKER"]
+                    .groupby("speaker_id")["inferred_speaker_name"]
+                    .agg(lambda s: s.value_counts().idxmax())
+        )
+        label_map: Dict[str, str] = {sid: f"{sid} | {name_by_id.get(sid, '')}".strip(" |") for sid in speaker_global_vec}
+
+    # 6) -------- Podcast aggregates --------
     p_groups = turns.groupby("podcast_id")["_row_ix"].apply(list)
     podcast_vecs: Dict[str, np.ndarray] = {pid: aggregate_mean(X_turns, idxs) for pid, idxs in p_groups.items()}
     podcast_category: Dict[str, str] = turns.drop_duplicates("podcast_id").set_index("podcast_id")["podcast_category"].to_dict()
 
-    # Build a nice label map for speakers: "SPEAKER_ID | Name"
-    # If speaker_id is missing, show "speaker_key | Name"
-    speaker_name_lookup = (
-        turns
-        .groupby("speaker_key")
-        .agg(speaker_id=("speaker_id", "first"),
-             name=("inferred_speaker_name", lambda s: next((x for x in s if not str(x).startswith("NO_INFERRED")), "NO_INFERRED_SPEAKER")))
-        .reset_index()
-    )
-    label_map: Dict[str, str] = {}
-    for _, r in speaker_name_lookup.iterrows():
-        sid = r["speaker_id"] if pd.notna(r["speaker_id"]) and r["speaker_id"] else r["speaker_key"]
-        label_map[r["speaker_key"]] = f"{sid} | {r['name']}"
+    # 7) -------- Plots --------
 
-    # 6) Plots
+    # 7a) Speaker variability across episodes (by speaker_id)
+    if speaker_episode_vecs:
+        speaker_variability_boxplot(
+            speaker_episode_vecs=speaker_episode_vecs,
+            out_path=out_dir / "speaker_variability_across_episodes.png",
+            min_episodes=2,
+        )
+    else:
+        log.warning("Skipping speaker variability plot (no speaker_id episode vectors).")
 
-    # 6a) Speaker variability across episodes (box/violin-like)
-    speaker_variability_boxplot(
-        speaker_episode_vecs=speaker_episode_vecs,
-        out_path=out_dir / "speaker_variability_across_episodes.png",
-        min_episodes=2,
-    )
+    # 7b) Speaker–Speaker similarity graph (speaker_id-based, with k-NN fallback)
+    if speaker_global_vec:
+        speaker_similarity_graph(
+            speaker_global_vec=speaker_global_vec,
+            episodes_per_speaker=episodes_per_speaker,
+            label_map=label_map,
+            out_path=out_dir / "speaker_similarity_graph.png",
+            sim_threshold=args.sim_threshold,
+            seed=0,
+            knn_k=args.knn_k,
+        )
+    else:
+        log.warning("Skipping speaker similarity graph (no speaker_id vectors).")
 
-    # 6b) Speaker–Speaker similarity graph (speaker_key-based)
-    speaker_similarity_graph(
-        speaker_global_vec=speaker_global_vec,
-        episodes_per_speaker=episodes_per_speaker,
-        label_map=label_map,
-        out_path=out_dir / "speaker_similarity_graph.png",
-        sim_threshold=args.sim_threshold,
-        seed=0,
-    )
-
-    # 6c) Podcast similarity graph (kNN; colored by category)
+    # 7c) Podcast similarity graph (kNN; colored by category)
     podcast_similarity_graph(
         podcast_vecs=podcast_vecs,
         podcast_category=podcast_category,
@@ -558,7 +577,7 @@ def main():
         seed=42,
     )
 
-    # 6d) Host vs Guest similarity over time (one file per episode, up to max)
+    # 7d) Host vs Guest similarity over time (one file per episode, up to max)
     host_guest_similarity_over_time(
         ep_df=turns,
         turn_vectors=turn_vectors,
