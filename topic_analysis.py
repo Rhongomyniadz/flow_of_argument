@@ -29,7 +29,7 @@ def canonical_to_raw(canonical_url: str) -> str:
 
 def normalize_output(raw: str) -> List[str]:
     try:
-        obj = json.loads(raw[raw.find("{") : raw.rfind("}") + 1])
+        obj = json.loads(raw[raw.find("{"): raw.rfind("}") + 1])
         return obj.get("key_points_assumed", [])
     except Exception:
         return []
@@ -84,23 +84,22 @@ def main():
 
     random.seed(42)
 
-    # 1) Load topic_keys and pick covid-related topic columns
+    # 1) Load topic_keys and pick COVID-related topic columns
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
 
-    # Retrieve topic_ids that mention "covid"
-    # covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    # topic_cols = [f"topic_{i}" for i in covid_ids]
-    # Retrieve topic_ids that mention "george floydd"
-    mask_gf = topic_keys.keywords.str.contains(r"\b(george|floyd)\b",
-                                           case=False, regex=True, na=False)
-    gf_ids = topic_keys.loc[mask_gf, "topic_id"]
-    topic_cols = [f"topic_{i}" for i in gf_ids]
+    # Use EXACTLY this (per your instruction)
+    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
+    topic_cols = [f"topic_{i}" for i in covid_ids]
 
-    # 2) Load entire doc_topics.txt and build matched_urls set
+    if len(topic_cols) == 0:
+        logger.warning("No COVID-related topics found in topic_keys; nothing to do.")
+        return
+
+    # 2) Load only URL + selected topic columns from doc_topics and build matched_urls
     matched_urls = set()
     usecols = ["url"] + topic_cols
     dtype = {c: "float32" for c in topic_cols}
@@ -113,11 +112,11 @@ def main():
         usecols=usecols, dtype=dtype,
     )
 
-    # Filter doc_topics based on the threshold for related topics
+    # Keep any row where any COVID topic weight > threshold
     mask = doc_topics[topic_cols].max(axis=1) > args.topic_threshold
     matched_urls.update(doc_topics.loc[mask, "url"])
 
-    logger.info(f"{len(matched_urls)} docs match threshold")
+    logger.info(f"{len(matched_urls)} docs match threshold among COVID topics")
 
     del doc_topics, topic_keys
     gc.collect()
@@ -128,7 +127,6 @@ def main():
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
 
-    # Episodes with exactly 2 speakers
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
     logger.info(f"Found {len(two_speaker_eps)} two-speaker episodes")
 
@@ -150,6 +148,7 @@ def main():
 
     if len(reservoir) == 0:
         logger.warning("No episodes found that match the criteria.")
+        return
 
     llm = LLMInterface(gpu_id=args.gpu_id)
 
@@ -160,10 +159,10 @@ def main():
     for ep in tqdm(reservoir, desc="processing eps"):
         label = re.sub(r"[^\w\-]", "_", ep.title)
         prompts, meta = [], []
-        for idx, t in enumerate(tqdm(ep.get_all_turns(),
-                                     desc=f"turns {label}", leave=False)):
+        for idx, t in enumerate(tqdm(ep.get_all_turns(), desc=f"turns {label}", leave=False)):
             if count_words(t.text) < args.min_words:
                 continue
+            role = (t.inferred_speaker_role or 'SPEAKER').upper()
             prompts.append(f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
@@ -174,7 +173,7 @@ Given a single speaker turn, extract the "key_points_assumed".
 OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
 
 Now analyze Turn #{idx}":
-{t.inferred_speaker_role.upper()}: {t.text.strip()}
+{role}: {t.text.strip()}
 """)
             meta.append((t.text, t.speaker, t.inferred_speaker_name, t.inferred_speaker_role))
 

@@ -382,7 +382,7 @@ def speaker_pair_similarity_over_time(ep_df: pd.DataFrame,
                                       max_plots: int = 9999,
                                       name_by_id: Optional[Dict[str, str]] = None) -> None:
     """
-    NEW: For each episode, select the two most frequent speaker_ids and compute a rolling
+    For each episode, select the two most frequent speaker_ids and compute a rolling
     cosine similarity between their embeddings over turn order.
     Saves one line plot per episode (up to max_plots).
     """
@@ -396,19 +396,14 @@ def speaker_pair_similarity_over_time(ep_df: pd.DataFrame,
         if df_e.empty:
             continue
 
-        # Use only rows with a speaker_id; if none, fall back to speaker_key
         df_e["sid_used"] = df_e["speaker_id"].fillna("")
         if (df_e["sid_used"] == "").all():
-            # Fallback: try speaker_key so we still separate two speakers if ids missing
             df_e["sid_used"] = df_e["speaker_key"]
-        # Get top-2 speaker ids by count
         counts = df_e["sid_used"].value_counts()
         if len(counts) < 2:
-            # Not enough distinct speakers
             continue
         sidA, sidB = counts.index[:2].tolist()
 
-        # Rolling windows for each speaker
         A_roll: List[np.ndarray] = []
         B_roll: List[np.ndarray] = []
 
@@ -436,7 +431,6 @@ def speaker_pair_similarity_over_time(ep_df: pd.DataFrame,
                 if len(B_roll) > window:
                     B_roll.pop(0)
             else:
-                # Ignore other speakers (should be rare if your data is 2-speaker episodes)
                 pass
 
             a_avg = avg(A_roll)
@@ -476,7 +470,7 @@ def main():
                     help="Directory of per-episode JSON files (default: results/covid).")
     ap.add_argument("--meta_csv", type=str, default=None,
                     help="Optional metadata CSV (episode_file,podcast_id,podcast_category,topic).")
-    ap.add_argument("--out_dir", type=str, default="viz_out", help="Output directory for plots.")
+    ap.add_argument("--out_dir", type=str, default="results/plots/visualization", help="Output directory for plots.")
     ap.add_argument("--embed_backend", type=str, default="sbert", choices=["sbert", "tfidf"], help="Embedding backend.")
     ap.add_argument("--sbert_model", type=str, default="all-MiniLM-L6-v2", help="Sentence-Transformer model name.")
     ap.add_argument("--device", type=str, default=None, help="Device hint for SBERT (e.g., 'cuda' or 'cpu').")
@@ -604,7 +598,7 @@ def main():
     speaker_pair_similarity_over_time(
         ep_df=turns,
         turn_vectors=turn_vectors,
-        out_dir=out_dir / "host_guest_over_time",  # keep folder name for continuity
+        out_dir=out_dir / "host_guest_over_time",
         window=args.rolling_w,
         max_plots=args.max_timeplots,
         name_by_id=speaker_name_by_id,
