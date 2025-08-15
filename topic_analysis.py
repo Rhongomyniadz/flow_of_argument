@@ -51,23 +51,40 @@ class LLMInterface:
         repetition_penalty: float = 1.1,
         top_k: int = 30,
         max_tokens: int = 2048,
+        tensor_parallel_size: int = 1,
+        download_dir: str = "/shared/4/models",
+        trust_remote_code: bool = True,
     ):
+        # IMPORTANT: vLLM doesn't take a `device` kwarg. Pin GPU via environment var.
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+
         self.llm = LLM(
             model=model_name,
-            tensor_parallel_size=1,
+            tensor_parallel_size=tensor_parallel_size,
             gpu_memory_utilization=gpu_memory_utilization,
-            trust_remote_code=True,
-            download_dir="/shared/4/models",
-            device=f"cuda:{gpu_id}",
+            trust_remote_code=trust_remote_code,
+            download_dir=download_dir,
         )
-        self.params = SamplingParams(
-            temperature=temperature,
-            top_p=top_p,
-            min_p=min_p,
-            repetition_penalty=repetition_penalty,
-            top_k=top_k,
-            max_tokens=max_tokens,
-        )
+
+        # Some vLLM versions don’t support `min_p`. Try with it, then fall back.
+        try:
+            self.params = SamplingParams(
+                temperature=temperature,
+                top_p=top_p,
+                min_p=min_p,  # may not be supported in your vLLM version
+                repetition_penalty=repetition_penalty,
+                top_k=top_k,
+                max_tokens=max_tokens,
+            )
+        except TypeError:
+            logger.warning("vLLM SamplingParams has no `min_p`; proceeding without it.")
+            self.params = SamplingParams(
+                temperature=temperature,
+                top_p=top_p,
+                repetition_penalty=repetition_penalty,
+                top_k=top_k,
+                max_tokens=max_tokens,
+            )
 
     def generate_batch(self, prompts: List[str]) -> List[str]:
         out = self.llm.generate(prompts, self.params)
@@ -75,7 +92,7 @@ class LLMInterface:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes")
+    parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes (COVID topic filter)")
     parser.add_argument("--min_words",       type=int,   default=50)
     parser.add_argument("--sample_n",        type=int,   default=50)
     parser.add_argument("--topic_threshold", type=float, default=0.02)
@@ -84,14 +101,14 @@ def main():
 
     random.seed(42)
 
-    # 1) Load topic_keys and pick COVID-related topic columns
+    # 1) Load topic_keys and pick COVID-related topic columns (EXACT line you requested)
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
 
-    # Use EXACTLY this (per your instruction)
+    # DO NOT MODIFY THIS PER YOUR INSTRUCTION
     covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
     topic_cols = [f"topic_{i}" for i in covid_ids]
 
@@ -107,9 +124,11 @@ def main():
     logger.info("Reading doc_topics.txt…")
     doc_topics = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
-        sep="\t", header=None,
+        sep="\t",
+        header=None,
         names=["row_id", "url"] + [f"topic_{i}" for i in range(100)],
-        usecols=usecols, dtype=dtype,
+        usecols=usecols,
+        dtype=dtype,
     )
 
     # Keep any row where any COVID topic weight > threshold
@@ -122,7 +141,7 @@ def main():
     gc.collect()
 
     # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
-    data_dir = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/'
+    data_dir = "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/"
 
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
@@ -162,7 +181,7 @@ def main():
         for idx, t in enumerate(tqdm(ep.get_all_turns(), desc=f"turns {label}", leave=False)):
             if count_words(t.text) < args.min_words:
                 continue
-            role = (t.inferred_speaker_role or 'SPEAKER').upper()
+            role = (t.inferred_speaker_role or "SPEAKER").upper()
             prompts.append(f"""
 SYSTEM:
 You are an expert podcast conversation analyst.
