@@ -42,7 +42,7 @@ def count_words(text: str) -> int:
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-8b",
+        model_name: str = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.5,
         temperature: float = 0.7,
@@ -55,7 +55,7 @@ class LLMInterface:
         download_dir: str = "/shared/4/models",
         trust_remote_code: bool = True,
     ):
-        # IMPORTANT: vLLM doesn't take a `device` kwarg. Pin GPU via environment var.
+        # vLLM does not accept a `device` kwarg; pin GPU via env var instead.
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
 
         self.llm = LLM(
@@ -66,12 +66,12 @@ class LLMInterface:
             download_dir=download_dir,
         )
 
-        # Some vLLM versions don’t support `min_p`. Try with it, then fall back.
+        # Some vLLM builds don't support `min_p`.
         try:
             self.params = SamplingParams(
                 temperature=temperature,
                 top_p=top_p,
-                min_p=min_p,  # may not be supported in your vLLM version
+                min_p=min_p,
                 repetition_penalty=repetition_penalty,
                 top_k=top_k,
                 max_tokens=max_tokens,
@@ -101,27 +101,30 @@ def main():
 
     random.seed(42)
 
-    # 1) Load topic_keys and pick COVID-related topic columns (EXACT line you requested)
+    # 1) Find the single COVID topic_id from topic_keys.txt
     topic_keys = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
-        sep="\t", header=None,
+        sep="\t",
+        header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
 
-    # DO NOT MODIFY THIS PER YOUR INSTRUCTION
-    covid_ids = topic_keys[topic_keys.keywords.str.contains("covid", case=False)].topic_id
-    topic_cols = [f"topic_{i}" for i in covid_ids]
-
-    if len(topic_cols) == 0:
-        logger.warning("No COVID-related topics found in topic_keys; nothing to do.")
+    covid_rows = topic_keys[topic_keys.keywords.str.contains("covid", case=False)]
+    if covid_rows.empty:
+        logger.warning("No COVID-related topic found in topic_keys; nothing to do.")
         return
+    if len(covid_rows) > 1:
+        logger.warning(f"Found multiple COVID-related topics; using the first one. IDs: {covid_rows.topic_id.tolist()}")
+    covid_id = int(covid_rows.iloc[0]["topic_id"])
+    topic_col = f"topic_{covid_id}"
+    logger.info(f"Using COVID topic_id={covid_id} -> column '{topic_col}'")
 
-    # 2) Load only URL + selected topic columns from doc_topics and build matched_urls
+    # 2) Read ONLY the url and the selected COVID topic column from doc_topics.txt
     matched_urls = set()
-    usecols = ["url"] + topic_cols
-    dtype = {c: "float32" for c in topic_cols}
+    usecols = ["url", topic_col]
+    dtype = {topic_col: "float32"}
 
-    logger.info("Reading doc_topics.txt…")
+    logger.info("Reading doc_topics.txt… (only url and COVID topic column)")
     doc_topics = pd.read_csv(
         "/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/doc_topics.txt",
         sep="\t",
@@ -131,25 +134,23 @@ def main():
         dtype=dtype,
     )
 
-    # Keep any row where any COVID topic weight > threshold
-    mask = doc_topics[topic_cols].max(axis=1) > args.topic_threshold
+    # Keep rows where the COVID topic weight exceeds the threshold
+    mask = doc_topics[topic_col] > args.topic_threshold
     matched_urls.update(doc_topics.loc[mask, "url"])
-
-    logger.info(f"{len(matched_urls)} docs match threshold among COVID topics")
+    logger.info(f"{len(matched_urls)} docs match threshold on {topic_col} > {args.topic_threshold}")
 
     del doc_topics, topic_keys
     gc.collect()
 
-    # 3) Load SPORC in streaming mode and get exactly-2-speaker episodes
+    # 3) Load SPORC and filter to exactly-2-speaker episodes
     data_dir = "/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/"
-
     sporc = SPORCDataset(local_data_dir=data_dir, streaming=True)
     sporc.load_podcast_subset()
 
     two_speaker_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
     logger.info(f"Found {len(two_speaker_eps)} two-speaker episodes")
 
-    # 4) Reservoir-sample up to sample_n episodes that also match our URLs
+    # 4) Reservoir-sample up to sample_n episodes whose raw URL is in the matched set
     reservoir = []
     total_seen = 0
     for ep in tqdm(two_speaker_eps, desc="sampling eps"):
@@ -169,9 +170,8 @@ def main():
         logger.warning("No episodes found that match the criteria.")
         return
 
+    # 5) Run LLM over turns and dump per-episode JSON
     llm = LLMInterface(gpu_id=args.gpu_id)
-
-    # 5) Process sampled episodes and save results immediately
     out_dir = "results/covid"
     os.makedirs(out_dir, exist_ok=True)
 
