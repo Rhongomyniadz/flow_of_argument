@@ -94,7 +94,7 @@ class LLMInterface:
 def main():
     parser = argparse.ArgumentParser(description="Analyze 2-speaker SPORC episodes (COVID topic filter)")
     parser.add_argument("--min_words",       type=int,   default=50)
-    parser.add_argument("--sample_n",        type=int,   default=50)
+    parser.add_argument("--sample_n",        type=int,   default=30)
     parser.add_argument("--topic_threshold", type=float, default=0.02)
     parser.add_argument("--gpu_id",          type=int,   default=0)
     args = parser.parse_args()
