@@ -1,15 +1,13 @@
-import os
 import json
 import argparse
 import logging
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Optional
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize as sk_normalize
 from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -31,17 +29,8 @@ log = logging.getLogger("assumption-level-visualizer")
 def l2_normalize(X: np.ndarray) -> np.ndarray:
     return sk_normalize(X, norm="l2", copy=False)
 
-
-def cosine(u: np.ndarray, v: np.ndarray) -> float:
-    denom = (np.linalg.norm(u) * np.linalg.norm(v))
-    if denom == 0:
-        return 0.0
-    return float(np.dot(u, v) / denom)
-
-
 def ensure_out_dir(out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
-
 
 def save_fig(path: Path) -> None:
     plt.tight_layout()
@@ -67,9 +56,10 @@ def load_turns(input_dir: Path) -> pd.DataFrame:
                 continue
             for i, rec in enumerate(data):
                 assumptions = rec.get("assumptions") or []
-                doc_text = " ; ".join([a for a in assumptions if isinstance(a, str) and a.strip()])
-                if not doc_text.strip():
+                assumptions = [a for a in assumptions if isinstance(a, str) and a.strip()]
+                if not assumptions:
                     continue
+                doc_text = " ; ".join(assumptions)
 
                 # Normalize speaker_id
                 sid_raw = rec.get("speaker_id", None)
@@ -89,10 +79,10 @@ def load_turns(input_dir: Path) -> pd.DataFrame:
                 rows.append({
                     "episode_file": fp.name,
                     "turn_idx": i,
-                    "speaker_id": sid_norm,
+                    "speaker_id": sid_norm if sid_norm is not None else "",
                     "speaker_key": speaker_key,
                     "inferred_speaker_name": name if name else "NO_INFERRED_SPEAKER",
-                    "assumptions": [a for a in assumptions if isinstance(a, str) and a.strip()],
+                    "assumptions": assumptions,
                     "doc_text": doc_text,
                 })
         except Exception as e:
@@ -112,12 +102,12 @@ def build_assumption_table(turns: pd.DataFrame) -> pd.DataFrame:
       episode_file, turn_idx, speaker_id (or ''), speaker_key, inferred_speaker_name, assumption_text
     """
     rows = []
-    for idx, r in turns.iterrows():
+    for _, r in turns.iterrows():
         for j, a in enumerate(r["assumptions"]):
             rows.append({
                 "episode_file": r["episode_file"],
                 "turn_idx": int(r["turn_idx"]),
-                "speaker_id": r["speaker_id"] if pd.notna(r["speaker_id"]) else "",
+                "speaker_id": r["speaker_id"],
                 "speaker_key": r["speaker_key"],
                 "inferred_speaker_name": r["inferred_speaker_name"],
                 "assumption_text": a.strip(),
@@ -182,14 +172,16 @@ class Embedder:
 def per_episode_assumption_timeline(assump_df: pd.DataFrame,
                                     X_assump: np.ndarray,
                                     out_dir: Path,
-                                    window: int = 3,
                                     sim_threshold: float = 0.60,
                                     max_plots: int = 9999,
                                     seed: int = 0) -> None:
     """
-    Two-lane timeline by top-2 speaker_ids (or speaker_key fallback).
+    Two-lane timeline by top-2 speakers (speaker_id first, fallback speaker_key).
     - Plot every assumption as a dot at x = turn_idx (+ jitter), y = lane (1 for A, 0 for B)
     - For each assumption by A, link to its nearest neighbor in B if cosine >= sim_threshold
+
+    IMPORTANT: This function assumes X_assump rows align 1:1 with assump_df rows (global index).
+    We first slice X_assump down to the episode's rows, THEN apply boolean masks.
     """
     rng = np.random.default_rng(seed)
     ensure_out_dir(out_dir)
@@ -205,6 +197,10 @@ def per_episode_assumption_timeline(assump_df: pd.DataFrame,
         if df.empty:
             continue
 
+        # Align embeddings with THIS episode slice up front (FIX)
+        idx_global = df.index.to_numpy()
+        X_df = X_assump[idx_global, :]
+
         # Use speaker_id if present; else fallback to speaker_key
         df["sid_used"] = df["speaker_id"].replace("", np.nan).fillna(df["speaker_key"])
 
@@ -214,21 +210,22 @@ def per_episode_assumption_timeline(assump_df: pd.DataFrame,
             continue
         sidA, sidB = counts.index[:2].tolist()
 
-        A_mask = df["sid_used"] == sidA
-        B_mask = df["sid_used"] == sidB
-        A_ix = np.where(A_mask.values)[0]
-        B_ix = np.where(B_mask.values)[0]
+        A_mask = (df["sid_used"] == sidA).values
+        B_mask = (df["sid_used"] == sidB).values
+        A_ix = np.where(A_mask)[0]  # indices within df
+        B_ix = np.where(B_mask)[0]
 
         if len(A_ix) == 0 or len(B_ix) == 0:
             continue
 
-        # Extract embeddings for A/B assumptions
-        X_A = X_assump[A_mask.values]
-        X_B = X_assump[B_mask.values]
+        # Embeddings for A/B assumptions (now safely aligned)
+        X_A = X_df[A_mask]
+        X_B = X_df[B_mask]
 
         # Nearest neighbor across speakers (A -> B)
         nbrs = NearestNeighbors(n_neighbors=1, metric="cosine").fit(X_B)
         dist, idx = nbrs.kneighbors(X_A)
+
         # Pairs above threshold
         edges = []
         for i, (d, j) in enumerate(zip(dist[:, 0], idx[:, 0])):
@@ -238,28 +235,23 @@ def per_episode_assumption_timeline(assump_df: pd.DataFrame,
                 bi = B_ix[j]
                 edges.append((ai, bi, sim))
 
-        # Build coordinates
-        # Small jitter so dots don't overlap perfectly at same turn
-        jitter = lambda n: rng.normal(0, 0.05, size=n)
+        # Jitter so dots don’t overlap on identical turns
+        def jitter(n): return rng.normal(0, 0.05, size=n)
 
-        x_A = df.loc[A_ix, "turn_idx"].values.astype(float) + jitter(len(A_ix))
+        x_A = df.iloc[A_ix]["turn_idx"].to_numpy(dtype=float) + jitter(len(A_ix))
         y_A = np.ones(len(A_ix))
-        x_B = df.loc[B_ix, "turn_idx"].values.astype(float) + jitter(len(B_ix))
+        x_B = df.iloc[B_ix]["turn_idx"].to_numpy(dtype=float) + jitter(len(B_ix))
         y_B = np.zeros(len(B_ix))
 
         # Plot
         plt.figure(figsize=(10, 4))
-        # Dots
         plt.scatter(x_A, y_A, s=20, label=str(sidA), alpha=0.85)
         plt.scatter(x_B, y_B, s=20, label=str(sidB), alpha=0.85, marker="s")
 
         # Cross-speaker links with width by similarity
         for ai, bi, sim in edges:
-            xa = float(df.iloc[ai]["turn_idx"])
-            xb = float(df.iloc[bi]["turn_idx"])
-            # connect midpoints of jittered x (nearest by turn)
-            xa = df.iloc[ai]["turn_idx"] + float(rng.normal(0, 0.02))
-            xb = df.iloc[bi]["turn_idx"] + float(rng.normal(0, 0.02))
+            xa = float(df.iloc[ai]["turn_idx"]) + float(rng.normal(0, 0.02))
+            xb = float(df.iloc[bi]["turn_idx"]) + float(rng.normal(0, 0.02))
             plt.plot([xa, xb], [1.0, 0.0], linewidth=1.0 + 2.0 * sim, alpha=0.25)
 
         plt.yticks([0, 1], [str(sidB), str(sidA)])
@@ -287,7 +279,6 @@ def per_episode_assumption_tsne(assump_df: pd.DataFrame,
     """
     ensure_out_dir(out_dir)
     episodes = assump_df["episode_file"].unique().tolist()
-    rng = np.random.default_rng(seed)
     plotted = 0
 
     for ep in episodes:
@@ -303,7 +294,8 @@ def per_episode_assumption_tsne(assump_df: pd.DataFrame,
         if len(sids) < 1:
             continue
 
-        X = X_assump[df.index.values, :]  # slice by original index alignment
+        # Slice embeddings using the episode's row indices (already fixed alignment)
+        X = X_assump[df.index.to_numpy(), :]
 
         N = X.shape[0]
         if N < 3:
@@ -318,7 +310,6 @@ def per_episode_assumption_tsne(assump_df: pd.DataFrame,
         strong_mask = np.zeros(N, dtype=bool)
         edges = []
         if highlight_pairs and len(sids) >= 2:
-            # Use top-2 speakers by count to define "cross" pairs
             top2 = df["sid_used"].value_counts().index[:2].tolist()
             if len(top2) == 2:
                 A_mask = (df["sid_used"] == top2[0]).values
@@ -326,8 +317,8 @@ def per_episode_assumption_tsne(assump_df: pd.DataFrame,
                 A_ix = np.where(A_mask)[0]
                 B_ix = np.where(B_mask)[0]
                 if len(A_ix) and len(B_ix):
-                    X_A = X[A_ix]
-                    X_B = X[B_ix]
+                    X_A = X[A_mask]
+                    X_B = X[B_mask]
                     nbrs = NearestNeighbors(n_neighbors=1, metric="cosine").fit(X_B)
                     dist, idx = nbrs.kneighbors(X_A)
                     for i, (d, j) in enumerate(zip(dist[:, 0], idx[:, 0])):
@@ -346,19 +337,18 @@ def per_episode_assumption_tsne(assump_df: pd.DataFrame,
         colors = [color_map[sid] for sid in sid_list]
 
         plt.figure(figsize=(6.5, 5.5))
-        # faint base points
+        # base points
         plt.scatter(Y[:, 0], Y[:, 1], s=18, c=colors, alpha=0.70, edgecolors="none")
         # highlight strong-pair points
         if edges:
             plt.scatter(Y[strong_mask, 0], Y[strong_mask, 1], s=30, facecolors="none", edgecolors="k", linewidths=0.6)
-            # draw thin links for matched pairs
             for ai, bi, sim in edges:
                 plt.plot([Y[ai, 0], Y[bi, 0]], [Y[ai, 1], Y[bi, 1]], alpha=0.25, linewidth=0.5)
 
         # Legend (top few speakers)
         for i, sid in enumerate(unique_sids[:10]):
             plt.scatter([], [], c=[color_map[sid]], label=str(sid))
-        plt.legend(title="speaker_id", loc="best", fontsize=8)
+        plt.legend(title="speaker", loc="best", fontsize=8)
 
         plt.title(f"Per-Assumption t-SNE Map\n{ep}  (N={N}, perplexity={perplexity})")
         plt.axis("off")
@@ -381,10 +371,9 @@ def main():
 
     # Timeline & pairing controls
     ap.add_argument("--assump_sim_threshold", type=float, default=0.60, help="Cross-speaker similarity threshold.")
-    ap.add_argument("--timeline_window", type=int, default=3, help="(Kept for future use) rolling window for smoothing.")
     ap.add_argument("--max_assump_plots", type=int, default=9999, help="Max episodes to plot for per-assumption views.")
 
-    # t-SNE controls (per episode auto-tunes perplexity, but allow seed)
+    # t-SNE controls
     ap.add_argument("--seed", type=int, default=0, help="Random seed for jitter/t-SNE.")
     args = ap.parse_args()
 
@@ -405,7 +394,7 @@ def main():
         log.error("No individual assumptions to visualize. Exiting.")
         return
 
-    # 2) Embed individual assumptions
+    # 2) Embed individual assumptions (X_assump row order aligns with A row order)
     texts = A["assumption_text"].tolist()
     embedder = Embedder(backend=args.embed_backend, sbert_model=args.sbert_model, device=args.device)
     log.info(f"Embedding {len(texts)} assumptions with backend='{embedder.backend}'")
@@ -413,24 +402,19 @@ def main():
     X_assump = embedder.encode(texts)
     log.info(f"Assumption embeddings shape: {X_assump.shape}")
 
-    # 3) Per-episode assumption timeline with cross-speaker links
+    # 3) Per-episode assumption timeline with cross-speaker links (FIXED indexing)
     per_episode_assumption_timeline(
-        assump_df=A.reset_index(drop=True),
+        assump_df=A,                     # keep original index to align with X_assump
         X_assump=X_assump,
         out_dir=out_dir / "assumptions_timeline",
-        window=args.timeline_window,
         sim_threshold=args.assump_sim_threshold,
         max_plots=args.max_assump_plots,
         seed=args.seed,
     )
 
-    # 4) Per-episode assumption t-SNE maps
-    # NOTE: We must preserve the alignment between A rows and X_assump rows.
-    # We pass the same A (with original index) to the function; inside it slices by df.index.
-    A_with_index = A.copy()
-    A_with_index.reset_index(inplace=True, drop=False)  # store old index in 'index' if needed
+    # 4) Per-episode assumption t-SNE maps (already uses df.index to slice X)
     per_episode_assumption_tsne(
-        assump_df=A,  # original index aligns with X_assump row order
+        assump_df=A,                     # keep original index to align with X_assump
         X_assump=X_assump,
         out_dir=out_dir / "assumptions_tsne",
         highlight_pairs=True,
