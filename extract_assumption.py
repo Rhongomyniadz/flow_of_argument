@@ -6,49 +6,43 @@ import gzip
 import argparse
 import logging
 from pathlib import Path
-from typing import List, Dict, Iterable, Optional, Tuple
+from typing import List, Dict, Iterable, Optional, Tuple, Set
+from urllib.parse import urlparse
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
 
-logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("assumption-extract")
 
 
-# -------------------- Helpers --------------------
+# -------------------- URL helpers --------------------
 
-def normalize_output(raw: str) -> List[str]:
-    """Extract list from model output that contains a JSON object with 'key_points_assumed'."""
-    try:
-        start = raw.find("{")
-        end = raw.rfind("}")
-        if start == -1 or end == -1:
-            return []
-        obj = json.loads(raw[start:end + 1])
-        vals = obj.get("key_points_assumed", [])
-        return [s for s in vals if isinstance(s, str)]
-    except Exception:
-        return []
+def canonical_to_raw(canonical_url: str) -> str:
+    """Map an mp3 URL to the SPORC 'raw' url format used in other indices."""
+    if not canonical_url:
+        return ""
+    p = urlparse(canonical_url)
+    domain = p.netloc
+    scheme = p.scheme
+    path = (p.path or "").lstrip("/")
+    collapsed = path.replace("/", "").replace("-", "")
+    host_noslash = f"{scheme}{domain}"
+    return f"/{domain}/o3/{host_noslash}{collapsed}MERGED" if domain and scheme else ""
 
 
-def count_words(text: str) -> int:
-    return len(re.findall(r"\w+", text or ""))
-
+# -------------------- Episode & turn parsing --------------------
 
 def get_text(turn: Dict) -> str:
     return (turn.get("text") or turn.get("turn_text") or "").strip()
 
-
 def get_role(turn: Dict) -> str:
-    role = turn.get("inferred_speaker_role") or turn.get("role") or ""
-    role = role.strip()
+    role = (turn.get("inferred_speaker_role") or turn.get("role") or "").strip()
     return role if role else "SPEAKER"
-
 
 def get_name(turn: Dict) -> str:
     name = (turn.get("inferred_speaker_name") or turn.get("speaker_name") or "").strip()
     return name if name else "NO_INFERRED_SPEAKER"
-
 
 def get_speaker_id(turn: Dict) -> Optional[str]:
     sid = turn.get("speaker_id", None)
@@ -60,13 +54,13 @@ def get_speaker_id(turn: Dict) -> Optional[str]:
         return str(sid.get("id") or sid.get("speaker_id") or "")
     return str(sid) if sid is not None else None
 
-
 def turns_from_episode(ep: Dict) -> List[Dict]:
     # Common keys across datasets
     for k in ("turns", "speaker_turns", "segments"):
-        if isinstance(ep.get(k), list):
-            return ep[k]
-    # Sometimes nested under 'transcript' or 'content'
+        v = ep.get(k)
+        if isinstance(v, list):
+            return v
+    # Sometimes nested
     trans = ep.get("transcript") or ep.get("content") or {}
     if isinstance(trans, dict):
         for k in ("turns", "speaker_turns", "segments"):
@@ -75,7 +69,6 @@ def turns_from_episode(ep: Dict) -> List[Dict]:
                 return v
     return []
 
-
 def episode_title(ep: Dict) -> str:
     for k in ("title", "episode_title", "name"):
         v = ep.get(k)
@@ -83,23 +76,62 @@ def episode_title(ep: Dict) -> str:
             return v
     return "untitled_episode"
 
+def episode_mp3(ep: Dict) -> str:
+    # Prefer explicit mp3_url if present
+    for k in ("mp3_url", "audio_url", "audio", "url", "audio_url_http"):
+        v = ep.get(k)
+        if isinstance(v, str) and v.startswith("http"):
+            return v
+    return ""
 
-def unique_speakers(turns: List[Dict]) -> List[str]:
-    sids = []
-    for t in turns:
-        sid = get_speaker_id(t)
-        if not sid:
-            sid = get_name(t)  # fallback so we can still count distinct speakers
-        sids.append(sid)
-    uniq = []
-    for s in sids:
-        if s and s not in uniq:
-            uniq.append(s)
-    return uniq
+def has_two_speakers_meta(ep: Dict) -> bool:
+    # Strong signals
+    n_main = ep.get("num_main_speakers")
+    if isinstance(n_main, (int, float)) and int(n_main) == 2:
+        return True
+
+    q = ep.get("quality_indicators", {})
+    if isinstance(q, dict):
+        total_labels = q.get("total_speaker_labels")
+        if isinstance(total_labels, (int, float)) and int(total_labels) == 2:
+            return True
+
+    # Hosts + guests
+    nh = ep.get("num_hosts")
+    ng = ep.get("num_guests")
+    if isinstance(nh, (int, float)) and isinstance(ng, (int, float)):
+        if int(nh) + int(ng) == 2:
+            return True
+
+    # Fallback list fields
+    for k in ("speakers", "speaker_ids"):
+        v = ep.get(k)
+        if isinstance(v, list) and len(v) == 2:
+            return True
+
+    # If num_turns exists but we can't infer #speakers, return False
+    return False
+
+def normalize_output(raw: str) -> List[str]:
+    """Extract list from model output that contains a JSON object with 'key_points_assumed'."""
+    try:
+        start = raw.find("{"); end = raw.rfind("}")
+        if start == -1 or end == -1:
+            return []
+        obj = json.loads(raw[start:end + 1])
+        vals = obj.get("key_points_assumed", [])
+        return [s for s in vals if isinstance(s, str)]
+    except Exception:
+        return []
+
+def count_words(text: str) -> int:
+    import re
+    return len(re.findall(r"\w+", text or ""))
 
 
-def stream_episodes_from_jsonl_gz(path: Path) -> Iterable[Dict]:
-    """Yield episode dicts from a jsonl or jsonl.gz file (one episode per line)."""
+# -------------------- Streamers --------------------
+
+def stream_jsonl(path: Path) -> Iterable[Dict]:
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "rt", encoding="utf-8") as f:
         for line in f:
@@ -117,8 +149,92 @@ def stream_episodes_from_jsonl_gz(path: Path) -> Iterable[Dict]:
                     if isinstance(o, dict):
                         yield o
 
+def find_episodes_path(cli_path: Optional[str]) -> Path:
+    if cli_path:
+        p = Path(cli_path).expanduser().resolve()
+        if p.exists():
+            return p
+        raise FileNotFoundError(f"Data file not found: {p}")
+    # auto-discover common locations under current working directory
+    candidates = [
+        Path("data/covid_episodes.jsonl.gz"),
+        Path("results/covid_episodes.jsonl.gz"),
+        Path("data/covid_episodes.jsonl"),
+        Path("results/covid_episodes.jsonl"),
+    ]
+    for c in candidates:
+        if c.exists():
+            return c.resolve()
+    raise FileNotFoundError("Could not locate covid_episodes.jsonl[.gz] under ./data or ./results; "
+                            "pass --data_path explicitly.")
 
-# -------------------- LLM Wrapper --------------------
+def collect_needed_turns(mp3_urls: Set[str],
+                         turns_path: Path,
+                         max_per_episode: Optional[int] = None) -> Dict[str, List[Dict]]:
+    """
+    Stream the big speakerTurnData.jsonl.gz and collect turns only for the target episodes.
+    Matching is by mp3_url OR canonical raw url.
+    Returns: dict mp3_url -> list of turn dicts (with at least text/speaker info).
+    """
+    opener = gzip.open if turns_path.suffix == ".gz" else open
+
+    # Precompute acceptable keys for quick matching
+    keys_by_mp3 = {}
+    for mp3 in mp3_urls:
+        keys_by_mp3[mp3] = {mp3, canonical_to_raw(mp3)}
+
+    out: Dict[str, List[Dict]] = {mp3: [] for mp3 in mp3_urls}
+    hits_left = set(mp3_urls)
+
+    with opener(turns_path, "rt", encoding="utf-8") as f:
+        for line in tqdm(f, desc="scan turns", unit="lines"):
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+
+            # candidate episode identifiers inside a turn record
+            cand = (rec.get("mp3_url") or rec.get("audio_url") or rec.get("episode_mp3")
+                    or rec.get("episode_url") or rec.get("url") or "")
+            # Match against all keys
+            matched_mp3 = None
+            for mp3, keys in keys_by_mp3.items():
+                if cand in keys:
+                    matched_mp3 = mp3
+                    break
+                # Try canonicalizing if cand looks like an mp3 url
+                if cand and cand.startswith("http"):
+                    if canonical_to_raw(cand) in keys:
+                        matched_mp3 = mp3
+                        break
+
+            if not matched_mp3:
+                continue
+
+            # Extract minimal turn fields
+            text = (rec.get("text") or rec.get("turn_text") or "").strip()
+            if not text:
+                continue
+            turn_obj = {
+                "text": text,
+                "speaker_id": rec.get("speaker_id", rec.get("speaker")),
+                "inferred_speaker_name": rec.get("inferred_speaker_name", "NO_INFERRED_SPEAKER"),
+                "inferred_speaker_role": rec.get("inferred_speaker_role", "NO_INFERRED_ROLE"),
+            }
+            out[matched_mp3].append(turn_obj)
+
+            if max_per_episode and len(out[matched_mp3]) >= max_per_episode:
+                if matched_mp3 in hits_left:
+                    hits_left.remove(matched_mp3)
+
+            # Optional early stop if all found and capped
+            if max_per_episode and not hits_left:
+                break
+
+    return out
+
+
+# -------------------- LLM wrapper --------------------
 
 class LLMInterface:
     def __init__(
@@ -136,9 +252,7 @@ class LLMInterface:
         download_dir: str = "/shared/4/models",
         trust_remote_code: bool = True,
     ):
-        # vLLM pins devices via CUDA_VISIBLE_DEVICES
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-
         self.llm = LLM(
             model=model_name,
             tensor_parallel_size=tensor_parallel_size,
@@ -156,7 +270,7 @@ class LLMInterface:
                 max_tokens=max_tokens,
             )
         except TypeError:
-            logger.warning("vLLM SamplingParams has no `min_p`; proceeding without it.")
+            log.warning("vLLM SamplingParams has no `min_p`; proceeding without it.")
             self.params = SamplingParams(
                 temperature=temperature,
                 top_p=top_p,
@@ -173,63 +287,103 @@ class LLMInterface:
 # -------------------- Main --------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Process episodes directly from /data/covid_episodes.jsonl.gz")
-    ap.add_argument("--data_path", type=str, default="/data/covid_episodes.jsonl.gz",
-                    help="Path to JSONL(.gz) file with one episode per line.")
-    ap.add_argument("--min_words", type=int, default=50,
-                    help="Minimum words in a turn to run the LLM on it.")
-    ap.add_argument("--sample_n", type=int, default=30,
-                    help="Max episodes to process via reservoir sampling.")
-    ap.add_argument("--gpu_id", type=int, default=0, help="GPU id to use with vLLM.")
-    ap.add_argument("--model_name", type=str, default="deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-                    help="HuggingFace model name for vLLM.")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data_path", type=str, default="", help="Path to episodes jsonl(.gz). If empty, auto-discover.")
+    ap.add_argument("--turns_path", type=str,
+                    default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz",
+                    help="Path to SPORC speakerTurnData.jsonl.gz for back-filling turns.")
+    ap.add_argument("--min_words", type=int, default=50, help="Min words in a turn to run LLM.")
+    ap.add_argument("--sample_n", type=int, default=30, help="Max episodes to process (reservoir).")
+    ap.add_argument("--gpu_id", type=int, default=0, help="GPU id for vLLM.")
+    ap.add_argument("--model_name", type=str, default="deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
     args = ap.parse_args()
 
-    data_path = Path(args.data_path)
-    if not data_path.exists():
-        logger.error("Data file not found: %s", str(data_path))
+    # 1) Locate the episodes file
+    try:
+        episodes_path = find_episodes_path(args.data_path)
+    except FileNotFoundError as e:
+        log.error(str(e))
         return
 
-    # 1) Stream episodes, keep those with exactly 2 speakers; reservoir sample up to sample_n
+    log.info("Streaming episodes from %s …", str(episodes_path))
+
+    # 2) Build reservoir of candidate episodes (2-speaker via turns OR metadata)
     reservoir: List[Dict] = []
     total_seen = 0
-    logger.info("Streaming episodes from %s …", str(data_path))
+    all_sampled_mp3: List[str] = []
+    episodes_buffer: List[Tuple[Dict, Optional[List[Dict]], str]] = []
+    # (ep, turns_if_present, mp3_url)
 
-    for ep in tqdm(stream_episodes_from_jsonl_gz(data_path), desc="scan jsonl"):
-        turns = turns_from_episode(ep)
-        if not turns:
+    for ep in tqdm(stream_jsonl(episodes_path), desc="scan jsonl"):
+        mp3 = episode_mp3(ep)
+        if not mp3:
             continue
-        spk = unique_speakers(turns)
-        if len(spk) != 2:
+
+        turns = turns_from_episode(ep)
+        if turns:
+            # compute speakers directly
+            sids = []
+            for t in turns:
+                sid = get_speaker_id(t) or get_name(t)
+                if sid and sid not in sids:
+                    sids.append(sid)
+            is_two = len(sids) == 2
+        else:
+            # fall back to metadata
+            is_two = has_two_speakers_meta(ep)
+
+        if not is_two:
             continue
 
         total_seen += 1
         if len(reservoir) < args.sample_n:
             reservoir.append(ep)
+            episodes_buffer.append((ep, turns if turns else None, mp3))
+            all_sampled_mp3.append(mp3)
         else:
-            j = __import__("random").randint(0, total_seen - 1)
+            import random
+            j = random.randint(0, total_seen - 1)
             if j < args.sample_n:
+                # replace
                 reservoir[j] = ep
+                episodes_buffer[j] = (ep, turns if turns else None, mp3)
+                all_sampled_mp3[j] = mp3
 
-    logger.info("Reservoir sampled %d episodes (out of %d 2-speaker matches)", len(reservoir), total_seen)
+    log.info("Reservoir sampled %d episodes (out of %d 2-speaker matches)", len(reservoir), total_seen)
     if not reservoir:
-        logger.warning("No qualifying episodes found; exiting.")
+        log.warning("No qualifying episodes found; exiting.")
         return
 
-    # 2) Init LLM
+    # 3) Back-fill turns for sampled episodes that lack them
+    need_turns_for = {mp3 for (_, tlist, mp3) in episodes_buffer if tlist is None}
+    turns_by_mp3: Dict[str, List[Dict]] = {}
+    if need_turns_for:
+        turns_path = Path(args.turns_path).expanduser().resolve()
+        if not turns_path.exists():
+            log.error("Turns file not found at %s — cannot back-fill missing transcripts.", str(turns_path))
+            return
+        log.info("Back-filling turns for %d sampled episodes from %s", len(need_turns_for), str(turns_path))
+        turns_by_mp3 = collect_needed_turns(need_turns_for, turns_path)
+
+    # 4) Init LLM
     llm = LLMInterface(model_name=args.model_name, gpu_id=args.gpu_id)
 
-    # 3) Process sampled episodes
+    # 5) Process and write out
     out_dir = Path("results/covid")
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    for ep in tqdm(reservoir, desc="processing eps"):
+    for ep, tlist, mp3 in tqdm(episodes_buffer, desc="processing eps"):
         title = episode_title(ep)
         label = re.sub(r"[^\w\-]", "_", title)
 
-        turns = turns_from_episode(ep)
+        if tlist is None:
+            tlist = turns_by_mp3.get(mp3, [])
+        if not tlist:
+            log.warning("No turns found for sampled episode: %s", title)
+            continue
+
         prompts, meta = [], []
-        for idx, t in enumerate(tqdm(turns, desc=f"turns {label}", leave=False)):
+        for idx, t in enumerate(tqdm(tlist, desc=f"turns {label}", leave=False)):
             text = get_text(t)
             if count_words(text) < args.min_words:
                 continue
@@ -254,6 +408,7 @@ Now analyze Turn #{idx}":
             ))
 
         if not prompts:
+            log.warning("No qualifying turns (min_words=%d) for: %s", args.min_words, title)
             continue
 
         outputs = llm.generate_batch(prompts)
@@ -263,18 +418,17 @@ Now analyze Turn #{idx}":
                 "turn_text": text,
                 "speaker_id": speaker,
                 "inferred_speaker_name": name,
-                "inferred_speaker_role": role,
+                "inferred_speaker_role": role if role else "NO_INFERRED_ROLE",
                 "assumptions": normalize_output(raw_out),
             })
 
         with open(out_dir / f"{label}.json", "w", encoding="utf-8") as f:
             json.dump(records, f, indent=2, ensure_ascii=False)
 
-        # free memory between episodes
         del prompts, meta, outputs, records
         gc.collect()
 
-    logger.info("Done. Wrote episode JSONs to %s", str(out_dir))
+    log.info("Done. Wrote episode JSONs to %s", str(out_dir))
 
 
 if __name__ == "__main__":
