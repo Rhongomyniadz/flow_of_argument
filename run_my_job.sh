@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=covid-jsonl
+#SBATCH --job-name=assumption_extraction
 #SBATCH --output=slurm-%j.out
 #SBATCH --partition=gpu
 #SBATCH --time=02:00:00
@@ -8,4 +8,4 @@
 
 
 
-python extract_subset.py 
+python extract_assumption.py 
