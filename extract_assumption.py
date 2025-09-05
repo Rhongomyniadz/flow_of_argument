@@ -267,7 +267,7 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        model_name: str = "Qwen/Qwen3-8B",
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         temperature: float = 0.7,
