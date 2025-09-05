@@ -19,7 +19,7 @@ log = logging.getLogger("assumption-extract")
 # -------------------- URL helpers --------------------
 
 def canonical_to_raw(canonical_url: str) -> str:
-    """Map an mp3 URL to the SPORC 'raw' url format used in other indices."""
+    """Map an mp3 URL to the 'raw' url format used in indices."""
     if not canonical_url:
         return ""
     p = urlparse(canonical_url)
@@ -55,12 +55,11 @@ def get_speaker_id(turn: Dict) -> Optional[str]:
     return str(sid) if sid is not None else None
 
 def turns_from_episode(ep: Dict) -> List[Dict]:
-    # Common keys across datasets
+    # Common keys if an episode embeds turns (often it won't)
     for k in ("turns", "speaker_turns", "segments"):
         v = ep.get(k)
         if isinstance(v, list):
             return v
-    # Sometimes nested
     trans = ep.get("transcript") or ep.get("content") or {}
     if isinstance(trans, dict):
         for k in ("turns", "speaker_turns", "segments"):
@@ -109,7 +108,6 @@ def has_two_speakers_meta(ep: Dict) -> bool:
         if isinstance(v, list) and len(v) == 2:
             return True
 
-    # If num_turns exists but we can't infer #speakers, return False
     return False
 
 def normalize_output(raw: str) -> List[str]:
@@ -129,7 +127,7 @@ def count_words(text: str) -> int:
     return len(re.findall(r"\w+", text or ""))
 
 
-# -------------------- Streamers --------------------
+# -------------------- Local streamers & path discovery --------------------
 
 def stream_jsonl(path: Path) -> Iterable[Dict]:
     opener = gzip.open if path.suffix == ".gz" else open
@@ -155,7 +153,7 @@ def find_episodes_path(cli_path: Optional[str]) -> Path:
         if p.exists():
             return p
         raise FileNotFoundError(f"Data file not found: {p}")
-    # auto-discover common locations under current working directory
+    # auto-discover under CWD
     candidates = [
         Path("data/covid_episodes.jsonl.gz"),
         Path("results/covid_episodes.jsonl.gz"),
@@ -168,13 +166,32 @@ def find_episodes_path(cli_path: Optional[str]) -> Path:
     raise FileNotFoundError("Could not locate covid_episodes.jsonl[.gz] under ./data or ./results; "
                             "pass --data_path explicitly.")
 
-def collect_needed_turns(mp3_urls: Set[str],
-                         turns_path: Path,
-                         max_per_episode: Optional[int] = None) -> Dict[str, List[Dict]]:
+def find_turns_path(cli_path: Optional[str]) -> Path:
+    if cli_path:
+        p = Path(cli_path).expanduser().resolve()
+        if p.exists():
+            return p
+        raise FileNotFoundError(f"Turns file not found: {p}")
+    candidates = [
+        Path("data/covid_episodes_turn.jsonl.gz"),
+        Path("results/covid_episodes_turn.jsonl.gz"),
+        Path("data/covid_episodes_turn.jsonl"),
+        Path("results/covid_episodes_turn.jsonl"),
+    ]
+    for c in candidates:
+        if c.exists():
+            return c.resolve()
+    raise FileNotFoundError("Could not locate covid_episodes_turn.jsonl[.gz] under ./data or ./results; "
+                            "pass --turns_path explicitly.")
+
+
+def collect_needed_turns_from_local(mp3_urls: Set[str],
+                                    turns_path: Path,
+                                    max_per_episode: Optional[int] = None) -> Dict[str, List[Dict]]:
     """
-    Stream the big speakerTurnData.jsonl.gz and collect turns only for the target episodes.
-    Matching is by mp3_url OR canonical raw url.
-    Returns: dict mp3_url -> list of turn dicts (with at least text/speaker info).
+    Stream the local turns JSONL(.gz) and collect turns only for the target episodes.
+    Matching is by mp3_url OR canonical raw url found in each turn record.
+    Returns: dict mp3_url -> list of turn dicts (min fields text/speaker/name/role).
     """
     opener = gzip.open if turns_path.suffix == ".gz" else open
 
@@ -186,27 +203,38 @@ def collect_needed_turns(mp3_urls: Set[str],
     out: Dict[str, List[Dict]] = {mp3: [] for mp3 in mp3_urls}
     hits_left = set(mp3_urls)
 
+    candidate_keys = (
+        "mp3_url", "audio_url", "audio", "episode_mp3", "episode_url", "url",
+        "canonical_url", "raw_url",
+    )
+
     with opener(turns_path, "rt", encoding="utf-8") as f:
-        for line in tqdm(f, desc="scan turns", unit="lines"):
+        for line in tqdm(f, desc="scan local turns", unit="lines"):
             try:
                 rec = json.loads(line)
             except Exception:
                 continue
 
             # candidate episode identifiers inside a turn record
-            cand = (rec.get("mp3_url") or rec.get("audio_url") or rec.get("episode_mp3")
-                    or rec.get("episode_url") or rec.get("url") or "")
-            # Match against all keys
+            cand = ""
+            for k in candidate_keys:
+                v = rec.get(k)
+                if isinstance(v, str) and v:
+                    cand = v
+                    break
+
+            if not cand:
+                continue
+
             matched_mp3 = None
             for mp3, keys in keys_by_mp3.items():
                 if cand in keys:
                     matched_mp3 = mp3
                     break
                 # Try canonicalizing if cand looks like an mp3 url
-                if cand and cand.startswith("http"):
-                    if canonical_to_raw(cand) in keys:
-                        matched_mp3 = mp3
-                        break
+                if cand.startswith("http") and canonical_to_raw(cand) in keys:
+                    matched_mp3 = mp3
+                    break
 
             if not matched_mp3:
                 continue
@@ -288,40 +316,40 @@ class LLMInterface:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data_path", type=str, default="", help="Path to episodes jsonl(.gz). If empty, auto-discover.")
-    ap.add_argument("--turns_path", type=str,
-                    default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz",
-                    help="Path to SPORC speakerTurnData.jsonl.gz for back-filling turns.")
+    ap.add_argument("--data_path", type=str, default="", help="Path to local episodes jsonl(.gz). If empty, auto-discover.")
+    ap.add_argument("--turns_path", type=str, default="", help="Path to local turns jsonl(.gz). If empty, auto-discover.")
     ap.add_argument("--min_words", type=int, default=50, help="Min words in a turn to run LLM.")
     ap.add_argument("--sample_n", type=int, default=30, help="Max episodes to process (reservoir).")
     ap.add_argument("--gpu_id", type=int, default=0, help="GPU id for vLLM.")
     ap.add_argument("--model_name", type=str, default="deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
     args = ap.parse_args()
 
-    # 1) Locate the episodes file
+    # 1) Locate the local episodes & turns files
     try:
         episodes_path = find_episodes_path(args.data_path)
+        turns_path = find_turns_path(args.turns_path)
     except FileNotFoundError as e:
         log.error(str(e))
         return
 
     log.info("Streaming episodes from %s …", str(episodes_path))
+    log.info("Using local turns from %s …", str(turns_path))
 
-    # 2) Build reservoir of candidate episodes (2-speaker via turns OR metadata)
+    # 2) Build reservoir of candidate episodes (2-speaker via embedded turns OR metadata)
     reservoir: List[Dict] = []
     total_seen = 0
     all_sampled_mp3: List[str] = []
     episodes_buffer: List[Tuple[Dict, Optional[List[Dict]], str]] = []
-    # (ep, turns_if_present, mp3_url)
+    # tuple: (episode_json, turns_if_present, mp3_url)
 
-    for ep in tqdm(stream_jsonl(episodes_path), desc="scan jsonl"):
+    for ep in tqdm(stream_jsonl(episodes_path), desc="scan episodes jsonl"):
         mp3 = episode_mp3(ep)
         if not mp3:
             continue
 
         turns = turns_from_episode(ep)
         if turns:
-            # compute speakers directly
+            # deduce speakers directly
             sids = []
             for t in turns:
                 sid = get_speaker_id(t) or get_name(t)
@@ -329,7 +357,7 @@ def main():
                     sids.append(sid)
             is_two = len(sids) == 2
         else:
-            # fall back to metadata
+            # fall back to metadata-based check
             is_two = has_two_speakers_meta(ep)
 
         if not is_two:
@@ -344,7 +372,6 @@ def main():
             import random
             j = random.randint(0, total_seen - 1)
             if j < args.sample_n:
-                # replace
                 reservoir[j] = ep
                 episodes_buffer[j] = (ep, turns if turns else None, mp3)
                 all_sampled_mp3[j] = mp3
@@ -354,21 +381,17 @@ def main():
         log.warning("No qualifying episodes found; exiting.")
         return
 
-    # 3) Back-fill turns for sampled episodes that lack them
+    # 3) Back-fill turns for sampled episodes that lack embedded turns (from local turns file)
     need_turns_for = {mp3 for (_, tlist, mp3) in episodes_buffer if tlist is None}
     turns_by_mp3: Dict[str, List[Dict]] = {}
     if need_turns_for:
-        turns_path = Path(args.turns_path).expanduser().resolve()
-        if not turns_path.exists():
-            log.error("Turns file not found at %s — cannot back-fill missing transcripts.", str(turns_path))
-            return
-        log.info("Back-filling turns for %d sampled episodes from %s", len(need_turns_for), str(turns_path))
-        turns_by_mp3 = collect_needed_turns(need_turns_for, turns_path)
+        log.info("Back-filling turns for %d sampled episodes from local turns file", len(need_turns_for))
+        turns_by_mp3 = collect_needed_turns_from_local(need_turns_for, turns_path)
 
     # 4) Init LLM
     llm = LLMInterface(model_name=args.model_name, gpu_id=args.gpu_id)
 
-    # 5) Process and write out
+    # 5) Process episodes and write per-episode outputs
     out_dir = Path("results/covid")
     out_dir.mkdir(parents=True, exist_ok=True)
 
