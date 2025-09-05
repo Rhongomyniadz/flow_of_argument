@@ -9,6 +9,5 @@
 
 
 python extract_assumption.py \
-  --data_path /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz \
-  --sample_n 30 \
-  --min_words 50 \
+  --data_path  /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz \
+  --turns_path /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz
