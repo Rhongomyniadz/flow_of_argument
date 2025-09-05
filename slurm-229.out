@@ -1,109 +1,0 @@
-2025-09-05 02:03:08.984004: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-09-05 02:03:09.118666: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-INFO 09-05 02:03:18 [__init__.py:235] Automatically detected platform cuda.
-2025-09-05 02:03:20,616 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
-2025-09-05 02:03:20,617 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
-scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 32it [00:00, 5898.64it/s]
-2025-09-05 02:03:20,624 INFO Reservoir sampled 30 episodes (out of 32 2-speaker matches)
-2025-09-05 02:03:20,624 INFO Back-filling turns for 30 sampled episodes from local turns file
-scan local turns: 0lines [00:00, ?lines/s]scan local turns: 1359lines [00:00, 13580.78lines/s]scan local turns: 2718lines [00:00, 10608.94lines/s]scan local turns: 3819lines [00:00, 10711.17lines/s]scan local turns: 4914lines [00:00, 8936.90lines/s] scan local turns: 6074lines [00:00, 9731.58lines/s]scan local turns: 6791lines [00:00, 10364.96lines/s]
-INFO 09-05 02:03:43 [config.py:1604] Using max model len 131072
-INFO 09-05 02:03:44 [config.py:2434] Chunked prefill is enabled with max_num_batched_tokens=8192.
-INFO 09-05 02:03:46 [core.py:572] Waiting for init message from front-end.
-INFO 09-05 02:03:46 [core.py:71] Initializing a V1 LLM engine (v0.10.0) with config: model='deepseek-ai/DeepSeek-R1-Distill-Llama-8B', speculative_config=None, tokenizer='deepseek-ai/DeepSeek-R1-Distill-Llama-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config={}, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=131072, download_dir='/shared/4/models', load_format=LoadFormat.AUTO, tensor_parallel_size=1, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_backend=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=0, served_model_name=deepseek-ai/DeepSeek-R1-Distill-Llama-8B, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=True, chunked_prefill_enabled=True, use_async_output_proc=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output","vllm.mamba_mixer2"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"max_capture_size":512,"local_cache_dir":null}
-INFO 09-05 02:03:51 [parallel_state.py:1102] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0
-INFO 09-05 02:03:51 [topk_topp_sampler.py:49] Using FlashInfer for top-p & top-k sampling.
-INFO 09-05 02:03:51 [gpu_model_runner.py:1843] Starting to load model deepseek-ai/DeepSeek-R1-Distill-Llama-8B...
-INFO 09-05 02:03:52 [gpu_model_runner.py:1875] Loading model from scratch...
-INFO 09-05 02:03:52 [cuda.py:290] Using Flash Attention backend on V1 engine.
-INFO 09-05 02:03:52 [weight_utils.py:296] Using model weights format ['*.safetensors']
-Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
-Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:02<00:02,  2.23s/it]
-Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:04<00:00,  2.52s/it]
-Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:04<00:00,  2.48s/it]
-
-INFO 09-05 02:03:58 [default_loader.py:262] Loading weights took 5.42 seconds
-INFO 09-05 02:03:59 [gpu_model_runner.py:1892] Model loading took 14.9889 GiB and 6.209913 seconds
-INFO 09-05 02:04:16 [backends.py:530] Using cache directory: /home/edenzha/.cache/vllm/torch_compile_cache/2ca8489b2d/rank_0_0/backbone for vLLM's torch.compile
-INFO 09-05 02:04:16 [backends.py:541] Dynamo bytecode transform time: 16.71 s
-INFO 09-05 02:04:31 [backends.py:161] Directly load the compiled graph(s) for dynamic shape from the cache, took 13.552 s
-INFO 09-05 02:04:34 [monitor.py:34] torch.compile takes 16.71 s in total
-/opt/anaconda/lib/python3.12/site-packages/torch/utils/cpp_extension.py:2356: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
-If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
-  warnings.warn(
-INFO 09-05 02:04:36 [gpu_worker.py:255] Available KV cache memory: 7.78 GiB
-ERROR 09-05 02:04:37 [core.py:632] EngineCore failed to start.
-ERROR 09-05 02:04:37 [core.py:632] Traceback (most recent call last):
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 623, in run_engine_core
-ERROR 09-05 02:04:37 [core.py:632]     engine_core = EngineCoreProc(*args, **kwargs)
-ERROR 09-05 02:04:37 [core.py:632]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 441, in __init__
-ERROR 09-05 02:04:37 [core.py:632]     super().__init__(vllm_config, executor_class, log_stats,
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 86, in __init__
-ERROR 09-05 02:04:37 [core.py:632]     self._initialize_kv_caches(vllm_config)
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 168, in _initialize_kv_caches
-ERROR 09-05 02:04:37 [core.py:632]     get_kv_cache_config(vllm_config, kv_cache_spec_one_worker,
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 1084, in get_kv_cache_config
-ERROR 09-05 02:04:37 [core.py:632]     check_enough_kv_cache_memory(vllm_config, kv_cache_spec, available_memory)
-ERROR 09-05 02:04:37 [core.py:632]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 689, in check_enough_kv_cache_memory
-ERROR 09-05 02:04:37 [core.py:632]     raise ValueError(
-ERROR 09-05 02:04:37 [core.py:632] ValueError: To serve at least one request with the models's max seq len (131072), (16.00 GiB KV cache is needed, which is larger than the available KV cache memory (7.78 GiB). Based on the available memory, the estimated maximum model length is 63744. Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
-Process EngineCore_0:
-Traceback (most recent call last):
-  File "/opt/anaconda/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/opt/anaconda/lib/python3.12/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 636, in run_engine_core
-    raise e
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 623, in run_engine_core
-    engine_core = EngineCoreProc(*args, **kwargs)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 441, in __init__
-    super().__init__(vllm_config, executor_class, log_stats,
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 86, in __init__
-    self._initialize_kv_caches(vllm_config)
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 168, in _initialize_kv_caches
-    get_kv_cache_config(vllm_config, kv_cache_spec_one_worker,
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 1084, in get_kv_cache_config
-    check_enough_kv_cache_memory(vllm_config, kv_cache_spec, available_memory)
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 689, in check_enough_kv_cache_memory
-    raise ValueError(
-ValueError: To serve at least one request with the models's max seq len (131072), (16.00 GiB KV cache is needed, which is larger than the available KV cache memory (7.78 GiB). Based on the available memory, the estimated maximum model length is 63744. Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
-Traceback (most recent call last):
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 458, in <module>
-    main()
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 392, in main
-    llm = LLMInterface(model_name=args.model_name, gpu_id=args.gpu_id)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 284, in __init__
-    self.llm = LLM(
-               ^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 273, in __init__
-    self.llm_engine = LLMEngine.from_engine_args(
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/engine/llm_engine.py", line 497, in from_engine_args
-    return engine_cls.from_vllm_config(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 126, in from_vllm_config
-    return cls(vllm_config=vllm_config,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 103, in __init__
-    self.engine_core = EngineCoreClient.make_client(
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 77, in make_client
-    return SyncMPClient(vllm_config, executor_class, log_stats)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 514, in __init__
-    super().__init__(
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 408, in __init__
-    with launch_core_engines(vllm_config, executor_class,
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/contextlib.py", line 144, in __exit__
-    next(self.gen)
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 697, in launch_core_engines
-    wait_for_engine_startup(
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 750, in wait_for_engine_startup
-    raise RuntimeError("Engine core initialization failed. "
-RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
