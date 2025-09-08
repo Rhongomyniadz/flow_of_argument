@@ -85,13 +85,13 @@ def main():
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
-    covid_mask = topic_keys["keywords"].str.contains(r"\bcovid\b", case=False, regex=True, na=False)
-    covid_ids: List[int] = topic_keys.loc[covid_mask, "topic_id"].astype(int).tolist()
-    if not covid_ids:
+    mask = topic_keys["keywords"].str.contains(r"\bcovid\b", case=False, regex=True, na=False)
+    ids: List[int] = topic_keys.loc[mask, "topic_id"].astype(int).tolist()
+    if not ids:
         log.error("No COVID-related topics found in topic_keys.")
         return
-    log.warning("COVID-related topics found: %s", covid_ids)
-    topic_cols = [f"topic_{i}" for i in covid_ids]
+    log.warning("COVID-related topics found: %s", ids)
+    topic_cols = [f"topic_{i}" for i in ids]
 
     # 2) Read doc_topics (only URL + COVID columns); match URL if any col > threshold
     log.info("Reading doc_topics: %s", args.doc_topics)
