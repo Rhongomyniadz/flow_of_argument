@@ -277,16 +277,12 @@ class LLMInterface:
         repetition_penalty: float = 1.1,
         top_k: int = 30,
         max_tokens: int = 2048,
-        tensor_parallel_size: int = 1,
         download_dir: str = "/shared/4/models",
-        trust_remote_code: bool = True,
     ):
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
         self.llm = LLM(
             model=model_name,
-            tensor_parallel_size=tensor_parallel_size,
             gpu_memory_utilization=gpu_memory_utilization,
-            trust_remote_code=trust_remote_code,
             download_dir=download_dir,
         )
         try:
