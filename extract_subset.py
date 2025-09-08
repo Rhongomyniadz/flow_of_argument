@@ -55,14 +55,14 @@ def original_json_like(obj) -> Optional[Dict]:
 # ---------------- Main ----------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Write SPORC COVID-topic episodes and their turns (structure preserved).")
-    ap.add_argument("--topic_threshold", type=float, default=0.02, help="Min weight for 'COVID-topic' in doc_topics.")
-    ap.add_argument("--min_speakers", type=int, default=2, help="Minimum speakers per episode.")
-    ap.add_argument("--max_speakers", type=int, default=2, help="Maximum speakers per episode.")
+    ap = argparse.ArgumentParser(description="Write SPORC COVID-topic episodes and their turns")
+    ap.add_argument("--topic_threshold", type=float, default=0.02, help="Min weight for selected topic in doc_topics")
+    ap.add_argument("--min_speakers", type=int, default=2, help="Minimum speakers per episode")
+    ap.add_argument("--max_speakers", type=int, default=2, help="Maximum speakers per episode")
     ap.add_argument("--episodes_out", type=str, default="data/covid_episodes.jsonl.gz",
-                    help="Output gzipped JSONL file for episodes (original JSON).")
+                    help="Output gzipped JSONL file for episodes")
     ap.add_argument("--turns_out", type=str, default="data/covid_episodes_turn.jsonl.gz",
-                    help="Output gzipped JSONL file for turns (original JSON).")
+                    help="Output gzipped JSONL file for turns")
     ap.add_argument("--topic_keys", type=str,
                     default="/shared/3/projects/podcasts/SPoRC/topicModelling/100/transcripts/topic_keys.txt",
                     help="Path to topic_keys.txt")
@@ -79,18 +79,19 @@ def main():
     episodes_out.parent.mkdir(parents=True, exist_ok=True)
     turns_out.parent.mkdir(parents=True, exist_ok=True)
 
-    # 1) Find **all** COVID-related topic ids
+    # 1) Find related topic ids that meet the threshold
     topic_keys = pd.read_csv(
         args.topic_keys,
         sep="\t", header=None,
         names=["topic_id", "overall_prop", "keywords"],
     )
     mask = topic_keys["keywords"].str.contains(r"\bcovid\b", case=False, regex=True, na=False)
+    mask = mask & (topic_keys["overall_prop"] > args.topic_threshold)
     ids: List[int] = topic_keys.loc[mask, "topic_id"].astype(int).tolist()
     if not ids:
-        log.error("No COVID-related topics found in topic_keys.")
+        log.error("No related topics found in topic_keys.")
         return
-    log.warning("COVID-related topics found: %s", ids)
+    log.warning("Found %d topics meeting criteria. IDs: %s", len(ids), ids)
     topic_cols = [f"topic_{i}" for i in ids]
 
     # 2) Read doc_topics (only URL + COVID columns); match URL if any col > threshold
