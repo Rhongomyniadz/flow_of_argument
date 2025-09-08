@@ -433,7 +433,7 @@ def main():
         turns_by_mp3 = collect_needed_turns_from_local(need_turns_for, turns_path)
 
     # 4) Init LLM
-    llm = LLMInterface(model_name=args.model_name, gpu_id=args.gpu_id)
+    llm = LLMInterface()
 
     # 5) Process episodes and write per-episode outputs
     out_dir = Path("results/covid")
