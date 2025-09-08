@@ -269,7 +269,7 @@ class LLMInterface:
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-8B",
-        gpu_id: Optional[int] = None,
+        gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         temperature: float = 0.7,
         top_p: float = 0.8,

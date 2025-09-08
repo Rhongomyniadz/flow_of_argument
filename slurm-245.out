@@ -1,17 +1,0 @@
-2025-09-08 20:04:36.145081: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-09-08 20:04:36.275578: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-INFO 09-08 20:04:45 [__init__.py:235] Automatically detected platform cuda.
-2025-09-08 20:04:51,063 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
-2025-09-08 20:04:51,064 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
-scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 32it [00:00, 9235.38it/s]
-2025-09-08 20:04:51,069 INFO Reservoir sampled 30 episodes (out of 32 2-speaker matches)
-2025-09-08 20:04:51,069 INFO Back-filling turns for 30 sampled episodes from local turns file
-scan local turns: 0lines [00:00, ?lines/s]scan local turns: 859lines [00:00, 8581.13lines/s]scan local turns: 1851lines [00:00, 9367.00lines/s]scan local turns: 2811lines [00:00, 9471.59lines/s]scan local turns: 4339lines [00:00, 11763.11lines/s]scan local turns: 5799lines [00:00, 12784.43lines/s]scan local turns: 6791lines [00:00, 11680.60lines/s]
-Traceback (most recent call last):
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 502, in <module>
-    main()
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 436, in main
-    llm = LLMInterface(model_name=args.model_name, gpu_id=args.gpu_id)
-                                  ^^^^^^^^^^^^^^^
-AttributeError: 'Namespace' object has no attribute 'model_name'
