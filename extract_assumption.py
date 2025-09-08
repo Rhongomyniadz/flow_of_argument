@@ -366,8 +366,6 @@ def main():
     ap.add_argument("--turns_path", type=str, default="", help="Path to local turns jsonl(.gz). If empty, auto-discover.")
     ap.add_argument("--min_words", type=int, default=50, help="Min words in a turn to run LLM.")
     ap.add_argument("--sample_n", type=int, default=30, help="Max episodes to process (reservoir).")
-    ap.add_argument("--gpu_id", type=int, default=0, help="GPU id for vLLM.")
-    ap.add_argument("--model_name", type=str, default="deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
     args = ap.parse_args()
 
     # 1) Locate the local episodes & turns files
