@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
+from text_regularizer import TextRegularizer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("assumption-extract")
@@ -306,10 +307,18 @@ class LLMInterface:
                 top_k=top_k,
                 max_tokens=max_tokens,
             )
+        self.regularizer = TextRegularizer()
 
-    def generate_batch(self, prompts: List[str]) -> List[str]:
+    def generate_batch(self, prompts: List[str], original_texts: List[str]) -> List[str]:
         out = self.llm.generate(prompts, self.params)
-        return [o.outputs[0].text.strip() for o in out]
+        results = []
+        
+        for output, orig_text in zip(out, original_texts):
+            raw_assumptions = normalize_output(output.outputs[0].text.strip())
+            regularized = self.regularizer.regularize_assumptions(orig_text, raw_assumptions)
+            results.append(regularized)
+            
+        return results
 
 
 # -------------------- Main --------------------
@@ -434,7 +443,7 @@ Now analyze Turn #{idx}":
             log.warning("No qualifying turns (min_words=%d) for: %s", args.min_words, title)
             continue
 
-        outputs = llm.generate_batch(prompts)
+        outputs = llm.generate_batch(prompts, [text for text, _, _, _ in meta])
         records = []
         for (text, speaker, name, role), raw_out in zip(meta, outputs):
             records.append({
