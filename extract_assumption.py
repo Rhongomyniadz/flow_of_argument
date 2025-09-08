@@ -310,6 +310,43 @@ class LLMInterface:
         self.regularizer = TextRegularizer()
 
     def generate_batch(self, prompts: List[str], original_texts: List[str]) -> List[str]:
+        prompts = []
+        for text in original_texts:
+            prompt = f"""
+SYSTEM:
+You are an expert in analyzing conversations and identifying implicit assumptions in speech. Your task is to uncover the underlying assumptions that speakers make in their statements.
+
+TASK:
+Analyze the following conversation turn and identify the key underlying assumptions. Focus on:
+1. Unstated beliefs the speaker holds
+2. Implicit knowledge they assume their audience has
+3. Hidden premises that support their arguments
+4. Contextual assumptions about their environment or situation
+
+FORMAT:
+Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
+Each assumption should be:
+- A complete, well-formed sentence
+- Different from but related to the original text
+- Focused on one specific point
+- Not a mere restatement of what was explicitly said
+
+EXAMPLE:
+Turn: "We need to move the meeting online since everyone's working remotely now."
+{
+  "key_points_assumed": [
+    "In-person meetings are no longer feasible or safe.",
+    "All team members have access to reliable internet connectivity.",
+    "The team is familiar with virtual meeting technology.",
+    "Remote work will continue for the foreseeable future."
+  ]
+}
+
+Now analyze this turn:
+{text}
+"""
+            prompts.append(prompt)
+
         out = self.llm.generate(prompts, self.params)
         results = []
         
