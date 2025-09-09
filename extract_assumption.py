@@ -282,7 +282,6 @@ class LLMInterface:
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
         self.llm = LLM(
             model=model_name,
-            dtype="float16",
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
         )
