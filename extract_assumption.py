@@ -11,7 +11,6 @@ from urllib.parse import urlparse
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
-from text_regularizer import TextRegularizer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("assumption-extract")
@@ -277,12 +276,11 @@ class LLMInterface:
         repetition_penalty: float = 1.1,
         top_k: int = 30,
         max_tokens: int = 2048,
-        download_dir: str = "/shared/4/models",
+        download_dir: str = "/shared/4/models"
     ):
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
         self.llm = LLM(
             model=model_name,
-            gpu_id=gpu_id,
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
         )
@@ -304,55 +302,10 @@ class LLMInterface:
                 top_k=top_k,
                 max_tokens=max_tokens,
             )
-        self.regularizer = TextRegularizer()
 
-    def generate_batch(self, prompts: List[str], original_texts: List[str]) -> List[str]:
-        prompts = []
-        for text in original_texts:
-            prompt = f"""
-SYSTEM:
-You are an expert in analyzing conversations and identifying implicit assumptions in speech. Your task is to uncover the underlying assumptions that speakers make in their statements.
-
-TASK:
-Analyze the following conversation turn and identify the key underlying assumptions. Focus on:
-1. Unstated beliefs the speaker holds
-2. Implicit knowledge they assume their audience has
-3. Hidden premises that support their arguments
-4. Contextual assumptions about their environment or situation
-
-FORMAT:
-Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
-Each assumption should be:
-- A complete, well-formed sentence
-- Different from but related to the original text
-- Focused on one specific point
-- Not a mere restatement of what was explicitly said
-
-EXAMPLE:
-Turn: "We need to move the meeting online since everyone's working remotely now."
-{
-  "key_points_assumed": [
-    "In-person meetings are no longer feasible or safe.",
-    "All team members have access to reliable internet connectivity.",
-    "The team is familiar with virtual meeting technology.",
-    "Remote work will continue for the foreseeable future."
-  ]
-}
-
-Now analyze this turn:
-{text}
-"""
-            prompts.append(prompt)
-
+    def generate_batch(self, prompts: List[str]) -> List[str]:
         out = self.llm.generate(prompts, self.params)
-        results = []
-        
-        for output, orig_text in zip(out, original_texts):
-            raw_assumptions = normalize_output(output.outputs[0].text.strip())
-            regularized = self.regularizer.regularize_assumptions(orig_text, raw_assumptions)
-            results.append(regularized)
-            
-        return results
+        return [o.outputs[0].text.strip() for o in out]
 
 
 # -------------------- Main --------------------
@@ -363,6 +316,7 @@ def main():
     ap.add_argument("--turns_path", type=str, default="", help="Path to local turns jsonl(.gz). If empty, auto-discover.")
     ap.add_argument("--min_words", type=int, default=50, help="Min words in a turn to run LLM.")
     ap.add_argument("--sample_n", type=int, default=30, help="Max episodes to process (reservoir).")
+    ap.add_argument("--gpu_id", type=int, default=0, help="GPU id for vLLM.")
     args = ap.parse_args()
 
     # 1) Locate the local episodes & turns files
@@ -430,7 +384,7 @@ def main():
         turns_by_mp3 = collect_needed_turns_from_local(need_turns_for, turns_path)
 
     # 4) Init LLM
-    llm = LLMInterface()
+    llm = LLMInterface(gpu_id=args.gpu_id)
 
     # 5) Process episodes and write per-episode outputs
     out_dir = Path("results/covid")
@@ -454,15 +408,36 @@ def main():
             role = get_role(t).upper()
             prompts.append(f"""
 SYSTEM:
-You are an expert podcast conversation analyst.
+You are an expert in analyzing conversations and identifying implicit assumptions in speech. Your task is to uncover the underlying assumptions that speakers make in their statements.
 
 TASK:
-Given a single speaker turn, extract the "key_points_assumed".
+Analyze the following conversation turn and identify the key underlying assumptions. Focus on:
+1. Unstated beliefs the speaker holds
+2. Implicit knowledge they assume their audience has
+3. Hidden premises that support their arguments
+4. Contextual assumptions about their environment or situation
 
-OUTPUT a JSON object with exactly one key "key_points_assumed" mapping to a list of strings.
+FORMAT:
+Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
+Each assumption should be:
+- A complete, well-formed sentence
+- Different from but related to the original text
+- Focused on one specific point
+- Not a mere restatement of what was explicitly said
 
-Now analyze Turn #{idx}":
-{role}: {text.strip()}
+EXAMPLE:
+Turn: "We need to move the meeting online since everyone's working remotely now."
+{
+  "key_points_assumed": [
+    "In-person meetings are no longer feasible or safe.",
+    "All team members have access to reliable internet connectivity.",
+    "The team is familiar with virtual meeting technology.",
+    "Remote work will continue for the foreseeable future."
+  ]
+}
+
+Now analyze this turn:
+{text}
 """)
             meta.append((
                 text,
@@ -475,7 +450,7 @@ Now analyze Turn #{idx}":
             log.warning("No qualifying turns (min_words=%d) for: %s", args.min_words, title)
             continue
 
-        outputs = llm.generate_batch(prompts, [text for text, _, _, _ in meta])
+        outputs = llm.generate_batch(prompts)
         records = []
         for (text, speaker, name, role), raw_out in zip(meta, outputs):
             records.append({
