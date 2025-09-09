@@ -16,21 +16,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger("assumption-extract")
 
 
-# -------------------- URL helpers --------------------
-
-def canonical_to_raw(canonical_url: str) -> str:
-    """Map an mp3 URL to the 'raw' url format used in indices."""
-    if not canonical_url:
-        return ""
-    p = urlparse(canonical_url)
-    domain = p.netloc
-    scheme = p.scheme
-    path = (p.path or "").lstrip("/")
-    collapsed = path.replace("/", "").replace("-", "")
-    host_noslash = f"{scheme}{domain}"
-    return f"/{domain}/o3/{host_noslash}{collapsed}MERGED" if domain and scheme else ""
-
-
 # -------------------- Episode & turn parsing --------------------
 
 def get_text(turn: Dict) -> str:
@@ -111,16 +96,65 @@ def has_two_speakers_meta(ep: Dict) -> bool:
     return False
 
 def normalize_output(raw: str) -> List[str]:
-    """Extract list from model output that contains a JSON object with 'key_points_assumed'."""
-    try:
-        start = raw.find("{"); end = raw.rfind("}")
-        if start == -1 or end == -1:
-            return []
-        obj = json.loads(raw[start:end + 1])
-        vals = obj.get("key_points_assumed", [])
-        return [s for s in vals if isinstance(s, str)]
-    except Exception:
+    """
+    Robustly extract a list of strings from LLM output that should contain a JSON
+    object with key "key_points_assumed". Tolerates code fences, extra prose,
+    single quotes, trailing commas, and falls back to bullet-list extraction.
+    """
+    import json as _json, re as _re, ast as _ast
+
+    if not raw:
         return []
+
+    s = (raw or "").strip()
+
+    # 1) If the model wrapped JSON in code fences, strip them.
+    m = _re.search(r"```(?:json)?\s*(\{.*?\})\s*```", s, flags=_re.S)
+    if m:
+        s = m.group(1).strip()
+
+    # 2) Try strict JSON first.
+    try:
+        obj = _json.loads(s)
+        vals = obj.get("key_points_assumed", [])
+        return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
+    except Exception:
+        pass
+
+    # 3) Try to locate the first {...} block and parse that.
+    a, b = s.find("{"), s.rfind("}")
+    if 0 <= a < b:
+        candidate = s[a:b+1].strip()
+        # 3a) Try JSON again.
+        try:
+            obj = _json.loads(candidate)
+            vals = obj.get("key_points_assumed", [])
+            return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
+        except Exception:
+            pass
+        # 3b) Last-chance: tolerate single quotes / trailing commas via ast.literal_eval.
+        try:
+            obj = _ast.literal_eval(candidate)
+            if isinstance(obj, dict):
+                vals = obj.get("key_points_assumed", [])
+                return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
+        except Exception:
+            pass
+
+    # 4) Heuristic fallback: grab bullet lines and turn them into assumptions.
+    bullets = re.findall(r"^\s*[-*]\s+(.*\S)\s*$", s, flags=re.M)
+    if bullets:
+        out = []
+        for b in bullets:
+            x = b.strip()
+            if not x.endswith("."):
+                x += "."
+            out.append(x)
+            if len(out) >= 8:
+                break
+        return out
+
+    return []
 
 def count_words(text: str) -> int:
     import re
@@ -190,22 +224,25 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
                                     max_per_episode: Optional[int] = None) -> Dict[str, List[Dict]]:
     """
     Stream the local turns JSONL(.gz) and collect turns only for the target episodes.
-    Matching is by mp3_url OR canonical raw url found in each turn record.
-    Returns: dict mp3_url -> list of turn dicts (min fields text/speaker/name/role).
+
+    IMPORTANT: We assume the subset-generator has *already* canonicalized and matched on URL
+    (e.g., by mapping to SPoRC's raw URL format during selection), and that the original JSON
+    written to `covid_episodes_turn.jsonl[.gz]` preserves a canonical per-episode URL field
+    identical to the episode's mp3_url we read from `covid_episodes.jsonl[.gz]`.
+
+    Therefore, matching is done by *direct equality* against the episode's mp3_url across
+    common candidate URL fields in the turn record. We do NOT attempt any further canonicalization.
     """
     opener = gzip.open if turns_path.suffix == ".gz" else open
 
-    # Precompute acceptable keys for quick matching
-    keys_by_mp3 = {}
-    for mp3 in mp3_urls:
-        keys_by_mp3[mp3] = {mp3, canonical_to_raw(mp3)}
+    # Direct-equality match set per episode
+    keys_by_mp3 = {mp3: {mp3} for mp3 in mp3_urls}
 
     out: Dict[str, List[Dict]] = {mp3: [] for mp3 in mp3_urls}
     hits_left = set(mp3_urls)
 
     candidate_keys = (
-        "mp3_url", "audio_url", "audio", "episode_mp3", "episode_url", "url",
-        "canonical_url", "raw_url",
+        "mp3_url", "audio_url", "audio", "episode_mp3", "episode_url", "url"
     )
 
     with opener(turns_path, "rt", encoding="utf-8") as f:
@@ -220,7 +257,7 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
             for k in candidate_keys:
                 v = rec.get(k)
                 if isinstance(v, str) and v:
-                    cand = v
+                    cand = v.strip()
                     break
 
             if not cand:
@@ -229,10 +266,6 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
             matched_mp3 = None
             for mp3, keys in keys_by_mp3.items():
                 if cand in keys:
-                    matched_mp3 = mp3
-                    break
-                # Try canonicalizing if cand looks like an mp3 url
-                if cand.startswith("http") and canonical_to_raw(cand) in keys:
                     matched_mp3 = mp3
                     break
 
@@ -274,7 +307,6 @@ class LLMInterface:
         top_p: float = 0.8,
         min_p: float = 0.1,
         repetition_penalty: float = 1.1,
-        top_k: int = 30,
         max_tokens: int = 2048,
         download_dir: str = "/shared/4/models"
     ):
@@ -284,24 +316,13 @@ class LLMInterface:
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
         )
-        try:
-            self.params = SamplingParams(
-                temperature=temperature,
-                top_p=top_p,
-                min_p=min_p,
-                repetition_penalty=repetition_penalty,
-                top_k=top_k,
-                max_tokens=max_tokens,
-            )
-        except TypeError:
-            log.warning("vLLM SamplingParams has no `min_p`; proceeding without it.")
-            self.params = SamplingParams(
-                temperature=temperature,
-                top_p=top_p,
-                repetition_penalty=repetition_penalty,
-                top_k=top_k,
-                max_tokens=max_tokens,
-            )
+        self.params = SamplingParams(
+            temperature=temperature,
+            top_p=top_p,
+            min_p=min_p,
+            repetition_penalty=repetition_penalty,
+            max_tokens=max_tokens,
+        )
 
     def generate_batch(self, prompts: List[str]) -> List[str]:
         out = self.llm.generate(prompts, self.params)
@@ -389,6 +410,9 @@ def main():
     # 5) Process episodes and write per-episode outputs
     out_dir = Path("results/covid")
     out_dir.mkdir(parents=True, exist_ok=True)
+    
+    raw_out_dir = Path("results/raw/covid")
+    raw_out_dir.mkdir(parents=True, exist_ok=True)
 
     for ep, tlist, mp3 in tqdm(episodes_buffer, desc="processing eps"):
         title = episode_title(ep)
@@ -441,6 +465,7 @@ Now analyze this turn:
 
         outputs = llm.generate_batch(prompts)
         records = []
+        raw_records = []
         for (text, speaker, name, role), raw_out in zip(meta, outputs):
             records.append({
                 "turn_text": text,
@@ -449,9 +474,20 @@ Now analyze this turn:
                 "inferred_speaker_role": role if role else "NO_INFERRED_ROLE",
                 "assumptions": normalize_output(raw_out),
             })
+            
+            raw_records.append({
+                "turn_text": text,
+                "speaker_id": speaker,
+                "inferred_speaker_name": name,
+                "inferred_speaker_role": role if role else "NO_INFERRED_ROLE",
+                "raw_output": raw_out,
+            })
 
         with open(out_dir / f"{label}.json", "w", encoding="utf-8") as f:
             json.dump(records, f, indent=2, ensure_ascii=False)
+            
+        with open(raw_out_dir / f"{label}.json", "w", encoding="utf-8") as f:
+            json.dump(raw_records, f, indent=2, ensure_ascii=False)
 
         del prompts, meta, outputs, records
         gc.collect()
