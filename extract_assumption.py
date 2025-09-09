@@ -425,16 +425,6 @@ Each assumption should be:
 - Focused on one specific point
 - Not a mere restatement of what was explicitly said
 
-EXAMPLE:
-Turn: "We need to move the meeting online since everyone's working remotely now."
-
-"key_points_assumed": [
-    "In-person meetings are no longer feasible or safe.",
-    "All team members have access to reliable internet connectivity.",
-    "The team is familiar with virtual meeting technology.",
-    "Remote work will continue for the foreseeable future."
-]
-
 Now analyze this turn:
 {text}
 """)
