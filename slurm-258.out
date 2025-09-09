@@ -1,23 +1,0 @@
-2025-09-09 00:37:22.774689: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-09-09 00:37:22.911628: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-INFO 09-09 00:37:31 [__init__.py:235] Automatically detected platform cuda.
-2025-09-09 00:37:37,314 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
-2025-09-09 00:37:37,315 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
-scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 32it [00:00, 9773.37it/s]
-2025-09-09 00:37:37,319 INFO Reservoir sampled 30 episodes (out of 32 2-speaker matches)
-2025-09-09 00:37:37,320 INFO Back-filling turns for 30 sampled episodes from local turns file
-scan local turns: 0lines [00:00, ?lines/s]scan local turns: 1357lines [00:00, 13561.77lines/s]scan local turns: 2714lines [00:00, 11180.86lines/s]scan local turns: 3949lines [00:00, 11653.70lines/s]scan local turns: 5134lines [00:00, 10095.71lines/s]scan local turns: 6177lines [00:00, 10087.24lines/s]scan local turns: 6791lines [00:00, 10594.36lines/s]
-Traceback (most recent call last):
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 499, in <module>
-    main()
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 433, in main
-    llm = LLMInterface()
-          ^^^^^^^^^^^^^^
-  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 283, in __init__
-    self.llm = LLM(
-               ^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 243, in __init__
-    engine_args = EngineArgs(
-                  ^^^^^^^^^^^
-TypeError: EngineArgs.__init__() got an unexpected keyword argument 'gpu_id'
