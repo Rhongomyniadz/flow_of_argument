@@ -260,8 +260,7 @@ def main():
     reservoir: List[Dict] = []
     total_seen = 0
     all_sampled_mp3: List[str] = []
-    episodes_buffer: List[Tuple[Dict, str]] = []
-    # tuple: (episode_json, turns_if_present, mp3_url)
+    episodes_buffer: List[Tuple[Dict, str]] = []  # tuple: (episode_json, mp3_url)
 
     for ep in tqdm(stream_jsonl(episodes_path), desc="scan episodes jsonl"):
         mp3 = ep.get("mp3_url")
@@ -271,13 +270,13 @@ def main():
         total_seen += 1
         if len(reservoir) < args.sample_n:
             reservoir.append(ep)
-            episodes_buffer.append((ep, mp3))
+            episodes_buffer.append((ep, mp3))  # Keep only episode and mp3_url
             all_sampled_mp3.append(mp3)
         else:
             j = random.randint(0, total_seen - 1)
             if j < args.sample_n:
                 reservoir[j] = ep
-                episodes_buffer[j] = (ep, mp3)
+                episodes_buffer[j] = (ep, mp3)  # Keep only episode and mp3_url
                 all_sampled_mp3[j] = mp3
 
     log.info("Reservoir sampled %d episodes (out of %d 2-speaker matches)", len(reservoir), total_seen)
@@ -286,7 +285,7 @@ def main():
         return
 
     # 3) Back-fill turns for sampled episodes that lack embedded turns (from local turns file)
-    need_turns_for = {mp3 for (_, tlist, mp3) in episodes_buffer if tlist is None}
+    need_turns_for = {mp3 for (_, mp3) in episodes_buffer}
     turns_by_mp3: Dict[str, List[Dict]] = {}
     if need_turns_for:
         log.info("Back-filling turns for %d sampled episodes from local turns file", len(need_turns_for))
@@ -302,12 +301,12 @@ def main():
     raw_out_dir = Path("results/raw/covid")
     raw_out_dir.mkdir(parents=True, exist_ok=True)
 
-    for ep, tlist, mp3 in tqdm(episodes_buffer, desc="processing eps"):
+    for ep, mp3 in tqdm(episodes_buffer, desc="processing eps"):
         title = ep.get("title")
         label = re.sub(r"[^\w\-]", "_", title)
 
-        if tlist is None:
-            tlist = turns_by_mp3.get(mp3, [])
+        # Get turns from collected turns
+        tlist = turns_by_mp3.get(mp3, [])
         if not tlist:
             log.warning("No turns found for sampled episode: %s", title)
             continue
