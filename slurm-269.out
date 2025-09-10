@@ -1,0 +1,17 @@
+2025-09-10 15:46:09.131584: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-09-10 15:46:09.263381: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+INFO 09-10 15:46:18 [__init__.py:235] Automatically detected platform cuda.
+2025-09-10 15:46:20,368 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
+2025-09-10 15:46:20,369 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
+scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 0it [00:00, ?it/s]
+Traceback (most recent call last):
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 381, in <module>
+    main()
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 260, in main
+    for ep in tqdm(stream_jsonl(episodes_path), desc="scan episodes jsonl"):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda/lib/python3.12/site-packages/tqdm/std.py", line 1181, in __iter__
+    for obj in iterable:
+               ^^^^^^^^
+TypeError: 'NoneType' object is not iterable
