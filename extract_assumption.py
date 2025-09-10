@@ -374,9 +374,11 @@ Each assumption should be:
 Now analyze this turn:
 {text}
 """)
+            id_raw = t.get("speaker")
+            speaker_id = "-".join(str(x) for x in id_raw)
             meta.append((
                 text,
-                t.get("speaker"),
+                speaker_id,
                 t.get("inferred_speaker_name"),
                 t.get("inferred_speaker_role"),
             ))
