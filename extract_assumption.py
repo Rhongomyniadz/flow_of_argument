@@ -1,13 +1,14 @@
 import os
+import ast
 import re
 import gc
 import json
 import gzip
 import argparse
+import random
 import logging
 from pathlib import Path
 from typing import List, Dict, Iterable, Optional, Tuple, Set
-from urllib.parse import urlparse
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
@@ -17,91 +18,12 @@ log = logging.getLogger("assumption-extract")
 
 
 # -------------------- Episode & turn parsing --------------------
-
-def get_text(turn: Dict) -> str:
-    return (turn.get("text") or turn.get("turn_text") or "").strip()
-
-def get_role(turn: Dict) -> str:
-    role = (turn.get("inferred_speaker_role") or turn.get("role") or "").strip()
-    return role if role else "SPEAKER"
-
-def get_name(turn: Dict) -> str:
-    name = (turn.get("inferred_speaker_name") or turn.get("speaker_name") or "").strip()
-    return name if name else "NO_INFERRED_SPEAKER"
-
-def get_speaker_id(turn: Dict) -> Optional[str]:
-    sid = turn.get("speaker_id", None)
-    if sid is None:
-        sid = turn.get("speaker", None)
-    if isinstance(sid, list):
-        return "-".join(str(x) for x in sid)
-    if isinstance(sid, dict):
-        return str(sid.get("id") or sid.get("speaker_id") or "")
-    return str(sid) if sid is not None else None
-
-def turns_from_episode(ep: Dict) -> List[Dict]:
-    # Common keys if an episode embeds turns (often it won't)
-    for k in ("turns", "speaker_turns", "segments"):
-        v = ep.get(k)
-        if isinstance(v, list):
-            return v
-    trans = ep.get("transcript") or ep.get("content") or {}
-    if isinstance(trans, dict):
-        for k in ("turns", "speaker_turns", "segments"):
-            v = trans.get(k)
-            if isinstance(v, list):
-                return v
-    return []
-
-def episode_title(ep: Dict) -> str:
-    for k in ("title", "episode_title", "name"):
-        v = ep.get(k)
-        if isinstance(v, str) and v.strip():
-            return v
-    return "untitled_episode"
-
-def episode_mp3(ep: Dict) -> str:
-    # Prefer explicit mp3_url if present
-    for k in ("mp3_url", "audio_url", "audio", "url", "audio_url_http"):
-        v = ep.get(k)
-        if isinstance(v, str) and v.startswith("http"):
-            return v
-    return ""
-
-def has_two_speakers_meta(ep: Dict) -> bool:
-    # Strong signals
-    n_main = ep.get("num_main_speakers")
-    if isinstance(n_main, (int, float)) and int(n_main) == 2:
-        return True
-
-    q = ep.get("quality_indicators", {})
-    if isinstance(q, dict):
-        total_labels = q.get("total_speaker_labels")
-        if isinstance(total_labels, (int, float)) and int(total_labels) == 2:
-            return True
-
-    # Hosts + guests
-    nh = ep.get("num_hosts")
-    ng = ep.get("num_guests")
-    if isinstance(nh, (int, float)) and isinstance(ng, (int, float)):
-        if int(nh) + int(ng) == 2:
-            return True
-
-    # Fallback list fields
-    for k in ("speakers", "speaker_ids"):
-        v = ep.get(k)
-        if isinstance(v, list) and len(v) == 2:
-            return True
-
-    return False
-
 def normalize_output(raw: str) -> List[str]:
     """
     Robustly extract a list of strings from LLM output that should contain a JSON
     object with key "key_points_assumed". Tolerates code fences, extra prose,
     single quotes, trailing commas, and falls back to bullet-list extraction.
     """
-    import json as _json, re as _re, ast as _ast
 
     if not raw:
         return []
@@ -109,13 +31,13 @@ def normalize_output(raw: str) -> List[str]:
     s = (raw or "").strip()
 
     # 1) If the model wrapped JSON in code fences, strip them.
-    m = _re.search(r"```(?:json)?\s*(\{.*?\})\s*```", s, flags=_re.S)
+    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", s, flags=re.S)
     if m:
         s = m.group(1).strip()
 
     # 2) Try strict JSON first.
     try:
-        obj = _json.loads(s)
+        obj = json.loads(s)
         vals = obj.get("key_points_assumed", [])
         return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
     except Exception:
@@ -127,14 +49,14 @@ def normalize_output(raw: str) -> List[str]:
         candidate = s[a:b+1].strip()
         # 3a) Try JSON again.
         try:
-            obj = _json.loads(candidate)
+            obj = json.loads(candidate)
             vals = obj.get("key_points_assumed", [])
             return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
         except Exception:
             pass
         # 3b) Last-chance: tolerate single quotes / trailing commas via ast.literal_eval.
         try:
-            obj = _ast.literal_eval(candidate)
+            obj = ast.literal_eval(candidate)
             if isinstance(obj, dict):
                 vals = obj.get("key_points_assumed", [])
                 return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
@@ -157,12 +79,10 @@ def normalize_output(raw: str) -> List[str]:
     return []
 
 def count_words(text: str) -> int:
-    import re
     return len(re.findall(r"\w+", text or ""))
 
 
 # -------------------- Local streamers & path discovery --------------------
-
 def stream_jsonl(path: Path) -> Iterable[Dict]:
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "rt", encoding="utf-8") as f:
@@ -174,12 +94,6 @@ def stream_jsonl(path: Path) -> Iterable[Dict]:
                 obj = json.loads(line)
             except Exception:
                 continue
-            if isinstance(obj, dict):
-                yield obj
-            elif isinstance(obj, list):
-                for o in obj:
-                    if isinstance(o, dict):
-                        yield o
 
 def find_episodes_path(cli_path: Optional[str]) -> Path:
     if cli_path:
@@ -190,9 +104,7 @@ def find_episodes_path(cli_path: Optional[str]) -> Path:
     # auto-discover under CWD
     candidates = [
         Path("data/covid_episodes.jsonl.gz"),
-        Path("results/covid_episodes.jsonl.gz"),
-        Path("data/covid_episodes.jsonl"),
-        Path("results/covid_episodes.jsonl"),
+        Path("data/covid_episodes.jsonl")
     ]
     for c in candidates:
         if c.exists():
@@ -208,9 +120,7 @@ def find_turns_path(cli_path: Optional[str]) -> Path:
         raise FileNotFoundError(f"Turns file not found: {p}")
     candidates = [
         Path("data/covid_episodes_turn.jsonl.gz"),
-        Path("results/covid_episodes_turn.jsonl.gz"),
-        Path("data/covid_episodes_turn.jsonl"),
-        Path("results/covid_episodes_turn.jsonl"),
+        Path("data/covid_episodes_turn.jsonl")
     ]
     for c in candidates:
         if c.exists():
@@ -241,10 +151,6 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
     out: Dict[str, List[Dict]] = {mp3: [] for mp3 in mp3_urls}
     hits_left = set(mp3_urls)
 
-    candidate_keys = (
-        "mp3_url", "audio_url", "audio", "episode_mp3", "episode_url", "url"
-    )
-
     with opener(turns_path, "rt", encoding="utf-8") as f:
         for line in tqdm(f, desc="scan local turns", unit="lines"):
             try:
@@ -252,14 +158,7 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
             except Exception:
                 continue
 
-            # candidate episode identifiers inside a turn record
-            cand = ""
-            for k in candidate_keys:
-                v = rec.get(k)
-                if isinstance(v, str) and v:
-                    cand = v.strip()
-                    break
-
+            cand = rec.get("mp3_url")
             if not cand:
                 continue
 
@@ -359,37 +258,20 @@ def main():
     # tuple: (episode_json, turns_if_present, mp3_url)
 
     for ep in tqdm(stream_jsonl(episodes_path), desc="scan episodes jsonl"):
-        mp3 = episode_mp3(ep)
+        mp3 = ep.get("mp3_url")
         if not mp3:
-            continue
-
-        turns = turns_from_episode(ep)
-        if turns:
-            # deduce speakers directly
-            sids = []
-            for t in turns:
-                sid = get_speaker_id(t) or get_name(t)
-                if sid and sid not in sids:
-                    sids.append(sid)
-            is_two = len(sids) == 2
-        else:
-            # fall back to metadata-based check
-            is_two = has_two_speakers_meta(ep)
-
-        if not is_two:
             continue
 
         total_seen += 1
         if len(reservoir) < args.sample_n:
             reservoir.append(ep)
-            episodes_buffer.append((ep, turns if turns else None, mp3))
+            episodes_buffer.append((ep, mp3))
             all_sampled_mp3.append(mp3)
         else:
-            import random
             j = random.randint(0, total_seen - 1)
             if j < args.sample_n:
                 reservoir[j] = ep
-                episodes_buffer[j] = (ep, turns if turns else None, mp3)
+                episodes_buffer[j] = (ep, mp3)
                 all_sampled_mp3[j] = mp3
 
     log.info("Reservoir sampled %d episodes (out of %d 2-speaker matches)", len(reservoir), total_seen)
@@ -415,7 +297,7 @@ def main():
     raw_out_dir.mkdir(parents=True, exist_ok=True)
 
     for ep, tlist, mp3 in tqdm(episodes_buffer, desc="processing eps"):
-        title = episode_title(ep)
+        title = ep.get("title")
         label = re.sub(r"[^\w\-]", "_", title)
 
         if tlist is None:
@@ -426,10 +308,10 @@ def main():
 
         prompts, meta = [], []
         for idx, t in enumerate(tqdm(tlist, desc=f"turns {label}", leave=False)):
-            text = get_text(t)
+            text = t.get("text").strip()
             if count_words(text) < args.min_words:
                 continue
-            role = get_role(t).upper()
+            role = t.get("inferred_speaker_role").strip().upper()
             prompts.append(f"""
 SYSTEM:
 You are an expert in analyzing conversations and identifying implicit assumptions in speech. Your task is to uncover the underlying assumptions that speakers make in their statements.
@@ -454,8 +336,8 @@ Now analyze this turn:
 """)
             meta.append((
                 text,
-                get_speaker_id(t),
-                get_name(t),
+                t.get("speaker"),
+                t.get("inferred_speaker_name"),
                 t.get("inferred_speaker_role"),
             ))
 

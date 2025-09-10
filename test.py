@@ -2,9 +2,9 @@ import gzip
 import json
 
 cluster_speaker_turn_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/speakerTurnData.jsonl.gz'
-local_speaker_turn_path = 'data/speakerTurnData.jsonl.gz'
+local_speaker_turn_path = 'data/covid_episodes_turn.jsonl.gz'
 cluster_episode_level_path = '/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/episodeLevelData.jsonl.gz'
-local_episode_level_path = 'data/episodeLevelData.jsonl.gz'
+local_episode_level_path = 'data/covid_episodes.jsonl.gz'
 
 def print_sample(file_path):
     """
@@ -24,11 +24,4 @@ def print_sample(file_path):
             print(f"Failed to parse JSON line: {e}")
             
             
-print_sample(cluster_speaker_turn_path)
-
-
-from itertools import islice
-
-with open("doc_topics.txt", "r", encoding="utf-8") as f:
-    for line in islice(f, 5):
-        print(line.rstrip())
+print_sample(local_episode_level_path)
