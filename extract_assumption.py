@@ -260,7 +260,7 @@ def main():
     reservoir: List[Dict] = []
     total_seen = 0
     all_sampled_mp3: List[str] = []
-    episodes_buffer: List[Tuple[Dict, Optional[List[Dict]], str]] = []
+    episodes_buffer: List[Tuple[Dict, str]] = []
     # tuple: (episode_json, turns_if_present, mp3_url)
 
     for ep in tqdm(stream_jsonl(episodes_path), desc="scan episodes jsonl"):
