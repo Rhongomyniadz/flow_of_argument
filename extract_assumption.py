@@ -94,6 +94,12 @@ def stream_jsonl(path: Path) -> Iterable[Dict]:
                 obj = json.loads(line)
             except Exception:
                 continue
+            if isinstance(obj, dict):
+                yield obj
+            elif isinstance(obj, list):
+                for o in obj:
+                    if isinstance(o, dict):
+                        yield o
 
 def find_episodes_path(cli_path: Optional[str]) -> Path:
     if cli_path:
