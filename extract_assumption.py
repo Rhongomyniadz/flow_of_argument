@@ -20,60 +20,95 @@ log = logging.getLogger("assumption-extract")
 # -------------------- Episode & turn parsing --------------------
 def normalize_output(raw: str) -> List[str]:
     """
-    Robustly extract a list of strings from LLM output that should contain a JSON
-    object with key "key_points_assumed". Tolerates code fences, extra prose,
-    single quotes, trailing commas, and falls back to bullet-list extraction.
+    Extract ["key_points_assumed", ...] from messy LLM output.
+    Handles prose before/after JSON, multiple JSON blocks, code fences,
+    and a stray trailing '}'.
     """
 
     if not raw:
         return []
 
-    s = (raw or "").strip()
+    s = raw.strip()
 
-    # 1) If the model wrapped JSON in code fences, strip them.
+    # Strip code fences if present
     m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", s, flags=re.S)
     if m:
         s = m.group(1).strip()
 
-    # 2) Try strict JSON first.
-    try:
-        obj = json.loads(s)
+    def _from_obj(obj) -> List[str]:
         vals = obj.get("key_points_assumed", [])
         return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
+
+    # Try strict JSON on the whole thing first
+    try:
+        obj = json.loads(s)
+        out = _from_obj(obj)
+        if out:
+            return out
     except Exception:
         pass
 
-    # 3) Try to locate the first {...} block and parse that.
-    a, b = s.find("{"), s.rfind("}")
-    if 0 <= a < b:
-        candidate = s[a:b+1].strip()
-        # 3a) Try JSON again.
-        try:
-            obj = json.loads(candidate)
-            vals = obj.get("key_points_assumed", [])
-            return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
-        except Exception:
-            pass
-        # 3b) Last-chance: tolerate single quotes / trailing commas via ast.literal_eval.
-        try:
-            obj = ast.literal_eval(candidate)
-            if isinstance(obj, dict):
-                vals = obj.get("key_points_assumed", [])
-                return [v.strip() for v in vals if isinstance(v, str) and v.strip()]
-        except Exception:
-            pass
+    # Heuristic candidates: after '####' and after 'Answer:'
+    candidates: List[str] = []
+    if "####" in s:
+        candidates.extend([seg.strip() for seg in s.split("####") if seg.strip()])
 
-    # 4) Heuristic fallback: grab bullet lines and turn them into assumptions.
+    ans_idx = s.lower().find("answer:")
+    if ans_idx != -1:
+        candidates.append(s[ans_idx + len("answer:"):].strip())
+
+    # Always include the full string as a candidate
+    candidates.append(s)
+
+    # Balanced-brace scanner to collect all {...} blocks
+    def _json_blocks(text: str) -> List[str]:
+        blocks, stack, start = [], 0, -1
+        for i, ch in enumerate(text):
+            if ch == "{":
+                if stack == 0:
+                    start = i
+                stack += 1
+            elif ch == "}":
+                if stack > 0:
+                    stack -= 1
+                    if stack == 0 and start != -1:
+                        blocks.append(text[start:i+1])
+                        start = -1
+        return blocks
+
+    for cand in candidates:
+        for blk in _json_blocks(cand):
+            # Prefer blocks that mention the key
+            if '"key_points_assumed"' not in blk and "'key_points_assumed'" not in blk:
+                # Still try, but lower priority
+                pass
+            # Strict JSON
+            try:
+                obj = json.loads(blk)
+                out = _from_obj(obj)
+                if out:
+                    return out
+            except Exception:
+                pass
+            # Tolerant parse (single quotes, trailing commas)
+            try:
+                obj = ast.literal_eval(blk)
+                if isinstance(obj, dict):
+                    out = _from_obj(obj)
+                    if out:
+                        return out
+            except Exception:
+                pass
+
+    # Last-chance: turn bullets into sentences
     bullets = re.findall(r"^\s*[-*]\s+(.*\S)\s*$", s, flags=re.M)
     if bullets:
         out = []
-        for b in bullets:
+        for b in bullets[:8]:
             x = b.strip()
             if not x.endswith("."):
                 x += "."
             out.append(x)
-            if len(out) >= 8:
-                break
         return out
 
     return []
