@@ -1,0 +1,15 @@
+2025-09-10 15:49:28.164871: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-09-10 15:49:28.296005: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+INFO 09-10 15:49:36 [__init__.py:235] Automatically detected platform cuda.
+2025-09-10 15:49:38,808 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
+2025-09-10 15:49:38,809 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
+scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 32it [00:00, 8775.84it/s]
+2025-09-10 15:49:38,814 INFO Reservoir sampled 30 episodes (out of 32 2-speaker matches)
+Traceback (most recent call last):
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 387, in <module>
+    main()
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 289, in main
+    need_turns_for = {mp3 for (_, tlist, mp3) in episodes_buffer if tlist is None}
+                              ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
