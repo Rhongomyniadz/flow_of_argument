@@ -2,9 +2,9 @@
 #SBATCH --job-name=assumption_extraction
 #SBATCH --output=slurm-%j.out
 #SBATCH --partition=gpu
-#SBATCH --time=02:00:00
+#SBATCH --time=36:00:00
 #SBATCH --gres=gpu:A6000:3
-#SBATCH --mem=32G
+#SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 
