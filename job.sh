@@ -3,7 +3,7 @@
 #SBATCH --output=slurm-%j.out
 #SBATCH --partition=gpu
 #SBATCH --time=36:00:00
-#SBATCH --nodes=4
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:A6000:1
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
