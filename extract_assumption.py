@@ -240,7 +240,7 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-8B",
+        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         temperature: float = 0.7,
@@ -354,24 +354,44 @@ def main():
             role = t.get("inferred_speaker_role").strip().upper()
             prompts.append(f"""
 SYSTEM:
-You are an expert in analyzing conversations and identifying implicit assumptions in speech. Your task is to uncover the underlying assumptions that speakers make in their statements.
+You are an expert at analyzing conversations and surfacing implicit assumptions. You strictly avoid repeating explicit statements and instead infer what must be true for the speaker’s words to make sense. You write concisely and avoid speculation beyond reasonable inference.
 
 TASK:
-Analyze the following conversation turn and identify the key underlying assumptions. Focus on:
-1. Unstated beliefs the speaker holds
-2. Implicit knowledge they assume their audience has
-3. Hidden premises that support their arguments
-4. Contextual assumptions about their environment or situation
+Analyze the following conversation turn and identify the underlying assumptions. Your job is to:
+1) Infer unstated beliefs the speaker holds
+2) Surface implicit knowledge the speaker assumes the audience has
+3) State hidden premises that support their claims or requests
+4) Capture contextual assumptions about the situation/environment
 
-FORMAT:
-Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
-Each assumption should be:
-- A complete, well-formed sentence
-- Different from but related to the original text
-- Focused on one specific point
-- Not a mere restatement of what was explicitly said
+SCOPE & QUANTITY:
+- Generate MANY assumptions (aim for 12-20 distinct items when the text permits; otherwise, include as many as are well-supported).
+- Each assumption must be specific, non-overlapping, and not a paraphrase of explicit content.
 
-Now analyze this turn:
+CONFIDENCE & ORDERING:
+- For each assumption, estimate a confidence in [0.0, 1.0] where:
+  - 0.90-1.00 = highly likely, strongly implied
+  - 0.70-0.89 = plausible with moderate support
+  - 0.50-0.69 = tentative but defensible
+- Sort the list in STRICTLY descending order of confidence (highest first).
+- Calibrate confidence based on direct cues, strength/number of supporting hints, and typical conversational pragmatics.
+
+OUTPUT FORMAT (JSON only):
+Return a JSON object with one key "key_points_assumed" whose value is a list of objects with fields:
+- "assumption": a single complete sentence stating the assumption
+- "confidence": a float in [0,1] with two decimal places
+Include "evidence_spans": a short phrase or two (from the input) that justifies the inference (no more than 12 words each). If used, keep it minimal.
+
+CONSTRAINTS FOR ASSUMPTIONS:
+- Each assumption must be a single, well-formed sentence focused on one idea.
+- Do not restate anything explicitly said in the text.
+- Prefer concrete, testable claims over vague generalities.
+- If an assumption depends on a stronger parent assumption, include both and reflect lower confidence for the child.
+- Avoid world knowledge that is not reasonably suggested by the text.
+
+EVALUATION PASS:
+After drafting, quickly de-duplicate and tighten wording before output.
+
+INPUT:
 {text}
 """)
             id_raw = t.get("speaker")
