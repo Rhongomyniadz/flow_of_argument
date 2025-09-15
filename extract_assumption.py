@@ -243,6 +243,7 @@ class LLMInterface:
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
+        tensor_parallel_size=3,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
@@ -255,6 +256,7 @@ class LLMInterface:
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
+            tensor_parallel_size=tensor_parallel_size
         )
         self.params = SamplingParams(
             temperature=temperature,
