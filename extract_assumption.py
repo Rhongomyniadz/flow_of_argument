@@ -246,7 +246,7 @@ class LLMInterface:
         top_p: float = 0.8,
         min_p: float = 0.1,
         repetition_penalty: float = 1.1,
-        max_tokens: int = 2048,
+        max_tokens: int = 262144,
         download_dir: str = "/shared/4/models"
     ):
         self.llm = LLM(
