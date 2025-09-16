@@ -1,4 +1,3 @@
-import os
 import ast
 import re
 import gc
@@ -396,8 +395,7 @@ After drafting, quickly de-duplicate and tighten wording before output.
 INPUT:
 {text}
 """)
-            id_raw = t.get("speaker")
-            speaker_id = "-".join(str(x) for x in id_raw)
+            speaker_id = "-".join(t.get("speaker") or ["UNKNOWN"]).strip()
             meta.append((
                 text,
                 speaker_id,
