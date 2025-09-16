@@ -280,7 +280,6 @@ def main():
     ap.add_argument("--turns_path", type=str, default="", help="Path to local turns jsonl(.gz). If empty, auto-discover.")
     ap.add_argument("--min_words", type=int, default=50, help="Min words in a turn to run LLM.")
     ap.add_argument("--sample_n", type=int, default=30, help="Max episodes to process (reservoir).")
-    ap.add_argument("--gpu_id", type=int, default=0, help="GPU id for vLLM.")
     args = ap.parse_args()
 
     # 1) Locate the local episodes & turns files
@@ -330,7 +329,7 @@ def main():
         turns_by_mp3 = collect_needed_turns_from_local(need_turns_for, turns_path)
 
     # 4) Init LLM
-    llm = LLMInterface(gpu_id=args.gpu_id)
+    llm = LLMInterface()
 
     # 5) Process episodes and write per-episode outputs
     out_dir = Path("results/covid")
