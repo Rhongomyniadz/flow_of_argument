@@ -24,4 +24,4 @@ def print_sample(file_path):
             print(f"Failed to parse JSON line: {e}")
             
             
-print_sample(local_speaker_turn_path)
+print_sample(local_episode_level_path)

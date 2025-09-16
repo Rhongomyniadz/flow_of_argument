@@ -254,9 +254,8 @@ class LLMInterface:
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
             tensor_parallel_size=tensor_parallel_size,
-            max_num_batched_tokens=2048,
             trust_remote_code=True,
-            max_model_len=2048
+            max_model_len=262144
         )
         self.params = SamplingParams(
             temperature=temperature,
