@@ -1,0 +1,17 @@
+2025-09-16 18:38:57.985293: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-09-16 18:38:58.116583: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+INFO 09-16 18:39:07 [__init__.py:235] Automatically detected platform cuda.
+2025-09-16 18:39:09,682 INFO Streaming episodes from /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz …
+2025-09-16 18:39:09,683 INFO Using local turns from /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz …
+scan episodes jsonl: 0it [00:00, ?it/s]scan episodes jsonl: 32it [00:00, 7536.09it/s]
+2025-09-16 18:39:09,690 INFO Reservoir sampled 30 episodes (out of 32 2-speaker matches)
+2025-09-16 18:39:09,690 INFO Back-filling turns for 30 sampled episodes from local turns file
+scan local turns: 0lines [00:00, ?lines/s]scan local turns: 3613lines [00:00, 36122.63lines/s]scan local turns: 6791lines [00:00, 37610.25lines/s]
+Traceback (most recent call last):
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 446, in <module>
+    main()
+  File "/home/edenzha/flow_of_argument/extract_assumption.py", line 333, in main
+    llm = LLMInterface(gpu_id=args.gpu_id)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: LLMInterface.__init__() got an unexpected keyword argument 'gpu_id'
