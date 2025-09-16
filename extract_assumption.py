@@ -241,7 +241,6 @@ class LLMInterface:
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
-        gpu_id: int = 0,
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
         temperature: float = 0.7,
@@ -251,12 +250,14 @@ class LLMInterface:
         max_tokens: int = 2048,
         download_dir: str = "/shared/4/models"
     ):
-        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
-            tensor_parallel_size=tensor_parallel_size
+            tensor_parallel_size=tensor_parallel_size,
+            max_num_batched_tokens=2048,
+            trust_remote_code=True,
+            max_model_len=2048
         )
         self.params = SamplingParams(
             temperature=temperature,
