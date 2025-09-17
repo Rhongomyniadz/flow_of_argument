@@ -246,7 +246,6 @@ class LLMInterface:
         top_p: float = 0.8,
         min_p: float = 0.1,
         repetition_penalty: float = 1.1,
-        max_tokens: int = 262144,
         download_dir: str = "/shared/4/models"
     ):
         self.llm = LLM(
@@ -254,8 +253,6 @@ class LLMInterface:
             gpu_memory_utilization=gpu_memory_utilization,
             download_dir=download_dir,
             tensor_parallel_size=tensor_parallel_size,
-            trust_remote_code=True,
-            max_model_len=262144
         )
         self.params = SamplingParams(
             temperature=temperature,
