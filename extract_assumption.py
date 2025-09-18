@@ -239,7 +239,8 @@ def collect_needed_turns_from_local(mp3_urls: Set[str],
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        # model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        model_name: str = "meta-llama/Llama-3.3-70B-Instruct",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
         temperature: float = 0.7,
@@ -259,7 +260,6 @@ class LLMInterface:
             top_p=top_p,
             min_p=min_p,
             repetition_penalty=repetition_penalty,
-            max_tokens=max_tokens,
         )
 
     def generate_batch(self, prompts: List[str]) -> List[str]:
