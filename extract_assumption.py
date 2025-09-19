@@ -242,7 +242,7 @@ class LLMInterface:
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         # model_name: str = "meta-llama/Llama-3.3-70B-Instruct",
         gpu_memory_utilization: float = 0.9,
-        tensor_parallel_size: int = 4,
+        tensor_parallel_size: int = 2,
         temperature: float = 0.7,
         top_p: float = 0.8,
         min_p: float = 0.1,
