@@ -357,26 +357,18 @@ TASK:
 Analyze the following conversation turn and identify the underlying assumptions. Your job is to:
 1) Infer unstated beliefs the speaker holds
 2) Surface implicit knowledge the speaker assumes the audience has
-3) State hidden premises that support their claims or requests
-4) Capture contextual assumptions about the situation/environment
+3) Capture contextual assumptions about the situation/environment
 
 SCOPE & QUANTITY:
-- Generate MANY assumptions (aim for 12-20 distinct items when the text permits; otherwise, include as many as are well-supported).
+- Generate at least 10 assumptions.
 - Each assumption must be specific, non-overlapping, and not a paraphrase of explicit content.
 
 CONFIDENCE & ORDERING:
-- For each assumption, estimate a confidence in [0.0, 1.0] where:
-  - 0.90-1.00 = highly likely, strongly implied
-  - 0.70-0.89 = plausible with moderate support
-  - 0.50-0.69 = tentative but defensible
 - Sort the list in STRICTLY descending order of confidence (highest first).
-- Calibrate confidence based on direct cues, strength/number of supporting hints, and typical conversational pragmatics.
 
 OUTPUT FORMAT (JSON only):
 Return a JSON object with one key "key_points_assumed" whose value is a list of objects with fields:
 - "assumption": a single complete sentence stating the assumption
-- "confidence": a float in [0,1] with two decimal places
-Include "evidence_spans": a short phrase or two (from the input) that justifies the inference (no more than 12 words each). If used, keep it minimal.
 
 CONSTRAINTS FOR ASSUMPTIONS:
 - Each assumption must be a single, well-formed sentence focused on one idea.
@@ -384,9 +376,6 @@ CONSTRAINTS FOR ASSUMPTIONS:
 - Prefer concrete, testable claims over vague generalities.
 - If an assumption depends on a stronger parent assumption, include both and reflect lower confidence for the child.
 - Avoid world knowledge that is not reasonably suggested by the text.
-
-EVALUATION PASS:
-After drafting, quickly de-duplicate and tighten wording before output.
 
 INPUT:
 {text}
