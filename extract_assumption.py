@@ -256,6 +256,7 @@ class LLMInterface:
             tensor_parallel_size=tensor_parallel_size,
         )
         self.params = SamplingParams(
+            max_tokens=65536,
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
