@@ -1,0 +1,63 @@
+annotation_task_name: "Assumption Detection (Per-Turn, Per-Assumption)"
+
+output_annotation_dir: "data_files/annotation_output/"
+output_annotation_format: "jsonl"
+annotation_codebook_url: ""
+
+data_files:
+  - "data_files/covid_expanded.jsonl"
+
+item_properties:
+  id_key: "id"
+  text_key: "turn_text"
+  meta_keys:
+    - "speaker_id"
+    - "inferred_speaker_name"
+    - "inferred_speaker_role"
+    - "assumption_text"
+    - "source_file"
+
+# REQUIRED by your Potato version
+user_config:
+  allow_all_users: true
+  users: []
+
+# Disable nags
+alert_time_each_instance: 10000000
+
+# UI schema
+annotation_schemes:
+  - name: "assumption_label"
+    label: "Pick Yes, Unsure, or No."
+    description: "Does the speaker likely hold this assumption (based on this turn only)?"
+    annotation_type: "radio"
+    required: true
+    horizontal: true
+    labels:    ["Yes", "Unsure", "No"]
+    values:    ["yes", "unsure", "no"]
+    shortcuts: ["y",   "u",      "n"]
+    tooltips:  ["Clear evidence present", "Hints or ambiguous", "No or counter-evidence"]
+
+  - name: "evidence_quote"
+    label: "Exact span(s) only—keep it short."
+    description: "Copy-paste the smallest exact quote from the turn."
+    annotation_type: "text"
+    required: false
+    placeholder: "e.g., “God is still at work and he never stops working.”"
+
+  - name: "confidence"
+    label: "Confidence level"
+    description: "How sure are you in your answer?"
+    annotation_type: "likert"
+    required: true
+    size: 4
+    length: 4
+    min_label: "Not confident"
+    max_label: "Very confident"
+
+# Use defaults (you can point to custom files later)
+html_layout: "templates/layout.html"
+surveyflow_html_layout: "default"
+base_html_template: "default"
+header_file: "default"
+site_dir: "default"
