@@ -2192,7 +2192,7 @@ def annotate_page(username=None, action=None):
         "instance": { "text": text },
         "emphasis": list(emphasis_corpus_to_schemas)
     }
-
+    assumption_text = instance.get("assumption_text")
     # also save the displayed text in the metadata dict
     # instance_id_to_data[instance_id]['displayed_text'] = text
 
@@ -2318,6 +2318,7 @@ def annotate_page(username=None, action=None):
         statistics_nav=all_statistics,
         var_elems=var_elems_html,
         custom_js=custom_js,
+        assumption_text=assumption_text,
         **kwargs
     )
 
