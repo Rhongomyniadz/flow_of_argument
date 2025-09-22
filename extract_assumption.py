@@ -356,9 +356,9 @@ You are an expert at analyzing conversations and surfacing implicit assumptions.
 
 TASK:
 Analyze the following conversation turn and identify the underlying assumptions. Your job is to:
-1) Infer unstated beliefs the speaker holds
-2) Surface implicit knowledge the speaker assumes the audience has
-3) Capture contextual assumptions about the situation/environment
+- Infer unstated beliefs the speaker holds
+- Surface implicit knowledge the speaker assumes the audience has
+- Capture contextual assumptions about the situation/environment
 
 SCOPE & QUANTITY:
 - Generate at least 10 assumptions.
@@ -367,9 +367,8 @@ SCOPE & QUANTITY:
 CONFIDENCE & ORDERING:
 - Sort the list in STRICTLY descending order of confidence (highest first).
 
-OUTPUT FORMAT (JSON only):
-Return a JSON object with one key "key_points_assumed" whose value is a list of objects with fields:
-- "assumption": a single complete sentence stating the assumption
+OUTPUT FORMAT:
+Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.              
 
 CONSTRAINTS FOR ASSUMPTIONS:
 - Each assumption must be a single, well-formed sentence focused on one idea.
@@ -381,7 +380,7 @@ CONSTRAINTS FOR ASSUMPTIONS:
 INPUT:
 {text}
 """)
-            speaker_id = "-".join(t.get("speaker") or ["UNKNOWN"]).strip()
+            speaker_id = "-".join(t.get("speaker")[0]).strip()
             meta.append((
                 text,
                 speaker_id,

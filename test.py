@@ -20,8 +20,9 @@ def print_sample(file_path):
             sample = json.loads(line)
             print(f"Sample:")
             print(json.dumps(sample, indent=4, ensure_ascii=False))
+            print(sample.get("speaker")[0])
         except json.JSONDecodeError as e:
             print(f"Failed to parse JSON line: {e}")
             
             
-print_sample(local_episode_level_path)
+print_sample(local_speaker_turn_path)
