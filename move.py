@@ -7,7 +7,7 @@ def main():
     in_dir = pathlib.Path("results/covid")
 
     # Output: single jsonl file inside your assumption_detection project
-    out_dir = pathlib.Path("annotation/project-hub/assumption_detection/data_files")
+    out_dir = pathlib.Path("annotation/project-hub/assumption/data_files")
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "covid_expanded.jsonl"
 

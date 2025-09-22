@@ -359,28 +359,33 @@ Analyze the following conversation turn and identify the underlying assumptions.
 - Infer unstated beliefs the speaker holds
 - Surface implicit knowledge the speaker assumes the audience has
 - Capture contextual assumptions about the situation/environment
+- Each assumption must be a single, well-formed sentence focused on one idea
+- Do not restate anything explicitly said in the text
+- Generate at least 10 assumptions
+- Each assumption must be specific, non-overlapping, and not a paraphrase of explicit content
+- Sort the list in STRICTLY descending order of confidence with the highest first.
 
-SCOPE & QUANTITY:
-- Generate at least 10 assumptions.
-- Each assumption must be specific, non-overlapping, and not a paraphrase of explicit content.
-
-CONFIDENCE & ORDERING:
-- Sort the list in STRICTLY descending order of confidence (highest first).
+Speaker turn text:
+{text}
 
 OUTPUT FORMAT:
-Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.              
+Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
 
-CONSTRAINTS FOR ASSUMPTIONS:
-- Each assumption must be a single, well-formed sentence focused on one idea.
-- Do not restate anything explicitly said in the text.
-- Prefer concrete, testable claims over vague generalities.
-- If an assumption depends on a stronger parent assumption, include both and reflect lower confidence for the child.
-- Avoid world knowledge that is not reasonably suggested by the text.
+Example:
+{"key_points_assumed": [
+    "Assumption 1.",
+    "Assumption 2."
+]}
 
-INPUT:
-{text}
-""")
-            speaker_id = "-".join(t.get("speaker")[0]).strip()
+Print your output in JSON format.
+""")        
+            speaker_val = t.get("speaker_id")
+            if isinstance(speaker_val, list):
+                speaker_id = "-".join(speaker_val).strip()
+            elif isinstance(speaker_val, str):
+                speaker_id = speaker_val.strip()
+            else:
+                speaker_id = "NO_SPEAKER"
             meta.append((
                 text,
                 speaker_id,
