@@ -243,9 +243,10 @@ class LLMInterface:
         # model_name: str = "meta-llama/Llama-3.3-70B-Instruct",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
-        temperature: float = 0.7,
-        top_p: float = 0.8,
+        temperature: float = 0.6,
+        top_p: float = 0.95,
         min_p: float = 0.1,
+        top_k: int = 20,
         repetition_penalty: float = 1.1,
         download_dir: str = "/shared/4/models"
     ):
@@ -260,6 +261,7 @@ class LLMInterface:
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
+            top_k=top_k,
             repetition_penalty=repetition_penalty,
         )
 
@@ -372,6 +374,7 @@ OUTPUT FORMAT:
 Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
 
 Example:
+```json
 {"key_points_assumed": [
     "Assumption 1.",
     "Assumption 2."
