@@ -373,13 +373,6 @@ Speaker turn text:
 OUTPUT FORMAT:
 Return a JSON object with one key "key_points_assumed" containing a list of clear, specific assumptions.
 
-Example:
-```json
-{"key_points_assumed": [
-    "Assumption 1.",
-    "Assumption 2."
-]}
-
 Print your output in JSON format.
 """)        
             speaker_val = t.get("speaker_id")
