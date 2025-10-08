@@ -5,27 +5,19 @@ from pathlib import Path
 ROOT = Path("/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes")
 OUTDIR = Path("./sampled_outputs")
 OUTDIR.mkdir(exist_ok=True)
-OUTFILE = OUTDIR / "appearance_30episodes_max50.json"
 
 # -------- Config --------
-MAX_WORDS = 50
+MIN_WORDS = 50
 TARGET_EPISODES = 30
 
-def turn_word_count(obj):
-    if isinstance(obj, dict) and "wordCount" in obj and isinstance(obj["wordCount"], (int, float)):
-        try:
-            return int(obj["wordCount"])
-        except Exception:
-            pass
-    tx = (obj.get("transcript") or "").strip()
-    return len(tx.split()) if tx else 0
 
 def iter_episode_files(root: Path):
-    # Deterministic ordering across nested dirs (e.g., .../4/2/*.jsonl etc.)
+    """Yield all *.jsonl files under root in sorted order."""
     return sorted(root.rglob("*.jsonl"))
 
+
 def collect_episode(fpath: Path):
-    """Return filtered list of turns (≤ MAX_WORDS). Empty if none qualify or file unreadable."""
+    """Return all turns if every turn > MIN_WORDS, else return None to skip."""
     turns = []
     try:
         with fpath.open("r") as fh:
@@ -33,37 +25,41 @@ def collect_episode(fpath: Path):
                 line = line.strip()
                 if not line:
                     continue
-                try:
-                    obj = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                wc = turn_word_count(obj)
-                if wc <= MAX_WORDS:
-                    turns.append({**obj, "_computedWordCount": wc})
+                obj = json.loads(line)
+                wc = int(obj.get("wordCount", 0))
+                if wc <= MIN_WORDS:
+                    # reject entire episode immediately
+                    return None
+                turns.append(obj)
     except Exception as e:
         print(f"[warn] Skipping unreadable {fpath}: {e}")
-        return []
+        return None
     return turns
 
+
 def main():
-    episodes_out = []
-    for ep_path in iter_episode_files(ROOT):
-        if len(episodes_out) >= TARGET_EPISODES:
+    files = list(iter_episode_files(ROOT))
+    if not files:
+        raise FileNotFoundError(f"No .jsonl files found under {ROOT}")
+
+    kept = 0
+    for ep_path in files:
+        if kept >= TARGET_EPISODES:
             break
-        filtered_turns = collect_episode(ep_path)
-        if not filtered_turns:
-            continue  # require at least one qualifying turn to keep this episode
-        episodes_out.append({
-            "episode_file": str(ep_path),
-            "episode_id": ep_path.stem,
-            "num_kept_turns": len(filtered_turns),
-            "turns": filtered_turns
-        })
 
-    with OUTFILE.open("w") as f:
-        json.dump(episodes_out, f, indent=2)
+        turns = collect_episode(ep_path)
+        if turns is None:
+            continue  # skip episodes with any short turns
 
-    print(f"Wrote {len(episodes_out)} episodes (each with turns ≤ {MAX_WORDS} words) to {OUTFILE}")
+        out_path = OUTDIR / f"{ep_path.stem}.json"
+        with out_path.open("w") as f:
+            json.dump(turns, f, indent=2)
+
+        kept += 1
+        print(f"[{kept:02d}/{TARGET_EPISODES}] Saved {len(turns)} turns to {out_path}")
+
+    print(f"✅ Done. Wrote {kept} episodes (all turns > {MIN_WORDS} words) to {OUTDIR}")
+
 
 if __name__ == "__main__":
     main()
