@@ -7,7 +7,7 @@ OUTDIR = Path("./sampled_outputs")
 OUTDIR.mkdir(exist_ok=True)
 
 # -------- Config --------
-MIN_WORDS = 50
+MIN_WORDS = 30
 TARGET_EPISODES = 30
 
 
