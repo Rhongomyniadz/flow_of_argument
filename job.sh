@@ -9,6 +9,4 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 
-python extract_assumption.py \
-  --data_path  /home/edenzha/flow_of_argument/data/covid_episodes.jsonl.gz \
-  --turns_path /home/edenzha/flow_of_argument/data/covid_episodes_turn.jsonl.gz
+python full_pipeline.py
