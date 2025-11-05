@@ -5,14 +5,14 @@ import re
 import gc
 import hashlib
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
 from sporc import SPORCDataset
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("prompt-experiments")
+log = logging.getLogger("ai-assumption-prompts")
 
 # -------------------- Helpers --------------------
 
@@ -93,6 +93,7 @@ def episode_turns(ep) -> List[Dict]:
         })
     return out
 
+
 # -------------------- vLLM Wrapper --------------------
 
 class LLMInterface:
@@ -128,83 +129,187 @@ class LLMInterface:
         outs = self.llm.generate(prompts, self.params)
         return [o.outputs[0].text.strip() for o in outs]
 
+
 # -------------------- Prompt Variants --------------------
 
 PROMPTS = [
-    # Prompt 1 — baseline (confidence + explicit/implicit)
+
+    # ─────────────────────────────────────────────────────────────
+    # Prompt 1 — Cognitive Linguistics Baseline
+    # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a cognitive linguistics analyst. Identify explicit and implicit propositions and infer five assumptions with confidence scores.
+You are a cognitive linguistics analyst who specializes in interpreting conversation turns. 
+Your task is to extract propositions and underlying assumptions with high precision and clear differentiation between explicit and implicit meaning.
+
+DEFINITIONS:
+- Explicit propositions: Direct statements or factual claims clearly expressed in the text.
+- Implicit propositions: Unstated but logically implied meanings or presuppositions necessary to understand the text.
+- Assumptions: Deeper underlying beliefs, values, or worldviews that must hold true for the speaker's reasoning to make sense.
 
 TASK:
-Given this speaker turn:
+Given the following speaker turn:
 "{turn_text}"
 
-Return JSON:
+Follow these steps carefully:
+1. Identify **explicit propositions**. Extract only what is overtly said or clearly asserted.
+2. Identify **implicit propositions**. Derive these from presuppositions, entailments, or contextual implications.
+3. Infer **five distinct assumptions** that logically underlie the speaker's reasoning or worldview. 
+   Each assumption must:
+   - Be phrased as a single, clear sentence.
+   - Not restate explicit content.
+   - Be specific and conceptually rich.
+   - Include a numeric confidence score between 0.0 and 1.0 indicating your certainty.
+
+OUTPUT FORMAT (strict JSON):
 {
   "explicit_propositions": ["...", "..."],
   "implicit_propositions": ["...", "..."],
   "assumptions": [
-     {"text": "...", "confidence": 0.9}, {"text": "...", "confidence": 0.7}
+    {"text": "...", "confidence": 0.93},
+    {"text": "...", "confidence": 0.88},
+    {"text": "...", "confidence": 0.81},
+    {"text": "...", "confidence": 0.76},
+    {"text": "...", "confidence": 0.71}
   ]
 }""",
 
-    # Prompt 2 — focus on reasoning chains
+    # ─────────────────────────────────────────────────────────────
+    # Prompt 2 — Logical / Reasoning Analyst
+    # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a reasoning analyst. Identify logical propositions and implicit premises leading to the speaker’s conclusion.
+You are a reasoning and logic analyst trained to extract propositional structures and infer unstated premises from arguments. 
+Focus on how ideas follow from each other and what premises support the conclusions.
 
-Given this speaker turn:
+DEFINITIONS:
+- Explicit propositions: Statements of fact or opinion directly expressed by the speaker.
+- Implicit propositions: Logical premises or presuppositions implied by the explicit statements.
+- Assumptions: Foundational beliefs or rules of inference the speaker must accept for their reasoning to hold.
+
+TASK:
+Analyze this conversation turn:
 "{turn_text}"
 
-Output JSON with:
+Perform:
+1. Identify **explicit propositions** forming the visible argument.
+2. Identify **implicit propositions** that connect or justify the explicit claims.
+3. Infer **five logical assumptions**, phrased as conditional or causal statements, each with a numeric confidence score.
+
+Focus on logical coherence — what must be true for the argument to be internally valid.
+
+OUTPUT FORMAT (strict JSON):
 {
-  "explicit_propositions": [...],
-  "implicit_propositions": [...],
-  "assumptions": [{"text": "...", "confidence": 0.88}, ...]
+  "explicit_propositions": ["...", "..."],
+  "implicit_propositions": ["...", "..."],
+  "assumptions": [
+    {"text": "If X, then Y", "confidence": 0.92},
+    {"text": "People act rationally when given incentives.", "confidence": 0.87},
+    ...
+  ]
 }""",
 
-    # Prompt 3 — focus on emotional or social assumptions
+    # ─────────────────────────────────────────────────────────────
+    # Prompt 3 — Social / Pragmatic Analyst
+    # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a pragmatics expert focusing on social and affective meaning.
-For each turn, identify explicit and implicit propositions plus five assumptions reflecting beliefs, emotions, or social perspectives.
+You are a pragmatics and social cognition expert. 
+Your goal is to interpret the social, emotional, and interpersonal dimensions of a conversation turn.
 
-Text:
+DEFINITIONS:
+- Explicit propositions: Direct statements, claims, or descriptions.
+- Implicit propositions: Presuppositions or conversational implicatures revealing emotional or relational subtext.
+- Assumptions: Deeper social or affective beliefs (e.g., about trust, respect, authority, morality, or identity).
+
+TASK:
+Given the following text:
 "{turn_text}"
 
-Return JSON:
+Perform the following:
+1. Extract **explicit propositions** that describe observable statements.
+2. Extract **implicit propositions** that convey emotional tone, interpersonal stance, or social context.
+3. Infer **five assumptions** that reveal the speaker's affective or social worldview.
+   Each should be a full sentence expressing a psychological or social belief, with a numeric confidence score.
+
+Ensure that each assumption is distinct and reveals the speaker's underlying attitude or emotion.
+
+OUTPUT FORMAT (strict JSON):
 {
-  "explicit_propositions": [...],
-  "implicit_propositions": [...],
-  "assumptions": [{"text": "...", "confidence": 0.91}, ...]
+  "explicit_propositions": ["...", "..."],
+  "implicit_propositions": ["...", "..."],
+  "assumptions": [
+    {"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9},
+    {"text": "Hard work defines personal worth.", "confidence": 0.88},
+    ...
+  ]
 }""",
 
-    # Prompt 4 — focus on causal reasoning
+    # ─────────────────────────────────────────────────────────────
+    # Prompt 4 — Causal Reasoning Analyst
+    # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a causal inference analyst. Identify propositions that imply cause–effect relationships and infer underlying assumptions with confidence.
+You are a causal inference analyst focusing on how speakers explain why things happen. 
+Your goal is to detect explicit and implicit cause–effect relationships and infer underlying causal assumptions.
 
-Speaker turn:
+DEFINITIONS:
+- Explicit propositions: Statements that describe observable causes or effects directly.
+- Implicit propositions: Unstated causal connections or enabling conditions implied by the text.
+- Assumptions: Core causal beliefs about how the world works — mechanisms, dependencies, or agency — that support the reasoning.
+
+TASK:
+Analyze this turn:
 "{turn_text}"
 
-Return JSON:
+Steps:
+1. Identify **explicit propositions** that describe or assert cause–effect relationships.
+2. Identify **implicit propositions** that link events or conditions causally.
+3. Infer **five causal assumptions** about how or why outcomes occur, each including a numeric confidence score (0.0–1.0).
+
+Each assumption should be specific, mechanistic, and avoid repeating surface-level content.
+
+OUTPUT FORMAT (strict JSON):
 {
-  "explicit_propositions": [...],
-  "implicit_propositions": [...],
-  "assumptions": [{"text": "...", "confidence": 0.85}, ...]
+  "explicit_propositions": ["...", "..."],
+  "implicit_propositions": ["...", "..."],
+  "assumptions": [
+    {"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93},
+    {"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86},
+    ...
+  ]
 }""",
 
-    # Prompt 5 — focus on epistemic stance (knowledge, belief, certainty)
+    # ─────────────────────────────────────────────────────────────
+    # Prompt 5 — Epistemic / Knowledge-State Analyst
+    # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are an epistemic reasoning analyst. Identify explicit and implicit propositions and infer assumptions revealing how certain, doubtful, or confident the speaker is.
+You are an epistemic reasoning analyst who studies how speakers express certainty, belief, and doubt. 
+Your task is to uncover both propositional content and the speaker's stance toward knowledge and truth.
 
-Text:
+DEFINITIONS:
+- Explicit propositions: Direct factual or evaluative statements.
+- Implicit propositions: Unstated presuppositions or epistemic attitudes implied by tone or framing.
+- Assumptions: Foundational epistemic beliefs about what counts as knowledge, evidence, or truth for the speaker.
+
+TASK:
+Given this text:
 "{turn_text}"
 
-Return JSON:
+Perform the following:
+1. Extract **explicit propositions** that convey claims about reality or belief.
+2. Extract **implicit propositions** that reveal epistemic stance (certainty, doubt, authority, etc.).
+3. Infer **five epistemic assumptions** reflecting how the speaker understands or trusts knowledge sources.
+   Each assumption must include a numeric confidence score.
+
+OUTPUT FORMAT (strict JSON):
 {
-  "explicit_propositions": [...],
-  "implicit_propositions": [...],
-  "assumptions": [{"text": "...", "confidence": 0.9}, ...]
+  "explicit_propositions": ["...", "..."],
+  "implicit_propositions": ["...", "..."],
+  "assumptions": [
+    {"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94},
+    {"text": "Expertise should guide decision-making.", "confidence": 0.88},
+    ...
+  ]
 }"""
 ]
+
 
 # -------------------- Experiment Runner --------------------
 
@@ -258,30 +363,53 @@ def run_prompt_variant(prompt_template: str, prompt_id: int, args, episodes, llm
     log.info("Prompt %d done. Episodes: %d | Turns: %d | Saved to %s",
              prompt_id, len(episodes), total_turns, str(out_dir))
 
+
 # -------------------- Main --------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Run 5 prompt variants for 5 SPoRC episodes")
+    ap = argparse.ArgumentParser(description="Run 5 prompt variants for 5 AI-related SPoRC episodes")
     ap.add_argument("--sporc_dir", type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1")
     ap.add_argument("--output_root", type=str, default="results/test_prompt")
-    ap.add_argument("--episodes_n", type=int, default=5)
     ap.add_argument("--min_words", type=int, default=50)
     ap.add_argument("--batch_size", type=int, default=8)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     args = ap.parse_args()
 
+    # Load SPoRC
     sporc = SPORCDataset(local_data_dir=args.sporc_dir, streaming=True)
     sporc.load_podcast_subset()
-    episodes = sporc.search_episodes(min_speakers=2, max_speakers=2)
-    episodes = episodes[:args.episodes_n]
-    log.info("Loaded %d two-speaker episodes for testing", len(episodes))
+    all_eps = sporc.search_episodes(min_speakers=2, max_speakers=2)
+
+    target_titles = [
+        "Mostafa Elbermawy — on Long-Lasting Work, Self-Development, and Why AI Will Not Replace Us",
+        "China's Six Front War With America - How To Weaponise COVID-19, 5G & AI",
+        "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
+        "AI and data-driven adaptation with Colin Shearer",
+        "Augmented Intelligence with AI in Manufacturing - Paul Boris"
+    ]
+
+    # Find matching episodes
+    selected = []
+    for ep in all_eps:
+        title = getattr(ep, "title", "") or ""
+        if any(t.lower() in title.lower() for t in target_titles):
+            selected.append(ep)
+        if len(selected) == len(target_titles):
+            break
+
+    log.info("Found %d target episodes for AI analysis.", len(selected))
+    for e in selected:
+        log.info("Matched: %s", getattr(e, "title", ""))
+
+    if not selected:
+        log.warning("No matching episodes found! Check title spellings.")
+        return
 
     llm = LLMInterface(model_name=args.model_name)
-
     for i, p in enumerate(PROMPTS, start=1):
-        run_prompt_variant(p, i, args, episodes, llm)
+        run_prompt_variant(p, i, args, selected, llm)
 
-    log.info("✅ All 5 prompt variants completed.")
+    log.info("✅ All 5 prompt variants completed on the 5 AI episodes.")
 
 
 if __name__ == "__main__":
