@@ -49,13 +49,13 @@ def main():
     parser.add_argument(
         "--min_speakers",
         type=int,
-        default=1,
+        default=2,
         help="Minimum speakers per episode (default=1)"
     )
     parser.add_argument(
         "--max_speakers",
         type=int,
-        default=None,
+        default=2,
         help="Maximum speakers per episode (default=None)"
     )
     args = parser.parse_args()
