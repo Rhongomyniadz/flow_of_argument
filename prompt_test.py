@@ -82,7 +82,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
-        tensor_parallel_size: int = 1,
+        tensor_parallel_size: int = 2,
         temperature: float = 0.6,
         top_p: float = 0.95,
         min_p: float = 0.1,
@@ -92,7 +92,6 @@ class LLMInterface:
     ):
         self.llm = LLM(
             model=model_name,
-            max_model_len=16384,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
         )
