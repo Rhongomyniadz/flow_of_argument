@@ -28,7 +28,6 @@ def collect_episode(fpath: Path):
                 obj = json.loads(line)
                 wc = int(obj.get("wordCount", 0))
                 if wc <= MIN_WORDS:
-                    # reject entire episode immediately
                     return None
                 turns.append(obj)
     except Exception as e:
@@ -49,8 +48,7 @@ def main():
 
         turns = collect_episode(ep_path)
         if turns is None:
-            continue  # skip episodes with any short turns
-
+            continue
         out_path = OUTDIR / f"{ep_path.stem}.json"
         with out_path.open("w") as f:
             json.dump(turns, f, indent=2)

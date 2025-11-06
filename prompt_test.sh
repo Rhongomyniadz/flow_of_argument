@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=assumption_extraction
+#SBATCH --job-name=prompt_test
 #SBATCH --output=slurm-%j.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00

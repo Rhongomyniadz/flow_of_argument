@@ -354,7 +354,9 @@ def main():
             role = t.get("inferred_speaker_role").strip().upper()
             prompts.append(f"""
 SYSTEM:
-You are an expert at analyzing conversations and surfacing implicit assumptions. You strictly avoid repeating explicit statements and instead infer what must be true for the speaker’s words to make sense. You write concisely and avoid speculation beyond reasonable inference.
+You are an expert at analyzing conversations and surfacing implicit assumptions. You strictly avoid repeating explicit 
+statements and instead infer what must be true for the speaker's words to make sense. You write concisely and avoid
+speculation beyond reasonable inference.
 
 TASK:
 Analyze the following conversation turn and identify the underlying assumptions. Your job is to:
