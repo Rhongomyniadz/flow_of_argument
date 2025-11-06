@@ -24,8 +24,7 @@ log = logging.getLogger("local-assumption-prompts-streamed")
 # Utilities
 # ---------------------------------------------------------
 def count_words(text: str) -> int:
-    import re as _re
-    return len(_re.findall(r"\w+", text or ""))
+    return len(re.findall(r"\w+", text or ""))
 
 
 def safe_slug(s: str, max_len: int = 64) -> str:
@@ -57,6 +56,24 @@ def load_jsonl_gz(path: str) -> List[Dict]:
     return rows
 
 
+def parse_llm_json_output(text: str) -> Optional[dict]:
+    """Extract and return the first valid JSON object from LLM output."""
+    if not text:
+        return None
+    match = re.search(r"\{[\s\S]*\}", text)
+    if not match:
+        return None
+    snippet = match.group(0)
+    try:
+        data = json.loads(snippet)
+        required = {"explicit_propositions", "implicit_propositions", "assumptions"}
+        if not isinstance(data, dict) or not required.issubset(data.keys()):
+            return None
+        return data
+    except Exception:
+        return None
+
+
 # ---------------------------------------------------------
 # vLLM Wrapper
 # ---------------------------------------------------------
@@ -75,6 +92,7 @@ class LLMInterface:
     ):
         self.llm = LLM(
             model=model_name,
+            max_model_len=16384,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
         )
@@ -107,7 +125,7 @@ Your task is to extract propositions and underlying assumptions with high precis
 DEFINITIONS:
 - Explicit propositions: Direct statements or factual claims clearly expressed in the text.
 - Implicit propositions: Unstated but logically implied meanings or presuppositions necessary to understand the text.
-- Assumptions: Deeper underlying beliefs, values, or worldviews that must hold true for the speaker’s reasoning to make sense.
+- Assumptions: Deeper underlying beliefs, values, or worldviews that must hold true for the speaker's reasoning to make sense.
 
 TASK:
 Given the following speaker turn:
@@ -116,7 +134,7 @@ Given the following speaker turn:
 Follow these steps carefully:
 1. Identify **explicit propositions**. Extract only what is overtly said or clearly asserted.
 2. Identify **implicit propositions**. Derive these from presuppositions, entailments, or contextual implications.
-3. Infer **five distinct assumptions** that logically underlie the speaker’s reasoning or worldview. 
+3. Infer **five distinct assumptions** that logically underlie the speaker's reasoning or worldview. 
    Each assumption must:
    - Be phrased as a single, clear sentence.
    - Not restate explicit content.
@@ -189,10 +207,10 @@ Given the following text:
 Perform the following:
 1. Extract **explicit propositions** that describe observable statements.
 2. Extract **implicit propositions** that convey emotional tone, interpersonal stance, or social context.
-3. Infer **five assumptions** that reveal the speaker’s affective or social worldview.
+3. Infer **five assumptions** that reveal the speaker's affective or social worldview.
    Each should be a full sentence expressing a psychological or social belief, with a numeric confidence score.
 
-Ensure that each assumption is distinct and reveals the speaker’s underlying attitude or emotion.
+Ensure that each assumption is distinct and reveals the speaker's underlying attitude or emotion.
 
 OUTPUT FORMAT (strict JSON):
 {
@@ -244,7 +262,7 @@ OUTPUT FORMAT (strict JSON):
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
 You are an epistemic reasoning analyst who studies how speakers express certainty, belief, and doubt. 
-Your task is to uncover both propositional content and the speaker’s stance toward knowledge and truth.
+Your task is to uncover both propositional content and the speaker's stance toward knowledge and truth.
 
 DEFINITIONS:
 - Explicit propositions: Direct factual or evaluative statements.
@@ -278,9 +296,9 @@ OUTPUT FORMAT (strict JSON):
 # Main pipeline
 # ---------------------------------------------------------
 def main():
-    ap = argparse.ArgumentParser(description="Stream turns by mp3url and run 5 prompt variants")
+    ap = argparse.ArgumentParser(description="Run 5 assumption prompts with flattened parsed outputs.")
     ap.add_argument("--data_dir", type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1")
-    ap.add_argument("--output_root", type=str, default="results/local_prompts_streamed")
+    ap.add_argument("--output_root", type=str, default="results/prompt_camprison")
     ap.add_argument("--min_words", type=int, default=50)
     ap.add_argument("--batch_size", type=int, default=8)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
@@ -289,13 +307,13 @@ def main():
     ep_path = Path(args.data_dir) / "episodeLevelData.jsonl.gz"
     turn_path = Path(args.data_dir) / "speakerTurnData.jsonl.gz"
 
-    # --- Load and filter episodes ---
+    # --- Load episodes ---
     log.info(f"Loading episode metadata from {ep_path}")
     episodes = load_jsonl_gz(str(ep_path))
     df_ep = pd.DataFrame(episodes)
     log.info("Total episodes loaded: %d", len(df_ep))
 
-    possible_title_cols = ["epTitle", "title", "episode_title", "name"]
+    possible_title_cols = ["epTitle", "title"]
     possible_speaker_cols = ["numMainSpeakers", "num_main_speakers"]
     title_col = next((c for c in possible_title_cols if c in df_ep.columns), None)
     speaker_col = next((c for c in possible_speaker_cols if c in df_ep.columns), None)
@@ -304,11 +322,11 @@ def main():
         df_ep = df_ep[df_ep[speaker_col] == 2]
     log.info(f"Using '{title_col}' for titles and '{speaker_col}' for speaker count filter.")
 
-    # --- Target episode titles ---
+    # --- Filter 5 target episodes ---
     targets = [
         "Mostafa Elbermawy — on Long-Lasting Work, Self-Development, and Why AI Will Not Replace Us",
         "China's Six Front War With America - How To Weaponise COVID-19, 5G & AI",
-        "Al and Rishal talk about Rishal’s book Grokking AI Algorithms",
+        "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
         "Augmented Intelligence with AI in Manufacturing - Paul Boris"
     ]
@@ -318,15 +336,14 @@ def main():
     if not selected_eps:
         return
 
-    # --- Build mp3url index for streaming turn filtering ---
     target_mp3s = {(ep.get("mp3url") or "").strip() for ep in selected_eps if ep.get("mp3url")}
-    log.info(f"Streaming turn file and collecting turns for {len(target_mp3s)} target episodes.")
+    log.info(f"Streaming speaker turns for {len(target_mp3s)} target episodes.")
 
-    turn_records: Dict[str, List[str]] = {mp3: [] for mp3 in target_mp3s}
+    turn_records: Dict[str, List[Dict]] = {mp3: [] for mp3 in target_mp3s}
 
-    # --- Stream turns directly from file ---
+    # --- Stream turns from file ---
     with gzip.open(turn_path, "rt", encoding="utf-8") as f:
-        for i, line in enumerate(f):
+        for line in f:
             try:
                 rec = json.loads(line)
             except Exception:
@@ -339,50 +356,81 @@ def main():
             if not text or count_words(text) < args.min_words:
                 continue
 
-            turn_records[mp3].append(text)
-
-            if i % 1_000_000 == 0 and i > 0:
-                log.info(f"Scanned {i:,} lines...")
+            turn_records[mp3].append({
+                "turn_text": text,
+                "speaker_id": rec.get("speaker", [None])[0],
+                "inferred_speaker_name": rec.get("inferredSpeakerName"),
+                "inferred_speaker_role": rec.get("inferredSpeakerRole")
+            })
 
     total_kept = sum(len(v) for v in turn_records.values())
-    log.info(f"Collected {total_kept:,} turns total across {len(target_mp3s)} episodes.")
+    log.info(f"Collected {total_kept:,} valid turns across {len(target_mp3s)} episodes.")
 
-    # --- Run prompts ---
+    # --- Run LLM ---
     llm = LLMInterface(model_name=args.model_name)
+    raw_dir = Path(args.output_root) / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
 
     for prompt_id, tmpl in enumerate(PROMPTS, start=1):
-        out_dir = Path(args.output_root) / f"prompt{prompt_id}"
-        out_dir.mkdir(parents=True, exist_ok=True)
+        parsed_dir = Path(args.output_root) / f"prompt{prompt_id}"
+        parsed_dir.mkdir(parents=True, exist_ok=True)
         total_turns = 0
 
         for ep in tqdm(selected_eps, desc=f"Prompt {prompt_id} episodes"):
             ep_mp3 = (ep.get("mp3url") or "").strip()
-            if ep_mp3 not in turn_records:
-                continue
-            turns = turn_records[ep_mp3]
+            turns = turn_records.get(ep_mp3, [])
             if not turns:
                 continue
 
-            prompts = [tmpl.format(turn_text=t) for t in turns]
+            prompts = [tmpl.format(turn_text=t["turn_text"]) for t in turns]
             outputs = []
             for start in range(0, len(prompts), args.batch_size):
                 chunk = prompts[start:start + args.batch_size]
                 outs = llm.generate_batch(chunk)
                 outputs.extend(outs)
 
-            total_turns += len(outputs)
-            results = [{"turn_text": t, "llm_output": o} for t, o in zip(turns, outputs)]
+            parsed_ok = 0
+            parsed_results = []
+            raw_results = []
+
+            for t, raw_out in zip(turns, outputs):
+                parsed = parse_llm_json_output(raw_out)
+                base_obj = {
+                    "turn_text": t["turn_text"],
+                    "speaker_id": t["speaker_id"],
+                    "inferred_speaker_name": t["inferred_speaker_name"],
+                    "inferred_speaker_role": t["inferred_speaker_role"]
+                }
+
+                # Parsed goes directly at root (flattened)
+                if parsed:
+                    parsed_ok += 1
+                    parsed_results.append({**base_obj, **parsed})
+                else:
+                    parsed_results.append(base_obj)
+
+                # Raw output stored separately
+                raw_results.append({**base_obj, "raw_output": raw_out})
 
             key = episode_key(ep)
-            with open(out_dir / f"{key}.json", "w", encoding="utf-8") as f:
-                json.dump(results, f, indent=2, ensure_ascii=False)
+
+            # Save parsed structured JSON (flattened)
+            with open(parsed_dir / f"{key}.json", "w", encoding="utf-8") as f:
+                json.dump(parsed_results, f, indent=2, ensure_ascii=False)
+
+            # Save raw completions separately
+            with open(raw_dir / f"{key}_prompt{prompt_id}.json", "w", encoding="utf-8") as f:
+                json.dump(raw_results, f, indent=2, ensure_ascii=False)
+
             gc.collect()
+            total_turns += len(outputs)
+            log.info(f"{key}: parsed {parsed_ok}/{len(outputs)} successfully.")
 
-        log.info(f"Prompt {prompt_id} complete: {total_turns} turns processed. Saved to {out_dir}")
+        log.info(f"Prompt {prompt_id} complete: {total_turns} turns processed.")
+        log.info(f"→ Parsed JSON: {parsed_dir}, Raw JSON: {raw_dir}")
 
-    log.info("✅ All 5 prompt variants completed memory-safely.")
+    log.info("✅ All 5 prompt variants completed successfully with flattened outputs.")
 
 
 if __name__ == "__main__":
     main()
-
