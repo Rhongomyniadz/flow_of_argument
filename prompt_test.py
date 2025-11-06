@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-Memory-safe assumption extraction on local SPoRC JSONL files
-using only mp3url + turnText.  Processes five AI-related episodes
-with five analytical prompt variants.
-"""
-
 import argparse
 import json
 import gzip
@@ -74,7 +65,7 @@ class LLMInterface:
         self,
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
-        tensor_parallel_size: int = 2,
+        tensor_parallel_size: int = 1,
         temperature: float = 0.6,
         top_p: float = 0.95,
         min_p: float = 0.1,
