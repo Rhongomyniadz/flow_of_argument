@@ -144,11 +144,11 @@ OUTPUT FORMAT (strict JSON):
 "explicit_propositions": ["...", "..."],
 "implicit_propositions": ["...", "..."],
 "assumptions": [
-{"text": "...", "confidence": 0.93},
-{"text": "...", "confidence": 0.88},
-{"text": "...", "confidence": 0.81},
-{"text": "...", "confidence": 0.76},
-{"text": "...", "confidence": 0.71}
+{{"text": "...", "confidence": 0.93}},
+{{"text": "...", "confidence": 0.88}},
+{{"text": "...", "confidence": 0.81}},
+{{"text": "...", "confidence": 0.76}},
+{{"text": "...", "confidence": 0.71}}
 ]
 
 """,
@@ -180,8 +180,8 @@ OUTPUT FORMAT (strict JSON):
 "explicit_propositions": ["...", "..."],
 "implicit_propositions": ["...", "..."],
 "assumptions": [
-{"text": "If X, then Y", "confidence": 0.92},
-{"text": "People act rationally when given incentives.", "confidence": 0.87},
+{{"text": "If X, then Y", "confidence": 0.92}},
+{{"text": "People act rationally when given incentives.", "confidence": 0.87}},
 ...
 ]
 """,
@@ -214,8 +214,8 @@ OUTPUT FORMAT (strict JSON):
 "explicit_propositions": ["...", "..."],
 "implicit_propositions": ["...", "..."],
 "assumptions": [
-{"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9},
-{"text": "Hard work defines personal worth.", "confidence": 0.88},
+{{"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9}},
+{{"text": "Hard work defines personal worth.", "confidence": 0.88}},
 ...
 ]
 """,
@@ -247,8 +247,8 @@ OUTPUT FORMAT (strict JSON):
 "explicit_propositions": ["...", "..."],
 "implicit_propositions": ["...", "..."],
 "assumptions": [
-{"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93},
-{"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86},
+{{"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93}},
+{{"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86}},
 ...
 ]
 """,
@@ -279,8 +279,8 @@ OUTPUT FORMAT (strict JSON):
 "explicit_propositions": ["...", "..."],
 "implicit_propositions": ["...", "..."],
 "assumptions": [
-{"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94},
-{"text": "Expertise should guide decision-making.", "confidence": 0.88},
+{{"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94}},
+{{"text": "Expertise should guide decision-making.", "confidence": 0.88}},
 ...
 ]
 """
