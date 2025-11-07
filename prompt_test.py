@@ -141,17 +141,17 @@ Follow these steps carefully:
    - Include a numeric confidence score between 0.0 and 1.0 indicating your certainty.
 
 OUTPUT FORMAT (strict JSON):
-{
-  "explicit_propositions": ["...", "..."],
-  "implicit_propositions": ["...", "..."],
-  "assumptions": [
-    {"text": "...", "confidence": 0.93},
-    {"text": "...", "confidence": 0.88},
-    {"text": "...", "confidence": 0.81},
-    {"text": "...", "confidence": 0.76},
-    {"text": "...", "confidence": 0.71}
-  ]
-}""",
+"explicit_propositions": ["...", "..."],
+"implicit_propositions": ["...", "..."],
+"assumptions": [
+{"text": "...", "confidence": 0.93},
+{"text": "...", "confidence": 0.88},
+{"text": "...", "confidence": 0.81},
+{"text": "...", "confidence": 0.76},
+{"text": "...", "confidence": 0.71}
+]
+
+""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 2 — Logical / Reasoning Analyst
@@ -177,15 +177,14 @@ Perform:
 Focus on logical coherence — what must be true for the argument to be internally valid.
 
 OUTPUT FORMAT (strict JSON):
-{
-  "explicit_propositions": ["...", "..."],
-  "implicit_propositions": ["...", "..."],
-  "assumptions": [
-    {"text": "If X, then Y", "confidence": 0.92},
-    {"text": "People act rationally when given incentives.", "confidence": 0.87},
-    ...
-  ]
-}""",
+"explicit_propositions": ["...", "..."],
+"implicit_propositions": ["...", "..."],
+"assumptions": [
+{"text": "If X, then Y", "confidence": 0.92},
+{"text": "People act rationally when given incentives.", "confidence": 0.87},
+...
+]
+""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 3 — Social / Pragmatic Analyst
@@ -212,15 +211,14 @@ Perform the following:
 Ensure that each assumption is distinct and reveals the speaker's underlying attitude or emotion.
 
 OUTPUT FORMAT (strict JSON):
-{
-  "explicit_propositions": ["...", "..."],
-  "implicit_propositions": ["...", "..."],
-  "assumptions": [
-    {"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9},
-    {"text": "Hard work defines personal worth.", "confidence": 0.88},
-    ...
-  ]
-}""",
+"explicit_propositions": ["...", "..."],
+"implicit_propositions": ["...", "..."],
+"assumptions": [
+{"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9},
+{"text": "Hard work defines personal worth.", "confidence": 0.88},
+...
+]
+""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 4 — Causal Reasoning Analyst
@@ -246,15 +244,14 @@ Steps:
 Each assumption should be specific, mechanistic, and avoid repeating surface-level content.
 
 OUTPUT FORMAT (strict JSON):
-{
-  "explicit_propositions": ["...", "..."],
-  "implicit_propositions": ["...", "..."],
-  "assumptions": [
-    {"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93},
-    {"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86},
-    ...
-  ]
-}""",
+"explicit_propositions": ["...", "..."],
+"implicit_propositions": ["...", "..."],
+"assumptions": [
+{"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93},
+{"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86},
+...
+]
+""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 5 — Epistemic / Knowledge-State Analyst
@@ -279,15 +276,14 @@ Perform the following:
    Each assumption must include a numeric confidence score.
 
 OUTPUT FORMAT (strict JSON):
-{
-  "explicit_propositions": ["...", "..."],
-  "implicit_propositions": ["...", "..."],
-  "assumptions": [
-    {"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94},
-    {"text": "Expertise should guide decision-making.", "confidence": 0.88},
-    ...
-  ]
-}"""
+"explicit_propositions": ["...", "..."],
+"implicit_propositions": ["...", "..."],
+"assumptions": [
+{"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94},
+{"text": "Expertise should guide decision-making.", "confidence": 0.88},
+...
+]
+"""
 ]
 
 
