@@ -214,22 +214,18 @@ class LLMInterface:
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
-        max_model_len: int = 12288,   # reduce KV cache needs vs 262k default
         temperature: float = 0.4,
         top_p: float = 0.95,
         min_p: float = 0.05,
         top_k: int = 40,
-        repetition_penalty: float = 1.05,
-        max_tokens: int = 1024,
+        repetition_penalty: float = 1.05
     ):
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
-            tensor_parallel_size=tensor_parallel_size,
-            max_model_len=max_model_len,
+            tensor_parallel_size=tensor_parallel_size
         )
         self.params = SamplingParams(
-            max_tokens=max_tokens,
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
@@ -422,24 +418,25 @@ OUTPUT FORMAT:
 # Main pipeline
 # ---------------------------------------------------------
 def main():
-    ap = argparse.ArgumentParser(description="Stream turns by mp3url and run 5 prompt variants with JSON parsing")
+    ap = argparse.ArgumentParser(description="Run 5 assumption prompts; parse & normalize outputs.")
     ap.add_argument("--data_dir", type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1")
-    ap.add_argument("--output_root", type=str, default="results/prompt_comparison")
+    ap.add_argument("--output_root", type=str, default="results/prompt_camprison")
     ap.add_argument("--min_words", type=int, default=50)
     ap.add_argument("--batch_size", type=int, default=8)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
+    ap.add_argument("--tensor_parallel_size", type=int, default=1)
     args = ap.parse_args()
 
     ep_path = Path(args.data_dir) / "episodeLevelData.jsonl.gz"
     turn_path = Path(args.data_dir) / "speakerTurnData.jsonl.gz"
 
-    # --- Load and filter episodes ---
+    # --- Load & filter episodes ---
     log.info(f"Loading episode metadata from {ep_path}")
     episodes = load_jsonl_gz(str(ep_path))
     df_ep = pd.DataFrame(episodes)
     log.info("Total episodes loaded: %d", len(df_ep))
 
-    possible_title_cols = ["epTitle", "title", "episode_title", "name"]
+    possible_title_cols = ["epTitle", "title"]
     possible_speaker_cols = ["numMainSpeakers", "num_main_speakers"]
     title_col = next((c for c in possible_title_cols if c in df_ep.columns), None)
     speaker_col = next((c for c in possible_speaker_cols if c in df_ep.columns), None)
@@ -448,25 +445,27 @@ def main():
         df_ep = df_ep[df_ep[speaker_col] == 2]
     log.info(f"Using '{title_col}' for titles and '{speaker_col}' for speaker count filter.")
 
+    # Five target episodes (by title, case-insensitive substring)
     targets = [
         "Mostafa Elbermawy — on Long-Lasting Work, Self-Development, and Why AI Will Not Replace Us",
         "China's Six Front War With America - How To Weaponise COVID-19, 5G & AI",
-        "Al and Rishal talk about Rishal’s book Grokking AI Algorithms",
+        "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
-        "Augmented Intelligence with AI in Manufacturing - Paul Boris"
+        "Augmented Intelligence with AI in Manufacturing - Paul Boris",
     ]
     mask = df_ep[title_col].fillna("").apply(lambda x: any(t.lower() in str(x).lower() for t in targets))
     selected_eps = df_ep[mask].to_dict(orient="records")
     log.info("Found %d matching episodes.", len(selected_eps))
     if not selected_eps:
+        log.warning("No matching episodes found. Exiting.")
         return
 
+    # Index target mp3s
     target_mp3s = {(ep.get("mp3url") or "").strip() for ep in selected_eps if ep.get("mp3url")}
-    log.info(f"Streaming turn file and collecting turns for {len(target_mp3s)} target episodes.")
+    log.info(f"Streaming speaker turns for {len(target_mp3s)} target episodes.")
 
-    turn_records: Dict[str, List[str]] = {mp3: [] for mp3 in target_mp3s}
-
-    # --- Stream turns directly from file ---
+    # --- Stream turns ---
+    turn_records: Dict[str, List[Dict]] = {mp3: [] for mp3 in target_mp3s}
     with gzip.open(turn_path, "rt", encoding="utf-8") as f:
         for i, line in enumerate(f):
             try:
@@ -476,75 +475,99 @@ def main():
             mp3 = (rec.get("mp3url") or "").strip()
             if mp3 not in target_mp3s:
                 continue
-
             text = (rec.get("turnText") or "").strip()
             if not text or count_words(text) < args.min_words:
                 continue
-            turn_records[mp3].append(text)
-
-            if i % 1_000_000 == 0 and i > 0:
-                log.info(f"Scanned {i:,} lines...")
+            # speaker key is a list in SPoRC turns
+            spk = rec.get("speaker")
+            speaker_id = spk[0] if isinstance(spk, list) and spk else (spk or None)
+            turn_records[mp3].append({
+                "turn_text": text,
+                "speaker_id": speaker_id,
+                "inferred_speaker_name": rec.get("inferredSpeakerName"),
+                "inferred_speaker_role": rec.get("inferredSpeakerRole"),
+            })
+            if i and i % 1_000_000 == 0:
+                log.info(f"Scanned {i:,} turn lines...")
 
     total_kept = sum(len(v) for v in turn_records.values())
-    log.info(f"Collected {total_kept:,} turns total across {len(target_mp3s)} episodes.")
+    log.info(f"Collected {total_kept:,} valid turns across {len(target_mp3s)} episodes.")
 
-    # --- Run prompts ---
-    llm = LLMInterface(model_name=args.model_name)
-    raw_dir = Path(args.output_root) / "raw"
+    # --- Run LLM ---
+    llm = LLMInterface(
+        model_name=args.model_name,
+        tensor_parallel_size=args.tensor_parallel_size,
+    )
+
+    output_root = Path(args.output_root)
+    parsed_roots = []
+    raw_dir = output_root / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     for prompt_id, tmpl in enumerate(PROMPTS, start=1):
-        out_dir = Path(args.output_root) / f"prompt{prompt_id}"
-        out_dir.mkdir(parents=True, exist_ok=True)
-        total_turns = 0
+        parsed_dir = output_root / f"prompt{prompt_id}"
+        parsed_dir.mkdir(parents=True, exist_ok=True)
+        parsed_roots.append(parsed_dir)
 
+        total_turns = 0
         for ep in tqdm(selected_eps, desc=f"Prompt {prompt_id} episodes"):
             ep_mp3 = (ep.get("mp3url") or "").strip()
-            if ep_mp3 not in turn_records:
-                continue
-            turns = turn_records[ep_mp3]
+            turns = turn_records.get(ep_mp3, [])
             if not turns:
                 continue
 
-            prompts = [tmpl.format(turn_text=t) for t in turns]
+            # Build prompts
+            prompts = [tmpl.format(turn_text=t["turn_text"]) for t in turns]
+
+            # Batch generate
             outputs = []
             for start in range(0, len(prompts), args.batch_size):
                 chunk = prompts[start:start + args.batch_size]
                 outs = llm.generate_batch(chunk)
                 outputs.extend(outs)
 
-            parsed_results = []
+            # Parse & normalize
+            parsed_results: List[Dict] = []
+            raw_results: List[Dict] = []
             parsed_ok = 0
+
             for t, raw_out in zip(turns, outputs):
-                parsed = parse_llm_json_output(raw_out)
-                parsed_results.append({
-                    "turn_text": t,
-                    "raw_output": raw_out,
-                    "parsed": parsed,
-                })
-                if parsed:
+                norm = parse_and_normalize_llm(raw_out)
+                base = {
+                    "turn_text": t["turn_text"],
+                    "speaker_id": t["speaker_id"],
+                    "inferred_speaker_name": t["inferred_speaker_name"],
+                    "inferred_speaker_role": t["inferred_speaker_role"],
+                }
+                if norm is not None:
                     parsed_ok += 1
+                    parsed_results.append({**base, **norm})
+                else:
+                    # If unparsable, still store the base metadata (no EP/A keys)
+                    parsed_results.append(base)
+                # Raw file: ONLY turn_text + raw_output (per your requirement)
+                raw_results.append({
+                    "turn_text": t["turn_text"],
+                    "raw_output": raw_out
+                })
 
             key = episode_key(ep)
 
-            # Save structured JSON
-            with open(out_dir / f"{key}.json", "w", encoding="utf-8") as f:
+            # Save parsed structured JSON (flattened)
+            with open(parsed_dir / f"{key}.json", "w", encoding="utf-8") as f:
                 json.dump(parsed_results, f, indent=2, ensure_ascii=False)
 
-            # Save raw-only text
-            with open(raw_dir / f"{key}_prompt{prompt_id}.txt", "w", encoding="utf-8") as f:
-                for out in outputs:
-                    f.write(out + "\n\n")
+            # Save raw completions separately (minimal fields)
+            with open(raw_dir / f"{key}_prompt{prompt_id}.json", "w", encoding="utf-8") as f:
+                json.dump(raw_results, f, indent=2, ensure_ascii=False)
 
-            total_turns += len(outputs)
             gc.collect()
-
-            log.info(f"{key}: {parsed_ok}/{len(outputs)} outputs successfully parsed.")
+            total_turns += len(outputs)
+            log.info(f"{key}: parsed {parsed_ok}/{len(outputs)} successfully.")
 
         log.info(f"Prompt {prompt_id} complete: {total_turns} turns processed.")
-        log.info(f"→ JSON parsed results saved to {out_dir}, raw text to {raw_dir}")
-
-    log.info("✅ All 5 prompt variants completed.")
+        log.info(f"→ Parsed JSON dir: {parsed_dir}")
+    log.info(f"✅ All 5 prompt variants completed. Raw dir: {raw_dir}")
 
 
 if __name__ == "__main__":
