@@ -216,6 +216,7 @@ class LLMInterface:
         tensor_parallel_size: int = 2,
         temperature: float = 0.4,
         max_model_len: int = 65508,
+        max_token: int = 4096,
         top_p: float = 0.95,
         min_p: float = 0.05,
         top_k: int = 40,
@@ -225,7 +226,8 @@ class LLMInterface:
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
-            max_model_len=max_model_len
+            max_model_len=max_model_len,
+            max_token=max_token
         )
         self.params = SamplingParams(
             temperature=temperature,
