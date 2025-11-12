@@ -216,7 +216,7 @@ class LLMInterface:
         tensor_parallel_size: int = 2,
         temperature: float = 0.4,
         max_model_len: int = 65508,
-        max_token: int = 4096,
+        max_tokens: int = 4096,
         top_p: float = 0.95,
         min_p: float = 0.05,
         top_k: int = 40,
@@ -227,7 +227,7 @@ class LLMInterface:
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
             max_model_len=max_model_len,
-            max_token=max_token
+            max_tokens=max_tokens
         )
         self.params = SamplingParams(
             temperature=temperature,
@@ -456,6 +456,7 @@ def main():
         "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
         "Augmented Intelligence with AI in Manufacturing - Paul Boris",
+        "testing episode for prompt engineering"
     ]
     mask = df_ep[title_col].fillna("").apply(lambda x: any(t.lower() in str(x).lower() for t in targets))
     selected_eps = df_ep[mask].to_dict(orient="records")
