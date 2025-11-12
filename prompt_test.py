@@ -6,25 +6,30 @@ import hashlib
 import gc
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any, Iterable, Tuple
 
 import pandas as pd
 from tqdm import tqdm
+
+# If you use vLLM:
 from vllm import LLM, SamplingParams
 
 
-# ---------------------------------------------------------
+# =========================================================
 # Logging
-# ---------------------------------------------------------
+# =========================================================
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("local-assumption-prompts-streamed")
+log = logging.getLogger("assumption-extract-and-normalize")
 
 
-# ---------------------------------------------------------
+# =========================================================
 # Utilities
-# ---------------------------------------------------------
+# =========================================================
+_WORD_RE = re.compile(r"\w+")
+
+
 def count_words(text: str) -> int:
-    return len(re.findall(r"\w+", text or ""))
+    return len(_WORD_RE.findall(text or ""))
 
 
 def safe_slug(s: str, max_len: int = 64) -> str:
@@ -34,6 +39,7 @@ def safe_slug(s: str, max_len: int = 64) -> str:
 
 
 def episode_key(ep: Dict) -> str:
+    """Stable filename key; prefers mp3, falls back to title, then hash."""
     title = (ep.get("epTitle") or ep.get("title") or "").strip()
     mp3 = (ep.get("mp3url") or "").strip()
     if mp3:
@@ -56,44 +62,171 @@ def load_jsonl_gz(path: str) -> List[Dict]:
     return rows
 
 
-def parse_llm_json_output(text: str) -> Optional[dict]:
-    """Extract and return the first valid JSON object from LLM output."""
+# ---------------- Balanced JSON extraction ----------------
+_CODE_FENCE_RE = re.compile(r"```(?:json)?(.*?)```", re.DOTALL | re.IGNORECASE)
+
+
+def _iter_json_candidates(txt: str) -> Iterable[str]:
+    """Yield possible JSON substrings: fenced blocks first, then brace-balanced spans."""
+    if not txt:
+        return
+    # Prefer ```json fenced``` blocks if present
+    for m in _CODE_FENCE_RE.finditer(txt):
+        block = m.group(1).strip()
+        if block:
+            yield block
+
+    # Fall back to scanning for top-level brace-balanced JSON objects
+    s = txt
+    start_idx = None
+    depth = 0
+    for i, ch in enumerate(s):
+        if ch == "{":
+            if depth == 0:
+                start_idx = i
+            depth += 1
+        elif ch == "}":
+            if depth > 0:
+                depth -= 1
+                if depth == 0 and start_idx is not None:
+                    yield s[start_idx : i + 1]
+
+
+def _to_float_conf(v: Any, default: float = 0.5) -> float:
+    try:
+        if isinstance(v, bool):
+            return 1.0 if v else 0.0
+        if isinstance(v, (int, float)):
+            x = float(v)
+        elif isinstance(v, str):
+            # Strip percent signs or stray chars
+            xs = v.strip().replace("%", "")
+            x = float(xs)
+        else:
+            return default
+        if x != x:  # NaN
+            return default
+        return max(0.0, min(1.0, x))
+    except Exception:
+        return default
+
+
+def _norm_item(x: Any, default_conf: float = 0.7) -> Optional[Dict[str, Any]]:
+    """Normalize an item into {'text': str, 'confidence': float} or None."""
+    if x is None:
+        return None
+    if isinstance(x, dict):
+        text = x.get("text")
+        conf = x.get("confidence", 0.5)
+    elif isinstance(x, str):
+        text = x
+        conf = default_conf
+    else:
+        return None
+
+    if not isinstance(text, str):
+        return None
+    text = text.strip()
     if not text:
         return None
-    match = re.search(r"\{[\s\S]*\}", text)
-    if not match:
-        return None
-    snippet = match.group(0)
-    try:
-        data = json.loads(snippet)
-        required = {"explicit_propositions", "implicit_propositions", "assumptions"}
-        if not isinstance(data, dict) or not required.issubset(data.keys()):
-            return None
-        return data
-    except Exception:
-        return None
+    conf_f = _to_float_conf(conf, default_conf)
+    return {"text": text, "confidence": conf_f}
 
 
-# ---------------------------------------------------------
+def _normalize_list(items: Any, cap: int = 10) -> List[Dict[str, Any]]:
+    """Coerce arbitrary list-like to a clean, deduped list of dicts with confidence."""
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    if items is None:
+        return out
+    if isinstance(items, dict) and "list" in items and isinstance(items["list"], list):
+        items = items["list"]
+    if not isinstance(items, (list, tuple)):
+        cand = _norm_item(items)
+        if cand:
+            key = cand["text"].strip().casefold()
+            if key not in seen:
+                seen.add(key)
+                out.append(cand)
+        return out[:cap]
+
+    for x in items:
+        cand = _norm_item(x)
+        if not cand:
+            continue
+        key = cand["text"].strip().casefold()
+        if key in seen:
+            # Keep the highest confidence on duplicates
+            for i, y in enumerate(out):
+                if y["text"].strip().casefold() == key and cand["confidence"] > y["confidence"]:
+                    out[i] = cand
+            continue
+        seen.add(key)
+        out.append(cand)
+
+    # Sort by confidence desc to approximate salience, truncate to cap
+    out.sort(key=lambda d: d.get("confidence", 0.0), reverse=True)
+    return out[:cap]
+
+
+def _dedup_cross_lists(primary: List[Dict[str, Any]], secondary: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Remove entries in secondary that duplicate texts in primary (casefold match)."""
+    prim_keys = {p["text"].strip().casefold() for p in primary}
+    sec_clean = [s for s in secondary if s["text"].strip().casefold() not in prim_keys]
+    return primary, sec_clean
+
+
+def parse_and_normalize_llm(text: str) -> Optional[Dict[str, Any]]:
+    """
+    Robustly extract the first valid JSON with keys:
+      - explicit_propositions: list of {text, confidence}
+      - assumptions:           list of {text, confidence}
+    If missing, default to [] and normalize everything.
+    """
+    if not text:
+        return None
+
+    for cand in _iter_json_candidates(text):
+        try:
+            obj = json.loads(cand)
+            if not isinstance(obj, dict):
+                continue
+            exp = obj.get("explicit_propositions", [])
+            asm = obj.get("assumptions", [])
+            exp_n = _normalize_list(exp, cap=10)
+            asm_n = _normalize_list(asm, cap=10)
+            # Remove overlaps (assumptions shouldn't repeat explicit texts)
+            exp_n, asm_n = _dedup_cross_lists(exp_n, asm_n)
+            return {"explicit_propositions": exp_n, "assumptions": asm_n}
+        except Exception:
+            continue
+
+    # Nothing parsable
+    return None
+
+
+# =========================================================
 # vLLM Wrapper
-# ---------------------------------------------------------
+# =========================================================
 class LLMInterface:
     def __init__(
         self,
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
-        temperature: float = 0.6,
+        max_model_len: int = 12288,   # reduce KV cache needs vs 262k default
+        temperature: float = 0.4,
         top_p: float = 0.95,
-        min_p: float = 0.1,
-        top_k: int = 20,
-        repetition_penalty: float = 1.1,
-        max_tokens: int = 6000,
+        min_p: float = 0.05,
+        top_k: int = 40,
+        repetition_penalty: float = 1.05,
+        max_tokens: int = 1024,
     ):
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
+            max_model_len=max_model_len,
         )
         self.params = SamplingParams(
             max_tokens=max_tokens,
@@ -108,7 +241,6 @@ class LLMInterface:
         outs = self.llm.generate(prompts, self.params)
         return [o.outputs[0].text.strip() for o in outs]
 
-
 # ---------------------------------------------------------
 # Prompt variants
 # ---------------------------------------------------------
@@ -118,172 +250,171 @@ PROMPTS = [
     # Prompt 1 — Cognitive Linguistics Baseline
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a cognitive linguistics analyst who specializes in interpreting conversation turns. 
-Your task is to extract propositions and underlying assumptions with high precision and clear differentiation between explicit and implicit meaning.
+You are a cognitive linguistics analyst who specializes in interpreting conversation turns.
+Your task is to extract explicit propositions and underlying assumptions with high precision.
 
-DEFINITIONS:
+CRITICAL DEFINITIONS:
 - Explicit propositions: Direct statements or factual claims clearly expressed in the text.
-- Implicit propositions: Unstated but logically implied meanings or presuppositions necessary to understand the text.
-- Assumptions: Deeper underlying beliefs, values, or worldviews that must hold true for the speaker's reasoning to make sense.
+- Assumptions: Deeper belief-level premises (causal/normative/epistemic/audience/goal) that must hold for the speaker's stance to make sense; more general than EP.
+
+RULES:
+- Return UP TO 10 items for each list (0-10). Prefer fewer, higher-quality items.
+- Order each list from MOST to LEAST salient for the turn's communicative intent.
+- Each Explicit propositions must be an atomic statement with a numeric confidence score (0.0-1.0).
+- Each Assumptions must be a generalized belief (not a paraphrase of Explicit propositions) with a numeric confidence score (0.0-1.0).
+- No duplication across Explicit propositions and Assumptions.
+- Strict JSON ONLY. No commentary, markdown, or extra keys. Double quotes only. No trailing commas.
+- If none for a category, output an empty list.
 
 TASK:
-Given the following speaker turn:
+Given this speaker turn:
 "{turn_text}"
 
-Follow these steps carefully:
-1. Identify **explicit propositions**. Extract only what is overtly said or clearly asserted.
-2. Identify **implicit propositions**. Derive these from presuppositions, entailments, or contextual implications.
-3. Infer **five distinct assumptions** that logically underlie the speaker's reasoning or worldview. 
-   Each assumption must:
-   - Be phrased as a single, clear sentence.
-   - Not restate explicit content.
-   - Be specific and conceptually rich.
-   - Include a numeric confidence score between 0.0 and 1.0 indicating your certainty.
-
-OUTPUT FORMAT (strict JSON):
-"explicit_propositions": ["...", "..."],
-"implicit_propositions": ["...", "..."],
-"assumptions": [
-{{"text": "...", "confidence": 0.93}},
-{{"text": "...", "confidence": 0.88}},
-{{"text": "...", "confidence": 0.81}},
-{{"text": "...", "confidence": 0.76}},
-{{"text": "...", "confidence": 0.71}}
-]
-
-""",
+OUTPUT FORMAT (strict JSON with exactly these keys):
+{{
+  "explicit_propositions": [
+    {{"text": "...", "confidence": 0.95}},
+    {{"text": "...", "confidence": 0.90}}
+  ],
+  "assumptions": [
+    {{"text": "...", "confidence": 0.93}},
+    {{"text": "...", "confidence": 0.88}}
+  ]
+}}""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 2 — Logical / Reasoning Analyst
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a reasoning and logic analyst trained to extract propositional structures and infer unstated premises from arguments. 
-Focus on how ideas follow from each other and what premises support the conclusions.
+You are a reasoning and logic analyst trained to extract propositional structures and infer unstated premises from arguments.
+Focus on how ideas follow from each other and what premises support conclusions.
 
 DEFINITIONS:
-- Explicit propositions: Statements of fact or opinion directly expressed by the speaker.
-- Implicit propositions: Logical premises or presuppositions implied by the explicit statements.
-- Assumptions: Foundational beliefs or rules of inference the speaker must accept for their reasoning to hold.
+- Explicit propositions: Direct claims stated in the text.
+- Assumptions: Foundational belief-level rules of inference or commitments required for the reasoning to be valid.
+
+RULES:
+- Return UP TO 10 items per list, ordered by MOST → LEAST salient for the argument.
+- Explicit propositions must be atomic, non-overlapping, each with a confidence score (0.0-1.0).
+- Assumptions should be more general than the text and may be conditional/causal, each with a confidence score (0.0-1.0).
+- No duplication between Explicit propositions and Assumptions; no paraphrase padding.
+- Strict JSON ONLY; no extra keys.
 
 TASK:
 Analyze this conversation turn:
 "{turn_text}"
 
-Perform:
-1. Identify **explicit propositions** forming the visible argument.
-2. Identify **implicit propositions** that connect or justify the explicit claims.
-3. Infer **five logical assumptions**, phrased as conditional or causal statements, each with a numeric confidence score.
-
-Focus on logical coherence — what must be true for the argument to be internally valid.
-
-OUTPUT FORMAT (strict JSON):
-"explicit_propositions": ["...", "..."],
-"implicit_propositions": ["...", "..."],
-"assumptions": [
-{{"text": "If X, then Y", "confidence": 0.92}},
-{{"text": "People act rationally when given incentives.", "confidence": 0.87}},
-...
-]
-""",
+OUTPUT FORMAT:
+{{
+  "explicit_propositions": [
+    {{"text": "...", "confidence": 0.94}},
+    {{"text": "...", "confidence": 0.90}}
+  ],
+  "assumptions": [
+    {{"text": "If X, then Y.", "confidence": 0.92}},
+    {{"text": "Agents act to maximize expected utility under constraints.", "confidence": 0.87}}
+  ]
+}}""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 3 — Social / Pragmatic Analyst
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a pragmatics and social cognition expert. 
-Your goal is to interpret the social, emotional, and interpersonal dimensions of a conversation turn.
+You are a pragmatics and social cognition expert.
+Interpret the social, emotional, and interpersonal dimensions of the turn.
 
 DEFINITIONS:
-- Explicit propositions: Direct statements, claims, or descriptions.
-- Implicit propositions: Presuppositions or conversational implicatures revealing emotional or relational subtext.
-- Assumptions: Deeper social or affective beliefs (e.g., about trust, respect, authority, morality, or identity).
+- Explicit propositions: Direct statements/claims/descriptions.
+- Assumptions: Deeper social/affective beliefs (trust, respect, authority, identity, morality) that underlie the stance.
+
+RULES:
+- Return UP TO 10 items per list, ordered by MOST → LEAST salient for social meaning.
+- Explicit propositions must be atomic, content-bearing claims with confidence (0.0-1.0).
+- Assumptions should be generalized beliefs (pass a “generality test” if entities become roles), each with confidence (0.0-1.0).
+- No duplication between Explicit propositions and Assumptions; avoid trivial paraphrases.
+- Strict JSON ONLY; no extra keys.
 
 TASK:
 Given the following text:
 "{turn_text}"
 
-Perform the following:
-1. Extract **explicit propositions** that describe observable statements.
-2. Extract **implicit propositions** that convey emotional tone, interpersonal stance, or social context.
-3. Infer **five assumptions** that reveal the speaker's affective or social worldview.
-   Each should be a full sentence expressing a psychological or social belief, with a numeric confidence score.
-
-Ensure that each assumption is distinct and reveals the speaker's underlying attitude or emotion.
-
-OUTPUT FORMAT (strict JSON):
-"explicit_propositions": ["...", "..."],
-"implicit_propositions": ["...", "..."],
-"assumptions": [
-{{"text": "People who fail to adapt are personally responsible for their struggles.", "confidence": 0.9}},
-{{"text": "Hard work defines personal worth.", "confidence": 0.88}},
-...
-]
-""",
+OUTPUT FORMAT:
+{{
+  "explicit_propositions": [
+    {{"text": "...", "confidence": 0.93}},
+    {{"text": "...", "confidence": 0.89}}
+  ],
+  "assumptions": [
+    {{"text": "Status and expertise warrant deference in public discussions.", "confidence": 0.90}},
+    {{"text": "Personal narratives build trust with an audience.", "confidence": 0.86}}
+  ]
+}}""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 4 — Causal Reasoning Analyst
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are a causal inference analyst focusing on how speakers explain why things happen. 
-Your goal is to detect explicit and implicit cause–effect relationships and infer underlying causal assumptions.
+You are a causal inference analyst focusing on how speakers explain why things happen.
 
 DEFINITIONS:
-- Explicit propositions: Statements that describe observable causes or effects directly.
-- Implicit propositions: Unstated causal connections or enabling conditions implied by the text.
-- Assumptions: Core causal beliefs about how the world works — mechanisms, dependencies, or agency — that support the reasoning.
+- Explicit propositions: Direct statements of causes/effects.
+- Assumptions: Core causal beliefs about mechanisms/dependencies/agency that support the reasoning; more general than EP.
+
+RULES:
+- Return UP TO 10 items per list, ordered by MOST → LEAST salient for causal explanation.
+- Explicit propositions must be atomic cause/effect claims with confidence (0.0-1.0).
+- Assumptions should articulate portable causal beliefs (mechanisms or constraints), each with confidence (0.0-1.0), not surface restatements.
+- No duplication between Explicit propositions and Assumptions.
+- Strict JSON ONLY; no extra keys.
 
 TASK:
 Analyze this turn:
 "{turn_text}"
 
-Steps:
-1. Identify **explicit propositions** that describe or assert cause–effect relationships.
-2. Identify **implicit propositions** that link events or conditions causally.
-3. Infer **five causal assumptions** about how or why outcomes occur, each including a numeric confidence score (0.0–1.0).
-
-Each assumption should be specific, mechanistic, and avoid repeating surface-level content.
-
-OUTPUT FORMAT (strict JSON):
-"explicit_propositions": ["...", "..."],
-"implicit_propositions": ["...", "..."],
-"assumptions": [
-{{"text": "Technological change accelerates when data becomes abundant.", "confidence": 0.93}},
-{{"text": "Human errors in decision systems propagate through automation.", "confidence": 0.86}},
-...
-]
-""",
+OUTPUT FORMAT:
+{{
+  "explicit_propositions": [
+    {{"text": "...", "confidence": 0.94}},
+    {{"text": "...", "confidence": 0.90}}
+  ],
+  "assumptions": [
+    {{"text": "Automation amplifies both efficiencies and upstream human errors.", "confidence": 0.93}},
+    {{"text": "Data availability is a primary driver of AI capability gains.", "confidence": 0.88}}
+  ]
+}}""",
 
     # ─────────────────────────────────────────────────────────────
     # Prompt 5 — Epistemic / Knowledge-State Analyst
     # ─────────────────────────────────────────────────────────────
     """SYSTEM:
-You are an epistemic reasoning analyst who studies how speakers express certainty, belief, and doubt. 
-Your task is to uncover both propositional content and the speaker's stance toward knowledge and truth.
+You are an epistemic reasoning analyst who studies how speakers express certainty, belief, and doubt.
 
 DEFINITIONS:
-- Explicit propositions: Direct factual or evaluative statements.
-- Implicit propositions: Unstated presuppositions or epistemic attitudes implied by tone or framing.
-- Assumptions: Foundational epistemic beliefs about what counts as knowledge, evidence, or truth for the speaker.
+- Explicit propositions: Direct factual/evaluative claims.
+-  Assumptions: General beliefs about what counts as knowledge/evidence/trustworthy sources.
+
+RULES:
+- Return UP TO 10 items per list, ordered by MOST → LEAST salient for epistemic stance.
+- Explicit propositions must be atomic claims about reality/belief with confidence (0.0-1.0).
+- Assumptions must be generalized epistemic commitments (e.g., evidence standards, expertise, testimony), each with confidence (0.0-1.0).
+- Avoid duplication between Explicit propositions and  Assumptions; no padding.
+- Strict JSON ONLY; no extra keys.
 
 TASK:
 Given this text:
 "{turn_text}"
 
-Perform the following:
-1. Extract **explicit propositions** that convey claims about reality or belief.
-2. Extract **implicit propositions** that reveal epistemic stance (certainty, doubt, authority, etc.).
-3. Infer **five epistemic assumptions** reflecting how the speaker understands or trusts knowledge sources.
-   Each assumption must include a numeric confidence score.
-
-OUTPUT FORMAT (strict JSON):
-"explicit_propositions": ["...", "..."],
-"implicit_propositions": ["...", "..."],
-"assumptions": [
-{{"text": "Empirical observation is more reliable than intuition.", "confidence": 0.94}},
-{{"text": "Expertise should guide decision-making.", "confidence": 0.88}},
-...
-]
-"""
+OUTPUT FORMAT:
+{{
+  "explicit_propositions": [
+    {{"text": "...", "confidence": 0.95}},
+    {{"text": "...", "confidence": 0.90}}
+  ],
+  "assumptions": [
+    {{"text": "Empirical results outweigh anecdotal experience in decision-making.", "confidence": 0.94}},
+    {{"text": "Domain expertise should guide interpretation of uncertain data.", "confidence": 0.88}}
+  ]
+}}"""
 ]
 
 
@@ -291,9 +422,9 @@ OUTPUT FORMAT (strict JSON):
 # Main pipeline
 # ---------------------------------------------------------
 def main():
-    ap = argparse.ArgumentParser(description="Run 5 assumption prompts with flattened parsed outputs.")
+    ap = argparse.ArgumentParser(description="Stream turns by mp3url and run 5 prompt variants with JSON parsing")
     ap.add_argument("--data_dir", type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1")
-    ap.add_argument("--output_root", type=str, default="results/prompt_camprison")
+    ap.add_argument("--output_root", type=str, default="results/prompt_comparison")
     ap.add_argument("--min_words", type=int, default=50)
     ap.add_argument("--batch_size", type=int, default=8)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
@@ -302,13 +433,13 @@ def main():
     ep_path = Path(args.data_dir) / "episodeLevelData.jsonl.gz"
     turn_path = Path(args.data_dir) / "speakerTurnData.jsonl.gz"
 
-    # --- Load episodes ---
+    # --- Load and filter episodes ---
     log.info(f"Loading episode metadata from {ep_path}")
     episodes = load_jsonl_gz(str(ep_path))
     df_ep = pd.DataFrame(episodes)
     log.info("Total episodes loaded: %d", len(df_ep))
 
-    possible_title_cols = ["epTitle", "title"]
+    possible_title_cols = ["epTitle", "title", "episode_title", "name"]
     possible_speaker_cols = ["numMainSpeakers", "num_main_speakers"]
     title_col = next((c for c in possible_title_cols if c in df_ep.columns), None)
     speaker_col = next((c for c in possible_speaker_cols if c in df_ep.columns), None)
@@ -317,11 +448,10 @@ def main():
         df_ep = df_ep[df_ep[speaker_col] == 2]
     log.info(f"Using '{title_col}' for titles and '{speaker_col}' for speaker count filter.")
 
-    # --- Filter 5 target episodes ---
     targets = [
         "Mostafa Elbermawy — on Long-Lasting Work, Self-Development, and Why AI Will Not Replace Us",
         "China's Six Front War With America - How To Weaponise COVID-19, 5G & AI",
-        "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
+        "Al and Rishal talk about Rishal’s book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
         "Augmented Intelligence with AI in Manufacturing - Paul Boris"
     ]
@@ -332,13 +462,13 @@ def main():
         return
 
     target_mp3s = {(ep.get("mp3url") or "").strip() for ep in selected_eps if ep.get("mp3url")}
-    log.info(f"Streaming speaker turns for {len(target_mp3s)} target episodes.")
+    log.info(f"Streaming turn file and collecting turns for {len(target_mp3s)} target episodes.")
 
-    turn_records: Dict[str, List[Dict]] = {mp3: [] for mp3 in target_mp3s}
+    turn_records: Dict[str, List[str]] = {mp3: [] for mp3 in target_mp3s}
 
-    # --- Stream turns from file ---
+    # --- Stream turns directly from file ---
     with gzip.open(turn_path, "rt", encoding="utf-8") as f:
-        for line in f:
+        for i, line in enumerate(f):
             try:
                 rec = json.loads(line)
             except Exception:
@@ -350,81 +480,71 @@ def main():
             text = (rec.get("turnText") or "").strip()
             if not text or count_words(text) < args.min_words:
                 continue
+            turn_records[mp3].append(text)
 
-            turn_records[mp3].append({
-                "turn_text": text,
-                "speaker_id": rec.get("speaker", [None])[0],
-                "inferred_speaker_name": rec.get("inferredSpeakerName"),
-                "inferred_speaker_role": rec.get("inferredSpeakerRole")
-            })
+            if i % 1_000_000 == 0 and i > 0:
+                log.info(f"Scanned {i:,} lines...")
 
     total_kept = sum(len(v) for v in turn_records.values())
-    log.info(f"Collected {total_kept:,} valid turns across {len(target_mp3s)} episodes.")
+    log.info(f"Collected {total_kept:,} turns total across {len(target_mp3s)} episodes.")
 
-    # --- Run LLM ---
+    # --- Run prompts ---
     llm = LLMInterface(model_name=args.model_name)
     raw_dir = Path(args.output_root) / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     for prompt_id, tmpl in enumerate(PROMPTS, start=1):
-        parsed_dir = Path(args.output_root) / f"prompt{prompt_id}"
-        parsed_dir.mkdir(parents=True, exist_ok=True)
+        out_dir = Path(args.output_root) / f"prompt{prompt_id}"
+        out_dir.mkdir(parents=True, exist_ok=True)
         total_turns = 0
 
         for ep in tqdm(selected_eps, desc=f"Prompt {prompt_id} episodes"):
             ep_mp3 = (ep.get("mp3url") or "").strip()
-            turns = turn_records.get(ep_mp3, [])
+            if ep_mp3 not in turn_records:
+                continue
+            turns = turn_records[ep_mp3]
             if not turns:
                 continue
 
-            prompts = [tmpl.format(turn_text=t["turn_text"]) for t in turns]
+            prompts = [tmpl.format(turn_text=t) for t in turns]
             outputs = []
             for start in range(0, len(prompts), args.batch_size):
                 chunk = prompts[start:start + args.batch_size]
                 outs = llm.generate_batch(chunk)
                 outputs.extend(outs)
 
-            parsed_ok = 0
             parsed_results = []
-            raw_results = []
-
+            parsed_ok = 0
             for t, raw_out in zip(turns, outputs):
                 parsed = parse_llm_json_output(raw_out)
-                base_obj = {
-                    "turn_text": t["turn_text"],
-                    "speaker_id": t["speaker_id"],
-                    "inferred_speaker_name": t["inferred_speaker_name"],
-                    "inferred_speaker_role": t["inferred_speaker_role"]
-                }
-
-                # Parsed goes directly at root (flattened)
+                parsed_results.append({
+                    "turn_text": t,
+                    "raw_output": raw_out,
+                    "parsed": parsed,
+                })
                 if parsed:
                     parsed_ok += 1
-                    parsed_results.append({**base_obj, **parsed})
-                else:
-                    parsed_results.append(base_obj)
-
-                # Raw output stored separately
-                raw_results.append({**base_obj, "raw_output": raw_out})
 
             key = episode_key(ep)
 
-            # Save parsed structured JSON (flattened)
-            with open(parsed_dir / f"{key}.json", "w", encoding="utf-8") as f:
+            # Save structured JSON
+            with open(out_dir / f"{key}.json", "w", encoding="utf-8") as f:
                 json.dump(parsed_results, f, indent=2, ensure_ascii=False)
 
-            # Save raw completions separately
-            with open(raw_dir / f"{key}_prompt{prompt_id}.json", "w", encoding="utf-8") as f:
-                json.dump(raw_results, f, indent=2, ensure_ascii=False)
+            # Save raw-only text
+            with open(raw_dir / f"{key}_prompt{prompt_id}.txt", "w", encoding="utf-8") as f:
+                for out in outputs:
+                    f.write(out + "\n\n")
 
-            gc.collect()
             total_turns += len(outputs)
-            log.info(f"{key}: parsed {parsed_ok}/{len(outputs)} successfully.")
+            gc.collect()
+
+            log.info(f"{key}: {parsed_ok}/{len(outputs)} outputs successfully parsed.")
 
         log.info(f"Prompt {prompt_id} complete: {total_turns} turns processed.")
-        log.info(f"→ Parsed JSON: {parsed_dir}, Raw JSON: {raw_dir}")
+        log.info(f"→ JSON parsed results saved to {out_dir}, raw text to {raw_dir}")
 
-    log.info("✅ All 5 prompt variants completed successfully with flattened outputs.")
+    log.info("✅ All 5 prompt variants completed.")
 
 
 if __name__ == "__main__":
