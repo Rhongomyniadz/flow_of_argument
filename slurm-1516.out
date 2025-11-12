@@ -1,0 +1,22 @@
+2025-11-12 20:41:39.027184: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+INFO 11-12 20:41:51 [__init__.py:241] Automatically detected platform cuda.
+2025-11-12 20:41:53,729 INFO Loading episode metadata from /shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/episodeLevelData.jsonl.gz
+2025-11-12 20:52:32,114 INFO Total episodes loaded: 1124058
+2025-11-12 20:52:34,948 INFO Using 'epTitle' for titles and 'numMainSpeakers' for speaker count filter.
+2025-11-12 20:52:35,841 INFO Found 4 matching episodes.
+2025-11-12 20:52:35,842 INFO Streaming speaker turns for 4 target episodes.
+2025-11-12 21:14:27,177 INFO Collected 130 valid turns across 4 episodes.
+Traceback (most recent call last):
+  File "/home/edenzha/flow_of_argument/prompt_test.py", line 578, in <module>
+    main()
+  File "/home/edenzha/flow_of_argument/prompt_test.py", line 501, in main
+    llm = LLMInterface(
+          ^^^^^^^^^^^^^
+  File "/home/edenzha/flow_of_argument/prompt_test.py", line 225, in __init__
+    self.llm = LLM(
+               ^^^^
+  File "/opt/anaconda/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 251, in __init__
+    engine_args = EngineArgs(
+                  ^^^^^^^^^^^
+TypeError: EngineArgs.__init__() got an unexpected keyword argument 'max_token'
