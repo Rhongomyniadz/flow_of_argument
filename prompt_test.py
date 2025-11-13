@@ -226,8 +226,7 @@ class LLMInterface:
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
-            max_model_len=max_model_len,
-            max_tokens=max_tokens
+            max_model_len=max_model_len
         )
         self.params = SamplingParams(
             temperature=temperature,
@@ -235,6 +234,7 @@ class LLMInterface:
             min_p=min_p,
             top_k=top_k,
             repetition_penalty=repetition_penalty,
+            max_tokens=max_tokens
         )
 
     def generate_batch(self, prompts: List[str]) -> List[str]:
