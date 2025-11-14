@@ -1,7 +1,7 @@
-
 import json
 import math
 import random
+import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -14,7 +14,9 @@ from tqdm import tqdm
 import torch
 from sentence_transformers import SentenceTransformer, util
 
-sns.set(style="whitegrid", font_scale=1.1)
+sns.set_theme(style="whitegrid")
+sns.set_context("notebook", font_scale=1.1)
+
 
 # -----------------------------
 # Embedding helpers (caching)
@@ -27,10 +29,15 @@ class Embedder:
     def encode_texts(self, texts: List[str]) -> torch.Tensor:
         """Embed a list of strings with caching. Returns a 2D tensor [n, d]."""
         if not texts:
-            return torch.empty(0, self.model.get_sentence_embedding_dimension())
+            dim = self.model.get_sentence_embedding_dimension()
+            return torch.empty(0, dim)
         to_compute = [t for t in texts if t not in self.cache]
         if to_compute:
-            embs = self.model.encode(to_compute, convert_to_tensor=True, show_progress_bar=False)
+            embs = self.model.encode(
+                to_compute,
+                convert_to_tensor=True,
+                show_progress_bar=False,
+            )
             if embs.ndim == 1:
                 embs = embs.unsqueeze(0)
             for t, e in zip(to_compute, embs):
@@ -88,8 +95,10 @@ def mean_self_cosine(X: torch.Tensor) -> float:
 # -----------------------------
 def load_prompt_dirs(base_dir: str = "results/prompt_camprison") -> List[Path]:
     base = Path(base_dir)
-    prompt_dirs = sorted([p for p in base.iterdir() if p.is_dir() and p.name.startswith("prompt")],
-                         key=lambda p: p.name)
+    prompt_dirs = sorted(
+        [p for p in base.iterdir() if p.is_dir() and p.name.startswith("prompt")],
+        key=lambda p: p.name,
+    )
     if not prompt_dirs:
         raise FileNotFoundError(f"No prompt directories found under {base_dir}")
     return prompt_dirs
@@ -115,7 +124,8 @@ def load_turn_rows_for_prompt_dir(prompt_dir: Path) -> List[Dict]:
 
         for idx, item in enumerate(items, start=1):
             exp = texts_from_items(item.get("explicit_propositions", []))
-            imp = texts_from_items(item.get("assumptions", []))  # treating assumptions as "implicit"
+            # treating assumptions as "implicit"
+            imp = texts_from_items(item.get("assumptions", []))
             rows.append({
                 "prompt": prompt_dir.name,
                 "episode_key": episode_key,
@@ -232,6 +242,11 @@ def build_redundancy_baseline(df: pd.DataFrame,
 # -----------------------------
 # Visualization
 # -----------------------------
+def safe_name(name: str) -> str:
+    """Safe filename from prompt name."""
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", name)
+
+
 def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts"):
     out = Path(outdir)
     out.mkdir(parents=True, exist_ok=True)
@@ -239,14 +254,30 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         print("⚠️ No data to visualize.")
         return
 
+    prompt_order = sorted(df["prompt"].unique())
+    vis_order = ["explicit", "implicit"]
+
     # --- 1) Lexical diversity by visibility (explicit vs implicit) ---
     div_long = pd.concat([
-        df[["prompt", "diversity_exp"]].rename(columns={"diversity_exp": "diversity"}).assign(visibility="explicit"),
-        df[["prompt", "diversity_imp"]].rename(columns={"diversity_imp": "diversity"}).assign(visibility="implicit"),
+        df[["prompt", "diversity_exp"]]
+        .rename(columns={"diversity_exp": "diversity"})
+        .assign(visibility="explicit"),
+        df[["prompt", "diversity_imp"]]
+        .rename(columns={"diversity_imp": "diversity"})
+        .assign(visibility="implicit"),
     ], ignore_index=True)
 
     plt.figure(figsize=(9, 5))
-    sns.pointplot(x="prompt", y="diversity", hue="visibility", data=div_long, dodge=0.25, errorbar="se")
+    sns.pointplot(
+        x="prompt",
+        y="diversity",
+        hue="visibility",
+        data=div_long,
+        order=prompt_order,
+        hue_order=vis_order,
+        dodge=0.3,
+        errorbar="se",
+    )
     plt.title("Lexical Diversity (TTR) by Prompt and Visibility")
     plt.tight_layout()
     plt.savefig(out / "lexical_diversity_pointplot.png")
@@ -254,7 +285,13 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
 
     # --- 2) EP–IM similarity per prompt ---
     plt.figure(figsize=(9, 5))
-    sns.pointplot(x="prompt", y="ep_im_similarity", data=df, errorbar="se")
+    sns.pointplot(
+        x="prompt",
+        y="ep_im_similarity",
+        data=df,
+        order=prompt_order,
+        errorbar="se",
+    )
     plt.title("Explicit ↔ Implicit (Assumptions) Similarity by Prompt")
     plt.ylabel("Mean Pairwise Cosine")
     plt.tight_layout()
@@ -266,11 +303,18 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     baseline_std = df.attrs.get("redundancy_baseline_std", 0.0)
 
     plt.figure(figsize=(9, 5))
-    sns.pointplot(x="prompt", y="redundancy_imp", data=df, errorbar="se")
-    plt.axhline(baseline_mean, color="red", linestyle="--", label=f"Random baseline (mean={baseline_mean:.3f})")
+    sns.pointplot(
+        x="prompt",
+        y="redundancy_imp",
+        data=df,
+        order=prompt_order,
+        errorbar="se",
+    )
+    plt.axhline(baseline_mean, color="red", linestyle="--",
+                label=f"Random baseline (mean={baseline_mean:.3f})")
     if baseline_std > 0:
         plt.fill_between(
-            [-0.5, len(sorted(df['prompt'].unique())) - 0.5],
+            [-0.5, len(prompt_order) - 0.5],
             [baseline_mean - baseline_std] * 2,
             [baseline_mean + baseline_std] * 2,
             color="red", alpha=0.1, label="Baseline ±1σ"
@@ -284,35 +328,105 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
 
     # --- 4) Average number of explicit & implicit per turn (per prompt) ---
     cnt_long = pd.concat([
-        df[["prompt", "exp_count"]].rename(columns={"exp_count": "num_statements"}).assign(visibility="explicit"),
-        df[["prompt", "imp_count"]].rename(columns={"imp_count": "num_statements"}).assign(visibility="implicit"),
+        df[["prompt", "exp_count"]]
+        .rename(columns={"exp_count": "num_statements"})
+        .assign(visibility="explicit"),
+        df[["prompt", "imp_count"]]
+        .rename(columns={"imp_count": "num_statements"})
+        .assign(visibility="implicit"),
     ], ignore_index=True)
 
     plt.figure(figsize=(9, 5))
-    sns.pointplot(x="prompt", y="num_statements", hue="visibility", data=cnt_long, dodge=0.25, errorbar="se")
+    sns.pointplot(
+        x="prompt",
+        y="num_statements",
+        hue="visibility",
+        data=cnt_long,
+        order=prompt_order,
+        hue_order=vis_order,
+        dodge=0.3,
+        errorbar="se",
+    )
     plt.title("Average Number of Explicit vs. Implicit per Turn (per Prompt)")
     plt.tight_layout()
     plt.savefig(out / "counts_per_prompt_pointplot.png")
     plt.close()
 
     # --- 5) Time series: average number across all prompts per turn index ---
-    # We aggregate across prompts & episodes by the turn index.
+    # First, build long-form with prompt included
     cnt_ts = pd.concat([
-        df[["turn_num", "exp_count"]].rename(columns={"exp_count": "num_statements"}).assign(visibility="explicit"),
-        df[["turn_num", "imp_count"]].rename(columns={"imp_count": "num_statements"}).assign(visibility="implicit"),
+        df[["prompt", "turn_num", "exp_count"]]
+        .rename(columns={"exp_count": "num_statements"})
+        .assign(visibility="explicit"),
+        df[["prompt", "turn_num", "imp_count"]]
+        .rename(columns={"imp_count": "num_statements"})
+        .assign(visibility="implicit"),
     ], ignore_index=True)
 
-    # Optionally limit to first N turns to avoid super long tails
-    # e.g., keep turn_num <= 100 if episodes are long
-    # cnt_ts = cnt_ts[cnt_ts["turn_num"] <= 100]
-
+    # Overall aggregated time series across prompts
     plt.figure(figsize=(10, 5))
-    sns.pointplot(x="turn_num", y="num_statements", hue="visibility", data=cnt_ts, errorbar="se")
+    ax = sns.pointplot(
+        x="turn_num",
+        y="num_statements",
+        hue="visibility",
+        data=cnt_ts,
+        hue_order=vis_order,
+        errorbar="se",
+    )
     plt.title("Average Number of Explicit vs. Implicit per Turn Index (All Prompts)")
     plt.xlabel("Turn Index within Episode")
+
+    # >>> thin x-axis labels so they don't overlap
+    uniq_turns = sorted(cnt_ts["turn_num"].unique())
+    max_labels = 20
+    if len(uniq_turns) > max_labels:
+        step = math.ceil(len(uniq_turns) / max_labels)
+        ticks = uniq_turns[::step]
+    else:
+        ticks = uniq_turns
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([str(t) for t in ticks])
+
     plt.tight_layout()
     plt.savefig(out / "counts_time_series_pointplot.png")
     plt.close()
+
+    # --- 6) Time series per prompt: one plot per prompt in a subfolder ---
+    ts_dir = out / "time_series_by_prompt"
+    ts_dir.mkdir(parents=True, exist_ok=True)
+
+    for p in prompt_order:
+        sub_df = cnt_ts[cnt_ts["prompt"] == p].copy()
+        if sub_df.empty:
+            continue
+
+        plt.figure(figsize=(10, 5))
+        ax = sns.pointplot(
+            x="turn_num",
+            y="num_statements",
+            hue="visibility",
+            data=sub_df,
+            hue_order=vis_order,
+            errorbar="se",
+        )
+        plt.title(f"Average Explicit vs. Implicit per Turn Index\n({p})")
+        plt.xlabel("Turn Index within Episode")
+
+        # >>> thin labels for this prompt only
+        uniq_turns_p = sorted(sub_df["turn_num"].unique())
+        max_labels_p = 20
+        if len(uniq_turns_p) > max_labels_p:
+            step_p = math.ceil(len(uniq_turns_p) / max_labels_p)
+            ticks_p = uniq_turns_p[::step_p]
+        else:
+            ticks_p = uniq_turns_p
+        ax.set_xticks(ticks_p)
+        ax.set_xticklabels([str(t) for t in ticks_p])
+
+        plt.tight_layout()
+        fname = ts_dir / f"{safe_name(p)}_counts_time_series_pointplot.png"
+        plt.savefig(fname)
+        plt.close()
 
     # --- Save data tables for further analysis ---
     df.to_csv(out / "turn_level_metrics.csv", index=False)
@@ -320,6 +434,7 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     cnt_long.to_csv(out / "counts_per_prompt_long.csv", index=False)
     cnt_ts.to_csv(out / "counts_time_series_long.csv", index=False)
     print(f"📊 Charts & tables saved to {out}/")
+    print(f"📊 Per-prompt time series saved to {ts_dir}/")
 
 
 # -----------------------------
@@ -327,9 +442,8 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
 # -----------------------------
 def main():
     # Pick the latest prompt directory under results (e.g., results/prompt_camprison)
-    # or pass a path via CLI if you prefer.
-    # Here we auto-select the newest dir under results starting with "prompt".
-    candidates = [p for p in Path("results").iterdir() if p.is_dir() and p.name.startswith("prompt")]
+    candidates = [p for p in Path("results").iterdir()
+                  if p.is_dir() and p.name.startswith("prompt")]
     if not candidates:
         raise FileNotFoundError("No prompt* directory found under ./results")
     latest_dir = max(candidates, key=lambda p: p.stat().st_mtime)
