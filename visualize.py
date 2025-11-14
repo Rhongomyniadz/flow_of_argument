@@ -3,7 +3,7 @@ import math
 import random
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -14,6 +14,9 @@ from tqdm import tqdm
 import torch
 from sentence_transformers import SentenceTransformer, util
 
+# -----------------------------------
+# Seaborn / Matplotlib style
+# -----------------------------------
 sns.set_theme(style="whitegrid")
 sns.set_context("notebook", font_scale=1.1)
 
@@ -119,86 +122,31 @@ def load_turn_rows_for_prompt_dir(prompt_dir: Path) -> List[Dict]:
         except Exception:
             continue
         items = data if isinstance(data, list) else [data]
-        # derive episode_key from filename (minus extension)
-        episode_key = fpath.stem
+        episode_key = fpath.stem  # filename minus extension
 
         for idx, item in enumerate(items, start=1):
             exp = texts_from_items(item.get("explicit_propositions", []))
             # treating assumptions as "implicit"
             imp = texts_from_items(item.get("assumptions", []))
-            rows.append({
-                "prompt": prompt_dir.name,
-                "episode_key": episode_key,
-                "turn_num": idx,
-                "exp_texts": exp,
-                "imp_texts": imp,
-            })
+            rows.append(
+                {
+                    "prompt": prompt_dir.name,
+                    "episode_key": episode_key,
+                    "turn_num": idx,
+                    "exp_texts": exp,
+                    "imp_texts": imp,
+                }
+            )
     return rows
 
 
-def evaluate_prompt_dir(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
-    """
-    Builds a long dataframe with per-turn metrics and counts.
-    """
-    prompt_dirs = load_prompt_dirs(base_dir)
-    embedder = Embedder("all-MiniLM-L6-v2")
-
-    all_rows: List[Dict] = []
-    # For random-baseline construction later
-    global_imp_pool: List[str] = []
-
-    for pdir in prompt_dirs:
-        rows = load_turn_rows_for_prompt_dir(pdir)
-        for r in rows:
-            global_imp_pool.extend(r["imp_texts"])
-
-        # Compute per-turn metrics
-        for r in rows:
-            exp_txts = r["exp_texts"]
-            imp_txts = r["imp_texts"]
-
-            exp_emb = embedder.encode_texts(exp_txts)
-            imp_emb = embedder.encode_texts(imp_txts)
-
-            # EP-IM similarity
-            ep_im_sim = mean_pairwise_cosine(exp_emb, imp_emb)
-
-            # Lexical diversity (separate)
-            div_exp = ttr(exp_txts)
-            div_imp = ttr(imp_txts)
-
-            # Redundancy within implicit (assumptions)
-            red_imp = mean_self_cosine(imp_emb)
-
-            # Counts
-            all_rows.append({
-                "prompt": r["prompt"],
-                "episode_key": r["episode_key"],
-                "turn_num": r["turn_num"],
-                "exp_count": len(exp_txts),
-                "imp_count": len(imp_txts),
-                "ep_im_similarity": ep_im_sim,
-                "diversity_exp": div_exp,
-                "diversity_imp": div_imp,
-                "redundancy_imp": red_imp,
-            })
-
-    df = pd.DataFrame(all_rows)
-    # Build random-baseline redundancy by shuffling assumptions across turns, preserving per-turn sizes.
-    if not df.empty:
-        baseline_vals = build_redundancy_baseline(df, global_imp_pool, embedder, n_runs=5, seed=42)
-        # Attach overall baseline (mean of runs) for convenience
-        df.attrs["redundancy_baseline_mean"] = float(np.mean(baseline_vals)) if baseline_vals else 0.0
-        df.attrs["redundancy_baseline_std"] = float(np.std(baseline_vals)) if baseline_vals else 0.0
-
-    return df
-
-
-def build_redundancy_baseline(df: pd.DataFrame,
-                              pool_texts: List[str],
-                              embedder: Embedder,
-                              n_runs: int = 5,
-                              seed: int = 42) -> List[float]:
+def build_redundancy_baseline(
+    df: pd.DataFrame,
+    pool_texts: List[str],
+    embedder: Embedder,
+    n_runs: int = 5,
+    seed: int = 42,
+) -> List[float]:
     """
     Random baseline for redundancy: shuffle all implicit (assumption) texts across turns,
     preserving per-turn implicit counts; compute mean within-turn redundancy across dataset.
@@ -211,7 +159,6 @@ def build_redundancy_baseline(df: pd.DataFrame,
     rng = random.Random(seed)
     run_means: List[float] = []
 
-    # Build per-turn sizes in order
     turn_sizes: List[int] = df["imp_count"].tolist()
 
     for _ in range(n_runs):
@@ -224,12 +171,10 @@ def build_redundancy_baseline(df: pd.DataFrame,
             if k <= 1:
                 redundancies.append(0.0)
                 continue
-            # if we run out (shouldn't), wrap around
             if pos + k > len(pool_copy):
-                # recycle by reshuffling
                 rng.shuffle(pool_copy)
                 pos = 0
-            sample = pool_copy[pos:pos + k]
+            sample = pool_copy[pos : pos + k]
             pos += k
             emb = embedder.encode_texts(sample)
             redundancies.append(mean_self_cosine(emb))
@@ -237,6 +182,62 @@ def build_redundancy_baseline(df: pd.DataFrame,
         run_means.append(float(np.mean(redundancies)) if redundancies else 0.0)
 
     return run_means
+
+
+def evaluate_prompt_dir(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
+    """
+    Builds a long dataframe with per-turn metrics and counts.
+    """
+    prompt_dirs = load_prompt_dirs(base_dir)
+    embedder = Embedder("all-MiniLM-L6-v2")
+
+    all_rows: List[Dict] = []
+    global_imp_pool: List[str] = []  # for random baseline
+
+    for pdir in prompt_dirs:
+        rows = load_turn_rows_for_prompt_dir(pdir)
+        for r in rows:
+            global_imp_pool.extend(r["imp_texts"])
+
+        for r in rows:
+            exp_txts = r["exp_texts"]
+            imp_txts = r["imp_texts"]
+
+            exp_emb = embedder.encode_texts(exp_txts)
+            imp_emb = embedder.encode_texts(imp_txts)
+
+            ep_im_sim = mean_pairwise_cosine(exp_emb, imp_emb)
+            div_exp = ttr(exp_txts)
+            div_imp = ttr(imp_txts)
+            red_imp = mean_self_cosine(imp_emb)
+
+            all_rows.append(
+                {
+                    "prompt": r["prompt"],
+                    "episode_key": r["episode_key"],
+                    "turn_num": r["turn_num"],
+                    "exp_count": len(exp_txts),
+                    "imp_count": len(imp_txts),
+                    "ep_im_similarity": ep_im_sim,
+                    "diversity_exp": div_exp,
+                    "diversity_imp": div_imp,
+                    "redundancy_imp": red_imp,
+                }
+            )
+
+    df = pd.DataFrame(all_rows)
+    if not df.empty:
+        baseline_vals = build_redundancy_baseline(
+            df, global_imp_pool, embedder, n_runs=5, seed=42
+        )
+        df.attrs["redundancy_baseline_mean"] = (
+            float(np.mean(baseline_vals)) if baseline_vals else 0.0
+        )
+        df.attrs["redundancy_baseline_std"] = (
+            float(np.std(baseline_vals)) if baseline_vals else 0.0
+        )
+
+    return df
 
 
 # -----------------------------
@@ -257,15 +258,64 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     prompt_order = sorted(df["prompt"].unique())
     vis_order = ["explicit", "implicit"]
 
+    # --------------------------------------------------
+    # 0) Correlation between exp_count and imp_count
+    # --------------------------------------------------
+    corr_rows = []
+    for p, g in df.groupby("prompt"):
+        if len(g) > 1:
+            pearson_r = g["exp_count"].corr(g["imp_count"], method="pearson")
+            spearman_r = g["exp_count"].corr(g["imp_count"], method="spearman")
+        else:
+            pearson_r = np.nan
+            spearman_r = np.nan
+        corr_rows.append(
+            {
+                "prompt": p,
+                "pearson_r": pearson_r,
+                "spearman_r": spearman_r,
+            }
+        )
+
+    corr_df = pd.DataFrame(corr_rows)
+    print("\n=== Correlation between #explicit and #implicit per prompt ===")
+    print(corr_df)
+
+    corr_df.to_csv(out / "exp_imp_correlation.csv", index=False)
+
+    plt.figure(figsize=(7, 4))
+    corr_melt = corr_df.melt(
+        id_vars="prompt",
+        value_vars=["pearson_r", "spearman_r"],
+        var_name="corr_type",
+        value_name="r",
+    )
+    sns.barplot(
+        data=corr_melt,
+        x="prompt",
+        y="r",
+        hue="corr_type",
+        order=prompt_order,
+    )
+    plt.axhline(0, color="black", linewidth=0.8)
+    plt.ylim(-0.1, 1.0)
+    plt.title("Correlation between #Explicit and #Implicit per Turn")
+    plt.tight_layout()
+    plt.savefig(out / "exp_imp_correlation.png")
+    plt.close()
+
     # --- 1) Lexical diversity by visibility (explicit vs implicit) ---
-    div_long = pd.concat([
-        df[["prompt", "diversity_exp"]]
-        .rename(columns={"diversity_exp": "diversity"})
-        .assign(visibility="explicit"),
-        df[["prompt", "diversity_imp"]]
-        .rename(columns={"diversity_imp": "diversity"})
-        .assign(visibility="implicit"),
-    ], ignore_index=True)
+    div_long = pd.concat(
+        [
+            df[["prompt", "diversity_exp"]]
+            .rename(columns={"diversity_exp": "diversity"})
+            .assign(visibility="explicit"),
+            df[["prompt", "diversity_imp"]]
+            .rename(columns={"diversity_imp": "diversity"})
+            .assign(visibility="implicit"),
+        ],
+        ignore_index=True,
+    )
 
     plt.figure(figsize=(9, 5))
     sns.pointplot(
@@ -310,16 +360,24 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         order=prompt_order,
         errorbar="se",
     )
-    plt.axhline(baseline_mean, color="red", linestyle="--",
-                label=f"Random baseline (mean={baseline_mean:.3f})")
+    plt.axhline(
+        baseline_mean,
+        color="red",
+        linestyle="--",
+        label=f"Random baseline (mean={baseline_mean:.3f})",
+    )
     if baseline_std > 0:
         plt.fill_between(
             [-0.5, len(prompt_order) - 0.5],
             [baseline_mean - baseline_std] * 2,
             [baseline_mean + baseline_std] * 2,
-            color="red", alpha=0.1, label="Baseline ±1σ"
+            color="red",
+            alpha=0.1,
+            label="Baseline ±1σ",
         )
-    plt.title("Assumption Redundancy (within-turn) by Prompt\n(with Random Shuffle Baseline)")
+    plt.title(
+        "Assumption Redundancy (within-turn) by Prompt\n(with Random Shuffle Baseline)"
+    )
     plt.ylabel("Mean Pairwise Cosine (upper triangle)")
     plt.legend()
     plt.tight_layout()
@@ -327,14 +385,17 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     plt.close()
 
     # --- 4) Average number of explicit & implicit per turn (per prompt) ---
-    cnt_long = pd.concat([
-        df[["prompt", "exp_count"]]
-        .rename(columns={"exp_count": "num_statements"})
-        .assign(visibility="explicit"),
-        df[["prompt", "imp_count"]]
-        .rename(columns={"imp_count": "num_statements"})
-        .assign(visibility="implicit"),
-    ], ignore_index=True)
+    cnt_long = pd.concat(
+        [
+            df[["prompt", "exp_count"]]
+            .rename(columns={"exp_count": "num_statements"})
+            .assign(visibility="explicit"),
+            df[["prompt", "imp_count"]]
+            .rename(columns={"imp_count": "num_statements"})
+            .assign(visibility="implicit"),
+        ],
+        ignore_index=True,
+    )
 
     plt.figure(figsize=(9, 5))
     sns.pointplot(
@@ -353,17 +414,18 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     plt.close()
 
     # --- 5) Time series: average number across all prompts per turn index ---
-    # First, build long-form with prompt included
-    cnt_ts = pd.concat([
-        df[["prompt", "turn_num", "exp_count"]]
-        .rename(columns={"exp_count": "num_statements"})
-        .assign(visibility="explicit"),
-        df[["prompt", "turn_num", "imp_count"]]
-        .rename(columns={"imp_count": "num_statements"})
-        .assign(visibility="implicit"),
-    ], ignore_index=True)
+    cnt_ts = pd.concat(
+        [
+            df[["prompt", "turn_num", "exp_count"]]
+            .rename(columns={"exp_count": "num_statements"})
+            .assign(visibility="explicit"),
+            df[["prompt", "turn_num", "imp_count"]]
+            .rename(columns={"imp_count": "num_statements"})
+            .assign(visibility="implicit"),
+        ],
+        ignore_index=True,
+    )
 
-    # Overall aggregated time series across prompts
     plt.figure(figsize=(10, 5))
     ax = sns.pointplot(
         x="turn_num",
@@ -376,16 +438,15 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     plt.title("Average Number of Explicit vs. Implicit per Turn Index (All Prompts)")
     plt.xlabel("Turn Index within Episode")
 
-    # >>> thin x-axis labels so they don't overlap
-    uniq_turns = sorted(cnt_ts["turn_num"].unique())
-    max_labels = 20
-    if len(uniq_turns) > max_labels:
-        step = math.ceil(len(uniq_turns) / max_labels)
-        ticks = uniq_turns[::step]
-    else:
-        ticks = uniq_turns
-    ax.set_xticks(ticks)
-    ax.set_xticklabels([str(t) for t in ticks])
+    # Thin x-axis labels so they don't overlap (no rotation)
+    xticks = ax.get_xticks()
+    labels = [lab.get_text() for lab in ax.get_xticklabels()]
+    n = len(labels)
+    if n > 15:
+        step = math.ceil(n / 15)
+        keep_idx = list(range(0, n, step))
+        ax.set_xticks([xticks[i] for i in keep_idx])
+        ax.set_xticklabels([labels[i] for i in keep_idx])
 
     plt.tight_layout()
     plt.savefig(out / "counts_time_series_pointplot.png")
@@ -412,16 +473,14 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         plt.title(f"Average Explicit vs. Implicit per Turn Index\n({p})")
         plt.xlabel("Turn Index within Episode")
 
-        # >>> thin labels for this prompt only
-        uniq_turns_p = sorted(sub_df["turn_num"].unique())
-        max_labels_p = 20
-        if len(uniq_turns_p) > max_labels_p:
-            step_p = math.ceil(len(uniq_turns_p) / max_labels_p)
-            ticks_p = uniq_turns_p[::step_p]
-        else:
-            ticks_p = uniq_turns_p
-        ax.set_xticks(ticks_p)
-        ax.set_xticklabels([str(t) for t in ticks_p])
+        xticks = ax.get_xticks()
+        labels = [lab.get_text() for lab in ax.get_xticklabels()]
+        n = len(labels)
+        if n > 15:
+            step = math.ceil(n / 15)
+            keep_idx = list(range(0, n, step))
+            ax.set_xticks([xticks[i] for i in keep_idx])
+            ax.set_xticklabels([labels[i] for i in keep_idx])
 
         plt.tight_layout()
         fname = ts_dir / f"{safe_name(p)}_counts_time_series_pointplot.png"
@@ -433,6 +492,8 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     div_long.to_csv(out / "diversity_long.csv", index=False)
     cnt_long.to_csv(out / "counts_per_prompt_long.csv", index=False)
     cnt_ts.to_csv(out / "counts_time_series_long.csv", index=False)
+    corr_df.to_csv(out / "exp_imp_correlation.csv", index=False)
+
     print(f"📊 Charts & tables saved to {out}/")
     print(f"📊 Per-prompt time series saved to {ts_dir}/")
 
@@ -441,9 +502,10 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
 # Main
 # -----------------------------
 def main():
-    # Pick the latest prompt directory under results (e.g., results/prompt_camprison)
-    candidates = [p for p in Path("results").iterdir()
-                  if p.is_dir() and p.name.startswith("prompt")]
+    candidates = [
+        p for p in Path("results").iterdir()
+        if p.is_dir() and p.name.startswith("prompt")
+    ]
     if not candidates:
         raise FileNotFoundError("No prompt* directory found under ./results")
     latest_dir = max(candidates, key=lambda p: p.stat().st_mtime)

@@ -214,27 +214,25 @@ class LLMInterface:
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
-        temperature: float = 0.4,
-        max_model_len: int = 65508,
-        max_tokens: int = 4096,
+        temperature: float = 0.6,
         top_p: float = 0.95,
-        min_p: float = 0.05,
-        top_k: int = 40,
-        repetition_penalty: float = 1.05
+        min_p: float = 0.1,
+        top_k: int = 20,
+        repetition_penalty: float = 1.1,
+        max_tokens: int = 6000,
     ):
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
-            max_model_len=max_model_len
         )
         self.params = SamplingParams(
+            max_tokens=max_tokens,
             temperature=temperature,
             top_p=top_p,
             min_p=min_p,
             top_k=top_k,
             repetition_penalty=repetition_penalty,
-            max_tokens=max_tokens
         )
 
     def generate_batch(self, prompts: List[str]) -> List[str]:
