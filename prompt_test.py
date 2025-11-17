@@ -454,7 +454,7 @@ def main():
         "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
         "Augmented Intelligence with AI in Manufacturing - Paul Boris",
-        "testing episode for prompt engineering"
+        "177: Surviving and thriving in a changing world: AI and data-driven adaptation with Colin Shearer"
     ]
     mask = df_ep[title_col].fillna("").apply(lambda x: any(t.lower() in str(x).lower() for t in targets))
     selected_eps = df_ep[mask].to_dict(orient="records")
