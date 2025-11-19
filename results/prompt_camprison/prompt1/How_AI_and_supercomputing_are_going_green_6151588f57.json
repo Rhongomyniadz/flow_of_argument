@@ -1,0 +1,506 @@
+[
+  {
+    "turn_text": "driver error and/or driving conditions. Always drive safely. Turning artificial intelligence? Green. I'm Tanya Hall, and joining me is Dr. John Cohn, IBM Fellow at the MIT IBM Watson AI Lab. Welcome, Dr. Cohn. Oh, nice to be here, Tanya, really happy to be here. So give us a brief summary of your extensive and colorful background at IBM. Ah, well, I was born on a snowy day in New York in 1959, but it's been a blur ever since then. All I would say is, let's see, I'm a real, I'm definitely an inveterate nerd, you know, I've been a nerd forever. I grew up in Texas, nearby you, but then went to MIT because it was the best nerdy school I could find, and then graduated there in '81 with a device physics major. And came up to here where I live near Burlington, Vermont, because IBM had a very large semiconductor fab. And believe it or not, I've been there 39 years, and it's been an incredible ride. I love making things with my hands and I love making chips, so this was the perfect place. And that took me on this kind of crazy journey. I fell in love with the software you used to make chips. So I did that for 30 years. I was the chief scientist for IBM for that, and I make a habit of every 30 years you should change it up. So I became the chief scientist for IBM's Internet of Things business, which was using chips and computers putting together two things I love. And then I did that and that was in Munich. So every other week I would get on an airplane from here in northern Vermont to Munich. And it was a fantastic job, but I had enough frequent flyer miles and I said, \"Okay.\" And it was a great job. But what happened actually there is I was working on the software used in chips to make them smarter. And I fell in love with artificial intelligence. And about that time we had started a laboratory here at MIT down in Cambridge. And I am a rabid MIT fan. I",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "Tanya Hall",
+    "inferred_speaker_role": "host",
+    "explicit_propositions": [
+      {
+        "text": "Dr. John Cohn has worked at IBM for 39 years.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Dr. John Cohn was born on a snowy day in New York in 1959.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Dr. John Cohn attended MIT and graduated in 1981 with a degree in device physics.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Dr. John Cohn developed a deep interest in artificial intelligence while working on chip software.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Dr. John Cohn was the chief scientist for IBM's Internet of Things business.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Dr. John Cohn has lived near Burlington, Vermont, for most of his career.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Dr. John Cohn is a self-described inveterate nerd.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Dr. John Cohn frequently traveled between Burlington, Vermont, and Munich during his IoT role.",
+        "confidence": 0.9
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Long-term career continuity at one organization reflects personal fulfillment and professional identity.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Personal passion drives sustained engagement in technical domains over decades.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Frequent travel between geographically distant locations is feasible and sustainable within corporate roles.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Technological evolution naturally leads to new areas of interest even after long-standing expertise.",
+        "confidence": 0.9
+      },
+      {
+        "text": "MIT holds significant institutional prestige and personal affinity for the speaker.",
+        "confidence": 0.89
+      }
+    ]
+  },
+  {
+    "turn_text": ", \"Put me in.\" And so John Kelly, our executive EP said, \"Why don't you go there and beat the IBM fellow for the lab?\" And it's been fantastic. So what I do is I commute at half-time down there in person, but I'm there all the time mentally. So it's been a great",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "John Cohn",
+    "inferred_speaker_role": "guest",
+    "explicit_propositions": [
+      {
+        "text": "The speaker was asked to join a project or role by John Kelly.",
+        "confidence": 0.95
+      },
+      {
+        "text": "The experience has been positive overall.",
+        "confidence": 0.94
+      },
+      {
+        "text": "John Kelly is the executive EP (Executive Producer) of the speaker's team.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The speaker was instructed to compete against an IBM representative for laboratory access or leadership.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The speaker commutes to the lab at half-time while being fully mentally engaged.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Being physically present part-time while mentally committed equates to effective contribution.",
+        "confidence": 0.93
+      },
+      {
+        "text": "John Kelly’s authority is recognized and trusted within the context of decision-making.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Competition with someone from IBM carries professional value or prestige.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Leadership roles or responsibilities imply accountability even when not fully on-site.",
+        "confidence": 0.87
+      },
+      {
+        "text": "A strong mental presence compensates for reduced physical presence in collaborative work environments.",
+        "confidence": 0.86
+      }
+    ]
+  },
+  {
+    "turn_text": "ride. And I'm now working with a team of people who are just glow-in-the-dark brilliant. And I'm learning to be a real AI person. So it's a very, very mind-expanding time for me. I want to talk a little bit more about your role. In fact, in your role at MIT, IBM Watson AI Lab, you oversee special projects including building a path toward a greener AI. Exactly how can AI become greener and why is that important? Oh, it's so important. I've always been in love with the hardware side and kind of where it meets software. So what happened, I started working on to address the fact that there wasn't enough accelerated compute. It turns out that AI takes a ton of energy, especially supervised learning the way we do it now. And over the last year, I spent designing and installing and operating a large supercomputer there called Satori. And in the process of building this IBM computers, it was really, really an amazing thing because usually I designed the chips. It was the first time I built something that big, using them. I started to realize how much power AI uses. It turns out that the software just is incredibly energy-consumptive. You use these GPUs, graphics processing units or accelerators along with the compute. And it started me thinking about, gosh, well, how is this going to affect the world? What happened though is when we built this computer, we built it for speed. It was an IBM helping the MIT kind of build up their processing. It turned out that every year all of the supercomputers in the world are ranked by their speed, but also by their energy efficiency. And just because we'd made good choices, we were in the middle of the pack in terms of performance, which is still something of the top 500 supercomputers. But we were number four in the greenest computer, greenest supercomputer at the top 500. So that started me thinking, and it turns out that our computer is built at a place called the Mass Green High Performance Computer Center, MGHPCC in Holyoke, Massachusetts. It's on an old brownfield site, it's actually got onsite hydroelectric power of a by-power from a variety, it's 97% green energy. And when you combine our fourth most energy efficient computer with the green energy choices, it started me thinking about, well, because to kind of back it up a little bit, if energy consumption of AI is very large and AI is growing very large, and there's some projections that if we didn't change the way we did AI, you know, we just continue to use supervised learning, that around somewhere around 2040, we're going to use all the energy in the world. That would mean, you know, all the coal you could dig up and all the solar panels you could plant, we're going to run into a brick wall. Now, I don't think that's going to happen, but I want to make sure it doesn't happen soon. I mean, the climate as a kind of pre-estriving Birkenstock wearing hippie from Vermont, you know, I'm all about the environment, and I don't want to contribute to something that's actually going the other way. So what we've done with this statutory supercomputer is we've instrumented it. So we're using the fact that it's super green to kind of make the point that when we've instrumented it to tell people how much power everything they do takes, it gives you feedback. It's just like, you know, like now when you fly on an airplane, they tell you what the carbon cost is, and you can buy an offset if you're feeling, you know, feeling so biased. But what that really does is it makes, it focuses people's attention. And so what we're doing with this supercomputer is by letting people know how much energy this thing uses, they can make better decisions. And we've been able to see, you know, simply just by alerting people to it, they can get 3,",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "Tanya Hall",
+    "inferred_speaker_role": "host",
+    "explicit_propositions": [
+      {
+        "text": "AI, particularly supervised learning, consumes a significant amount of energy.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The speaker is working with a team of exceptionally talented individuals.",
+        "confidence": 0.95
+      },
+      {
+        "text": "A supercomputer named Satori was designed, installed, and operated by the speaker at MIT in collaboration with IBM.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Satori is located at the Mass Green High Performance Computer Center in Holyoke, Massachusetts.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Satori ranks as the fourth most energy-efficient supercomputer among the Top 500 globally.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The MGHPCC facility utilizes 97% green energy sourced from on-site hydroelectric power.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The speaker is currently learning to become proficient in AI-related roles.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The speaker believes that continuing current AI practices may lead to unsustainable environmental consequences.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Projections suggest that unchecked growth in AI energy demand could consume all available global energy by approximately 2040.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Instrumentation of Satori allows users to monitor real-time energy usage, providing feedback on computational impact.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Energy efficiency in computing systems is both achievable and measurable through standardized benchmarks.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Environmental sustainability is a morally imperative goal that should influence technological development.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Providing users with real-time data on resource consumption leads to more responsible decision-making.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Technological progress in AI should be aligned with ecological limits rather than pursued independently of environmental impact.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Public awareness of environmental costs drives behavioral change even without direct regulation.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Green energy infrastructure can support large-scale computing needs sustainably.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Institutional collaborations between academia and industry can effectively advance sustainable technology innovation.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Supervised learning methods will remain dominant unless actively restructured toward lower-energy alternatives.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Feedback mechanisms for energy use in computation are scalable and applicable beyond specialized research environments.",
+        "confidence": 0.84
+      },
+      {
+        "text": "The speaker’s personal values regarding environmental protection are representative of broader societal concern.",
+        "confidence": 0.83
+      }
+    ]
+  },
+  {
+    "turn_text": "workload that we could run on this machine. It's 70 times more efficient, 70 times less carbon than a similarly sized, similarly capable machine in a less-premed data center, 70. So we feel that that gets people thinking in a way that we are going to avoid that brick wall. What makes Satora unique compared to other supercomputers? I mean, is it the hardware design? Is it the applications you can run? Well, it's a combination. The energy efficiency is because of the IBM Power architecture. So we have very large memory. We have very large memory in GPUs. It uses very exotic cooling that's, you know, air cooling is very well cooled, so the density is quite high. So a combination of those kind of things made it the most energy efficient from the Green 500. But it's the combination of that and the placement in this Green data center that's kind of like top of the heap on both of those that comes together to make it unique. But I think, honestly, the thing that's going to really move the needle so everybody should be using the most efficient energy computation that they can. But I think what really has to happen is we have to change the way that we think about doing AI software. We have to move away from just doing supervised learning. That is tons of labeled data, which the world doesn't really offer you unless you're just trying to do cats and dogs, right? So if we can get to a point where we can train on less data and become better about making software that uses less data, that's going to solve more energy no matter what kind of computer that you run on. So we're trying to make the point and by giving people feedback",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "Tanya Hall",
+    "inferred_speaker_role": "host",
+    "explicit_propositions": [
+      {
+        "text": "The machine described is 70 times more energy-efficient than a similarly sized and capable machine in a less-premed data center.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Satora is the most energy-efficient supercomputer according to the Green 500 rankings.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Supervised learning requires large amounts of labeled data, which is often unavailable outside simple classification tasks.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The energy efficiency of Satora is due to its IBM Power architecture, large GPU memory, and exotic cooling methods.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Reducing data requirements in AI training will lead to lower energy consumption regardless of hardware used.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Satora’s location in a green data center contributes significantly to its overall energy efficiency.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Energy efficiency in computing systems is a critical factor for sustainable technological development.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Improving AI software efficiency through reduced data dependency is more impactful than improving hardware alone.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Audiences are receptive to arguments based on environmental impact when evaluating computational technologies.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Technological progress in AI should prioritize sustainability over raw performance metrics.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Feedback mechanisms effectively influence decision-making around technology adoption.",
+        "confidence": 0.85
+      }
+    ]
+  },
+  {
+    "turn_text": "that this approach versus that approach, one of them is greener versus the other, you don't have to be running on our fancy computer to do it, but it's just a great pedestal because we've got the instrumentation. And I can tell you, I can talk about this for hours, but the idea of how we use things, my lab is concentrating on neural",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "John Cohn",
+    "inferred_speaker_role": "guest",
+    "explicit_propositions": [
+      {
+        "text": "The speaker's lab is currently focused on research involving neural systems.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The speaker's laboratory has instrumentation that provides a strong foundation for their work.",
+        "confidence": 0.94
+      },
+      {
+        "text": "One of the two approaches being discussed is greener than the other.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The greenness of the approach does not require using the speaker's advanced computer system.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The speaker could discuss their topic at length without losing coherence or relevance.",
+        "confidence": 0.87
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "There is value in having specialized instrumentation even if it's not strictly necessary for basic functionality.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Environmental sustainability (greenness) is a meaningful criterion for evaluating technical approaches.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The speaker possesses sufficient expertise to confidently assert comparative advantages between approaches.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Audiences will find extended discussion on technical topics engaging when presented with authoritative context.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Neural-focused research is a legitimate and important area of scientific inquiry within the current context.",
+        "confidence": 0.88
+      }
+    ]
+  },
+  {
+    "turn_text": "symbolic computing. And by doing that, we can show that you can train with far less data and training with far less data and generating far less carbon. And I would love to talk to you for hours and hours and hours about this and we'll have to have you back to do that. But I think you alluded to something that you may have answered my next question. As you look past the great quarantine of 2020, what MIT IBM projects are you most excited about? Well, I think I started to go right into it. What's interesting is that it's the idea that AI has gotten so popular with for the last say five years is the ability to use these neural network components to train on lots of data. So you do, I get tons of data, whether they're faces or dogs or cats or whatever, and they're labeled, they're meticulously labeled. And that is an approach that's really powerful for recognizing faces, et cetera. But it doesn't, what it's not good at is doing what humans do, which is just on the first or second time you see something being able to understand it. You know, I don't know you well, but I know you're from Texas, so I bet you like Mexican food, right? Well, I can apply that kind of reasoning, but straight AI, straight supervised learning doesn't know anything you don't tell us. So we're very interested in being able to apply symbolic reasoning, which is what drove AI for almost 50 years that had first existed, and then combine it with the new advances with neural computing. By doing that, you can use the best of both, neural networks, deep learning is really good at parsing the world and saying what's around me, and then applying the best parts of symbolic reasoning and symbolic logic and induction planning causality to try to understand how to reason about it. That means I can bring experiences that I gathered from somewhere else and apply them to this new situation, which something AI doesn't do very well. I'll give you an example, in one of the projects that we're doing with Josh Tenenbaum's lab at MIT, we were able to show on a particular data set that tries to answer visual questions, be able to look at a picture and ask an arbitrary question and have the computer answer, which you or I would have no trouble doing. Computers aren't very good at that. By using this neural symbolic thing, we were able to improve the accuracy to near perfect. I mean, a human is like 96%, the best software thing was about 98%, we're over",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "Tanya Hall",
+    "inferred_speaker_role": "host",
+    "explicit_propositions": [
+      {
+        "text": "A joint neural-symbolic model achieved near-perfect performance on a visual question answering dataset.",
+        "confidence": 0.97
+      },
+      {
+        "text": "Combining symbolic reasoning with neural computing leverages strengths of both approaches.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Symbolic computing enables training with significantly less data.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Symbolic reasoning supports inference, planning, causality, and transfer of experience to new contexts.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Traditional supervised learning cannot generalize beyond explicitly taught information.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Humans can understand new situations after seeing them once or twice due to prior knowledge application.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Neural networks trained on large amounts of labeled data are effective for tasks like face recognition.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Neural networks excel at perceiving and parsing sensory input such as images.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Training with less data results in lower carbon emissions.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Human performance on visual question answering is approximately 96% accurate.",
+        "confidence": 0.9
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Current AI systems lack causal understanding and structured logical reasoning.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The integration of symbolic systems with neural networks represents a promising path toward more robust AI.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Effective artificial intelligence should emulate human-like generalization and reasoning capabilities.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Prior knowledge transfer is essential for intelligent behavior in novel situations.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Labeled datasets are costly and environmentally impactful, making low-data training desirable.",
+        "confidence": 0.92
+      },
+      {
+        "text": "There exists a fundamental complementarity between perception-driven models and rule-based reasoning.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Visual question answering is a meaningful benchmark for evaluating holistic machine understanding.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The success of symbolic AI in earlier decades provides a valid foundation for modern hybrid architectures.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Audiences value technical depth and future-oriented research directions in AI discourse.",
+        "confidence": 0.88
+      },
+      {
+        "text": "MIT-IBM collaboration fosters innovation in foundational AI problems.",
+        "confidence": 0.87
+      }
+    ]
+  },
+  {
+    "turn_text": "two things together makes neural symbolic really, really exciting. So that's the thing I'm most excited about. And it's going to have a direct output on power. It's going to make our AI much greener and much more flexible. Dr. John Cone, IBM Fellow, and distinguished agitator at the MIT IBM Watson AI lab",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "Tanya Hall",
+    "inferred_speaker_role": "host",
+    "explicit_propositions": [
+      {
+        "text": "Two things together make neural symbolic AI particularly exciting.",
+        "confidence": 0.97
+      },
+      {
+        "text": "Neural symbolic AI will make AI systems significantly greener.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Neural symbolic AI will enhance the flexibility of AI systems.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Neural symbolic AI will have a direct impact on power efficiency.",
+        "confidence": 0.92
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Combining neural and symbolic approaches leads to meaningful advancements in AI.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Improvements in energy efficiency and system flexibility are valuable goals in AI development.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Technological progress in AI can directly translate into environmental and operational benefits.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The speaker has credible authority to assess the future trajectory of AI technologies.",
+        "confidence": 0.9
+      }
+    ]
+  },
+  {
+    "turn_text": ". What a unique title. John, we definitely want to have you come back anytime. If somebody wants to connect with you, what's the best way they can do that? Well, there are a couple of places I think that the lab, the MIT IBM Watson AI lab.mit.edu our website, or catch me on Twitter at John Cone VT, like John Cone Vermont. And I'll be very happy to answer. I'm always looking for friends. Thanks again, John. And you guys can find more of my interviews right here or at tanyahall.net. Thanks for watching. [MUSIC PLAYING] You",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "John Cohn",
+    "inferred_speaker_role": "guest",
+    "explicit_propositions": [
+      {
+        "text": "The title being discussed is unique.",
+        "confidence": 0.95
+      },
+      {
+        "text": "John is willing to return whenever invited.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The MIT IBM Watson AI Lab website is at lab.mit.edu.",
+        "confidence": 0.9
+      },
+      {
+        "text": "John’s personal website is tanyahall.net.",
+        "confidence": 0.88
+      },
+      {
+        "text": "John can be contacted via Twitter under the handle @JohnConeVT.",
+        "confidence": 0.87
+      },
+      {
+        "text": "John is open to connecting with new people and considers them 'friends'.",
+        "confidence": 0.85
+      },
+      {
+        "text": "More interviews with John are available on the current platform.",
+        "confidence": 0.83
+      },
+      {
+        "text": "John will be happy to respond to inquiries.",
+        "confidence": 0.82
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Audiences value direct access to experts through public platforms.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Public sharing of contact information fosters meaningful professional relationships.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Being approachable increases one’s influence and visibility in academic and technical communities.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Viewers expect follow-up resources after engaging content ends.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Social media presence enhances credibility and accessibility for researchers.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Offering multiple contact points increases the likelihood of successful outreach.",
+        "confidence": 0.82
+      }
+    ]
+  }
+]
