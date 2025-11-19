@@ -456,7 +456,16 @@ def main():
         "Al and Rishal talk about Rishal's book Grokking AI Algorithms",
         "AI and data-driven adaptation with Colin Shearer",
         "Augmented Intelligence with AI in Manufacturing - Paul Boris",
-        "177: Surviving and thriving in a changing world: AI and data-driven adaptation with Colin Shearer"
+        "177: Surviving and thriving in a changing world: AI and data-driven adaptation with Colin Shearer",
+        "Artificial Intelligence (AI) and it is Application in Construction",
+        "Why AI needs to develop ethical and legal standards before being unleashed (ft. David Toman)",
+        "Cloudpick AI-Powered Autonomous Retail Store Solution – Intel on AI – Episode 60",
+        "What history can teach us about the future of AI",
+        "How AI and supercomputing are going green",
+        "The potential of AI in healthcare",
+        "How I Taught My 7 Year About Machine Learning and AI in 2020",
+        "AI Assists Human Intelligence__Elon Musk Jack Ma Debate",
+        "Hard Talk HR - How AI Can Help Build a High-Performing HR Department, Oliver Muhr, Ep. 15"
     ]
     mask = df_ep[title_col].fillna("").apply(lambda x: any(t.lower() in str(x).lower() for t in targets))
     selected_eps = df_ep[mask].to_dict(orient="records")
