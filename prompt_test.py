@@ -220,11 +220,13 @@ class LLMInterface:
         top_k: int = 20,
         repetition_penalty: float = 1.1,
         max_tokens: int = 6000,
+        max_model_len: int = 100000
     ):
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=gpu_memory_utilization,
             tensor_parallel_size=tensor_parallel_size,
+            max_model_len=max_model_len
         )
         self.params = SamplingParams(
             max_tokens=max_tokens,
