@@ -1,135 +1,0 @@
-INFO 11-17 19:52:34 [__init__.py:216] Automatically detected platform cuda.
-2025-11-17 19:52:36.788368: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2025-11-17 19:52:49,995 INFO Loading episode metadata from /shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1/episodeLevelData.jsonl.gz
-2025-11-17 20:03:31,721 INFO Total episodes loaded: 1124058
-2025-11-17 20:03:33,145 INFO Using 'epTitle' for titles and 'numMainSpeakers' for speaker count filter.
-2025-11-17 20:03:33,965 INFO Found 4 matching episodes.
-2025-11-17 20:03:33,965 INFO Streaming speaker turns for 4 target episodes.
-2025-11-17 20:26:32,464 INFO Collected 130 valid turns across 4 episodes.
-INFO 11-17 20:26:32 [utils.py:233] non-default args: {'disable_log_stats': True, 'model': 'Qwen/Qwen3-30B-A3B-Instruct-2507'}
-INFO 11-17 20:26:33 [model.py:547] Resolved architecture: Qwen3MoeForCausalLM
-`torch_dtype` is deprecated! Use `dtype` instead!
-INFO 11-17 20:26:33 [model.py:1510] Using max model len 262144
-INFO 11-17 20:26:33 [scheduler.py:205] Chunked prefill is enabled with max_num_batched_tokens=8192.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:26:41 [core.py:644] Waiting for init message from front-end.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:26:41 [core.py:77] Initializing a V1 LLM engine (v0.11.0) with config: model='Qwen/Qwen3-30B-A3B-Instruct-2507', speculative_config=None, tokenizer='Qwen/Qwen3-30B-A3B-Instruct-2507', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=262144, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=0, served_model_name=Qwen/Qwen3-30B-A3B-Instruct-2507, enable_prefix_caching=True, chunked_prefill_enabled=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output","vllm.mamba_mixer2","vllm.mamba_mixer","vllm.short_conv","vllm.linear_attention","vllm.plamo2_mamba_mixer","vllm.gdn_attention","vllm.sparse_attn_indexer"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"cudagraph_mode":[2,1],"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"use_inductor_graph_partition":false,"pass_config":{},"max_capture_size":512,"local_cache_dir":null}
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m W1117 20:27:07.870000 2919664 site-packages/torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m W1117 20:27:07.870000 2919664 site-packages/torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:09 [parallel_state.py:1208] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:19 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:20 [gpu_model_runner.py:2602] Starting to load model Qwen/Qwen3-30B-A3B-Instruct-2507...
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:29 [gpu_model_runner.py:2634] Loading model from scratch...
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:29 [cuda.py:366] Using Flash Attention backend on V1 engine.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:27:30 [weight_utils.py:392] Using model weights format ['*.safetensors']
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/16 [00:00<?, ?it/s]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:   6% Completed | 1/16 [00:40<10:10, 40.72s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  12% Completed | 2/16 [01:19<09:17, 39.83s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  19% Completed | 3/16 [02:00<08:42, 40.17s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  25% Completed | 4/16 [02:11<05:42, 28.53s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  31% Completed | 5/16 [02:50<05:56, 32.41s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  38% Completed | 6/16 [03:34<06:02, 36.27s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  44% Completed | 7/16 [04:20<05:55, 39.51s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  50% Completed | 8/16 [05:03<05:24, 40.61s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  56% Completed | 9/16 [05:43<04:43, 40.54s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  62% Completed | 10/16 [06:24<04:03, 40.63s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  69% Completed | 11/16 [07:06<03:24, 40.90s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  75% Completed | 12/16 [07:49<02:46, 41.73s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  81% Completed | 13/16 [08:29<02:03, 41.27s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  88% Completed | 14/16 [09:11<01:22, 41.25s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards:  94% Completed | 15/16 [09:56<00:42, 42.35s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards: 100% Completed | 16/16 [10:37<00:00, 42.12s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Loading safetensors checkpoint shards: 100% Completed | 16/16 [10:37<00:00, 39.85s/it]
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m 
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:38:08 [default_loader.py:267] Loading weights took 638.10 seconds
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:39:06 [gpu_model_runner.py:2653] Model loading took 56.9342 GiB and 639.594578 seconds
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:39:45 [backends.py:548] Using cache directory: /home/edenzha/.cache/vllm/torch_compile_cache/1606bc0a30/rank_0_0/backbone for vLLM's torch.compile
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:39:45 [backends.py:559] Dynamo bytecode transform time: 28.68 s
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:40:04 [backends.py:197] Cache the graph for dynamic shape for later use
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:42:27 [backends.py:218] Compiling a graph for dynamic shape takes 160.26 s
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m WARNING 11-17 20:42:32 [fused_moe.py:798] Using default MoE config. Performance might be sub-optimal! Config file not found at ['/opt/anaconda/lib/python3.12/site-packages/vllm/model_executor/layers/fused_moe/configs/E=128,N=768,device_name=NVIDIA_A100-SXM4-80GB.json']
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:42:36 [monitor.py:34] torch.compile takes 188.94 s in total
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m [rank0]:W1117 20:42:36.373000 2919664 site-packages/torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m [rank0]:W1117 20:42:36.373000 2919664 site-packages/torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m [rank0]:W1117 20:42:36.381000 2919664 site-packages/torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m [rank0]:W1117 20:42:36.381000 2919664 site-packages/torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m INFO 11-17 20:45:40 [gpu_worker.py:298] Available KV cache memory: 13.81 GiB
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708] EngineCore failed to start.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708] Traceback (most recent call last):
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 699, in run_engine_core
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     engine_core = EngineCoreProc(*args, **kwargs)
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 498, in __init__
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     super().__init__(vllm_config, executor_class, log_stats,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 92, in __init__
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     self._initialize_kv_caches(vllm_config)
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 199, in _initialize_kv_caches
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     kv_cache_configs = get_kv_cache_configs(vllm_config, kv_cache_specs,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 1243, in get_kv_cache_configs
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     check_enough_kv_cache_memory(vllm_config, kv_cache_spec_one_worker,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 716, in check_enough_kv_cache_memory
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708]     raise ValueError(
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ERROR 11-17 20:45:47 [core.py:708] ValueError: To serve at least one request with the models's max seq len (262144), (24.00 GiB KV cache is needed, which is larger than the available KV cache memory (13.81 GiB). Based on the available memory, the estimated maximum model length is 150784. Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Process EngineCore_DP0:
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m Traceback (most recent call last):
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     self.run()
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/multiprocessing/process.py", line 108, in run
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     self._target(*self._args, **self._kwargs)
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 712, in run_engine_core
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     raise e
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 699, in run_engine_core
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     engine_core = EngineCoreProc(*args, **kwargs)
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 498, in __init__
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     super().__init__(vllm_config, executor_class, log_stats,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 92, in __init__
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     self._initialize_kv_caches(vllm_config)
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 199, in _initialize_kv_caches
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     kv_cache_configs = get_kv_cache_configs(vllm_config, kv_cache_specs,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 1243, in get_kv_cache_configs
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     check_enough_kv_cache_memory(vllm_config, kv_cache_spec_one_worker,
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m   File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py", line 716, in check_enough_kv_cache_memory
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m     raise ValueError(
-[1;36m(EngineCore_DP0 pid=2919664)[0;0m ValueError: To serve at least one request with the models's max seq len (262144), (24.00 GiB KV cache is needed, which is larger than the available KV cache memory (13.81 GiB). Based on the available memory, the estimated maximum model length is 150784. Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
-Traceback (most recent call last):
-  File "/home/edenzha/flow_of_argument/prompt_test.py", line 577, in <module>
-    main()
-  File "/home/edenzha/flow_of_argument/prompt_test.py", line 500, in main
-    llm = LLMInterface(
-          ^^^^^^^^^^^^^
-  File "/home/edenzha/flow_of_argument/prompt_test.py", line 224, in __init__
-    self.llm = LLM(
-               ^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 297, in __init__
-    self.llm_engine = LLMEngine.from_engine_args(
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 177, in from_engine_args
-    return cls(vllm_config=vllm_config,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 114, in __init__
-    self.engine_core = EngineCoreClient.make_client(
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 80, in make_client
-    return SyncMPClient(vllm_config, executor_class, log_stats)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 602, in __init__
-    super().__init__(
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 448, in __init__
-    with launch_core_engines(vllm_config, executor_class,
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/anaconda/lib/python3.12/contextlib.py", line 144, in __exit__
-    next(self.gen)
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 732, in launch_core_engines
-    wait_for_engine_startup(
-  File "/opt/anaconda/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 785, in wait_for_engine_startup
-    raise RuntimeError("Engine core initialization failed. "
-RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
