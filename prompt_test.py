@@ -282,6 +282,7 @@ OUTPUT FORMAT (strict JSON with exactly these keys):
   ]
 }}""",
 
+
     # ─────────────────────────────────────────────────────────────
     # Prompt 2 — Logical / Reasoning Analyst
     # ─────────────────────────────────────────────────────────────
@@ -426,7 +427,7 @@ def main():
     ap.add_argument("--data_dir", type=str, default="/shared/3/datasets/podcasts/SPoRC/processed/mayJune/v1")
     ap.add_argument("--output_root", type=str, default="results/prompt_camprison")
     ap.add_argument("--min_words", type=int, default=50)
-    ap.add_argument("--batch_size", type=int, default=8)
+    ap.add_argument("--batch_size", type=int, default=256)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=1)
     args = ap.parse_args()
