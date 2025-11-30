@@ -20,13 +20,13 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results/political_prompt3_samples")
+DEFAULT_OUT_ROOT = Path("results/political_prompt3_grouped")
 
 # =========================================================
 # Logging
 # =========================================================
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("political-prompt3-sampler-v2")
+log = logging.getLogger("political-prompt3-by-episode")
 
 _WORD_RE = re.compile(r"\w+")
 
@@ -42,29 +42,44 @@ def open_text(path: Path):
 
 
 # =========================================================
-# Episode id loading (use what you showed: "id")
+# Load episode metadata (use key shown in your example: "id")
 # =========================================================
-def load_episode_ids(episodes_jsonl: Path) -> List[int]:
-    ids: List[int] = []
+def load_episode_id_and_meta(episodes_jsonl: Path) -> Dict[int, Dict[str, Any]]:
+    """
+    Returns: {episode_id: {title_ep, pubDate_ep, rssKey, guid_ep, key}}
+    (Only fields we might want for debugging / manifest.)
+    """
+    out: Dict[int, Dict[str, Any]] = {}
     with open_text(episodes_jsonl) as f:
         for line in f:
-            line = line.strip()
-            if not line:
+            s = line.strip()
+            if not s:
                 continue
             try:
-                rec = json.loads(line)
+                rec = json.loads(s)
             except Exception:
                 continue
-            if isinstance(rec, dict) and rec.get("id") is not None:
-                try:
-                    ids.append(int(rec["id"]))
-                except Exception:
-                    pass
-    return ids
+            if not isinstance(rec, dict):
+                continue
+            if rec.get("id") is None:
+                continue
+            try:
+                eid = int(rec["id"])
+            except Exception:
+                continue
+
+            out[eid] = {
+                "title_ep": rec.get("title_ep"),
+                "pubDate_ep": rec.get("pubDate_ep"),
+                "rssKey": rec.get("rssKey"),
+                "guid_ep": rec.get("guid_ep"),
+                "key": rec.get("key"),
+            }
+    return out
 
 
 # =========================================================
-# Turns index: id -> actual file path by filename stem
+# Turns index: episode_id -> turns file by filename stem
 # =========================================================
 def turns_file_id(path: Path) -> Optional[int]:
     name = path.name
@@ -98,37 +113,29 @@ def build_turns_index(turns_dir: Path) -> Dict[int, Path]:
 
 # =========================================================
 # Robust JSON reading for turns files
-#   - First try JSONL (1 JSON per line)
-#   - If that yields nothing, fall back to JSONDecoder.raw_decode scanning
+#   - Try JSONL (1 JSON per line) first
+#   - If that yields nothing, fall back to JSONDecoder.raw_decode scan
 # =========================================================
 def iter_json_objects_jsonl(path: Path) -> Iterator[Any]:
-    any_parsed = False
-    bad = 0
     with open_text(path) as f:
         for line in f:
             s = line.strip()
             if not s:
                 continue
             try:
-                obj = json.loads(s)
-                any_parsed = True
-                yield obj
+                yield json.loads(s)
             except Exception:
-                bad += 1
                 continue
-    # caller can detect "yielded nothing" by checking separately
-    if not any_parsed and bad > 0:
-        # silent; debug happens in probe
-        return
 
 
 def iter_json_objects_rawdecode(path: Path) -> Iterator[Any]:
-    # Works for: multi-line JSON objects, concatenated JSON objects, JSON arrays, etc.
     with open_text(path) as f:
         text = f.read()
+
     s = text.lstrip()
     if not s:
         return
+
     # JSON array case
     if s[0] == "[":
         try:
@@ -153,40 +160,13 @@ def iter_json_objects_rawdecode(path: Path) -> Iterator[Any]:
         try:
             obj, j = dec.raw_decode(text, i)
         except Exception:
-            # give up
             break
         yield obj
         i = j
 
 
-def iter_turn_records(path: Path) -> Iterator[Dict[str, Any]]:
-    """
-    Normalize possible wrappers:
-      - dict turn
-      - dict with 'turns' or 'speakerTurns' etc.
-      - list of turns
-    """
-    # Try JSONL first
-    yielded = 0
-    for obj in iter_json_objects_jsonl(path):
-        yielded += 1
-        for t in _explode_obj(obj):
-            if isinstance(t, dict):
-                yield t
-
-    if yielded > 0:
-        return
-
-    # Fallback: raw_decode scanning
-    for obj in iter_json_objects_rawdecode(path):
-        for t in _explode_obj(obj):
-            if isinstance(t, dict):
-                yield t
-
-
 def _explode_obj(obj: Any) -> Iterable[Any]:
     if isinstance(obj, dict):
-        # common wrappers
         for k in ("turns", "speakerTurns", "utterances", "data"):
             v = obj.get(k)
             if isinstance(v, list) and v:
@@ -197,11 +177,27 @@ def _explode_obj(obj: Any) -> Iterable[Any]:
     return []
 
 
+def iter_turn_records(path: Path) -> Iterator[Dict[str, Any]]:
+    yielded_any = False
+    for obj in iter_json_objects_jsonl(path):
+        yielded_any = True
+        for t in _explode_obj(obj):
+            if isinstance(t, dict):
+                yield t
+    if yielded_any:
+        return
+    for obj in iter_json_objects_rawdecode(path):
+        for t in _explode_obj(obj):
+            if isinstance(t, dict):
+                yield t
+
+
 # =========================================================
-# Turn extraction: use known keys, else auto-pick best string field
+# Turn extraction: known keys first, else auto-pick best string field
 # =========================================================
 @dataclass
 class ExtractedTurn:
+    turn_idx: int
     text: str
     speaker_id: Any
     speaker_name: Optional[str]
@@ -210,11 +206,6 @@ class ExtractedTurn:
 
 
 def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]]:
-    """
-    If standard keys missing, pick the best string field.
-    Prefers keys containing text-ish substrings and longer content.
-    Returns (text, key).
-    """
     best = None  # (score, key, text)
     for k, v in turn.items():
         if not isinstance(v, str):
@@ -223,12 +214,11 @@ def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
         if not s:
             continue
         lk = k.lower()
-        # heuristic scoring
         score = len(s)
-        if "text" in lk:
-            score += 5000
         if "turn" in lk and "text" in lk:
             score += 8000
+        if "text" in lk:
+            score += 5000
         if "transcript" in lk or "utter" in lk or "content" in lk:
             score += 4000
         if best is None or score > best[0]:
@@ -238,8 +228,7 @@ def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
     return best[2], best[1]
 
 
-def extract_turn(turn: Dict[str, Any]) -> Optional[ExtractedTurn]:
-    # Text: your expected keys first
+def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[ExtractedTurn]:
     chosen_key = ""
     txt = None
 
@@ -259,31 +248,24 @@ def extract_turn(turn: Dict[str, Any]) -> Optional[ExtractedTurn]:
     if not txt:
         return None
 
-    # Speaker id
     spk = turn.get("speaker_id", None)
     if spk is None:
         spk = turn.get("speaker", None)
     if isinstance(spk, list) and spk:
         spk = spk[0]
 
-    # Speaker name / role
     name = turn.get("inferred_speaker_name")
     if name is None:
         name = turn.get("inferredSpeakerName")
-    if isinstance(name, str):
-        name = name.strip()
-    else:
-        name = None
+    name = name.strip() if isinstance(name, str) else None
 
     role = turn.get("inferred_speaker_role")
     if role is None:
         role = turn.get("inferredSpeakerRole")
-    if isinstance(role, str):
-        role = role.strip()
-    else:
-        role = None
+    role = role.strip() if isinstance(role, str) else None
 
     return ExtractedTurn(
+        turn_idx=turn_idx,
         text=txt,
         speaker_id=spk,
         speaker_name=name,
@@ -292,8 +274,20 @@ def extract_turn(turn: Dict[str, Any]) -> Optional[ExtractedTurn]:
     )
 
 
+def load_episode_turns(turns_path: Path, min_words: int) -> List[ExtractedTurn]:
+    out: List[ExtractedTurn] = []
+    for i, t in enumerate(iter_turn_records(turns_path)):
+        et = extract_turn(t, turn_idx=i)
+        if et is None:
+            continue
+        if count_words(et.text) < min_words:
+            continue
+        out.append(et)
+    return out
+
+
 # =========================================================
-# Prompt 3 ONLY + parsing normalization (same as your style)
+# Prompt 3 + parsing normalization
 # =========================================================
 _CODE_FENCE_RE = re.compile(r"```(?:json)?(.*?)```", re.DOTALL | re.IGNORECASE)
 
@@ -305,10 +299,9 @@ def _iter_json_candidates(txt: str) -> Iterable[str]:
         block = m.group(1).strip()
         if block:
             yield block
-    s = txt
     start_idx = None
     depth = 0
-    for i, ch in enumerate(s):
+    for i, ch in enumerate(txt):
         if ch == "{":
             if depth == 0:
                 start_idx = i
@@ -317,7 +310,7 @@ def _iter_json_candidates(txt: str) -> Iterable[str]:
             if depth > 0:
                 depth -= 1
                 if depth == 0 and start_idx is not None:
-                    yield s[start_idx : i + 1]
+                    yield txt[start_idx : i + 1]
 
 
 def _to_float_conf(v: Any, default: float = 0.5) -> float:
@@ -327,8 +320,7 @@ def _to_float_conf(v: Any, default: float = 0.5) -> float:
         if isinstance(v, (int, float)):
             x = float(v)
         elif isinstance(v, str):
-            xs = v.strip().replace("%", "")
-            x = float(xs)
+            x = float(v.strip().replace("%", ""))
         else:
             return default
         if x != x:
@@ -471,113 +463,26 @@ class LLMInterface:
 
 
 # =========================================================
-# Sampling: stop once we have N turns (no need to scan all 9663)
+# Main: sample N episodes; write one json per episode id
 # =========================================================
-def sample_turns(
-    episode_ids: List[int],
-    turns_index: Dict[int, Path],
-    n_samples: int,
-    min_words: int,
-    seed: int,
-    episodes_to_try: int,
-    probe_k: int,
-) -> List[Dict[str, Any]]:
-    rng = random.Random(seed)
-    existing = [eid for eid in episode_ids if eid in turns_index]
-    log.info("Episode ids loaded: %d", len(episode_ids))
-    log.info("Episode ids with turns files present: %d", len(existing))
-    if not existing:
-        return []
-
-    rng.shuffle(existing)
-    to_try = existing if episodes_to_try <= 0 else existing[: min(episodes_to_try, len(existing))]
-    log.info("Trying up to %d episodes to collect %d turns.", len(to_try), n_samples)
-
-    samples: List[Dict[str, Any]] = []
-
-    # probe: show what one turns file actually looks like and what text field we pick
-    if probe_k > 0:
-        print("\n==== PROBE (turns file reality check) ====")
-        shown = 0
-        for eid in to_try:
-            p = turns_index[eid]
-            first_obj = None
-            for obj in iter_turn_records(p):
-                first_obj = obj
-                break
-            if first_obj is None:
-                print(f"id={eid} file={p}  -> NO parsed objects (parser failed)")
-            else:
-                et = extract_turn(first_obj)
-                keys = list(first_obj.keys())[:30]
-                print(f"id={eid} file={p}")
-                print(f"  first_record_keys(first 30): {keys}")
-                if et is None:
-                    print("  extract_turn: FAILED (no usable text field found)")
-                else:
-                    wc = count_words(et.text)
-                    snip = et.text.replace("\n", " ")[:200] + ("..." if len(et.text) > 200 else "")
-                    print(f"  extract_turn: OK  chosen_text_key={et.chosen_text_key!r}  words={wc}")
-                    print(f"  snippet: {snip}")
-            shown += 1
-            if shown >= probe_k:
-                break
-
-    for eid in tqdm(to_try, desc="Sampling episodes"):
-        p = turns_index[eid]
-
-        # reservoir sample ONE good turn from this episode file
-        chosen: Optional[Dict[str, Any]] = None
-        seen_good = 0
-
-        for turn in iter_turn_records(p):
-            et = extract_turn(turn)
-            if et is None:
-                continue
-            if count_words(et.text) < min_words:
-                continue
-
-            seen_good += 1
-            item = {
-                "episode_id": eid,
-                "turn_file": str(p),
-                "turn_text": et.text,
-                "speaker_id": et.speaker_id,
-                "inferred_speaker_name": et.speaker_name,
-                "inferred_speaker_role": et.speaker_role,
-                "chosen_text_key": et.chosen_text_key,
-            }
-            if chosen is None:
-                chosen = item
-            else:
-                # classic reservoir sampling
-                if rng.randrange(seen_good) == 0:
-                    chosen = item
-
-        if chosen is not None:
-            samples.append(chosen)
-            if len(samples) >= n_samples:
-                break
-
-    log.info("Sampled turns: %d", len(samples))
-    return samples
-
-
 def main():
-    ap = argparse.ArgumentParser(description="Sample N political turns and run Prompt 3 via vLLM (robust parsing).")
+    ap = argparse.ArgumentParser(description="Sample N episodes; run Prompt 3; save one JSON per episode id.")
     ap.add_argument("--episodes_jsonl", type=str, default=str(DEFAULT_EPISODES_JSONL))
     ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
 
-    ap.add_argument("--n_samples", type=int, default=30)
+    ap.add_argument("--num_episodes", type=int, default=50)
     ap.add_argument("--min_words", type=int, default=10)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--episodes_to_try", type=int, default=2000, help="0 = try all")
-    ap.add_argument("--probe_k", type=int, default=3)
 
+    # optional safety cap; default = no cap
+    ap.add_argument("--max_turns_per_episode", type=int, default=0, help="0 means no cap; else max turns to process per episode.")
+
+    ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=1)
+
     args = ap.parse_args()
 
     episodes_jsonl = Path(args.episodes_jsonl)
@@ -590,75 +495,122 @@ def main():
         raise FileNotFoundError(f"Turns dir not found: {turns_dir}")
 
     log.info("Loading episode ids from %s", episodes_jsonl)
-    ep_ids = load_episode_ids(episodes_jsonl)
+    ep_meta = load_episode_id_and_meta(episodes_jsonl)
+    ep_ids = list(ep_meta.keys())
     log.info("Episode ids loaded: %d", len(ep_ids))
 
     log.info("Building turns index from %s", turns_dir)
     turns_index = build_turns_index(turns_dir)
     log.info("Indexed turns files: %d", len(turns_index))
 
-    sampled = sample_turns(
-        episode_ids=ep_ids,
-        turns_index=turns_index,
-        n_samples=args.n_samples,
-        min_words=args.min_words,
-        seed=args.seed,
-        episodes_to_try=args.episodes_to_try,
-        probe_k=args.probe_k,
-    )
-
-    if not sampled:
-        log.error("Still sampled 0 turns. The PROBE above will tell whether parsing fails or the text key differs.")
+    eligible = [eid for eid in ep_ids if eid in turns_index]
+    log.info("Episode ids with turns files present: %d", len(eligible))
+    if not eligible:
+        log.error("No eligible episode ids (id not found as a turns filename).")
         return
 
-    llm = LLMInterface(
-        model_name=args.model_name,
-        tensor_parallel_size=args.tensor_parallel_size,
-        max_tokens=1200,
-    )
+    rng = random.Random(args.seed)
+    rng.shuffle(eligible)
+    eligible = eligible[: min(len(eligible), args.episodes_to_try)]
 
-    prompts = [PROMPT_3.format(turn_text=t["turn_text"]) for t in sampled]
+    parsed_dir = out_root / "prompt3"
+    raw_dir = out_root / "raw"
+    parsed_dir.mkdir(parents=True, exist_ok=True)
+    raw_dir.mkdir(parents=True, exist_ok=True)
 
-    outputs: List[str] = []
-    for start in tqdm(range(0, len(prompts), args.batch_size), desc="Generating (prompt3)"):
-        outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
+    llm = LLMInterface(model_name=args.model_name, tensor_parallel_size=args.tensor_parallel_size)
 
-    parsed_ok = 0
-    results = []
-    raw_results = []
+    manifest = {
+        "episodes_jsonl": str(episodes_jsonl),
+        "turns_dir": str(turns_dir),
+        "num_episodes_target": args.num_episodes,
+        "min_words": args.min_words,
+        "max_turns_per_episode": args.max_turns_per_episode,
+        "seed": args.seed,
+        "model_name": args.model_name,
+        "tensor_parallel_size": args.tensor_parallel_size,
+        "episodes_written": [],
+        "episodes_skipped_no_turns": 0,
+    }
 
-    for t, raw_out in zip(sampled, outputs):
-        norm = parse_and_normalize_llm(raw_out)
-        base = {k: t[k] for k in t.keys()}
-        if norm is not None:
-            parsed_ok += 1
-            results.append({**base, **norm})
-        else:
-            results.append(base)
-        raw_results.append({"turn_text": t["turn_text"], "raw_output": raw_out})
+    written = 0
+    for eid in tqdm(eligible, desc="Episodes processed"):
+        if written >= args.num_episodes:
+            break
 
-    out_root.mkdir(parents=True, exist_ok=True)
-    (out_root / "raw").mkdir(parents=True, exist_ok=True)
+        turns_path = turns_index[eid]
+        turns = load_episode_turns(turns_path, min_words=args.min_words)
+        if not turns:
+            manifest["episodes_skipped_no_turns"] += 1
+            continue
 
-    out_json = out_root / f"prompt3_political_samples{args.n_samples}.json"
-    out_raw = out_root / "raw" / f"prompt3_political_samples{args.n_samples}_raw.json"
+        if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(turns) > args.max_turns_per_episode:
+            # Keep chronological: take first K (you can change to random sample if you prefer)
+            turns = turns[: args.max_turns_per_episode]
 
-    with open(out_json, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
-    with open(out_raw, "w", encoding="utf-8") as f:
-        json.dump(raw_results, f, indent=2, ensure_ascii=False)
+        prompts = [PROMPT_3.format(turn_text=t.text) for t in turns]
 
-    log.info("Parsed OK: %d/%d", parsed_ok, len(results))
-    log.info("Wrote: %s", out_json)
-    log.info("Wrote: %s", out_raw)
+        outputs: List[str] = []
+        for start in range(0, len(prompts), args.batch_size):
+            outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
 
-    print("\n==== Preview (first 3) ====")
-    for i, r in enumerate(results[:3], 1):
-        txt = (r.get("turn_text") or "").replace("\n", " ")
-        print(f"\n[{i}] episode_id={r.get('episode_id')} file={r.get('turn_file')}")
-        print(f"  chosen_text_key={r.get('chosen_text_key')!r}")
-        print(f"  speaker={r.get('inferred_speaker_name')!r} role={r.get('inferred_speaker_role')!r}")
-        print("  turn_text:", txt[:240] + ("..." if len(txt) > 240 else ""))
+        parsed_rows = []
+        raw_rows = []
+        parsed_ok = 0
+
+        for t, raw_out in zip(turns, outputs):
+            norm = parse_and_normalize_llm(raw_out)
+            base = {
+                "episode_id": eid,
+                "turn_file": str(turns_path),
+                "turn_idx": t.turn_idx,
+                "turn_text": t.text,
+                "speaker_id": t.speaker_id,
+                "inferred_speaker_name": t.speaker_name,
+                "inferred_speaker_role": t.speaker_role,
+                "chosen_text_key": t.chosen_text_key,
+            }
+            if norm is not None:
+                parsed_ok += 1
+                parsed_rows.append({**base, **norm})
+            else:
+                parsed_rows.append(base)
+
+            raw_rows.append({"turn_idx": t.turn_idx, "turn_text": t.text, "raw_output": raw_out})
+
+        out_parsed = parsed_dir / f"{eid}.json"          # <- filename is id
+        out_raw = raw_dir / f"{eid}_raw.json"
+        with open(out_parsed, "w", encoding="utf-8") as f:
+            json.dump(parsed_rows, f, indent=2, ensure_ascii=False)
+        with open(out_raw, "w", encoding="utf-8") as f:
+            json.dump(raw_rows, f, indent=2, ensure_ascii=False)
+
+        meta = ep_meta.get(eid, {})
+        manifest["episodes_written"].append(
+            {
+                "episode_id": eid,
+                "turn_file": str(turns_path),
+                "n_turns_written": len(parsed_rows),
+                "parsed_ok": parsed_ok,
+                "parsed_path": str(out_parsed),
+                "raw_path": str(out_raw),
+                # these are just for convenience/debug
+                "title_ep": meta.get("title_ep"),
+                "pubDate_ep": meta.get("pubDate_ep"),
+                "rssKey": meta.get("rssKey"),
+                "guid_ep": meta.get("guid_ep"),
+                "key": meta.get("key"),
+            }
+        )
+
+        written += 1
+
+    manifest_path = out_root / "manifest_prompt3_by_episode.json"
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+
+    log.info("Done. Episode files written: %d", written)
+    log.info("Manifest: %s", manifest_path)
 
 
 if __name__ == "__main__":
