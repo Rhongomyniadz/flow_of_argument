@@ -20,7 +20,7 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results/political_prompt3_grouped")
+DEFAULT_OUT_ROOT = Path("results")
 
 # =========================================================
 # Logging
@@ -513,7 +513,7 @@ def main():
     rng.shuffle(eligible)
     eligible = eligible[: min(len(eligible), args.episodes_to_try)]
 
-    parsed_dir = out_root / "prompt3"
+    parsed_dir = out_root / "political"
     raw_dir = out_root / "raw"
     parsed_dir.mkdir(parents=True, exist_ok=True)
     raw_dir.mkdir(parents=True, exist_ok=True)

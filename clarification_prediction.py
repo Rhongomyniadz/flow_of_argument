@@ -246,7 +246,7 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
 
 def main():
     # NEW default base_dir (your new pipeline output root)
-    base_dir = "results/political_prompt3_grouped"  # contains prompt3/ and raw/
+    base_dir = "results/political_prompt3_grouped/prompt3"  # contains prompt3/ and raw/
     outdir = Path("results/analysis_charts/clarification_prediction_political")
 
     df_pairs = build_pairs(base_dir)
