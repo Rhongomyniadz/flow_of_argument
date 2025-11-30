@@ -1,7 +1,7 @@
 import json
 import re
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 
 import numpy as np
 import pandas as pd
@@ -24,12 +24,10 @@ CLARIFICATION_PATTERNS = [
     r"\bso\s+you're\s+saying\b",
     r"\bjust\s+to\s+be\s+clear\b",
 ]
-
 CLARIFICATION_RE = re.compile("|".join(CLARIFICATION_PATTERNS), re.IGNORECASE)
 
 
 def is_clarification_question(text: str) -> bool:
-    """Return True if text contains a clarification-style question."""
     if not isinstance(text, str):
         return False
     t = text.strip()
@@ -39,16 +37,31 @@ def is_clarification_question(text: str) -> bool:
 
 
 # -----------------------------
-# Loading prompt outputs
+# Loading prompt outputs (NEW)
 # -----------------------------
 def load_prompt_dirs(base_dir: str) -> List[Path]:
+    """
+    Works with:
+      - output_root containing prompt3/ and raw/ (new pipeline)
+      - a directory that itself IS prompt3/ (contains episode json files)
+      - legacy layout with prompt1..prompt5 (still supported)
+    """
     base = Path(base_dir)
+
+    # Case 1: base_dir is already a prompt dir (contains episode JSONs)
+    jsons_here = list(base.glob("*.json"))
+    if jsons_here:
+        return [base]
+
+    # Case 2: output root contains prompt* dirs (new + legacy)
     prompt_dirs = sorted(
         [p for p in base.iterdir() if p.is_dir() and p.name.startswith("prompt")],
         key=lambda p: p.name,
     )
+
     if not prompt_dirs:
-        raise FileNotFoundError(f"No prompt directories found under {base_dir}")
+        raise FileNotFoundError(f"No prompt directories (prompt*) or episode JSONs found under {base_dir}")
+
     return prompt_dirs
 
 
@@ -62,25 +75,53 @@ def load_episode(path: Path) -> List[Dict[str, Any]]:
     return [data]
 
 
+def get_episode_id_from_file(turns: List[Dict[str, Any]], fpath: Path) -> Any:
+    # Prefer explicit field in JSON (new pipeline stores episode_id per record)
+    if turns and isinstance(turns[0], dict) and "episode_id" in turns[0]:
+        return turns[0].get("episode_id")
+    # Fall back to filename stem (new pipeline uses <id>.json)
+    stem = fpath.stem
+    if stem.isdigit():
+        return int(stem)
+    return stem
+
+
+def sort_turns_in_episode(turns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    New pipeline outputs already in order, but this makes it robust.
+    Uses turn_idx if present, otherwise keeps original order.
+    """
+    if not turns:
+        return turns
+    if all(isinstance(t, dict) and "turn_idx" in t for t in turns):
+        try:
+            return sorted(turns, key=lambda x: (x.get("turn_idx") is None, x.get("turn_idx")))
+        except Exception:
+            return turns
+    return turns
+
+
 # -----------------------------
-# Build A->B pairs
+# Build A->B pairs (per episode)
 # -----------------------------
-def build_pairs(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
+def build_pairs(base_dir: str = "results/political_prompt3_grouped") -> pd.DataFrame:
     prompt_dirs = load_prompt_dirs(base_dir)
     rows = []
 
     for pdir in prompt_dirs:
-        prompt_name = pdir.name
+        prompt_name = pdir.name  # usually "prompt3"
         files = sorted(pdir.glob("*.json"))
-        print(f"🔍 Scanning {prompt_name} ({len(files)} episodes)...")
+        print(f"🔍 Scanning {prompt_name} ({len(files)} episodes) from: {pdir}")
 
         for fpath in files:
-            episode_key = fpath.stem
             turns = load_episode(fpath)
             if len(turns) < 2:
                 continue
 
-            # Walk adjacent pairs
+            turns = sort_turns_in_episode(turns)
+            episode_id = get_episode_id_from_file(turns, fpath)
+
+            # Walk adjacent pairs within the SAME episode file
             for i in range(len(turns) - 1):
                 a = turns[i]
                 b = turns[i + 1]
@@ -95,7 +136,6 @@ def build_pairs(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
                 assumptions_a = a.get("assumptions", [])
                 if not isinstance(assumptions_a, list):
                     assumptions_a = []
-
                 num_assumptions_a = len(assumptions_a)
 
                 b_text = b.get("turn_text", "")
@@ -103,9 +143,9 @@ def build_pairs(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
 
                 rows.append({
                     "prompt": prompt_name,
-                    "episode_key": episode_key,
-                    "turn_num_a": i + 1,        # 1-indexed
-                    "turn_num_b": i + 2,
+                    "episode_id": episode_id,
+                    "turn_idx_a": a.get("turn_idx", i),
+                    "turn_idx_b": b.get("turn_idx", i + 1),
                     "speaker_a": spk_a,
                     "speaker_b": spk_b,
                     "num_assumptions_a": num_assumptions_a,
@@ -114,8 +154,7 @@ def build_pairs(base_dir: str = "results/prompt_camprison") -> pd.DataFrame:
                     "turn_text_b": b_text,
                 })
 
-    df = pd.DataFrame(rows)
-    return df
+    return pd.DataFrame(rows)
 
 
 # -----------------------------
@@ -128,10 +167,8 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
         print("⚠️ No valid A->B pairs found.")
         return
 
-    # Cap very large counts (shouldn't happen with your prompts, but safe)
     df_pairs["num_assumptions_a_capped"] = df_pairs["num_assumptions_a"].clip(upper=10)
 
-    # ---- Overall empirical probability by count ----
     overall = (
         df_pairs
         .groupby("num_assumptions_a_capped")["b_is_clarification"]
@@ -140,7 +177,6 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
         .rename(columns={"mean": "prob"})
     )
 
-    # ---- By prompt ----
     by_prompt = (
         df_pairs
         .groupby(["prompt", "num_assumptions_a_capped"])["b_is_clarification"]
@@ -154,11 +190,10 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
     overall.to_csv(outdir / "binned_overall.csv", index=False)
     by_prompt.to_csv(outdir / "binned_by_prompt.csv", index=False)
 
-    # Plot settings
     sns.set_theme(style="whitegrid")
     sns.set_context("notebook", font_scale=1.1)
 
-    # ---- Plot 1: overall probability ----
+    # Plot 1: overall
     plt.figure(figsize=(8.5, 5))
     sns.pointplot(
         data=df_pairs,
@@ -166,7 +201,6 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
         y="b_is_clarification",
         estimator=np.mean,
         errorbar="se",
-        color="tab:blue",
     )
     plt.title("P(next turn is clarification | # assumptions in A)")
     plt.xlabel("# assumptions in Speaker A (capped at 10)")
@@ -176,32 +210,33 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
     plt.savefig(outdir / "prob_next_clarification_overall.png", dpi=200)
     plt.close()
 
-    # ---- Plot 2: per prompt ----
-    plt.figure(figsize=(9.5, 5.5))
-    sns.pointplot(
-        data=df_pairs,
-        x="num_assumptions_a_capped",
-        y="b_is_clarification",
-        hue="prompt",
-        estimator=np.mean,
-        errorbar="se",
-        dodge=0.4,
-    )
-    plt.title("P(next clarification | # assumptions in A) by Prompt")
-    plt.xlabel("# assumptions in Speaker A (capped at 10)")
-    plt.ylabel("Probability Speaker B clarifies next turn")
-    plt.ylim(0, 1)
-    plt.legend(title="prompt", bbox_to_anchor=(1.02, 1), loc="upper left")
-    plt.tight_layout()
-    plt.savefig(outdir / "prob_next_clarification_by_prompt.png", dpi=200)
-    plt.close()
+    # Plot 2: by prompt (only if >1 prompt dirs)
+    if df_pairs["prompt"].nunique() > 1:
+        plt.figure(figsize=(9.5, 5.5))
+        sns.pointplot(
+            data=df_pairs,
+            x="num_assumptions_a_capped",
+            y="b_is_clarification",
+            hue="prompt",
+            estimator=np.mean,
+            errorbar="se",
+            dodge=0.4,
+        )
+        plt.title("P(next clarification | # assumptions in A) by Prompt")
+        plt.xlabel("# assumptions in Speaker A (capped at 10)")
+        plt.ylabel("Probability Speaker B clarifies next turn")
+        plt.ylim(0, 1)
+        plt.legend(title="prompt", bbox_to_anchor=(1.02, 1), loc="upper left")
+        plt.tight_layout()
+        plt.savefig(outdir / "prob_next_clarification_by_prompt.png", dpi=200)
+        plt.close()
 
-    # ---- Basic numeric diagnostics ----
-    # Point-biserial (Pearson with binary)
     pearson = df_pairs["num_assumptions_a"].corr(df_pairs["b_is_clarification"], method="pearson")
     spearman = df_pairs["num_assumptions_a"].corr(df_pairs["b_is_clarification"], method="spearman")
+
     print("\n=== Diagnostics ===")
     print(f"Total A->B pairs: {len(df_pairs)}")
+    print(f"Episodes covered: {df_pairs['episode_id'].nunique()}")
     print(f"Clarification rate overall: {df_pairs['b_is_clarification'].mean():.3f}")
     print(f"Pearson (point-biserial) corr: {pearson:.3f}")
     print(f"Spearman corr: {spearman:.3f}")
@@ -210,8 +245,9 @@ def plot_probability(df_pairs: pd.DataFrame, outdir: Path):
 
 
 def main():
-    base_dir = "results/prompt_camprison"
-    outdir = Path("results/analysis_charts/clarification_prediction")
+    # NEW default base_dir (your new pipeline output root)
+    base_dir = "results/political_prompt3_grouped"  # contains prompt3/ and raw/
+    outdir = Path("results/analysis_charts/clarification_prediction_political")
 
     df_pairs = build_pairs(base_dir)
     plot_probability(df_pairs, outdir)
