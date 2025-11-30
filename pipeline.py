@@ -21,15 +21,7 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results/political_samples")
-
-# =========================================================
-# STRICT turn keys (as shown in your earlier pipeline style)
-# =========================================================
-TURN_TEXT_KEY = "turn_text"
-SPEAKER_ID_KEY = "speaker_id"
-SPEAKER_NAME_KEY = "inferred_speaker_name"
-SPEAKER_ROLE_KEY = "inferred_speaker_role"
+DEFAULT_OUT_ROOT = Path("results/political_prompt3_samples")
 
 # =========================================================
 # Logging
@@ -51,6 +43,10 @@ def open_text(path: Path):
 
 
 def iter_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
+    """
+    Robust JSONL iterator: expects 1 JSON object per line.
+    (This avoids the 'Extra data' issue from json.load on a .jsonl file.)
+    """
     with open_text(path) as f:
         for line_no, line in enumerate(f, 1):
             line = line.strip()
@@ -58,64 +54,111 @@ def iter_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
                 continue
             try:
                 obj = json.loads(line)
-            except Exception as e:
-                log.warning("JSONL decode error %s:%d: %s", path, line_no, e)
+            except Exception:
+                # Keep it quiet at INFO level; noisy otherwise.
                 continue
             if isinstance(obj, dict):
                 yield obj
 
 
-def id_to_turns_path(turns_dir: Path, id_value: int) -> Tuple[Path, Path]:
-    """
-    Observed structure: .../<firstdigit>/<seconddigit>/<id>.jsonl
-    Returns: (jsonl_path, jsonl_gz_path)
-    """
-    s = str(int(id_value))
-    d1 = s[0] if len(s) >= 1 else "0"
-    d2 = s[1] if len(s) >= 2 else "0"
-    p = turns_dir / d1 / d2 / f"{s}.jsonl"
-    pgz = turns_dir / d1 / d2 / f"{s}.jsonl.gz"
-    return p, pgz
-
-
 def load_episode_ids(episodes_jsonl: Path) -> List[int]:
     ids: List[int] = []
-    for rec in iter_jsonl(episodes_jsonl):
-        v = rec.get("id")
-        if v is None:
-            continue
-        try:
-            ids.append(int(v))
-        except Exception:
-            continue
+    with open_text(episodes_jsonl) as f:
+        for line_no, line in enumerate(f, 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            if not isinstance(rec, dict):
+                continue
+            v = rec.get("id")  # use what you showed: "id"
+            if v is None:
+                continue
+            try:
+                ids.append(int(v))
+            except Exception:
+                continue
     return ids
 
 
-def extract_turn_strict(turn: Dict[str, Any]) -> Tuple[Optional[str], Any, Optional[str], Optional[str]]:
+def turns_file_id(path: Path) -> Optional[int]:
     """
-    STRICT: uses only keys:
-      - turn_text
-      - speaker_id
-      - inferred_speaker_name
-      - inferred_speaker_role
+    Extract episode id from filenames like:
+      86945.jsonl
+      86945.jsonl.gz
     """
-    txt = turn.get(TURN_TEXT_KEY)
+    name = path.name
+    if name.endswith(".jsonl.gz"):
+        base = name[: -len(".jsonl.gz")]
+    elif name.endswith(".jsonl"):
+        base = name[: -len(".jsonl")]
+    else:
+        return None
+    try:
+        return int(base)
+    except Exception:
+        return None
+
+
+def build_turns_index(turns_dir: Path) -> Dict[int, Path]:
+    """
+    Index existing turns files by id -> path, using the actual directory content
+    (matching your inspect.py behavior), rather than assuming a sharding scheme.
+    """
+    idx: Dict[int, Path] = {}
+
+    # Prefer .jsonl over .jsonl.gz if both exist for same id
+    # (keep whichever is uncompressed).
+    candidates = list(turns_dir.rglob("*.jsonl")) + list(turns_dir.rglob("*.jsonl.gz"))
+    for p in candidates:
+        eid = turns_file_id(p)
+        if eid is None:
+            continue
+        if eid not in idx:
+            idx[eid] = p
+        else:
+            # prefer .jsonl
+            if idx[eid].name.endswith(".jsonl.gz") and p.name.endswith(".jsonl"):
+                idx[eid] = p
+    return idx
+
+
+# =========================================================
+# Turn extraction (no key-dumping; just known schema)
+# =========================================================
+def extract_turn(turn: Dict[str, Any]) -> Tuple[Optional[str], Any, Optional[str], Optional[str]]:
+    # Text
+    txt = turn.get("turn_text")
+    if txt is None:
+        txt = turn.get("turnText")
     if isinstance(txt, str):
         txt = txt.strip()
     else:
         txt = None
 
-    spk = turn.get(SPEAKER_ID_KEY)
+    # Speaker id
+    spk = turn.get("speaker_id")
+    if spk is None:
+        spk = turn.get("speaker")
     if isinstance(spk, list) and spk:
         spk = spk[0]
 
-    name = turn.get(SPEAKER_NAME_KEY)
+    # Speaker name
+    name = turn.get("inferred_speaker_name")
+    if name is None:
+        name = turn.get("inferredSpeakerName")
     if isinstance(name, str):
         name = name.strip()
     else:
         name = None
 
-    role = turn.get(SPEAKER_ROLE_KEY)
+    # Speaker role
+    role = turn.get("inferred_speaker_role")
+    if role is None:
+        role = turn.get("inferredSpeakerRole")
     if isinstance(role, str):
         role = role.strip()
     else:
@@ -223,7 +266,10 @@ def _normalize_list(items: Any, cap: int = 10) -> List[Dict[str, Any]]:
     return out[:cap]
 
 
-def _dedup_cross_lists(primary: List[Dict[str, Any]], secondary: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+def _dedup_cross_lists(
+    primary: List[Dict[str, Any]],
+    secondary: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     prim_keys = {p["text"].casefold() for p in primary}
     sec_clean = [s for s in secondary if s["text"].casefold() not in prim_keys]
     return primary, sec_clean
@@ -321,29 +367,22 @@ OUTPUT FORMAT:
 
 
 # =========================================================
-# Sampling turns from political data (by episode id -> turns file)
+# Sampling turns with correct id->file matching
 # =========================================================
-def sample_turns_from_political_data(
-    episodes_jsonl: Path,
-    turns_dir: Path,
+def sample_turns(
+    episode_ids: List[int],
+    turns_index: Dict[int, Path],
     n_samples: int,
     min_words: int,
     seed: int,
     episodes_to_scan: int,
     per_episode_cap: int,
+    probe_k: int,
 ) -> List[Dict[str, Any]]:
     rng = random.Random(seed)
 
-    log.info("Loading episode ids from %s", episodes_jsonl)
-    ids = load_episode_ids(episodes_jsonl)
-    log.info("Episode ids loaded: %d", len(ids))
-
-    # keep only ids with existing turns file
-    existing: List[int] = []
-    for eid in ids:
-        p, pgz = id_to_turns_path(turns_dir, eid)
-        if p.exists() or pgz.exists():
-            existing.append(eid)
+    existing = [eid for eid in episode_ids if eid in turns_index]
+    log.info("Episode ids loaded: %d", len(episode_ids))
     log.info("Episode ids with turns files present: %d", len(existing))
     if not existing:
         return []
@@ -352,35 +391,60 @@ def sample_turns_from_political_data(
     scan_list = existing if episodes_to_scan <= 0 else existing[: min(episodes_to_scan, len(existing))]
     log.info("Scanning %d episodes for sampling (episodes_to_scan=%d).", len(scan_list), episodes_to_scan)
 
-    # global reservoir (approx uniform over scanned subset)
+    # small join/probing preview
+    if probe_k > 0:
+        print("\n==== PROBE (id -> turns file -> one extracted turn) ====")
+        shown = 0
+        for eid in scan_list:
+            p = turns_index[eid]
+            # find first parseable turn
+            first_ok = None
+            for turn in iter_jsonl(p):
+                txt, spk, name, role = extract_turn(turn)
+                if txt:
+                    first_ok = (txt, spk, name, role)
+                    break
+            if first_ok is None:
+                # could be empty/unparseable file; still show mapping
+                print(f"id={eid}  turns_file={p}  (no parseable turns)")
+            else:
+                txt, spk, name, role = first_ok
+                wc = count_words(txt)
+                snip = txt.replace("\n", " ")[:220] + ("..." if len(txt) > 220 else "")
+                print(f"id={eid}  turns_file={p}")
+                print(f"  speaker_id={spk!r} name={name!r} role={role!r} words={wc}")
+                print(f"  turn_text: {snip}")
+            shown += 1
+            if shown >= probe_k:
+                break
+
     reservoir: List[Dict[str, Any]] = []
-    seen = 0
+    seen_global = 0
 
     for eid in tqdm(scan_list, desc="Scanning episodes"):
-        p, pgz = id_to_turns_path(turns_dir, eid)
-        turn_file = p if p.exists() else pgz if pgz.exists() else None
-        if turn_file is None:
-            continue
+        p = turns_index[eid]
 
-        # per-episode reservoir to avoid huge episodes dominating
         ep_res: List[Dict[str, Any]] = []
         ep_seen = 0
 
-        for turn in iter_jsonl(turn_file):
-            txt, spk, name, role = extract_turn_strict(turn)
-            if not txt or count_words(txt) < min_words:
+        for turn in iter_jsonl(p):
+            txt, spk, name, role = extract_turn(turn)
+            if not txt:
+                continue
+            if count_words(txt) < min_words:
                 continue
 
             ep_seen += 1
             item = {
                 "episode_id": eid,
-                "turn_file": str(turn_file),
+                "turn_file": str(p),
                 "turn_text": txt,
                 "speaker_id": spk,
                 "inferred_speaker_name": name,
                 "inferred_speaker_role": role,
             }
 
+            # per-episode cap reservoir (avoid one episode dominating)
             if len(ep_res) < per_episode_cap:
                 ep_res.append(item)
             else:
@@ -388,22 +452,20 @@ def sample_turns_from_political_data(
                 if j < per_episode_cap:
                     ep_res[j] = item
 
+        # global reservoir from the per-episode sampled items
         for item in ep_res:
-            seen += 1
+            seen_global += 1
             if len(reservoir) < n_samples:
                 reservoir.append(item)
             else:
-                j = rng.randrange(seen)
+                j = rng.randrange(seen_global)
                 if j < n_samples:
                     reservoir[j] = item
 
-    log.info("Sampled turns: %d (global seen candidates=%d).", len(reservoir), seen)
+    log.info("Sampled turns: %d (global seen candidates=%d).", len(reservoir), seen_global)
     return reservoir
 
 
-# =========================================================
-# Main
-# =========================================================
 def main():
     ap = argparse.ArgumentParser(description="Sample N political interview turns and run ONLY Prompt 3 via vLLM.")
     ap.add_argument("--episodes_jsonl", type=str, default=str(DEFAULT_EPISODES_JSONL))
@@ -414,6 +476,7 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--episodes_to_scan", type=int, default=10000, help="0 = scan all episodes with turns files")
     ap.add_argument("--per_episode_cap", type=int, default=20)
+    ap.add_argument("--probe_k", type=int, default=5, help="Print K id->turn-file mappings and one turn snippet each")
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=1)
@@ -428,18 +491,27 @@ def main():
     if not turns_dir.exists():
         raise FileNotFoundError(f"Turns dir not found: {turns_dir}")
 
-    sampled_turns = sample_turns_from_political_data(
-        episodes_jsonl=episodes_jsonl,
-        turns_dir=turns_dir,
+    log.info("Building turns index from %s", turns_dir)
+    turns_index = build_turns_index(turns_dir)
+    log.info("Indexed turns files: %d", len(turns_index))
+
+    episode_ids = load_episode_ids(episodes_jsonl)
+    sampled_turns = sample_turns(
+        episode_ids=episode_ids,
+        turns_index=turns_index,
         n_samples=args.n_samples,
         min_words=args.min_words,
         seed=args.seed,
         episodes_to_scan=args.episodes_to_scan,
         per_episode_cap=args.per_episode_cap,
+        probe_k=args.probe_k,
     )
 
     if not sampled_turns:
-        log.warning("No turns sampled. Try lowering --min_words or increasing --episodes_to_scan.")
+        log.warning(
+            "No turns sampled. If PROBE shows 'no parseable turns', the turns files may not be JSONL (1 JSON per line) "
+            "or use different text keys than expected."
+        )
         return
 
     llm = LLMInterface(
@@ -452,8 +524,7 @@ def main():
 
     outputs: List[str] = []
     for start in tqdm(range(0, len(prompts), args.batch_size), desc="Generating (prompt3)"):
-        chunk = prompts[start : start + args.batch_size]
-        outputs.extend(llm.generate_batch(chunk))
+        outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
 
     results: List[Dict[str, Any]] = []
     raw_results: List[Dict[str, Any]] = []
@@ -474,7 +545,6 @@ def main():
             results.append({**base, **norm})
         else:
             results.append(base)
-
         raw_results.append({"turn_text": t["turn_text"], "raw_output": raw_out})
 
     out_root.mkdir(parents=True, exist_ok=True)
@@ -494,15 +564,12 @@ def main():
     log.info("Wrote: %s", out_json)
     log.info("Wrote: %s", out_raw)
 
-    print("\n==== Preview (first 5) ====")
-    for i, r in enumerate(results[:5], 1):
-        print(f"\n[{i}] episode_id={r.get('episode_id')} speaker={r.get('inferred_speaker_name')!r} role={r.get('inferred_speaker_role')!r}")
+    print("\n==== Preview (first 3) ====")
+    for i, r in enumerate(results[:3], 1):
         txt = (r.get("turn_text") or "").replace("\n", " ")
-        print("turn_text:", txt[:240] + ("..." if len(txt) > 240 else ""))
-        eps = r.get("explicit_propositions") or []
-        asm = r.get("assumptions") or []
-        print("EP:", [e["text"] for e in eps[:2]] if eps else [])
-        print("A :", [a["text"] for a in asm[:2]] if asm else [])
+        print(f"\n[{i}] episode_id={r.get('episode_id')} file={r.get('turn_file')}")
+        print(f"  speaker={r.get('inferred_speaker_name')!r} role={r.get('inferred_speaker_role')!r}")
+        print("  turn_text:", txt[:240] + ("..." if len(txt) > 240 else ""))
 
 
 if __name__ == "__main__":
