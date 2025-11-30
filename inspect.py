@@ -50,29 +50,26 @@ def iter_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
 
 
 def read_json_or_jsonl(path: Path, max_jsonl_lines: Optional[int] = None) -> Any:
-    with open_text(path) as f:
-        # peek first non-ws char
-        first = ""
-        while True:
-            ch = f.read(1)
-            if not ch:
-                break
-            if not ch.isspace():
-                first = ch
-                break
-        f.seek(0)
-
-        # JSON
-        if first in ("[", "{"):
-            return json.load(f)
-
-        # JSONL
+    # Treat .jsonl strictly as JSONL (even though it begins with "{")
+    if path.name.endswith(".jsonl") or path.name.endswith(".jsonl.gz"):
         out = []
-        for i, rec in enumerate(iter_jsonl(path)):
-            out.append(rec)
-            if max_jsonl_lines is not None and i + 1 >= max_jsonl_lines:
-                break
+        with open_text(path) as f:
+            for i, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(json.loads(line))
+                except Exception as e:
+                    print(f"[WARN] {path.name}:{i} JSONL decode error: {e}")
+                    continue
+                if max_jsonl_lines is not None and len(out) >= max_jsonl_lines:
+                    break
         return out
+
+    # Otherwise fall back to normal JSON
+    with open_text(path) as f:
+        return json.load(f)
 
 
 # -----------------------------
