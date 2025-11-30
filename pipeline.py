@@ -410,7 +410,7 @@ def main():
     ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
     ap.add_argument("--n_samples", type=int, default=30)
-    ap.add_argument("--min_words", type=int, default=50)
+    ap.add_argument("--min_words", type=int, default=10)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--episodes_to_scan", type=int, default=10000, help="0 = scan all episodes with turns files")
     ap.add_argument("--per_episode_cap", type=int, default=20)
