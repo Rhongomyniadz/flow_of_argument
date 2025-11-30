@@ -20,7 +20,7 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results")
+DEFAULT_OUT_ROOT = Path("results/political")
 
 # =========================================================
 # Logging
