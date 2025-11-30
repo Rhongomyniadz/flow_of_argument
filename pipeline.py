@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 import gc
 import gzip
@@ -21,15 +20,7 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results/political_samples")
-
-# =========================================================
-# STRICT turn keys (as shown in your earlier pipeline style)
-# =========================================================
-TURN_TEXT_KEY = "turn_text"
-SPEAKER_ID_KEY = "speaker_id"
-SPEAKER_NAME_KEY = "inferred_speaker_name"
-SPEAKER_ROLE_KEY = "inferred_speaker_role"
+DEFAULT_OUT_ROOT = Path("results/political_prompt3_samples")
 
 # =========================================================
 # Logging
@@ -91,31 +82,40 @@ def load_episode_ids(episodes_jsonl: Path) -> List[int]:
     return ids
 
 
-def extract_turn_strict(turn: Dict[str, Any]) -> Tuple[Optional[str], Any, Optional[str], Optional[str]]:
-    """
-    STRICT: uses only keys:
-      - turn_text
-      - speaker_id
-      - inferred_speaker_name
-      - inferred_speaker_role
-    """
-    txt = turn.get(TURN_TEXT_KEY)
+# =========================================================
+# Turn extraction: output snake_case, read snake_case OR camelCase
+# (no big candidate-key lists, just the known schema you already saw)
+# =========================================================
+def extract_turn(turn: Dict[str, Any]) -> Tuple[Optional[str], Any, Optional[str], Optional[str]]:
+    # Text
+    txt = turn.get("turn_text")
+    if txt is None:
+        txt = turn.get("turnText")
     if isinstance(txt, str):
         txt = txt.strip()
     else:
         txt = None
 
-    spk = turn.get(SPEAKER_ID_KEY)
+    # Speaker id
+    spk = turn.get("speaker_id")
+    if spk is None:
+        spk = turn.get("speaker")
     if isinstance(spk, list) and spk:
         spk = spk[0]
 
-    name = turn.get(SPEAKER_NAME_KEY)
+    # Speaker name
+    name = turn.get("inferred_speaker_name")
+    if name is None:
+        name = turn.get("inferredSpeakerName")
     if isinstance(name, str):
         name = name.strip()
     else:
         name = None
 
-    role = turn.get(SPEAKER_ROLE_KEY)
+    # Speaker role
+    role = turn.get("inferred_speaker_role")
+    if role is None:
+        role = turn.get("inferredSpeakerRole")
     if isinstance(role, str):
         role = role.strip()
     else:
@@ -223,7 +223,10 @@ def _normalize_list(items: Any, cap: int = 10) -> List[Dict[str, Any]]:
     return out[:cap]
 
 
-def _dedup_cross_lists(primary: List[Dict[str, Any]], secondary: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+def _dedup_cross_lists(
+    primary: List[Dict[str, Any]],
+    secondary: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     prim_keys = {p["text"].casefold() for p in primary}
     sec_clean = [s for s in secondary if s["text"].casefold() not in prim_keys]
     return primary, sec_clean
@@ -331,6 +334,7 @@ def sample_turns_from_political_data(
     seed: int,
     episodes_to_scan: int,
     per_episode_cap: int,
+    debug: bool,
 ) -> List[Dict[str, Any]]:
     rng = random.Random(seed)
 
@@ -338,7 +342,6 @@ def sample_turns_from_political_data(
     ids = load_episode_ids(episodes_jsonl)
     log.info("Episode ids loaded: %d", len(ids))
 
-    # keep only ids with existing turns file
     existing: List[int] = []
     for eid in ids:
         p, pgz = id_to_turns_path(turns_dir, eid)
@@ -352,9 +355,11 @@ def sample_turns_from_political_data(
     scan_list = existing if episodes_to_scan <= 0 else existing[: min(episodes_to_scan, len(existing))]
     log.info("Scanning %d episodes for sampling (episodes_to_scan=%d).", len(scan_list), episodes_to_scan)
 
-    # global reservoir (approx uniform over scanned subset)
     reservoir: List[Dict[str, Any]] = []
     seen = 0
+
+    printed_debug = False
+    debug_file = None
 
     for eid in tqdm(scan_list, desc="Scanning episodes"):
         p, pgz = id_to_turns_path(turns_dir, eid)
@@ -362,13 +367,21 @@ def sample_turns_from_political_data(
         if turn_file is None:
             continue
 
-        # per-episode reservoir to avoid huge episodes dominating
         ep_res: List[Dict[str, Any]] = []
         ep_seen = 0
 
         for turn in iter_jsonl(turn_file):
-            txt, spk, name, role = extract_turn_strict(turn)
-            if not txt or count_words(txt) < min_words:
+            if debug and not printed_debug:
+                printed_debug = True
+                debug_file = str(turn_file)
+                print("\n==== DEBUG: first raw turn object ====")
+                print(f"turn_file: {debug_file}")
+                print(json.dumps(turn, ensure_ascii=False, indent=2)[:4000])
+
+            txt, spk, name, role = extract_turn(turn)
+            if not txt:
+                continue
+            if count_words(txt) < min_words:
                 continue
 
             ep_seen += 1
@@ -398,6 +411,8 @@ def sample_turns_from_political_data(
                     reservoir[j] = item
 
     log.info("Sampled turns: %d (global seen candidates=%d).", len(reservoir), seen)
+    if debug and not printed_debug:
+        print("\n[DEBUG] No turn objects were parsed at all (unexpected).")
     return reservoir
 
 
@@ -410,13 +425,14 @@ def main():
     ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
     ap.add_argument("--n_samples", type=int, default=30)
-    ap.add_argument("--min_words", type=int, default=30)
+    ap.add_argument("--min_words", type=int, default=50)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--episodes_to_scan", type=int, default=800, help="0 = scan all episodes with turns files")
     ap.add_argument("--per_episode_cap", type=int, default=20)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=1)
+    ap.add_argument("--debug", action="store_true")
     args = ap.parse_args()
 
     episodes_jsonl = Path(args.episodes_jsonl)
@@ -436,10 +452,15 @@ def main():
         seed=args.seed,
         episodes_to_scan=args.episodes_to_scan,
         per_episode_cap=args.per_episode_cap,
+        debug=args.debug,
     )
 
     if not sampled_turns:
-        log.warning("No turns sampled. Try lowering --min_words or increasing --episodes_to_scan.")
+        log.warning(
+            "No turns sampled. Most likely causes:\n"
+            "  (1) min_words too high for this dataset; try --min_words 10\n"
+            "  (2) turns use different keys; run once with --debug to confirm.\n"
+        )
         return
 
     llm = LLMInterface(
@@ -496,7 +517,10 @@ def main():
 
     print("\n==== Preview (first 5) ====")
     for i, r in enumerate(results[:5], 1):
-        print(f"\n[{i}] episode_id={r.get('episode_id')} speaker={r.get('inferred_speaker_name')!r} role={r.get('inferred_speaker_role')!r}")
+        print(
+            f"\n[{i}] episode_id={r.get('episode_id')} "
+            f"speaker={r.get('inferred_speaker_name')!r} role={r.get('inferred_speaker_role')!r}"
+        )
         txt = (r.get("turn_text") or "").replace("\n", " ")
         print("turn_text:", txt[:240] + ("..." if len(txt) > 240 else ""))
         eps = r.get("explicit_propositions") or []
