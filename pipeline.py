@@ -513,7 +513,7 @@ def main():
     rng.shuffle(eligible)
     eligible = eligible[: min(len(eligible), args.episodes_to_try)]
 
-    parsed_dir = out_root / "political"
+    parsed_dir = out_root / "parsed"
     raw_dir = out_root / "raw"
     parsed_dir.mkdir(parents=True, exist_ok=True)
     raw_dir.mkdir(parents=True, exist_ok=True)
