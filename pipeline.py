@@ -605,7 +605,7 @@ def main():
 
         written += 1
 
-    manifest_path = out_root / "manifest_prompt3_by_episode.json"
+    manifest_path = out_root / "manifest_by_episode.json"
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 
