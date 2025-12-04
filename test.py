@@ -192,132 +192,268 @@
 #     main()
 
 
-import gzip
+# find turn with 1 assumption in prev side
+# import gzip
+# import json
+# from pathlib import Path
+# from typing import Iterable, Dict, Any, Optional
+# import logging
+
+# logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+# log = logging.getLogger("find-prev-count-one")
+
+
+# def iter_json_objects(path: Path) -> Iterable[Dict[str, Any]]:
+#     """Yield JSON objects from .json, .jsonl, and .jsonl.gz files."""
+#     if not path.exists():
+#         return
+
+#     opener = gzip.open if path.suffix == ".gz" else open
+#     mode = "rt" if path.suffix == ".gz" else "r"
+#     with opener(path, mode, encoding="utf-8") as fh:
+#         # Try streaming JSONL one object per line
+#         fh.seek(0)
+#         for line in fh:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             try:
+#                 yield json.loads(line)
+#             except Exception:
+#                 # Fall back to reading whole file
+#                 break
+
+#         # Reset and attempt to parse whole file if not JSONL
+#         fh.seek(0)
+#         try:
+#             obj = json.load(fh)
+#         except Exception:
+#             return
+
+#         if isinstance(obj, list):
+#             for item in obj:
+#                 if isinstance(item, dict):
+#                     yield item
+#         elif isinstance(obj, dict):
+#             yield obj
+
+
+# def assumptions_count_from_obj(obj: Dict[str, Any]) -> int:
+#     """Return len(obj['assumptions']) if present, else 0."""
+#     a = obj.get("assumptions")
+#     if isinstance(a, list):
+#         return len(a)
+#     return 0
+
+
+# def prev_assumptions_count(obj: Dict[str, Any]) -> Optional[int]:
+#     """
+#     Return a count of assumptions for the 'prev' side if available.
+#     Checks multiple common keys/representations.
+#     """
+#     # direct numeric fields (binned or raw)
+#     for key in ("num_assumptions_prev_capped", "num_assumptions_prev", "num_prev_assumptions"):
+#         if key in obj and isinstance(obj[key], (int, float)):
+#             return int(obj[key])
+
+#     # check nested 'prev' object
+#     prev = obj.get("prev") or obj.get("previous") or obj.get("prev_turn") or obj.get("previous_turn")
+#     if isinstance(prev, dict):
+#         return assumptions_count_from_obj(prev)
+
+#     # check adjacent fields named like prev_assumptions
+#     for key in ("prev_assumptions", "previous_assumptions", "assumptions_prev"):
+#         if key in obj and isinstance(obj[key], list):
+#             return len(obj[key])
+
+#     return None
+
+
+# def find_matches(root: Path, target_prev_count: int = 1):
+#     matches = []
+#     files = list(root.glob("**/*"))
+#     for f in files:
+#         if f.is_dir():
+#             continue
+#         if f.suffix.lower() not in {".json", ".jsonl", ".gz"}:
+#             continue
+#         for obj in iter_json_objects(f):
+#             prev_count = prev_assumptions_count(obj)
+#             if prev_count is None:
+#                 # If prev info isn't present, check top-level 'assumptions' as fallback
+#                 if assumptions_count_from_obj(obj) == target_prev_count:
+#                     matches.append({"source": str(f), "object": obj})
+#             else:
+#                 if prev_count == target_prev_count:
+#                     matches.append({"source": str(f), "object": obj})
+#             # Also check nested turns arrays
+#             if "turns" in obj and isinstance(obj["turns"], list):
+#                 for turn in obj["turns"]:
+#                     prev_count_turn = prev_assumptions_count(turn)
+#                     if prev_count_turn is None:
+#                         if assumptions_count_from_obj(turn) == target_prev_count:
+#                             matches.append({"source": str(f), "object": turn})
+#                     elif prev_count_turn == target_prev_count:
+#                         matches.append({"source": str(f), "object": turn})
+
+#     return matches
+
+
+# def main():
+#     folder = Path("results/political/parsed")
+#     if not folder.exists():
+#         log.error("Path does not exist: %s", folder)
+#         return
+
+#     matches = find_matches(folder, target_prev_count=1)
+#     log.info("Found %d matches where prev-assumptions == 1", len(matches))
+
+#     out_file = Path("results/political/matches_prev_assumptions_1.jsonl")
+#     out_file.parent.mkdir(parents=True, exist_ok=True)
+#     with out_file.open("w", encoding="utf-8") as fh:
+#         for item in matches:
+#             fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+#     if matches:
+#         log.info("First match saved to output and printed below:")
+#         print(json.dumps(matches[0], ensure_ascii=False, indent=2))
+#     else:
+#         log.info("No matches found.")
+
+# if __name__ == "__main__":
+#     main()
+
+
 import json
+import re
 from pathlib import Path
-from typing import Iterable, Dict, Any, Optional
-import logging
+from collections import Counter
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("find-prev-count-one")
+RAW_DIR = Path("results/political/raw")          # <-- change if needed
+PARSED_DIR = Path("results/political/parsed")    # optional (for cross-check)
 
+CODE_FENCE_RE = re.compile(r"```(?:json)?(.*?)```", re.DOTALL | re.IGNORECASE)
 
-def iter_json_objects(path: Path) -> Iterable[Dict[str, Any]]:
-    """Yield JSON objects from .json, .jsonl, and .jsonl.gz files."""
-    if not path.exists():
+def iter_json_candidates(txt: str):
+    if not txt:
         return
+    for m in CODE_FENCE_RE.finditer(txt):
+        block = m.group(1).strip()
+        if block:
+            yield block
+    # brace-balanced fallback
+    start = None
+    depth = 0
+    for i, ch in enumerate(txt):
+        if ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}":
+            if depth > 0:
+                depth -= 1
+                if depth == 0 and start is not None:
+                    yield txt[start:i+1]
 
-    opener = gzip.open if path.suffix == ".gz" else open
-    mode = "rt" if path.suffix == ".gz" else "r"
-    with opener(path, mode, encoding="utf-8") as fh:
-        # Try streaming JSONL one object per line
-        fh.seek(0)
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                yield json.loads(line)
-            except Exception:
-                # Fall back to reading whole file
-                break
-
-        # Reset and attempt to parse whole file if not JSONL
-        fh.seek(0)
+def parse_raw_json(raw_text: str):
+    for cand in iter_json_candidates(raw_text):
         try:
-            obj = json.load(fh)
+            obj = json.loads(cand)
+            if isinstance(obj, dict):
+                return obj
         except Exception:
-            return
-
-        if isinstance(obj, list):
-            for item in obj:
-                if isinstance(item, dict):
-                    yield item
-        elif isinstance(obj, dict):
-            yield obj
-
-
-def assumptions_count_from_obj(obj: Dict[str, Any]) -> int:
-    """Return len(obj['assumptions']) if present, else 0."""
-    a = obj.get("assumptions")
-    if isinstance(a, list):
-        return len(a)
-    return 0
-
-
-def prev_assumptions_count(obj: Dict[str, Any]) -> Optional[int]:
-    """
-    Return a count of assumptions for the 'prev' side if available.
-    Checks multiple common keys/representations.
-    """
-    # direct numeric fields (binned or raw)
-    for key in ("num_assumptions_prev_capped", "num_assumptions_prev", "num_prev_assumptions"):
-        if key in obj and isinstance(obj[key], (int, float)):
-            return int(obj[key])
-
-    # check nested 'prev' object
-    prev = obj.get("prev") or obj.get("previous") or obj.get("prev_turn") or obj.get("previous_turn")
-    if isinstance(prev, dict):
-        return assumptions_count_from_obj(prev)
-
-    # check adjacent fields named like prev_assumptions
-    for key in ("prev_assumptions", "previous_assumptions", "assumptions_prev"):
-        if key in obj and isinstance(obj[key], list):
-            return len(obj[key])
-
+            pass
     return None
 
+def safe_load_list(fp: Path):
+    try:
+        data = json.load(open(fp, "r", encoding="utf-8"))
+        return data if isinstance(data, list) else [data]
+    except Exception:
+        return []
 
-def find_matches(root: Path, target_prev_count: int = 1):
-    matches = []
-    files = list(root.glob("**/*"))
-    for f in files:
-        if f.is_dir():
-            continue
-        if f.suffix.lower() not in {".json", ".jsonl", ".gz"}:
-            continue
-        for obj in iter_json_objects(f):
-            prev_count = prev_assumptions_count(obj)
-            if prev_count is None:
-                # If prev info isn't present, check top-level 'assumptions' as fallback
-                if assumptions_count_from_obj(obj) == target_prev_count:
-                    matches.append({"source": str(f), "object": obj})
-            else:
-                if prev_count == target_prev_count:
-                    matches.append({"source": str(f), "object": obj})
-            # Also check nested turns arrays
-            if "turns" in obj and isinstance(obj["turns"], list):
-                for turn in obj["turns"]:
-                    prev_count_turn = prev_assumptions_count(turn)
-                    if prev_count_turn is None:
-                        if assumptions_count_from_obj(turn) == target_prev_count:
-                            matches.append({"source": str(f), "object": turn})
-                    elif prev_count_turn == target_prev_count:
-                        matches.append({"source": str(f), "object": turn})
-
-    return matches
-
+# suspicious instruction patterns (expand as needed)
+INSTR_PATTERNS = {
+    "exactly_two_and_one": re.compile(r"exactly\s+two\s+key\s+points.*one\s+assumption", re.I | re.S),
+    "exactly_two_key_points": re.compile(r"exactly\s+two\s+key\s+points", re.I),
+    "one_assumption": re.compile(r"\bone\s+assumption\b", re.I),
+    "must_contain": re.compile(r"\bmust\s+contain\b", re.I),
+}
 
 def main():
-    folder = Path("results/political/parsed")
-    if not folder.exists():
-        log.error("Path does not exist: %s", folder)
-        return
+    raw_files = sorted(RAW_DIR.glob("*.json"))
+    if not raw_files:
+        raise FileNotFoundError(f"No raw json files found under {RAW_DIR}")
 
-    matches = find_matches(folder, target_prev_count=1)
-    log.info("Found %d matches where prev-assumptions == 1", len(matches))
+    hist_all = Counter()
+    hist_instr = Counter()
+    instr_counts = Counter()
+    unparsable = 0
+    total_rows = 0
 
-    out_file = Path("results/political/matches_prev_assumptions_1.jsonl")
-    out_file.parent.mkdir(parents=True, exist_ok=True)
-    with out_file.open("w", encoding="utf-8") as fh:
-        for item in matches:
-            fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+    examples = {k: [] for k in INSTR_PATTERNS.keys()}
 
-    if matches:
-        log.info("First match saved to output and printed below:")
-        print(json.dumps(matches[0], ensure_ascii=False, indent=2))
-    else:
-        log.info("No matches found.")
+    for fp in raw_files:
+        rows = safe_load_list(fp)
+        for r in rows:
+            total_rows += 1
+            raw_out = r.get("raw_output", "")
+            if not isinstance(raw_out, str):
+                continue
+
+            # instruction detection
+            matched_any = False
+            for name, pat in INSTR_PATTERNS.items():
+                if pat.search(raw_out):
+                    instr_counts[name] += 1
+                    matched_any = True
+                    if len(examples[name]) < 3:  # keep a few examples
+                        examples[name].append({
+                            "file": str(fp),
+                            "turn_text": (r.get("turn_text", "") or "")[:220].replace("\n", " "),
+                            "raw_prefix": raw_out[:220].replace("\n", " "),
+                        })
+
+            obj = parse_raw_json(raw_out)
+            if obj is None:
+                unparsable += 1
+                continue
+
+            k = obj.get("assumptions", [])
+            k = len(k) if isinstance(k, list) else 0
+
+            hist_all[min(k, 10)] += 1
+            if matched_any:
+                hist_instr[min(k, 10)] += 1
+
+    print(f"RAW_DIR: {RAW_DIR} | files={len(raw_files)} | rows={total_rows}")
+    print(f"unparsable_raw_json={unparsable}\n")
+
+    print("=== Assumption-count histogram (ALL RAW; capped at 10) ===")
+    for i in range(0, 11):
+        print(f"{i:>2}: {hist_all.get(i, 0)}")
+    print()
+
+    print("=== Instruction pattern matches ===")
+    for name, c in instr_counts.most_common():
+        print(f"{name}: {c}")
+    print()
+
+    print("=== Assumption-count histogram (ONLY rows with ANY instruction match; capped at 10) ===")
+    for i in range(0, 11):
+        print(f"{i:>2}: {hist_instr.get(i, 0)}")
+    print()
+
+    print("=== Small example snippets (first 3 per pattern) ===")
+    for name, exs in examples.items():
+        if not exs:
+            continue
+        print(f"\n--- {name} ---")
+        for ex in exs:
+            print(f"file={ex['file']}")
+            print(f"turn_text={ex['turn_text']}")
+            print(f"raw_prefix={ex['raw_prefix']}")
+            print()
 
 if __name__ == "__main__":
     main()
