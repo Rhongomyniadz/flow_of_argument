@@ -323,137 +323,27 @@
 # if __name__ == "__main__":
 #     main()
 
-
 import json
 import re
-from pathlib import Path
-from collections import Counter
 
-RAW_DIR = Path("results/political/raw")          # <-- change if needed
-PARSED_DIR = Path("results/political/parsed")    # optional (for cross-check)
+# Match exact uppercase token "AI" (not inside words like "SUSTAIN", not "Ai", not "AIs")
+AI_TOKEN = re.compile(r"(?<![A-Za-z])AI(?![A-Za-z])")
 
-CODE_FENCE_RE = re.compile(r"```(?:json)?(.*?)```", re.DOTALL | re.IGNORECASE)
+INPUT_PATH = "episode_names.json"
+OUTPUT_PATH = "ai_episode_names.json"
 
-def iter_json_candidates(txt: str):
-    if not txt:
-        return
-    for m in CODE_FENCE_RE.finditer(txt):
-        block = m.group(1).strip()
-        if block:
-            yield block
-    # brace-balanced fallback
-    start = None
-    depth = 0
-    for i, ch in enumerate(txt):
-        if ch == "{":
-            if depth == 0:
-                start = i
-            depth += 1
-        elif ch == "}":
-            if depth > 0:
-                depth -= 1
-                if depth == 0 and start is not None:
-                    yield txt[start:i+1]
+with open(INPUT_PATH, "r", encoding="utf-8") as f:
+    data = json.load(f)
 
-def parse_raw_json(raw_text: str):
-    for cand in iter_json_candidates(raw_text):
-        try:
-            obj = json.loads(cand)
-            if isinstance(obj, dict):
-                return obj
-        except Exception:
-            pass
-    return None
+# data is expected to be a JSON array of objects like: {"title": ..., "podcast": ..., "mp3_url": ...}
+ai_episodes = [
+    ep for ep in data
+    if isinstance(ep, dict)
+    and isinstance(ep.get("title"), str)
+    and AI_TOKEN.search(ep["title"])
+]
 
-def safe_load_list(fp: Path):
-    try:
-        data = json.load(open(fp, "r", encoding="utf-8"))
-        return data if isinstance(data, list) else [data]
-    except Exception:
-        return []
+with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    json.dump(ai_episodes, f, ensure_ascii=False, indent=2)
 
-# suspicious instruction patterns (expand as needed)
-INSTR_PATTERNS = {
-    "exactly_two_and_one": re.compile(r"exactly\s+two\s+key\s+points.*one\s+assumption", re.I | re.S),
-    "exactly_two_key_points": re.compile(r"exactly\s+two\s+key\s+points", re.I),
-    "one_assumption": re.compile(r"\bone\s+assumption\b", re.I),
-    "must_contain": re.compile(r"\bmust\s+contain\b", re.I),
-}
-
-def main():
-    raw_files = sorted(RAW_DIR.glob("*.json"))
-    if not raw_files:
-        raise FileNotFoundError(f"No raw json files found under {RAW_DIR}")
-
-    hist_all = Counter()
-    hist_instr = Counter()
-    instr_counts = Counter()
-    unparsable = 0
-    total_rows = 0
-
-    examples = {k: [] for k in INSTR_PATTERNS.keys()}
-
-    for fp in raw_files:
-        rows = safe_load_list(fp)
-        for r in rows:
-            total_rows += 1
-            raw_out = r.get("raw_output", "")
-            if not isinstance(raw_out, str):
-                continue
-
-            # instruction detection
-            matched_any = False
-            for name, pat in INSTR_PATTERNS.items():
-                if pat.search(raw_out):
-                    instr_counts[name] += 1
-                    matched_any = True
-                    if len(examples[name]) < 3:  # keep a few examples
-                        examples[name].append({
-                            "file": str(fp),
-                            "turn_text": (r.get("turn_text", "") or "")[:220].replace("\n", " "),
-                            "raw_prefix": raw_out[:220].replace("\n", " "),
-                        })
-
-            obj = parse_raw_json(raw_out)
-            if obj is None:
-                unparsable += 1
-                continue
-
-            k = obj.get("assumptions", [])
-            k = len(k) if isinstance(k, list) else 0
-
-            hist_all[min(k, 10)] += 1
-            if matched_any:
-                hist_instr[min(k, 10)] += 1
-
-    print(f"RAW_DIR: {RAW_DIR} | files={len(raw_files)} | rows={total_rows}")
-    print(f"unparsable_raw_json={unparsable}\n")
-
-    print("=== Assumption-count histogram (ALL RAW; capped at 10) ===")
-    for i in range(0, 11):
-        print(f"{i:>2}: {hist_all.get(i, 0)}")
-    print()
-
-    print("=== Instruction pattern matches ===")
-    for name, c in instr_counts.most_common():
-        print(f"{name}: {c}")
-    print()
-
-    print("=== Assumption-count histogram (ONLY rows with ANY instruction match; capped at 10) ===")
-    for i in range(0, 11):
-        print(f"{i:>2}: {hist_instr.get(i, 0)}")
-    print()
-
-    print("=== Small example snippets (first 3 per pattern) ===")
-    for name, exs in examples.items():
-        if not exs:
-            continue
-        print(f"\n--- {name} ---")
-        for ex in exs:
-            print(f"file={ex['file']}")
-            print(f"turn_text={ex['turn_text']}")
-            print(f"raw_prefix={ex['raw_prefix']}")
-            print()
-
-if __name__ == "__main__":
-    main()
+print(f"Saved {len(ai_episodes)} episodes to {OUTPUT_PATH}")
