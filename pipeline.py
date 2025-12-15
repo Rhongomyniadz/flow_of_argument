@@ -26,7 +26,7 @@ DEFAULT_OUT_ROOT = Path("results/political")
 # Logging
 # =========================================================
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("political-prompt3-by-episode")
+log = logging.getLogger("political-by-episode")
 
 _WORD_RE = re.compile(r"\w+")
 
@@ -287,7 +287,7 @@ def load_episode_turns(turns_path: Path, min_words: int) -> List[ExtractedTurn]:
 
 
 # =========================================================
-# Prompt 3 + parsing normalization
+# Prompt + parsing normalization
 # =========================================================
 _CODE_FENCE_RE = re.compile(r"```(?:json)?(.*?)```", re.DOTALL | re.IGNORECASE)
 
@@ -393,36 +393,49 @@ def parse_and_normalize_llm(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-PROMPT_3 = """SYSTEM:
-You are a pragmatics and social cognition expert.
-Interpret the social, emotional, and interpersonal dimensions of the turn.
+PROMPT = """You are analyzing the content of different turns in a conversation. Your task is to separate and extract the explicit and implicit information in one turn.
 
-DEFINITIONS:
-- Explicit propositions: Direct statements/claims/descriptions.
-- Assumptions: Deeper social/affective beliefs (trust, respect, authority, identity, morality) that underlie the stance.
-
-RULES:
-- Return UP TO 10 items per list, ordered by MOST → LEAST salient for social meaning.
-- Explicit propositions must be atomic, content-bearing claims with confidence (0.0-1.0).
-- Assumptions should be generalized beliefs (pass a “generality test” if entities become roles), each with confidence (0.0-1.0).
-- No duplication between Explicit propositions and Assumptions; avoid trivial paraphrases.
-- Strict JSON ONLY; no extra keys.
+CRITICAL DEFINITIONS:
+- Explicit propositions: Direct statements or factual claims clearly expressed in the text of the turn.
+- Assumptions: The premises that must hold for the speaker's stance to make sense or be coherent. These assumptions can include categories such as
+  - causal assumptions
+  - normative assumptions
+  - epistemic assumptions
+  - beliefs about the audience or world
+  - goals
+  - beliefs about what counts as knowledge/evidence/trustworthy sources
+  - social/affective beliefs (trust, respect, authority, identity, morality) that justify the speaker's stance
 
 TASK:
-Given the following text:
-"{turn_text}"
+- Extract a list of propositions and a list of assumptions for the given turn.
 
-OUTPUT FORMAT:
+RULES:
+- Return up to 10 propositions. Prefer fewer, higher-quality items
+- Return up to 10 assumptions. Prefer fewer, higher-quality items
+- Order each list from most to least salient for the turn's communicative intent
+- Each explicit proposition must be an atomic statement with a numeric confidence score
+- Each assumption must be an implicit belief, not a paraphrase of explicit propositions
+- Do not duplicate content across explicit propositions and implicit assumptions.
+- Generate results in JSON only. Do not include commentary, markdown, or extra keys. Double quotes only. No trailing commas.
+- If there are no propositions or beliefs for a category, output an empty list.
+
+OUTPUT FORMAT (strict JSON with exactly these keys):
 {{
   "explicit_propositions": [
-    {{"text": "...", "confidence": 0.93}},
-    {{"text": "...", "confidence": 0.89}}
+    {{"text": "...", "confidence": 0.95}},
+    {{"text": "...", "confidence": 0.90}}
   ],
   "assumptions": [
-    {{"text": "Status and expertise warrant deference in public discussions.", "confidence": 0.90}},
-    {{"text": "Personal narratives build trust with an audience.", "confidence": 0.86}}
+    {{"text": "...", "confidence": 0.93}},
+    {{"text": "...", "confidence": 0.88}}
   ]
-}}"""
+}}
+
+TASK:
+Extract the list of propositions and list of assumptions for this speaker turn:
+"{turn_text}"
+
+"""
 
 
 # =========================================================
@@ -466,7 +479,7 @@ class LLMInterface:
 # Main: sample N episodes; write one json per episode id
 # =========================================================
 def main():
-    ap = argparse.ArgumentParser(description="Sample N episodes; run Prompt 3; save one JSON per episode id.")
+    ap = argparse.ArgumentParser(description="Sample N episodes; run Prompt; save one JSON per episode id.")
     ap.add_argument("--episodes_jsonl", type=str, default=str(DEFAULT_EPISODES_JSONL))
     ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
@@ -548,7 +561,7 @@ def main():
             # Keep chronological: take first K (you can change to random sample if you prefer)
             turns = turns[: args.max_turns_per_episode]
 
-        prompts = [PROMPT_3.format(turn_text=t.text) for t in turns]
+        prompts = [PROMPT.format(turn_text=t.text) for t in turns]
 
         outputs: List[str] = []
         for start in range(0, len(prompts), args.batch_size):
