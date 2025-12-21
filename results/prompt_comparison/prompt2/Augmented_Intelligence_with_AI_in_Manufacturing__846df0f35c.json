@@ -1,0 +1,1148 @@
+[
+  {
+    "turn_text": "(upbeat music) - Hello everybody and welcome to Ask the CEO with Avraham Gattail. Today, I'd like to introduce a very special guest. He's the Executive Vice President and Chief Revenue Officer of CRIMO, a company that fills the critical gap in industrial productivity by leveraging analytics to transform underutilized data into operation critical insights. As part of this discussion, we will share how the partnership with Microsoft, the use of Azure and the Azure Marketplace, have empowered them to scale and grow their business. It's my pleasure to welcome Paul Boris. Welcome, Paul. - Thanks, everyone.",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Avraham Gattail is hosting the 'Ask the CEO' interview series.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Paul Boris is the Executive Vice President and Chief Revenue Officer of CRIMO.",
+        "confidence": 0.95
+      },
+      {
+        "text": "CRIMO leverages analytics to transform underutilized data into operation-critical insights.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The partnership with Microsoft has enabled CRIMO to scale and grow its business.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Azure and the Azure Marketplace are tools used by CRIMO to enable scaling and growth.",
+        "confidence": 0.9
+      },
+      {
+        "text": "This episode features a discussion about CRIMO’s business model and technology partnerships.",
+        "confidence": 0.89
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Businesses can achieve scalable growth through strategic technology partnerships.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Cloud platforms like Azure provide infrastructure enabling data-driven business transformation.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Data analytics applied to operational data improves industrial productivity.",
+        "confidence": 0.91
+      },
+      {
+        "text": "A CEO’s public appearance signals organizational legitimacy and strategic direction.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Publicly discussing technological infrastructure increases credibility and investor interest.",
+        "confidence": 0.85
+      }
+    ]
+  },
+  {
+    "turn_text": "you there. - Yeah, great having you here. So Paul, I'm really excited to be speaking to you today. IoT deployments have gone up year over year with a projected number of 20.4 billion devices installed by the end of this year. Now, while many manufacturers like to paint this rosy picture of customers using only their products in a green field environment, the reality is that many manufacturing facilities have all kinds of IoT devices installed in there. And as we know, one of the benefits of having an industrial IoT solution is the ability to obtain actionable analytics from your devices. And that's hard enough to attain on a single manufacturer's platform, let alone a hodgepodge of hundreds of thousands of disparate devices across an industrial manufacturing facility. What are the challenges industrial operations run into when trying to convert their IoT collected data into useful",
+    "speaker_id": "SPEAKER_01",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "IoT device installations are increasing annually.",
+        "confidence": 0.95
+      },
+      {
+        "text": "A projected 20.4 billion IoT devices will be installed by the end of this year.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Many manufacturing facilities contain diverse types of IoT devices.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Industrial IoT solutions can provide actionable analytics from connected devices.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Obtaining actionable analytics is difficult on a single manufacturer’s platform.",
+        "confidence": 0.89
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "The presence of heterogeneous IoT devices complicates data integration and analysis.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Actionable analytics require unified data processing across diverse systems.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Manufacturers' idealized deployment scenarios do not reflect real-world conditions.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Data from IoT devices has value only if it can be transformed into actionable insights.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Industrial operations prioritize operational efficiency through data-driven decisions.",
+        "confidence": 0.88
+      }
+    ]
+  },
+  {
+    "turn_text": "? - Yeah, so this is a great point 'cause everybody's in this rush to drive more data and more devices into the operation. And I've been in the space at this point, quite a long time, 30 years really in manufacturing. The biggest challenges are, first off, people don't think they have data at all. So they've got data on some new pieces of equipment or some new lines or something that they brought in. But that data, when they look at it from a typical perspective, isn't enough to give them a full view of what's going on in the operation. They've kind of got a node as opposed to a network or a train of assets. So that causes a lot of issues because it shows up as gaps in the data, gaps in the insights they may get. That's not necessarily the case, I'll maybe explain why later, but that is one of the concerns. Next is they've got some data and now they're trying to get it securely from that device, from that machine, from that cluster or work cell into a position where they can use it. That might be a local system, an MES manufacturing execution system, something like that. Now more so, it's up into the cloud where they can do some deeper analytics on it and get some better insights. And the third is, if you've actually got it and you've got it moved into a position where you can actually take a look at it, a lot of folks, and this is one of the kind of mistakes that some people make is they feel the necessity to have it all harmonized, normalized, rationalized. It's all got to be named correctly. And they spend, I talk with manufacturers that quite frankly, they've got programs that might run two, three years where the first year is spent cleaning things up. And the big challenge there is, halfway through that process, they'll bring in a new line from a different facility that's got a different set of systems with a different Navy",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Manufacturers often believe they lack sufficient data despite having data from new equipment or production lines.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Data from individual machines or work cells forms isolated nodes rather than interconnected networks across operations.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Some manufacturers attempt to fully harmonize, normalize, and rationalize their data before analysis.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Isolated data points create perceived gaps in operational visibility and insight generation.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Transferring data from machines or clusters to systems like MES or cloud platforms enables deeper analytics.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Data normalization projects can last two to three years, consuming significant resources.",
+        "confidence": 0.89
+      },
+      {
+        "text": "New production lines introduced mid-project often come with incompatible systems and naming conventions.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Operational efficiency improves when data is integrated across assets and systems.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Data quality improvements such as normalization are necessary prerequisites for reliable analytics.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The presence of heterogeneous systems increases complexity in data integration efforts.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Organizations prioritize consistency and standardization in data management over speed of deployment.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Delayed actionable insights result from excessive focus on pre-processing data before analysis.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Manufacturing environments typically involve incremental changes and additions to existing infrastructure.",
+        "confidence": 0.86
+      }
+    ]
+  },
+  {
+    "turn_text": "all over again. - They'll start all over again, they'll buy another division, they'll retire a facility in an asset where they started it. So it becomes this kind of a decaying loop of always get new information coming in and I can never seem to get this all straight now. That's holding a lot of things up. There's a lot of things that are going on right now, really in the data space, the security and the transport of that data that are eliminating those challenges for the most part. But it's, that's where people kind of get stuck. They look at this and they say, I've got to buy a whole bunch of sensors and put sensors in to get started. I think that's, I don't think that's active. I think you can get started a lot",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE"
+  },
+  {
+    "turn_text": "'s, yes, it's, you need to move forward with the process because remember, this data isn't just going to change how you run these operations. It's going to change how your people interact with the systems and interact with each other and understand how the process is running. These processes are coming incredibly more complex. And if we don't kind of allow people to walk into the space where they're using these tools and technologies and virtual bots and things that are helping them through, to do better analytics, they're not going to be ready. You can't flip the switch and instantly create this, you know, brilliant factory or smart factory. And expect that everybody's going to be ready to do anything with that when they're standing in front of that equipment. You need to do this in tandem working together",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Processes are becoming increasingly complex.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The data will change how operations are run.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Instant readiness is unrealistic after introducing advanced technology.",
+        "confidence": 0.94
+      },
+      {
+        "text": "The data will change how people interact with systems.",
+        "confidence": 0.93
+      },
+      {
+        "text": "A smart factory cannot function effectively without prepared personnel.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The data will change how people interact with each other.",
+        "confidence": 0.92
+      },
+      {
+        "text": "People need time and guidance to adapt to new tools like virtual bots.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Change must occur incrementally alongside human development.",
+        "confidence": 0.9
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Human adaptation to technological change requires structured learning and experience.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Technological implementation success depends on concurrent workforce readiness.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Complexity increase necessitates proportional investment in human-system integration.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Organizational transformation cannot be fully automated; human agency is essential.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Incremental adoption leads to higher long-term system effectiveness than abrupt deployment.",
+        "confidence": 0.87
+      }
+    ]
+  },
+  {
+    "turn_text": "is really where I've spent a lot of my time and how I've attacked it for a lot of years. And this is back running on AS 400s and getting reports on green bar and how you do at that level of data when you're trying to run operations and manufacturing in real time. The point, and you mentioned this earlier, is to get started now with what you have. If I have nothing more than I know what went in and I know what came out, if I can get better insight to that and I can feed that information back to people, then I can actually start to understand do I want to work on the first half of that line or that area or that plant or the second half? How can I start dividing it? So it's not to lose good on behalf of pursuing a great. That's really what the issue is about. So use what you have. You've got more data than you need to get started. Start now and create some insights. Those insights will guide you into what the next best action is and how you're gonna drive your process forward",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Current data—such as inputs and outputs—is sufficient to begin generating actionable insights.",
+        "confidence": 0.97
+      },
+      {
+        "text": "Starting with basic input-output knowledge allows meaningful insight generation.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The speaker has spent many years working on operational and manufacturing data systems.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Pursuing perfection prevents progress; starting with available resources is preferable.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Historically, systems ran on AS/400s and generated reports using green bar paper.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Insights derived from initial data inform subsequent actions and process evolution.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Real-time operation and manufacturing require timely data processing.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Actionable outcomes emerge from iterative cycles of insight and response.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Feedback of insights to stakeholders improves decision-making about process focus areas.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Dividing processes into parts (e.g., line segments, plants) enables targeted improvement.",
+        "confidence": 0.89
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Progress requires prioritizing action over ideal conditions.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Useful insights can be extracted even from incomplete or low-fidelity data sources.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Improvement in complex systems begins with minimal viable data and feedback loops.",
+        "confidence": 0.93
+      },
+      {
+        "text": "There exists a causal relationship between early-stage data utilization and long-term strategic clarity.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Human agents interpret and act upon insights to direct process optimization.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Operational decisions benefit from incremental learning based on observed outcomes.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Organizations can identify high-leverage points in processes through comparative analysis of system segments.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Data-driven feedback increases the accuracy of resource allocation across production units.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Incremental improvements compound toward significant systemic gains.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Systems can be meaningfully segmented without requiring full end-to-end visibility initially.",
+        "confidence": 0.86
+      }
+    ]
+  },
+  {
+    "turn_text": "yes, it is. It is, if you don't understand that, and this is just my position, for the foreseeable future, we still can't get self-driving cars to do really well in adverse conditions. And so just yesterday, I had a long conversation with a manufacturing manager, very complex process. He's dealing with right now COVID, the virus, this massive disruption to his supply chain. So literally 40% of his staff of 500 has been called non-essential. So they're out. Now the other 60% have to come in. They have to stay six feet apart. They've got to wear PPE. Everybody's got to be protected and safe. All while doing manufacturing. He's in the oil and gas phase. So there's been this tremendous collapse of the oil market. He's got to deal with that. And at the same time this was going on, they actually retired a facility and they're bringing a new facility into his operation. He can have all the data in the world, all the analytics, all the metrics. If he's not driving that team forward, and one of the things that he said to me that I thought was really brilliant, he explains to his team every day that this is a chance to do something you'll never get to do in your lifetime. Your growth and your ability to endure kind of chaos in operations will never be challenged probably in our lifetimes way it is right now. So he's working with the team, but he's also now got them focused on the data. Where can we start to pick off pieces of data, start to roll that back into the operation and give folks refocused on the things that are driving the process forward most effectively. So if you're not doing both, if you're not considering how to augment the intelligence of the human and how to make the machine more thinking, a more intelligent machine and then work those in combination, you're going to miss the opportunity. I just don't think you're going to be able to drive the process if I can",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Self-driving cars cannot perform reliably in adverse weather conditions in the near term.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Human leadership and machine intelligence must be combined to achieve effective process management.",
+        "confidence": 0.94
+      },
+      {
+        "text": "A manufacturing manager is currently managing a workforce where 40% of 500 employees are classified as non-essential due to COVID-19.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Without combining human leadership with enhanced machine intelligence, organizations will fail to drive processes forward.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The remaining 60% of workers must maintain six-foot distance and wear PPE during operations.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The manufacturing manager operates in the oil and gas sector facing a significant decline in oil prices.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The manager recently retired an old facility and is integrating a new one into operations.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The manager uses daily communication to inspire his team by framing current challenges as rare personal growth opportunities.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Data analysis and operational metrics are available to the manager despite complexity.",
+        "confidence": 0.88
+      },
+      {
+        "text": "The manager actively integrates data insights back into ongoing operations to improve performance.",
+        "confidence": 0.87
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Effective organizational performance requires alignment between human motivation and system-level intelligence.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Leadership effectiveness depends on the ability to communicate purpose amid crisis.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Operational resilience emerges when humans and intelligent systems collaborate adaptively.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Data-driven decision-making improves outcomes only when integrated with active human oversight.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Complex disruptions necessitate both adaptive human leadership and advanced technological augmentation.",
+        "confidence": 0.86
+      },
+      {
+        "text": "People respond positively to narratives of unique opportunity even under stress.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Machine intelligence can be meaningfully augmented beyond automation to support cognitive tasks.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Organizational success in dynamic environments relies on continuous feedback loops between data and action.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Technological solutions alone are insufficient without concurrent investment in human coordination.",
+        "confidence": 0.82
+      },
+      {
+        "text": "Leaders who frame adversity as transformative learning experiences increase team engagement and output.",
+        "confidence": 0.81
+      }
+    ]
+  },
+  {
+    "turn_text": "discussed. >> So this is the foundational premise of the company started about just over three years ago, was that if we could augment the intelligence of the human, if we could create kind of an AI mentor software bot that could tap you on the shoulder and say, but just same way a 30 year operator within those operations where they'd say, \"Hey, I've seen this before. \"I can't really recall, but I know when this happens \"and these things are put into the machine, \"we need to do these extra work \"or we need to be careful of these other considerations.\" The software bot, this analytic engine called Razor, that's our product, listens to all the underlying signals that already exist in manufacturing. So we grab the data as it is, where it is, without the need to do all that rationalization and harmonization and then listen for signals that we can feed back to the operator and say, \"Here's an insight that you probably didn't catch, \"something you may want to attend to \"with an understanding that an operator is going to do it, \"not do it or do something completely different.\" But whatever that action is, gets picked back up by that model again, and the next turn of the crank, it's even smarter and provides even better insights. So it starts with what you have. It starts right now. We're providing these insights to companies in as little as 15 to 30 days that they're able to go back in and use with their teams, the teams then take an action that impacts the data, the data that impacts the team, and it becomes that kind of virtuous cycle of the augmented human and the intelligent machine working",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The foundational premise of the company is augmenting human intelligence using AI.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The company was founded just over three years ago.",
+        "confidence": 0.95
+      },
+      {
+        "text": "This feedback loop enables continuous improvement of the AI’s insights.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Razor is an AI-powered analytic engine designed to provide real-time operational insights.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The system supports a virtuous cycle between human judgment and machine intelligence.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Operator actions influence the underlying data, which feeds back into the system.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Razor listens to existing manufacturing data without requiring data harmonization.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Razor identifies patterns and signals that operators might miss.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The system delivers actionable insights to operators, who decide whether to act.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Companies can deploy Razor and see results within 15 to 30 days.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Machine learning models improve performance when fed updated real-world behavioral data.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Human operators possess tacit knowledge that can be partially captured through signal detection.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Operational changes driven by insights lead to measurable improvements in outcomes.",
+        "confidence": 0.89
+      },
+      {
+        "text": "AI systems can effectively simulate expert intuition through historical pattern matching.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Existing industrial data contains sufficient signal-to-noise ratio for meaningful pattern recognition.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Feedback loops in complex systems amplify long-term value when properly implemented.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Operators will engage meaningfully with AI-generated insights rather than ignore them.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Organizations adopt new technologies faster when they deliver visible results quickly.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Data integrity is preserved across iterations despite lack of upfront harmonization.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Augmented intelligence outperforms pure automation in dynamic, unpredictable environments.",
+        "confidence": 0.82
+      }
+    ]
+  },
+  {
+    "turn_text": "loop. - That's exactly what it is. But the key is to understand that in all of manufacturing, we're solving a class of problem. How to pull insights that are hidden inside the data you've already got. So go back to the beginning where we said, \"You may only have a couple pieces of data.\" We don't need to have all the information, all the data about this node. We can take information from along the process or in a plant and actually pull from that what nominal behavior is, and then that exposes with the sub-optimal behavior is. And when we see that, that allows us to give some direction. And that's really based on the power of the tools that are available today around AI and machine",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Modern AI tools enable effective extraction of insights from incomplete datasets.",
+        "confidence": 0.96
+      },
+      {
+        "text": "In manufacturing, we solve problems related to extracting hidden insights from existing data.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Identifying nominal behavior enables the detection of sub-optimal behavior.",
+        "confidence": 0.94
+      },
+      {
+        "text": "It is not necessary to have complete data about every node in a system to identify nominal behavior.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Information from across a production process or within a plant can be used to determine nominal behavior.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Recognizing sub-optimal behavior provides actionable direction for improvement.",
+        "confidence": 0.91
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Hidden patterns in data can be reliably extracted using analytical methods.",
+        "confidence": 0.93
+      },
+      {
+        "text": "AI-driven analysis improves decision-making in industrial contexts.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Sub-optimal behavior is diagnosable once nominal behavior is known.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Nominal behavior represents an ideal or standard state of operation.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Data from different parts of a process can be meaningfully aggregated to represent overall system behavior.",
+        "confidence": 0.89
+      }
+    ]
+  },
+  {
+    "turn_text": "them. - Well, you can find it on the internet pretty easily, but the A380, the aircraft that had a catastrophic failure on an oil line at a leading edge of a wing in flight. Thank God they had the most seasoned crew on the aircraft. They had trainers on the aircraft that just happened to be flying. They really knew what they were doing. They would have lost the aircraft easily. But what happened was it took them something like 45 minutes to clear all the alarms in the cockpit just so the team could determine what their next best action was. So if all we're hearing are these alarms sounding and we're not getting any context with them, if we're not getting insight with them, and we don't realize one of them is a fire alarm that we need to get out, let alone reset a piece of equipment, then the consequences could be catastrophic. Now, they're not always that life and death, but in an operation, right and same, think about what we're doing right now. I've either got a control cost, much more tightly because my market's collapsed. I've got a control production much more tightly because I'm in a surge that I can't even control. People are buying more of my product than ever before. Or I'm bringing a new product in because half my plants close, the other half are in the food companies are taking all their institutional package and moving it to commercial and retail packaging. How do I get that started up without making all the mistakes everybody made before? I wanna learn from the insights that are buried in the data, I wanna do these things. So it's a tremendous opportunity for literally any manufacturer right now to take advantage of what they've got, improve the process and start this cycle of digital",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The A380 experienced a catastrophic failure in an oil line at the leading edge of its wing during flight.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The aircraft had a highly experienced crew, including trainers who were onboard and able to respond effectively.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Inadequate alarm clarity can lead to catastrophic outcomes in high-stakes operational environments.",
+        "confidence": 0.92
+      },
+      {
+        "text": "It took approximately 45 minutes to clear cockpit alarms before the crew could identify their next best course of action.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Without contextual information about alarms, operators may fail to recognize critical warnings such as fire alerts.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Manufacturers currently face challenges related to sudden changes in demand, plant closures, and shifts in distribution channels.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Digital transformation offers manufacturers an opportunity to learn from historical data and avoid past mistakes.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Data-driven insights can help optimize manufacturing processes and initiate continuous improvement cycles.",
+        "confidence": 0.87
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Crew performance under stress depends critically on accurate situational awareness derived from system feedback.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Effective crisis management requires timely interpretation of diagnostic signals within complex systems.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Operational resilience improves when organizations leverage embedded knowledge from prior incidents.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Digital tools enable extraction of actionable insights from large-scale operational data.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Organizations benefit from learning from historical failures to prevent recurrence.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Human decision-making in dynamic environments is constrained by available information quality.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Manufacturing efficiency gains are possible through systematic integration of real-time data and adaptive processes.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Operators will prioritize actions based on perceived severity and clarity of warning indicators.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Information overload impairs effective response in high-pressure scenarios.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Technological adoption in industry is driven by the potential for competitive advantage via process optimization.",
+        "confidence": 0.82
+      }
+    ]
+  },
+  {
+    "turn_text": ". - Yeah, it's, look, it's an exciting time. The manufacturers are in a great position. If they're thinking ahead, if they're thinking about, what can I do differently to create more value tomorrow? I can bring in all kinds of consultants and technology and people to drive things next year. But what are we gonna do tomorrow next week? What are we gonna do with the tools and technologies that we have? What can we add to it just to complement that mix and then drive the process? I think that's where people need to be focused 'cause there's tremendous opportunity, frankly, everywhere. We've not engaged a company where we couldn't help them drive performance very, very quickly. -",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The speaker’s team has successfully improved performance at every company they’ve engaged with.",
+        "confidence": 0.96
+      },
+      {
+        "text": "Manufacturers are in a strong position during this period.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Thinking ahead about creating future value is beneficial.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Consultants, technology, and personnel can be leveraged to improve performance next year.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Immediate action using existing tools and technologies is possible and valuable.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Small improvements to current processes can significantly enhance outcomes.",
+        "confidence": 0.89
+      },
+      {
+        "text": "There is substantial opportunity for performance improvement across industries.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Improvements based on existing resources are more feasible than relying solely on new investments.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Organizations can identify and implement incremental enhancements without requiring major overhauls.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Performance gains are achievable within short timeframes when focus is applied correctly.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Existing tools and technologies contain untapped potential for optimization.",
+        "confidence": 0.89
+      },
+      {
+        "text": "People will prioritize actions that yield measurable results in the near term.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Change initiatives succeed when aligned with current capabilities rather than dependent on external inputs alone.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Consulting and technological inputs are effective only when integrated with internal operational knowledge.",
+        "confidence": 0.85
+      },
+      {
+        "text": "The ability to rapidly improve performance implies that systemic barriers are not insurmountable.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Opportunity exists wherever there is a gap between current practice and optimal execution.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Managers possess the agency to make decisions that lead to immediate performance improvements.",
+        "confidence": 0.82
+      }
+    ]
+  },
+  {
+    "turn_text": "in the Azure marketplace. So literally you can go to the Azure marketplace and you can execute and start the technology and the technology deployment. It drops in very, very quickly. It would be merely a matter of exposing historical data securely so that we could then push it through. We're cloud-based, so we're on Azure. That's where our technology resides. It can run locally if that's a requirement. The manufacturers, sometimes you have these operations that have a security requirement based on what they produce where they can't, they need to air gap things. If that's necessary, you can do that. But typically it's on Azure. That data would then come into the analytic engine. We would report the insights back and we would within a week to two weeks start providing value to the operation literally from the time they say, let's go, let's get started",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The system is primarily cloud-based and hosted on Azure.",
+        "confidence": 0.96
+      },
+      {
+        "text": "The technology can be deployed directly from the Azure Marketplace.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Some manufacturing environments require air-gapped systems due to security needs.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Technology deployment via Azure is rapid and efficient.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Insights are reported back to users following analysis.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Data flows into an analytic engine after secure exposure.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Historical data can be exposed securely for processing.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Value delivery begins within one to two weeks of project initiation.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Local execution is possible when required due to security constraints.",
+        "confidence": 0.9
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Secure data exposure enables reliable downstream analytics.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Cloud hosting on Azure ensures scalability and operational efficiency.",
+        "confidence": 0.92
+      },
+      {
+        "text": "Analytic engines can process raw historical data effectively once secured.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Once data is ingested, analytical engines can generate meaningful insights in less than two weeks.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Air-gapping is feasible without compromising core functionality.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Users will initiate projects only when ready to begin value generation.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Deployment speed correlates with user readiness and infrastructure availability.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Organizations prioritize timely value delivery over extended setup cycles.",
+        "confidence": 0.86
+      }
+    ]
+  },
+  {
+    "turn_text": "? - So I think they should go to the Azure marketplace. We're gonna have a short link on the screen, but I'm gonna read it here to you just in case you want to write this down. It's gonna be HTTPS colon slash slash bit.ly I'll lowercase slash two capital V, small queue, capital J, small G91. You'll see that on the screen. It'll be in the show notes. And you can get to the Azure marketplace. And there's a lot of great tools and technologies there. I mean, it's a tremendous resource that Microsoft's providing for manufacturers and really anybody in the space that's trying to deploy new advanced technologies",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The speaker recommends going to the Azure marketplace.",
+        "confidence": 0.95
+      },
+      {
+        "text": "The Azure marketplace contains many useful tools and technologies.",
+        "confidence": 0.94
+      },
+      {
+        "text": "There is a short link displayed on screen for the Azure marketplace.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The URL is https://bit.ly/2VqJG91.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The link will also be available in the show notes.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Microsoft provides the Azure marketplace as a resource for manufacturers.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The Azure marketplace supports deployment of advanced technologies.",
+        "confidence": 0.89
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Accessing the Azure marketplace increases the likelihood of obtaining valuable technological resources.",
+        "confidence": 0.93
+      },
+      {
+        "text": "A short link reliably directs users to the intended destination.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Users who need advanced technology tools benefit from using centralized marketplaces like Azure.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Information provided verbally is sufficient for accurate user action when accompanied by visual cues.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Microsoft’s provision of resources implies their quality and relevance to target users.",
+        "confidence": 0.85
+      }
+    ]
+  },
+  {
+    "turn_text": "I cannot overemphasize what it's done. So we were a startup three years ago. We've got several Fortune 100 customers at this point. We're closing deals every quarter, new customers and new use cases and deployments. And the ability to get from that first concept to scalable deployable secure technology is really about how we've been able to leverage the Microsoft tools, leverage Azure. And now most importantly, the Azure marketplace to get more awareness of our technology out in the space and allow customers to access more quickly. So from literally every aspect, the Microsoft team has been fantastic. And we're working with some great folks and they've helped us and they really understand if you're a startup, if you're a young company, you can get swallowed up by large organizations. It can be very difficult. They actually understand how to work with younger smaller organizations that need to get their first wins in place and then build on that. And they've just been a fantastic partner from the technology, to the partnership programs, to just visibility about what we're doing in the",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The company was a startup three years ago.",
+        "confidence": 0.95
+      },
+      {
+        "text": "The Microsoft team has been a fantastic partner across multiple dimensions.",
+        "confidence": 0.94
+      },
+      {
+        "text": "The company now has several Fortune 100 customers.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Leveraging Microsoft tools and Azure has enabled technological development.",
+        "confidence": 0.92
+      },
+      {
+        "text": "The company closes deals every quarter with new customers and new use cases.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Microsoft understands the challenges faced by startups and young companies.",
+        "confidence": 0.91
+      },
+      {
+        "text": "The company has developed scalable, deployable, and secure technology.",
+        "confidence": 0.9
+      },
+      {
+        "text": "The Azure Marketplace has increased awareness of the company's technology.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Microsoft helps startups achieve initial wins and scale incrementally.",
+        "confidence": 0.89
+      },
+      {
+        "text": "The Azure Marketplace allows customers to access the technology more quickly.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Startups succeed when they gain early customer validation and scalability through platform partnerships.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Platform ecosystems like Azure accelerate market entry and adoption for emerging technologies.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Technical scalability and security are prerequisites for enterprise adoption.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Partnerships with established tech providers reduce risk and increase credibility for startups.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Access to cloud infrastructure enables rapid prototyping and deployment at scale.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Visibility via digital marketplaces correlates with faster customer acquisition.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Large organizations often dominate or absorb smaller innovators without supportive ecosystems.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Effective collaboration between startups and corporate partners requires mutual understanding of growth stages.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Customer trust increases when technology is available through reputable platforms like Azure Marketplace.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Strategic alignment with a major cloud provider enhances long-term business sustainability.",
+        "confidence": 0.84
+      }
+    ]
+  },
+  {
+    "turn_text": "? - So they should go to the manufacturing marketplace. So that's mfgmarketplace@microsoft.com and they can get into the manufacturing, the Microsoft Manufacturing Group and they can start looking at the marketplace rewards there as well. So that's mfgmarketplac.com and we'll have a link there as well. - Great",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The recipient should go to the manufacturing marketplace.",
+        "confidence": 0.95
+      },
+      {
+        "text": "mfgmarketplace@microsoft.com is the email address for the manufacturing marketplace.",
+        "confidence": 0.93
+      },
+      {
+        "text": "The Microsoft Manufacturing Group manages the manufacturing marketplace.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Marketplace rewards are available within the Microsoft Manufacturing Group.",
+        "confidence": 0.89
+      },
+      {
+        "text": "mfgmarketplac.com is the website URL for the manufacturing marketplace.",
+        "confidence": 0.88
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Accessing the manufacturing marketplace enables participation in its rewards program.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Microsoft has authority over the manufacturing marketplace and related resources.",
+        "confidence": 0.86
+      },
+      {
+        "text": "The target audience is capable of using email and web links to access digital platforms.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Information provided will be used to guide decision-making toward beneficial outcomes.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Digital marketplaces provide value through structured reward systems.",
+        "confidence": 0.8
+      }
+    ]
+  },
+  {
+    "turn_text": "you? - So they can find us at Praymo.com. That's p-r-a-e-m-o.com. We're on Twitter at Praymo.ai and you can send an email info@praymo.com. We're on LinkedIn as well. You can find this very easily in the search box. Just type them in Praymo and you can find myself there as well. Love to connect with folks",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "Praymo.com is a website URL.",
+        "confidence": 0.95
+      },
+      {
+        "text": "The correct spelling of the domain is p-r-a-e-m-o.com.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Praymo.ai is the Twitter handle for Praymo.",
+        "confidence": 0.92
+      },
+      {
+        "text": "info@praymo.com is an email address associated with Praymo.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Praymo has a presence on LinkedIn.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Users can locate Praymo-related accounts using a search box.",
+        "confidence": 0.89
+      },
+      {
+        "text": "The speaker can be found on these platforms under their name.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Searching 'Praymo' will lead users to relevant profiles.",
+        "confidence": 0.87
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Search engines index public social media and web domains accurately.",
+        "confidence": 0.94
+      },
+      {
+        "text": "People who use search tools can successfully retrieve results when given accurate keywords.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Publicly listed contact details are accessible and functional if properly entered.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Using standard spellings increases the likelihood of successful discovery via search.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Individuals seeking connection expect clear pathways to reach others online.",
+        "confidence": 0.89
+      }
+    ]
+  },
+  {
+    "turn_text": "audience? - So we're in a kind of an interesting time. There'll be a time where this conversation will get replayed and we'll be well past this disruption that's going on right now. And it's always amazing to me when you see the general public learn about things like manufacturing supply chains and the criticality of manufacturing operations and companies that need to be able to flip products on a dime would go from making literally automotive parts to ventilator parts in a matter of weeks. And there's a capability and a resilience and an ingenuity that exists in the manufacturing space and has been, it's kind of been stifled because most folks and reasonably so want to make this data based decisions. Microsoft has given us tools now to go all the way down to the metal and get that information out of these machines. We're building tools that allow us to actually use that data as is and start things very quickly. If you allow, if you really believe in your teams and their capability and understand like that manufacturing manager that I talked to and said, this is a time that's going to give them an experience and capability like they've never had before, those people will step up. So challenge your teams, get them thinking about new, using new tools, using new techniques, using new approaches, you have to do it right now as we sit in the middle of this disruption. But your ability to do that and trust those teams and drive forward is going to pay dividends in untold ways for years to come in an operation based on how those people really drive and advance your organization and bring the best in their talent. I've been in manufacturing forever. The best people are in the supply chain teams and operations teams and they will work as hard on the goals of the organization as they will on anything. Giving some trust and some tools and they'll definitely be ready to go. -",
+    "speaker_id": "SPEAKER_00",
+    "inferred_speaker_name": "NO_INFERRED_SPEAKER",
+    "inferred_speaker_role": "NO_INFERRED_ROLE",
+    "explicit_propositions": [
+      {
+        "text": "The public is currently learning about manufacturing supply chains and operational criticality.",
+        "confidence": 0.95
+      },
+      {
+        "text": "Supply chain and operations personnel are among the most dedicated and capable employees in manufacturing.",
+        "confidence": 0.94
+      },
+      {
+        "text": "Manufacturing organizations can rapidly reconfigure production lines to produce different products, such as ventilators from automotive parts.",
+        "confidence": 0.93
+      },
+      {
+        "text": "Trust in frontline teams enhances their performance during periods of disruption.",
+        "confidence": 0.92
+      },
+      {
+        "text": "There exists significant resilience, capability, and ingenuity within the manufacturing sector.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Most decision-makers reasonably prioritize data-based decisions in manufacturing.",
+        "confidence": 0.9
+      },
+      {
+        "text": "Microsoft provides tools that enable real-time data extraction from machinery at a granular level.",
+        "confidence": 0.89
+      },
+      {
+        "text": "New tools are being developed to process raw machine data immediately without extensive preprocessing.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Teams exposed to new tools and challenges will develop unprecedented capabilities.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Leaders who empower teams during disruption will gain long-term operational benefits.",
+        "confidence": 0.86
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Organizational success depends on unlocking latent human capital through empowerment and tooling.",
+        "confidence": 0.93
+      },
+      {
+        "text": "When provided with appropriate tools and autonomy, skilled workers will innovate and adapt effectively.",
+        "confidence": 0.91
+      },
+      {
+        "text": "Technological access enables faster response times and improved decision-making in dynamic environments.",
+        "confidence": 0.89
+      },
+      {
+        "text": "Past experiences of team capability predict future adaptive performance under pressure.",
+        "confidence": 0.88
+      },
+      {
+        "text": "Disruption creates unique opportunities for organizational transformation and skill development.",
+        "confidence": 0.87
+      },
+      {
+        "text": "Data-driven decision-making improves operational outcomes when combined with human judgment.",
+        "confidence": 0.86
+      },
+      {
+        "text": "Employees align their efforts with organizational goals when trusted and equipped.",
+        "confidence": 0.85
+      },
+      {
+        "text": "Resilience in manufacturing systems emerges from both technological infrastructure and human agency.",
+        "confidence": 0.84
+      },
+      {
+        "text": "Leadership actions during crisis shape long-term cultural and operational norms.",
+        "confidence": 0.83
+      },
+      {
+        "text": "Innovation capacity increases when individuals perceive ownership over problem-solving processes.",
+        "confidence": 0.82
+      }
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+Fit mode: fit
+Formula: is_question_asked ~ num_assumptions + num_words_in_turn + num_explicit_statements
+Samples: 264416
+
+                           Logit Regression Results                           
+==============================================================================
+Dep. Variable:      is_question_asked   No. Observations:               264416
+Model:                          Logit   Df Residuals:                   264412
+Method:                           MLE   Df Model:                            3
+Date:                Fri, 19 Dec 2025   Pseudo R-squ.:                0.006744
+Time:                        16:30:55   Log-Likelihood:            -1.6304e+05
+converged:                       True   LL-Null:                   -1.6415e+05
+Covariance Type:            nonrobust   LLR p-value:                     0.000
+===========================================================================================
+                              coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+Intercept                  -1.1863      0.013    -94.264      0.000      -1.211      -1.162
+num_assumptions             0.0254      0.004      5.932      0.000       0.017       0.034
+num_words_in_turn           0.0003   3.14e-05      9.427      0.000       0.000       0.000
+num_explicit_statements     0.0382      0.003     10.946      0.000       0.031       0.045
+===========================================================================================
