@@ -1,11 +1,3 @@
-"""
-Run:
-  python label_with_vllm_qwen3.py \
-    --input analysis_charts/clarification_prediction/questions.csv \
-    --output analysis_charts/clarification_prediction/questions_labeled.csv \
-    --batch-size 64
-"""
-
 from __future__ import annotations
 
 import argparse
