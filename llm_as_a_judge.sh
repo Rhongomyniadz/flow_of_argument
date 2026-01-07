@@ -9,6 +9,4 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 python llm_as_a_judge.py \
-  --input results/analysis_charts/clarification_prediction/questions.csv \
-  --output results/analysis_charts/clarification_prediction/questions_labeled.csv \
   --batch_size 64
