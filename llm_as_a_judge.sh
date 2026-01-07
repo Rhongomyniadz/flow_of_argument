@@ -8,6 +8,8 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
+conda activate vllm
+
 python llm_as_a_judge.py \
   --input analysis_charts/clarification_prediction/questions.csv \
   --output analysis_charts/clarification_prediction/questions_labeled.csv \
