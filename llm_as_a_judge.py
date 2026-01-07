@@ -81,8 +81,8 @@ def parse_label(text: str) -> int:
 # -------------------- Main --------------------
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", default="results/analysis_charts/clarification_prediction/questions.csv")
-    ap.add_argument("--output", default="results/analysis_charts/clarification_prediction/questions_labeled.csv")
+    ap.add_argument("--input", default="/home/edenzha/flow_of_argument/results/analysis_charts/clarification_prediction/questions.csv")
+    ap.add_argument("--output", default="/home/edenzha/flow_of_argument/results/analysis_charts/clarification_prediction/questions_labeled.csv")
     ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--limit", type=int, default=0)
 
