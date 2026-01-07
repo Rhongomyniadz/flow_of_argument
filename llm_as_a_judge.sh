@@ -8,13 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-export CUDA_HOME=/usr/local/cuda-12.6
-export PATH=/usr/local/cuda-12.6/bin:/opt/anaconda/bin:/usr/sbin:/usr/bin:/sbin:/bin
-export LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64
-export TORCH_CUDA_ARCH_LIST="8.0"
-export FLASHINFER_COMPUTE_CAPS=80
-
 python llm_as_a_judge.py \
-  --input analysis_charts/clarification_prediction/questions.csv \
-  --output analysis_charts/clarification_prediction/questions_labeled.csv \
+  --input results/analysis_charts/clarification_prediction/questions.csv \
+  --output results/analysis_charts/clarification_prediction/questions_labeled.csv \
   --batch_size 64
