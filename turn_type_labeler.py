@@ -52,24 +52,56 @@ SYSTEM_PROMPT = (
     "Output ONLY the label string, with no extra words."
 )
 
-TURN_TYPE_PROMPT = """\
-Choose exactly ONE Turn Type label for the TURN.
+TURN_TYPE_PROMPT = """
+You are labeling the TURN TYPE of a single conversation turn.
+Your job is to choose exactly ONE label from the list below, using the definitions and decision rules provided.
 
-Turn Types:
-- Substantive: advances the conversation by adding new information/claims OR managing the topic (includes repair questions).
-- Backchannel: a short signal of continued attention without taking the floor.
-- Procedural: meta-talk about the channel/setting (e.g., can you hear me, you're muted, hold on).
-- Disrupted: cut off before a complete thought is formed; incomplete syntax.
+You MUST output exactly ONE label (verbatim) and NOTHING ELSE.
 
-Output ONLY one of:
-Substantive
-Backchannel
-Procedural
-Disrupted
+Allowed output (choose ONE):
+- Substantive
+- Backchannel
+- Procedural
+- Disrupted
+
+=== Turn Type Definitions (use these) ===
+
+1) Substantive
+- A turn that advances the conversation by adding new information (claims) OR managing the topic.
+- Includes: stating facts/opinions, explaining, narrating, arguing, answering questions, asking clarification questions,
+  challenging/correcting, proposing actions, or otherwise moving the discussion forward.
+- Generally not just a minimal acknowledgment.
+
+2) Backchannel
+- A signal of continued attention without taking the floor.
+- Typically very short acknowledgments like: "Yeah", "Uh-huh", "Right", "Okay", "Sure", "Mm-hmm".
+- Does NOT introduce new claims, does NOT meaningfully steer the topic, does NOT ask a real question.
+
+3) Procedural
+- Meta-talk about the channel or setting, not about the topic.
+- Examples: "Can you hear me?", "You're muted", "Hold on a sec", "Let me restart", "Connection is bad".
+
+4) Disrupted
+- A turn cut off by an interruption before a complete thought is formed.
+- Indicators: incomplete syntax, trailing dash/ellipsis suggesting interruption ("I was thinking that-"),
+  or clearly unfinished sentence where the intent cannot be completed.
+
+=== Decision Rules / Tie-breakers (IMPORTANT) ===
+- Choose ONE label even if multiple patterns appear.
+- Priority:
+  1) If the turn is about audio/connection/turn-taking mechanics, choose Procedural.
+  2) If the turn is clearly cut off / incomplete mid-thought, choose Disrupted.
+  3) If the turn is merely a short acknowledgment with no added content, choose Backchannel.
+  4) Otherwise choose Substantive (default), including ANY real question (especially clarification), answer, claim, or challenge.
+
+Output rules:
+- Output ONLY the label text (one line).
+- No punctuation, no quotes, no explanation.
 
 TURN:
 {turn_text}
 """
+
 
 ALLOWED = {"Substantive", "Backchannel", "Procedural", "Disrupted"}
 

@@ -65,11 +65,18 @@ ALLOWED = [
 ]
 ALLOWED_SET = set(ALLOWED)
 
-MOVE_PROMPT = """\
-Label the CURRENT TURN with exactly ONE Conversation Move label (Primary Move).
-Use the PREVIOUS TURN as context if present.
+MOVE_PROMPT = """
+You are an expert conversation analyst. Your job is to label the PRIMARY Conversation Move of the CURRENT TURN,
+using the PREVIOUS TURN only as context.
 
-Conversation Moves (output EXACTLY one label as written):
+Conversation Moves are grouped into:
+A) Constructive (Building the World): adds to the "Explicit Claims" pile
+B) Repair (Fixing the World): signals a Gricean Maxim violation that must be repaired
+C) Disengagement (Abandoning the World): negative outcomes; avoids engaging the world
+
+You MUST output exactly ONE label from the list below, and output NOTHING ELSE.
+
+Allowed labels (output EXACTLY one):
 - Assert / Elaborate
 - Agree / Align
 - Answer
@@ -80,7 +87,61 @@ Conversation Moves (output EXACTLY one label as written):
 - Topic Shift
 - Stonewalling / Non-Response
 
-Output ONLY one label from the list above.
+=== Official Definitions (use these) ===
+
+A. Constructive Moves (Building the World)
+1) Assert / Elaborate
+   - Stating a fact, opinion, or description (adds new explicit content).
+   - Includes explaining, justifying, narrating, or elaborating, when not primarily answering a question.
+2) Agree / Align
+   - Explicit agreement with the previous speaker's claim or assumption.
+   - Examples: "That's a good point", "Exactly", "Right", "I agree".
+3) Answer
+   - Providing information solicited by a previous question (directly addresses what was asked).
+
+B. Repair Moves (Fixing the World)
+4) Clarification Request (Generic)
+   - Signaling a failure to understand Manner or Relation (unclear meaning or relevance).
+   - Examples: "What do you mean?", "I don't follow."
+   - Does NOT specify what exact piece is missing.
+5) Clarification Request (Specific)
+   - Signaling a missing Claim or Assumption (Quantity violation).
+   - Asks for a specific missing element needed to interpret prior content.
+   - Examples: "Which report are you referring to?", "Who is 'he'?"
+6) Correction / Challenge
+   - Explicitly rejecting a previous Claim or Assumption (Quality violation).
+   - Examples: "No, that's not right", "I disagree with your premise."
+7) Self-Correction
+   - The speaker catches their own violation mid-turn and corrects/rephrases themselves.
+   - Examples: "I mean, well, let me rephrase that..."
+
+C. Disengagement Moves (Abandoning the World)
+8) Topic Shift
+   - Abruptly changing the subject without a bridging assumption.
+   - Example: "Anyway, did you see the game?"
+9) Stonewalling / Non-Response
+   - Deliberately short, non-committal answers to open questions.
+   - Examples: "Maybe", "I guess."
+   - Use when the turn avoids engaging rather than genuinely answering.
+
+=== Primary-move selection rules (IMPORTANT) ===
+- Choose ONE label even if multiple moves appear.
+- Prefer the move that best describes the turn's main function in the interaction.
+
+Tie-breakers (apply in order):
+1) If the CURRENT TURN is primarily asking for clarification, choose Clarification Request (Specific/Generic),
+   even if it also contains commentary.
+2) If the CURRENT TURN primarily rejects/disputes prior content, choose Correction / Challenge.
+3) If the PREVIOUS TURN asked a question and the CURRENT TURN provides the requested information,
+   choose Answer (even if it also elaborates).
+4) If it begins with explicit agreement and then adds detail, choose Agree / Align unless the agreement is minor
+   and the bulk is new assertion (then Assert / Elaborate).
+5) If it avoids engaging with an open question via short non-committal language, choose Stonewalling / Non-Response.
+6) If it abruptly changes topic without a bridge, choose Topic Shift.
+
+Output rules:
+- Output ONLY one label from the Allowed labels list.
+- No quotes, no punctuation, no explanations.
 
 PREVIOUS TURN:
 {prev_turn}
@@ -88,6 +149,7 @@ PREVIOUS TURN:
 CURRENT TURN:
 {cur_turn}
 """
+
 
 
 def ensure_dir(path: str) -> None:
