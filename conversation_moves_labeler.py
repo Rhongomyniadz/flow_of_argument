@@ -1,21 +1,9 @@
-#!/usr/bin/env python3
-"""
-LLM-as-judge Conversation Move labeling (no heuristics).
-
-Input:  results/political/parsed/*.json
-Output: data/conversation_move_labeled.json  (one big JSON array; streaming write)
-
-Uses previous turn as context.
-Adds field:
-- conversation_move_label: one of the allowed move labels
-"""
-
 import argparse
 import glob
 import json
 import os
 import re
-from typing import Any, Dict, List, Iterable, Optional
+from typing import Any, Dict, List, Optional
 
 from tqdm import tqdm
 from transformers import AutoTokenizer
@@ -106,14 +94,26 @@ def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def load_episode(path: str) -> List[Dict[str, Any]]:
+def load_episode_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
-        obj = json.load(f)
+        return json.load(f)
+
+
+def extract_turns(obj: Any) -> List[Dict[str, Any]]:
     if isinstance(obj, list):
         return obj
     if isinstance(obj, dict) and isinstance(obj.get("turns"), list):
         return obj["turns"]
-    raise ValueError(f"Unrecognized JSON format in {path} (expected list or dict with 'turns')")
+    raise ValueError("Unrecognized JSON format: expected list or dict with 'turns' list.")
+
+
+def get_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
+    if turns and "episode_id" in turns[0] and turns[0]["episode_id"] is not None:
+        return str(turns[0]["episode_id"])
+    m = re.search(r"(\d+)\.json$", os.path.basename(fallback_path))
+    if m:
+        return m.group(1)
+    raise ValueError(f"Could not infer episode_id from data or filename: {fallback_path}")
 
 
 def truncate_text(s: str, max_chars: int) -> str:
@@ -139,74 +139,71 @@ def normalize_label(raw: str) -> Optional[str]:
     if s in ALLOWED_SET:
         return s
 
-    # robust parsing: if extra tokens are appended, match by prefix against known labels
+    # Robust parsing only (not heuristic labeling)
     for lab in sorted(ALLOWED, key=len, reverse=True):
         if s.startswith(lab):
             return lab
-
     return None
 
 
-def stream_json_array(out_path: str, records: Iterable[Dict[str, Any]]) -> None:
+def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
     with open(out_path, "w", encoding="utf-8") as f:
-        f.write("[\n")
-        first = True
-        for rec in records:
-            if not first:
-                f.write(",\n")
-            json.dump(rec, f, ensure_ascii=False)
-            first = False
-        f.write("\n]\n")
+        json.dump(turns, f, ensure_ascii=False, indent=2)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input_dir", type=str, default="results/political/parsed")
-    ap.add_argument("--output", type=str, default="data/conversation_move_labeled.json")
+    ap.add_argument("--input_dir", type=str, default="data/labeled")
+    ap.add_argument("--output_dir", type=str, default="data/labeled")
     ap.add_argument("--batch_size", type=int, default=32)
     ap.add_argument("--max_turn_chars", type=int, default=3000)
     args = ap.parse_args()
 
-    ensure_dir(os.path.dirname(args.output) or ".")
+    ensure_dir(args.output_dir)
 
     files = sorted(glob.glob(os.path.join(args.input_dir, "*.json")))
     if not files:
         raise FileNotFoundError(f"No .json files found under: {args.input_dir}")
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
-    llm_if = LLMInterface()  # <- use defaults exactly as defined
+    llm_if = LLMInterface()  # use defaults exactly as defined
 
-    def labeled_records() -> Iterable[Dict[str, Any]]:
-        for fp in tqdm(files, desc="Move Episodes"):
-            turns = load_episode(fp)
-            if not turns:
-                continue
+    for fp in tqdm(files, desc="Move Episodes"):
+        obj = load_episode_json(fp)
+        turns = extract_turns(obj)
+        if not turns:
+            continue
 
-            prompts: List[str] = []
-            for i, t in enumerate(turns):
-                prev_txt = turns[i - 1].get("turn_text", "") if i > 0 else ""
-                cur_txt = t.get("turn_text", "")
+        episode_id = get_episode_id(turns, fp)
+        out_path = os.path.join(args.output_dir, f"{episode_id}.json")
 
-                prev_txt = truncate_text(prev_txt, args.max_turn_chars)
-                cur_txt = truncate_text(cur_txt, args.max_turn_chars)
+        prompts: List[str] = []
+        for i, t in enumerate(turns):
+            prev_txt = turns[i - 1].get("turn_text", "") if i > 0 else ""
+            cur_txt = t.get("turn_text", "")
 
-                user = MOVE_PROMPT.format(prev_turn=prev_txt, cur_turn=cur_txt)
-                prompts.append(build_chat_prompt(tokenizer, user))
+            prev_txt = truncate_text(prev_txt, args.max_turn_chars)
+            cur_txt = truncate_text(cur_txt, args.max_turn_chars)
 
-            outputs: List[str] = []
-            for i in range(0, len(prompts), args.batch_size):
-                outputs.extend(llm_if.generate_batch(prompts[i:i + args.batch_size]))
+            user = MOVE_PROMPT.format(prev_turn=prev_txt, cur_turn=cur_txt)
+            prompts.append(build_chat_prompt(tokenizer, user))
 
-            for t, out_text in zip(turns, outputs):
-                rec = dict(t)
-                lab = normalize_label(out_text)
-                rec["conversation_move_label"] = lab
-                if lab is None:
-                    rec["conversation_move_label_error"] = out_text[:400]
-                yield rec
+        outputs: List[str] = []
+        for i in range(0, len(prompts), args.batch_size):
+            outputs.extend(llm_if.generate_batch(prompts[i:i + args.batch_size]))
 
-    stream_json_array(args.output, labeled_records())
-    print(f"Done. Wrote: {args.output}")
+        labeled_turns: List[Dict[str, Any]] = []
+        for t, out_text in zip(turns, outputs):
+            rec = dict(t)
+            lab = normalize_label(out_text)
+            rec["conversation_move_label"] = lab
+            if lab is None:
+                rec["conversation_move_label_error"] = out_text[:400]
+            labeled_turns.append(rec)
+
+        save_episode_turns(out_path, labeled_turns)
+
+    print(f"Done. Updated per-episode files under: {args.output_dir}")
 
 
 if __name__ == "__main__":
