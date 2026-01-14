@@ -8,7 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python turn_type_labeler.py \
+python data_processing/turn_type_labeler.py \
   --input_dir results/political/parsed \
   --output_dir data/labeled \
   --batch_size 64

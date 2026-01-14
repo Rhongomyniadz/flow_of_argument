@@ -8,7 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python conversation_moves_labeler.py \
+python data_processing/conversation_moves_labeler.py \
   --input_dir data/labeled \
   --output_dir data/conversation_moves_labeled \
   --batch_size 64
