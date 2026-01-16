@@ -2,11 +2,13 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+
+from vllm import LLM, SamplingParams
 
 try:
     from statsmodels.tsa.stattools import grangercausalitytests
@@ -14,298 +16,222 @@ except Exception:
     grangercausalitytests = None
 
 
-def load_episode(path: Path) -> List[Dict[str, Any]]:
-    with path.open("r", encoding="utf-8") as f:
-        obj = json.load(f)
-    if not isinstance(obj, list):
-        raise ValueError(f"{path} is not a JSON list")
-    return obj
-
-
-def sort_turns(turns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    if any("startTime" in t and t.get("startTime") is not None for t in turns):
-        return sorted(
-            turns,
-            key=lambda t: (
-                t.get("startTime", float("inf")),
-                t.get("turn_idx", 10**9),
-            ),
+# =========================================================
+# LLM Interface (defaults only, tensor_parallel_size=2)
+# =========================================================
+class LLMInterface:
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        gpu_memory_utilization: float = 0.9,
+        tensor_parallel_size: int = 2,
+        temperature: float = 0.0,
+        top_p: float = 1.0,
+        min_p: float = 0.0,
+        top_k: int = 0,
+        repetition_penalty: float = 1.05,
+        download_dir: str = "/shared/4/models",
+        max_tokens: int = 16,
+    ):
+        self.llm = LLM(
+            model=model_name,
+            gpu_memory_utilization=gpu_memory_utilization,
+            download_dir=download_dir,
+            tensor_parallel_size=tensor_parallel_size,
         )
-    return sorted(turns, key=lambda t: t.get("turn_idx", 10**9))
+        self.params = SamplingParams(
+            max_tokens=max_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            min_p=min_p,
+            top_k=top_k,
+            repetition_penalty=repetition_penalty,
+        )
+
+    def generate_batch(self, prompts: List[str]) -> List[str]:
+        out = self.llm.generate(prompts, self.params)
+        return [o.outputs[0].text.strip() for o in out]
 
 
-def rolling_mean(arr: List[float], w: int) -> List[float]:
-    out = []
-    for i in range(len(arr)):
-        window = arr[max(0, i - w + 1) : i + 1]
-        out.append(float(np.nanmean(window)))
+# =========================================================
+# Prompt (stance 1..5)
+# =========================================================
+STANCE_PROMPT = """\
+You are a stance judge.
+
+Task:
+Given a short dialogue context and the CURRENT TURN, rate the CURRENT TURN's stance toward the immediately preceding speaker's content.
+
+Use a 5-point scale:
+5 = clearly agrees / aligns / endorses the prior turn
+4 = mostly agrees (minor hedges)
+3 = neutral / unclear / independent (no clear agree/disagree)
+2 = mostly disagrees / pushes back (mild challenge)
+1 = clearly disagrees / rejects / challenges the prior turn
+
+Rules:
+- Judge stance relative to the most recent prior turn in the CONTEXT.
+- Clarification questions are usually 3 unless they clearly imply rejection.
+- Answering a question without evaluation is usually 3.
+- Output ONLY the number 1,2,3,4,or 5. No words, no punctuation.
+
+CONTEXT (immediately preceding turns, truncated to a token budget):
+{context}
+
+CURRENT TURN:
+{cur}
+
+Output: one digit in [1..5]
+"""
+
+
+# =========================================================
+# Core helpers
+# =========================================================
+def build_context_up_to_k_tokens(previous_turn_texts: List[str], max_tokens: int) -> str:
+    """
+    Uses as many immediate previous turns as fit into `max_tokens` (approx words).
+    Keeps most recent turns; truncates the oldest included turn if needed.
+    """
+    if max_tokens <= 0 or not previous_turn_texts:
+        return "(none)"
+
+    token_budget = max_tokens
+    kept: List[str] = []
+
+    # walk from most recent backward
+    for t in reversed(previous_turn_texts):
+        toks = t.split()
+        if not toks:
+            continue
+
+        if len(toks) <= token_budget:
+            kept.append(t)
+            token_budget -= len(toks)
+        else:
+            # take tail of this turn to fill remaining budget
+            tail = " ".join(toks[-token_budget:])
+            kept.append(tail)
+            token_budget = 0
+
+        if token_budget <= 0:
+            break
+
+    kept.reverse()
+
+    # label them relative to current
+    lines = []
+    for i, txt in enumerate(kept):
+        # i=0 is oldest in kept, but still preceding
+        lines.append(f"[prev-{len(kept)-i}] {txt}")
+    return "\n\n".join(lines) if lines else "(none)"
+
+
+def parse_stance_1to5(s: str) -> int:
+    s = (s or "").strip()
+    for ch in s:
+        if ch in "12345":
+            return int(ch)
+    return 3
+
+
+def compute_duration(turn: Dict[str, Any]) -> float:
+    if isinstance(turn.get("duration"), (int, float)) and float(turn["duration"]) > 0:
+        return float(turn["duration"])
+    st = turn.get("startTime")
+    et = turn.get("endTime")
+    if isinstance(st, (int, float)) and isinstance(et, (int, float)) and float(et) > float(st):
+        return float(et) - float(st)
+    return 1.0
+
+
+def compute_time_x(turn: Dict[str, Any], fallback_order: int) -> float:
+    st = turn.get("startTime")
+    if isinstance(st, (int, float)):
+        return float(st)
+    return float(fallback_order)
+
+
+def compute_iceberg(turn: Dict[str, Any]) -> Dict[str, Any]:
+    explicit_count = len(turn.get("explicit_propositions", []) or [])
+    assumption_count = len(turn.get("assumptions", []) or [])
+    duration = compute_duration(turn)
+    D = float(explicit_count) / float(max(assumption_count, 1))
+    Dnorm = D / float(duration if duration > 0 else 1.0)
+    return {
+        "explicit_count": explicit_count,
+        "assumption_count": assumption_count,
+        "duration": duration,
+        "D_iceberg": D,
+        "D_iceberg_norm": Dnorm,
+    }
+
+
+def lagged_corr(x: np.ndarray, y: np.ndarray, max_lag: int) -> Dict[int, float]:
+    out: Dict[int, float] = {}
+    for lag in range(max_lag + 1):
+        if lag == 0:
+            x1, y1 = x, y
+        else:
+            x1, y1 = x[:-lag], y[lag:]
+        mask = np.isfinite(x1) & np.isfinite(y1)
+        if mask.sum() < 3:
+            out[lag] = float("nan")
+            continue
+        if np.std(x1[mask]) < 1e-12 or np.std(y1[mask]) < 1e-12:
+            out[lag] = float("nan")
+            continue
+        out[lag] = float(np.corrcoef(x1[mask], y1[mask])[0, 1])
     return out
 
 
-def compute_granger(drop: np.ndarray, arg: np.ndarray, maxlag: int) -> Dict[str, Any]:
+def granger_two_way(iceberg: np.ndarray, stance: np.ndarray, maxlag: int) -> Dict[str, Any]:
     if grangercausalitytests is None:
         return {"available": False, "reason": "statsmodels not available"}
 
-    if len(drop) < (maxlag + 5):
-        return {"available": True, "skipped": True, "reason": "too few points", "n": int(len(drop))}
+    mask = np.isfinite(iceberg) & np.isfinite(stance)
+    iceberg = iceberg[mask]
+    stance = stance[mask]
 
-    data = np.column_stack([arg, drop])  # [y, x]
-    try:
-        res = grangercausalitytests(data, maxlag=maxlag, verbose=False)
-        pvals = {int(lag): float(res[lag][0]["ssr_ftest"][1]) for lag in res}
-        return {"available": True, "skipped": False, "pvals": pvals, "min_p": min(pvals.values())}
-    except Exception as e:
-        return {"available": True, "skipped": False, "error": str(e)}
+    if len(iceberg) < maxlag + 6:
+        return {"available": True, "skipped": True, "reason": "too few points", "n": int(len(iceberg))}
 
+    out: Dict[str, Any] = {"available": True, "skipped": False, "maxlag": int(maxlag), "n": int(len(iceberg))}
 
-def is_substantive(turn: Dict[str, Any]) -> bool:
-    return (turn.get("turn_type_label", "") or "").strip() == "Substantive"
+    # iceberg -> stance  (y=stance, x=iceberg)
+    data_is = np.column_stack([stance, iceberg])
+    res_is = grangercausalitytests(data_is, maxlag=maxlag, verbose=False)
+    p_is = {int(lag): float(res_is[lag][0]["ssr_ftest"][1]) for lag in res_is}
+    out["iceberg_causes_stance_pvals"] = p_is
+    out["iceberg_causes_stance_min_p"] = min(p_is.values()) if p_is else None
 
+    # stance -> iceberg  (y=iceberg, x=stance)
+    data_si = np.column_stack([iceberg, stance])
+    res_si = grangercausalitytests(data_si, maxlag=maxlag, verbose=False)
+    p_si = {int(lag): float(res_si[lag][0]["ssr_ftest"][1]) for lag in res_si}
+    out["stance_causes_iceberg_pvals"] = p_si
+    out["stance_causes_iceberg_min_p"] = min(p_si.values()) if p_si else None
 
-def stance_from_move(move_label: str) -> Tuple[str, float]:
-    """
-    Option A: richer mapping from conversation_move_label -> stance_prob (P(Agreement)).
-    This is a pragmatic proxy for "agreement vs disagreement" without an LLM.
-    """
-    m = (move_label or "").strip()
-
-    # Strong alignment
-    if m == "Agree / Align":
-        return "Agreement", 0.90
-
-    # Strong conflict
-    if m == "Correction / Challenge":
-        return "Disagreement", 0.10
-
-    # Answers are usually cooperative/constructive
-    if m == "Answer":
-        return "Agreement", 0.65
-
-    # Asserting/elaborating often continues the world; mildly cooperative by default
-    if m == "Assert / Elaborate":
-        return "Agreement", 0.55
-
-    # Clarification requests often reflect a mismatch / missing assumptions -> mild disagreement signal
-    if m in ("Clarification Request (Generic)", "Clarification Request (Specific)"):
-        return "Disagreement", 0.45
-
-    # Self-correction is not stance; keep it neutral
-    if m == "Self-Correction":
-        return "Neutral", 0.50
-
-    # Topic shift often breaks coherence; mildly disagreement-ish (not conflict, but not alignment)
-    if m == "Topic Shift":
-        return "Disagreement", 0.40
-
-    # Stonewalling is disengagement / low cooperation
-    if m == "Stonewalling / Non-Response":
-        return "Disagreement", 0.35
-
-    # Unknown / missing
-    return "Neutral", 0.50
+    return out
 
 
-def compute_episode_metrics(turns: List[Dict[str, Any]], episode_id: str) -> List[Dict[str, Any]]:
-    rows: List[Dict[str, Any]] = []
-    order = 0
-
-    for t in turns:
-        if not is_substantive(t):
-            continue
-
-        explicit_count = len(t.get("explicit_propositions", []) or [])
-        assumption_count = len(t.get("assumptions", []) or [])
-
-        # duration: prefer duration; else end-start; else 1.0
-        if isinstance(t.get("duration"), (int, float)) and float(t["duration"]) > 0:
-            duration = float(t["duration"])
-        else:
-            st = t.get("startTime")
-            et = t.get("endTime")
-            if isinstance(st, (int, float)) and isinstance(et, (int, float)) and float(et) > float(st):
-                duration = float(et) - float(st)
-            else:
-                duration = 1.0
-
-        D_iceberg = float(explicit_count) / float(max(assumption_count, 1))
-        D_norm = D_iceberg / float(duration if duration > 0 else 1.0)
-
-        move = (t.get("conversation_move_label") or "").strip()
-        stance_label, stance_prob = stance_from_move(move)
-
-        rows.append(
-            {
-                "episode_id": episode_id,
-                "turn_idx": t.get("turn_idx", None),
-                "speaker_id": t.get("speaker_id", None),
-                "startTime": t.get("startTime", None),
-                "endTime": t.get("endTime", None),
-                "duration": duration,
-                "explicit_count": explicit_count,
-                "assumption_count": assumption_count,
-                "D_iceberg": D_iceberg,
-                "D_iceberg_norm": D_norm,
-                "stance_label": stance_label,
-                "stance_prob": stance_prob,
-                "conversation_move_label": move,
-                "order": order,
-            }
-        )
-        order += 1
-
-    return rows
+def roll(v: np.ndarray, w: int) -> np.ndarray:
+    out = np.full_like(v, np.nan, dtype=float)
+    for i in range(len(v)):
+        lo = max(0, i - w + 1)
+        out[i] = float(np.nanmean(v[lo:i + 1]))
+    return out
 
 
-def plot_episode(rows: List[Dict[str, Any]], episode_id: str, out_path: Path, rolling_window: int) -> None:
-    if not rows:
-        return
-
-    x_axis = [
-        float(r["startTime"]) if r.get("startTime") is not None else float(r["order"])
-        for r in rows
-    ]
-
-    # Use stance_label buckets
-    y_agree = [
-        r["D_iceberg_norm"] if r["stance_label"] == "Agreement" else np.nan
-        for r in rows
-    ]
-    y_disagree = [
-        r["D_iceberg_norm"] if r["stance_label"] == "Disagreement" else np.nan
-        for r in rows
-    ]
-
-    # Skip plot if both are empty
-    if not (np.isfinite(np.array(y_agree)).any() or np.isfinite(np.array(y_disagree)).any()):
-        return
-
-    agree_line = rolling_mean(y_agree, rolling_window)
-    disagree_line = rolling_mean(y_disagree, rolling_window)
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    plt.figure(figsize=(10, 4.5))
-    plt.plot(x_axis, agree_line, label="Agreement")
-    plt.plot(x_axis, disagree_line, label="Disagreement")
-    plt.xlabel("Time (seconds)" if rows[0].get("startTime") is not None else "Turn order")
-    plt.ylabel("D_iceberg / duration")
-    plt.title(f"Episode {episode_id}: Iceberg Ratio (Normalized) by Stance")
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=200)
-    plt.close()
-
-
-def episode_summary(rows: List[Dict[str, Any]], maxlag: int) -> Dict[str, Any]:
-    x = np.array([r["stance_prob"] for r in rows], dtype=float)
-    y = np.array([r["D_iceberg_norm"] for r in rows], dtype=float)
-
-    if len(x) >= 2 and np.std(x) > 1e-12 and np.std(y) > 1e-12:
-        corr = float(np.corrcoef(x, y)[0, 1])
-    else:
-        corr = float("nan")
-
-    # "Argument" proxy: Correction/Challenge on substantive turns
-    arg = np.array([1.0 if r["conversation_move_label"] == "Correction / Challenge" else 0.0 for r in rows], dtype=float)
-
-    # Sudden drop in iceberg ratio (positive when D_norm decreases)
-    drop = np.zeros_like(y)
-    if len(y) > 1:
-        drop[1:] = np.maximum(0.0, y[:-1] - y[1:])
-
-    gr = compute_granger(drop, arg, maxlag=maxlag)
-    return {
-        "n_substantive": int(len(rows)),
-        "pearson_corr(stance_prob, D_norm)": corr,
-        "granger_drop_causes_argument": gr,
-    }
-
-
-def run_exp2(input_dir: Path, output_dir: Path, maxlag: int, rolling_window: int) -> None:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    per_episode_dir = output_dir / "per_episode"
-    plots_dir = output_dir / "plots"
-    per_episode_dir.mkdir(exist_ok=True)
-    plots_dir.mkdir(exist_ok=True)
-
-    files = sorted(input_dir.glob("*.json"))
-    if not files:
-        raise RuntimeError(f"No .json files found in {input_dir}")
-
-    summaries = []
-    all_stance = []
-    all_dnorm = []
-
-    for path in tqdm(files, desc="Episodes"):
-        episode_id = path.stem
-        turns = sort_turns(load_episode(path))
-        rows = compute_episode_metrics(turns, episode_id)
-
-        # Save per-episode
-        with (per_episode_dir / f"{episode_id}.json").open("w", encoding="utf-8") as f:
-            json.dump(rows, f, ensure_ascii=False, indent=2)
-
-        # Plot
-        plot_episode(rows, episode_id, plots_dir / f"{episode_id}.png", rolling_window)
-
-        # Summary
-        s = episode_summary(rows, maxlag=maxlag)
-        s["episode_id"] = episode_id
-        summaries.append(s)
-
-        for r in rows:
-            all_stance.append(r["stance_prob"])
-            all_dnorm.append(r["D_iceberg_norm"])
-
-    # Global correlation across all episodes
-    all_stance = np.array(all_stance, dtype=float)
-    all_dnorm = np.array(all_dnorm, dtype=float)
-    if len(all_stance) >= 2 and np.std(all_stance) > 1e-12 and np.std(all_dnorm) > 1e-12:
-        global_corr = float(np.corrcoef(all_stance, all_dnorm)[0, 1])
-    else:
-        global_corr = float("nan")
-
-    summary_obj = {
-        "input_dir": str(input_dir),
-        "output_dir": str(output_dir),
-        "episodes_processed": len(summaries),
-        "global_pearson_corr(stance_prob, D_norm)": global_corr,
-        "per_episode": summaries,
-        "notes": {
-            "D_iceberg": "explicit_count / max(assumption_count, 1)",
-            "D_norm": "D_iceberg / duration_seconds",
-            "stance_prob": "Move-based mapping (Option A)",
-            "argument_proxy": "Correction / Challenge on Substantive turns",
-            "granger_test": "Does iceberg drop predict upcoming argument proxy?",
-        },
-        "stance_mapping": {
-            "Agree / Align": 0.90,
-            "Answer": 0.65,
-            "Assert / Elaborate": 0.55,
-            "Clarification Request (Generic)": 0.45,
-            "Clarification Request (Specific)": 0.45,
-            "Self-Correction": 0.50,
-            "Topic Shift": 0.40,
-            "Stonewalling / Non-Response": 0.35,
-            "Correction / Challenge": 0.10,
-            "default": 0.50
-        },
-    }
-
-    with (output_dir / "summary.json").open("w", encoding="utf-8") as f:
-        json.dump(summary_obj, f, ensure_ascii=False, indent=2)
-
-    with (output_dir / "summary.csv").open("w", encoding="utf-8") as f:
-        f.write("episode_id,n_substantive,pearson_corr,granger_min_p\n")
-        for s in summaries:
-            gr = s.get("granger_drop_causes_argument", {})
-            min_p = gr.get("min_p", "")
-            f.write(f"{s['episode_id']},{s['n_substantive']},{s['pearson_corr(stance_prob, D_norm)']},{min_p}\n")
-
-
+# =========================================================
+# Main
+# =========================================================
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_dir", type=Path, default=Path("data/conversation_moves_labeled"))
     ap.add_argument("--output_dir", type=Path, default=Path("experiments/exp2_iceberg"))
+    ap.add_argument("--max_context_tokens", type=int, default=1000)
+    ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--maxlag", type=int, default=3)
     ap.add_argument("--rolling_window", type=int, default=5)
     ap.add_argument("--verbose", action="store_true")
@@ -313,10 +239,138 @@ def main():
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(message)s",
+        format="%(asctime)s | %(levelname)s | %(message)s"
     )
 
-    run_exp2(args.input_dir, args.output_dir, args.maxlag, args.rolling_window)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    (args.output_dir / "per_episode").mkdir(exist_ok=True)
+    (args.output_dir / "plots").mkdir(exist_ok=True)
+
+    files = sorted(args.input_dir.glob("*.json"))
+    if not files:
+        raise RuntimeError(f"No JSON files in {args.input_dir}")
+
+    llm = LLMInterface()
+    summaries = []
+
+    for fp in tqdm(files, desc="Episodes"):
+        episode_id = fp.stem
+        turns = json.loads(fp.read_text(encoding="utf-8"))
+        if not isinstance(turns, list) or not turns:
+            continue
+
+        # sort by time if present, else turn_idx
+        if any(t.get("startTime") is not None for t in turns):
+            turns.sort(key=lambda t: (t.get("startTime", float("inf")), t.get("turn_idx", 10**9)))
+        else:
+            turns.sort(key=lambda t: t.get("turn_idx", 10**9))
+
+        history_texts: List[str] = []
+        prompts: List[str] = []
+        meta: List[Tuple[int, Dict[str, Any]]] = []
+
+        # only evaluate stance for Substantive turns (since iceberg is defined there)
+        for idx, t in enumerate(turns):
+            cur_text = (t.get("turn_text") or "").strip()
+            history_texts.append(cur_text)
+
+            if t.get("turn_type_label") != "Substantive":
+                continue
+
+            context = build_context_up_to_k_tokens(history_texts[:-1], max_tokens=args.max_context_tokens)
+            prompts.append(STANCE_PROMPT.format(context=context, cur=cur_text))
+            meta.append((idx, t))
+
+        # LLM stance
+        stance_scores: List[int] = []
+        for i in range(0, len(prompts), args.batch_size):
+            outs = llm.generate_batch(prompts[i:i + args.batch_size])
+            stance_scores.extend([parse_stance_1to5(o) for o in outs])
+
+        rows = []
+        x_series = []
+        stance_series = []
+        iceberg_series = []
+
+        for (idx, t), s in zip(meta, stance_scores):
+            ice = compute_iceberg(t)
+            x = compute_time_x(t, fallback_order=idx)
+
+            rows.append({
+                "episode_id": episode_id,
+                "turn_idx": t.get("turn_idx", idx),
+                "startTime": t.get("startTime"),
+                "endTime": t.get("endTime"),
+                **ice,
+                "stance_1to5": int(s),
+            })
+
+            x_series.append(x)
+            stance_series.append(float(s))
+            iceberg_series.append(float(ice["D_iceberg_norm"]))
+
+        # write per-episode json
+        with (args.output_dir / "per_episode" / f"{episode_id}.json").open("w", encoding="utf-8") as f:
+            json.dump(rows, f, ensure_ascii=False, indent=2)
+
+        if len(rows) < 6:
+            summaries.append({"episode_id": episode_id, "n_substantive": len(rows), "note": "too few points"})
+            continue
+
+        stance_arr = np.array(stance_series, dtype=float)
+        iceberg_arr = np.array(iceberg_series, dtype=float)
+
+        mask = np.isfinite(stance_arr) & np.isfinite(iceberg_arr)
+        corr = float(np.corrcoef(stance_arr[mask], iceberg_arr[mask])[0, 1]) if mask.sum() >= 3 else float("nan")
+
+        lagcorr_stance_to_iceberg = lagged_corr(stance_arr, iceberg_arr, max_lag=args.maxlag)
+        lagcorr_iceberg_to_stance = lagged_corr(iceberg_arr, stance_arr, max_lag=args.maxlag)
+
+        gr = granger_two_way(iceberg_arr, stance_arr, maxlag=args.maxlag)
+
+        summaries.append({
+            "episode_id": episode_id,
+            "n_substantive": len(rows),
+            "pearson_corr(stance_1to5, iceberg_norm)": corr,
+            "lagcorr_stance_to_iceberg": lagcorr_stance_to_iceberg,
+            "lagcorr_iceberg_to_stance": lagcorr_iceberg_to_stance,
+            "granger": gr,
+        })
+
+        # Plot two lines on one axis (iceberg z-scored for visibility)
+        xs = np.array(x_series, dtype=float)
+        stance_sm = roll(stance_arr, args.rolling_window)
+
+        if np.isfinite(iceberg_arr).sum() >= 3 and np.nanstd(iceberg_arr) > 1e-12:
+            iceberg_z = (iceberg_arr - np.nanmean(iceberg_arr)) / np.nanstd(iceberg_arr)
+        else:
+            iceberg_z = iceberg_arr
+        iceberg_sm = roll(iceberg_z, args.rolling_window)
+
+        plt.figure(figsize=(11, 4.8))
+        plt.plot(xs, stance_sm, label="Stance (1=disagree, 5=agree)")
+        plt.plot(xs, iceberg_sm, label="Iceberg (D_norm, z-scored for plot)")
+        plt.xlabel("Time (seconds)" if rows[0].get("startTime") is not None else "Turn index")
+        plt.ylabel("Value")
+        plt.title(f"Episode {episode_id}: Stance & Iceberg over Time")
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(args.output_dir / "plots" / f"{episode_id}.png", dpi=200)
+        plt.close()
+
+    # Save summary
+    with (args.output_dir / "summary.json").open("w", encoding="utf-8") as f:
+        json.dump({
+            "input_dir": str(args.input_dir),
+            "output_dir": str(args.output_dir),
+            "max_context_tokens": args.max_context_tokens,
+            "maxlag": args.maxlag,
+            "rolling_window": args.rolling_window,
+            "episodes_processed": len(summaries),
+            "per_episode": summaries,
+        }, f, ensure_ascii=False, indent=2)
+
+    logging.info("Done. Results saved to %s", args.output_dir)
 
 
 if __name__ == "__main__":

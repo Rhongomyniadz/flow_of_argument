@@ -10,6 +10,6 @@
 
 
 python experiments/exp2_iceberg/exp2_iceberg.py \
-  --input_dir data/labeled \
+  --input_dir data/conversation_moves_labeled \
   --output_dir experiments/exp2_iceberg \
   --use_llm_stance
