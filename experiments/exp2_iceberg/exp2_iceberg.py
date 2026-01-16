@@ -272,7 +272,7 @@ def main():
     ap.add_argument("--input_dir", type=Path, default=Path("data/conversation_moves_labeled"))
     ap.add_argument("--output_dir", type=Path, default=Path("experiments/exp2_iceberg"))
     ap.add_argument("--max_context_tokens", type=int, default=1000)
-    ap.add_argument("--batch_size", type=int, default=32)
+    ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--maxlag", type=int, default=3)
     ap.add_argument("--rolling_window", type=int, default=5)
     ap.add_argument("--verbose", action="store_true")
