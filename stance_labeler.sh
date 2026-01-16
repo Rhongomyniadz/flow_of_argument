@@ -8,5 +8,5 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python data_processing/stance_label.py \
+python data_processing/stance_labeler.py \
     --k 512
