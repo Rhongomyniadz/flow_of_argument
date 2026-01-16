@@ -1,23 +1,19 @@
+# experiments/exp2_iceberg/exp2_iceberg_stance_llm.py
 import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any, Dict, List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-
 from vllm import LLM, SamplingParams
+from statsmodels.tsa.stattools import grangercausalitytests
 
-try:
-    from statsmodels.tsa.stattools import grangercausalitytests
-except Exception:
-    grangercausalitytests = None
 
 
 # =========================================================
-# LLM Interface (defaults only, tensor_parallel_size=2)
+# vLLM Interface (defaults only, tensor_parallel_size=2)
 # =========================================================
 class LLMInterface:
     def __init__(
@@ -56,7 +52,7 @@ class LLMInterface:
 # =========================================================
 # Prompt (stance 1..5)
 # =========================================================
-STANCE_PROMPT = """\
+STANCE_PROMPT = """
 You are a stance judge.
 
 Task:
@@ -86,22 +82,17 @@ Output: one digit in [1..5]
 
 
 # =========================================================
-# Core helpers
+# Helpers
 # =========================================================
 def build_context_up_to_k_tokens(previous_turn_texts: List[str], max_tokens: int) -> str:
-    """
-    Uses as many immediate previous turns as fit into `max_tokens` (approx words).
-    Keeps most recent turns; truncates the oldest included turn if needed.
-    """
     if max_tokens <= 0 or not previous_turn_texts:
         return "(none)"
 
     token_budget = max_tokens
     kept: List[str] = []
 
-    # walk from most recent backward
     for t in reversed(previous_turn_texts):
-        toks = t.split()
+        toks = (t or "").split()
         if not toks:
             continue
 
@@ -109,22 +100,20 @@ def build_context_up_to_k_tokens(previous_turn_texts: List[str], max_tokens: int
             kept.append(t)
             token_budget -= len(toks)
         else:
-            # take tail of this turn to fill remaining budget
-            tail = " ".join(toks[-token_budget:])
-            kept.append(tail)
+            kept.append(" ".join(toks[-token_budget:]))
             token_budget = 0
 
         if token_budget <= 0:
             break
 
     kept.reverse()
+    if not kept:
+        return "(none)"
 
-    # label them relative to current
     lines = []
     for i, txt in enumerate(kept):
-        # i=0 is oldest in kept, but still preceding
         lines.append(f"[prev-{len(kept)-i}] {txt}")
-    return "\n\n".join(lines) if lines else "(none)"
+    return "\n\n".join(lines)
 
 
 def parse_stance_1to5(s: str) -> int:
@@ -198,14 +187,14 @@ def granger_two_way(iceberg: np.ndarray, stance: np.ndarray, maxlag: int) -> Dic
 
     out: Dict[str, Any] = {"available": True, "skipped": False, "maxlag": int(maxlag), "n": int(len(iceberg))}
 
-    # iceberg -> stance  (y=stance, x=iceberg)
+    # iceberg -> stance (y=stance, x=iceberg)
     data_is = np.column_stack([stance, iceberg])
     res_is = grangercausalitytests(data_is, maxlag=maxlag, verbose=False)
     p_is = {int(lag): float(res_is[lag][0]["ssr_ftest"][1]) for lag in res_is}
     out["iceberg_causes_stance_pvals"] = p_is
     out["iceberg_causes_stance_min_p"] = min(p_is.values()) if p_is else None
 
-    # stance -> iceberg  (y=iceberg, x=stance)
+    # stance -> iceberg (y=iceberg, x=stance)
     data_si = np.column_stack([iceberg, stance])
     res_si = grangercausalitytests(data_si, maxlag=maxlag, verbose=False)
     p_si = {int(lag): float(res_si[lag][0]["ssr_ftest"][1]) for lag in res_si}
@@ -224,6 +213,58 @@ def roll(v: np.ndarray, w: int) -> np.ndarray:
 
 
 # =========================================================
+# Plotting: two separate plots saved into plots/{episode_id}/
+# =========================================================
+def plot_two_panels_separately(
+    episode_id: str,
+    rows: List[Dict[str, Any]],
+    xs: np.ndarray,
+    stance_arr: np.ndarray,
+    iceberg_arr: np.ndarray,
+    rolling_window: int,
+    out_dir: Path,
+) -> None:
+    """
+    Save:
+      plots/{episode_id}/stance.png   (stance centered at 3 -> baseline 0)
+      plots/{episode_id}/iceberg.png  (iceberg baseline 0)
+    """
+    if len(rows) == 0:
+        return
+
+    ep_plot_dir = out_dir / episode_id
+    ep_plot_dir.mkdir(parents=True, exist_ok=True)
+
+    stance_sm = roll(stance_arr, rolling_window)
+    iceberg_sm = roll(iceberg_arr, rolling_window)
+
+    stance_centered = stance_sm - 3.0  # so neutral 3 is baseline 0
+    iceberg_centered = iceberg_sm      # so 0 is baseline 0
+
+    # stance.png
+    plt.figure(figsize=(11, 4.0))
+    plt.plot(xs, stance_centered, label="Stance (centered at 3)")
+    plt.axhline(0.0, color="black", lw=1, linestyle="--", alpha=0.6)
+    plt.xlabel("Time (seconds)" if rows[0].get("startTime") is not None else "Turn index")
+    plt.ylabel("Stance (1..5) - 3")
+    plt.title(f"Episode {episode_id}: Stance over Time (baseline=3)")
+    plt.tight_layout()
+    plt.savefig(ep_plot_dir / "stance.png", dpi=200)
+    plt.close()
+
+    # iceberg.png
+    plt.figure(figsize=(11, 4.0))
+    plt.plot(xs, iceberg_centered, label="Iceberg (D_norm)")
+    plt.axhline(0.0, color="black", lw=1, linestyle="--", alpha=0.6)
+    plt.xlabel("Time (seconds)" if rows[0].get("startTime") is not None else "Turn index")
+    plt.ylabel("D_iceberg_norm")
+    plt.title(f"Episode {episode_id}: Iceberg Ratio over Time (baseline=0)")
+    plt.tight_layout()
+    plt.savefig(ep_plot_dir / "iceberg.png", dpi=200)
+    plt.close()
+
+
+# =========================================================
 # Main
 # =========================================================
 def main():
@@ -231,7 +272,7 @@ def main():
     ap.add_argument("--input_dir", type=Path, default=Path("data/conversation_moves_labeled"))
     ap.add_argument("--output_dir", type=Path, default=Path("experiments/exp2_iceberg"))
     ap.add_argument("--max_context_tokens", type=int, default=1000)
-    ap.add_argument("--batch_size", type=int, default=64)
+    ap.add_argument("--batch_size", type=int, default=32)
     ap.add_argument("--maxlag", type=int, default=3)
     ap.add_argument("--rolling_window", type=int, default=5)
     ap.add_argument("--verbose", action="store_true")
@@ -269,7 +310,7 @@ def main():
         prompts: List[str] = []
         meta: List[Tuple[int, Dict[str, Any]]] = []
 
-        # only evaluate stance for Substantive turns (since iceberg is defined there)
+        # stance only for Substantive turns
         for idx, t in enumerate(turns):
             cur_text = (t.get("turn_text") or "").strip()
             history_texts.append(cur_text)
@@ -281,16 +322,16 @@ def main():
             prompts.append(STANCE_PROMPT.format(context=context, cur=cur_text))
             meta.append((idx, t))
 
-        # LLM stance
+        # vLLM stance
         stance_scores: List[int] = []
         for i in range(0, len(prompts), args.batch_size):
             outs = llm.generate_batch(prompts[i:i + args.batch_size])
             stance_scores.extend([parse_stance_1to5(o) for o in outs])
 
-        rows = []
-        x_series = []
-        stance_series = []
-        iceberg_series = []
+        rows: List[Dict[str, Any]] = []
+        xs: List[float] = []
+        stance_series: List[float] = []
+        iceberg_series: List[float] = []
 
         for (idx, t), s in zip(meta, stance_scores):
             ice = compute_iceberg(t)
@@ -305,11 +346,11 @@ def main():
                 "stance_1to5": int(s),
             })
 
-            x_series.append(x)
+            xs.append(x)
             stance_series.append(float(s))
             iceberg_series.append(float(ice["D_iceberg_norm"]))
 
-        # write per-episode json
+        # Save per-episode JSON
         with (args.output_dir / "per_episode" / f"{episode_id}.json").open("w", encoding="utf-8") as f:
             json.dump(rows, f, ensure_ascii=False, indent=2)
 
@@ -317,6 +358,7 @@ def main():
             summaries.append({"episode_id": episode_id, "n_substantive": len(rows), "note": "too few points"})
             continue
 
+        xs_arr = np.array(xs, dtype=float)
         stance_arr = np.array(stance_series, dtype=float)
         iceberg_arr = np.array(iceberg_series, dtype=float)
 
@@ -325,7 +367,6 @@ def main():
 
         lagcorr_stance_to_iceberg = lagged_corr(stance_arr, iceberg_arr, max_lag=args.maxlag)
         lagcorr_iceberg_to_stance = lagged_corr(iceberg_arr, stance_arr, max_lag=args.maxlag)
-
         gr = granger_two_way(iceberg_arr, stance_arr, maxlag=args.maxlag)
 
         summaries.append({
@@ -337,26 +378,16 @@ def main():
             "granger": gr,
         })
 
-        # Plot two lines on one axis (iceberg z-scored for visibility)
-        xs = np.array(x_series, dtype=float)
-        stance_sm = roll(stance_arr, args.rolling_window)
-
-        if np.isfinite(iceberg_arr).sum() >= 3 and np.nanstd(iceberg_arr) > 1e-12:
-            iceberg_z = (iceberg_arr - np.nanmean(iceberg_arr)) / np.nanstd(iceberg_arr)
-        else:
-            iceberg_z = iceberg_arr
-        iceberg_sm = roll(iceberg_z, args.rolling_window)
-
-        plt.figure(figsize=(11, 4.8))
-        plt.plot(xs, stance_sm, label="Stance (1=disagree, 5=agree)")
-        plt.plot(xs, iceberg_sm, label="Iceberg (D_norm, z-scored for plot)")
-        plt.xlabel("Time (seconds)" if rows[0].get("startTime") is not None else "Turn index")
-        plt.ylabel("Value")
-        plt.title(f"Episode {episode_id}: Stance & Iceberg over Time")
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(args.output_dir / "plots" / f"{episode_id}.png", dpi=200)
-        plt.close()
+        # Save two separate plots in plots/{episode_id}/
+        plot_two_panels_separately(
+            episode_id=episode_id,
+            rows=rows,
+            xs=xs_arr,
+            stance_arr=stance_arr,
+            iceberg_arr=iceberg_arr,
+            rolling_window=args.rolling_window,
+            out_dir=args.output_dir / "plots",
+        )
 
     # Save summary
     with (args.output_dir / "summary.json").open("w", encoding="utf-8") as f:
