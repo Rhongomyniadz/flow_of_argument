@@ -9,6 +9,4 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 
-python experiments/exp2_iceberg/exp2_iceberg.py \
-  --input_dir data/conversation_moves_labeled \
-  --output_dir experiments/exp2_iceberg \
+python experiments/exp2_iceberg/exp2_iceberg.py --k 512 --smooth 5 --max_lag 3
