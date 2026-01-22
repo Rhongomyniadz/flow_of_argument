@@ -1,0 +1,57 @@
+{
+  "episode_id": "49428",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.169,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Residential safety depends on monitoring environmental hazards like gas leaks.",
+      "c_turn_idx": 6,
+      "claim_text": "If someone feels like there is gas, they should call 911.",
+      "overlap_score": 2,
+      "c_time": 109.377,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to residents in the affected area, as established in the prior context where the speaker addresses homeowners and encourages them to call for checks.\",\n  \"reason\": \"Claim C explicitly instructs individuals to call 911 if they suspect gas presence, which directly verifies the earlier assumption A that residential safety depends on monitoring environmental hazards like gas leaks. The instruction is clear, actionable, and directly tied to the concern about gas infiltration into homes"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.169,
+      "a_idx_in_turn": 5,
+      "assumption_text": "Public cooperation increases overall community safety during emergencies.",
+      "c_turn_idx": 6,
+      "claim_text": "The speaker is attempting to ensure public safety.",
+      "overlap_score": 2,
+      "c_time": 109.377,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the emergency response team mentioned in turn 0, including fire and hazmat crews. 'Everyone' in claim C refers to the community residents affected by the emergency.\",\n  \"reason\": \"Claim C explicitly states the intent to keep everyone safe, which directly verifies the core idea in assumption A—that public cooperation increases community safety during emergencies. The actions described (providing contact information, checking homes, monitoring gas) demonstrate proactive efforts"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 46.092,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Information about home evacuations should be verified before being accepted as true.",
+      "c_turn_idx": 2,
+      "claim_text": "We are now concerned about gas entering our home.",
+      "overlap_score": 2,
+      "c_time": 50.434,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the emergency response crews mentioned in turn 1. 'Home' in 'gas coming in the home' refers to residential homes in the affected area, consistent with the evacuation context.\",\n  \"reason\": \"Claim C explicitly states concern about gas entering homes, which directly verifies the substance of assumption A—that information about home evacuations should be verified before acceptance. The concern about gas ingress is a direct reason for the evacuation, confirming the"
+    }
+  ]
+}

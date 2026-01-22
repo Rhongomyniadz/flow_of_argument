@@ -1,0 +1,57 @@
+{
+  "episode_id": "48619",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 4.548,
+      "a_idx_in_turn": 6,
+      "assumption_text": "The use of personal names ('Sean') in the URL implies credibility or authenticity, which influences decision-making.",
+      "c_turn_idx": 4,
+      "claim_text": "Sean Hannity has added another burner to his personal collection of defense products.",
+      "overlap_score": 2,
+      "c_time": 64.813,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The name 'Sean' in turn 0 refers to Sean Hannity, who is the speaker in turn 4. However, the claim in turn 4 does not address the use of personal names in URLs or its influence on credibility/decision-making.\",\n  \"reason\": \"Turn 4 features Sean Hannity promoting a product (Burner) under his name, but it does not make explicit the assumption that using personal names in URLs (like 'puretalk.com/sean') implies credibility"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 4.548,
+      "a_idx_in_turn": 7,
+      "assumption_text": "Consumers trust that companies will follow through on their charitable commitments when they promote them publicly.",
+      "c_turn_idx": 2,
+      "claim_text": "Stronger competition will result in lower prices for consumers.",
+      "overlap_score": 2,
+      "c_time": 42.728,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'consumers' in A refers to the general public, and 'consumers' in C is used in the same general sense.\",\n  \"reason\": \"Claim C states that stronger competition will lead to lower prices for consumers, which aligns with part of the implied benefit in assumption A—namely, that consumer trust in corporate charitable actions may be influenced by broader market outcomes like lower prices. However, A focuses on trust in charitable commitments, while"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 34.792,
+      "a_idx_in_turn": 0,
+      "assumption_text": "Tax incentives for energy development are effective policy tools.",
+      "c_turn_idx": 3,
+      "claim_text": "Energy tax credits should not be repealed.",
+      "overlap_score": 2,
+      "c_time": 52.355,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'what works' in turn 3 refers to 'energy tax credits' mentioned in turn 1. 'Don't repeal energy tax credits' explicitly affirms the effectiveness of tax incentives for energy development.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by asserting that energy tax credits should not be repealed, implying their effectiveness. This aligns with the reasoning in A that tax incentives are effective policy tools, as supported by the context that"
+    }
+  ]
+}

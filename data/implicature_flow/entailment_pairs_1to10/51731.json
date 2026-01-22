@@ -1,0 +1,87 @@
+{
+  "episode_id": "51731",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 30.583,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The speaker believes that public opinion should influence political decisions.",
+      "c_turn_idx": 2,
+      "claim_text": "The speaker believes that the current moment could represent an inflection point in governmental approach.",
+      "overlap_score": 2,
+      "c_time": 57.484,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 3 refers to the government's response to the movement, which is consistent with the idea of governmental responsiveness mentioned in turn 1.\",\n  \"reason\": \"Claim C explicitly states that the current moment could be an inflection point in the governmental approach, which directly verifies the earlier assumption A that public opinion influences political decisions. The speaker in turn 3 affirms that government responds to the strength of a growing movement, thereby making the assumption that"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 30.583,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The speaker sees humanitarian outcomes as a primary justification for policy change.",
+      "c_turn_idx": 2,
+      "claim_text": "The speaker is wondering whether the lack of specificity previously might have marked a change.",
+      "overlap_score": 2,
+      "c_time": 57.484,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the president' and 'that' in turn 2, which refers to President Biden's specific language mentioned in turn 1.\",\n  \"reason\": \"Turn 2 expresses uncertainty about whether the president's specific language marks a change, which indirectly references the prior assumption that policy shifts are driven by humanitarian concerns. However, it does not explicitly state or verify that humanitarian outcomes are a primary justification for policy change. The connection is weak and infer"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 30.583,
+      "a_idx_in_turn": 3,
+      "assumption_text": "The speaker considers the current conflict situation to be unjustifiable without immediate action.",
+      "c_turn_idx": 2,
+      "claim_text": "The speaker believes that the current moment could represent an inflection point in governmental approach.",
+      "overlap_score": 2,
+      "c_time": 57.484,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to 'this' as the recent presidential statement mentioned by SPEAKER_01, which aligns with the 'current moment' in C.\",\n  \"reason\": \"C explicitly states that the speaker believes the current moment represents an inflection point in governmental approach, which directly verifies the substance of A—the idea that the situation demands immediate action and is now shifting due to public pressure. The context confirms that SPEAKER_00 interprets the president"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 30.583,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker believes that international pressure through sanctions (like an arms embargo) can effectively shape state behavior.",
+      "c_turn_idx": 2,
+      "claim_text": "The speaker believes that the current moment could represent an inflection point in governmental approach.",
+      "overlap_score": 2,
+      "c_time": 57.484,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to 'this' as the recent presidential statement on protests and peace, which aligns with the idea of governmental response to movement pressure.\",\n  \"reason\": \"Claim C explicitly states that the current moment may be an inflection point in government approach, directly verifying the assumption in A that international pressure (such as an arms embargo) can shape state behavior. The context shows that the speaker interprets the president’s shift in rhetoric as a responsive action to"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 30.583,
+      "a_idx_in_turn": 6,
+      "assumption_text": "The speaker values life preservation above military escalation.",
+      "c_turn_idx": 4,
+      "claim_text": "The speaker values humanity.",
+      "overlap_score": 2,
+      "c_time": 84.568,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 4 refers to the speaker and the broader movement mentioned in prior turns; 'people' and 'hostages' refer to individuals whose lives are at stake, aligning with the concept of life preservation.\",\n  \"reason\": \"Turn 4 explicitly states 'pro-peace, pro-humanity, and diplomacy,' which directly verifies the core idea in assumption A—that the speaker values life preservation over military escalation. The emphasis on saving lives and returning"
+    }
+  ]
+}

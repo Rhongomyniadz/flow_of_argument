@@ -1,0 +1,27 @@
+{
+  "episode_id": "51847",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 3.908,
+      "a_idx_in_turn": 3,
+      "assumption_text": "The title 'Tennessee Talks' implies a focus on state-level issues relevant to Tennessee residents.",
+      "c_turn_idx": 2,
+      "claim_text": "This is an episode of Tennessee Talks.",
+      "overlap_score": 2,
+      "c_time": 820.373,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the podcast episode mentioned in turn 0 ('Tennessee Talks'), which is the same entity as the show discussed throughout the conversation.\",\n  \"reason\": \"Claim C explicitly states 'This is an episode of Tennessee Talks,' which directly verifies the substance of assumption A—that the title 'Tennessee Talks' implies a focus on state-level issues relevant to Tennessee residents. While C does not elaborate on the content focus, it explicitly confirms the"
+    }
+  ]
+}

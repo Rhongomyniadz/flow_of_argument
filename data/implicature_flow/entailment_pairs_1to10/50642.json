@@ -1,0 +1,42 @@
+{
+  "episode_id": "50642",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.169,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The Missouri Department of Mental Health has legitimate authority and capacity to provide mental health services.",
+      "c_turn_idx": 1,
+      "claim_text": "Vicky Hartsell is the only member of the Armed Services Committee from Missouri.",
+      "overlap_score": 2,
+      "c_time": 10.233,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'his' in turn 0 refers to Missouri Congresswoman Vicky Hartsell, indicating she is the representative of Missouri in the Armed Services Committee.\",\n  \"reason\": \"Claim C states that Vicky Hartsell is the only member of the Armed Services Committee from Missouri, which aligns with the information in turn 0 that she represents Missouri in the committee. However, turn 0 does not explicitly state that she is the only member; it only implies her"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.169,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The Missouri Department of Mental Health has legitimate authority and capacity to provide mental health services.",
+      "c_turn_idx": 2,
+      "claim_text": "The speaker has worked tirelessly on four issues related to Missouri.",
+      "overlap_score": 2,
+      "c_time": 25.253,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 2 refers to the speaker (SPEAKER_02), who is likely Missouri Congresswoman Vicky Hartsell based on context. 'Four Missouri' is interpreted as 'four issues related to Missouri'.\",\n  \"reason\": \"Claim C states that the speaker has worked tirelessly on four issues related to Missouri, which aligns with the general idea that the Missouri Department of Mental Health has a role in supporting veterans through mental health services"
+    }
+  ]
+}

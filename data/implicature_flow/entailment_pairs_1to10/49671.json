@@ -1,0 +1,102 @@
+{
+  "episode_id": "49671",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.129,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The conference has the authority to make decisions on the matter at hand.",
+      "c_turn_idx": 2,
+      "claim_text": "The conference has the authority to decide who leads them.",
+      "overlap_score": 3,
+      "c_time": 12.114,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 2 refers to 'the conference', which is established in the prior context and consistently used to denote the group making decisions.\",\n  \"reason\": \"Claim C explicitly states that 'the conference has the authority to decide who leads them,' which directly verifies the substance of assumption A—that the conference has the authority to make decisions on the matter at hand. The phrasing is clear, unambiguous, and matches the core meaning of A without omission or"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.129,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The conference has the authority to make decisions on the matter at hand.",
+      "c_turn_idx": 3,
+      "claim_text": "The speaker believes the conference has unresolved matters to address.",
+      "overlap_score": 2,
+      "c_time": 50.283,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to 'the conference', which is the subject of assumption A.\",\n  \"reason\": \"Claim C states that the conference has unresolved matters to address, which implies the conference must deliberate and decide on leadership—a direct reflection of assumption A that the conference has the authority to make such decisions. While C does not explicitly state 'the conference has the authority,' it strongly entails that the conference is responsible for resolving the issue, thereby affirming"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.129,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Decision-making within the conference follows a process that allows for consensus or formal agreement.",
+      "c_turn_idx": 2,
+      "claim_text": "Leadership selection should follow a bottom-up process initiated by the conference.",
+      "overlap_score": 2,
+      "c_time": 12.114,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'if the conference decides that that's their decision' refers to the leadership decision mentioned in turn 1. 'They' in 'the conference, they've got to figure all that out' refers back to the conference.\",\n  \"reason\": \"Claim C explicitly states that leadership selection must follow a 'bottom-up process initiated by the conference,' which directly verifies the core idea in assumption A that decision-making follows a process allowing for consensus or formal agreement"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 4.891,
+      "a_idx_in_turn": 0,
+      "assumption_text": "There is a shared understanding among participants about who 'we' refers to in the context of leadership.",
+      "c_turn_idx": 2,
+      "claim_text": "When the Democrats control both the White House and the Senate, and the Republicans control the House, leadership selection requires consensus among all members.",
+      "overlap_score": 2,
+      "c_time": 12.114,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 1 refers to the conference members, which is clarified in turn 2 by specifying that 'everyone on board' must agree on the leader, indicating a shared understanding within the group.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that leadership selection requires consensus among all members of the conference, confirming that there is a shared understanding about who 'we' refers to—namely, the collective body making the decision"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 4.891,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Accepting leadership requires agreement on both the individual and the legitimacy of their claim to lead.",
+      "c_turn_idx": 2,
+      "claim_text": "When the Democrats control both the White House and the Senate, and the Republicans control the House, leadership selection requires consensus among all members.",
+      "overlap_score": 3,
+      "c_time": 12.114,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 2 refers to the Republican party controlling the House, and 'this is the person we want to lead us' refers back to the leadership selection process mentioned in turn 1.\",\n  \"reason\": \"Claim C explicitly states that leadership selection requires consensus among all members when Republicans control the House and Democrats control the White House and Senate, which directly verifies the earlier assumption A that accepting leadership requires agreement on both the individual and the legitimacy of their claim"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 4.891,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The speaker believes the listener has a role in evaluating or endorsing potential leaders.",
+      "c_turn_idx": 3,
+      "claim_text": "The speaker believes the conference has unresolved matters to address.",
+      "overlap_score": 3,
+      "c_time": 50.283,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to 'the conference', which is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the conference has matters to figure out, which directly verifies the assumption that the listener (or the conference) plays a role in evaluating or endorsing potential leaders. The phrase 'the conference, they've got to figure all that out' confirms the necessity of their involvement in deciding leadership, making the earlier assumption explicit"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "episode_id": "50643",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.97,
+      "a_idx_in_turn": 0,
+      "assumption_text": "Veterans are aware of and trust public service announcements like the Missouri Military Minute.",
+      "c_turn_idx": 1,
+      "claim_text": "The military funding bill includes key projects in Missouri.",
+      "overlap_score": 2,
+      "c_time": 12.259,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference resolution needed; 'the military funding bill' refers to the same entity mentioned in turn 1.\",\n  \"reason\": \"Claim C states that the military funding bill includes key projects in Missouri, which is a factual detail about the bill. However, this does not address or verify the assumption that veterans are aware of and trust public service announcements like the Missouri Military Minute. There is no mention of awareness, trust, or the role of the announcement in the claim. Thus,"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.97,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Free and confidential mental health support is valuable and accessible to veterans who need it.",
+      "c_turn_idx": 2,
+      "claim_text": "The Veterans Administration has started reevaluating how it addresses Veteran health issues.",
+      "overlap_score": 2,
+      "c_time": 22.948,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 0 refers to the Missouri Department of Mental Health, which is responsible for presenting the Missouri Military Minute and connecting veterans to support. In turn 2, 'the Veterans Administration' is the subject of the action, and its actions align with the goal of making mental health support accessible.\",\n  \"reason\": \"Claim C explicitly states that the Veterans Administration has begun reevaluating how it addresses Veteran health issues, which directly supports the assumption in A"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.97,
+      "a_idx_in_turn": 3,
+      "assumption_text": "The Missouri Department of Mental Health has the authority and capacity to provide or coordinate veteran mental health services.",
+      "c_turn_idx": 2,
+      "claim_text": "The Veterans Administration has started reevaluating how it addresses Veteran health issues.",
+      "overlap_score": 3,
+      "c_time": 22.948,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 2 refers to the Veterans Administration, as established in the prior context where the VA is discussed as the entity reevaluating Veteran health issues.\",\n  \"reason\": \"Claim C explicitly states that the Veterans Administration has begun reevaluating how it addresses Veteran health issues, which directly verifies the substance of assumption A—that the Missouri Department of Mental Health has the authority and capacity to provide or coordinate such services—by implying institutional engagement and systemic change in"
+    }
+  ]
+}

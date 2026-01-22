@@ -1,0 +1,42 @@
+{
+  "episode_id": "51032",
+  "params": {
+    "max_future_turns": 200,
+    "max_claims_per_assumption": 16,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 17.728,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The award recognizes legislative support for agriculture.",
+      "c_turn_idx": 3,
+      "claim_text": "Birdshed supports bills that support agriculture.",
+      "overlap_score": 2,
+      "c_time": 68.718,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'birdshed' in turn 3 is a clear misspelling of 'Burchett', referring to U.S. Congressman Tim Burchett mentioned in turn 1. The claim 'Birdshed supports bills that support agriculture' thus refers to Burchett's legislative support for agriculture.\",\n  \"reason\": \"Claim C explicitly states that Burchett (corrected from 'birdshed') supports bills that support agriculture, which directly verifies the substance of assumption A"
+    },
+    {
+      "a_turn_idx": 4,
+      "a_time": 74.68,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Agricultural productivity is inherently tied to land-based cultivation.",
+      "c_turn_idx": 6,
+      "claim_text": "Tennessee Omen Farm Radio is involved in discussions about agricultural land stewardship.",
+      "overlap_score": 2,
+      "c_time": 100.31,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 6 refers to the farmer mentioned in the context of legislation and land stewardship. 'Tennessee Omen Farm Radio' is the organization associated with the speaker's advocacy.\",\n  \"reason\": \"Claim C states that Tennessee Omen Farm Radio is involved in discussions about agricultural land stewardship, which aligns with the core idea in assumption A that agricultural productivity is inherently tied to land-based cultivation. While C does not explicitly state 'agric"
+    }
+  ]
+}
