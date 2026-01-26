@@ -16,7 +16,7 @@ class LLMInterface:
         top_k: int = 0,
         repetition_penalty: float = 1.05,
         download_dir: str = "/shared/4/models",
-        max_tokens: int = 128,
+        max_tokens: int = 1000,
     ):
         self.llm = LLM(
             model=model_name,
@@ -304,8 +304,8 @@ def main():
     ap.add_argument("--glob", type=str, default="*.json")
     ap.add_argument("--out_dir", type=str, default="data/implicature_flow/entailment_pairs_1to10")
 
-    ap.add_argument("--max_future_turns", type=int, default=200, help="0 = all future")
-    ap.add_argument("--max_claims_per_assumption", type=int, default=16)
+    ap.add_argument("--max_future_turns", type=int, default=30, help="0 = all future")
+    ap.add_argument("--max_claims_per_assumption", type=int, default=15)
     ap.add_argument("--min_overlap", type=int, default=2)
     ap.add_argument("--context_w", type=int, default=2)
     ap.add_argument("--batch_size", type=int, default=64)
