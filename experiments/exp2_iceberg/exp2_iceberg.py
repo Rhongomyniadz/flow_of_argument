@@ -1,20 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
-Iceberg Ratio Analysis: Publication-Ready Implementation
-==========================================================================
-This script implements the Iceberg Ratio metric (explicit proportion variant)
-and validates its predictive relationship with disagreement across dialogues.
-
-Key features for publication readiness:
-✅ Full reproducibility (fixed seeds, deterministic processing)
-✅ Statistical rigor (95% CIs via Fisher z-transform, one-tailed testing)
-✅ Diagnostic transparency (CONSORT-style filtering report)
-✅ Publication-quality figures (vector PDF outputs, APA styling)
-✅ Machine-readable results (structured JSON archive)
-✅ Human-readable summary (Markdown table for direct paper inclusion)
-✅ Complete audit trail (per-episode results, failure logs)
-
 Reference:
   Grice, H. P. (1975). Logic and conversation. In P. Cole & J. L. Morgan (Eds.),
   Syntax and Semantics 3: Speech Acts (pp. 41–58). Academic Press.
@@ -693,7 +677,7 @@ def main():
                         help="Minimum substantive turns per episode (default: 15)")
     parser.add_argument("--max_lag", type=int, default=25,
                         help="Maximum lag to search (default: 25 turns)")
-    parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg",
+    parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg/results",
                         help="Output directory for results and figures")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed (for future extensions; current analysis is deterministic)")
