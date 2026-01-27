@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=conversation_moves_labeler
-#SBATCH --output=log/conversation_moves_labeler.out
+#SBATCH --output=_log/conversation_moves_labeler.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1

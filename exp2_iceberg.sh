@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=exp2_iceberg
-#SBATCH --output=log/exp2_iceberg.out
+#SBATCH --output=_log/exp2_iceberg.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1
