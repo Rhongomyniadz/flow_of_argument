@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=llm_as_a_judge
-#SBATCH --output=llm_as_a_judge.out
+#SBATCH --output=log/llm_as_a_judge.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1

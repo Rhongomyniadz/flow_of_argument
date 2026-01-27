@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=stance_labeler
-#SBATCH --output=stance_labeler.out
+#SBATCH --output=log/stance_labeler.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1
