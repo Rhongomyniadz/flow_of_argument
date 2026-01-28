@@ -2,7 +2,7 @@
 #SBATCH --job-name=entailment_labeler
 #SBATCH --output=_log/entailment_labeler.out
 #SBATCH --partition=gpu
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:A100:2
 #SBATCH --mem=64G
