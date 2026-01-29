@@ -1,0 +1,27 @@
+{
+  "episode_id": "84672",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 5.289,
+      "a_idx_in_turn": 9,
+      "assumption_text": "The Senate’s role in impeachment trials includes evaluating evidence beyond formal investigative procedures.",
+      "c_turn_idx": 1,
+      "claim_text": "The inclusion of these materials will complete the documentation of the Senate's handling of the impeachment proceedings.",
+      "overlap_score": 2,
+      "c_time": 969.616,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these materials' in claim C refers to the statements of senators, the full record of proceedings, and the filings by the parties mentioned in turn 1.\",\n  \"reason\": \"Claim C explicitly states that including the specified materials will complete the documentation of the Senate's handling of the impeachment proceedings. This directly verifies the substance of the earlier assumption in turn 0, which implies that such documentation is necessary and that the inclusion of these materials fulfills that purpose. The"
+    }
+  ]
+}

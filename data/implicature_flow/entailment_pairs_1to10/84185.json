@@ -1,0 +1,42 @@
+{
+  "episode_id": "84185",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 23.128,
+      "a_idx_in_turn": 0,
+      "assumption_text": "Historical markers should exist for significant local events tied to notable figures.",
+      "c_turn_idx": 2,
+      "claim_text": "Hoffa had significant ties to organized crime figures in Las Vegas.",
+      "overlap_score": 2,
+      "c_time": 611.166,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Jimmy Hoffa, as established in the context. 'Organized crime figures in Las Vegas' is explicitly linked to Hoffa's known associations with mobsters, particularly through the mention of 'skimming' and financial partnerships with mobsters in Las Vegas and Hollywood.\",\n  \"reason\": \"Claim C explicitly states that Hoffa had significant ties to organized crime figures in Las Vegas. This is directly supported by the earlier assumption A,"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 23.128,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Hoffa’s modest lifestyle contradicts public perceptions of organized crime figures.",
+      "c_turn_idx": 2,
+      "claim_text": "Hoffa had significant ties to organized crime figures in Las Vegas.",
+      "overlap_score": 4,
+      "c_time": 611.166,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Hoffa, as established in the context where Hoffa is the subject of discussion throughout. 'Vegas' is a common shorthand for Las Vegas, referring to organized crime figures associated with that city.\",\n  \"reason\": \"Claim C explicitly states that Hoffa had significant ties to organized crime figures in Las Vegas, which directly verifies the substance of assumption A — that Hoffa's association with the mob contradicts public perceptions of organized"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "episode_id": "84313",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 2.113,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Public commitment through marriage strengthens family integration.",
+      "c_turn_idx": 1,
+      "claim_text": "The commitment to stay together in marriage is officially recognized.",
+      "overlap_score": 2,
+      "c_time": 166.044,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the commitment to stay together in marriage, which is the central concept in assumption A. 'Marriage' in C is coreferent with 'marriage' in A.\",\n  \"reason\": \"Claim C explicitly states that the commitment to stay together in marriage is officially recognized, which directly verifies the core idea in assumption A—that public commitment through marriage strengthens family integration. The phrase 'officially recognized' aligns with the notion"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 2.113,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Public commitment through marriage strengthens family integration.",
+      "c_turn_idx": 1,
+      "claim_text": "Divorce exists, but it does not equate to marriage in terms of commitment.",
+      "overlap_score": 2,
+      "c_time": 166.044,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to 'marriage', as established in the context where 'divorce' is contrasted with 'marriage' in terms of commitment.\",\n  \"reason\": \"Claim C explicitly states that divorce, while existing, does not equate to marriage in terms of commitment. This directly verifies the core substance of assumption A, which asserts that public commitment through marriage strengthens family integration. The claim clarifies that marriage carries a distinct, public,"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 2.113,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Living together lacks equivalent social or ritual significance compared to marriage.",
+      "c_turn_idx": 1,
+      "claim_text": "The commitment to stay together in marriage is officially recognized.",
+      "overlap_score": 2,
+      "c_time": 166.044,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the commitment to stay together in marriage, which is explicitly discussed in turn 0 as being officially recognized through marriage.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by stating that the commitment to stay together in marriage is officially recognized, which aligns with the earlier assertion in turn 0 that marriage provides an official, communal, and public acknowledgment of commitment—something lacking in cohabitation. The"
+    }
+  ]
+}

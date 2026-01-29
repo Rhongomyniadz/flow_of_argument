@@ -1,0 +1,42 @@
+{
+  "episode_id": "84174",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 8.993,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker’s identity as Brendan Sturmer lends credibility to the show.",
+      "c_turn_idx": 3,
+      "claim_text": "The podcast 'Interesting People Reading Poetry' was co-created by the speaker and her brother Andy Sturmer.",
+      "overlap_score": 2,
+      "c_time": 595.307,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The speaker refers to themselves as Brendan Sturmer in turn 0; in turn 3, they refer to themselves as 'me' and mention their brother Andy Sturmer. The claim in C is about the podcast being co-created by the speaker and Andy Sturmer, not about the speaker's identity lending credibility.\",\n  \"reason\": \"Claim C discusses the co-creation of the podcast by the speaker and their brother, which is unrelated to the assumption that the speaker"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 29.315,
+      "a_idx_in_turn": 1,
+      "assumption_text": "The selection of Warsan Shire's poem reflects cultural relevance or political resonance.",
+      "c_turn_idx": 3,
+      "claim_text": "The poem 'Conversations About Home at the Deportation Center' by Warsan Shire appears in a pamphlet published by flip-dye publishing.",
+      "overlap_score": 3,
+      "c_time": 595.307,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'the poem' in turn 3, which is the same as 'Conversations About Home at the Deportation Center by Warsan Shire' mentioned in turn 1. 'flip-dye publishing' is the publisher of the pamphlet.\",\n  \"reason\": \"Claim C states that the poem appears in a pamphlet published by flip-dye publishing, which is a factual detail about the poem's publication. However, this does"
+    }
+  ]
+}

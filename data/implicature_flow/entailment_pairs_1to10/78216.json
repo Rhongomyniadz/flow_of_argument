@@ -1,0 +1,42 @@
+{
+  "episode_id": "78216",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 10.447,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Hope for political change in Cuba was a shared and meaningful sentiment among Cuban exiles.",
+      "c_turn_idx": 1,
+      "claim_text": "Many Cuban families, including the speaker's, were happy in Cuba before emigration.",
+      "overlap_score": 2,
+      "c_time": 46.756,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my family' in turn 1 refers to the speaker's family as introduced in turn 0; 'many Cuban families' includes the speaker's family and aligns with the broader group mentioned in turn 0.\",\n  \"reason\": \"Claim C explicitly states that 'My family and many Cuban families were very happy in their country,' which directly verifies the substance of assumption A—that hope for political change was a shared and meaningful sentiment among Cuban exiles. The happiness"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 10.447,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Hope for political change in Cuba was a shared and meaningful sentiment among Cuban exiles.",
+      "c_turn_idx": 1,
+      "claim_text": "Most members of the speaker's family and other Cuban families wished to remain in Cuba despite its flaws.",
+      "overlap_score": 2,
+      "c_time": 46.756,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 1 refers to 'my family and many Cuban families' as established in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that 'most of them wanted Cuba to remain their home,' which directly verifies the core sentiment in assumption A—that there was a shared and meaningful hope for political change among Cuban exiles. The statement confirms both the desire to stay in Cuba and the emotional significance of that wish, aligning precisely with the substance"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "episode_id": "49778",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.029,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The audience expects timely news updates from KSL regarding current political developments.",
+      "c_turn_idx": 1,
+      "claim_text": "Mary Richards is reporting live from the KSL 24-hour news center.",
+      "overlap_score": 2,
+      "c_time": 9.758,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Mary' in turn 1 refers to Mary Richards, as established in the context.\",\n  \"reason\": \"Claim C explicitly states that Mary Richards is reporting live from the KSL 24-hour news center, which confirms KSL's active role in delivering real-time news coverage. This supports the assumption that the audience expects timely news updates from KSL on political developments, as the live reporting setup implies immediacy and relevance. While C does not explicitly mention '"
+    }
+  ]
+}

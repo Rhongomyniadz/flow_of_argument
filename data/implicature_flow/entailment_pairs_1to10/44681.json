@@ -1,0 +1,57 @@
+{
+  "episode_id": "44681",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 31.351,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Public figures like members of Congress and governors have moral responsibility to lead by example during a pandemic.",
+      "c_turn_idx": 2,
+      "claim_text": "Griffith had interactions with other House members, particularly during a recent press conference near the Capitol.",
+      "overlap_score": 2,
+      "c_time": 98.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 1 refers to Representative Morgan Griffith, as established in the context. 'They' in turn 2 refers to Republican colleagues, consistent with the prior mention of 'my Republican colleagues'.\",\n  \"reason\": \"Claim C explicitly confirms a key element of assumption A: that public figures (specifically, members of Congress) have direct interactions with others (colleagues) in high-risk settings (a press conference near the Capitol), which underscores"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 31.351,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Public figures like members of Congress and governors have moral responsibility to lead by example during a pandemic.",
+      "c_turn_idx": 3,
+      "claim_text": "The November election is occurring during a pandemic.",
+      "overlap_score": 2,
+      "c_time": 165.677,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the election' in turn 3 refers to the November federal election mentioned in turn 1, and 'amidst a pandemic' explicitly confirms the context of the pandemic.\",\n  \"reason\": \"Claim C explicitly states that the November election is occurring during a pandemic, which directly verifies the implicit assumption in A that public figures must lead by example during a pandemic—specifically in the context of an ongoing national crisis affecting critical events like elections. The connection between the"
+    },
+    {
+      "a_turn_idx": 3,
+      "a_time": 165.677,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Effective oversight of federal elections requires coordination at the national level.",
+      "c_turn_idx": 4,
+      "claim_text": "The election's self-dominant is specifically focused on federal elections.",
+      "overlap_score": 2,
+      "c_time": 179.009,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'its' in 'the election's self-dominant has its eyes wide open' refers to the House Administration Committee, as established in turn 3. 'We' in turn 4 refers to the committee and its members.\",\n  \"reason\": \"Claim C explicitly states that the committee is watching activity at the state level 'particularly as it pertains to federal elections,' which directly verifies the substance of assumption A—that effective oversight of federal elections requires coordination at the"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "episode_id": "51871",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 3.905,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Listeners will recognize 'Tennessee Talks' as a formal political discussion platform.",
+      "c_turn_idx": 2,
+      "claim_text": "This is an episode of Tennessee Talks.",
+      "overlap_score": 2,
+      "c_time": 890.578,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the podcast episode introduced in turn 0, which is explicitly named 'Tennessee Talks'. The context confirms that the episode being discussed is part of the 'Tennessee Talks' series.\",\n  \"reason\": \"Claim C explicitly states 'This is an episode of Tennessee Talks,' which directly verifies the substance of assumption A—that listeners will recognize 'Tennessee Talks' as a formal political discussion platform. The statement is unambiguous, directly"
+    }
+  ]
+}

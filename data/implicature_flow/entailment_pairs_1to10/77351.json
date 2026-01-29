@@ -1,0 +1,87 @@
+{
+  "episode_id": "77351",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 2.324,
+      "a_idx_in_turn": 1,
+      "assumption_text": "'Root of all' implies foundational importance or origin in a meaningful domain.",
+      "c_turn_idx": 1,
+      "claim_text": "You are listening to the Root of All with Alexander Brown.",
+      "overlap_score": 2,
+      "c_time": 37.659,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to the audience/listeners mentioned in turn 0. 'Root of All' is the title of the podcast introduced in turn 0 and reiterated in turn 1, establishing clear identity.\",\n  \"reason\": \"Turn 1 explicitly states 'you are listening to the Root of All with Alexander Brown,' which directly verifies the claim made in turn 0 that 'It's the root of all.' The phrase 'root of all"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 2.324,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Repetition emphasizes significance rather than conveying new information.",
+      "c_turn_idx": 3,
+      "claim_text": "Listeners should focus on actual performed actions rather than rhetoric when evaluating leaders.",
+      "overlap_score": 2,
+      "c_time": 176.449,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'our state capitals and even city halls' and 'your representative' as general references to political leaders; 'performed actions' is a direct reference to tangible deeds, contrasting with rhetoric.\",\n  \"reason\": \"Claim C emphasizes focusing on actual performed actions over rhetoric, which aligns with the broader theme of accountability in democratic representation. However, it does not explicitly address or verify the specific assumption A—that repetition emphasizes significance rather than conveying new information"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 37.659,
+      "a_idx_in_turn": 1,
+      "assumption_text": "Audience members identify as either mental health listeners or political listeners.",
+      "c_turn_idx": 3,
+      "claim_text": "Listeners should use their voices to express political opinions.",
+      "overlap_score": 2,
+      "c_time": 176.449,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in claim C refers to the audience members, who were previously categorized in assumption A as either mental health listeners or political listeners. 'Listeners' in C aligns with the audience defined in A.\",\n  \"reason\": \"Claim C explicitly states that listeners should 'use your voice to express political opinions,' which directly verifies the core idea in assumption A that the audience consists of distinct groups, including political listeners. The call to action in C is specifically directed at"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 37.659,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Political representation should reflect constituent interests through accessible channels.",
+      "c_turn_idx": 3,
+      "claim_text": "Listeners should use their voices to express political opinions.",
+      "overlap_score": 2,
+      "c_time": 176.449,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'your' in claim C refers to 'listeners' or 'constituents' as established in the context, aligning with the audience addressed in assumption A.\",\n  \"reason\": \"Claim C explicitly states that listeners should 'use their voice' to express political opinions, which directly verifies the core idea in assumption A that political representation should reflect constituent interests through accessible channels. The call to 'use your voice' is a clear, direct enactment of the mechanism described in"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 37.659,
+      "a_idx_in_turn": 5,
+      "assumption_text": "Constituents benefit from learning about their representatives’ backgrounds and roles.",
+      "c_turn_idx": 3,
+      "claim_text": "Constituents should share their opinions with representatives regardless of party affiliation.",
+      "overlap_score": 2,
+      "c_time": 176.449,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in claim C refers to constituents, consistent with the subject of assumption A. 'Representatives' in C corresponds to 'representatives' in A.\",\n  \"reason\": \"Claim C explicitly states that constituents should share their opinions with representatives regardless of party affiliation, which directly verifies the core idea in assumption A that constituents benefit from engaging with their representatives. The phrasing 'regardless if your representative has a D or R beside their name' matches the spirit"
+    }
+  ]
+}

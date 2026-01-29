@@ -1,0 +1,42 @@
+{
+  "episode_id": "65068",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 21.644,
+      "a_idx_in_turn": 4,
+      "assumption_text": "There is a perceived connection between institutional decisions and subsequent public reaction.",
+      "c_turn_idx": 3,
+      "claim_text": "There is a hundred-to-one sentencing disparity between crack and powder cocaine.",
+      "overlap_score": 2,
+      "c_time": 32.267,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the hundred-to-one' refers directly to the sentencing disparity mentioned in turn 3.\",\n  \"reason\": \"Claim C explicitly states the existence of a hundred-to-one sentencing disparity between crack and powder cocaine, which directly verifies the substance of assumption A—namely, that there is a perceived connection between institutional decisions (like sentencing laws) and public reaction (as reflected in advocacy for reform). The claim is both direct and unambiguous in confirming the institutional policy"
+    },
+    {
+      "a_turn_idx": 3,
+      "a_time": 32.267,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Changing the ratio would lead to fairer outcomes in the justice system.",
+      "c_turn_idx": 7,
+      "claim_text": "Taking action now could lead to positive outcomes.",
+      "overlap_score": 2,
+      "c_time": 60.395,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 7 refers to the group discussing criminal justice reform, particularly in the context of drug policy mentioned in turn 3.\",\n  \"reason\": \"Claim C states that taking action now could lead to positive outcomes, which aligns with the general direction of assumption A (changing the ratio leads to fairer outcomes). However, C does not explicitly mention the ratio change or the justice system fairness, nor does it verify the specific causal link proposed in A"
+    }
+  ]
+}
