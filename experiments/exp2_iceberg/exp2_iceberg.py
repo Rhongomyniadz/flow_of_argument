@@ -51,12 +51,38 @@ matplotlib.rcParams.update({
     'ps.fonttype': 42,
 })
 
+# Configure console logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)-8s | %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger(__name__)
+
+# ==============================================================================
+# Configure dual logging: console + timestamped file in _log/exp2/
+# ==============================================================================
+log_dir = Path("_log/exp2")
+log_dir.mkdir(parents=True, exist_ok=True)
+
+# Generate timestamped log filename (e.g., iceberg_analysis_20260130_142533.log)
+log_timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+log_file = log_dir / f"iceberg_analysis_{log_timestamp}.log"
+
+# Create file handler with identical format to console output
+file_handler = logging.FileHandler(log_file, encoding='utf-8')
+file_handler.setLevel(logging.INFO)
+file_formatter = logging.Formatter(
+    '%(asctime)s | %(levelname)-8s | %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+file_handler.setFormatter(file_formatter)
+
+# Add file handler to root logger (inherits basicConfig console handler)
+logging.getLogger().addHandler(file_handler)
+logger.info(f"Log file created: {log_file.resolve()}")
+logger.info("Dual logging enabled: console + file output")
+# ==============================================================================
 
 def compute_iceberg_ratio(
     explicit_cnt: int,
@@ -455,6 +481,7 @@ def analyze_dataset(
     logger.info(f"Maximum shift      : ±{max_shift} turns")
     logger.info(f"Output directory   : {output_dir}")
     logger.info(f"Start time         : {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"Log file           : {log_file.resolve()}")
     logger.info("="*70)
     
     episode_paths = sorted(Path(data_dir).glob("*.json"))
@@ -504,6 +531,7 @@ def analyze_dataset(
             
         except Exception as e:
             failures.append((path.stem, f"exception: {str(e)[:50]}"))
+            logger.exception(f"Error processing {path.stem}: {e}")
             continue
     
     n_total = len(episode_paths)
@@ -564,6 +592,7 @@ def analyze_dataset(
                 "max_shift": max_shift,
                 "bidirectional_search": bidirectional,
                 "processing_date": start_time.isoformat(),
+                "log_file": str(log_file.resolve()),
             }
         }, f, indent=2)
     
@@ -612,14 +641,6 @@ This pattern aligns with Grice (1975): when a speaker detects a potential violat
     print(f"{'% positive shift (S>0, H₂)':.<35} {pct_positive:.1f}%  ← EXPLICITNESS → STANCE")
     print(f"{'One-tailed p-value':.<35} {p_display}")
     print("="*80)
-    print("\n✅ Directionality evidence:")
-    if pct_negative > 70:
-        print(f"   ✅ STRONG: {pct_negative:.1f}% of dialogues support H₁ (stance → explicitness)")
-    elif pct_negative > 55:
-        print(f"   ⚠️  MODERATE: {pct_negative:.1f}% support H₁")
-    else:
-        print(f"   ❌ WEAK: Only {pct_negative:.1f}% support H₁")
-    print("="*80)
     
     end_time = datetime.now()
     elapsed = (end_time - start_time).total_seconds()
@@ -630,7 +651,6 @@ This pattern aligns with Grice (1975): when a speaker detects a potential violat
     logger.info(f"Episodes included      : {meta_result['n']}")
     logger.info(f"Mean correlation (r)   : {meta_result['mean_r']:.4f}")
     logger.info(f"Mean optimal shift     : {mean_shift:.2f} turns")
-    logger.info(f"% negative shift (S<0) : {pct_negative:.1f}% (H₁: stance→explicitness)")
     logger.info(f"P-value (one-tailed)   : {p_display}")
     logger.info("="*70)
     
@@ -644,7 +664,8 @@ This pattern aligns with Grice (1975): when a speaker detects a potential violat
             "max_shift": max_shift,
             "bidirectional": bidirectional,
             "n_episodes_processed": n_success,
-            "processing_time_sec": elapsed
+            "processing_time_sec": elapsed,
+            "log_file": str(log_file.resolve())
         }
     }
 
