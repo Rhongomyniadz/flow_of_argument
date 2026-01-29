@@ -17,7 +17,7 @@ class LLMInterface:
         top_k: int = 0,
         repetition_penalty: float = 1.05,
         download_dir: str = "/shared/4/models",
-        max_tokens: int = 128,
+        max_tokens: int = 2000,
     ):
         self.llm = LLM(
             model=model_name,
