@@ -1,7 +1,7 @@
 """
 Reference:
   Grice, H. P. (1975). Logic and conversation. In P. Cole & J. L. Morgan (Eds.),
-  Syntax and Semantics 3: Speech Acts (pp. 41–58). Academic Press.
+  Syntax and Semantics 3: Speech Acts (pp. 41-58). Academic Press.
 """
 """
 Iceberg Ratio Analysis: Bidirectional Temporal Shift Search for Causal Directionality
@@ -190,19 +190,9 @@ def find_optimal_temporal_shift_bidirectional(
 ) -> Dict[str, Any]:
     """
     Find optimal temporal shift S in range [-max_shift, +max_shift] that maximizes negative correlation.
-    
-    Interpretation (REVISED for H₁):
-      S < 0: Iceberg at t predicts stance at t+|S| → stance change happens after iceberg → H₂
-             Actually: stance[t+|S|] correlated with iceberg[t] → stance change *precedes* iceberg rise → H₁
-      S > 0: Iceberg at t-S predicts stance at t → iceberg at earlier time predicts later stance
-             If stance drops at t, and iceberg was high at t-S, then explicit density ↑ before disagreement → H₂
-      BUT: We want: stance drop → later explicit density ↑
-      That corresponds to: stance[t] ↓ → iceberg[t+k] ↑ for k>0
-      Which is captured when S = -k < 0: x = iceberg[t], y = stance[t+k] → if y↓ & x↑, r < 0 → optimal S = -k
 
-    Therefore:
-      ✅ Negative shift (S < 0) supports H₁: Stance shift → later explicit density ↑
-      ❌ Positive shift (S > 0) supports H₂: Explicit density ↑ → later stance shift
+    ✅ Negative shift (S < 0) supports H₁: Stance shift → later explicit density ↑
+    ❌ Positive shift (S > 0) supports H₂: Explicit density ↑ → later stance shift
 
     Returns:
         "shift_sign": "negative" → H₁ supported
