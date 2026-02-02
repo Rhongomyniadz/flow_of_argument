@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 from vllm import LLM, SamplingParams
 
+
 class LLMInterface:
     def __init__(
         self,
@@ -41,14 +42,17 @@ class LLMInterface:
 def ensure_dir(p: str) -> None:
     os.makedirs(p, exist_ok=True)
 
+
 def load_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 def save_json(path: str, obj: Any) -> None:
     ensure_dir(os.path.dirname(path))
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2)
+
 
 def extract_turn_text(turn: Dict[str, Any]) -> str:
     key = turn.get("chosen_text_key")
@@ -59,11 +63,13 @@ def extract_turn_text(turn: Dict[str, Any]) -> str:
             return turn[cand]
     return ""
 
+
 def turn_start_time(turn: Dict[str, Any]) -> Optional[float]:
     st = turn.get("startTime")
     if isinstance(st, (int, float)):
         return float(st)
     return None
+
 
 def normalize_text(s: str) -> str:
     s = s.lower()
@@ -71,29 +77,63 @@ def normalize_text(s: str) -> str:
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
+
 STOP = set("""
 a an the and or but if then else to of in on for from with without by as is are was were be been being
 this that these those it its i you he she they we them him her my your our their
 """.split())
 
+
 def keywords(s: str) -> set:
     toks = normalize_text(s).split()
     return set(t for t in toks if len(t) >= 3 and t not in STOP)
 
+
 def overlap_score(a_kw: set, c_kw: set) -> int:
     return len(a_kw & c_kw)
 
+
 def safe_json_extract(text: str) -> Optional[Dict[str, Any]]:
+    """
+    Extract and parse the first balanced JSON object found in `text`.
+    More robust than a greedy regex when the model emits extra braces or prose.
+    """
     if not text:
         return None
-    m = re.search(r"\{.*\}", text, flags=re.DOTALL)
-    if not m:
+
+    start = text.find("{")
+    if start == -1:
         return None
-    blob = m.group(0)
-    try:
-        return json.loads(blob)
-    except Exception:
-        return None
+
+    depth = 0
+    in_str = False
+    esc = False
+
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+        else:
+            if ch == '"':
+                in_str = True
+            elif ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    blob = text[start:i + 1]
+                    try:
+                        return json.loads(blob)
+                    except Exception:
+                        return None
+
+    return None
+
 
 def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
     lo = max(0, idx - w)
@@ -126,6 +166,7 @@ Important:
 - Judge whether C states or clearly verifies the substance of A.
 - Use a 1-10 scale (see below).
 - Output MUST be strict JSON only.
+- Output MUST contain ONLY the keys listed below. No extra keys, no prose.
 
 Entailment Scale (1-10):
 1 = clearly unrelated or contradicts A
@@ -150,9 +191,7 @@ Context around C:
 Return JSON with EXACTLY these keys:
 {{
   "entailment_score": 1-10,
-  "confidence": 0.0-1.0,
-  "coref_notes": "briefly explain key coreference links, if any",
-  "reason": "brief justification focusing on semantic content"
+  "confidence": 0.0-1.0
 }}
 """
 
@@ -250,8 +289,6 @@ def run_episode_labeling(
             parsed = {
                 "entailment_score": 0,
                 "confidence": 0.0,
-                "coref_notes": "",
-                "reason": "parse_failed",
             }
 
         try:
@@ -270,8 +307,6 @@ def run_episode_labeling(
             **m,
             "entailment_score": score,
             "confidence": conf,
-            "coref_notes": parsed.get("coref_notes", "") if isinstance(parsed.get("coref_notes", ""), str) else "",
-            "reason": parsed.get("reason", "") if isinstance(parsed.get("reason", ""), str) else "",
             "raw": out,
         })
 
