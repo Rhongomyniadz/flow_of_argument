@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to Dr. Carol Swain, who is the host introduced in turn 0; 'this latest common sense conversation' directly references the show's title and theme established in turn 0.\",\n  \"reason\": \"Claim C explicitly states that Dr. Carol Swain is participating in a 'common sense' conversation, which directly verifies the substance of assumption A—that the concept of 'common sense' is a central and accepted approach in the discussion. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to Dr. Carol Swain, who is the host introduced in turn 0. 'Common sense conversation' directly references the show title mentioned in turn 0.\",\n  \"reason\": \"Claim C explicitly states that Dr. Carol Swain is participating in a 'common sense' conversation, which directly verifies the substance of assumption A—that the concept of 'common sense' is widely accepted as a valid problem-solving approach—by situating the discussion within"
     },
     {
       "a_turn_idx": 0,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'Congressman Diane Black' in turn 18 refers to the same individual introduced in turn 1 as 'Congressman Diane Black', establishing identity.\",\n  \"reason\": \"Turn 18 states that Diane Black will rejoin the conversation after a break, which implies her continued presence and active participation in the interview. However, this does not explicitly verify or state the earlier assumption that her participation is consistent with her role as a serious candidate in a major political race."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 1 refers to Diane Black, who is also referred to as 'Congressman Diane Black' in turn 18. The term 'Congressman' is used incorrectly for Diane Black, who is female; however, the reference is clearly to the same person.\",\n  \"reason\": \"Turn 18 states that 'Congressman Diane Black will rejoin the conversation following the break,' which confirms her presence and active participation in the interview."
     },
     {
       "a_turn_idx": 1,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_03, and 'David' refers to the same person mentioned in turn 4.\",\n  \"reason\": \"Claim C discusses how the speaker (SPEAKER_02) perceives SPEAKER_03's abilities as attractive to David, which relates to the broader theme of their relationship. However, it does not address or verify the specific assumption A—that David has the right to disclose personal"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_03, and 'David' refers to the same person mentioned in turn 4.\",\n  \"reason\": \"Claim C discusses how the speaker (SPEAKER_02) perceives SPEAKER_03's abilities as attractive to David, which relates to the personal narrative in the book. However, it does not address or verify the specific assumption A—that David has the right to disclose personal"
     },
     {
       "a_turn_idx": 4,
@@ -707,11 +707,11 @@
       "claim_text": "The speaker does not believe in superstition.",
       "overlap_score": 2,
       "c_time": 546.088,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the speaker' in turn 17 refers to SPEAKER_03.",
-      "reason": "Claim C (turn 17) states the speaker's disbelief in superstition, which is unrelated to assumption A (turn 7), which concerns the distinction between external acceptance and internal self-acceptance. There is no overlap in semantic content or logical connection between the two statements. Therefore, the entailment score is 1.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 17 refers to SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 17) states the speaker's disbelief in superstition, which is unrelated to assumption A (turn 7), which concerns the distinction between external acceptance and internal self-acceptance. There is no overlap in semantic content or logical connection between the two statements. Therefore, the entailment score is 1.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to God, as in 'God put us together'. The subject 'the speaker' in turn 17 refers to SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 17) states that the speaker does not believe in superstition, which is unrelated to assumption A (turn 7), which concerns the distinction between external acceptance and internal self-acceptance or perceived legitimacy. There is no"
     },
     {
       "a_turn_idx": 9,

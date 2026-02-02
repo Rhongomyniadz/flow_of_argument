@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'we' in turn 4 refers to the podcast hosts, not directly linked to turn 1.\",\n  \"reason\": \"Turn 4's claim 'we're not stopping at success stories' introduces a new focus on failures and challenges, which indirectly relates to the idea that not all news is equally important or trustworthy by suggesting depth and nuance in storytelling. However, it does not explicitly state or verify the substance of A, which concerns the differential importance"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'we' in turn 4 refers to the podcast hosts, not linked to any prior speaker.\",\n  \"reason\": \"Turn 4's claim 'we're not stopping at success stories' introduces a new focus on failures and challenges, which indirectly acknowledges that not all narratives (including news or financial stories) are positive or equally representative. However, it does not explicitly address the idea that not all news stories are equally important or trustworthy. While there is a"
     },
     {
       "a_turn_idx": 2,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Seth Molten refers to the same individual mentioned in turn 5; 'my Congressman' in turn 5 establishes his identity as the representative of the 6th District in Massachusetts.\",\n  \"reason\": \"Claim C states that Congressman Seth Molten is from the sixth congressional district in Massachusetts, which aligns with the contextual information in turn 5. However, turn 5 does not explicitly state or verify the speaker's positive regard for Molten or trustworthiness—those"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Seth Molten is referred to as 'my Congressman' in turn 5 and later as 'Congressman Seth Molten' in turn 23; 'the sixth district' in turn 23 refers to the 6th District mentioned in turn 5.\",\n  \"reason\": \"Turn 23 states a factual detail about Congressman Seth Molten's representation of the sixth congressional district in Massachusetts, which aligns with the context provided in turn 5. However,"
     },
     {
       "a_turn_idx": 5,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' refers to the nation-state throughout.\",\n  \"reason\": \"Claim C (turn 25) states that China failed to take adequate measures to stop the spread of the virus, which is not logically or semantically entailed by assumption A (turn 7). Assumption A emphasizes individual responsibility—people should isolate even if asymptomatic—to prevent transmission. Claim C shifts focus to state-level failure by China, introducing a geopolitical critique unrelated to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'China' refers to the nation-state, not individuals.\",\n  \"reason\": \"Claim C (turn 25) states that China failed to take adequate measures to stop the spread of the virus, which is a distinct assertion about China's handling of the pandemic. Assumption A (turn 7) concerns individual behavior—specifically, that asymptomatic or mildly ill people should take preventive measures to avoid spreading the virus. There is no direct"
     },
     {
       "a_turn_idx": 7,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to SPEAKER_09, who was previously discussing their own experience with COVID-19 symptoms and quarantine. However, the claim in turn 20 ('you're in a unique situation to discuss this topic') refers to a different topic—remote voting during a crisis—not the speaker's exposure to or potential contraction of the disease.\",\n  \"reason\": \"Claim C discusses a political context involving remote voting and congressional participation"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in turn 20 refers to SPEAKER_09, who was previously discussing his own health and potential exposure to COVID-19. However, turn 20 shifts focus entirely to political discourse about remote voting, not to the health condition or disease exposure mentioned in turn 8.\",\n  \"reason\": \"Turn 20 discusses a political opportunity related to remote voting during a crisis, but does not mention or verify the speaker's exposure"
     },
     {
       "a_turn_idx": 8,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'we' in claim C refers to the speaker and listener, but does not connect to the medical symptoms or testing context of assumption A.\",\n  \"reason\": \"Claim C states a vague belief about shared traits ('something in common') related to personal improvement goals, which is unrelated to the medical significance of symptoms described in assumption A. There is no mention of symptoms, infection, testing, or health status in C. The topics diverge entirely, making"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'we' in C refers to the speaker and listener, but not connected to the medical symptoms in A.\",\n  \"reason\": \"Claim C (turn 29) states a general belief about shared traits ('we have something in common') related to personal improvement, which is unrelated to the medical significance of symptoms described in assumption A. There is no mention of symptoms, infection, testing, or health status. The topics are entirely different, making the"
     },
     {
       "a_turn_idx": 9,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 29 refers to the speaker (SPEAKER_01) and potentially the listener, but no clear reference to 'Massachusetts' or the prior context about location is established.\",\n  \"reason\": \"Claim C (turn 29) states a general belief about shared commonality between the speaker and listener, but does not mention Massachusetts, the speaker's location, or any aspect of the earlier assumption A regarding recognition of Massachusetts'"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 29 refers to the speaker (SPEAKER_01) and potentially the listener, but no clear reference to 'Massachusetts' or the prior context about location is established.\",\n  \"reason\": \"Claim C (turn 29) expresses a general belief about shared traits ('something in common') but does not mention Massachusetts, the speaker's location, or the significance of being in Massachusetts. While the earlier assumption A involves the"
     },
     {
       "a_turn_idx": 11,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'we' in turn 29 refers to the speaker and audience, not tied to the earlier mention of Massachusetts.\",\n  \"reason\": \"Claim C (turn 29) discusses a general desire to be 'better functioning humans,' which is unrelated to the specific assumption A (turn 11) that the listener recognizes the significance of Massachusetts in the speaker's situation. There is no mention of location, quarantine, testing, or the context of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'we' in turn 29 refers to the speaker and audience, not tied to the earlier mention of Massachusetts.\",\n  \"reason\": \"Claim C (turn 29) expresses a general aspiration to be 'better functioning humans,' which is unrelated to the specific assumption A (turn 11) that the listener recognizes the significance of Massachusetts in the speaker's situation. There is no mention of location, quarantine, or regional context in C,"
     },
     {
       "a_turn_idx": 11,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_09, who is the listener and parent of the daughter mentioned in turn 11. 'Your house' in turn 13 refers to the household where SPEAKER_09 and their family are quarantined.\",\n  \"reason\": \"Turn 13 explicitly states that the listener is following a daily routine within the confines of their house, which directly verifies the assumption in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_09, who is the listener and parent of the daughter mentioned in turn 11. 'Your house' refers to the household where the daughter (Emmy) resides.\",\n  \"reason\": \"Turn 13 explicitly confirms that the listener is maintaining a daily routine confined to their home, which directly verifies the assumption in turn 12 that the listener has a daughter living in the household and"
     },
     {
       "a_turn_idx": 12,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between assumption A and claim C. Assumption A concerns the presence of a daughter in the household; claim C discusses voting on a large stimulus bill.\",\n  \"reason\": \"Claim C (turn 21) makes no mention of a daughter, household, or any related personal detail. It focuses entirely on the size of a legislative bill and remote voting. There is no semantic connection to assumption A, which centers on the speaker's assumption about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between assumption A and claim C. Assumption A concerns the presence of a daughter in the household; claim C discusses voting on a large stimulus bill.\",\n  \"reason\": \"Claim C (turn 21) makes no mention of a daughter, household, or any related personal detail. It focuses entirely on the size of a legislative bill and remote voting. There is no semantic connection to assumption A, which centers on the speaker's family composition"
     },
     {
       "a_turn_idx": 12,
@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 29 refers to the listener, but the statement 'You don't know me, yet' contradicts the assumption that the speaker knows the listener well enough to assume they have a daughter.\",\n  \"reason\": \"Claim C (turn 29) states 'You don't know me, yet,' which directly contradicts the implicit knowledge assumed in A (turn 12), where the speaker confidently asserts the listener has"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 29 refers to the listener, but the claim 'you don't know me, yet' contradicts the prior assumption that the speaker knows the listener has a daughter, implying familiarity.\",\n  \"reason\": \"Claim C (turn 29) states 'you don't know me, yet,' which contradicts the assumption in A (turn 12) that the speaker is aware of the listener's personal situation ("
     },
     {
       "a_turn_idx": 12,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 29 refers to the listener, consistent with prior turns.\",\n  \"reason\": \"Turn 29 states a belief in shared commonality ('we have something in common') but does not explicitly reference or verify the assumption that the listener has a daughter in the household. While the context includes the daughter (Emmy), this specific detail is not mentioned or tied to the claim of commonality. The connection is weakly topical—"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 29 refers to the listener, consistent with prior turns.\",\n  \"reason\": \"Turn 29 claims the speaker believes they share something in common with the listener, which is a general statement of connection. However, it does not explicitly verify or state the specific assumption from turn 12—that the listener has an 18-month-old daughter in the household. While the shared experience of parenting might be implied, the claim"
     },
     {
       "a_turn_idx": 12,
@@ -1011,7 +1011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'We' in C refers to the speaker and audience, not the listener's daughter.\",\n  \"reason\": \"Claim C (turn 29) expresses a general aspiration to be better functioning humans, which is unrelated to the specific assumption in A (turn 12) that the listener has an 18-month-old daughter in the household. There is no mention of a child, family, or household structure"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'we' in claim C refers to a general audience, not the listener or their daughter.\",\n  \"reason\": \"Claim C expresses a general aspiration to be better functioning humans, which is unrelated to the specific assumption in A that the listener has an 18-month-old daughter living in the household. There is no mention of a child, family, or household structure in C, and no semantic connection to the assumption about the daughter. Thus, C neither"
     },
     {
       "a_turn_idx": 13,
@@ -1026,7 +1026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the same day-to-day routine' refers to the daily routine mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the daily routine is monotonous and describes it as 'wake up, go to work, eat, sleep, repeat,' which aligns with the idea of a structured routine involving work and basic activities. However, it does not explicitly verify the inclusion of domestic duties as part of the routine, nor does it confirm"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the same day-to-day routine' refers to the daily routine mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the current daily routine is monotonous and describes it as 'wake up, go to work, eat, sleep, repeat,' which aligns with the idea of a structured routine involving work and daily tasks. However, it does not explicitly verify the full substance of assumption A, which specifies that a 'daily routine"
     },
     {
       "a_turn_idx": 13,
@@ -1041,7 +1041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the same day-to-day routine' refers to the daily routine mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the current daily routine is unpleasant, which touches on the topic of the routine described in A. However, A focuses on the structure of the routine (work and domestic duties), while C expresses a subjective judgment about its quality (that it 'sucks'). C does not explicitly verify or state the structural components of A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the same day-to-day routine' refers to the daily routine mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the current daily routine is unpleasant, which touches on the topic of the daily routine from assumption A. However, it does not explicitly verify or state the substance of A—that a daily routine includes structured time spent on work and domestic duties. While there is a topical connection, C adds a subjective evaluation ('sucks"
     },
     {
       "a_turn_idx": 13,
@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in C refers to the speaker and listener collectively, but does not connect to the specific trust relationship described in A.\",\n  \"reason\": \"Claim C expresses a general desire to be better functioning humans, which is unrelated to the specific assumption in A that the speaker trusts the listener's understanding without needing clarification. There is no mention of mutual understanding, trust, or the context of managing a child during quarantine. The topics and semantics are entirely distinct"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in C refers to the speaker and listener collectively, but does not connect to the specific trust dynamic in A.\",\n  \"reason\": \"Claim C expresses a general aspiration to be better functioning humans, which is unrelated to the specific assumption in A that the speaker trusts the listener's understanding without needing clarification. There is no mention of mutual understanding, trust, or the context of managing a child during quarantine. The topics and semantics are entirely distinct,"
     },
     {
       "a_turn_idx": 14,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'you' in turn 39 refers to SPEAKER_09, but the topic shifts entirely to podcast sources and political commentary.\",\n  \"reason\": \"Claim C (turn 39) discusses where the listener obtains podcasts, which is unrelated to the earlier assumption A about shared parental duties and concerns regarding child health. There is no overlap in semantic content, and C does not state, imply, or verify any aspect of A. The topics"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in claim C refers to SPEAKER_09, who is the subject of assumption A. However, claim C discusses podcast sources, which is unrelated to parental duties or child health concerns.\",\n  \"reason\": \"Claim C states that the listener obtains podcasts from an app or platform, which is entirely unrelated to assumption A, which concerns shared parental responsibilities and worries about child health. There is no overlap in semantic content, and C neither"
     },
     {
       "a_turn_idx": 15,
@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the relief bill' in turn 42 refers to the $2.2 trillion relief bill mentioned in turn 41.\",\n  \"reason\": \"Claim C (turn 42) discusses the inadequacy of the initial Senate Republican relief bill in providing support to those in need, particularly frontline workers and unemployed individuals. However, this does not address or verify assumption A (turn 15), which concerns family members providing childcare avoiding exposure"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the relief bill' in turn 42 refers to the Senate Republican relief bill mentioned in the context.\",\n  \"reason\": \"Claim C (turn 42) discusses the inadequacy of the initial Senate Republican relief bill in providing support to those who need it, particularly frontline workers and unemployed individuals, and frames it as an industry bailout. This is unrelated to assumption A (turn 15), which concerns family members providing childcare avoiding exposure"
     },
     {
       "a_turn_idx": 15,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 29 refers to the speaker and listener collectively, but does not relate to the concept of worry or lack of alternatives.\",\n  \"reason\": \"Turn 29 claims a shared trait ('we all wish we were better functioning humans') which is unrelated to the assumption in turn 15 that worry implies a lack of viable alternatives. There is no mention of worry, constraints, or alternatives in turn 29. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 29 refers to the speaker and listener collectively, but does not relate to the concept of worry or lack of alternatives.\",\n  \"reason\": \"Claim C (turn 29) states a belief about shared traits ('we have something in common') related to self-improvement and functioning better as humans. This is unrelated to assumption A (turn 15), which concerns the idea that worry implies a lack of viable"
     },
     {
       "a_turn_idx": 15,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 42 refers to the nurses and doctors on the front lines, which is consistent with the context of healthcare workers needing protection during the pandemic.\",\n  \"reason\": \"Claim C states that nurses and doctors on the front lines were excluded from the first Senate draft of the relief bill, which relates to the broader concern about the relief bill's content and timing mentioned in assumption A. However, A assumes the audience is familiar with political developments surrounding the"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 42 refers to the nurses and doctors on the front lines, which is consistent with the context of healthcare workers needing protection during the pandemic.\",\n  \"reason\": \"Claim C states that nurses and doctors on the front lines were excluded from the first Senate draft of the relief bill, which relates to the broader context of the relief bill's content and priorities. However, it does not explicitly verify or state the earlier assumption A—that the audience is"
     },
     {
       "a_turn_idx": 16,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 42 refers to the revised relief bill, which is the subject of discussion. 'This bill' in turn 42 refers to the $2.2 trillion relief bill mentioned in turn 16.\",\n  \"reason\": \"Claim C states that the revised relief bill includes greater support for small businesses than the original draft. While this provides specific detail about changes to the bill, it does not explicitly confirm or verify the assumption in A"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 42 refers to the revised relief bill, which is the subject of discussion. 'This bill' in turn 42 refers to the $2.2 trillion relief bill mentioned earlier.\",\n  \"reason\": \"Claim C states that the revised relief bill includes greater support for small businesses than the original draft. While this provides specific detail about changes to the bill, it does not explicitly confirm or verify the assumption in A—that the audience is"
     },
     {
       "a_turn_idx": 16,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 42 refers to the initial Senate Republican draft of the relief bill, which is clarified by the contrast with the revised version.\",\n  \"reason\": \"Claim C states that the relief bill changed industry assistance from grants/gifts to repayable loans, which modifies the original intent of the Senate draft. However, this does not explicitly confirm or verify the earlier assumption A—that passing a large stimulus bill is essential to addressing the economic crisis. While"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 42 refers to the initial Senate Republican draft of the relief bill, which is clarified by the contrast with the revised version.\",\n  \"reason\": \"Claim C states that the relief bill changed industry assistance from grants/gifts to repayable loans, which addresses a modification to the original bill. However, it does not explicitly affirm or verify the core belief in assumption A—that passing a large stimulus bill is essential to addressing the economic crisis."
     },
     {
       "a_turn_idx": 17,
@@ -1416,7 +1416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_09, consistent with prior turns. The phrase 'this bill' refers to the $2.2 trillion relief bill discussed throughout.\",\n  \"reason\": \"Turn 44 states the speaker does not intend to review every individual item in the bill, which aligns with the broader context of prioritizing swift passage of the stimulus during a national crisis. While this reflects a practical stance on legislative process,"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_09, consistent with prior turns. The phrase 'this bill' refers to the $2.2 trillion relief bill discussed throughout.\",\n  \"reason\": \"Turn 44 states the speaker does not intend to review every individual item in the bill, which aligns with the broader context of prioritizing swift passage of the stimulus during a national crisis. However, while this reflects a practical stance consistent with"
     },
     {
       "a_turn_idx": 17,
@@ -1431,7 +1431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'you' in turn 29 refers to the listener, but no link to the subject of assumption A (MIT-educated representative Massey).\",\n  \"reason\": \"Claim C states 'you don't know me, yet,' which is about the speaker's lack of personal knowledge of the listener. This is unrelated to assumption A, which concerns the speaker's view that MIT education indicates competence but not necessarily sound policy judgment. There is no mention of MIT"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'you' in turn 29 refers to the listener, but no link to the subject of assumption A (MIT-educated representative Massey).\",\n  \"reason\": \"Claim C states 'You don't know me, yet,' which is about the speaker's lack of personal knowledge of the listener. This is unrelated to assumption A, which concerns the speaker's view that MIT education indicates competence but not necessarily sound policy judgment. There is no mention of MIT"
     },
     {
       "a_turn_idx": 17,
@@ -1446,7 +1446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this bill' refers to the $2.2 trillion relief bill discussed throughout.\",\n  \"reason\": \"Claim C (turn 44) states the speaker does not intend to review every individual item in the bill, which is unrelated to assumption A (turn 17). Assumption A concerns MIT education as a marker of competence but not necessarily sound policy judgment. Claim C addresses a procedural decision about reviewing bill details, not the evaluation of expertise or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this bill' refers to the $2.2 trillion relief bill discussed throughout.\",\n  \"reason\": \"Claim C (turn 44) states the speaker does not intend to review every individual item in the bill, which is unrelated to assumption A (turn 17). Assumption A concerns MIT education as a marker of competence but not necessarily sound policy judgment. Claim C addresses a procedural decision about reviewing bill details, not the speaker's evaluation of"
     },
     {
       "a_turn_idx": 17,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'We' in C refers to the speaker and listener, but does not connect to the subject of A (MIT education or policy judgment).\",\n  \"reason\": \"Claim C (turn 29) states a general belief about shared traits ('we have something in common') related to self-improvement, which is unrelated to the specific assumption A (turn 17) that MIT education indicates competence but not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'we' in turn 29 refers to the speaker and listener broadly, not tied to any prior entity in turn 17.\",\n  \"reason\": \"Turn 29 claims the speaker shares something in common with the listener, which is unrelated to the assumption in turn 17 about MIT education implying competence but not policy judgment. There is no mention of MIT, competence, or policy judgment in turn 29. The two statements address entirely"
     },
     {
       "a_turn_idx": 17,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_06, who is discussing eliminating boredom via a video game.\",\n  \"reason\": \"Claim C (turn 30) states that boredom can be eliminated, which is unrelated to assumption A (turn 17), which concerns MIT education as a sign of competence but not necessarily sound policy judgment. There is no overlap in topic, concept, or semantic content between the two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_06, who is discussing eliminating boredom via a video game. No link to SPEAKER_09 or the MIT-related assumption in turn 17.\",\n  \"reason\": \"Turn 30 claims the speaker believes boredom can be eliminated, which is unrelated to the earlier assumption in turn 17 that MIT education indicates competence but not necessarily sound policy judgment. There is no"
     },
     {
       "a_turn_idx": 17,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 17 refers to Representative Massey, but turn 34 discusses building wealth generally without reference to Massey or MIT.\",\n  \"reason\": \"Turn 34 discusses the varied paths to building wealth, which is unrelated to the claim in turn 17 that MIT education indicates competence but not necessarily sound policy judgment. There is no overlap in subject matter or semantic content between the two claims. The future claim does not address"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 17 refers to Representative Massey, but turn 34 discusses building wealth generally without reference to Massey or MIT.\",\n  \"reason\": \"Turn 34 discusses the varied paths to building wealth, which is unrelated to the claim in turn 17 that MIT education indicates competence but not necessarily sound policy judgment. There is no mention of MIT, policy judgment, or the specific individual (Massey). The topics are"
     },
     {
       "a_turn_idx": 17,
@@ -1566,7 +1566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 26 refers to SPEAKER_09, who is the same speaker mentioned in turn 18. No other coreference issues are present.\",\n  \"reason\": \"Turn 18 asserts that the speaker (SPEAKER_05) has influence over others' standing within the legislative body, specifically referencing their ability to challenge Speaker Pelosi and being in her 'dog house.' Turn 26, however, discusses SPEAKER"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 26 refers to SPEAKER_09, who is the same speaker mentioned in turn 18. No other coreference issues are present.\",\n  \"reason\": \"Turn 18 asserts that the speaker has influence over others' standing within the legislative body, based on their experience challenging Speaker Pelosi. Turn 26, however, discusses the speaker's work on China-related issues through the Armed Services Committee, which is unrelated to"
     },
     {
       "a_turn_idx": 18,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 19 refers to Massey, while 'you' in turn 30 refers to the listener/player.\",\n  \"reason\": \"Claim C (turn 30) discusses eliminating boredom through a video game, which is entirely unrelated to assumption A (turn 19), which concerns Massey's principled behavior despite limited personal familiarity. There is no overlap in subject matter, semantics, or implied connection. The two"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 19 refers to Massey, but turn 30 discusses boredom and a video game, with no reference to Massey or principled behavior.\",\n  \"reason\": \"Turn 30 claims the speaker believes boredom can be eliminated, which is unrelated to the earlier assumption in turn 19 that Massey's actions align with principled behavior despite lack of direct familiarity. There is no overlap in subject matter, concept"
     },
     {
       "a_turn_idx": 19,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the idea of remote voting, which was introduced in turn 20 as a significant issue in federal policy debates.\",\n  \"reason\": \"Claim C explicitly states 'remote voting absolutely should be on the table,' which directly verifies the assumption in A that the audience recognizes the significance of federal-level policy debates like remote voting. The context shows that the discussion centers on the necessity and legitimacy of remote voting during an exceptional situation,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'remote voting' as a solution to the issue of voting during exceptional circumstances, directly linking it to the context of the federal-level debate on remote voting introduced in turn 20.\",\n  \"reason\": \"Claim C ('Remote voting should be considered') directly and explicitly verifies the substance of assumption A, which is that the audience recognizes the significance of federal-level policy debates like remote voting. The context shows that the discussion centers on the necessity of"
     },
     {
       "a_turn_idx": 20,
@@ -1821,7 +1821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_06, whose claim is about eliminating boredom via a video game.\",\n  \"reason\": \"Claim C (turn 30) states that boredom can be eliminated, which is unrelated to assumption A (turn 21), which concerns a moral duty to participate in national policy decisions. There is no overlap in subject matter, intent, or semantic content. The two statements address entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_06, whose claim is about eliminating boredom via a video game.\",\n  \"reason\": \"Claim C (turn 30) states that boredom can be eliminated, which is unrelated to assumption A (turn 21), which concerns a moral duty to participate in national policy decisions. There is no overlap in semantic content, and C does not state, verify, or imply anything"
     },
     {
       "a_turn_idx": 21,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 46 refers to SPEAKER_09, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 46) discusses the speaker's belief about the presence of 'pork' in the bill, which is unrelated to assumption A (turn 21), which concerns the speaker's duty to participate in decisions affecting national policy. There is no mention of voting duties, participation, or decision-making"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 46 refers to SPEAKER_09, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 46) discusses the speaker's belief about the presence of 'pork' in the bill, which is unrelated to assumption A (turn 21), which concerns the speaker's duty to participate in decisions affecting national policy. There is no mention of voting duties, participation, or decision-making responsibility"
     },
     {
       "a_turn_idx": 23,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the listener' refers to SPEAKER_05, and 'you' in turn 46 refers to SPEAKER_09.\",\n  \"reason\": \"Claim C states that the speaker believes the listener is correct about the presence of pork, which is unrelated to assumption A, which concerns the audience's value of transparency and consistency in political discourse. There is no semantic connection between endorsing the presence of pork in legislation and affirming a belief about audience"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the listener' refers to SPEAKER_05, and 'you' in turn 46 refers to SPEAKER_09.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker believes the listener is correct about the presence of pork in the bill, which is unrelated to assumption A (turn 23), which concerns the audience's value for transparency and consistency in political discourse. There is no mention of transparency"
     },
     {
       "a_turn_idx": 23,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this bill' in turn 46 refers to the stimulus relief package mentioned in earlier turns, including turn 23.\",\n  \"reason\": \"Claim C states that 'this bill has some reality related to legislative processes,' which is a vague and general observation about legislation. Assumption A, however, concerns the speaker's trust in the accuracy of a reported legislative action. While C touches on legislative processes, it does not address trust, accuracy, or the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this bill' in turn 46 refers to the stimulus relief package mentioned in earlier turns, specifically the legislative action discussed in turn 23.\",\n  \"reason\": \"Claim C states that 'this bill has some reality related to legislative processes,' which is a vague and general observation about the nature of legislation. Assumption A, however, concerns the speaker's trust in the accuracy of the reported legislative action. While C touches on legislative processes, it does not"
     },
     {
       "a_turn_idx": 24,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to 'Asian Americans' as established in turn 24, where the speaker mentions 'members of the Asian American community' being hurt and under assault.\",\n  \"reason\": \"Claim C explicitly states that Asian Americans are currently being targeted in the United States, which directly verifies the substance of assumption A—that racism against Asian Americans in the U.S. is a serious and ongoing societal issue. The context confirms that the targeting is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to Asian Americans, as established in turn 24 where Speaker_09 mentions 'members of the Asian American community' being hurt and 'their community is under assault by racists'. The phrase 'getting targeted here at home' directly refers to the same group.\",\n  \"reason\": \"Claim C explicitly states that Asian Americans are currently being targeted in the United States, which directly verifies the core assertion in assumption A that"
     },
     {
       "a_turn_idx": 24,
@@ -1941,7 +1941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the resolution mentioned in turn 24, which is the subject of the discussion regarding its impact on Asian Americans.\",\n  \"reason\": \"Claim C explicitly states that the resolution was perceived politically as a cover for attacking Asian Americans, which directly verifies the substance of assumption A—that racism against Asian Americans is a serious and ongoing issue that is being exacerbated by political discourse. The context confirms that the speaker withdrew support due to harm caused to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the resolution mentioned in turn 24, which is the subject of discussion throughout the exchange.\",\n  \"reason\": \"Claim C explicitly states that the resolution was perceived politically as a cover for attacking Asian Americans, which directly verifies the substance of assumption A—that racism against Asian Americans is a serious and ongoing issue that is being exacerbated by political rhetoric. The context shows that Speaker_09 withdrew support due to the harmful impact on the"
     },
     {
       "a_turn_idx": 24,

@@ -19,9 +19,9 @@
       "c_time": 22.462,
       "entailment_score": 9,
       "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'a cell phone plan' refers directly to PureTalk's offering mentioned in turn 2.",
-      "reason": "Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies the substance of assumption A—that the listener has access to a cell phone and can switch providers—by confirming the availability of a specific, affordable plan. The pricing and service details make the assumption concrete and verifiable.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'a cell phone plan' refers directly to PureTalk's offering mentioned in turn 2.\",\n  \"reason\": \"Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies the substance of assumption A—that the listener has access to a cell phone and can switch providers—by confirming the availability of a specific, affordable plan. The pricing and service details make the assumption concrete and verifiable.\"\n}\n```"
+      "coref_notes": "No coreference issues; 'a cell phone plan' refers directly to the service offered by PureTalk.",
+      "reason": "Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies the substance of assumption A that the listener has access to a cell phone and can switch providers. The price point and availability of the plan are clearly stated, confirming both the feasibility and the condition of switching, thus strongly supporting the assumption.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'a cell phone plan' refers directly to the service offered by PureTalk.\",\n  \"reason\": \"Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies the substance of assumption A that the listener has access to a cell phone and can switch providers. The price point and availability of the plan are clearly stated, confirming both the feasibility and the condition of switching, thus strongly supporting the assumption.\"\n}\n```"
     },
     {
       "a_turn_idx": 3,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Donald Trump' in turn 11, which resolves the coreference to the subject of turn 3 ('Trump').\",\n  \"reason\": \"Claim C discusses Trump's prediction of negative economic consequences under a Biden presidency, which is unrelated to the assumption in A that current economic policies under Trump have led to measurable positive outcomes. While both relate to Trump and the economy, C does not affirm, verify, or make explicit the claim that"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Donald Trump' refers to the same individual mentioned in turn 3. 'Biden' is clearly the subject of the prediction.\",\n  \"reason\": \"Claim C discusses Donald Trump's prediction of negative economic consequences under a Biden presidency, which is unrelated to the earlier assumption A that Trump's current economic policies have led to measurable positive outcomes. While both involve economic claims and Trump, C does not state or verify the substance of A. Instead, it"
     },
     {
       "a_turn_idx": 3,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 11, 'he' refers to Donald Trump, who is the subject of the prior discussion. 'My taxes' refers to Trump's tax policies mentioned earlier.\",\n  \"reason\": \"Claim C discusses potential negative economic consequences of Biden's tax policies, implying that current policies under Trump are stable and beneficial. However, it does not explicitly state or verify the specific claim in A—that Trump's current economic policies have led to measurable positive outcomes. While there is a topical"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 11, 'he' refers to Donald Trump, who is the subject of the prior discussion. 'My taxes' refers to Trump's tax policies mentioned earlier.\",\n  \"reason\": \"Claim C discusses potential negative economic consequences of Biden's tax policies, implying that current policies (under Trump) are beneficial. However, it does not explicitly state or verify the specific claim in A—that Trump's current economic policies have led to measurable positive outcomes. While there is a topical"
     },
     {
       "a_turn_idx": 3,
@@ -62,11 +62,11 @@
       "claim_text": "Three conservative justices were appointed and confirmed under President Trump.",
       "overlap_score": 2,
       "c_time": 436.15,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'three conservative justices' refers to individuals appointed under Trump, which is unrelated to the economic policies mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses judicial appointments under Trump, specifically three conservative justices confirmed, while assumption A focuses on the economic outcomes of Trump's policies. There is no overlap in subject matter—C does not address economic performance, job creation, or any measurable positive outcome related to the economy. Therefore, C neither supports nor verifies"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'three conservative justices' refers to individuals appointed under Trump, which is unrelated to the economic policies mentioned in assumption A.",
+      "reason": "Claim C discusses the appointment of three conservative justices under Trump, which is unrelated to the economic policies or their measurable positive outcomes mentioned in assumption A. There is no overlap in subject matter or causal connection. Therefore, C does not support, verify, or relate to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'three conservative justices' refers to individuals appointed under Trump, which is unrelated to the economic policies mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the appointment of three conservative justices under Trump, which is unrelated to the economic policies or their measurable positive outcomes mentioned in assumption A. There is no overlap in subject matter or causal connection. Therefore, C does not support, verify, or relate to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 3,
@@ -81,7 +81,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the current Georgia governor' refers to the sitting governor of Georgia, distinct from Trump mentioned in turn 3.\",\n  \"reason\": \"Claim C (turn 18) discusses abortion policy and calls for the Georgia governor to ban all abortions, which is unrelated to the economic policies under Trump discussed in assumption A (turn 3). There is no mention of economic outcomes, job creation, or energy tax credits in C. The two claims address entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the current Georgia governor' refers to the sitting governor of Georgia, distinct from Trump mentioned in turn 3.\",\n  \"reason\": \"Claim C (turn 18) discusses abortion policy and calls for the Georgia governor to ban all abortions, which is unrelated to the economic policies under Trump discussed in assumption A (turn 3). There is no mention of economic outcomes, job creation, or energy tax credits in C. The topics are entirely different"
     },
     {
       "a_turn_idx": 3,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_09 refers to 'Florida, Tennessee, and Texas' as examples of states that experienced economic booms after eliminating state income taxes; this directly supports the claim about positive economic outcomes linked to policy changes, aligning with the earlier assumption A about Trump's economic policies leading to measurable positive outcomes.\",\n  \"reason\": \"Claim C explicitly states that Florida, Tennessee, and Texas have experienced economic booms after eliminating state income taxes, which directly verifies the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_09 refers to 'Florida, Tennessee, and Texas' as examples of states that experienced economic booms after eliminating state income taxes, which directly supports the claim about positive economic outcomes under Trump's policies, as implied in turn 3.\",\n  \"reason\": \"Claim C explicitly states that Florida, Tennessee, and Texas have experienced economic booms after eliminating state income taxes—a direct verification of the substance of assumption A, which asserts that Trump's economic policies have led"
     },
     {
       "a_turn_idx": 3,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to President Trump, as established in the context of the endorsement and prior discussion about Trump's actions and influence.\",\n  \"reason\": \"Claim C discusses the speaker's belief in having earned Trump's endorsement through support during 2016–2018, particularly regarding economic policy. However, it does not explicitly state or verify the economic outcomes mentioned in assumption A (that Trump's policies led to measurable positive outcomes). While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to President Trump, as established in the context. 'Me' in claim C refers to SPEAKER_04.\",\n  \"reason\": \"Claim C discusses the speaker's belief in having earned Trump's endorsement through support during 2016–2018, particularly regarding economic agenda implementation. However, it does not explicitly state or verify the economic outcome claim from turn 3 (that Trump's policies led to measurable"
     },
     {
       "a_turn_idx": 3,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'biden' in turn 11, which aligns with the political figure implied in turn 3 (Trump's opposition to repealing energy tax credits). The claim that Biden's tax policy would cause a 'severe economic depression' directly extends and explicitly verifies the assumption in turn 3 that repealing energy tax credits undermines economic progress and national strength.\",\n  \"reason\": \"Turn 11 explicitly states that Biden's tax policy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 11 refers to Biden, as established by the context of Trump's prediction about Biden's presidency. 'My taxes' refers to the energy tax credits mentioned in turn 3.\",\n  \"reason\": \"Claim C explicitly states that Biden's tax policy would cause a severe economic depression, which directly verifies the substance of assumption A—that repealing energy tax credits would undermine economic progress and national strength. The causal link between tax policy and economic collapse"
     },
     {
       "a_turn_idx": 3,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 11 refers to Biden, as established by the context of Trump's prediction about Biden's presidency. 'They' in 'they'll leave' refers to companies previously invested in the U.S.\",\n  \"reason\": \"Claim C explicitly states that tax policies under a Biden presidency would lead to foreign investment fleeing, which directly verifies the substance of assumption A—that repealing energy tax credits (a policy associated with Biden’s agenda) would undermine economic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 11 refers to Biden, as established by the context of Trump's prediction about Biden's presidency. 'They' in 'they'll leave' refers to companies investing in the U.S.\",\n  \"reason\": \"Claim C explicitly states that tax policies under a Biden presidency would lead to foreign investment fleeing, which directly verifies the substance of assumption A—that repealing energy tax credits (a policy associated with Biden's agenda) would undermine economic progress"
     },
     {
       "a_turn_idx": 3,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'eliminating the state income tax' in turn 20, which is a different policy from 'repealing energy tax credits' mentioned in turn 3. No direct coreference between the two policies is established.\",\n  \"reason\": \"While both claims relate to economic policy and suggest positive economic outcomes from tax changes, the specific policies differ: turn 3 discusses energy tax credits, while turn 20 discusses eliminating state income tax"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'eliminating the state income tax' as a measure that would 'be a big boom to our economy,' which is a general economic benefit claim. However, 'state income tax' is distinct from 'energy tax credits' mentioned in assumption A. No direct link is made between the two policies.\",\n  \"reason\": \"Claim C discusses eliminating state income tax and its economic benefits, while assumption A concerns repealing energy tax credits and their impact"
     },
     {
       "a_turn_idx": 4,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Sean' in turn 8 refers to Sean Hannity, established in turn 4 where he introduces himself as 'Sean Hannity here'.\",\n  \"reason\": \"Turn 8 mentions 'Sean Hannity's show' and provides a toll-free number associated with it, which implies the speaker is aware of and referencing Sean Hannity. However, it does not explicitly state or verify that the listener knows who Sean Hannity is—only that the caller is dialing into his show."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to Speaker 08, who is identified as Sean Hannity in turn 4. 'Sean Hannity' is explicitly named in turn 4, establishing that the listener knows who he is.\",\n  \"reason\": \"Turn 8 mentions 'Sean Hannity's show' and provides a toll-free number associated with it, implying the speaker assumes the audience recognizes Sean Hannity. However, while this suggests familiarity with the show, it does not"
     },
     {
       "a_turn_idx": 4,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 4 refers to 'burner', which is the product being discussed. In turn 6, 'burner' is explicitly stated to be shippable directly to the customer's door.\",\n  \"reason\": \"Claim C explicitly states that 'burner is' can be shipped directly to the customer's door, which directly verifies the substance of assumption A that a 'burner' is something that can be used temporarily and discarded—im"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 6 refers to 'burner', which is the product being discussed throughout the conversation.\",\n  \"reason\": \"Claim C explicitly states that 'burner can be shipped directly to the customer's door,' which directly verifies a key aspect of assumption A—that a 'burner' is something that can be used temporarily and discarded—by confirming its accessibility and ease of acquisition without restrictions like background checks. This supports the idea of disposability and temporary"
     },
     {
       "a_turn_idx": 4,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the Secretary of Education, not the speaker of turn 4. The speaker in turn 4 is SPEAKER_04, who is discussing policy and energy, not claiming authority related to burners. Turn 8 does not address the speaker's credibility or authority regarding personal use of burners.\",\n  \"reason\": \"Claim C (turn 8) discusses the Secretary of Education and mentions him in passing, which is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the Secretary of Education, as indicated by the context of the discussion about political figures and the mention of 'the president'. However, this reference is unrelated to the earlier assumption A about the speaker's authority or credibility regarding personal actions involving burners.\",\n  \"reason\": \"Claim C discusses the Secretary of Education and mentions him in a political context, which is entirely unrelated to assumption A, which concerns the speaker's credibility in discussing"
     },
     {
       "a_turn_idx": 4,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the speaker' in turn 17, which aligns with SPEAKER_08 from turn 4. However, the topic shifts entirely from personal actions involving burners to political stance on Roe v. Wade, with no connection to authority or credibility regarding burners.\",\n  \"reason\": \"Claim C discusses a completely different topic—waiting 49 years for the overturning of Roe v. Wade—while assumption A concerns the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the speaker' in turn 17, which aligns with SPEAKER_08 from turn 4 (Sean Hannity). However, the claim in turn 17 is about waiting 49 years for the overturning of Roe v. Wade, which is unrelated to the authority or credibility regarding personal actions involving burners.\",\n  \"reason\": \"Claim C discusses a political stance on Roe v. Wade and a personal wait of"
     },
     {
       "a_turn_idx": 4,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to Trump, as established in the prior context of political discussion and interviews. 'The speaker' in assumption A refers to Sean Hannity (SPEAKER_08), while 'the subject' in claim C refers to Trump. These are distinct individuals.\",\n  \"reason\": \"Assumption A concerns Sean Hannity's authority or credibility to discuss his personal use of burners. Claim C discusses Trump's pre-existing knowledge of his"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to Trump, as established in the prior context. 'The speaker' in assumption A refers to Sean Hannity (SPEAKER_08), while 'the subject' in claim C refers to Trump. These are distinct individuals.\",\n  \"reason\": \"Assumption A claims that Sean Hannity has authority or credibility to discuss personal actions involving burners. Claim C states that Trump (the subject) already knew the answer beforehand,"
     },
     {
       "a_turn_idx": 5,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the device described in turn 5, which is the compact launcher by Burner.\",\n  \"reason\": \"Claim C states that the device cannot carry a firearm, which is related to the idea in assumption A about the device being suitable for concealed carry. However, C does not make A explicit; instead, it introduces a new limitation (inability to carry a firearm) rather than verifying the practicality or social acceptability of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the device described in turn 5, which is the compact launcher by Burner.\",\n  \"reason\": \"Claim C states that the device cannot carry a firearm, which is related to the idea in assumption A about the device being suitable for concealed carry. However, C does not explicitly verify or state the core content of A—namely, that the device's smartphone-sized form factor makes it practical and socially acceptable for concealed carry"
     },
     {
       "a_turn_idx": 5,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to potential customers, consistent with the audience addressed in assumption A. 'Burner dealer' refers to the company's authorized partners mentioned in turn 6.\",\n  \"reason\": \"Claim C explicitly states that there is a way to try the product before buying via a burner dealer, which directly verifies the substance of assumption A—that the speaker trusts Burner’s product claims without needing independent verification. The mention of 'try before you buy'"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to potential customers, consistent with the audience addressed in assumption A. 'Burner dealer' refers to the company's authorized partners mentioned in turn 6.\",\n  \"reason\": \"Claim C explicitly states that there is a way to try the product before buying via a burner dealer, which directly verifies the substance of assumption A—that the speaker trusts Burner’s product claims without needing independent verification. The offer to 'try before you buy'"
     },
     {
       "a_turn_idx": 6,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Georgia' and 'law enforcement officers' are clear in context.\",\n  \"reason\": \"Claim C discusses a shortage of law enforcement officers in Georgia's major cities, which is unrelated to the earlier assumption A about trust from law enforcement and government agencies validating product effectiveness. C does not mention the product, trust, validation, or reliability. There is no semantic connection between the shortage of officers and the claim that such trust validates a product’s effectiveness. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Georgia' refers to the state, and 'law enforcement officers' refers to police personnel.\",\n  \"reason\": \"Claim C discusses a shortage of law enforcement officers in Georgia's major cities, which is unrelated to the earlier assumption A about trust from law enforcement and government agencies validating product effectiveness. C does not mention the product, trust, or validation, nor does it support or verify the idea that such trust implies reliability. The topics are entirely different—"
     },
     {
       "a_turn_idx": 7,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to a political figure previously discussed (likely Trump), but this has no connection to the earlier assumption A about 'partner' referring to authorized representatives for trial access.\",\n  \"reason\": \"Claim C discusses a person referred to as 'he' in the context of political figures and media, which is entirely unrelated to the concept of 'partners' as authorized representatives for trial access in assumption A. There is no overlap in subject matter"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to a political figure previously discussed (likely Trump), but this has no connection to the earlier assumption A about 'partner' referring to authorized representatives for trial access.\",\n  \"reason\": \"Claim C discusses a person referred to as 'he' in the context of political figures and media, which is entirely unrelated to assumption A, which concerns the definition of 'partner' as an authorized representative for accessing trials. There is no overlap"
     },
     {
       "a_turn_idx": 8,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_09, and 'incumbent candidate' refers to Brian Kemp, as established in context.\",\n  \"reason\": \"Claim C states that President Trump has endorsed SPEAKER_09 over the incumbent candidate (Brian Kemp), which is unrelated to assumption A, which concerns the President's visible struggle as evidence of unfitness for office. There is no mention of the President's physical condition,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_09, and 'incumbent candidate' refers to Brian Kemp, as established in context. The claim does not relate to the President's visible struggle.\",\n  \"reason\": \"Claim C states that President Trump has endorsed SPEAKER_09 over the incumbent candidate (Brian Kemp), which is unrelated to assumption A, which concerns the President's visible struggle as evidence of unfitness for office"
     },
     {
       "a_turn_idx": 8,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President, while 'Ron' in turn 38 refers to Ron DeSantis. These are distinct individuals.\",\n  \"reason\": \"Claim C states that the speaker believes Ron DeSantis will become president, which is unrelated to assumption A, which concerns the President's visible struggle as evidence of unfitness. The two claims involve different individuals and different assertions—A is about current fitness for office, while C is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President, and 'Ron' in turn 38 refers to Ron DeSantis. These are distinct individuals.\",\n  \"reason\": \"Claim C states that the speaker believes Ron DeSantis will become president, which is unrelated to assumption A, which concerns the President's visible struggle as evidence of unfitness. The two claims involve different individuals and different assertions—A is about current presidential fitness, while C is a"
     },
     {
       "a_turn_idx": 8,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the speaker (SPEAKER_04), and 'the audience' in turn 8 refers to listeners of the show. In turn 25, 'the speaker' refers to SPEAKER_04, and 'everybody' refers to the audience.\",\n  \"reason\": \"Turn 25 expresses encouragement for people to vote early, implying a belief in the importance of civic action. However, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the speaker (SPEAKER_04), and 'the audience' in turn 8 refers to listeners of the show, including those being addressed in turn 25.\",\n  \"reason\": \"Turn 25 claims the speaker encourages people to act regarding voter suppression, but does not address or verify the audience's trust in the speaker's judgment about political performance. While both involve political engagement, the specific assumption about"
     },
     {
       "a_turn_idx": 8,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President. In turn 20, 'President Trump' is mentioned, but the claim is about Trump endorsing the speaker, not about the President being a liability due to cognitive decline.\",\n  \"reason\": \"Claim C (turn 20) discusses President Trump's endorsement of the speaker, which is unrelated to the assumption in A (turn 8) that the President is a liability due to cognitive decline. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President, and 'the speaker' in turn 20 refers to SPEAKER_04. The claim in turn 20 about Trump endorsing the speaker does not address or verify the assumption that the President is seen as a liability due to cognitive decline.\",\n  \"reason\": \"Turn 20 discusses political endorsement and support from President Trump for the speaker, which is unrelated to the claim in turn 8 that"
     },
     {
       "a_turn_idx": 8,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President, and 'Ron' in turn 38 refers to Ron DeSantis. These are distinct individuals.\",\n  \"reason\": \"Claim C states that the speaker believes Ron DeSantis will become president, which is unrelated to assumption A, which claims the Speaker views the current President as a liability due to cognitive decline. The two statements concern different individuals and do not verify or support each other. Therefore, the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the President, and 'Ron' in turn 38 refers to Ron DeSantis. These are distinct individuals.\",\n  \"reason\": \"Claim C states that the speaker believes Ron DeSantis will become president, which is unrelated to assumption A, which claims the Speaker views the President (likely Biden) as a liability due to cognitive decline. The two statements concern different individuals and do not verify or support each other."
     },
     {
       "a_turn_idx": 9,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 9 refers to Speaker 08, who is discussing education through personal guidance. In turn 21, Speaker 04 discusses political endorsement and support for Trump, which is unrelated to the concept of education as guiding or informing others.\",\n  \"reason\": \"Claim C discusses political loyalty and endorsement from Trump, focusing on electoral strategy and partisan alignment. Assumption A concerns the belief that education involves meaningful guidance or informing others. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 9 refers to Speaker 08, who is discussing education through personal guidance. In turn 21, Speaker 04 discusses political endorsement and support for Trump, which is unrelated to the concept of education as guiding or informing others.\",\n  \"reason\": \"Claim C discusses political loyalty and endorsement from Trump, focusing on electoral strategy and partisan alignment. Assumption A concerns the philosophical belief that education involves meaningful guidance or informing. There is"
     },
     {
       "a_turn_idx": 9,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to support a link between 'election laws' and 'education' or 'guiding/informing others'. The subject shifts entirely from education to political strategy and media.\",\n  \"reason\": \"Claim C discusses election laws and political messaging, while assumption A concerns education as guiding or informing people meaningfully. There is no semantic overlap or explicit connection between the two topics. C does not state, imply, or verify any aspect of A, making the relationship clearly unrelated.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A. 'Election laws' in turn 33 refers to political/legal processes around voting, while assumption A concerns education as guidance/information. No shared semantic content.\",\n  \"reason\": \"Claim C discusses election laws and political strategy, specifically referencing media relations and policy responses to Biden's presidency. Assumption A centers on education as a process of meaningful guidance or informing. The topics are entirely distinct, with no overlap in subject"
     },
     {
       "a_turn_idx": 9,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Ron' in turn 38 refers to Ron DeSantis, as established in turn 36.\",\n  \"reason\": \"Claim C (turn 38) states the speaker believes Ron DeSantis will become president, which is unrelated to assumption A (turn 9), which concerns the belief that education involves guiding or informing others meaningfully. There is no overlap in semantic content between the two statements. The topics—education and political"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Ron' in turn 38 refers to Ron DeSantis, as established in turn 36.\",\n  \"reason\": \"Claim C (turn 38) states the speaker believes Ron DeSantis will become president, which is unrelated to assumption A (turn 9), which concerns the belief that education involves guiding or informing others meaningfully. There is no overlap in semantic content between the two claims. The topic shifts entirely from education"
     },
     {
       "a_turn_idx": 9,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 28, 'she' refers to Stacey Abrams, as established in turn 27. The claim 'said it publicly' refers to Stacey Abrams stating her support for HR1 and open voting, which aligns with the idea of public identification of personal positions.\",\n  \"reason\": \"Turn 9 asserts that the speaker views family members as socially significant and worth identifying publicly. Turn 28 states that Stacey Abrams 'said it publicly' regarding her"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 28, 'she' refers to Stacey Abrams, as established in turn 27. The claim 'said it publicly' refers to Stacey Abrams stating her support for HR1 and open voting, which aligns with the public identification of family members in turn 9.\",\n  \"reason\": \"Turn 9 expresses the assumption that the speaker views family members as socially significant and worth identifying publicly. Turn 28 states that Stacey Abrams 'said it"
     },
     {
       "a_turn_idx": 10,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in turn 17 refers to SPEAKER_04, who is not the same person as SPEAKER_08 in turn 10. SPEAKER_08 is the one who claims 'I can't see,' indicating visual impairment. SPEAKER_04 makes no mention of vision or disability.\",\n  \"reason\": \"Turn 17 discusses the speaker's wait for the overturning of Roe v. Wade, which is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in turn 17 refers to SPEAKER_04, who is not the same individual as SPEAKER_08 in turn 10. SPEAKER_08 is the one who claims 'I can't see,' indicating visual impairment. SPEAKER_04 makes no mention of visual impairment or blindness.\",\n  \"reason\": \"Turn 17 discusses the speaker's wait for the overturning of Roe v. Wade, which"
     },
     {
       "a_turn_idx": 10,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to President Trump, and 'you' refers to the speaker in the gubernatorial race. No reference to visual impairment or blindness is present.\",\n  \"reason\": \"Claim C (turn 20) discusses political endorsement and economic policy, with no mention of vision, sight, or disability. Assumption A (turn 10) states the speaker has a visual impairment or blindness. There is no semantic connection between the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to President Trump, and 'you' refers to the speaker in the gubernatorial race. No reference to visual impairment or blindness is present.\",\n  \"reason\": \"Claim C (turn 20) discusses political endorsement and economic policy, with no mention of vision, sight, or any related condition. Assumption A (turn 10) states the speaker has a visual impairment or blindness, which is not addressed,"
     },
     {
       "a_turn_idx": 10,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the speaker in the conversation, not the person with visual impairment mentioned in turn 10. The claim in turn 33 is about the speaker's prior knowledge of an answer regarding political strategy, not about vision or blindness.\",\n  \"reason\": \"Turn 33 discusses the speaker's belief that someone already knew the answer to a political question, specifically about media engagement and policy focus. This is unrelated to the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the speaker in the prior conversation, likely Speaker 05, who is discussing another person's response. The claim in turn 33 is about someone's knowledge of an answer regarding political strategy, not about visual impairment.\",\n  \"reason\": \"Turn 33 discusses the speaker's belief that someone already knew the answer to a question about political strategy, specifically regarding media engagement. This is entirely unrelated to the assumption"
     },
     {
       "a_turn_idx": 10,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to a political figure previously discussed (likely Trump or DeSantis), not the speaker from turn 10 who claims 'I can't see'. No connection is made between 'he' and the visual impairment mentioned in A.\",\n  \"reason\": \"Turn 35 discusses 'he' in the context of political figures and public perception, with no reference to vision, blindness, or sensory impairment. The claim does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to a political figure previously discussed (likely Trump or DeSantis), not the speaker from turn 10 who claims 'I can't see'. No connection is made between 'he' and the visual impairment.\",\n  \"reason\": \"Turn 35 discusses 'he' in the context of political figures and public perception, with no reference to vision or disability. The earlier assumption A (visual impairment) is neither stated"
     },
     {
       "a_turn_idx": 10,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in turn 10 refers to SPEAKER_08; 'the speaker' in turn 36 refers to SPEAKER_04.\",\n  \"reason\": \"Claim C (turn 36) discusses Ron DeSantis's potential for the presidency and his political trajectory, which is entirely unrelated to the earlier assumption A (turn 10) about SPEAKER_08 having"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in turn 10 refers to SPEAKER_08, while 'he' in turn 36 refers to Ron DeSantis.\",\n  \"reason\": \"Claim C (turn 36) discusses Ron DeSantis's potential for the presidency and his available time, which is entirely unrelated to the earlier assumption A (turn 10) that the speaker has a visual impairment or"
     },
     {
       "a_turn_idx": 11,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, consistent with the context. 'Me' in C refers to SPEAKER_04, who is the same speaker as in A.\",\n  \"reason\": \"Claim C states that the speaker believes they earned Trump's endorsement by standing with him in 2016–2018, which implies trust in Trump’s leadership and policies. However, it does not explicitly state or verify the specific assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, consistent with the context. 'Me' in C refers to SPEAKER_04, who is the speaker in both A and C.\",\n  \"reason\": \"Claim C states that the speaker believes they earned Trump's endorsement by standing with him in 2016–2018, which implies trust in Trump’s leadership and policies. However, it does not explicitly state or verify the specific assumption"
     },
     {
       "a_turn_idx": 11,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Ron DeSantis, and 'Trump' refers to Donald Trump. No reference to trust in Trump's economic predictions.\",\n  \"reason\": \"Claim C states that the speaker does not believe Ron DeSantis can succeed even with Trump's endorsement, which is unrelated to the assumption that the speaker trusts Trump's predictions about economic outcomes. There is no mention of economic predictions, trust, or any aspect of Trump's forecasting"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Ron DeSantis, and 'Trump' refers to Donald Trump. No reference to trust in Trump's economic predictions.\",\n  \"reason\": \"Claim C states that the speaker does not believe Ron DeSantis can succeed even with Trump's endorsement, which is unrelated to the assumption that the speaker trusts Trump's predictions about economic outcomes. There is no mention of economic predictions, trust, or any aspect of A in C"
     },
     {
       "a_turn_idx": 11,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'our campaign' in turn 16, which aligns with the broader political effort discussed in turn 11 involving Trump’s rhetoric on taxation and corporate relocation.\",\n  \"reason\": \"Claim C (turn 16) discusses a campaign targeting citizens and addressing economic concerns, which is tangentially related to the idea in A that political rhetoric influences corporate behavior. However, C does not mention taxation, corporate relocation, or the specific causal"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'our campaign' and 'the people', which likely refers to the political campaign in Georgia involving David Perdue; 'people' is used as a collective noun representing voters.\",\n  \"reason\": \"Claim C states that the campaign is bringing political efforts directly to citizens, which aligns loosely with the broader theme of political messaging influencing public perception. However, it does not explicitly address or verify the specific causal relationship in assumption A—that political rhetoric about"
     },
     {
       "a_turn_idx": 11,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the establishment' in turn 16 refers to political elites or governing institutions, which aligns with the broader societal critique implied in turn 11 about public perception of economic indicators.\",\n  \"reason\": \"Claim C explicitly identifies the establishment as the source of public frustration regarding economic issues, which directly connects to assumption A that the public views economic indicators like inflation and gas prices as reliable measures of national health. While C does not repeat the exact phrasing of A"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the establishment' in turn 16 refers to political elites or governing institutions, which aligns with the broader societal critique implied in turn 11 about public perception of economic indicators.\",\n  \"reason\": \"Claim C explicitly identifies the establishment as the source of public frustration regarding economic issues, which directly reflects and expands upon assumption A—the public's reliance on economic indicators like inflation and gas prices as measures of national health. While A focuses on the public's view of"
     },
     {
       "a_turn_idx": 12,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_09 refers to 'the governor' in turn 16, which resolves to Brian Kemp from the prior context in turn 13. 'Our five major cities' refers to the urban centers in Georgia, consistent with the discussion of Atlanta and broader state-level governance.\",\n  \"reason\": \"Turn 16 explicitly states that Georgia is short 1,200 law enforcement officers across its five major cities, directly supporting the assumption in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to Governor Brian Kemp, as established in the context of the Georgia gubernatorial race and prior discussion of his leadership.\",\n  \"reason\": \"Turn 16 explicitly states that Georgia is short 1,200 law enforcement officers across its five major cities, which directly supports and verifies the assumption in turn 12 that law enforcement is viewed as a non-negotiable component of governance. The claim underscores the critical"
     },
     {
       "a_turn_idx": 13,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'everyone' in turn 25 refers to the general public, specifically voters in Georgia, as established in the prior context. 'This idea' refers to the claim about voter suppression mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes people should act ('I'm encouraging everybody up to get') in response to voter suppression, which directly verifies the earlier assumption A that people should assist others during emergencies or crises. The context frames voter suppression as"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'everyone' in turn 25 refers to the general public, specifically voters in Georgia, as established in the prior context about early voting and the Georgia primary.\",\n  \"reason\": \"Claim C states that the speaker encourages people to act ('get out') in response to perceived voter suppression, which aligns with the core idea in assumption A that people should assist others during crises—here, the crisis being voter suppression. While C does not explicitly use the phrase '"
     },
     {
       "a_turn_idx": 13,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Ron DeSantis, who is identified as the speaker's governor. This contradicts assumption A, which claims the speaker trusts their own assessment of Governor Brian Kemp’s performance.\",\n  \"reason\": \"Claim C explicitly identifies Ron DeSantis as the speaker's governor, which directly contradicts assumption A, where the speaker expresses skepticism about Governor Brian Kemp’s performance. The two governors are distinct individuals, and the shift from"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Ron DeSantis, who is identified as the speaker's governor. This contradicts assumption A, which states the speaker trusts their own assessment of Governor Brian Kemp’s performance.\",\n  \"reason\": \"Claim C explicitly identifies Ron DeSantis as the speaker's governor, which directly contradicts assumption A, where the speaker expresses skepticism about Governor Brian Kemp’s performance. The two governors are distinct individuals, and the shift from"
     },
     {
       "a_turn_idx": 13,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'race' in turn 42 refers to the political race in New Hampshire involving Gail Hough Brown, as established in the surrounding context.\",\n  \"reason\": \"Claim C states that 'race is a relevant factor in identifying political affiliation,' which is a general statement about political races and ideology. However, it does not explicitly address or verify the earlier assumption A, which is that 'watching political races is relevant to civic engagement.' While both involve political races"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 42 refers to Gail Hough Brown, as established in turn 41. The term 'race' in turn 42 refers to the political contest involving Gail Hough Brown, not the racial concept.\",\n  \"reason\": \"Claim C (turn 42) discusses a political race involving a candidate identified as a conservative, emphasizing her background and policy positions. However, it does not address or verify the idea that"
     },
     {
       "a_turn_idx": 13,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to audience members, as established by the context of civic engagement and voting.\",\n  \"reason\": \"Claim C suggests audience members should check in before Election Day, which relates to civic participation but does not explicitly state or verify the specific assumption that audience members share interest in Georgia politics and racing events. While the context of Georgia's primary implies relevance to the audience, the claim C focuses on voter engagement rather than confirming shared interests."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to audience members, as established by the context of civic engagement and voter participation.\",\n  \"reason\": \"Turn 30 suggests audience members should check in before Election Day, which relates to civic involvement and political engagement. However, it does not explicitly state or verify the specific assumption from turn 13—that audience members share interest in Georgia politics and racing events. While the topic of Georgia politics is present, the claim about"
     },
     {
       "a_turn_idx": 13,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'audience members' in C refers to listeners of the show, distinct from the Georgia political context in A.\",\n  \"reason\": \"Claim C states that audience members can participate by calling in, which is unrelated to the assumption that audience members share interest in Georgia politics and racing events. There is no mention of Georgia politics, racing, or shared interests in C. The topics are entirely different, and C does not verify, support, or even reference"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'audience members' in C refers to listeners of the show, distinct from the political focus in A.\",\n  \"reason\": \"Claim C states that audience members can participate by calling in, which is unrelated to the assumption A that audience members share interest in Georgia politics and racing events. There is no mention of Georgia politics, racing, or shared interests in C. The topics are entirely different, and C does not verify, support, or even reference"
     },
     {
       "a_turn_idx": 14,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to SPEAKER_04 and their team, as established in prior context. 'What I see out here in the field' refers to firsthand observations made during campaigning.\",\n  \"reason\": \"Claim C explicitly states there is a gap between the speaker's on-the-ground observations ('what I see out here in the field') and the current polling data. This directly verifies the substance of assumption A, which asserts that polling data"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to SPEAKER_04 and their team, consistent with the context of field observations in Georgia.\",\n  \"reason\": \"Claim C explicitly states there is a gap between the speaker's on-the-ground observations ('what I see out here in the field') and the current polling data, which directly verifies the substance of assumption A—that polling data from reputable Georgia-based analysts should be trusted over anonymous or unverified sources. The gap"
     },
     {
       "a_turn_idx": 14,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'him' in turn 21 as President Trump, and 'I' refers to SPEAKER_04 themselves. No reference to media coverage, public perception, or accuracy of reporting.\",\n  \"reason\": \"Claim C discusses the speaker's belief in earning Trump's endorsement through past support in 2016–2018, which is unrelated to the earlier assumption A about media coverage influencing public perception and requiring accuracy."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 21 refers to Donald Trump, consistent with prior context.\",\n  \"reason\": \"Claim C asserts that the speaker believes they earned Trump's endorsement due to standing with him in 2016–2018. Assumption A, however, concerns media coverage influencing public perception and requiring accuracy. There is no overlap in subject matter or semantic content between the two statements. Claim C does not address media accuracy,"
     },
     {
       "a_turn_idx": 14,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 25, 'this idea' refers to the claim about voter suppression mentioned in prior turns; 'everyone' and 'get' refer to voters being encouraged to participate.\",\n  \"reason\": \"Claim C expresses concern about voter suppression and urges people to act, which is related to the broader theme of electoral fairness and public engagement. However, it does not explicitly address or verify the specific assumption in A—that media coverage influences public perception and must be accurate. While both involve"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04's 'this idea' in turn 25 refers to the claim about voter suppression mentioned earlier in the conversation, specifically the discussion around early voting and potential suppression tactics in Georgia.\",\n  \"reason\": \"Claim C expresses concern about voter suppression and encourages people to act, which is related to the broader theme of electoral fairness discussed in the context. However, it does not explicitly verify or state the specific belief from assumption A—that media coverage influences public perception and"
     },
     {
       "a_turn_idx": 14,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the political figure previously discussed (likely Trump), and 'election laws' is mentioned as a topic of interest, though not directly tied to media accuracy or influence on public perception.\",\n  \"reason\": \"Claim C mentions that 'election laws' are central to the discussion, which is only weakly related to assumption A, which centers on media coverage influencing public perception and requiring accuracy. While both relate to elections, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the political figure previously discussed (likely Trump), and 'election laws' is mentioned as a topic of interest, though not directly tied to media accuracy or influence on public perception.\",\n  \"reason\": \"Claim C mentions 'election laws' as central to the discussion, which is only weakly related to assumption A, which centers on media coverage influencing public perception and requiring accuracy. While both relate to elections, C does not"
     },
     {
       "a_turn_idx": 14,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Ron DeSantis' as 'my governor' and 'he' in turn 36, which resolves to Ron DeSantis. No mention of media coverage, election influence, or accuracy of reporting.\",\n  \"reason\": \"Claim C discusses Ron DeSantis's potential for the presidency and his available time, which is unrelated to assumption A about media coverage influencing public perception and requiring accuracy. There is no overlap in semantic content,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Ron DeSantis, as established by context (SPEAKER_04's prior mention of 'my governor' and 'congressman').\",\n  \"reason\": \"Claim C (turn 36) discusses Ron DeSantis's potential to become president and asserts he has 'plenty of time,' which is unrelated to assumption A (turn 14), which concerns media coverage influencing public perception and"
     },
     {
       "a_turn_idx": 14,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 38 refers to Ron DeSantis, as established in turn 36. 'Ron' and 'he' are coreferential.\",\n  \"reason\": \"Claim C states that the speaker believes Ron DeSantis will become president, which is a future prediction about political success. Assumption A, however, is about media coverage influencing public perception and requiring accuracy. There is no semantic connection between believing someone will become president and the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Ron' in turn 38 refers to Ron DeSantis, as established in turn 36.\",\n  \"reason\": \"Claim C (turn 38) expresses belief that Ron DeSantis will become president, which is unrelated to assumption A (turn 14), which concerns media coverage influencing public perception and the need for accuracy. There is no overlap in topic, content, or logical connection between the two statements. Thus,"
     },
     {
       "a_turn_idx": 14,

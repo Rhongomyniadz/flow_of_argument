@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_03, who is the speaker in turn 35. No other coreference issues.\",\n  \"reason\": \"Turn 43 mentions that the speaker (SPEAKER_03) has been on KVRE and worked at a radio station, which implies public engagement and media presence, but does not address or verify the claim in turn 35 that the speaker has the authority to fire"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in A refers to SPEAKER_03, who is also the subject in C.\",\n  \"reason\": \"Claim C (turn 43) states that the speaker has been on KVRE and worked at the radio station, which is unrelated to the authority to fire others. There is no mention, implication, or verification of the speaker having the power to fire individuals. The content of C does not support, verify, or even"
     },
     {
       "a_turn_idx": 35,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 47 refers to the speaker (SPEAKER_03), and 'Arkansans' refers to people from Arkansas, likely including the speaker. No coreference resolves to the earlier assumption about trusting judgment.\",\n  \"reason\": \"Turn 47 expresses enthusiasm about an Arkansan serving as chair, which is unrelated to the earlier assumption (turn 38) that the speaker trusts their own judgment about political intentions based on"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 47 refers to the speaker (SPEAKER_03), and 'Arkansans' refers to people from Arkansas, likely including the speaker. However, the claim in turn 47 does not address trust in judgment about political intentions or reliance on public information.\",\n  \"reason\": \"Turn 47 expresses enthusiasm about an Arkansan serving as chair of a committee, which is unrelated to the assumption in turn 3"
     },
     {
       "a_turn_idx": 38,
@@ -3321,7 +3321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to Speaker_03 (Congressman Westman), as established in the prior exchange. The phrase 'I'm giving you a little time to think about it' directly references the listener (Speaker_03) and indicates a deliberate pause for reflection.\",\n  \"reason\": \"Claim C explicitly states that the speaker is allowing the listener time to think before responding, which directly supports and verifies the substance of assumption A—that future"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to Speaker_03 (Congressman Westman), as established in the prior exchange. The phrase 'I'm giving you a little time to think about it' directly references the listener (Speaker_03) and indicates a deliberate pause for reflection.\",\n  \"reason\": \"Claim C explicitly states that the speaker is allowing the listener time to think before responding, which directly supports and clarifies the earlier assumption A—that future"
     },
     {
       "a_turn_idx": 42,
@@ -3542,11 +3542,11 @@
       "claim_text": "The committee shares jurisdiction with another body over the Forest Service.",
       "overlap_score": 2,
       "c_time": 1801.055,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our committee' in turn 46 refers to the natural resources committee mentioned in turn 44. The phrase 'joint jurisdiction over the forest service' explicitly confirms the shared jurisdiction aspect of the committee.\",\n  \"reason\": \"Claim C explicitly states that the natural resources committee has joint jurisdiction over the Forest Service, which directly verifies the substance of assumption A — that the natural resources committee is a recognized institutional body with defined jurisdictional authority. The mention of 'joint"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'our committee' in turn 46 refers to the natural resources committee mentioned in turn 44.",
+      "reason": "Claim C explicitly states that the natural resources committee has joint jurisdiction over the Forest Service, which directly verifies the substance of assumption A—that the natural resources committee is a recognized institutional body with defined jurisdiction. The statement is clear, specific, and confirms the committee's formal role, making it a direct and explicit verification of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our committee' in turn 46 refers to the natural resources committee mentioned in turn 44.\",\n  \"reason\": \"Claim C explicitly states that the natural resources committee has joint jurisdiction over the Forest Service, which directly verifies the substance of assumption A—that the natural resources committee is a recognized institutional body with defined jurisdiction. The statement is clear, specific, and confirms the committee's formal role, making it a direct and explicit verification of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 44,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 47 refers to the committee's jurisdiction and responsibilities described in turn 46.\",\n  \"reason\": \"Turn 47 explicitly states that the situation is 'never ending' and 'it's got to be' complex, directly verifying the assumption in turn 46 that involvement in such issues is inherently engaging due to their complexity and breadth. The claim clearly captures the substance of the earlier assumption by emphasizing the continuous and intricate nature of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 47 refers to the committee's jurisdiction and responsibilities described in turn 46, particularly the extensive and overlapping areas of authority including water rights, public lands, tribal issues, and energy production.\",\n  \"reason\": \"Turn 47 explicitly states 'it's never ending' and 'it's got to be,' directly verifying the complexity and continuous nature of the committee's work, which aligns with the assumption in turn 46"
     },
     {
       "a_turn_idx": 46,
@@ -4821,7 +4821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my district' in turn 62 refers to Jefferson County, as established in turn 63 where Speaker 03 explicitly states that Jefferson County is within their district.\",\n  \"reason\": \"Claim C explicitly states that duck hunting in Jefferson County is 'probably the best in the world,' which directly verifies the assumption in A that duck hunting is a legitimate and valuable experience worth including on personal lists. The claim not only affirms the value of duck hunting in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my district' in turn 62 refers to Jefferson County, as established in turn 63 where Speaker 03 explicitly states that Jefferson County is within their district.\",\n  \"reason\": \"Claim C explicitly states that duck hunting in Jefferson County is 'probably the best in the world,' which directly verifies the assumption in A that duck hunting is a legitimate and valuable experience worth including on personal lists. The claim not only affirms the value of duck hunting but"
     },
     {
       "a_turn_idx": 62,
@@ -4836,7 +4836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my district' in turn 63 refers to the same geographic area previously mentioned (the fourth district), which includes Jefferson County. 'The Delta' in turn 62 is implicitly linked to the broader region of the speaker's district, and turn 63 explicitly confirms that Jefferson County—within that district—has excellent duck hunting.\",\n  \"reason\": \"Turn 63 directly and explicitly verifies the substance of turn 62 by stating that Jefferson County"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my district' in turn 62 refers to Jefferson County, as established in turn 63 where Speaker 03 explicitly states that Jefferson County is within their district and has the best duck hunting in the world.\",\n  \"reason\": \"Turn 63 explicitly confirms that Jefferson County, which is part of the speaker's district, has 'probably the best duck hunting in the world.' This directly verifies the assumption in turn 62 that 'the Delta"
     },
     {
       "a_turn_idx": 62,
@@ -4866,7 +4866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'That's true' refers back to the statement in turn 62 about the Delta being on the speaker's list for recreation, specifically duck hunting.\",\n  \"reason\": \"Claim C explicitly confirms the prior assumption A by affirming 'That's true' in direct response to the mention of the Delta being on the speaker's list of recreational interests. This directly verifies the substance of A—namely, that the speaker includes the Delta among their"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'That's true' refers back to the statement in turn 62 about the Delta being on the speaker's list for recreation, specifically duck hunting.\",\n  \"reason\": \"Claim C explicitly confirms the prior assumption A by affirming 'That's true' in response to the mention of the Delta being on the speaker's list of recreational interests. This directly verifies the substance of A—namely, that the speaker includes the Delta among their listed"
     },
     {
       "a_turn_idx": 62,
@@ -4881,7 +4881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_03 throughout. 'My district' refers to the fourth district mentioned earlier. 'That's true' refers to the idea that the Delta is on the speaker's list of recreational interests.\",\n  \"reason\": \"Claim C mentions 'So I'm up the four,' which implies the speaker has been to four places, but it does not explicitly confirm they have already visited them. Instead, it suggests they are considering or planning to"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_03 throughout. 'My district' refers to the fourth district mentioned earlier. 'That's true' refers to the idea that the Delta is on the speaker's list of recreational interests.\",\n  \"reason\": \"Claim C mentions 'I'm up the four,' which implies the speaker has visited four places, but it does not explicitly confirm they have already been to four specific locations. Instead, it suggests a personal connection to four"
     },
     {
       "a_turn_idx": 62,
@@ -4926,7 +4926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 64 refers to SPEAKER_03, consistent with prior turns. 'Up the four' implies the speaker has visited four locations.\",\n  \"reason\": \"Claim C states the speaker has been to four places, which supports the assumption that they have firsthand experience relevant to judging duck hunting quality. While it does not explicitly mention duck hunting or expertise, the context of recreation and travel to national parks (including Jefferson County, mentioned in A"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 64 refers to SPEAKER_03, consistent with prior turns. 'Up the four' implies the speaker has visited four locations.\",\n  \"reason\": \"Claim C states the speaker has been to four places, which supports the assumption that they have firsthand experience relevant to judging duck hunting quality. While it does not explicitly mention duck hunting or expertise, the context of recreation and prior travel to specific locations (like the Delta and Jefferson County"
     },
     {
       "a_turn_idx": 64,
@@ -4956,7 +4956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 71 refers to 'large national parks,' which aligns with the collective reference to 'our national parks' in turn 65. 'All over the country' in turn 71 reinforces the broad applicability implied in turn 65.\",\n  \"reason\": \"Claim C states that there are significant problems with large national parks, which supports the idea that collective discussion of national parks is necessary when individual choice is difficult—because"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 71 refers to 'large national parks,' which aligns with the collective reference to 'our national parks' in turn 65.\",\n  \"reason\": \"Claim C states that there are significant problems with large national parks, which supports the idea that collective discussion of national parks is necessary when individual selection is difficult—because the challenges (e.g., congestion, housing, bureaucracy) are systemic across many parks. While C does not explicitly"
     },
     {
       "a_turn_idx": 65,
@@ -4971,7 +4971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these parks' in turn 72 refers to national parks mentioned earlier, particularly Glacier National Park and others discussed in context.\",\n  \"reason\": \"Claim C discusses construction costs within national parks being four times higher due to remoteness and regulations, which relates to the logistical challenges of managing national parks. However, it does not explicitly address or verify the assumption in A—that it is appropriate to speak about national parks collectively when personal selection is difficult. While both statements concern"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these parks' in turn 72 refers to national parks mentioned earlier, particularly Glacier National Park and others discussed in context.\",\n  \"reason\": \"Claim C discusses construction costs within national parks being four times higher due to remoteness and regulations, which relates to the logistical challenges of managing national parks. However, it does not explicitly address or verify the assumption in A—that it is appropriate to speak about national parks in collective terms when personal selection is difficult. While both"
     },
     {
       "a_turn_idx": 65,
@@ -4986,7 +4986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to Speaker_03, who is the chair of the committee mentioned in turn 65.\",\n  \"reason\": \"Turn 66 explicitly identifies Hot Springs National Park as 'the jewel of the park service,' which directly verifies the implicit value and significance of the park within the National Park Service. This aligns with the assumption in turn 65 that the speaker’s role as chair grants them access and credibility,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to Speaker_03, who is the chair of the committee mentioned in turn 65.\",\n  \"reason\": \"Turn 66 explicitly identifies Hot Springs National Park as 'the jewel of the park service,' which directly verifies the implicit value and significance of the park within the National Park Service. This aligns with the assumption in turn 65 that the speaker's role as chair grants them access and credibility,"
     },
     {
       "a_turn_idx": 66,
@@ -5001,7 +5001,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these parks' in turn 72 refers to the large national parks mentioned earlier, such as Glacier National Park and Yellowstone, which were discussed in the context of worker housing and access challenges.\",\n  \"reason\": \"Claim C discusses construction costs being four times higher inside national parks due to remoteness and regulations, which indirectly reflects differential treatment or prioritization of resources in certain parks. However, it does not explicitly state or verify that the National Park Service values certain parks"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 72 refers to the regulatory bodies overseeing national parks, which aligns with the National Park Service mentioned in turn 66.\",\n  \"reason\": \"Turn 72 discusses elevated construction costs within national parks due to remoteness and regulations, implying differential treatment or prioritization of certain parks. However, it does not explicitly state or verify that the National Park Service values certain parks more highly than others—this is an inference rather than a"
     },
     {
       "a_turn_idx": 66,
@@ -5016,7 +5016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these massive parks' in turn 71 refers to large national parks mentioned earlier, such as Glacier National Park and Yellowstone, which are discussed in context.\",\n  \"reason\": \"Claim C states that there are significant problems associated with large national parks, which aligns with the broader implication in assumption A that the National Park Service prioritizes certain parks (implying some are larger or more complex). However, C does not explicitly state or verify that the NPS"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these massive parks' in turn 71 refers to large national parks mentioned earlier, such as Glacier National Park and Yellowstone, which are consistent with the context of the National Park Service's operations.\",\n  \"reason\": \"Claim C states that there are significant problems associated with large national parks, which aligns with the broader implication in assumption A that the National Park Service prioritizes certain parks (like Hot Springs and Glacier). However, C does not explicitly state or verify"
     },
     {
       "a_turn_idx": 66,
@@ -5106,7 +5106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses traffic impact from a policy change related to river access, while assumption A refers to the designation of Hot Springs National Park as a 'jewel' within the Park Service, which is unrelated.\",\n  \"reason\": \"Claim C discusses the potential for doubled traffic due to a proposed policy restricting personal vehicle access to river put-ins, which is entirely unrelated to the idea that naming a park a 'jewel' reflects a widely accepted or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_03, consistent with A.\",\n  \"reason\": \"Claim C discusses a policy's impact on traffic due to vehicle trips, while assumption A concerns the recognition of a park as a 'jewel' reflecting widespread or authoritative evaluation. The topics are entirely unrelated—C addresses logistical and economic impacts of a transportation policy, whereas A is about symbolic or evaluative status of a park. There is"
     },
     {
       "a_turn_idx": 67,
@@ -5136,7 +5136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in 'although there's some housing in the parks' refers to housing for workers within the park, as established in the prior context about worker housing.\",\n  \"reason\": \"Claim C explicitly states that some housing exists within the park itself, which directly verifies the implicit acknowledgment in assumption A that stories from visitors or locals at Glacier International Park often involve systemic issues like worker housing—implying such housing is a known and recurring feature. The statement in C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in 'although there's some housing in the parks' refers to housing for workers within the park, as established in the prior sentence about workers living outside the park.\",\n  \"reason\": \"Claim C explicitly states that some housing exists within the park itself, which directly verifies the implicit acknowledgment in assumption A that stories from visitors or locals at Glacier International Park involve consistent patterns related to park operations—here, worker housing. The statement confirms a factual condition (housing"
     },
     {
       "a_turn_idx": 70,
@@ -5151,7 +5151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 74 refers to SPEAKER_02, the listener, but does not reference or verify the belief that the listener will visit Glacier International Park.\",\n  \"reason\": \"Claim C (turn 74) is a general offer to assist ('let us know if you need anything') and does not mention Glacier International Park or the listener's future visit. It is unrelated to assumption A, which specifically asserts the listener will visit the park"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 74 refers to the listener (SPEAKER_02), who was previously mentioned as visiting Glacier International Park in turn 70. However, the claim in turn 74 does not address or verify the belief about the listener visiting the park.\",\n  \"reason\": \"Turn 70 expresses the assumption that the listener will visit Glacier International Park. Turn 74, however, is a general invitation to contact the speaker"
     },
     {
       "a_turn_idx": 70,
@@ -5166,7 +5166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to the listener(s) who will visit Glacier International Park; 'the previous speaker' in turn 74 refers to SPEAKER_03, whose narrative in turns 68–72 provides the representative example.\",\n  \"reason\": \"Turn 74, 'I agree with the previous speaker,' explicitly affirms alignment with the narrative presented by SPEAKER_03, which includes the representative case of federal"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to the listener(s) who will hear a story at Glacier International Park; 'the previous speaker' in turn 74 refers to SPEAKER_03, who shared the narrative in turns 68–72.\",\n  \"reason\": \"Turn 70 asserts that a story similar to the one just shared will be told at Glacier International Park, implying the narrative is representative or typical. Turn 74"
     },
     {
       "a_turn_idx": 71,
@@ -5181,7 +5181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in the context refers to regulatory bodies managing national parks, and 'these parks' refers to large national parks mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that construction costs inside national parks are four times higher than elsewhere, which directly verifies the substance of assumption A—that large national parks create systemic challenges—by providing a specific, concrete example of such a challenge (high construction costs due to remoteness and regulations). The claim is both direct and un"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in the context refers to regulatory bodies managing national parks, and 'these parks' refers to large national parks mentioned in turn 71.\",\n  \"reason\": \"Claim C explicitly states that construction costs inside national parks are four times higher than elsewhere, which directly verifies the key point made in assumption A about systemic challenges arising from large national parks. The causal explanation (remote locations and regulations) further strengthens the alignment. The statement in C is clear, direct"
     }
   ]
 }

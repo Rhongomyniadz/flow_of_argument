@@ -32,11 +32,11 @@
       "claim_text": "The current weather condition is more than just occasional flurries.",
       "overlap_score": 2,
       "c_time": 531.567,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'it' in turn 15 refers to the current weather condition.",
-      "reason": "Claim C discusses the weather being more than occasional flurries, which is unrelated to the assumption A about audience trust in live vs. pre-recorded broadcasts. There is no overlap in semantic content or relevance between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'it' in turn 15 refers to the current weather condition.\",\n  \"reason\": \"Claim C discusses the weather being more than occasional flurries, which is unrelated to the assumption A about audience trust in live vs. pre-recorded broadcasts. There is no overlap in semantic content or relevance between the two statements.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the entailment judgment; 'it' in turn 15 refers to the weather condition.\",\n  \"reason\": \"Claim C discusses the current weather being more than occasional flurries, which is unrelated to the assumption about audience trust in live vs. pre-recorded broadcasts. There is no mention of audience perception, trust, or media format in C. The topics are entirely distinct, so C does not support, verify, or relate to A.\""
     },
     {
       "a_turn_idx": 0,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 6 refers to 'lemon-flavored Girl Scout cookies', which were previously mentioned in turn 2 and 5.\",\n  \"reason\": \"Claim C explicitly states that lemon-flavored Girl Scout cookies are 'perfect with tea,' which implies their cultural familiarity and desirability as a snack item—directly supporting the expectation in assumption A that the audience recognizes them as a desirable and culturally familiar snack. While C does not explicitly state '"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 6 refers to 'lemon-flavored Girl Scout cookies', which were previously mentioned in turn 2 and 5. 'Girl Scout cookies' is the subject of both A and C.\",\n  \"reason\": \"Claim C explicitly mentions 'Girl Scout cookies' and their lemon flavor, aligning with the cultural familiarity and desirability implied in assumption A. By stating that lemon-flavored Girl Scout cookies are 'perfect with tea' and"
     },
     {
       "a_turn_idx": 1,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 6 refers to SPEAKER_06, who previously mentioned Girl Scout cookies in turn 1. 'Girl Scout cookies' is the subject of both claims.\",\n  \"reason\": \"Turn 6 explicitly affirms a positive personal preference for Girl Scout cookies, specifically highlighting their lemon flavor and pairing with tea. This directly verifies the cultural familiarity and desirability implied in turn 1, where the speaker assumes the audience recognizes Girl Scout cookies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 6 refers to SPEAKER_06, who previously mentioned Girl Scout cookies in turn 1. 'Girl Scout cookies' is the subject of both claims.\",\n  \"reason\": \"Turn 6 explicitly affirms a positive personal preference for Girl Scout cookies, specifically mentioning their lemon variety and pairing them with tea. This directly verifies the cultural familiarity and desirability implied in turn 1, where the speaker assumes the audience recognizes Girl Scout"
     },
     {
       "a_turn_idx": 1,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Quincy' refers to the same location in both A and C.\",\n  \"reason\": \"Claim C discusses cross-state insurance access in Quincy, while assumption A concerns viewers understanding physical reactions during a political event. The topics are entirely unrelated—C addresses healthcare policy and geographic insurance access, whereas A focuses on observational interpretation of political behavior. There is no overlap in semantic content, and C does not state, verify, or relate to the idea that viewers"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Quincy' refers to the same location in both A and C.\",\n  \"reason\": \"Claim C discusses cross-state insurance access in Quincy as a practical necessity, while assumption A concerns viewers understanding political figures' physical reactions during formal events like the State of the Union. The topics are entirely unrelated—C addresses healthcare policy and geographic access to insurance, whereas A focuses on observational interpretation of nonverbal cues in political settings. There is no overlap in"
     },
     {
       "a_turn_idx": 9,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Representative Darren LeHood, while 'the speaker' in assumption A refers to SPEAKER_04. These are different individuals.\",\n  \"reason\": \"Claim C discusses the political viability of parental school choice in Congress, which is unrelated to assumption A, which asserts that the speaker has authority or control over scheduling decisions. There is no overlap in subject matter, context, or implied power. The claims are"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Representative Darren LeHood, who is not the same individual as SPEAKER_04 in turn 13.\",\n  \"reason\": \"Claim C discusses the political viability of parental school choice in Congress, which is unrelated to the earlier assumption A that the speaker has authority or control over scheduling decisions. There is no overlap in subject matter, context, or implied power structure. The speaker in C is a"
     },
     {
       "a_turn_idx": 13,
@@ -887,11 +887,11 @@
       "claim_text": "The speaker questions whether the idea of parental freedom in school selection has political viability in Congress.",
       "overlap_score": 2,
       "c_time": 811.261,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_06, who is discussing policy, not sensory perception.",
-      "reason": "Claim C discusses political viability of parental school choice in Congress, which is entirely unrelated to assumption A, which concerns the reliability of the speaker's sensory perception of snow accumulation. There is no overlap in semantic content, and C neither states nor verifies A. The topics are distinct and unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_06, who is discussing policy, not sensory perception.\",\n  \"reason\": \"Claim C discusses political viability of parental school choice in Congress, which is entirely unrelated to assumption A, which concerns the reliability of the speaker's sensory perception of snow accumulation. There is no overlap in semantic content, and C neither states nor verifies A. The topics are distinct and unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Representative Darren LaHood, while 'the speaker' in assumption A refers to SPEAKER_06, who observed snow accumulation.\",\n  \"reason\": \"Claim C discusses the political viability of parental school choice in Congress, which is entirely unrelated to assumption A, which concerns the reliability of sensory perception (noticing snow). There is no overlap in semantic content, and C neither states nor verifies A. The"
     },
     {
       "a_turn_idx": 14,
@@ -965,8 +965,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'the speaker' in C refers to SPEAKER_06, consistent with A.",
-      "reason": "Claim C (turn 25) discusses the speaker's belief that the listener supports private school choice, which is unrelated to assumption A (turn 16), which concerns expectations or values regarding formal politeness in communication. There is no overlap in semantic content or logical connection between the two claims.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_06, consistent with A.\",\n  \"reason\": \"Claim C (turn 25) discusses the speaker's belief that the listener supports private school choice, which is unrelated to assumption A (turn 16), which concerns expectations or values regarding formal politeness in communication. There is no overlap in semantic content or logical connection between the two claims.\"\n}\n```"
+      "reason": "Claim C (turn 25) discusses the speaker's belief about the listener's support for private school choice, which is unrelated to assumption A (turn 16), which concerns expectations or values regarding formal politeness in communication. There is no overlap in semantic content or logical connection between the two claims.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_06, consistent with A.\",\n  \"reason\": \"Claim C (turn 25) discusses the speaker's belief about the listener's support for private school choice, which is unrelated to assumption A (turn 16), which concerns expectations or values regarding formal politeness in communication. There is no overlap in semantic content or logical connection between the two claims.\"\n}\n```"
     },
     {
       "a_turn_idx": 16,
@@ -1175,8 +1175,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'the speaker' in both A and C refers to SPEAKER_06.",
-      "reason": "Claim C (turn 25) discusses the speaker's belief about private school choice, which is unrelated to assumption A (turn 16), which concerns the appropriateness of discussing politics with a representative after a major national event. There is no overlap in semantic content or logical connection between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in both A and C refers to SPEAKER_06.\",\n  \"reason\": \"Claim C (turn 25) discusses the speaker's belief about private school choice, which is unrelated to assumption A (turn 16), which concerns the appropriateness of discussing politics with a representative after a major national event. There is no overlap in semantic content or logical connection between the two statements.\"\n}\n```"
+      "reason": "Claim C (turn 25) discusses private school choice and the speaker's belief in it, which is unrelated to assumption A (turn 16), which concerns the appropriateness of discussing politics with a representative after a major national event. There is no overlap in semantic content or logical connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in both A and C refers to SPEAKER_06.\",\n  \"reason\": \"Claim C (turn 25) discusses private school choice and the speaker's belief in it, which is unrelated to assumption A (turn 16), which concerns the appropriateness of discussing politics with a representative after a major national event. There is no overlap in semantic content or logical connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 16,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_06, consistent with turn 16.\",\n  \"reason\": \"Turn 16 expresses trust that the interview details (e.g., timing, guest) are confirmed and will proceed as planned. Turn 25 introduces a completely different topic—political viability of school choice—without referencing or verifying any prior assumption about scheduling, confirmation, or procedural readiness. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_06, consistent with turn 16.\",\n  \"reason\": \"Turn 16 expresses trust that the interview details (e.g., timing, guest) have been confirmed and will proceed as planned. Turn 25 introduces a completely different topic—political viability of school choice—without referencing or verifying any prior confirmation about the interview schedule or logistics. There is no overlap in"
     },
     {
       "a_turn_idx": 16,
@@ -2016,7 +2016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'investing in technical and vocational education,' which is the central subject of assumption A. 'It' in the context of 'it has to be part of the fabric of America' and 'if we want to keep this economy going' clearly refers to vocational and technical education.\",\n  \"reason\": \"Claim C explicitly states that investing in technical and vocational education is aligned with maintaining economic vitality, which directly verifies the core idea in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'investing in technical and vocational education,' which is the central subject of assumption A. 'It' in the context of 'it has to be part of the fabric of America' and 'if we want to keep this economy going' clearly refers to vocational and technical education.\",\n  \"reason\": \"Claim C explicitly states that investing in technical and vocational education aligns with maintaining economic vitality, which directly verifies the core idea in"
     },
     {
       "a_turn_idx": 27,
@@ -2031,7 +2031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'engaging youth in trades and technical education,' which is the central topic introduced in assumption A. 'It' in A refers to vocational and technical education, which is explicitly linked to long-term societal benefits in C.\",\n  \"reason\": \"Claim C explicitly states that engaging youth in trades and technical education will yield long-term benefits for society, which directly verifies the core substance of assumption A—that restoring vocational and technical education is essential"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'engaging youth in trades and technical education,' which is the central topic introduced in assumption A. 'It' in A refers to vocational and technical education, which is explicitly linked to workforce development and economic opportunity.\",\n  \"reason\": \"Claim C explicitly states that engaging youth in trades and technical education will yield long-term benefits for society, which directly verifies the core substance of assumption A—that restoring vocational and technical education is essential for"
     },
     {
       "a_turn_idx": 27,
@@ -2106,7 +2106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the promises made by Obamacare' refers to the broader policy initiative, and 'my constituencies' refers to the speaker's constituents.\",\n  \"reason\": \"Claim C (turn 36) states that the promises of Obamacare have not been fulfilled for the speaker's constituents, which contradicts assumption A (turn 27), which expresses trust in the credibility of a pledge made by two American workers and 400 companies regarding job and education opportunities"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the promises made by Obamacare' refers to the broader set of commitments associated with the Affordable Care Act.\",\n  \"reason\": \"Claim C (turn 36) states that the promises of Obamacare have not been fulfilled for the speaker's constituents, which contradicts assumption A (turn 27), which expresses trust in the credibility of a pledge made by two American workers and 400 companies related to education and job opportunities. The topics are"
     },
     {
       "a_turn_idx": 27,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Representative Darren Lohood' is a named individual and 'you' refers to Speaker_01.\",\n  \"reason\": \"Claim C (turn 37) states that Representative Darren Lohood is short on time, which is unrelated to assumption A (turn 32), which concerns the speaker's belief that their position aligns with broader societal values on fairness and responsibility. There is no semantic connection between the two statements. Claim"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Representative Darren Lohood' is a named individual and 'you' in turn 37 refers to Speaker_01.\",\n  \"reason\": \"Claim C (turn 37) states that Representative Darren Lohood is short on time, which is unrelated to assumption A (turn 32), which concerns the speaker's belief that their position aligns with broader societal values on fairness and responsibility. There is no semantic connection between"
     },
     {
       "a_turn_idx": 32,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 38 refers to the audience and hosts (SPEAKER_06 and listeners), but does not relate to the earlier assumption about alignment with societal values regarding fairness and responsibility.\",\n  \"reason\": \"Turn 38 expresses appreciation for being on the show and acknowledges the audience, but does not address or verify the assumption that the speaker's position aligns with broader societal values on fairness and responsibility. There is no mention of fairness,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 38 refers to the audience and hosts.\",\n  \"reason\": \"Claim C (turn 38) expresses appreciation for being on the show and with the audience, which is unrelated to assumption A, which concerns alignment with societal values on fairness and responsibility in drug pricing. There is no mention of policy, fairness, accountability, or societal values in C. Thus, C does not support, verify, or relate to A.\""
     },
     {
       "a_turn_idx": 33,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to Representative Darren Lohood, who is the subject of the statement. No coreference resolves to the earlier assumption A.\",\n  \"reason\": \"Claim C (turn 37) states that Representative Darren Lohood is short on time, which is unrelated to assumption A (turn 33), which concerns public accountability for legislative votes based on morality or partisanship. There is no semantic connection between tracking votes"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to Representative Darren Lohood, who is the subject of the statement. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 37) states that Representative Darren Lohood is short on time, which is unrelated to assumption A (turn 33), which concerns public accountability for legislative votes based on moral or partisan grounds. There is no semantic connection between tracking votes via accountability and the assertion"
     },
     {
       "a_turn_idx": 34,
@@ -2421,7 +2421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 36 refers to Obamacare, as established in the prior context where the speaker discusses the promises made during its implementation and their failure to materialize.\",\n  \"reason\": \"Claim C explicitly states that 'it hasn't worked the way it was supposed to,' directly verifying the substance of assumption A, which asserts that consistency in policy positions is valuable—here, implying that the failure of Obamacare to deliver on its promises undermines its credibility. The claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 36 refers to Obamacare, as established in the prior context where the speaker discusses the promises made during its implementation and their failure to materialize.\",\n  \"reason\": \"Claim C explicitly states that 'it hasn't worked the way it was supposed to,' directly verifying the substance of assumption A, which asserts that consistency in policy positions is valuable—here, implying that the failure of Obamacare to deliver on its promises undermines its credibility and justifies"
     },
     {
       "a_turn_idx": 34,
@@ -2466,7 +2466,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 38 refers to the hosts and listeners of the news round table, not the audience assumed in turn 34.\",\n  \"reason\": \"Claim C expresses appreciation for being on the show and acknowledges the hosts and listeners, but does not address or verify the assumption that the audience agrees on protecting pre-existing conditions. The two statements are unrelated in content and purpose, with C focusing on interpersonal rapport rather than policy agreement. Therefore, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 38 refers to the hosts and listeners of the news round table, not the audience assumed in turn 34.\",\n  \"reason\": \"Claim C expresses appreciation for being on the show and acknowledges the hosts and listeners, but does not address or verify the assumption that the audience agrees on protecting pre-existing conditions. The two statements are unrelated in content and purpose. Therefore, C does not make A explicit, nor does it support it.\""
     },
     {
       "a_turn_idx": 34,
@@ -2556,7 +2556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the lawsuit mentioned in turn 35, which is the subject of the question and the focus of the discussion.\",\n  \"reason\": \"Claim C explicitly states that the lawsuit deals with Obamacare as a whole, which directly verifies the substance of assumption A—that opposing the lawsuit implies support for maintaining current healthcare protections like those under Obamacare. The statement in C clarifies the scope of the lawsuit, aligning with the speaker’s position that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the lawsuit mentioned in turn 35, which is the subject of the question and the focus of the discussion.\",\n  \"reason\": \"Claim C explicitly states that the lawsuit deals with Obamacare as a whole, which directly verifies the substance of assumption A—that opposing the lawsuit implies support for maintaining current healthcare protections like those under Obamacare. The statement in C clarifies the scope of the lawsuit, aligning with the speaker's position that"
     }
   ]
 }

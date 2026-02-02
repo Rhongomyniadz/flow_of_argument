@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the states' in claim C refers to Florida and Texas, which are distinct from the foreign states mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses U.S. states (Florida and Texas) asserting control over social media content moderation to prevent discrimination against conservative viewpoints. Assumption A concerns foreign states making espionage accusations against journalists and former military personnel, urging skepticism toward such claims. The topics, actors (foreign vs. domestic states), and contexts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'states' in claim C refers to Florida and Texas, distinct from the foreign states in assumption A.\",\n  \"reason\": \"Claim C discusses U.S. states (Florida and Texas) asserting control over social media content moderation to prevent perceived bias against conservative viewpoints. Assumption A concerns foreign states making espionage accusations against journalists and former military personnel, urging skepticism toward such claims. The topics, actors (foreign vs. domestic states), and contexts (espionage"
     },
     {
       "a_turn_idx": 21,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to social media companies, which are the subject of the claim about political influence. No direct reference to public opinion or media coverage influencing political accountability.\",\n  \"reason\": \"Claim C discusses states' concerns about social media companies having excessive power and political influence, which is tangentially related to the broader theme of media influence on politics. However, it does not explicitly address or verify the specific mechanism in assumption A—that public opinion and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to social media companies, which are the subject of the claim about power and influence.\",\n  \"reason\": \"Claim C discusses the political influence and power of social media companies, which aligns with the general idea in assumption A that public opinion and media coverage affect political accountability. However, C does not explicitly connect this power to influencing political accountability or the role of public opinion in the way A suggests. While there is a topical"
     },
     {
       "a_turn_idx": 28,
@@ -2541,7 +2541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the United States' in A refers to the nation, while 'states of Florida and Texas' in C refer to specific U.S. states. No shared referents.\",\n  \"reason\": \"Claim C discusses Florida and Texas challenging social media companies' power and political influence, which is unrelated to the U.S.'s moral and political alignment with Ukraine mentioned in assumption A. There is no overlap in subject matter, context, or semantic content. Thus,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the United States' in A refers to the nation, while 'Florida and Texas' in C refer to specific states. No shared referents.\",\n  \"reason\": \"Claim C discusses state-level regulation of social media platforms in Florida and Texas, focusing on political influence and content moderation. Assumption A concerns the United States' moral and political alignment with Ukraine. These topics are entirely unrelated in subject matter and context. There is no overlap in semantic content,"
     },
     {
       "a_turn_idx": 30,
@@ -2702,11 +2702,11 @@
       "claim_text": "The US Supreme Court is currently hearing two landmark cases involving social media regulation.",
       "overlap_score": 2,
       "c_time": 1532.09,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the US Supreme Court' refers to the same entity throughout.",
-      "reason": "Claim C discusses the US Supreme Court hearing cases about social media regulation, which is entirely unrelated to assumption A, which concerns media coverage of immigrant-related crime amplifying public anxiety about border security. There is no overlap in topic, concept, or causal relationship between the two statements. Therefore, C does not support, verify, or even relate to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the US Supreme Court' refers to the same entity throughout.\",\n  \"reason\": \"Claim C discusses the US Supreme Court hearing cases about social media regulation, which is entirely unrelated to assumption A, which concerns media coverage of immigrant-related crime amplifying public anxiety about border security. There is no overlap in topic, concept, or causal relationship between the two statements. Therefore, C does not support, verify, or even relate to A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; claim C discusses social media regulation by states, while assumption A concerns media coverage of immigrant-related crime and its effect on public anxiety about border security.\",\n  \"reason\": \"Claim C is entirely unrelated to assumption A. While both touch on broader societal issues involving public policy and perception, C discusses the US Supreme Court's review of state-level social media regulation, whereas A focuses on how media portrayal of crimes involving immigrants amplifies anxiety about border security. There is no"
     },
     {
       "a_turn_idx": 31,
@@ -2826,7 +2826,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the states' refers to Florida and Texas as introduced in turn 45.\",\n  \"reason\": \"Claim C discusses state-level regulation of social media companies based on concerns about political influence and content moderation. Assumption A, however, concerns media coverage of political gridlock reinforcing viewer engagement. These topics are unrelated: one addresses political polarization and media influence in governance, while the other focuses on media effects on public interest in political narratives. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the states' refers to Florida and Texas as introduced in turn 45.\",\n  \"reason\": \"Claim C discusses state-level regulation of social media platforms based on concerns about political influence and content moderation. Assumption A, however, concerns media coverage of political gridlock reinforcing viewer engagement. These topics are unrelated: one addresses political polarization and media influence in governance, while the other focuses on media effects on public interest in political narratives. There is no overlap"
     },
     {
       "a_turn_idx": 34,
@@ -3456,7 +3456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 46 refers to the states of Florida and Texas, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that the US Supreme Court is hearing two landmark cases involving social media regulation, which directly verifies the substance of assumption A—that the U.S. Supreme Court is a legitimate venue for resolving conflicts between state power and individual digital rights. The context confirms that the cases are about state-level attempts to regulate social media content"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 46 refers to the states of Florida and Texas, as established in the context.\",\n  \"reason\": \"Claim C explicitly states that the U.S. Supreme Court is hearing two landmark cases involving social media regulation, which directly verifies the substance of assumption A that the U.S. Supreme Court is a legitimate venue for resolving conflicts between state power and individual digital rights. The context confirms that the cases involve state-level attempts to regulate social media content"
     },
     {
       "a_turn_idx": 45,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the states of Florida and Texas, as established in the prior context. The phrase 'their states taxes in florida' is a minor grammatical error but clearly refers to Florida's regulatory authority.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas argue social media companies wield 'too much power, too much political influence,' which directly verifies the core substance of assumption A—that social media platforms are influenced by political and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to the states of Florida and Texas, as established in turn 46. The phrase 'their states taxes in florida' in turn 46 is a minor grammatical error but clearly refers to Florida's regulatory authority.\",\n  \"reason\": \"Turn 46 explicitly states that Florida and Texas argue social media companies wield 'too much power, too much political influence,' which directly verifies the core claim in turn 4"
     },
     {
       "a_turn_idx": 45,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the states of Florida and Texas, as established in the prior context. 'Their states taxes in florida' is a grammatical error but clearly intended to refer to Florida's regulatory authority.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas seek to pass laws requiring social media platforms to refrain from deleting or demoting user posts within their states, which directly verifies the substance of assumption A—that social media platforms are"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 46 refers to Florida and Texas, as established in the context. 'They' in 'they meaning their states taxes in florida' is a grammatical error but clearly intended to refer to the states.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas seek to pass laws requiring social media platforms to refrain from deleting or demoting user posts within their states, which directly verifies the substance of assumption A—that social media platforms are"
     },
     {
       "a_turn_idx": 45,
@@ -3531,7 +3531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the states of Florida and Texas, as established in the prior context. 'Their states taxes in florida' is a grammatical error but clearly refers to Florida's state-level regulations.\",\n  \"reason\": \"Claim C explicitly states that the states argue their laws are necessary to prevent social media platforms from discriminating against conservative viewpoints. This directly verifies the substance of assumption A, which asserts that social media platforms are influenced by political"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the states of Florida and Texas, as established in the prior context. 'Conservatives' refers to the political group mentioned in the broader discussion of partisan dynamics.\",\n  \"reason\": \"Claim C explicitly states that the states argue their laws are necessary to prevent social media platforms from discriminating against conservative viewpoints. This directly verifies the substance of assumption A, which asserts that social media platforms are influenced by political forces. The claim"
     },
     {
       "a_turn_idx": 45,
@@ -3606,7 +3606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the states' in turn 46 refers to Florida and Texas as introduced in turn 45.\",\n  \"reason\": \"Turn 46 explicitly states that the US Supreme Court is hearing two landmark cases involving social media regulation, which directly verifies the substance of turn 45's claim that two states are arguing before the Supreme Court about state control over social media content. The content of C fully aligns with and confirms the core assertion in A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'their' in turn 45 refers to the states of Florida and Texas, which are explicitly named in turn 46.\",\n  \"reason\": \"Turn 46 explicitly states that the US Supreme Court is hearing two landmark cases involving social media regulation, which directly verifies the substance of turn 45's assumption that states are asserting control over social media content. The mention of Florida and Texas, their arguments about platform power and political influence, and"
     },
     {
       "a_turn_idx": 45,
@@ -3921,7 +3921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to social media companies, specifically Facebook and Twitter, as established in the prior context. 'Twitter' is explicitly named and linked to the broader discussion of content moderation.\",\n  \"reason\": \"Claim C states that there is minimal content moderation on Twitter, which touches on the broader concern about government mandates undermining free expression by forcing platforms to host controversial content. However, C does not explicitly verify or state the core assumption in A—that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to social media companies, specifically Facebook and Twitter, as established in the prior context. 'Twitter' is explicitly named and linked to the broader discussion of content moderation.\",\n  \"reason\": \"Turn 54 claims there is minimal content moderation on Twitter, which touches on the broader concern about government mandates undermining free expression by forcing platforms to host controversial content. However, it does not explicitly verify or state the core assumption in turn"
     },
     {
       "a_turn_idx": 46,
@@ -3951,7 +3951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in the context of the legal cases discussed in turns 46 and 48.\",\n  \"reason\": \"Turn 55 explicitly states that Florida and Texas are proposing state-level intervention in website content regulation, which directly verifies the core claim in turn 46 that states (specifically Florida and Texas) are seeking to regulate social media content—contrary to the idea of tech"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in the context of the prior discussion about state-level legislation targeting social media content moderation.\",\n  \"reason\": \"Turn 55 explicitly states that Florida and Texas are proposing state-level intervention in website content regulation, which directly verifies the core claim in turn 46 that self-regulation by tech companies is more effective and appropriate than government intervention. The statement clearly identifies the states' proposed action"
     },
     {
       "a_turn_idx": 46,
@@ -3981,7 +3981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 49 refers to the legal dispute involving Florida and Texas attempting to regulate social media content moderation, as established in prior turns.\",\n  \"reason\": \"Claim C explicitly identifies the case as involving a First Amendment issue regarding website discretion over content, which directly verifies the core substance of assumption A—that First Amendment protections extend to private social media companies in content moderation. The phrasing 'whether websites should have that discretion at all' aligns precisely with"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 49 refers to the legal dispute involving Florida and Texas attempting to regulate social media content moderation, as established in prior turns.\",\n  \"reason\": \"Turn 49 explicitly identifies the case as a First Amendment issue concerning website discretion over content, which directly verifies the core claim in turn 46 that First Amendment protections extend to private social media companies when moderating content. The phrasing 'whether websites should have that discretion at all'"
     },
     {
       "a_turn_idx": 46,
@@ -4026,7 +4026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 47 refers to the tech industry coalition (e.g., the Computer and Communications Industry Association) mentioned in turn 46, which is advocating for platform self-regulation.\",\n  \"reason\": \"Claim C explicitly states that the lawsuit was filed to 'vindicate the First Amendment,' which directly verifies the substance of assumption A—that First Amendment protections extend to private social media companies in content moderation. The context confirms that the legal challenge centers"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 47 refers to the tech industry coalition (e.g., the Computer and Communications Industry Association) mentioned in turn 46, which is advocating for platform self-regulation. The claim 'this lawsuit was filed to protect the First Amendment' directly and explicitly verifies the substance of the earlier assumption that First Amendment protections extend to private social media companies in content moderation.\",\n  \"reason\": \"Turn 47 explicitly states that the lawsuit was brought"
     },
     {
       "a_turn_idx": 46,
@@ -4041,7 +4041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to social media companies, and 'their states' refers to Florida and Texas. The claim in turn 48 explicitly addresses the consequences of removing Section 230, which is directly tied to the legal framework enabling social media companies to moderate content without liability.\",\n  \"reason\": \"Turn 48 explicitly states that removing Section 230 would 'really end a lot of social media sites,' which directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to social media companies; 'their states taxes in florida' is a grammatical error but contextually refers to Florida's regulatory authority.\",\n  \"reason\": \"Claim C explicitly states that removing Section 230 could lead to the collapse of many social media sites, which directly verifies the substance of assumption A—that First Amendment protections are essential for social media companies to moderate content without state interference. The context shows that Section"
     },
     {
       "a_turn_idx": 46,
@@ -4101,7 +4101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in the prior context (turns 46–48). The phrase 'state-level intervention' directly corresponds to the states' proposed laws discussed in turn 46.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas are proposing state-level intervention in website content regulation, which directly verifies the substance of assumption A—that there is a credible risk that state-level regulations will"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in the prior context (turns 46–48). The phrase 'state gets to be the referee' in turn 55 clearly refers to the states' proposed intervention in content regulation.\",\n  \"reason\": \"Turn 55 explicitly states that Florida and Texas are proposing state-level intervention in website content regulation, which directly verifies the substance of assumption A—that there is a"
     },
     {
       "a_turn_idx": 46,
@@ -4116,7 +4116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'there' in claim C refers to the existence of a group or network of organizations and professionals engaged in developing and implementing standards for online content moderation and safety, which is implied by the context of 'community of practice'.\",\n  \"reason\": \"Claim C introduces the idea of a 'community of practice promoting online trust and safety,' which touches on the broader ecosystem of content moderation but does not explicitly address or verify the specific concern in assumption A—that state-level regulations could"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'there' in claim C refers to the existence of a group or network of organizations and professionals engaged in developing and implementing standards for online content moderation and safety, which is implied by the context of social media platform policies and industry practices.\",\n  \"reason\": \"Claim C states that there is a 'community of practice promoting online trust and safety,' which touches on the broader theme of self-regulation and industry-led standards mentioned in the context. However, it does not explicitly"
     },
     {
       "a_turn_idx": 46,
@@ -4191,7 +4191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the censorship of pandemic-related online content, which is discussed in the context of content moderation decisions made by websites during the pandemic.\",\n  \"reason\": \"Claim C states that there was censorship of some pandemic-related online content, which aligns with the substance of assumption A—that content moderation is essential for maintaining functional online communities. The example given in turn 50 illustrates how websites made editorial decisions during the pandemic, implying that such moderation"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the censorship of pandemic-related online content, which is discussed in the context of content moderation decisions made by websites during the pandemic.\",\n  \"reason\": \"Claim C states that there was censorship of some pandemic-related online content, which aligns with the substance of assumption A—that content moderation is essential for maintaining functional online communities. The example given in turn 50 illustrates how platforms made editorial decisions during the pandemic, implying that such moderation"
     },
     {
       "a_turn_idx": 48,
@@ -4251,7 +4251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'websites' in claim C refers to online platforms discussed throughout the context, particularly in relation to content moderation and editorial discretion.\",\n  \"reason\": \"Claim C explicitly states that websites should be able to remove content without facing legal liability, which directly verifies the core idea in assumption A—that legal liability for user-generated content would deter platforms from moderating at all. The context shows that Section 230 provides this immunity, and removing it would eliminate moderation incentives."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'websites' in claim C refers to the same entities discussed in assumption A—online platforms and social media companies. The term 'without facing legal liability' directly corresponds to the idea of 'deter platforms from moderating at all' in A, as liability fear would undermine moderation.\",\n  \"reason\": \"Claim C explicitly affirms that websites should be able to remove content without legal liability, which directly verifies the core concern in assumption A: that legal liability would"
     },
     {
       "a_turn_idx": 48,
@@ -4266,7 +4266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the requirement imposed by Florida and Texas to host all viewpoints, including Nazism, as discussed in turn 48.\",\n  \"reason\": \"Claim C explicitly states that requiring platforms to host Nazism would be inappropriate, which directly verifies the core concern in assumption A: that legal liability for user-generated content (such as Nazism) would deter platforms from moderating at all. The connection is clear and direct—C confirms the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the hypothetical requirement for platforms to host Nazism, which is directly tied to the concern raised in assumption A about legal liability deterring content moderation.\",\n  \"reason\": \"Claim C explicitly states that requiring platforms to host Nazism would be inappropriate, which directly verifies the core concern in assumption A: that legal liability for user-generated content (such as extremist views) would discourage platforms from moderating at all. The example of Nazism"
     },
     {
       "a_turn_idx": 48,
@@ -4296,7 +4296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'others' in turn 53 refers to 'other social media platforms,' which aligns with the discussion of varying content policies introduced in turn 48.\",\n  \"reason\": \"Claim C explicitly states that some platforms have very strict content policies, which directly supports the assumption in A that legal liability for user-generated content would deter platforms from moderating at all. The existence of strict moderation policies implies that platforms currently do moderate, and that such moderation is contingent on"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to 'other social media platforms', which aligns with the subject of turn 48's assumption about platform moderation decisions.\",\n  \"reason\": \"Claim C explicitly states that 'some' platforms have very strict policies, which directly verifies the broader assumption in A that platforms make editorial choices about content—specifically, that such choices are central to their operation. The contrast between 'very free-flowing' and 'very strict"
     },
     {
       "a_turn_idx": 48,
@@ -4311,7 +4311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'social media companies', which is consistent with the subject of assumption A. The phrase 'shirk their responsibility' aligns with the operational reliance on Section 230 to avoid liability, as discussed in A.\",\n  \"reason\": \"Claim C explicitly states that when social media companies avoid responsibility, government intervention increases. This directly verifies the substance of assumption A, which asserts that social media companies benefit significantly from Section 2"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'social media companies', which is consistent with the subject of assumption A. The phrase 'shirk their responsibility' aligns with the operational reliance on Section 230 to avoid liability, as discussed in A.\",\n  \"reason\": \"Claim C explicitly states that when social media companies avoid responsibility, it increases the likelihood of government intervention. This directly verifies the substance of assumption A, which asserts that social media companies benefit significantly"
     },
     {
       "a_turn_idx": 48,
@@ -4401,7 +4401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 53, 'the state' refers to Florida and Texas as mentioned in the prior context. 'Nazism' refers to the example of controversial content discussed in turn 48.\",\n  \"reason\": \"Claim C explicitly states that the solution to poor platform policy decisions is not for the state to mandate hosting of controversial content like Nazism. This directly verifies the core concern in assumption A—that government mandates on content moderation threaten platform autonomy and innovation—by rejecting state intervention"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 53, 'the state' refers to Florida and Texas as mentioned in the prior context. 'Nazism' is a specific example of controversial content discussed in turn 48.\",\n  \"reason\": \"Claim C explicitly rejects state-mandated hosting of controversial content like Nazism, directly verifying the concern in assumption A that government mandates on content moderation threaten platform autonomy. The statement 'the solution to poor platform policy decisions is not for the state to mandate hosting of"
     },
     {
       "a_turn_idx": 48,
@@ -4446,7 +4446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 54 refers to the platform's justification for content moderation, specifically the use of 'free speech' as a rationale.\",\n  \"reason\": \"Claim C explicitly states that platforms justify content moderation under the banner of free speech, which directly verifies the core idea in assumption A—that government mandates threatening platform autonomy undermine the ability of platforms to make editorial choices based on their own values and community standards. The mention of 'free speech' as a justification"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 54 refers to the platform's content moderation practices, specifically the justification of hosting controversial content under the banner of free speech.\",\n  \"reason\": \"Claim C explicitly states that platforms justify their content moderation decisions under the banner of free speech, which directly verifies the core idea in assumption A—that government mandates threatening platform autonomy undermine the ability of platforms to make independent editorial choices about content. The mention of 'free speech' as a justification aligns"
     },
     {
       "a_turn_idx": 48,
@@ -4461,7 +4461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to social media companies, as established in prior context. 'Advertisers' is a clear referent to the entity mentioned in turn 55.\",\n  \"reason\": \"Claim C states that advertisers play a role in shaping platform content decisions, which aligns with part of assumption A's concern about external pressures on platform autonomy. However, A focuses specifically on government mandates as a threat to autonomy and innovation, while C introduces"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to social media companies, as established in prior turns. 'Advertisers' is a clear referent to the entity mentioned in turn 55.\",\n  \"reason\": \"Claim C (turn 54) states that advertisers play a role in shaping platform content decisions, which aligns with the substance of assumption A (turn 48) that government mandates threaten platform autonomy. While C does not explicitly mention government mandates"
     },
     {
       "a_turn_idx": 48,
@@ -4551,7 +4551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to users, as established in the context where users are described as having agency in choosing platforms. 'Their' in 'their mouse' refers to users, consistent with the prior discussion of user choice.\",\n  \"reason\": \"Claim C (turn 54) states that users can switch platforms by clicking to another site, which directly supports the idea that users expect platforms to exercise judgment in content moderation—because if users can"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to users, as established in the prior context where users are discussed as having agency in choosing platforms. 'Their' in 'their mouse' refers to users.\",\n  \"reason\": \"Claim C (turn 54) states that users can switch platforms by clicking to another site, which directly supports the idea that users expect platforms to exercise judgment in content moderation—because if users can leave, platforms must maintain policies aligned with"
     },
     {
       "a_turn_idx": 49,
@@ -4626,7 +4626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to social media platforms, consistent with the subject of turn 49. 'Advertisers' in turn 49 is referenced indirectly in turn 55 as making 'advertising choices', which aligns with the role of advertisers in influencing platform policies.\",\n  \"reason\": \"Turn 53 states that social media platforms have been trying to adapt over time, which implies ongoing efforts to manage content—supporting the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to social media platforms, consistent with the subject of turn 49. 'Advertisers' in turn 49 is referenced indirectly in turn 55 as making 'advertising choices', which aligns with the role of advertisers in influencing platform policies.\",\n  \"reason\": \"Turn 53 states that social media platforms are adapting over time, which implies ongoing efforts to manage content—supporting the idea that platforms"
     },
     {
       "a_turn_idx": 49,
@@ -4641,7 +4641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'advertisers' in turn 54 refers to the same group mentioned in turn 49 ('their advertisers'), establishing clear coreference.\",\n  \"reason\": \"Turn 54 explicitly states that advertisers play a role in shaping platform content decisions, which directly verifies the substance of assumption A in turn 49—that advertisers support platforms maintaining control over controversial content. The claim in C is a direct and explicit confirmation of the implied stake advertisers have in content moderation"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'advertisers' in turn 54 refers to the same group mentioned in turn 49 ('their advertisers'), establishing clear coreference.\",\n  \"reason\": \"Turn 54 explicitly states that advertisers play a role in shaping platform content decisions, which directly verifies the substance of assumption A in turn 49—that advertisers support platforms maintaining control over controversial content. The claim in C is a clear, direct articulation of the implied motivation behind platform content moderation"
     },
     {
       "a_turn_idx": 50,
@@ -4701,7 +4701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in prior context (turns 48–50). 'The state' in turn 55 refers to Florida and Texas as the entities proposing intervention.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas propose state-level intervention in website content regulation, which directly verifies the core substance of assumption A—that these states are attempting to mandate equal treatment of pro-al-Qaeda and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to Florida and Texas, as established in prior context (turns 48–50). 'State-level intervention' directly refers to the legislative actions described in turn 50.\",\n  \"reason\": \"Claim C explicitly states that Florida and Texas propose state-level intervention in website content regulation, which directly verifies the core substance of assumption A—that these states are attempting to mandate equal treatment of pro-al-Qaeda and anti-"
     },
     {
       "a_turn_idx": 50,
@@ -4716,7 +4716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the government's assertion about the lab leak being potentially damaging to public trust in health institutions, as discussed in turn 50.\",\n  \"reason\": \"Claim C explicitly states that government assertions about the lab leak could damage public trust in health institutions during the pandemic, which directly verifies the substance of assumption A—that censorship of public discourse on health issues during crises undermines democratic values. The connection is clear: suppressing legitimate discussion (like the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the government's assertion about the lab leak being potentially damaging to public trust in health institutions, as discussed in turn 50.\",\n  \"reason\": \"Claim C explicitly states that government assertions about the lab leak could damage public trust in health institutions during the pandemic, which directly verifies the substance of assumption A—that censorship of public discourse on health issues during crises undermines democratic values. The connection is clear: suppressing discussion of controversial but potentially"
     },
     {
       "a_turn_idx": 50,
@@ -4761,7 +4761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to 'other social media platforms', which aligns with the subject of the earlier assumption A about online platforms having responsibility in content distinction.\",\n  \"reason\": \"Claim C explicitly states that other social media platforms have very strict policies regarding acceptable content, which directly supports and verifies the substance of assumption A—that online platforms have a responsibility to distinguish between types of content based on intent and impact. The mention of varying policies (strict vs"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to 'other social media platforms', which aligns with the subject of turn 50's assumption about platforms having responsibility to distinguish content based on intent and impact.\",\n  \"reason\": \"Claim C explicitly states that other social media platforms have very strict policies regarding acceptable content, which directly supports and verifies the substance of assumption A—that platforms have a responsibility to differentiate content based on intent and impact. The mention of 'very strict"
     },
     {
       "a_turn_idx": 50,
@@ -4806,7 +4806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'there' in claim C refers to the existence of organized efforts within the tech industry to promote online trust and safety, which is contextually linked to the broader discussion of content moderation and platform responsibilities introduced in turn 51.\",\n  \"reason\": \"Claim C states the existence of a 'community of practice promoting online trust and safety,' which touches on the general theme of institutional responsibility and public discourse around content moderation. However, it does not explicitly address or verify the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'there' in claim C refers to the existence of organized efforts within the tech industry to promote online trust and safety, which is contextually linked to the broader discussion of content moderation and platform responsibilities introduced in turn 51.\",\n  \"reason\": \"Claim C mentions a 'community of practice promoting online trust and safety,' which touches on the general theme of institutional responses to controversial content discussed in assumption A. However, it does not explicitly address or verify the causal relationship"
     },
     {
       "a_turn_idx": 52,
@@ -8946,7 +8946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_43 refers to 'this' political issue, which resolves to the conflict between defining life at fertilization and supporting IVF, as discussed in turn 111. 'This' connects to the broader policy contradiction involving Senator Duckworth's personal experience and the legislative implications.\",\n  \"reason\": \"Claim C states that the political consequences of restricting reproductive rights were foreseeable starting in 2018, which directly supports the underlying assumption in A—that Senator Tam"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_43 refers to 'this' political issue, which resolves to the contradiction between defining life at fertilization and supporting IVF, as discussed in turn 111. 'This' connects to the broader policy conflict involving Senator Duckworth’s personal experience and the implications of the Life at Conception Act.\",\n  \"reason\": \"Claim C states that the political consequences of restricting reproductive rights were foreseeable from 2018, which directly supports the underlying assumption"
     },
     {
       "a_turn_idx": 112,
@@ -9021,7 +9021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 121 refers to Ivan Cantu, the subject of the discussion in turns 119–123. No other coreference is relevant to the comparison between A and C.\",\n  \"reason\": \"Claim C (turn 121) expresses the speaker's personal belief about convicting Ivan Cantu if they were on the jury, based on the original prosecution case. However, this is unrelated to assumption A ("
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 121 refers to Ivan Cantu, the defendant in the capital punishment case. There is no reference to the Life at Conception Act or the speaker's understanding of its implications.\",\n  \"reason\": \"Claim C (turn 121) discusses the speaker's hypothetical decision to convict Ivan Cantu based on the original prosecution case, which is entirely unrelated to assumption A (turn 112), which concerns the contradiction between"
     },
     {
       "a_turn_idx": 112,
@@ -9364,9 +9364,9 @@
       "c_time": 4348.651,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'the pause' refers to a potential ceasefire, distinct from the earlier assumption about defining life.",
-      "reason": "Claim C discusses optimism about a ceasefire pause in the Israel-Hamas conflict, while assumption A concerns the moral and political legitimacy of defining life from fertilization. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C address or verify any aspect of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the pause' refers to a potential ceasefire, distinct from the earlier assumption about defining life.\",\n  \"reason\": \"Claim C discusses optimism about a ceasefire pause in the Israel-Hamas conflict, while assumption A concerns the moral and political legitimacy of defining life from fertilization. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C address or verify any aspect of A.\"\n}\n```"
+      "coref_notes": "No coreference resolution needed; 'the pause' refers to the potential ceasefire mentioned in prior turns.",
+      "reason": "Claim C discusses optimism about a ceasefire pause in the Israel-Hamas conflict, while assumption A concerns the moral and political legitimacy tied to consistent definitions of life beginning at fertilization. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C address or verify any aspect of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the pause' refers to the potential ceasefire mentioned in prior turns.\",\n  \"reason\": \"Claim C discusses optimism about a ceasefire pause in the Israel-Hamas conflict, while assumption A concerns the moral and political legitimacy tied to consistent definitions of life beginning at fertilization. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C address or verify any aspect of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 113,
@@ -9441,7 +9441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the pause' refers to the potential ceasefire mentioned in prior turns.\",\n  \"reason\": \"Claim C discusses optimism about a ceasefire pause in the Israel-Hamas conflict, while assumption A concerns the moral equivalence of reproductive choices and legal culpability in the context of IVF and personhood of embryos. The topics, contexts, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C verify or address any aspect of A.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 135 refers to the same individual as in turn 114, but the content is unrelated.\",\n  \"reason\": \"Claim C (turn 135) discusses optimism about a potential ceasefire in the Israel-Hamas conflict, which is entirely unrelated to assumption A (turn 114), which concerns the moral and legal implications of defining life at fertilization and the contradiction in supporting both IVF"
     },
     {
       "a_turn_idx": 115,
@@ -10581,7 +10581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'the governor' as Governor Abbott; 'he' in turn 127 refers to Governor Abbott; 'this man Ivan Cantu' refers to the defendant mentioned in prior turns.\",\n  \"reason\": \"Claim C explicitly states that a 30-day reprieve by Governor Abbott would allow an investigative hearing into new evidence, which directly verifies the substance of assumption A—that the speaker's emotional reaction stems from rational engagement with compelling new evidence"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'the governor' as Governor Abbott; 'he' in turn 127 refers to Governor Abbott.\",\n  \"reason\": \"Claim C explicitly states that a 30-day reprieve by Governor Abbott would allow an investigative hearing into new evidence, directly verifying the substance of assumption A—that the speaker's emotional reaction stems from rational engagement with compelling new evidence. The claim does not merely imply or suggest this; it explicitly frames the reprieve"
     },
     {
       "a_turn_idx": 125,
@@ -10596,7 +10596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to the decision-makers (e.g., jury, judges) involved in the trial, as established in the context of turn 125 where the credibility of the trial process is questioned.\",\n  \"reason\": \"Claim C explicitly states that the responsibility of deciding a person's life or death was given to individuals who did not receive the full truth at trial, which directly verifies the core assumption in A—that there is a credible possibility Ivan"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to the decision-makers (e.g., jury, judges) involved in the trial, as established in the context of turn 127. 'This man Ivan Cantu' in the surrounding context confirms the subject of the trial.\",\n  \"reason\": \"Claim C explicitly states that the responsibility of deciding a citizen's life or death was given to individuals who did not receive the full truth at trial, which directly verifies the substance of"
     },
     {
       "a_turn_idx": 125,
@@ -10626,7 +10626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Martin' as the person who previously expressed regret about President Bartlett's decision, resolving the coreference between 'Martin' and the speaker in the prior turn.\",\n  \"reason\": \"Claim C explicitly states that Martin previously expressed regret over President Bartlett not halting the execution in a fictional scenario with similar moral stakes, which directly verifies the substance of assumption A — that there is a credible possibility Ivan Cantu did not commit the murders —"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Martin' as the person who previously expressed regret about President Bartlett's decision, resolving the coreference between 'Martin' and the speaker in turn 125.\",\n  \"reason\": \"Claim C explicitly states that Martin previously expressed regret over President Bartlett not halting the execution in a fictional scenario with similar moral stakes, which directly verifies the substance of assumption A — that there is a credible possibility Ivan Cantu did not commit the"
     },
     {
       "a_turn_idx": 125,
@@ -10641,7 +10641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the new evidence mentioned in the context, specifically the findings from the documentary 'Cousins in Blood' and the testimony that key state witnesses lied.\",\n  \"reason\": \"Claim C explicitly states that there are new pieces of evidence that have not been heard by any court, which directly verifies the substance of assumption A—that there is a credible possibility Ivan Cantu did not commit the murders—by grounding this possibility in unexamined"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the new evidence mentioned in the context, specifically the findings from the documentary 'Cousins in Blood' and the revelation that key state witnesses lied.\",\n  \"reason\": \"Claim C explicitly states that there are new pieces of evidence that have not been heard by any court, which directly verifies the substance of assumption A—that there is a credible possibility Ivan Cantu did not commit the murders. This is supported by prior context showing that"
     },
     {
       "a_turn_idx": 125,
@@ -10656,7 +10656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 125 refers to Ivan Cantu; 'the case' in turn 127 refers to the legal proceedings against Ivan Cantu.\",\n  \"reason\": \"Claim C explicitly states that Ivan Cantu's guilt remains questionable due to unresolved issues, which directly verifies the core substance of assumption A—that the court system may fail to recognize flaws in the prosecution's case due to systemic bias or incompetence. The phrase 'unresolved issues surrounding"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 125 refers to Ivan Cantu; 'the case' in turn 127 refers to the legal proceedings against Ivan Cantu.\",\n  \"reason\": \"Claim C explicitly states that Ivan Cantu's guilt remains questionable due to unresolved issues, which directly verifies the core substance of assumption A—that the court system may fail to recognize flaws in the prosecution's case due to systemic bias or incompetence. The mention of 'unresolved issues"
     },
     {
       "a_turn_idx": 125,
@@ -10671,7 +10671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'DA' in claim C refers to Colin County District Attorney Greg Willis, as established in turn 125.\",\n  \"reason\": \"Claim C explicitly states that the district attorney continues to defend the fairness of the original trial despite ongoing concerns, which directly verifies the substance of assumption A—that a lack of witnesses indicates poor legal representation, undermining the fairness of the trial. The claim reinforces the idea that the trial was unfair, aligning with the core argument in A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'DA's' in turn 127, which resolves to Colin County District Attorney Greg Willis mentioned in turn 125.\",\n  \"reason\": \"Claim C explicitly states that the district attorney continues to defend the fairness of the original trial despite ongoing concerns, which directly verifies the substance of assumption A—that a lack of witnesses indicates poor legal representation, undermining trial fairness. The mention of the DA 'digging in their heels' and"
     },
     {
       "a_turn_idx": 125,
@@ -10686,7 +10686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 143 refers to SPEAKER_38, who is discussing book challenges, unrelated to Ivan Cantu or moral responsibility.\",\n  \"reason\": \"Turn 143 discusses a separate topic—challenging books in a school library based on nudity in illustrations—and does not mention Ivan Cantu, moral responsibility, advocacy, or any aspect of the earlier assumption A. There is no semantic connection between the content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 143 refers to SPEAKER_38, who is discussing book challenges, unrelated to Ivan Cantu or moral responsibility.\",\n  \"reason\": \"Claim C discusses a separate topic—interviewing about book illustrations and censorship—while assumption A concerns moral responsibility to advocate for Ivan Cantu despite uncertainty. There is no overlap in subject matter, intent, or content. Thus, C does not support, relate to"
     },
     {
       "a_turn_idx": 125,
@@ -10701,7 +10701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the relationship between A and C. 'The speaker' in C refers to Stefano Farrell, distinct from the speaker in A.\",\n  \"reason\": \"Claim C (turn 147) states that the speaker has an eight-year-old child, which is unrelated to assumption A (turn 125), which concerns moral responsibility to advocate for Ivan despite uncertainty. There is no overlap in subject matter, logic, or content. The two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to Stefano Farrell, distinct from the speaker in A.\",\n  \"reason\": \"Claim C (turn 147) states that the speaker has an eight-year-old child, which is unrelated to assumption A (turn 125), which concerns moral responsibility to advocate for Ivan despite uncertainty. There is no overlap in subject matter, logic, or content. The two statements"
     },
     {
       "a_turn_idx": 126,
@@ -10761,7 +10761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'he' in turn 135 refers to the president, not the speaker in turn 126.\",\n  \"reason\": \"Claim C (turn 135) discusses optimism about a ceasefire in the Israel-Hamas conflict, while assumption A (turn 126) concerns investigative scrutiny leading to re-evaluation of prior conclusions in a criminal case involving Ivan Cantu. The topics, subjects, and contexts are entirely different."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the pause' refers to a potential ceasefire, not related to the earlier assumption about investigative scrutiny.\",\n  \"reason\": \"Claim C discusses optimism about a potential ceasefire in the Israel-Hamas conflict, while assumption A concerns the need for re-evaluation of prior conclusions due to new investigative evidence in a criminal case. The topics, subjects, and core ideas are entirely unrelated. Therefore, C does not support, verify, or relate to A in any meaningful"
     },
     {
       "a_turn_idx": 126,
@@ -10776,7 +10776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' refers to the visual content in the book, and 'children' refers to minors in general.\",\n  \"reason\": \"Claim C (turn 145) states that nudity alone is not harmful to minors, which is unrelated to assumption A (turn 126), which concerns investigative scrutiny leading to re-evaluation of prior conclusions in a criminal case. The topics, context, and semantic content are entirely different. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' refers to the visual content in the book, and 'children' refers to minors in general.\",\n  \"reason\": \"Claim C (turn 145) states that nudity alone is not harmful to minors, which is unrelated to assumption A (turn 126), which concerns investigative scrutiny leading to re-evaluation of prior conclusions in a criminal case. The topics, subjects, and semantic content are entirely different. There"
     },
     {
       "a_turn_idx": 127,
@@ -10791,7 +10791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Israel' and 'Hamas' are clear referents.\",\n  \"reason\": \"Claim C (turn 138) discusses Israel's rejection of Hamas's counter-proposal, while assumption A (turn 127) concerns new evidence about Ivan Cantu's potential innocence and the need for reconsideration of his conviction. The topics are entirely unrelated—C addresses international conflict negotiations, while A focuses on a U.S. death penalty case"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Israel' and 'Hamas' are clear referents.\",\n  \"reason\": \"Claim C (turn 138) discusses Israel's rejection of Hamas's counter-proposal, which is unrelated to assumption A (turn 127), which concerns new evidence about Ivan Cantu's potential innocence and the need for a reprieve based on flawed trial proceedings. The topics, subjects, and contexts are entirely different—C relates to international conflict"
     },
     {
       "a_turn_idx": 127,
@@ -10806,7 +10806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'a legislative proposal' refers to the bill mentioned in turn 152.\",\n  \"reason\": \"Claim C discusses a legislative proposal about school district funding for book challenges, which is entirely unrelated to assumption A, which concerns new evidence about Ivan Cantu's potential innocence and the need for a reprieve based on that evidence. There is no overlap in subject matter, context, or semantic content. Therefore, C does not support, verify, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'a legislative proposal' refers to a new topic unrelated to Ivan Cantu's case.\",\n  \"reason\": \"Claim C discusses a legislative proposal about school district funding and book challenges in Florida, which is entirely unrelated to the earlier assumption A about new evidence in Ivan Cantu's case and the need for a reprieve based on doubts about guilt. There is no overlap in subject matter, context, or semantic content."
     },
     {
       "a_turn_idx": 127,
@@ -10821,7 +10821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to the president, not the speaker in turn 127. The subject of claim C is the president's expressed hopefulness, while assumption A concerns the speaker's belief about moral judgment overriding legal outcomes.\",\n  \"reason\": \"Claim C discusses the president's hopefulness about a ceasefire, which is unrelated to the speaker's belief in turn 127 that moral judgment should supersede legal outcomes when doubts exist"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'someone else' in C refers to the president, while A concerns the speaker's belief about moral judgment vs. legal outcomes.\",\n  \"reason\": \"Claim C states that someone else (the president) is expressing hopefulness about a ceasefire, which is unrelated to assumption A, which asserts that personal moral judgment should override formal legal outcomes when doubts exist. There is no overlap in semantic content or intent between C and A. C does not mention justice,"
     },
     {
       "a_turn_idx": 127,
@@ -10836,7 +10836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the pause' refers to a potential ceasefire, not related to the earlier assumption about moral judgment vs. legal outcomes.\",\n  \"reason\": \"Claim C discusses optimism about a potential ceasefire in the Israel-Hamas conflict, which is entirely unrelated to assumption A, which concerns personal moral judgment overriding legal outcomes in a capital case. There is no overlap in subject matter, context, or semantic content. Therefore, C does not support, verify, or relate to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'he' in turn 135 refers to the president, not related to the speaker in turn 127.\",\n  \"reason\": \"Turn 135 discusses optimism about a potential ceasefire in the Israel-Hamas conflict, while turn 127 concerns the moral duty to question legal outcomes when doubts exist, particularly in the case of Ivan Cantu’s execution. The topics, subjects, and claims are entirely different. There is"
     },
     {
       "a_turn_idx": 127,
@@ -10851,7 +10851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'nudity' in turn 145 refers to physical depiction in a book, while 'personal moral judgment' and 'legal outcomes' in turn 127 pertain to capital punishment and judicial fairness.\",\n  \"reason\": \"Turn 145 discusses the harmlessness of nudity in children's books under Florida law, focusing on artistic merit and prurient interest. Turn 127 concerns the moral obligation to override legal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'nudity' in turn 145 refers to physical depiction in a book, while 'personal moral judgment' and 'legal outcomes' in turn 127 pertain to capital punishment and judicial fairness.\",\n  \"reason\": \"Turn 145 discusses the harmlessness of nudity in children's books under Florida law, focusing on artistic and educational context. Turn 127 asserts that moral judgment should override legal outcomes when doubts"
     },
     {
       "a_turn_idx": 127,
@@ -10866,7 +10866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'kids' in turn 140 refers to children generally, with no pronouns linking to prior speakers.\",\n  \"reason\": \"Claim C (turn 140) discusses children's preference for passionate over instructional content, which is unrelated to assumption A (turn 127), which concerns Governor Abbott's capacity for compassionate, non-political action in a death penalty case. There is no overlap in subject matter, semantics, or implied"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'kids' in turn 140 refers to children generally, with no pronouns linking to prior speakers or entities.\",\n  \"reason\": \"Claim C (turn 140) discusses children's preference for passionate over instructional content, which is unrelated to assumption A (turn 127), which concerns Governor Abbott's capacity for compassionate, non-political action in a death penalty case. There is no overlap in subject matter, semantics,"
     },
     {
       "a_turn_idx": 127,
@@ -10881,7 +10881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'all involved negotiators' refers to international mediators in the Israel-Hamas conflict, distinct from the West Wing episode or ethical leadership discussion.\",\n  \"reason\": \"Claim C discusses negotiators working under time pressure to finalize a ceasefire by Ramadan in the context of the Israel-Hamas conflict. Assumption A refers to a West Wing episode as a cultural reference for ethical leadership under pressure. The two topics are unrelated in subject matter, context, and semantic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'all involved negotiators' refers to international mediators in the Israel-Hamas conflict, distinct from the West Wing episode or ethical leadership context.\",\n  \"reason\": \"Claim C discusses negotiators working under time pressure to finalize a ceasefire by Ramadan in the context of the Israel-Hamas conflict. Assumption A refers to a West Wing episode as a cultural reference for ethical leadership under pressure. There is no overlap in subject matter, context, or semantic content"
     },
     {
       "a_turn_idx": 129,
@@ -10896,7 +10896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in C refers to SPEAKER_38, who is unrelated to the earlier discussion about Wing and the governor.\",\n  \"reason\": \"Claim C discusses an interview about challenged books in Florida, specifically regarding nudity in children's literature. This topic is entirely unrelated to assumption A, which concerns Wing's authority over the speaker’s identity or role in the context of a death penalty reprieve. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between assumption A and claim C. 'The speaker' in C refers to SPEAKER_38, who is discussing book challenges in Florida, unrelated to the earlier discussion about Wing and executive authority in turn 129.\",\n  \"reason\": \"Claim C discusses an interview about challenged books in Florida involving nudity and censorship, while assumption A concerns Wing's authority over the speaker’s identity or role in the context of a death penalty reprieve"
     },
     {
       "a_turn_idx": 129,
@@ -10911,7 +10911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the relationship between A and C. 'Wing' in A refers to a person (likely a legal advisor) mentioned in turn 129; 'the speaker' in A refers to SPEAKER_18. In C, 'I' refers to Stefano Farrell, a different individual.\",\n  \"reason\": \"Claim C (turn 147) states that the speaker has an eight-year-old child, which is unrelated to assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to assumption A; 'Wing' in turn 129 refers to a person with authority over the speaker's identity, while 'the speaker' in turn 147 refers to Stefano Farrell, a different individual.\",\n  \"reason\": \"Claim C (turn 147) states that the speaker has an eight-year-old child, which is entirely unrelated to assumption A (turn 129), which concerns Wing's authority over"
     },
     {
       "a_turn_idx": 130,
@@ -10941,7 +10941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to President Biden, as established in the prior context. The claim in C discusses optimism about a ceasefire, which is unrelated to the personal moral or psychological incapacity described in A.\",\n  \"reason\": \"Turn 130 asserts that the speaker believes they personally lack the moral or psychological capacity to carry out lethal actions, emphasizing a deep personal limitation. Turn 135, however, expresses optimism about a ceasefire"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to President Biden, as established in the prior context. The phrase 'the pause' refers to the proposed ceasefire.\",\n  \"reason\": \"Claim C states that the speaker (President Biden) is expressing optimism about a ceasefire, which is unrelated to assumption A. Assumption A concerns the personal moral or psychological inability to carry out lethal actions, while C discusses political optimism about a diplomatic resolution. There is no overlap in semantic"
     },
     {
       "a_turn_idx": 130,
@@ -10956,7 +10956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' in turn 145 refers to physical depiction in a book, while 'carrying out lethal actions' in turn 130 refers to moral capacity for execution. The topics are entirely distinct.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in children's books under Florida law, which is unrelated to the moral or psychological capacity required to carry out lethal actions. There is no overlap in semantic content between"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' refers to physical depiction in the book, and 'minors' refers to children.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the personal moral or psychological inability to carry out lethal actions. The topics are entirely unrelated—A involves ethical capacity for violence, while C addresses censorship and child exposure to nudity. There is no overlap in semantic content, and C neither"
     },
     {
       "a_turn_idx": 130,
@@ -10971,7 +10971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'we' in claim C refers to CNN, which is unrelated to the speaker in turn 130.\",\n  \"reason\": \"Claim C (turn 157) expresses CNN's belief about the necessity of truth for understanding the world, which is entirely unrelated to assumption A (turn 130), where the speaker expresses personal moral incapacity to carry out lethal actions. There is no overlap in subject matter, intent, or content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'we' in claim C refers to CNN, not the speaker in turn 130.\",\n  \"reason\": \"Claim C (turn 157) expresses CNN's belief about the necessity of truth for understanding the world, which is unrelated to assumption A (turn 130), where the speaker expresses personal moral incapacity to carry out lethal actions. There is no overlap in semantic content or intent between the two statements. The topics"
     },
     {
       "a_turn_idx": 130,
@@ -10986,7 +10986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to President Biden, as established in the prior context. The term 'pause' in turn 135 refers to a ceasefire, consistent with earlier discussion.\",\n  \"reason\": \"Turn 135 mentions the speaker (President Biden) expressing hope and optimism about a ceasefire, which aligns with the general theme of cautious hope seen in earlier turns. However, it does not explicitly address the internal moral conflict described"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to President Biden, as established in the prior context. The term 'pause' refers to the proposed ceasefire.\",\n  \"reason\": \"Claim C discusses the speaker's (President Biden's) expressed optimism about a ceasefire, which relates to the broader theme of hope and political action. However, it does not address the internal moral conflict described in assumption A—specifically, the personal ethical struggle over participating in or endorsing state"
     },
     {
       "a_turn_idx": 130,
@@ -11001,7 +11001,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'a proposal' refers to a legislative change about book challenges, not the speaker's moral conflict.\",\n  \"reason\": \"Claim C discusses a legislative proposal about school funding for book challenges, which is entirely unrelated to the internal moral conflict about participating in state-sanctioned violence described in assumption A. There is no overlap in subject matter, theme, or content. The two statements address different issues (education policy vs. ethical dilemma over state violence), and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'a proposal' refers to a legislative change about book challenges, not the speaker's moral conflict.\",\n  \"reason\": \"Claim C discusses a legislative proposal about school funding for book challenges, which is entirely unrelated to the speaker's internal moral conflict about participating in state-sanctioned violence. There is no overlap in subject matter, theme, or content between A and C. Thus, the claim does not support, verify, or relate to the earlier assumption"
     },
     {
       "a_turn_idx": 131,
@@ -11012,11 +11012,11 @@
       "claim_text": "The speaker hopes the hostage deal will be finalized by the end of the weekend.",
       "overlap_score": 2,
       "c_time": 4295.035,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the speaker' refers to SPEAKER_18 throughout.",
-      "reason": "Claim C (turn 132) discusses the speaker's hope for a hostage deal by the end of the weekend, which is unrelated to assumption A (turn 131), which concerns trust that viewers recognize the significance of Martin Sheen and Sister Helen Prejan. There is no overlap in semantic content or intent between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_18 throughout.\",\n  \"reason\": \"Claim C (turn 132) discusses the speaker's hope for a hostage deal by the end of the weekend, which is unrelated to assumption A (turn 131), which concerns trust that viewers recognize the significance of Martin Sheen and Sister Helen Prejan. There is no overlap in semantic content or intent between the two statements.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_18 throughout.\",\n  \"reason\": \"Claim C (turn 132) discusses the speaker's hope for a hostage deal by the end of the weekend, which is unrelated to assumption A (turn 131), which concerns trust that viewers recognize the significance of Martin Sheen and Sister Helen Prejan in the context of capital punishment. There is no overlap in subject matter, intent, or content"
     },
     {
       "a_turn_idx": 132,
@@ -11031,7 +11031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to SPEAKER_18, who expressed hope for a ceasefire by next Monday in turn 132.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_18) is expressing hopefulness about a ceasefire, which aligns with the core content of assumption A—that the speaker believes the current situation allows for a resolution within the stated timeframe (by the end of the weekend or by"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to SPEAKER_18, who expressed hope for a ceasefire by next Monday in turn 132.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_18) is expressing hopefulness about a ceasefire, which aligns with the substance of assumption A—that the speaker believes the current situation allows for a resolution within the stated timeframe (by the end of the weekend or by Monday"
     },
     {
       "a_turn_idx": 132,
@@ -11046,7 +11046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to SPEAKER_18, who is the speaker expressing hope for a ceasefire by next Monday. The term 'pause' in turn 135 refers to the ceasefire mentioned in turn 132.\",\n  \"reason\": \"Turn 135 explicitly states that the speaker (SPEAKER_18) is expressing hope and optimism about the ceasefire, which directly verifies the belief in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 135 refers to SPEAKER_18, who is the speaker expressing hope for a ceasefire by next Monday. The term 'pause' in turn 135 refers to the ceasefire mentioned in turn 132.\",\n  \"reason\": \"Turn 135 explicitly states that the speaker (SPEAKER_18) is expressing hope and optimism about the ceasefire (referred to as a 'pause'), which"
     },
     {
       "a_turn_idx": 132,
@@ -11057,11 +11057,11 @@
       "claim_text": "The speaker believes that nudity in the book is not harmful to children.",
       "overlap_score": 2,
       "c_time": 4686.847,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_29, distinct from SPEAKER_18 in A.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the feasibility of achieving a hostage deal and ceasefire by a specific deadline. The topics are entirely unrelated—C addresses child safety and censorship in literature, whereas A addresses geopolitical negotiations. There is no overlap in semantic content, and"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; 'the speaker' in C refers to SPEAKER_29, distinct from SPEAKER_18 in A.",
+      "reason": "Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the feasibility of a hostage deal and ceasefire by a specific deadline. The topics, subjects, and semantic content are entirely unrelated. There is no overlap in meaning, context, or intent between A and C.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_29, distinct from SPEAKER_18 in A.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the feasibility of a hostage deal and ceasefire by a specific deadline. The topics, subjects, and semantic content are entirely unrelated. There is no overlap in meaning, context, or intent between A and C.\"\n}\n```"
     },
     {
       "a_turn_idx": 132,
@@ -11076,7 +11076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'she' in turn 153 refers to Jennifer Pippen, but this does not connect to the content of assumption A.\",\n  \"reason\": \"Claim C discusses Jennifer Pippen challenging a book due to her belief about unicorns being the worst, which is entirely unrelated to assumption A, which concerns the speaker's belief that a hostage deal and ceasefire in the Israeli-Hamas war can be achieved by the end of the weekend. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'she' in turn 153 refers to Jennifer Pippen, but this does not connect to the earlier assumption about the hostage deal or ceasefire timeline.\",\n  \"reason\": \"Claim C discusses Jennifer Pippen challenging a book due to her belief that unicorns are the worst, which is entirely unrelated to assumption A, which concerns the speaker's belief that a hostage deal and ceasefire can be achieved by the end of the weekend. There is no overlap"
     },
     {
       "a_turn_idx": 133,
@@ -11091,7 +11091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 133 refers to the speaker (SPEAKER_18), and 'my last security advisor' is the source of the intelligence mentioned. In turn 138, 'this recent diplomatic meeting' refers to the Friday talks involving the CIA director, Egyptian and Israeli counterparts, and the Qatari prime minister, which restarted stalled negotiations.\",\n  \"reason\": \"Claim C explicitly states that a recent diplomatic meeting helped restart stalled"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 133 refers to the speaker (SPEAKER_18), and 'my last security advisor' is the source of the information about the closeness of the negotiations. In turn 138, 'this recent diplomatic meeting' refers to the Friday talks involving the CIA director, Egyptian and Israeli counterparts, and the Qatari prime minister, which restarted stalled negotiations.\",\n  \"reason\": \"Claim C explicitly states that a"
     },
     {
       "a_turn_idx": 133,
@@ -11106,7 +11106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in claim C refers to SPEAKER_38, who is discussing book challenges, not intelligence on negotiations.\",\n  \"reason\": \"Claim C discusses an interview about book censorship and nudity in children's literature, which is entirely unrelated to the earlier assumption A about having access to reliable intelligence on negotiations. There is no overlap in topic, subject matter, or implied content. The speaker in C is not the same as the speaker in A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 143 refers to SPEAKER_38, who is discussing interviews about book challenges, not intelligence on negotiations.\",\n  \"reason\": \"Turn 143 discusses an interview about book censorship and depictions of nudity, which is entirely unrelated to the earlier assumption A about having access to reliable intelligence on negotiations. There is no mention of negotiations, ceasefire talks, or insider information. The topics and context are completely"
     },
     {
       "a_turn_idx": 133,
@@ -11121,7 +11121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my' in turn 147 refers to Stefano Farrell, who is the speaker in that turn. There is no connection between having an eight-year-old child and possessing reliable intelligence or insider information on negotiations.\",\n  \"reason\": \"Claim C states that the speaker has an eight-year-old child, which is entirely unrelated to assumption A, which concerns access to reliable intelligence or insider information about negotiations. There is no overlap in subject matter, nor does C verify"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'her' in turn 147 refers to Stefano Farrell, who is the speaker in that turn. There is no mention of intelligence, negotiations, or insider information in turn 147.\",\n  \"reason\": \"Turn 147 states that the speaker has an eight-year-old child and discusses book challenges in Florida. This is entirely unrelated to the earlier assumption in turn 133, which concerns access to reliable intelligence on negotiations. There"
     },
     {
       "a_turn_idx": 133,
@@ -11136,7 +11136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 136 refers to President Biden, as established in the prior context (turns 132–133). The phrase 'by Monday' directly aligns with the timeframe mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that 'by Monday might be possible for something to happen,' which directly verifies the core content of assumption A—that a ceasefire by next Monday is possible. While C does not use the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 136 refers to President Biden, as established in the prior context (turns 132–133). The phrase 'by Monday' directly aligns with the timeline mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that a ceasefire might be possible by Monday, which directly verifies the core content of assumption A—that a ceasefire by next Monday is both possible and desirable. While C does not explicitly state"
     },
     {
       "a_turn_idx": 133,
@@ -11151,7 +11151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to the individual making the assessment about harm, which in context is SPEAKER_29. However, assumption A concerns the speaker's influence or authority over national security messaging, which is unrelated to the discussion about nudity in children's books.\",\n  \"reason\": \"Claim C discusses parental disagreement with an assessment about the harm of nudity in children's books, specifically in the context of a book challenge in Florida. This topic is entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to SPEAKER_29, who is discussing the harm of nudity in children's books. This is unrelated to the earlier assumption A, which concerns the speaker's influence over national security messaging.\",\n  \"reason\": \"Claim C discusses parental disagreement about the harm of nudity in children's books, specifically referencing a local controversy in Florida. This topic is entirely unrelated to the national security messaging influence discussed in assumption A. There is no"
     },
     {
       "a_turn_idx": 136,
@@ -11166,7 +11166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the demand mentioned in assumption A, specifically the demand for Israel to end the war entirely, which is explicitly stated in turn 136.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that Israel end the war altogether, which directly verifies the substance of assumption A, which asserts that there has been continuous fighting without any prior cessation—implying that such a demand had previously existed and was"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the demand for Israel to end the war entirely, which is explicitly mentioned in assumption A as a key condition for a ceasefire.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that Israel end the war altogether, which directly verifies the substance of assumption A—that there has been continuous fighting without any prior cessation, implying that such a demand was previously in place. The phrasing 'dropping the demand that"
     },
     {
       "a_turn_idx": 136,
@@ -11181,7 +11181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 139 refers to Hamas, as established in the preceding context discussing Hamas's demands. 'That' in 'dropping the demand that the IDF leave Gaza altogether' refers to the previously mentioned demand for Israel to withdraw from Gaza.\",\n  \"reason\": \"Claim C explicitly states that Hamas has reduced the number of Palestinian prisoners it demands Israel release, which directly verifies a key part of assumption A—namely, that there has been continuous"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 139 refers to Hamas, as established in the preceding context discussing Hamas's demands.\",\n  \"reason\": \"Claim C explicitly states that Hamas has reduced the number of Palestinian prisoners it demands Israel release, which directly verifies a key part of assumption A—namely, that there has been continuous fighting without prior cessation—by indicating a shift in Hamas’s position that could enable a temporary pause. This reduction in demands is presented as a critical"
     },
     {
       "a_turn_idx": 136,
@@ -11196,7 +11196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 137 refers to Hamas, as established in the surrounding context. The demand for Israel to pull out of Gaza is explicitly linked to Hamas's previous core requirement.\",\n  \"reason\": \"Claim C explicitly states that Hamas has softened its demand for a complete Israeli withdrawal from Gaza, which directly verifies the substance of assumption A — that there has been continuous fighting since the last cessation (the November truce). This softening is presented as a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 137 refers to Hamas, as established in the surrounding context. The demand for Israel to pull out of Gaza is explicitly linked to Hamas's previous core requirement.\",\n  \"reason\": \"Claim C explicitly states that Hamas has softened its demand for a complete Israeli withdrawal from Gaza, which directly verifies the substance of assumption A—that there has been continuous fighting since the last cessation (the November truce). The mention of Hamas softening this key"
     },
     {
       "a_turn_idx": 136,
@@ -11211,7 +11211,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' in claim C refers to the Israeli government, specifically Prime Minister Netanyahu mentioned in the context. 'Hamas’s counter-proposal' is the same proposal referenced in turn 136.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that there has been continuous fighting since the previous truce—by explaining why the talks stalled previously. This rejection is presented"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' refers to the Israeli government, specifically Prime Minister Netanyahu, as mentioned in the context.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that there has been continuous fighting since the previous truce, due to the breakdown in negotiations after Israel dismissed Hamas’s proposal. This dismissal is presented as a key reason for the lack of cessation, thus making A explicit and directly"
     },
     {
       "a_turn_idx": 136,
@@ -11226,7 +11226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'the demand that the IDF leave Gaza altogether' resolves to 'Israel to pull out of Gaza altogether' mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that the IDF leave Gaza altogether, which directly verifies the earlier assumption A that there has been continuous fighting since the last ceasefire, implying no prior cessation. This drop in demand is presented as a key development enabling a potential pause, thus confirming"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'the IDF' and 'Israel' are used interchangeably in context.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that the IDF fully withdraw from Gaza, which directly verifies the substance of assumption A—that there has been continuous fighting since the war began, implying no prior cessation. This drop in demand is presented as a key development enabling a potential ceasefire, thus making the earlier assumption about the absence of prior"
     },
     {
       "a_turn_idx": 136,
@@ -11241,7 +11241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' in claim C refers to the Israeli government, specifically Prime Minister Netanyahu, as established in the context of turn 138.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that a cessation in fighting would be a significant development—by highlighting a prior major obstacle (Israel's dismissal of the proposal) that had stalled negotiations. This rejection is presented as a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' in claim C refers to the Israeli government, specifically Prime Minister Netanyahu mentioned in the prior context. 'Hamas’s counter-proposal' is the same proposal referenced in turn 136 as a major obstacle to ceasefire.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that a cessation in fighting would be a significant development—by highlighting a prior breakdown in"
     },
     {
       "a_turn_idx": 136,
@@ -11256,7 +11256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Hamas refers to the same entity mentioned in turn 136; 'it' in turn 139 refers to Hamas's demands.\",\n  \"reason\": \"Claim C states that Hamas has reduced the number of Palestinian prisoners it demands Israel release, which is a specific example of softening demands. While this supports the broader idea in assumption A that a cessation in fighting is significant, it does not explicitly verify the belief that such a cessation is meaningful—only that certain demands"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Hamas refers to the same entity mentioned in turn 136; 'reduced the number of Palestinian prisoners' is a specific example of softening demands, which aligns with the broader idea of a cessation in fighting being significant.\",\n  \"reason\": \"Claim C states that Hamas has reduced demands, including the number of Palestinian prisoners to be released, which supports the notion that progress toward a ceasefire is being made. However, it does not explicitly state or verify the speaker's"
     },
     {
       "a_turn_idx": 136,
@@ -11271,7 +11271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"Hamas' demand to 'end the war altogether' refers to the same condition mentioned in turn 136 as a key requirement for a ceasefire. The pronoun 'that' in turn 136 implicitly refers to the cessation of fighting, which is the central event described.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that Israel end the war altogether, which directly verifies the substance of assumption A — that a cessation in fighting is a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the demand for Israel to end the war entirely, which is explicitly mentioned in assumption A as a key condition for a ceasefire. The phrase 'dropping the demand that Israel end this war altogether' directly verifies the substance of A.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand for Israel to end the war altogether, which aligns precisely with the core idea in assumption A—that a cessation in fighting would"
     },
     {
       "a_turn_idx": 136,
@@ -11284,9 +11284,9 @@
       "c_time": 4686.847,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'nudity' refers to physical depiction in the book, and 'children' refers to minors.",
+      "coref_notes": "No coreference resolution needed; 'nudity' refers to the visual depiction in the book, and 'children' refers to minors.",
       "reason": "Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the significance of a ceasefire in the Israel-Hamas conflict. The topics are entirely unrelated, and there is no overlap in semantic content. Therefore, C does not support, relate to, or verify A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' refers to physical depiction in the book, and 'children' refers to minors.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the significance of a ceasefire in the Israel-Hamas conflict. The topics are entirely unrelated, and there is no overlap in semantic content. Therefore, C does not support, relate to, or verify A in any way.\"\n}\n```"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'nudity' refers to the visual depiction in the book, and 'children' refers to minors.\",\n  \"reason\": \"Claim C discusses the harmlessness of nudity in a book to children, while assumption A concerns the significance of a ceasefire in the Israel-Hamas conflict. The topics are entirely unrelated, and there is no overlap in semantic content. Therefore, C does not support, relate to, or verify A in any way.\"\n}\n```"
     },
     {
       "a_turn_idx": 136,
@@ -11301,7 +11301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'the demand that Israel end this war altogether' clearly resolves the core idea in A about recognizing the significance of a ceasefire in the Israel-Hamas War.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that Israel end the war altogether, which directly verifies the substance of assumption A—that the listener understands the context of the Israel-Hamas War and recognizes the significance of a ceasefire. The phrasing 'dropping"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'the demand that Israel end this war altogether' clearly resolves the core idea in assumption A about recognizing the significance of a ceasefire.\",\n  \"reason\": \"Claim C explicitly states that Hamas has dropped the demand that Israel end the war altogether, which directly verifies the substance of assumption A—that the listener understands the context of the Israel-Hamas War and recognizes the significance of a ceasefire. The explicit mention of this specific demand being withdrawn confirms the"
     },
     {
       "a_turn_idx": 136,
@@ -11316,7 +11316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' in claim C refers to the Israeli government, specifically Prime Minister Netanyahu, as established in the context of turn 138.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that the listener understands the context of the Israel-Hamas War and recognizes the significance of a ceasefire. The rejection of the proposal is presented as a pivotal moment that caused the talks to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Israel' in claim C refers to the Israeli government, specifically Prime Minister Netanyahu, as established in the context of turn 138.\",\n  \"reason\": \"Claim C explicitly states that Israel rejected Hamas’s counter-proposal without serious consideration, which directly verifies the substance of assumption A—that the listener understands the context of the Israel-Hamas War and recognizes the significance of a ceasefire. The rejection of the proposal is presented as a pivotal moment that caused a standstill"
     },
     {
       "a_turn_idx": 136,
@@ -11331,7 +11331,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'they' in turn 139 refers to Hamas, consistent with turn 136.\",\n  \"reason\": \"Claim C explicitly states that Hamas has reduced its demand for Palestinian prisoners to be released, which directly supports the broader assumption in A that Hamas has softened key demands—specifically, the demand for Israel to withdraw from Gaza and end the war. While C does not mention the listener's understanding of the context or the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Hamas refers to the same entity throughout; 'they' in turn 139 refers to Hamas.\",\n  \"reason\": \"Claim C explicitly states that Hamas has reduced the number of Palestinian prisoners it demands Israel release, which directly supports and clarifies a key aspect of the earlier assumption A—that the listener understands the context of the Israel-Hamas War and recognizes the significance of a ceasefire. While A focuses on the broader significance of a ceasefire and the context of negotiations, C provides"
     },
     {
       "a_turn_idx": 136,
@@ -11346,7 +11346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to 'All right. Carlos Juarez, thank you so much. I can't believe they would do that in the night kitchen by Maurice Sendak.' The phrase 'in the night kitchen' is a reference to the book 'In the Night Kitchen' by Maurice Sendak, which is the subject of the challenge mentioned in turn 153. However, the claim in turn 154 expresses personal disbelief"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to 'All right. Carlos Juarez, thank you so much. I can't believe they would do that in the night kitchen by Maurice Sendak.' The subject 'they' likely refers to those who challenged the book 'In the Night Kitchen' by Maurice Sendak, mentioned in turn 153. However, this claim is unrelated to the earlier assumption A about a temporal boundary ('within a week') for"
     },
     {
       "a_turn_idx": 137,
@@ -11391,7 +11391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Pippin refers to Jennifer Pippen; 'she' in turn refers to Pippin, the book challenger.\",\n  \"reason\": \"Claim C explicitly states that Florida’s education law permits the removal of public school library books that depict or describe certain content, which directly verifies the substance of assumption A—that public education should reflect diverse perspectives, including controversial ones—by highlighting a legal mechanism that enables the exclusion of such content based on perceived controversy. The context confirms that the law is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Pippin refers to Jennifer Pippen; 'she' in turn refers to Pippin, the book challenger.\",\n  \"reason\": \"Claim C explicitly states that Florida’s education law permits the removal of public school library books that depict or describe certain content, which directly verifies the substance of assumption A—that public education should reflect diverse perspectives, including controversial ones—by showing how such content can be excluded under legal authority. The context confirms that the law is being used to remove books"
     },
     {
       "a_turn_idx": 140,
@@ -11451,7 +11451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations in the books, specifically the depictions of characters without clothes. 'Nudity' in turn 145 refers to the same content discussed in turn 140.\",\n  \"reason\": \"Claim C explicitly states that 'nudity alone is not harmful to minors,' which directly verifies the core substance of assumption A—that nudity in children’s literature is acceptable if contextually relevant and age"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations in the books, specifically the depictions of characters without clothes. 'Nudity' in turn 145 refers back to the same content discussed in turn 140.\",\n  \"reason\": \"Claim C explicitly states that 'nudity alone is not harmful to minors,' which directly verifies the core substance of assumption A—that nudity in children’s literature is acceptable if contextually relevant and"
     },
     {
       "a_turn_idx": 140,
@@ -11466,7 +11466,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 153 refers to 'lawmakers' mentioned in turn 151 and 152. 'Individuals' in turn 153 refers to people challenging books, specifically Jennifer Pippen, who is identified as a grandparent in turn 153.\",\n  \"reason\": \"Claim C discusses legislative proposals to restrict book challenges to individuals with children in the school, which indirectly relates to the broader context of media"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 153 refers to 'lawmakers' mentioned in turn 151 and 152. 'Individuals' in turn 153 refers to people challenging books, specifically Jennifer Pippen, who is identified as a grandparent in turn 153.\",\n  \"reason\": \"Turn 153 mentions lawmakers considering limiting challenges from individuals without children at the school, which relates to the broader context of book"
     },
     {
       "a_turn_idx": 142,
@@ -11481,7 +11481,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 145 refers to the illustrations in the books mentioned in turn 142, specifically the depictions of naked characters in 'Night Kitchen' and 'Unicorns are the worst'. The term 'nudity' in turn 145 directly references the 'illustrations of characters without clothes' from turn 142.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that nudity"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 145 refers to the illustrations in the books mentioned in turn 142, specifically the depictions of naked characters in 'Night Kitchen' and 'Unicorns are the worst'. The term 'nudity' in turn 145 directly references the 'illustrations of characters without clothes' from turn 142.\",\n  \"reason\": \"Claim C explicitly states the legal standard under Florida law for determining whether"
     },
     {
       "a_turn_idx": 142,
@@ -11496,7 +11496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 150 refers to school libraries across Florida, which aligns with the subject of public school libraries mentioned in turn 142.\",\n  \"reason\": \"Claim C states that school libraries in Florida removed over 1400 books, which supports the broader implication of turn 142—that public school libraries are being pressured to conform to community standards (as seen through book challenges). While C does not explicitly mention 'community"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 150 refers to school libraries across Florida, which aligns with the subject of public school libraries mentioned in turn 142.\",\n  \"reason\": \"Claim C states that school libraries in Florida removed over 1400 books, which supports the broader implication of turn 142—that public school libraries are being pressured to conform to community standards, leading to book removals. While C does not explicitly mention 'community"
     },
     {
       "a_turn_idx": 142,
@@ -11511,7 +11511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, and 'a proposal' refers to the legislative proposal mentioned in the context.\",\n  \"reason\": \"Claim C discusses a legislative proposal about funding for individuals who challenge books, which is tangentially related to the broader context of book challenges in public school libraries. However, it does not explicitly state or verify the specific assumption in A—that public school libraries should conform to community standards regarding acceptable content. While the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, as established in the context of funding allocation proposals.\",\n  \"reason\": \"Claim C discusses a legislative proposal about funding allocations for school districts related to book challenges, which is tangentially related to the broader issue of community standards in public school libraries. However, it does not explicitly state or verify the specific assumption that public school libraries should conform to community standards regarding acceptable content. While the context implies that such"
     },
     {
       "a_turn_idx": 142,
@@ -11526,7 +11526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, as established in the context of funding decisions for book purchases.\",\n  \"reason\": \"Claim C discusses school districts using public funds to purchase books at $100 each, which relates to the financial mechanism of book acquisition but does not address or verify the core idea in assumption A—that public school libraries should conform to community standards regarding content. While both involve public school libraries and book content, C focuses"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, as established in the context of funding decisions for books.\",\n  \"reason\": \"Claim C discusses school districts using public funds to purchase books at $100 each, which relates to the financial mechanism of book acquisition but does not address or verify the core idea in assumption A—that public school libraries should conform to community standards regarding content. While both involve public school libraries and book content, C focuses on"
     },
     {
       "a_turn_idx": 142,
@@ -11541,7 +11541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 142 refers to the books (Night Kitchen and Unicorns are the worst), and 'nudity' in turn 145 refers to the same depictions mentioned in turn 142.\",\n  \"reason\": \"Turn 145 explicitly states that nudity alone is not harmful to minors, directly verifying the substance of turn 142, which assumes that the presence of nudity in illustrated books is significant"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 142 refers to the books (Night Kitchen and Unicorns are the worst), and 'nudity' in turn 145 refers to the same depictions mentioned in turn 142.\",\n  \"reason\": \"Turn 145 explicitly states that nudity alone is not harmful to minors, directly verifying the substance of assumption A, which claims the speaker views the presence of nudity as significant enough to warrant mention"
     },
     {
       "a_turn_idx": 143,
@@ -11556,7 +11556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to the action described in turn 143—Pippin's formal objection and the subsequent demand to alter the book (e.g., covering nudity with markers). 'The night kitchen' is a reference to the book 'In the Night Kitchen' by Maurice Sendak, which was the subject of the objection.\",\n  \"reason\": \"Claim C expresses strong disapproval ('preposterous') of the action taken"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to the action described in turn 143—Pippin's formal objection to the book 'Night Kitchen' due to its depictions of nudity, which the speaker finds unreasonable.\",\n  \"reason\": \"Claim C expresses strong disapproval ('preposterous') of the action taken in 'Night Kitchen,' which aligns with the earlier assumption A that contrasting formal objections with later interviews is important. While C does"
     },
     {
       "a_turn_idx": 144,
@@ -11571,7 +11571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrated characters in the books mentioned earlier (e.g., the goblin), and 'nudity' in turn 145 clearly refers to the same concept discussed in turn 144.\",\n  \"reason\": \"Claim C explicitly states 'nudity alone is not harmful to minors,' which directly verifies the substance of assumption A ('Nudity alone does not constitute pornography') by asserting a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in turn 144 refers to the illustrations containing nudity in the books discussed in turns 142–143. 'They' in turn 144 refers to the same illustrations.\",\n  \"reason\": \"Claim C explicitly states 'nudity alone is not harmful to minors,' which directly verifies the core substance of assumption A ('Nudity alone does not constitute pornography'). While A focuses on pornography, C extends the idea"
     },
     {
       "a_turn_idx": 144,
@@ -11586,7 +11586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations in the books, specifically the depictions of characters without clothes. 'A goblin's backside' in turn 145 is a specific instance of such nudity.\",\n  \"reason\": \"Claim C explicitly states that a goblin's backside does not appear to be harmful to children, which directly verifies the core idea in assumption A—that nudity alone does not constitute pornography or harm minors. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations containing nudity in the books discussed, specifically the goblin's backside mentioned in turn 145.\",\n  \"reason\": \"Claim C explicitly states that a goblin's backside does not appear to be harmful to children, which directly verifies the substance of assumption A—that nudity alone does not constitute pornography. The claim aligns with the reasoning in turn 145, where the speaker argues"
     },
     {
       "a_turn_idx": 144,
@@ -11601,7 +11601,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations in the books mentioned earlier, specifically the depictions of characters without clothes. In turn 145, 'nudity' refers to the same content, and 'the speaker' refers to SPEAKER_29, who explicitly states their belief about nudity not being harmful.\",\n  \"reason\": \"Turn 145 directly and explicitly verifies the claim made in turn 144 that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 144 refers to the illustrations in the books mentioned earlier, specifically the depictions of characters without clothes. The claim in turn 145 explicitly states that nudity alone is not harmful to minors, directly verifying the substance of the assumption in turn 144.\",\n  \"reason\": \"Turn 145 explicitly affirms that nudity in the book is not harmful to children, which directly verifies the core claim in turn"
     },
     {
       "a_turn_idx": 144,
@@ -11616,7 +11616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 151 refers to someone without a child in school, but there is no connection between this claim and the assumption about nudity not constituting pornography.\",\n  \"reason\": \"Claim C discusses the reasonableness of objecting to book challenges based on personal stake (having a child in school), while assumption A addresses the definition of pornography in relation to nudity. There is no semantic overlap or logical connection between the two statements. Claim C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 151 refers to someone without a child in school, which is unrelated to the concept of nudity not constituting pornography in turn 144.\",\n  \"reason\": \"Claim C discusses the reasonableness of objecting to book challenges based on personal stake (having a child in school), while assumption A addresses the definition of pornography in relation to nudity. There is no semantic connection between the two statements; C does not mention,"
     },
     {
       "a_turn_idx": 144,
@@ -11631,7 +11631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 147 refers to Stefano Farrell, who is introduced in the context. 'My son' refers to Farrell's child.\",\n  \"reason\": \"Turn 147 states that the speaker has an eight-year-old child, which provides personal context but does not explicitly affirm or verify the claim in turn 144 that the speaker has authority or credibility to define what is pornographic. While having a child may imply a stake"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 147 refers to Stefano Farrell, who is introduced as a member of the Florida Freedom to Read Project. 'My son' refers to Farrell's eight-year-old child.\",\n  \"reason\": \"Claim C states that the speaker has an eight-year-old child, which provides personal context but does not explicitly address or verify the assumption in A—that the speaker has the authority or credibility to define whether something is pornographic. While having a"
     },
     {
       "a_turn_idx": 144,
@@ -11646,7 +11646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 154 refers to the individuals who challenged the book 'The Night Kitchen' by Maurice Sendak, as established in the prior context involving Pippin and the legislative proposal.\",\n  \"reason\": \"Turn 154 expresses disbelief that a challenge occurred regarding 'The Night Kitchen' by Maurice Sendak, implying skepticism about the legitimacy or seriousness of the objection. However, it does not explicitly address or verify the earlier assumption A—that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to the act of challenging or removing the book 'In the Night Kitchen' by Maurice Sendak, as established in prior context.\",\n  \"reason\": \"Turn 154 expresses disbelief that the book 'In the Night Kitchen' was subject to challenge or removal, implying skepticism about the legitimacy of such action. However, it does not explicitly address or verify the assumption in turn 144—that the speaker has"
     },
     {
       "a_turn_idx": 145,
@@ -11661,7 +11661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to the action of challenging or censoring the book 'Night Kitchen' by Maurice Sendak, which includes removing nudity via permanent markers, as discussed in prior turns.\",\n  \"reason\": \"Claim C expresses disbelief that actions like censoring 'Night Kitchen' (e.g., drawing over nudity) are taken seriously, implying a judgment on the appropriateness of such measures. However, it does not explicitly address or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 154 refers to the action of challenging or censoring the book 'In the Night Kitchen' by Maurice Sendak, which includes removing nudity via drawing on illustrations. This is inferred from the prior context involving Pippin's challenge and the discussion of censorship.\",\n  \"reason\": \"Claim C expresses disbelief that actions like censoring or altering a book (e.g., drawing on illustrations) are justified, calling it 'preposterous"
     },
     {
       "a_turn_idx": 145,
@@ -11706,7 +11706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, which are the entities capable of purchasing books with public funding.\",\n  \"reason\": \"Claim C discusses school districts using public funds to buy books at $100 each, which relates to the broader issue of book access and censorship mentioned in A. However, C does not address or verify the specific claim in A—that public figures like Farrell have legitimate authority on free expression. While both statements touch on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 152 refers to school districts, which are the entities capable of purchasing books with public funds. No direct reference to Farrell or public figures' authority is present.\",\n  \"reason\": \"Claim C discusses school districts using public funding to purchase books at $100 each, which is a logistical and financial policy detail. It does not address or verify the legitimacy of public figures like Farrell having authority on free expression. While both A and"
     },
     {
       "a_turn_idx": 150,
@@ -11721,7 +11721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'individuals' in turn 152 refers to people who challenge books, as established in the prior context (turn 151). The phrase 'find individuals $100 for a book' is ambiguous but likely means reimbursing challengers $100 per book, not purchasing books.\",\n  \"reason\": \"Claim C states that school districts would be able to reimburse individuals $100 per book for unsuccessful challenges, which does not"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'individuals' in turn 152 refers to people who challenge books, as established in the prior context (turn 151). The phrase 'find individuals $100 for a book' is ambiguous but likely means reimbursing challengers $100 per book, not purchasing books.\",\n  \"reason\": \"Claim C states that school districts would be able to reimburse individuals $100 per book challenge, which does not explicitly verify"
     },
     {
       "a_turn_idx": 151,
@@ -11736,7 +11736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim A refers to individuals without children in school, which is explicitly referenced in claim C as 'individuals without children at the school where the book is located'. The phrase 'limiting challenges from people who don't have children at the school' directly verifies the assumption in A that such individuals lack standing.\",\n  \"reason\": \"Claim C explicitly states that lawmakers are considering restricting challenges from individuals without children at the school, which directly verifies the core assertion"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim A refers to individuals without children in school, which is explicitly referenced in claim C as 'individuals without children at the school where the book is located'.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by stating that lawmakers are considering limiting challenges from individuals without children at the school where the book is located, which matches the core idea in A that such individuals lack standing to raise serious concerns. The phrasing"
     },
     {
       "a_turn_idx": 151,
@@ -11751,7 +11751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'individuals' in turn 152 refers to those who object to books, as established in the prior context involving objections and financial costs.\",\n  \"reason\": \"Claim C states that school districts could reimburse individuals $100 for a book, which directly relates to the financial threshold mentioned in assumption A ($100). While C does not explicitly state that $100 is a 'meaningful threshold for evaluating the seriousness of objection,' it operational"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'individuals' in turn 152 refers to those who object to books, as established in the prior context involving objections and financial costs.\",\n  \"reason\": \"Claim C states that school districts could reimburse individuals $100 for a book, which directly relates to the financial threshold mentioned in assumption A. While C does not explicitly state that $100 is a 'meaningful threshold for evaluating the seriousness of objection,' it operationalizes the $1"
     },
     {
       "a_turn_idx": 151,
@@ -11766,7 +11766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in turn 151 refers to individuals challenging books without having children in the school; 'individuals' in turn 153 refers to the same group, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that lawmakers are considering limiting challenges from individuals without children at the school, which directly verifies the substance of assumption A—that limiting book challenges through legislative action is both feasible and desirable. The context confirms that the proposed limitation is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in turn 151 refers to individuals challenging books without having children at the school; 'individuals' in turn 153 refers to the same group, resolving coreference.\",\n  \"reason\": \"Claim C explicitly states that lawmakers are considering limiting challenges from individuals without children at the school, which directly verifies the substance of assumption A—that limiting book challenges through legislative action is both feasible and desirable. The context confirms this legislative consideration is underway,"
     },
     {
       "a_turn_idx": 152,
@@ -11781,7 +11781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Jennifer Pippen, as established in the context. 'Unicorns are the worst' is the title of the book challenged.\",\n  \"reason\": \"Claim C states that Jennifer Pippen challenged a book titled 'Unicorns are the worst,' which aligns with the event described in turn 153. However, it does not address or verify the speaker's belief about the $100 allocation being reasonable or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Jennifer Pippen, as established in the context. 'Unicorns are the worst' is the title of the book she challenged.\",\n  \"reason\": \"Claim C states that Jennifer Pippen challenged a book titled 'Unicorns are the worst' on behalf of a grandparent, which provides context about her motivation but does not explicitly address or verify the speaker's belief in turn 152 that allocating $10"
     },
     {
       "a_turn_idx": 153,
@@ -11811,7 +11811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 156 refers to consumers, and 'it' in turn 157 refers to the product/service (Sleep Number smartbed). The phrase 'near you' in turn 157 resolves to the same local stores mentioned in turn 156 as exclusive locations for the sale.\",\n  \"reason\": \"Claim C explicitly states where details about the product can be found—either at a nearby store or online at sleepnumber"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 156 refers to consumers, and 'it' in turn 157 refers to the Sleep Number smartbed product. 'Near you' resolves to local stores, which aligns with 'exclusively at a sleep number store' from turn 156.\",\n  \"reason\": \"Claim C explicitly states where details about the product can be found—nearby stores or sleepnumber.com—which directly verifies the information implied in"
     }
   ]
 }

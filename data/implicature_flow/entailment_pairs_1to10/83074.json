@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to the listener, but the claim is about enjoying Tupac while being a prosecutor, which is unrelated to the assumption about distinguishing live broadcasts from pre-recorded podcasts.\",\n  \"reason\": \"Claim C discusses the listener's ability to enjoy Tupac's music despite his critical lyrics toward prosecutors, which is a completely different topic from the assumption in A about distinguishing between live broadcasts and pre-recorded podcasts. There is no overlap in semantic"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to the listener, consistent with the audience addressed in turn 0. 'Tupac' is a proper noun and unambiguous.\",\n  \"reason\": \"Turn 9 discusses the listener's ability to enjoy Tupac's music despite his critical views of prosecutors, implying a contradiction in their role as a prosecutor. However, this does not explicitly address or verify the assumption in turn 0—that the listener can distinguish between live broadcasts"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A; 'the speaker' in C refers to SPEAKER_01, while 'the speaker' in A refers to SPEAKER_02. The topics (Tupac's lyrics vs. distinguishing live broadcasts from podcasts) are unrelated.\",\n  \"reason\": \"Claim C discusses Tupac's references to maternal love in his music, which is entirely unrelated to the assumption A about the listener's ability to distinguish live broadcasts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the relationship between A and C. 'The speaker' in A refers to SPEAKER_02; 'the speaker' in C refers to SPEAKER_01. No shared identity or reference.\",\n  \"reason\": \"Claim C discusses Tupac's references to maternal love, specifically in the song 'Dear Mama,' which is unrelated to the assumption in A about distinguishing live broadcasts from pre-recorded podcasts. There is no overlap in semantic content,"
     },
     {
       "a_turn_idx": 0,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 23 refers to SPEAKER_01, consistent with context.\",\n  \"reason\": \"Claim C (turn 23) discusses turnout at a political event in New Hampshire and emphasizes the universality of shared concerns across demographics. However, it does not address or verify the earlier assumption A, which is about valuing depth over novelty in audience contributions. There is no mention of audience contribution quality, depth, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 23 refers to SPEAKER_01, consistent with context.\",\n  \"reason\": \"Claim C (turn 23) discusses attendance at a political event in New Hampshire and emphasizes the universality of shared concerns across demographics. However, it does not address or verify the earlier assumption A, which is about valuing depth over novelty in audience contributions. There is no mention of audience contribution quality, depth, or"
     },
     {
       "a_turn_idx": 5,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to the listener (SPEAKER_01), as established in the prior context where SPEAKER_01 shared their experience on the Breakfast Club. The phrase 'listening to Tupac' and 'being a prosecutor' directly reference the listener's stated past behavior and current role.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds it contradictory that the listener, as a prosecutor, could enjoy Tupac—whose"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to the listener (SPEAKER_01), who was on the Breakfast Club and mentioned listening to Tupac. The phrase 'as a prosecutor' clarifies the listener's role, which is central to the contradiction raised.\",\n  \"reason\": \"Claim C explicitly states the speaker's surprise at the listener enjoying Tupac while being a prosecutor, directly addressing the implied assumption in A that the listener's responses (about music preferences"
     },
     {
       "a_turn_idx": 5,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Tupac, established in prior context. 'That' in 'that whole genre' refers to Tupac's musical and political influence.\",\n  \"reason\": \"Claim C explicitly states that Tupac had a deep understanding of politics and social justice issues, which directly verifies the substance of assumption A—that audiences can understand complex issues if properly engaged—by demonstrating that Tupac, through his music, communicated complex societal critiques effectively to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Tupac, established in prior context.\",\n  \"reason\": \"Claim C explicitly states that Tupac had a deep understanding of politics and social justice issues, which directly verifies the implied assumption in A that audiences can grasp complex issues when properly engaged—here illustrated through Tupac’s articulate and historically informed commentary on systemic injustices. The claim goes beyond mere mention, affirming intellectual depth and societal relevance, thus strongly and explicitly"
     },
     {
       "a_turn_idx": 8,
@@ -707,11 +707,11 @@
       "claim_text": "Tupac came from a family involved in activism.",
       "overlap_score": 2,
       "c_time": 204.695,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'his' in 'his family was active' refers to Tupac, resolving coreference to the subject of the discussion.",
-      "reason": "Claim C explicitly states that Tupac's family was active, which directly verifies the assumption in A that the listener should recognize Tupac’s references to family relationships. The mention of family involvement in activism provides clear contextual support for understanding Tupac’s personal connections and motivations, making the earlier assumption explicit and verifiable.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in 'his family was active' refers to Tupac, resolving coreference to the subject of the discussion.\",\n  \"reason\": \"Claim C explicitly states that Tupac's family was active, which directly verifies the assumption in A that the listener should recognize Tupac’s references to family relationships. The mention of family involvement in activism provides clear contextual support for understanding Tupac’s personal connections and motivations, making the earlier assumption explicit and verifiable.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in 'his family was active' refers to Tupac, resolving coreference to the subject of the discussion.\",\n  \"reason\": \"Claim C explicitly states that Tupac's family was active, which directly verifies the assumption in A that the listener should recognize Tupac’s references to family relationships. The mention of family involvement in activism provides clear contextual support for understanding Tupac’s personal connections and thematic depth in his music, thereby explicitly validating the earlier assumption.\""
     },
     {
       "a_turn_idx": 10,
@@ -846,7 +846,7 @@
       "confidence": 0.95,
       "coref_notes": "No coreference links relevant to the comparison between A and C; 'Megan' in C refers to a different individual than Tupac in A.",
       "reason": "Claim C discusses Megan's failure to learn from past mistakes, which is entirely unrelated to the earlier assumption A about Tupac being a culturally significant, forward-thinking figure. There is no overlap in subject matter, theme, or semantic content. The two statements address different individuals and distinct topics.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Megan' in C refers to a different individual than Tupac in A.\",\n  \"reason\": \"Claim C discusses Megan's failure to learn from past mistakes, which is entirely unrelated to the earlier assumption A about Tupac being a culturally significant, forward-thinking figure. There is no overlap in subject matter, theme, or semantic content. The two statements address different individuals and distinct topics.\"\n}\n```"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Megan' in C refers to a different individual than Tupac in A.\",\n  \"reason\": \"Claim C discusses Megan's failure to learn from past mistakes, which is entirely unrelated to the earlier assumption A about Tupac being a culturally significant, forward-thinking figure. There is no overlap in subject matter, theme, or semantic content. The two statements address different individuals and distinct topics.\"\n}\n``````json"
     },
     {
       "a_turn_idx": 13,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses immigration policy and criteria for entering America, which is entirely unrelated to assumption A (turn 13), which concerns the speaker's alignment with evidence on racial disparities in the criminal justice system. There is no overlap in topic, content, or implied support. The shift from systemic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses immigration policy and criteria for entering America, which is entirely unrelated to assumption A (turn 13), which concerns the speaker's alignment with evidence on racial disparities in the criminal justice system. There is no overlap in topic, content, or implied support. The shift to immigration"
     },
     {
       "a_turn_idx": 17,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to Megan, who is distinct from the speaker in turn 17. The claim in C concerns Megan's perceived lack of learning, while A concerns the speaker's own agency and control.\",\n  \"reason\": \"Turn 40 makes a claim about Megan's failure to learn from past experiences, which is unrelated to the speaker's agency or control over their own actions as stated in turn 17. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to Megan, who is the subject of the claim about not learning her lesson. The reference to 'Megan 2.0' implies a repeated pattern of behavior, suggesting lack of genuine change.\",\n  \"reason\": \"Claim C discusses Megan's failure to learn from past experiences, implying a lack of personal growth or agency in changing her behavior. However, this does not directly address or verify the specific assertion in A—that"
     },
     {
       "a_turn_idx": 18,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 21 refers to the general public or collective humanity, aligning with the implied shared understanding in turn 18. 'Us' and 'our' in turn 21 correspond to the audience and speaker's shared human experience.\",\n  \"reason\": \"Claim C explicitly states that the speaker addresses shared human experiences—health, family, financial stability—regardless of demographic differences, which directly supports the assumption in A that rhetorical questions imply"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 21 refers to the collective audience and speaker, aligning with the implied shared understanding in turn 18. 'Us' and 'our' consistently refer to the general human experience across demographics.\",\n  \"reason\": \"Turn 21 explicitly verifies the substance of turn 18 by stating that the speaker's message is grounded in universal human experiences—health, family, financial stability—that transcend demographic divisions. This directly confirms the assumption"
     },
     {
       "a_turn_idx": 18,

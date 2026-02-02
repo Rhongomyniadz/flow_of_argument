@@ -14961,7 +14961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to senators and congressmen mentioned in turn 142, which is unrelated to the subject of app behavior detection in a coffee shop.\",\n  \"reason\": \"Claim C discusses public distrust toward politicians and their statements, particularly regarding national security threats. This is unrelated to assumption A, which concerns the ability of a coffee shop's Wi-Fi provider to detect or control app behavior on a personal phone. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to senators/congressmen, which is consistent with context. However, claim C discusses public disbelief in political figures, while assumption A concerns technical detectability of app behavior on public Wi-Fi.\",\n  \"reason\": \"Claim C (turn 144) discusses widespread distrust in politicians' statements, particularly regarding national security threats. This is unrelated to assumption A, which asserts that a coffee shop's Wi-Fi environment does"
     },
     {
       "a_turn_idx": 125,
@@ -15291,7 +15291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to users of the app, consistent with the broader context of personal data collection. 'That information' in turn 127 refers to user data including location, contacts, browsing behavior, and conversations.\",\n  \"reason\": \"Claim C explicitly lists the data sources mentioned in assumption A—user locations, contacts, browsing behavior, and conversations—and directly verifies the mechanism by which AI algorithms collect such data. This matches the substance of A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to users of the app, consistent with the broader context of personal data collection. 'They' in turn 127 refers to artificial intelligence systems, which is clarified in turn 129 as 'artificial intelligence algorithms'.\",\n  \"reason\": \"Claim C explicitly states that AI algorithms collect data from user locations, contacts, browsing behavior, and conversations—directly verifying the core elements of assumption A, which asserts that"
     },
     {
       "a_turn_idx": 127,

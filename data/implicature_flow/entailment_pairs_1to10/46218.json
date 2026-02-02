@@ -5781,7 +5781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 80) states that the speaker considers themselves the youngest member of Congress, which is unrelated to assumption A (turn 69), which concerns ethical responsibilities as a new member of Congress. While both refer to being a new member, C does not address ethics, responsibility, or any moral dimension. The focus shifts entirely to age and physical stamina"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is also the speaker in turn 69. No other coreference issues.\",\n  \"reason\": \"Turn 80 states that the speaker considers themselves the youngest member of Congress, which is unrelated to the ethical responsibilities mentioned in turn 69. There is no mention of ethics, responsibility, or moral duty in turn 80. The two statements address entirely different topics—"
     },
     {
       "a_turn_idx": 69,
@@ -5796,7 +5796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, the same speaker as in turn 69. The phrase 'not the dumbest member of Congress' is self-deprecating humor and does not address the ethical responsibilities mentioned in A.\",\n  \"reason\": \"Turn 80 expresses a personal belief about intelligence and capability relative to other members of Congress, which is unrelated to the ethical responsibilities discussed in turn 69. While both"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, the same speaker as in turn 69. The statement 'I'm not the dumbest member of Congress' is self-referential and does not directly address or verify the ethical responsibilities mentioned in turn 69.\",\n  \"reason\": \"Turn 80 expresses a personal belief about intelligence and capability, which is tangentially related to being a new member of Congress but does not explicitly"
     },
     {
       "a_turn_idx": 69,
@@ -5811,7 +5811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress mentioned in the prior context.\",\n  \"reason\": \"Claim C discusses physical and mental stamina as necessary for fulfilling daily responsibilities in Congress, which relates to the broader theme of the demands of being a member of Congress. However, it does not explicitly address the ethical responsibilities mentioned in assumption A (turn 69). While the discussion of stamina implies the difficulty of the role, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress mentioned in the prior context.\",\n  \"reason\": \"Claim C discusses physical and mental stamina as necessary for fulfilling daily responsibilities in Congress, which relates to the broader theme of the demands of being a member of Congress. However, it does not explicitly address the ethical responsibilities mentioned in assumption A (turn 69). While the discussion of stamina touches on the challenges of serving in Congress—"
     },
     {
       "a_turn_idx": 69,
@@ -5841,7 +5841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the system' refers to Air Force One communications, not related to the concept of newcomers or ethical behavior.\",\n  \"reason\": \"Claim C discusses the internal phone system of Air Force One and its access to phone numbers without contacting Verizon. This topic is entirely unrelated to assumption A, which concerns the ethical responsibility of newcomers in Congress. There is no overlap in subject matter, semantics, or implied content. Therefore, the claim neither supports nor relates to the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about communication systems on Air Force One and access to phone numbers, unrelated to the ethical conduct of newcomers in Congress.\",\n  \"reason\": \"Claim C discusses the internal communication capabilities of Air Force One and access to phone numbers without contacting external providers like Verizon. This is entirely unrelated to the ethical responsibility of newcomers in Congress, which is the subject of assumption A. There is no overlap in semantic content, and C neither supports nor relates to A"
     },
     {
       "a_turn_idx": 70,
@@ -5852,11 +5852,11 @@
       "claim_text": "The speaker considers themselves the youngest member of Congress.",
       "overlap_score": 2,
       "c_time": 2184.357,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.",
-      "reason": "Claim C (turn 80) states that the speaker considers themselves the youngest member of Congress, which is unrelated to assumption A (turn 70), which concerns the significance of being away from family during weekends. There is no overlap in semantic content between the two statements. Therefore, the entailment score is 1.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 80) states that the speaker considers themselves the youngest member of Congress, which is unrelated to assumption A (turn 70), which concerns the significance of being away from family during weekends. There is no overlap in semantic content between the two statements. Therefore, the entailment score is 1.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A; 'the speaker' in both instances refers to the same person, but the topics differ significantly.\",\n  \"reason\": \"Claim C states that the speaker considers themselves the youngest member of Congress, which is unrelated to the earlier assumption A about the significance of being away from family during weekends. There is no overlap in semantic content between the two statements. Therefore, the claim does not make the assumption explicit, nor does it support or"
     },
     {
       "a_turn_idx": 70,
@@ -5871,7 +5871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the president' in turn 93 refers to the same individual mentioned in earlier turns (Obama), but the claim in C is unrelated to the assumption in A.\",\n  \"reason\": \"Turn 70 expresses the assumption that being away from family during weekends is significant. Turn 93 states that speaking to the president is unrealistic or unattainable, which is unrelated to the emotional or personal significance of weekend separation from family. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 93 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 93) states that speaking to the president is unrealistic or unattainable, which contradicts the earlier assumption A (turn 70), where the speaker implies that being away from family during weekends is significant. However, C does not address or relate to the significance of being away from"
     },
     {
       "a_turn_idx": 70,
@@ -5886,7 +5886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect 'the speaker' in turn 95 to the subject of turn 70; the contexts are distinct—turn 70 discusses being away from family during weekends, while turn 95 describes movement on Air Force One during a flight.\",\n  \"reason\": \"Turn 95 discusses physical freedom of movement on Air Force One and interactions with the president, which is unrelated to the emotional or situational significance of being away from family during weekends"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' refers consistently to SPEAKER_00 in both turns.\",\n  \"reason\": \"Claim C discusses movement between seats and the boardroom on Air Force One, which is unrelated to the assumption in A about the significance of being away from family during weekends. There is no mention of family, weekends, emotional impact, or separation from loved ones in C. The topics are entirely different, and C does"
     },
     {
       "a_turn_idx": 70,
@@ -5916,7 +5916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 73 refers to SPEAKER_00, the speaker recounting the experience. 'What you've accomplished' refers to the actions described in turns 70–72, particularly the strategic efforts to secure votes.\",\n  \"reason\": \"Turn 73 expresses admiration for the speaker's accomplishments and suggests that the full extent of those actions has not yet been revealed ('we're not even at the tip of the iceberg'). However"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 73 refers to SPEAKER_00, the speaker recounting the experience. 'What you've accomplished' refers to the actions described in turns 70–72, particularly the strategic efforts to pass the Affordable Care Act.\",\n  \"reason\": \"Turn 73 expresses admiration for the speaker's accomplishments and suggests that the full extent of those actions has not yet been revealed ('we're not even at the tip of the"
     },
     {
       "a_turn_idx": 70,
@@ -5927,11 +5927,11 @@
       "claim_text": "The speaker believes they are not the dumbest member of Congress.",
       "overlap_score": 2,
       "c_time": 2184.357,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.",
-      "reason": "Claim C (turn 80) expresses self-perception about intelligence ('not the dumbest member of Congress') and reflects on age and stamina, but does not mention or imply anything about intentional or malicious actions. There is no semantic connection between C and A, which concerns belief in malicious intent behind political tactics. Thus, C neither supports nor relates to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 80) expresses self-perception about intelligence ('not the dumbest member of Congress') and reflects on age and stamina, but does not mention or imply anything about intentional or malicious actions. There is no semantic connection between C and A, which concerns belief in malicious intent behind political tactics. Thus, C neither supports nor relates to A.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 80) expresses self-perception about intelligence ('not the dumbest member of Congress') and reflects on age and stamina, but does not mention or imply anything about intentional or malicious actions. There is no semantic connection between C and A, which concerns belief in malicious intent behind specific political actions. Thus, C neither states nor verifies A, and"
     },
     {
       "a_turn_idx": 70,
@@ -5946,7 +5946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the president' refers to Obama, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 93) states that going to talk to the president is not feasible, which contradicts the speaker's own account in turn 95 where they describe successfully approaching and talking to President Obama during the flight. This directly contradicts the idea that such interaction is impossible, thus contradicting assumption A, which asserts intentional and malicious behavior (im"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 93 refers to the speaker (SPEAKER_00), and 'the president' refers to President Obama.\",\n  \"reason\": \"Turn 93 states that going to talk to the president is not feasible, which contradicts the earlier assumption A that actions were intentional and malicious. Turn 93 implies a lack of access or opportunity to speak with the president, while assumption A involves deliberate, strategic manipulation by"
     },
     {
       "a_turn_idx": 70,
@@ -5961,7 +5961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to the speaker (SPEAKER_00) in turn 96; 'you' in 'walking into Congress' refers to the speaker.\",\n  \"reason\": \"Claim C (turn 96) discusses reflection on one's journey to Congress, which is unrelated to the earlier assumption A (turn 70) that the speaker believes certain actions were intentional and malicious. There is no mention of intent, malice, or the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 96 refers to the speaker reflecting on their own journey to Congress.\",\n  \"reason\": \"Claim C (turn 96) discusses reflection on the journey to Congress, which is unrelated to assumption A (turn 70), which asserts that the speaker believes certain political actions were intentional and malicious. There is no mention of intent, malice, or the specific actions described in turn 70. The topics diver"
     },
     {
       "a_turn_idx": 71,
@@ -5987,11 +5987,11 @@
       "claim_text": "The speaker believes they are not the dumbest member of Congress.",
       "overlap_score": 2,
       "c_time": 2184.357,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'I' in turn 80 refers to SPEAKER_00, consistent with prior turns.",
-      "reason": "Turn 80 expresses self-perception about intelligence ('not the dumbest member of Congress') but does not address or verify the claim in turn 71 that personal appeals through direct communication influence political decisions. There is no mention of lobbying, persuasion, or influence via direct contact. The two statements are unrelated in substance.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, consistent with prior turns.\",\n  \"reason\": \"Turn 80 expresses self-perception about intelligence ('not the dumbest member of Congress') but does not address or verify the claim in turn 71 that personal appeals through direct communication influence political decisions. There is no mention of lobbying, persuasion, or influence via direct contact. The two statements are unrelated in substance.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 80) expresses self-perception about intelligence ('not the dumbest member of Congress') and reflects on age and stamina, but does not mention or verify the idea that personal appeals through direct communication influence political decisions. There is no explicit or implicit connection between the belief in personal influence via direct contact (A) and"
     },
     {
       "a_turn_idx": 71,
@@ -6006,7 +6006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 93 refers to the listener (SPEAKER_01), and 'the president' refers to President Obama as established in the context.\",\n  \"reason\": \"Claim C (turn 93) states that going to talk to the president is not feasible, which directly contradicts the earlier assumption A (turn 71), where the speaker describes personal appeals—such as being called into the Oval Office or receiving direct calls from"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01's 'you' in turn 93 refers to SPEAKER_00, as the speaker is addressing the previous speaker's experience.\",\n  \"reason\": \"Claim C (turn 93) states that going to talk to the president is not feasible, which directly contradicts assumption A (turn 71), where the speaker describes personal appeals through direct communication (e.g., calls to the Oval Office) as effective in influencing political decisions."
     },
     {
       "a_turn_idx": 71,
@@ -6021,7 +6021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_00), as established by context. 'This point' in 'at this point' refers to the moment of entering Congress, which aligns with the speaker's journey described earlier.\",\n  \"reason\": \"Turn 96 raises a reflective question about how one got to Congress, which touches on the broader theme of personal journey and influence. However, it does not explicitly state or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_00), as established by context. 'This point' in 'at this point' refers to the moment of entering Congress.\",\n  \"reason\": \"Turn 96 asks whether the speaker reflects on how they got to Congress, which is tangentially related to the idea of personal influence in politics. However, it does not explicitly state or verify the belief that personal appeals through direct"
     },
     {
       "a_turn_idx": 71,
@@ -6035,8 +6035,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'you' refers to the speaker addressing the audience.",
-      "reason": "Claim C discusses the interior of Air Force One being comparable to a well-appointed RV, emphasizing functionality over luxury. This topic is entirely unrelated to assumption A, which concerns voting outcomes being driven by strategic persuasion rather than policy merits. There is no overlap in subject matter, concept, or implied connection between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' refers to the speaker addressing the audience.\",\n  \"reason\": \"Claim C discusses the interior of Air Force One being comparable to a well-appointed RV, emphasizing functionality over luxury. This topic is entirely unrelated to assumption A, which concerns voting outcomes being driven by strategic persuasion rather than policy merits. There is no overlap in subject matter, concept, or implied connection between the two statements.\"\n}\n```"
+      "reason": "Claim C discusses the interior of Air Force One being comparable to a well-appointed RV, emphasizing functionality over luxury. This is entirely unrelated to Assumption A, which concerns voting outcomes being driven by strategic persuasion rather than policy merits. There is no overlap in subject matter, concept, or implied connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' refers to the speaker addressing the audience.\",\n  \"reason\": \"Claim C discusses the interior of Air Force One being comparable to a well-appointed RV, emphasizing functionality over luxury. This is entirely unrelated to Assumption A, which concerns voting outcomes being driven by strategic persuasion rather than policy merits. There is no overlap in subject matter, concept, or implied connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 71,
@@ -6051,7 +6051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to a member of Congress, consistent with the speaker's identity in prior turns. 'Members representational allowance' refers to the funding allocated to each congressional office.\",\n  \"reason\": \"Turn 76 mentions that the representational allowance can be used to rent office space, which relates to the physical workspace of members of Congress. However, it does not explicitly address or verify the specific claim in turn 71—that the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to a member of Congress, consistent with the speaker's identity in prior turns. 'Your office space' refers to the congressional office mentioned in earlier context.\",\n  \"reason\": \"Claim C discusses the representational allowance enabling the rental of office space, which relates to the physical infrastructure of congressional work. However, it does not explicitly address or verify the specific claim in A—that the Oval Office represents a space of significant power and"
     },
     {
       "a_turn_idx": 72,
@@ -6081,7 +6081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to the member of Congress, consistent with the context of congressional office operations.\",\n  \"reason\": \"Claim C states that each congressional office receives approximately $1.5 million annually for representational purposes, which provides financial context about congressional resources. However, it does not explicitly address or verify the specific assumption in A—that living in a congressional office is unusual or noteworthy. While the financial strain mentioned in the surrounding context (e.g.,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to the member of Congress, and 'each congressional office' refers to the individual offices of members of Congress, consistent with the context.\",\n  \"reason\": \"Claim C states that each congressional office receives about $1.5 million annually for representational purposes, which provides financial context about congressional resources. However, it does not explicitly state or verify the assumption that living in a congressional office is unusual or noteworthy (A). While the"
     },
     {
       "a_turn_idx": 73,
@@ -6096,7 +6096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same speaker as in turn 73. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 80) states that the speaker considers themselves the youngest member of Congress, which is unrelated to assumption A (turn 73), which asserts that being a member of Congress implies significant political responsibility and commitment. While both statements relate to being a member"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same speaker as in turn 73.\",\n  \"reason\": \"Claim C (turn 80) states that the speaker considers themselves the youngest member of Congress, which is unrelated to assumption A (turn 73), which asserts that being a member of Congress implies significant political responsibility and commitment. While both statements are about being a member of Congress, C does not"
     },
     {
       "a_turn_idx": 73,
@@ -6111,7 +6111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same individual speaking in turn 73. No other coreference issues.\",\n  \"reason\": \"Turn 80 states that the speaker believes they are not the dumbest member of Congress, which is unrelated to the assumption in turn 73 that being a member of Congress implies significant political responsibility and commitment. While both statements relate to being a member of Congress, turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same speaker as in turn 73. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 80) states that the speaker believes they are not the dumbest member of Congress, which is unrelated to assumption A (turn 73), which asserts that being a member of Congress implies significant political responsibility and commitment. While both statements relate to"
     },
     {
       "a_turn_idx": 73,
@@ -6126,7 +6126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to the president; 'my office' in turn 88 refers to the speaker's congressional office.\",\n  \"reason\": \"Claim C states that there is a person in the White House assigned to the speaker's office to communicate important issues, which relates to the broader context of communication between the White House and Congress. However, it does not explicitly address or verify the specific assumption A—that the speaker trusts the credibility of the person"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to the president; 'my office' in turn 88 refers to the speaker's congressional office.\",\n  \"reason\": \"Claim C states that there is a person in the White House assigned to the speaker's office to communicate important issues, which relates to the broader context of communication between the White House and Congress. However, it does not address or verify the specific assumption A—that the speaker trusts the credibility of the person sharing"
     },
     {
       "a_turn_idx": 73,
@@ -6141,7 +6141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 93 refers to SPEAKER_01, who is the listener in the conversation. The claim in C is about SPEAKER_01's desire to talk to the president, which is unrelated to the earlier assumption A about trusting the credibility of the person sharing the story.\",\n  \"reason\": \"Assumption A (turn 73) concerns trust in the credibility of the storyteller (SPEAKER_00), while"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 93 refers to SPEAKER_01, who is the person being addressed. The claim in C is about SPEAKER_01's desire to talk to the president, which is unrelated to the earlier assumption A about trusting the credibility of the person sharing the story.\",\n  \"reason\": \"Assumption A (turn 73) concerns trust in the credibility of the storyteller, specifically regarding the narrative about the Affordable Care Act"
     },
     {
       "a_turn_idx": 73,
@@ -6171,7 +6171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to a member of Congress, consistent with the subject of turn 73. 'Each congressional office' refers to the physical workspace of a member of Congress, which aligns with the idea of 'congressional office space' in turn 73.\",\n  \"reason\": \"Claim C states that each congressional office receives $1.5 million annually for representational purposes, including hiring staff and renting office space. This supports"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 76 refers to a member of Congress, consistent with the subject of turn 73. 'Each congressional office' refers to the physical workspace of a member of Congress, which aligns with the idea of 'congressional office space' in turn 73.\",\n  \"reason\": \"Turn 76 states that congressional offices receive about $1.5 million annually for representational purposes, including hiring staff and renting office space."
     },
     {
       "a_turn_idx": 74,
@@ -6186,7 +6186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress, which is consistent with the context. However, this claim does not address or verify the assumption about public perceptions of healthcare and pensions.\",\n  \"reason\": \"Claim C expresses surprise at the physical stamina of older members of Congress serving in office, which is unrelated to the assumption in A about public beliefs regarding privileged access to healthcare and pensions. There is no mention of benefits, healthcare,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress, which is consistent with the context. However, this claim does not address or verify the assumption about public perception of healthcare and pension privileges.\",\n  \"reason\": \"Claim C expresses surprise at the physical stamina of older members of Congress serving in office, which is unrelated to the assumption in A about public beliefs regarding privileged access to healthcare and pensions. There is no mention of benefits, healthcare"
     },
     {
       "a_turn_idx": 74,
@@ -6197,11 +6197,11 @@
       "claim_text": "The interior of Air Force One is comparable to a well-appointed RV rather than a luxury aircraft.",
       "overlap_score": 2,
       "c_time": 2378.338,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference relevant; claim C discusses Air Force One's interior, while assumption A concerns congressional living arrangements due to financial hardship.",
-      "reason": "Claim C discusses the modest, functional nature of Air Force One's interior, comparing it to an RV, which is unrelated to the financial hardship of members of Congress sleeping on office couches. There is no overlap in subject matter, context, or semantic content between A and C. Thus, the claims are clearly unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; claim C discusses Air Force One's interior, while assumption A concerns congressional living arrangements due to financial hardship.\",\n  \"reason\": \"Claim C discusses the modest, functional nature of Air Force One's interior, comparing it to an RV, which is unrelated to the financial hardship of members of Congress sleeping on office couches. There is no overlap in subject matter, context, or semantic content between A and C. Thus, the claims are clearly unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; claim C discusses Air Force One's interior, while assumption A concerns congressional members sleeping on office couches due to financial hardship.\",\n  \"reason\": \"Claim C discusses the modest, functional nature of Air Force One's interior, comparing it to a well-appointed RV. This is unrelated to assumption A, which asserts that sleeping on office couches reflects genuine financial hardship among members of Congress. There is no overlap in subject matter, context, or semantic content. The"
     },
     {
       "a_turn_idx": 75,
@@ -6216,7 +6216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 89 refers to the listener (SPEAKER_01), consistent with prior context.\",\n  \"reason\": \"Turn 89 ('You check your schedule and then you confirm') is unrelated to the earlier assumption A (turn 75), which claims the listener should understand the point being made without further explanation. Turn 89 introduces a procedural action (checking a schedule) that does not address understanding, clarity"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 89 refers to the listener (SPEAKER_01), consistent with prior context.\",\n  \"reason\": \"Turn 89 ('You check your schedule and then you confirm') is unrelated to assumption A (turn 75), which claims the listener should understand the point being made without further explanation. Turn 89 introduces a procedural action (checking a schedule) that does not address understanding, clarity, or"
     },
     {
       "a_turn_idx": 75,
@@ -6231,7 +6231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 89 refers to the listener (SPEAKER_01), consistent with prior context.\",\n  \"reason\": \"Turn 89 ('After checking the schedule, the listener should confirm') does not address or verify the assumption in turn 75, which is that the listener should understand the point being made without further explanation. Instead, turn 89 introduces a procedural step (checking a schedule and confirming) unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 89 refers to the listener (SPEAKER_01), consistent with prior context.\",\n  \"reason\": \"Turn 89 ('After checking the schedule, the listener should confirm') is unrelated to assumption A (turn 75), which claims the listener should understand the point without further explanation. Turn 89 introduces a procedural step about confirming availability after checking a schedule, which is irrelevant to the epist"
     },
     {
       "a_turn_idx": 75,
@@ -6246,7 +6246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 77 refers to the speaker (SPEAKER_00), who is discussing the budget allocation for their congressional office. The term 'budget' refers to the members representational allowance mentioned in turn 76.\",\n  \"reason\": \"Claim C explicitly states that half of the annual budget (approximately $1.5 million) is allocated to staff, budgets, and office rent. This directly verifies the substance of assumption A, which"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 77 refers to the speaker's congressional office budget, which is consistent with the context of budget allocation for staff and office expenses discussed in turn 75.\",\n  \"reason\": \"Claim C explicitly states that half of the annual budget (about a million and a half dollars) is allocated to staff, budgets, and office rent—directly verifying the substance of assumption A, which asserts that budget allocation for staff is a standard and expected"
     },
     {
       "a_turn_idx": 75,
@@ -6261,7 +6261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in claim C refers to the speaker (SPEAKER_00), consistent with the context of congressional office budgeting discussed in turn 76.\",\n  \"reason\": \"Claim C explicitly states that half of the annual budget (about a million and a half dollars) is allocated to paying for staff, budgets, and office rent. This directly verifies the substance of assumption A, which posits that the listener (SPEAKER_01)"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 77 refers to the speaker's congressional office budget, which aligns with the context of the members representational allowance discussed in turn 76.\",\n  \"reason\": \"Claim C explicitly states that half of the annual budget (about a million and a half dollars) is allocated to staff, budgets, and office rent. This directly verifies the substance of assumption A, which posits that the listener assumes the speaker has both staff and a"
     },
     {
       "a_turn_idx": 75,
@@ -6276,7 +6276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, the same speaker as in turn 75. The claim in turn 80 is about self-perception regarding intelligence ('not the dumbest member of Congress'), which is unrelated to the assumption in turn 75 about the existence of staff and a budget.\",\n  \"reason\": \"Turn 75 assumes the listener believes the speaker has both staff and a budget, based on the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, the same speaker as in turn 75. The claim in turn 80 is about self-perception regarding intelligence relative to other members of Congress, which is unrelated to the assumption in turn 75 about the existence of staff and a budget.\",\n  \"reason\": \"Turn 75 assumes the listener believes the speaker has both staff and a budget, based on the question about"
     },
     {
       "a_turn_idx": 75,
@@ -6306,7 +6306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 89 refers to the listener (SPEAKER_01), who was previously asking about staff and budget in turn 75.\",\n  \"reason\": \"Turn 89 states that the speaker acknowledges the listener's likely familiarity with the process, which is a general observation about the listener's knowledge. However, it does not explicitly state or verify the specific assumption in turn 75—that the listener believes the speaker has both staff and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 89 refers to the listener (SPEAKER_01), who was the subject of the earlier assumption A regarding their presumed familiarity with congressional processes.\",\n  \"reason\": \"Turn 89 states that the speaker acknowledges the listener's likely familiarity with the process, which is tangentially related to assumption A (that the listener holds a position including staff and a budget). However, C does not explicitly verify or state the substance of A"
     },
     {
       "a_turn_idx": 75,
@@ -6320,8 +6320,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'you' refers to the listener in both A and C.",
-      "reason": "Claim C discusses the facilities on Air Force One, including a fully functional operating room, which is unrelated to the earlier assumption A about the listener's belief regarding having staff and a budget. There is no mention of staffing, budget allocation, or congressional office resources in C. The topics are entirely different, and C neither states nor verifies the substance of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' refers to the listener in both A and C.\",\n  \"reason\": \"Claim C discusses the facilities on Air Force One, including a fully functional operating room, which is unrelated to the earlier assumption A about the listener's belief regarding having staff and a budget. There is no mention of staffing, budget allocation, or congressional office resources in C. The topics are entirely different, and C neither states nor verifies the substance of A.\"\n}\n```"
+      "reason": "Claim C discusses the facilities on Air Force One, including a fully functional operating room, which is unrelated to the assumption in A that the listener believes the speaker has both staff and a budget. There is no mention of staff, budget, or congressional office resources in C. The topics are entirely different, and C neither states nor verifies the substance of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' refers to the listener in both A and C.\",\n  \"reason\": \"Claim C discusses the facilities on Air Force One, including a fully functional operating room, which is unrelated to the assumption in A that the listener believes the speaker has both staff and a budget. There is no mention of staff, budget, or congressional office resources in C. The topics are entirely different, and C neither states nor verifies the substance of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 75,
@@ -6336,7 +6336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 93 refers to SPEAKER_01, who is the speaker questioning the feasibility of talking to the president. No coreference resolves to SPEAKER_00.\",\n  \"reason\": \"Turn 93 expresses a belief that talking to the president is not feasible, which contradicts the earlier assumption A (turn 75) that the listener believes the speaker has both staff and a budget. Turn 93 is unrelated to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 93 refers to the speaker (SPEAKER_01), who is expressing disbelief or dismissal about the feasibility of talking to the president. This contrasts with assumption A, which concerns the existence of staff and a budget for a congressional office.\",\n  \"reason\": \"Claim C (turn 93) discusses the practical impossibility of speaking with the president during a flight on Air Force One, which is unrelated to assumption A (turn"
     },
     {
       "a_turn_idx": 75,
@@ -6351,7 +6351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_01), who is reflecting on the experience of entering Congress. The phrase 'how you got here' refers to the journey to becoming a congressman, which is distinct from the earlier assumption A about having staff and a budget.\",\n  \"reason\": \"Claim C (turn 96) discusses reflection on the personal journey to reaching Congress, which is unrelated to assumption A (turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_01), who is reflecting on the experience of entering Congress. The phrase 'how you got here' refers to the journey to becoming a congressman, not the structural support (staff and budget) mentioned in assumption A.\",\n  \"reason\": \"Claim C (turn 96) discusses reflection on the personal journey to reaching Congress, which is unrelated to the specific assumption A (turn"
     },
     {
       "a_turn_idx": 76,
@@ -6366,7 +6366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 80 refers to members of Congress, particularly older ones, as established in the prior context about congressional duties and stamina.\",\n  \"reason\": \"Claim C explicitly states that congressional duties require frequent travel between Washington, D.C., and district offices, which directly supports and verifies the operational need mentioned in assumption A—specifically, the necessity of funding for official travel, as detailed in turn 76. The context confirms that travel is a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 80 refers to members of Congress, particularly older ones, as established by the context of physical demands and travel.\",\n  \"reason\": \"Claim C explicitly states that congressional duties require frequent travel between Washington, D.C., and district offices, which directly supports and verifies the operational need implied in assumption A—namely, that congressional offices require financial resources (like the members representational allowance) to cover costs associated with maintaining multiple offices and staff"
     },
     {
       "a_turn_idx": 76,
@@ -6381,7 +6381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 88 refers to the Congressman, consistent with the subject of turn 76. 'My staff' and 'my office' refer to the Congressman's congressional office established in turn 76.\",\n  \"reason\": \"Turn 88 mentions the Congressman needing to check in at Andrews Air Force Base for a trip arranged by the White House legislative affairs office, which involves official travel. While this supports the idea that congressional offices require resources"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 88 refers to the Congressman, consistent with the subject of turn 76. 'My staff' and 'my office' refer back to the Congressman's congressional office mentioned in turn 76.\",\n  \"reason\": \"Turn 88 mentions the Congressman needing to check in at Andrews Air Force Base for a trip, which is part of official travel funded by the members representational allowance discussed in turn 76. While this"
     },
     {
       "a_turn_idx": 76,
@@ -6396,7 +6396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those guys' in turn 80 refers to members of Congress in their 70s or 80s, which is consistent with the context.\",\n  \"reason\": \"Claim C discusses the physical and mental stamina required for congressional work, particularly among older members, and expresses disbelief at how they manage it. This is unrelated to assumption A, which concerns the speaker's authority or firsthand knowledge about congressional funding structures. There is no mention of funding, budget"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those guys' in turn 80 refers to members of Congress in their 70s or 80s, which is consistent with the context.\",\n  \"reason\": \"Claim C discusses the physical and mental stamina required for congressional work among older members, which is unrelated to assumption A, which concerns the speaker's authority or firsthand knowledge about congressional funding structures. There is no mention of funding, budgeting, or institutional knowledge in C. The topic shifts"
     },
     {
       "a_turn_idx": 76,
@@ -6411,7 +6411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same speaker as in turn 76. The phrase 'I didn't have 50 years of life experience' directly contradicts the implication in turn 76 that the speaker speaks from authoritative or experiential knowledge about congressional funding structures.\",\n  \"reason\": \"Turn 76 implies the speaker has firsthand or authoritative knowledge about congressional funding structures, suggesting deep familiarity"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, who is the same speaker as in turn 76. The phrase 'I didn't have 50 years of life experience' directly contradicts the implication in turn 76 that the speaker speaks from authoritative or experiential knowledge about congressional funding structures.\",\n  \"reason\": \"Turn 76 asserts that the speaker speaks from experience or authoritative knowledge about congressional funding structures. However"
     },
     {
       "a_turn_idx": 76,
@@ -6426,7 +6426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 86) discusses confusion about the sequence of events leading to an invitation to ride Air Force One, which is unrelated to assumption A (turn 76), which asserts that the speaker speaks from experience or authoritative knowledge about congressional funding structures. There is no mention of funding, allowances, or financial systems in C, and the topic shifts entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00, consistent across turns.\",\n  \"reason\": \"Claim C (turn 86) discusses confusion about the sequence of events leading to an invitation to Air Force One, which is unrelated to assumption A (turn 76), which concerns the speaker's authoritative knowledge of congressional funding structures. There is no overlap in subject matter, and C neither states nor verifies any aspect of A. The topics are"
     },
     {
       "a_turn_idx": 76,
@@ -6456,7 +6456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 100 refers to the described experience of being connected via Air Force One, which is unrelated to the assumption about congressional funding structures.\",\n  \"reason\": \"Claim C (turn 100) describes a personal anecdote about using Air Force One communication systems, expressing amusement at the process. This is entirely unrelated to assumption A, which concerns the speaker's authority or firsthand knowledge of congressional funding structures and budgeting."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' refers to SPEAKER_00 in both instances.\",\n  \"reason\": \"Claim C (turn 100) discusses the speaker's personal experience with using Air Force One communication systems, describing it as 'kind of a kick,' which reflects amusement or surprise. However, this statement is unrelated to assumption A (turn 76), which concerns the speaker's authoritative knowledge or firsthand experience with"
     },
     {
       "a_turn_idx": 76,
@@ -6471,7 +6471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 106 refers to the speaker (SPEAKER_00), consistent with prior turns. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 106) discusses personal doubts about continuing political service after each election cycle, which touches on the emotional and psychological aspects of serving in Congress. However, it does not explicitly address or verify the earlier assumption A, which concerns the speaker’s authority or firsthand experience"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 106 refers to the speaker (SPEAKER_00), consistent with prior turns. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 106) discusses the speaker's personal doubts about continuing political service after each election cycle, which touches on personal reflection and emotional strain. However, it does not explicitly state or verify the earlier assumption A—that the speaker speaks from experience or authoritative knowledge about congressional"
     },
     {
       "a_turn_idx": 76,
@@ -6482,11 +6482,11 @@
       "claim_text": "The speaker finds it difficult to understand how individuals in their 70s or 80s maintain the stamina required for congressional work.",
       "overlap_score": 2,
       "c_time": 2184.357,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'those guys' in turn 80 refers to older members of Congress, which is consistent with the context of aging lawmakers.",
-      "reason": "Claim C discusses the physical stamina required for congressional work among older members, which is unrelated to assumption A, which concerns audience members' lack of knowledge about how congressional allowances function. There is no overlap in semantic content between the two statements. Therefore, C neither supports nor verifies A; it is clearly unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those guys' in turn 80 refers to older members of Congress, which is consistent with the context of aging lawmakers.\",\n  \"reason\": \"Claim C discusses the physical stamina required for congressional work among older members, which is unrelated to assumption A, which concerns audience members' lack of knowledge about how congressional allowances function. There is no overlap in semantic content between the two statements. Therefore, C neither supports nor verifies A; it is clearly unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those guys' in turn 80 refers to older members of Congress, which is consistent with the context of aging lawmakers.\",\n  \"reason\": \"Claim C discusses the physical stamina required for congressional work among older members, which is unrelated to assumption A, which concerns audience members' lack of knowledge about how congressional allowances function. There is no overlap in subject matter or semantic content between A and C. Therefore, C neither states nor verifies A, and the two are"
     },
     {
       "a_turn_idx": 77,
@@ -6516,7 +6516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 80 refers to SPEAKER_00, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 80) states 'I'm not the dumbest member of Congress,' which is unrelated to assumption A, which concerns belief in obtaining 'the best story' through official channels like the Secretary of State. There is no mention of the Secretary of State, official channels, or the process of resolving constituent issues in C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 80) states 'I'm not the dumbest member of Congress,' which is unrelated to assumption A (turn 78), which asserts belief in obtaining 'the best story' through official channels like the Secretary of State. There is no overlap in semantic content between the two statements. The former is a self-assessment of intelligence, while"
     },
     {
       "a_turn_idx": 78,
@@ -6546,7 +6546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_00), but the statement 'do you ask how you got here?' is a rhetorical question about reflection on one's journey to Congress, which is unrelated to the specific belief in turn 78 about attaining 'the best story' through official channels like the Secretary of State.\",\n  \"reason\": \"Turn 96 introduces a reflective question about the journey to Congress, which"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_00), but the statement 'do you ask how you got here?' is a rhetorical question about reflection on one's journey to Congress, which is unrelated to the specific belief in turn 78 about attaining 'the best story' through official channels like the Secretary of State.\",\n  \"reason\": \"Turn 78 expresses a belief that the best story (likely referring to"
     },
     {
       "a_turn_idx": 78,
@@ -6561,7 +6561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 107 refers to SPEAKER_00, consistent with earlier turns. 'The best committee' and 'leadership' are not directly linked to 'the best story' or 'official channels like the Secretary of State' in turn 78.\",\n  \"reason\": \"Turn 107 expresses a personal ambition to be on the 'best committee' and in leadership, reflecting a desire for influence and impact. However,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 107 refers to SPEAKER_00, consistent with earlier turns. 'The best committee' and 'leadership' are not directly linked to 'the best story' or 'official channels like the Secretary of State' in turn 78.\",\n  \"reason\": \"Turn 107 expresses a personal ambition to be on the 'best committee' and in leadership, reflecting a desire for influence and impact within Congress."
     },
     {
       "a_turn_idx": 78,
@@ -6576,7 +6576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 107) discusses the speaker's aspiration to use Excel and pursue business, which is unrelated to assumption A (turn 78), which asserts belief in obtaining 'the best story' through official channels like the Secretary of State. There is no mention of seeking stories via official channels, nor any reference to the Secretary of State or the process"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 107) discusses the speaker's aspiration to use Excel and pursue business, which is unrelated to assumption A (turn 78), which asserts belief in obtaining 'the best story' through official channels like the Secretary of State. There is no mention of official channels, the Secretary of State, or the idea of attaining a 'best story"
     },
     {
       "a_turn_idx": 78,
@@ -6606,7 +6606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to the President (Obama), and 'you' refers to the speaker (SPEAKER_00). The phrase 'who calls you?' refers to the mechanism by which the invitation is initiated.\",\n  \"reason\": \"Turn 86 asks about the process of being invited to ride on Air Force One, specifically who initiates the contact. While this touches on institutional access (the White House legislative affairs office), it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to the President (Obama), and 'you' refers to the speaker (Congressman). The phrase 'who calls you?' refers to the mechanism by which the invitation is initiated.\",\n  \"reason\": \"Turn 86 asks about the process of being invited to Air Force One, specifically who initiates the contact. While this touches on institutional access (White House legislative affairs office), it does not explicitly confirm or verify the"
     },
     {
       "a_turn_idx": 78,
@@ -6621,7 +6621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 89 refers to the speaker (SPEAKER_00), who is discussing the process of being invited to Air Force One. The phrase 'you check your schedule and then you confirm' reflects the procedural nature of the interaction, implying institutional coordination.\",\n  \"reason\": \"Claim C (turn 89) mentions the process of checking schedules and confirming invitations, which implies institutional coordination and access—supporting the idea of institutional influence"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 89 refers to the speaker (SPEAKER_00), who is discussing the process of being invited to Air Force One. The phrase 'you check your schedule and then you confirm' reflects the procedural nature of the interaction, implying institutional coordination.\",\n  \"reason\": \"Claim C (turn 89) mentions the process of checking schedules and confirming invitations, which implies institutional coordination and access—consistent with the idea of institutional influence"
     },
     {
       "a_turn_idx": 78,
@@ -6666,7 +6666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, consistent with the speaker in turn 79.\",\n  \"reason\": \"Claim C explicitly states the speaker's belief that they are not the dumbest member of Congress, which directly verifies the assumption in A that the speaker believes their youth and position in Congress are linked to their capability. The self-deprecating humor ('not the dumbest') affirms competence despite youth, directly supporting the causal link"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, consistent with the speaker in turn 79.\",\n  \"reason\": \"Claim C explicitly states the speaker's belief that they are not the dumbest member of Congress, which directly verifies the assumption in A that the speaker believes their youth and position in Congress are linked to their capability. The self-deprecating humor about being young but not dumb reinforces the idea that capability is attributed despite youth, thus"
     },
     {
       "a_turn_idx": 79,
@@ -6681,7 +6681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the listener (SPEAKER_01), who is the young member of Congress mentioned in turn 79.\",\n  \"reason\": \"Turn 96 raises a reflective question about how one got to Congress, which touches on the theme of the journey to office. However, it does not explicitly state or verify the causal link between youth and capability asserted in turn 79. While there is a topical connection"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 96 refers to the speaker (SPEAKER_01), who is the young member of Congress mentioned in turn 79. The phrase 'walking into Congress' refers to the act of becoming a member of Congress.\",\n  \"reason\": \"Turn 96 raises a reflective question about how one got to Congress, which touches on the theme of personal journey and qualification. However, it does not explicitly address or verify the specific"
     },
     {
       "a_turn_idx": 79,
@@ -6711,7 +6711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress, which aligns with the subject of the assumption in turn 79.\",\n  \"reason\": \"Claim C explicitly expresses surprise at older members of Congress continuing to serve actively, which directly verifies the substance of assumption A—that the speaker believes the listener’s youth and position in Congress are causally linked to capability. The speaker contrasts their own youthful energy with the perceived physical and mental strain"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some of those guys' in turn 80 refers to older members of Congress, as clarified by the context mentioning 'guys that are in their 80s or in their 70s'.\",\n  \"reason\": \"Claim C explicitly states the speaker's surprise at older members of Congress continuing to serve actively, which directly verifies the substance of assumption A—that the speaker believes the listener’s youth and position in Congress are causally linked to capability."
     },
     {
       "a_turn_idx": 79,
@@ -6726,7 +6726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00, and 'my office' refers to the congressional office of SPEAKER_00.\",\n  \"reason\": \"Claim C (turn 88) discusses the White House legislative affairs office reaching out to the speaker's office to advocate for the White House’s position. This is unrelated to assumption A (turn 79), which concerns the causal link between the listener’s youth and their capability in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00, and 'my office' refers to the congressional office of SPEAKER_00.\",\n  \"reason\": \"Claim C (turn 88) discusses the White House legislative affairs office reaching out to the speaker's office to advocate for the White House's position. This is unrelated to assumption A (turn 79), which concerns the causal link between the listener's youth and their capability in"
     },
     {
       "a_turn_idx": 79,
@@ -6801,7 +6801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my office' in turn 88 refers to the speaker's congressional office, which aligns with the context of public office discussed in turn 79.\",\n  \"reason\": \"Claim C states that there is a White House official assigned to the speaker's congressional office to communicate important issues, which implies institutional credibility and trustworthiness in the role of public office. This supports the idea that holding public office is seen as a credible and trustworthy indicator of competence—"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my office' in turn 88 refers to the speaker's congressional office, which aligns with the context of public office discussed in turn 79.\",\n  \"reason\": \"Claim C states that there is a person within the White House assigned to the speaker's office to communicate important issues, which implies institutional credibility and trustworthiness in the speaker's public office—supporting the idea that holding public office is seen as a credible and trustworthy indicator of competence"
     },
     {
       "a_turn_idx": 79,
@@ -6816,7 +6816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'my' in turn 88 refers to SPEAKER_00, indicating the speaker's own office. 'The White House legislative affairs office' is a formal entity that interacts with the speaker's office.\",\n  \"reason\": \"Claim C describes a procedural interaction between the White House legislative affairs office and the speaker's office, which reflects institutional credibility and coordination. However, it does not explicitly address or verify the assumption that public office is viewed as a credible and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'my' in turn 88 refers to SPEAKER_00, indicating the speaker's own congressional office. 'The White House legislative affairs office' is a formal entity that interacts with the speaker's office.\",\n  \"reason\": \"Claim C describes a procedural interaction between the White House legislative affairs office and the speaker's office, which reflects institutional credibility and coordination. However, it does not explicitly state or verify the assumption that public office is viewed as a credible"
     },
     {
       "a_turn_idx": 80,

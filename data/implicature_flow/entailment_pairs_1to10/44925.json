@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 30) states that the speaker believes people should not own a home, which directly contradicts assumption A (turn 2), which asserts that working as a congressional staffer involves meaningful contributions to public service. There is no semantic connection between the two statements—C does not address staffing, public service"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to the Democratic administration and its policies, not related to the congressional staffers mentioned in assumption A.\",\n  \"reason\": \"Claim C (turn 30) states that the speaker believes people should not own a home due to government overreach, which is unrelated to assumption A (turn 2), which asserts that working as a congressional staffer involves meaningful contributions to public service. There is no overlap in subject matter, nor"
     },
     {
       "a_turn_idx": 2,
@@ -212,11 +212,11 @@
       "claim_text": "The speaker believes the government dictates choices regarding household appliances like gas stoves.",
       "overlap_score": 2,
       "c_time": 1005.914,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'the government' refers to federal authorities in general.",
-      "reason": "Claim C (turn 30) discusses government control over personal choices like household appliances and lifestyle decisions, which is unrelated to assumption A (turn 2), which concerns congressional staffers making meaningful contributions to public service. There is no overlap in semantic content, and C does not address or verify any aspect of A. The topics are entirely distinct.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the government' refers to federal authorities in general.\",\n  \"reason\": \"Claim C (turn 30) discusses government control over personal choices like household appliances and lifestyle decisions, which is unrelated to assumption A (turn 2), which concerns congressional staffers making meaningful contributions to public service. There is no overlap in semantic content, and C does not address or verify any aspect of A. The topics are entirely distinct.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the government' in C refers to federal authorities, but this is unrelated to the concept of congressional staffers' contributions in A.\",\n  \"reason\": \"Claim C discusses government control over household appliances like gas stoves, which is entirely unrelated to the earlier assumption A about congressional staffers making meaningful contributions to public service. There is no overlap in semantic content, and C does not state, verify, or imply anything about staffing roles or public service contributions. The"
     },
     {
       "a_turn_idx": 2,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 30) discusses government control over personal choices like gas stoves and household appliances, which is unrelated to assumption A (turn 2), which concerns trust in personal judgment about staff quality and effectiveness. There is no overlap in semantic content, and C does not state, verify, or imply A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 30 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 30) discusses government control over personal decisions like appliance choices, which is unrelated to assumption A (turn 2), which concerns trust in personal judgment about staff quality and effectiveness. There is no overlap in semantic content, and C does not state, verify, or imply A. The topics are"
     },
     {
       "a_turn_idx": 2,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 18 refers to the listener (Congressman), and 'Mexicans' is a direct reference to a group mentioned in the claim.\",\n  \"reason\": \"Claim C (turn 18) expresses a position about Mexicans paying for the border wall, which is unrelated to the earlier assumption A about holding a positive moral evaluation of government servants. There is no overlap in subject matter, sentiment, or content. In fact,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 18 refers to the listener (Congressman), and 'Mexicans' is a direct reference to a group mentioned in the claim.\",\n  \"reason\": \"Claim C (turn 18) expresses a belief that Mexicans should pay for the border wall, which is unrelated to assumption A, which concerns a positive moral evaluation of government servants and their service to constituents. There is no overlap in subject matter, values, or intent"
     },
     {
       "a_turn_idx": 2,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 18 refers to SPEAKER_00, but the topic shifts entirely to border wall funding.\",\n  \"reason\": \"Claim C discusses the belief that Mexicans should pay for the border wall, which is unrelated to the earlier assumption A about the sustainability and justification of remote work for federal employees. There is no overlap in subject matter, logic, or semantic content. The shift in topic is abrupt and unrelated, indicating clear non"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_01, who is distinct from the speaker in A (SPEAKER_00).\",\n  \"reason\": \"Claim C discusses funding the border wall through contributions from Mexicans, which is entirely unrelated to the sustainability or justification of remote work for federal employees mentioned in assumption A. There is no overlap in topic, concept, or implied connection. The claims are semantically unrelated and do not support"
     },
     {
       "a_turn_idx": 3,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the process' refers to funding mechanisms for the wall, not staffing stability.\",\n  \"reason\": \"Claim C discusses obtaining money through mechanisms related to immigration costs and funding a wall, which is unrelated to the concept of staffing stability or continuity in leadership. There is no overlap in semantic content between C and the earlier assumption A, which centers on retaining experienced staff for consistent constituent service. The topics are entirely different, making the entailment score 1.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the process' in turn 17 refers to funding mechanisms for the wall, not staffing stability.\",\n  \"reason\": \"Claim C discusses obtaining money through mechanisms related to immigration costs and funding a wall, which is unrelated to the concept of staffing stability or continuity in leadership. Assumption A focuses on retaining experienced staff for consistent constituent service, while C addresses financial mechanisms for infrastructure. There is no overlap in semantic content, and C does not verify or"
     },
     {
       "a_turn_idx": 4,
@@ -4086,7 +4086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to the Chinese government, as established by the context discussing China's economic behavior and policy shifts. The term 'greediest government' in turn 26 explicitly identifies the Chinese government as the subject.\",\n  \"reason\": \"Turn 26 explicitly states that 'the Chinese government is the greediest government I've ever encountered,' which directly verifies the assumption in turn 25 that the speaker has reliable access to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to the Chinese government, as established by the context discussing China's economic behavior and policy shifts. The term 'greed' in turn 26 explicitly attributes this motive to the Chinese government.\",\n  \"reason\": \"Turn 26 explicitly states that the Chinese government is driven by greed and is the greediest government the speaker has ever seen, which directly verifies the assumption in turn 25 that the speaker has reliable"
     },
     {
       "a_turn_idx": 25,
@@ -4206,7 +4206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the 'left' or 'Democrats' as discussed in the preceding context, but this does not connect to the assumption A about judging the moral character of a nation's government based on economic greed.\",\n  \"reason\": \"Claim C discusses the belief that the left wants to eliminate private ownership of homes and cars, advocating for government control over personal life choices. This is unrelated to assumption A, which concerns the speaker's belief in having"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'they' in turn 30 as the left-leaning political forces or the Democratic administration, which aligns with the broader critique of Biden and progressive policies mentioned earlier.\",\n  \"reason\": \"Claim C (turn 30) asserts that the left does not want individuals to own homes or cars, advocating instead for reliance on mass transit and government control. This is unrelated to Assumption A (turn 26), which concerns the speaker"
     },
     {
       "a_turn_idx": 26,
@@ -4311,7 +4311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to American citizens, and 'the government' refers to the federal government, particularly the Democratic administration mentioned earlier. 'Gas stoves' and 'air conditioned ceiling fans' are specific examples of household items under government control.\",\n  \"reason\": \"Claim C discusses government control over personal household decisions, such as owning gas stoves and appliances, which aligns with the broader theme of government overreach mentioned in the context. However, it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to American citizens, and 'the government' refers to the federal government, particularly the Democratic administration mentioned earlier. 'Gas stoves' is a specific example of household appliances used to illustrate broader governmental control.\",\n  \"reason\": \"Claim C discusses government control over personal household decisions, such as owning gas stoves, which aligns with the broader theme of government overreach mentioned in the context. However, it does not explicitly state or"
     },
     {
       "a_turn_idx": 27,
@@ -4416,7 +4416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'we' in turn 33 refers to the speakers collectively, not tied to any prior entity in turn 29.\",\n  \"reason\": \"Claim C (turn 33) discusses the border issue as something the public should not endure, which is unrelated to assumption A (turn 29), which concerns Democratic lawmakers' genuine ideological intentions versus rhetorical strategy. There is no mention of ideology, intentions, or rhetoric in C, nor does C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this' in turn 33 refers to the border issue described in turn 32.\",\n  \"reason\": \"Claim C (turn 33) discusses the border issue as something the public should not endure, which is unrelated to assumption A (turn 29), which concerns Democratic lawmakers' genuine ideological intentions versus rhetorical strategy. There is no mention of ideology, intent, or rhetoric in C, nor does C verify or state the substance of"
     },
     {
       "a_turn_idx": 29,

@@ -1427,11 +1427,11 @@
       "claim_text": "No one has ever come out of solitary confinement.",
       "overlap_score": 2,
       "c_time": 286.432,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'no one' refers to individuals who have experienced solitary confinement, but the statement contradicts the idea that people are released from solitary, which is factually false and inconsistent with assumption A.\",\n  \"reason\": \"Claim C states that 'no one has ever come out of solitary confinement,' which directly contradicts the reality that people are released from solitary confinement after periods of time. This negates any support for assumption A, which discusses the disproportionate impact of"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'solitary' refers to solitary confinement throughout.",
+      "reason": "Claim C states 'No one has ever come out of solitary confinement,' which contradicts the implied possibility of release from solitary confinement in assumption A. Assumption A suggests solitary confinement is applied disproportionately, implying it is a temporary or reversible condition. Claim C denies any return from solitary, making it incompatible with A. Thus, the claim contradicts rather than verifies A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'solitary' refers to solitary confinement throughout.\",\n  \"reason\": \"Claim C states 'No one has ever come out of solitary confinement,' which contradicts the implied possibility of release from solitary confinement in assumption A. Assumption A suggests solitary confinement is applied disproportionately, implying it is a temporary or reversible condition. Claim C denies any return from solitary, making it incompatible with A. Thus, the claim contradicts rather than verifies A.\"\n}\n```"
     },
     {
       "a_turn_idx": 11,

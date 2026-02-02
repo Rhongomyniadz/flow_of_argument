@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in the context is not present; 'bonus bins' is explicitly mentioned in both A and C, maintaining clear referential continuity.\",\n  \"reason\": \"Claim C states that bonus bins can only be used on selected games, which directly supports and clarifies a key aspect of assumption A—that promotions like bonus bins are effective tools for attracting new customers. While A asserts effectiveness, C provides a specific restriction that helps define how the promotion functions, thereby verifying part"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in the context is not present; 'bonus bins' is explicitly mentioned in both A and C, maintaining clear referential continuity.\",\n  \"reason\": \"Claim C states that bonus bins can only be used on selected games, which directly supports and clarifies a key restriction implied in assumption A about promotions being effective tools. While A focuses on effectiveness in attracting new customers, C provides specific operational detail (usage restrictions) that substantiates how such promotions function—"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The term 'bonus issues' in claim C refers to the same promotional mechanism mentioned in turn 0 ('bonus bins'), and 'expire 70s after receipt' is a direct restatement of 'expire 70 days after receipt' from turn 1.\",\n  \"reason\": \"Claim C explicitly verifies a key detail about bonus bins—specifically, their expiration period of 70 days after receipt—which was implied in the promotional context of turn 0. While turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The term 'bonus issues' in claim C refers to the same promotional mechanism mentioned in turn 0, where 'bonus bins' are offered as part of a promotion to attract new players. 'Bonus bins' are explicitly tied to expiration in both A and C.\",\n  \"reason\": \"Claim C explicitly states that bonus issues are associated with bonus bins that expire 70 days after receipt, which directly verifies a key detail about the promotional structure introduced in assumption A. This confirms a"
     },
     {
       "a_turn_idx": 0,
@@ -50,8 +50,8 @@
       "entailment_score": 9,
       "confidence": 0.95,
       "coref_notes": "The pronoun 'bonus bins' in turn 1 refers to the same promotional offer introduced in turn 0.",
-      "reason": "Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail about the promotion mentioned in assumption A. This confirms the mechanism by which the promotion operates, thereby explicitly supporting the effectiveness of such promotions in attracting new customers through structured, incremental rewards.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus bins' in turn 1 refers to the same promotional offer introduced in turn 0.\",\n  \"reason\": \"Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail about the promotion mentioned in assumption A. This confirms the mechanism by which the promotion operates, thereby explicitly supporting the effectiveness of such promotions in attracting new customers through structured, incremental rewards.\"\n}\n```"
+      "reason": "Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail about the promotion mentioned in assumption A. This confirms a specific mechanism of the promotion, supporting its structure and effectiveness as an attraction tool for new customers.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus bins' in turn 1 refers to the same promotional offer introduced in turn 0.\",\n  \"reason\": \"Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail about the promotion mentioned in assumption A. This confirms a specific mechanism of the promotion, supporting its structure and effectiveness as an attraction tool for new customers.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. Claim C discusses family ancestry and immigration timelines, while assumption A concerns audience interpretation of promotional language ('even more').\",\n  \"reason\": \"Claim C (turn 10) discusses personal family history and ancestral timelines, specifically comparing the depth of ancestral roots between the speaker's maternal and paternal families. Assumption A (turn 0) refers to audience perception of the phrase 'even more' in a promotional context,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'my mom's family' and 'my dad's family' are clear references to the speaker's maternal and paternal lineages.\",\n  \"reason\": \"Claim C (turn 10) discusses the temporal proximity of ancestral ties, stating that the speaker's mom's family arrived more recently than the dad's family, which traces back to the Mayflower. This is unrelated to assumption A, which concerns audience interpretation of 'even more' as implying a"
     },
     {
       "a_turn_idx": 0,
@@ -77,11 +77,11 @@
       "claim_text": "Bonus bins can only be used on selected games.",
       "overlap_score": 2,
       "c_time": 17.772,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'they' in the context is not present; 'bonus bins' is explicitly referenced in both A and C.",
-      "reason": "Claim C explicitly states that bonus bins can only be used on selected games, which directly verifies a key aspect of assumption A—that bonus bins are a form of valuable in-game currency with specific usage restrictions. The statement in C aligns precisely with the functional value and limitations implied in A.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in the context is not present; 'bonus bins' is explicitly referenced in both A and C.\",\n  \"reason\": \"Claim C explicitly states that bonus bins can only be used on selected games, which directly verifies a key aspect of assumption A—that bonus bins are a form of valuable in-game currency with specific usage restrictions. The statement in C aligns precisely with the functional value and limitations implied in A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus bins' in turn 1 refers to the same entity introduced in turn 0, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that bonus bins can only be used on selected games, which directly verifies a key aspect of assumption A — that bonus bins are a form of valuable currency within the game environment, specifically with usage restrictions. The statement in C is precise, unambiguous, and confirms a critical functional property of bonus bins, align"
     },
     {
       "a_turn_idx": 0,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus issues' in claim C refers to the 'bonus issues' mentioned in turn 0's context, specifically linking them to 'bonus bins' as described in the prior statement.\",\n  \"reason\": \"Claim C explicitly states that 'bonus issues are associated with bonus bins that expire 70 days after receipt,' which directly verifies the substance of assumption A—that bonus bins are a valuable currency—by confirming their time-limited nature and functional role within the game environment"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus issues' in turn 1 refers to the 'bonus bins' mentioned in turn 0; '70s' is a typo for '70 days', which matches the expiration detail in turn 1.\",\n  \"reason\": \"Claim C explicitly states that bonus issues (i.e., bonus bins) are associated with an expiration of 70 days after receipt, which directly verifies a key aspect of assumption A — that bonus bins are a form of"
     },
     {
       "a_turn_idx": 0,
@@ -107,11 +107,11 @@
       "claim_text": "Bonus bins received increment in 50-unit amounts.",
       "overlap_score": 2,
       "c_time": 17.772,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'bonus bins' in turn 1 refers to the same entity introduced in turn 0, establishing clear coreference.",
-      "reason": "Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail implied in assumption A about the nature of bonus bins as a defined unit of value within the game environment. The specificity and alignment with the prior mention confirm strong explicit verification.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus bins' in turn 1 refers to the same entity introduced in turn 0, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that bonus bins are received in 50-unit increments, which directly verifies a key detail implied in assumption A about the nature of bonus bins as a defined unit of value within the game environment. The specificity and alignment with the prior mention confirm strong explicit verification.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'bonus bins' in turn 1 refers to the same entity introduced in turn 0, establishing clear coreference.\",\n  \"reason\": \"Turn 1 explicitly states that bonus bins are received in increments of 50 units, which directly verifies a key aspect of the earlier assumption in turn 0 that bonus bins are a form of valuable currency within the game environment. The claim is specific, unambiguous, and aligns precisely with the substance of the assumption.\""
     },
     {
       "a_turn_idx": 1,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'us' and 'another podcast from the Commonwealth Club', which implies the speaker is part of the event. However, the claim in turn 3 does not address or verify the speaker's authority or legitimacy to promote gambling offers.\",\n  \"reason\": \"Turn 3 states the speaker is addressing an audience who has joined the broadcast, which is unrelated to the earlier assumption A about having authority or legitimacy to promote gambling offers. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'us' and 'another podcast from the Commonwealth Club', which implies the speaker is part of the event. However, the claim in turn 3 does not address or verify the speaker's authority or legitimacy to promote gambling offers.\",\n  \"reason\": \"Turn 3 states the speaker is addressing an audience who has joined the broadcast, which is unrelated to the assumption that the speaker has authority or legitimacy to promote gambling offers. There is no mention"
     },
     {
       "a_turn_idx": 1,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the claim; 'the speaker' in turn 7 refers to SPEAKER_00, who is discussing personal background, not authority to promote gambling.\",\n  \"reason\": \"Claim C (turn 7) states the speaker has been back to Holy Family Hospital in New Delhi, which is unrelated to the earlier assumption A about having authority or legitimacy to promote gambling offers. There is no mention of gambling, promotion, or legitimacy in C. The topics"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 7 refers to SPEAKER_00, who is discussing personal background related to birth in New Delhi and family history. No reference to authority or legitimacy to promote gambling offers is present.\",\n  \"reason\": \"Claim C (turn 7) discusses the speaker's personal history, specifically being born in Holy Family Hospital in New Delhi and returning there. This is entirely unrelated to the earlier assumption A about having authority or legitimacy to promote gambling offers"
     },
     {
       "a_turn_idx": 1,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 29 refers to SPEAKER_00, who is a U.S. Senator, while 'the speaker' in turn 1 refers to a promotional figure for FanDul Casino. The two speakers are unrelated.\",\n  \"reason\": \"Claim C discusses a U.S. Senator's experience with government funding and continuing resolutions, which is entirely unrelated to the assumption A about a gambling promoter having authority or legitimacy. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 29 refers to SPEAKER_00, who is a U.S. Senator, while 'the speaker' in turn 1 refers to a promotional figure for FanDul Casino. The two speakers are unrelated.\",\n  \"reason\": \"Claim C discusses the speaker's experience in the U.S. Senate and government operations, while assumption A concerns the legitimacy of a casino promoter to endorse gambling. The topics, roles"
     },
     {
       "a_turn_idx": 1,
@@ -182,11 +182,11 @@
       "claim_text": "JFK believed the United States should play an important role in influencing countries like India.",
       "overlap_score": 2,
       "c_time": 162.214,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'JFK' refers to John F. Kennedy, and 'the United States' is the subject of the belief.\",\n  \"reason\": \"Claim C discusses JFK's belief in the U.S. playing an important role in influencing countries like India, which is unrelated to Assumption A, which concerns promoting gambling via emotionally charged language and metaphors. There is no overlap in topic, content, or intent between A and C. Thus, the claim does"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'JFK' refers to John F. Kennedy, and 'the United States' refers to the U.S. government.",
+      "reason": "Claim C discusses JFK's belief in the U.S. playing an influential role in countries like India, which is unrelated to Assumption A, which advocates promoting gambling using emotionally charged language and metaphors. There is no overlap in subject matter, intent, or semantic content between the two claims.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'JFK' refers to John F. Kennedy, and 'the United States' refers to the U.S. government.\",\n  \"reason\": \"Claim C discusses JFK's belief in the U.S. playing an influential role in countries like India, which is unrelated to Assumption A, which advocates promoting gambling using emotionally charged language and metaphors. There is no overlap in subject matter, intent, or semantic content between the two claims.\"\n}\n```"
     },
     {
       "a_turn_idx": 3,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to Senator Bennett, as established by the context of the interview. 'They' refers to Bennett's parents, who were working at the U.S. embassy in India.\",\n  \"reason\": \"Claim C mentions Chester Bowles as a historical figure associated with the U.S. embassy in India during Bennett's birth, which provides background context relevant to Bennett's origin story. However, it does not address or verify the audience's expectation"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to Senator Michael Bennett, as established by the context of the interview.\",\n  \"reason\": \"Claim C mentions Chester Bowles as a historical figure associated with the U.S. embassy in India during Bennett's birth, which provides background context relevant to his origin story. However, it does not address or verify the audience's expectation of continuity between episodes, which is the substance of assumption A. While the mention of past events and personal"
     },
     {
       "a_turn_idx": 4,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the audience members, as established by the context of a public speaking event.\",\n  \"reason\": \"Claim C states that some audience members may recall Chester Bowles, which is a weak topical connection to assumption A (that audience members value political discourse and informed civic engagement). However, C does not state, verify, or imply anything about the audience's values or engagement with political discourse. It merely suggests possible familiarity with a historical figure"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the audience members, as established by the context of a live event and prior speaker addressing them.\",\n  \"reason\": \"Claim C states that some audience members may recall Chester Bowles, which is a weak topical connection to assumption A (that audience members value political discourse and informed civic engagement). However, C does not state, verify, or imply anything about the audience's values or engagement with political discourse. It merely suggests possible familiarity"
     },
     {
       "a_turn_idx": 4,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 11 refers to Donald Trump, who is not related to the assumption about public figures like senators being credible authorities.\",\n  \"reason\": \"Claim C discusses Donald Trump's political strategy and draws a parallel to right-wing governments in Poland, focusing on division and loyalty rhetoric. Assumption A asserts that public figures like senators are credible authorities on systemic political issues. There is no mention or implication in C that senators (or any public"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, who is the subject of the claim about political strategy. No coreference resolves to Senator Bennett or the earlier assumption about public figures.\",\n  \"reason\": \"Claim C (turn 11) discusses Donald Trump's political strategy and draws a parallel to right-wing governments in Poland, which is unrelated to Assumption A (turn 4), which asserts that public figures like senators are credible authorities on systemic political"
     },
     {
       "a_turn_idx": 4,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Erdogan, and 'Donald Trump' is explicitly mentioned as sharing the same belief structure. 'He' in 'he owes nothing to anybody who didn't vote for him' refers to Erdogan, and the speaker draws a parallel to Trump.\",\n  \"reason\": \"Claim C discusses a political environment under Erdogan where leaders owe allegiance only to their voters, and explicitly compares this to Trump’s behavior. However, it does not directly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Erdogan, and 'Donald Trump' is explicitly named. The claim about leaders owing allegiance only to their voters is applied to both Erdogan and Trump.\",\n  \"reason\": \"Claim C discusses a political environment where a leader feels indebted only to those who voted for them, using Erdogan in Turkey as an example and drawing a parallel to Trump. However, it does not explicitly address or verify the earlier assumption A, which concerns the"
     },
     {
       "a_turn_idx": 4,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'JFK' refers to John F. Kennedy, mentioned in the prior context as the subject of Chester Bowles' diplomatic work.\",\n  \"reason\": \"Claim C explicitly states that JFK believed the United States should play an important role in influencing countries like India, which directly verifies the substance of assumption A — that moderators (or speakers) frame intellectual and ethical stakes, here exemplified by connecting JFK’s foreign policy vision to the personal background of Senator Bennett. The claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'JFK' refers to John F. Kennedy, mentioned in the prior context as the subject of Chester Bowles' diplomatic work.\",\n  \"reason\": \"Claim C explicitly states that JFK believed the United States should play an important role in influencing countries like India, which directly verifies the substance of assumption A — that moderators (in this case, the speaker) frame the intellectual and ethical stakes of political conversations. Here, the claim clarifies the ideological foundation (JFK"
     },
     {
       "a_turn_idx": 5,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the book, as established in the context. 'The Corruption of In Action' is a chapter title mentioned in the book, linking directly to the book's content.\",\n  \"reason\": \"Claim C states that the book contains a chapter titled 'The Corruption of In Action' discussing Citizens United, which relates to the broader theme of political dysfunction discussed in the book. However, it does not explicitly verify or state the specific assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the book, as established in the context. 'The Corruption of In Action' is a chapter title mentioned in the book, linking directly to the book's content.\",\n  \"reason\": \"Claim C states that the book contains a chapter titled 'The Corruption of In Action' discussing Citizens United, which relates to the broader theme of political dysfunction discussed in the book. However, assumption A specifically claims that the book contains an origin story"
     },
     {
       "a_turn_idx": 5,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the prior context discussing his political behavior.\",\n  \"reason\": \"Claim C discusses the idea that certain individuals (specifically Trump) understand and exploit the historical trope of Jewish disloyalty to their host country, particularly in the context of American identity. While this touches on themes related to origin stories and national belonging, it does not explicitly address or verify the specific assumption A—that the speaker believes"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the prior context discussing his political behavior.\",\n  \"reason\": \"Claim C discusses the historical trope about Jewish loyalty to countries, specifically referencing the idea that Jews are disloyal to the nation in which they live. While this touches on themes related to identity and belonging, it does not explicitly address or verify the earlier assumption A, which concerns evaluating one's origin story against standards set by published"
     },
     {
       "a_turn_idx": 5,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 9 refers to the speaker's grandfather's family, as established in the prior sentence ('my grandfather didn't want to leave his family behind'). 'Everybody was killed, except the three of them' clearly identifies the fate of the rest of the family.\",\n  \"reason\": \"Claim C explicitly states that all other members of the speaker's grandfather's family were killed during the Holocaust, which directly verifies the implicit assumption in A that the Holocaust had"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 9 refers to the speaker's grandfather's family, as established by the context of surviving the Holocaust and the mention of 'everybody was killed, except the three of them.'\",\n  \"reason\": \"Claim C explicitly states that all other members of the speaker's grandfather's family were killed during the Holocaust, which directly verifies the implicit assumption in A that the Holocaust had profound psychological and cultural impacts on identity formation through the loss of family and"
     },
     {
       "a_turn_idx": 8,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"My mom's family refers to the family of the speaker's mother, who fled Poland during the Holocaust; my dad's family refers to the speaker's paternal lineage, traced back to the Mayflower.\",\n  \"reason\": \"Claim C explicitly states that the speaker's mom's family has more recent ancestral ties compared to the dad's family, which directly verifies the substance of assumption A—that the Holocaust-related family history (mom's side) is significantly more recent than the older, established lineage"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my mom's family' in claim C refers to the family of the speaker's mother, who was born in Poland and survived the Holocaust, as established in turn 8. 'My dad's family' refers to the paternal lineage traced back to the Mayflower.\",\n  \"reason\": \"Claim C explicitly states that the mother's family has more recent ancestral ties compared to the father's family, which directly verifies the substance of assumption A—that the Holocaust-related family history"
     },
     {
       "a_turn_idx": 9,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Americans' as established in the broader context, particularly in turn 11 where 'We're all Americans' establishes collective identity.\",\n  \"reason\": \"Claim C explicitly states that all Americans are united under a shared national identity, which directly verifies the core idea in assumption A—that identity is shaped by both ancestral roots and temporal placement within a national context. While A emphasizes the duality of heritage and national integration, C aff"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Americans' as established in the broader context, particularly in turn 11 where 'We're all Americans' establishes collective identity.\",\n  \"reason\": \"Claim C explicitly states that all Americans are united under a shared national identity, which directly verifies the core idea in assumption A—that identity is shaped by both ancestral roots and temporal placement within a national context. The emphasis on pluralism, loyalty, and belonging in turn 1"
     },
     {
       "a_turn_idx": 10,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the lunch counters' refers to the civil rights-era sit-ins, which are distinct from the Mayflower ancestry mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses symbolic actions like lunch counter protests in the civil rights movement, which are unrelated to the idea that ancestral ties to foundational American events like the Mayflower carry symbolic weight and legitimacy. There is no mention of the Mayflower, ancestry, or foundational American events in C. The topics are"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the lunch counters' refers to the civil rights-era sit-ins, a historical event distinct from the Mayflower or ancestry.\",\n  \"reason\": \"Claim C discusses the symbolic importance of lunch counter protests in expanding the civil rights movement, which is unrelated to assumption A, which concerns the symbolic weight of ancestral ties to foundational American events like the Mayflower. While both involve symbolism in American identity, C does not state, verify, or relate to the specific"
     },
     {
       "a_turn_idx": 10,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, as established in the surrounding context (turns 11–12). The term 'the individual' in C is also resolved to Trump based on discourse context.\",\n  \"reason\": \"Claim C explicitly states that the individual (Trump) understands the centuries-old trope about Jewish loyalty to countries, which directly verifies the assumption in A that the speaker believes their values were shaped by intergenerational civic commitment—specific"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the prior context and confirmed by the discussion of his political behavior.\",\n  \"reason\": \"Claim C explicitly states that the individual (Trump) understands the centuries-old trope about Jewish loyalty to countries, which directly verifies the assumption in A that the speaker believes their values were shaped by intergenerational civic commitment—specifically through the lens of historical trauma and the importance of loyalty and belonging in a"
     },
     {
       "a_turn_idx": 10,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to SPEAKER_00, who is the speaker of turn 10. However, turn 14 claims that the listener (SPEAKER_01) ran for office, which contradicts the information in turn 15 that SPEAKER_00 was appointed senator and did not run for office.\",\n  \"reason\": \"Turn 10 expresses the speaker's belief that their values were shaped by"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to SPEAKER_00, the speaker who previously expressed belief in intergenerational civic commitment (A). However, claim C states 'the speaker believes that the listener ran for office,' which misattributes the action to the listener (SPEAKER_01), contradicting the context where SPEAKER_00 clarifies they were appointed, not elected.\",\n  \"reason\": \"Claim C contradicts assumption A by"
     },
     {
       "a_turn_idx": 10,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical role of Republicans in civil rights progress, specifically referencing bipartisan support for major civil rights legislation. However, assumption A (turn 10) concerns the speaker's belief that their own values were shaped by intergenerational civic commitment due to their family's Holocaust survival and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical role of Republicans in civil rights progress, specifically referencing bipartisan support for major civil rights legislation. However, this is unrelated to Assumption A (turn 10), which asserts that the speaker's personal values were shaped by intergenerational civic commitment stemming from their family"
     },
     {
       "a_turn_idx": 10,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_00, consistent with earlier context.\",\n  \"reason\": \"Claim C discusses the speaker's current status regarding debate eligibility, which is unrelated to assumption A, which concerns the speaker's belief that their values were shaped by intergenerational civic commitment. There is no mention of values, civic commitment, or family history in claim C. The topics are entirely distinct, and C neither states nor verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in claim C refers to SPEAKER_00, consistent with earlier context.\",\n  \"reason\": \"Claim C discusses the speaker's current status regarding debate eligibility, which is unrelated to assumption A, which concerns the speaker's belief that their values were shaped by intergenerational civic commitment. There is no mention of values, civic commitment, or family history in claim C. The topics are entirely distinct, and C neither states nor verifies the"
     },
     {
       "a_turn_idx": 10,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the broader context of the conversation discussing his political behavior and rhetoric.\",\n  \"reason\": \"Claim C explicitly states that the individual (Trump) 'knows what he's doing' and 'knows that that's a centuries-old trope about whether or not Jews are loyal to the country in which they live.' This directly verifies the substance of assumption A, which asserts that historical suffering (such"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"He refers to Donald Trump; 'he' in 'he knows what he's doing' and 'he does have this preternatural sense' refers to Trump.\",\n  \"reason\": \"Claim C explicitly states that the individual (Trump) knows about the centuries-old trope regarding Jewish loyalty to countries, which directly verifies the substance of assumption A—that historical suffering does not negate national belonging or loyalty. The speaker emphasizes that Trump is deliberately invoking this trope, thereby acknowledging its existence and intent,"
     },
     {
       "a_turn_idx": 10,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 24 refers to the speaker and their coalition-building efforts.\",\n  \"reason\": \"Claim C (turn 24) discusses the necessity of not compromising on science while building coalitions, which is unrelated to assumption A (turn 10), which asserts that historical suffering does not negate national belonging or loyalty. The topics, themes, and semantic content are entirely distinct—A concerns identity and loyalty in the context of immigrant"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 24 refers to the speaker and their allies, not linked to any prior entity in turn 10.\",\n  \"reason\": \"Claim C (turn 24) discusses the necessity of not compromising on science in building political coalitions, which is unrelated to assumption A (turn 10), which asserts that historical suffering does not negate national belonging or loyalty. The topics—national identity and historical trauma versus scientific integrity"
     },
     {
       "a_turn_idx": 10,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Mitch McConnell, as established in the context of Senate leadership and political strategy.\",\n  \"reason\": \"Claim C (turn 36) discusses Mitch McConnell's strategic focus on key battleground states, implying he prioritizes electoral outcomes. However, this does not explicitly address or verify the earlier assumption A (turn 10), which asserts that historical suffering (e.g., Holocaust survival) does not negate national belonging or loyalty"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Mitch McConnell, as established in the context.\",\n  \"reason\": \"Claim C states that Mitch McConnell does not forget about key battleground states, which is a statement about political strategy and focus. However, this does not explicitly address or verify the earlier assumption A—that historical suffering does not negate national belonging or loyalty. While the broader context includes themes of loyalty and identity (e.g., references to Jewish heritage and American citizenship),"
     },
     {
       "a_turn_idx": 10,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the addressee' refers to the speaker in turn 39, who is also the subject of the discussion.\",\n  \"reason\": \"Claim C (turn 39) states that the addressee does not meet the polling threshold for debate qualification, which is a factual claim about current polling performance. Assumption A (turn 10) asserts that historical suffering does not negate national belonging or loyalty. There is no semantic connection between"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the addressee' refers to the speaker (SPEAKER_00), consistent with prior context.\",\n  \"reason\": \"Claim C (turn 39) states that the addressee does not meet the polling threshold for debate qualification, which is a factual claim about current political standing. Assumption A (turn 10) asserts that historical suffering does not negate national belonging or loyalty. There is no semantic connection between the two"
     },
     {
       "a_turn_idx": 10,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the addressee' refers to the speaker in turn 39, who is also the subject of the discussion.\",\n  \"reason\": \"Claim C (turn 39) discusses the addressee's failure to meet fundraising and polling thresholds for debate qualification, which is unrelated to assumption A (turn 10), which asserts that historical suffering does not negate national belonging or loyalty. There is no semantic connection between the two statements—C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the addressee' refers to the speaker in turn 39, who is also the subject of the discussion.\",\n  \"reason\": \"Claim C (turn 39) discusses the addressee's failure to meet fundraising and polling thresholds for debate qualification, which is entirely unrelated to assumption A (turn 10), which asserts that historical suffering does not negate national belonging or loyalty. There is no semantic connection between the two statements,"
     },
     {
       "a_turn_idx": 10,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the collective American public and political actors involved in building a coalition for climate action, consistent with the broader civic ethos described in turn 10.\",\n  \"reason\": \"Claim C (turn 24) states that the coalition for climate action already exists in America and merely needs mobilization, which aligns with the core idea in assumption A (turn 10) that America functions best through mutual giving and receiving"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the collective American public and political actors involved in building climate action coalitions, consistent with the broader civic ethos described in turn 10.\",\n  \"reason\": \"Claim C (turn 24) states that the coalition for climate action already exists in America and merely needs mobilization, which aligns with the core idea in assumption A (turn 10) that America functions best through mutual giving and receiving—"
     },
     {
       "a_turn_idx": 11,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 11 refers to Donald Trump, but turn 17 discusses the speaker's own knowledge of government, not Trump's rhetorical strategies.\",\n  \"reason\": \"Turn 17 states that the speaker knew more about how the U.S. government works than the average person due to upbringing and experience, but it does not address or verify the claim in turn 11 that the use of historical tropes about loyalty is a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 11 refers to Donald Trump, but turn 17 discusses the speaker's own knowledge of government, not Trump's rhetorical strategies.\",\n  \"reason\": \"Turn 17 states that the speaker knew more about how the U.S. government works than the average person due to upbringing and experience, but does not address or verify the claim in turn 11 that the use of historical tropes about loyalty is a deliberate"
     },
     {
       "a_turn_idx": 11,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the surrounding context. In turn 20, 'these guys' and the reference to political behavior resembling historical decline (via Thucydides) implicitly connect to the earlier critique of Trump’s use of loyalty tropes as a strategic move.\",\n  \"reason\": \"Claim C (turn 20) does not explicitly state that the use of historical tropes about loyalty is a deliberate"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, as established in the surrounding context. 'He' in turn 20 is not used; however, the reference to 'these guys' and the broader critique of political dysfunction aligns with the earlier critique of Trump's actions.\",\n  \"reason\": \"Claim C (turn 20) references Thucydides to draw a parallel between current political decay and historical precedents of institutional collapse, emphasizing"
     },
     {
       "a_turn_idx": 11,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Republican politicians' refers to members of the Republican Party who consider acting on climate change.\",\n  \"reason\": \"Claim C discusses Republican politicians facing threats of funding in primaries for considering climate action, which relates to political division and party dynamics. However, assumption A concerns a leader dividing people politically as acting against democratic norms. While both touch on political division and party behavior, C does not explicitly state or verify the core idea that dividing people politically undermines democratic norms"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Republican politicians' refers to members of the Republican Party, and 'them' in turn 26 refers to these politicians.\",\n  \"reason\": \"Claim C discusses Republican politicians facing threats of funding in primaries for supporting climate action, which relates to political division and party dynamics. However, it does not explicitly state or verify the core idea in assumption A—that a leader who divides people politically acts against democratic norms. While C implies that political division is exacerbated"
     },
     {
       "a_turn_idx": 11,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, as established in the preceding context (turn 11).\",\n  \"reason\": \"Claim C explicitly states that 'he has made little effort to reach out to people who did not vote for him,' which directly verifies the substance of assumption A—that a leader who divides people politically (like Trump, as described in turn 11) acts against democratic norms. The claim confirms a specific behavior (lack of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, as established in the preceding context (turns 11 and 13).\",\n  \"reason\": \"Claim C explicitly states that 'he has made little effort to reach out to people who did not vote for him,' which directly verifies the substance of assumption A—that a leader who divides people politically (like Trump, as described) acts against democratic norms. The claim confirms a specific behavior (lack of"
     },
     {
       "a_turn_idx": 11,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, and 'he' in turn 16 refers to the governor, indicating different individuals. No coreference between the subjects of A and C.\",\n  \"reason\": \"Claim C discusses expectations about a governor appointing someone with electoral experience, which is unrelated to the assumption in A that a leader who divides people politically acts against democratic norms. While both relate to political leadership and democratic values, C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'some people' who expected the governor to appoint someone with electoral experience. No coreference resolves to the earlier assumption A.\",\n  \"reason\": \"Claim C discusses expectations about gubernatorial appointments based on electoral experience, which is unrelated to the earlier assumption A that a leader who divides people politically acts against democratic norms. There is no mention of political division, democratic norms, or the behavior of leaders in relation to unity or"
     },
     {
       "a_turn_idx": 11,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to the speaker's grandfather; 'they' refers to the speaker's grandparents. In turn 39, 'you' refers to the addressee (SPEAKER_01), not the speaker or their family.\",\n  \"reason\": \"Claim C (turn 39) discusses the addressee's viability for presidential candidacy and debate eligibility, which is unrelated to assumption A (turn 11),"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to the speaker's grandfather; 'they' refers to the speaker's grandparents. In turn 39, 'you' refers to the addressee (SPEAKER_01), not the speaker or their family.\",\n  \"reason\": \"Turn 39 discusses the addressee's viability in a presidential campaign and debate eligibility, which is unrelated to the earlier assumption in turn 11 about the speaker"
     },
     {
       "a_turn_idx": 12,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established by the context of political division and lack of outreach to non-supporters. In turn 19, 'Trump' is explicitly mentioned and contrasted with broader systemic issues in Washington.\",\n  \"reason\": \"Claim C states that Trump is not the cause of all the problems described (e.g., hyper-partisanship, dysfunction), which indirectly challenges the implication in assumption A that political leaders should"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the context. 'He' in turn 19 refers to Trump as well, based on the prior discussion.\",\n  \"reason\": \"Claim C (turn 19) states that 'Trump is not the cause of all these things,' which contradicts the implication in assumption A (turn 12) that political leaders should connect with all constituents—not just supporters—and implicitly criticizes"
     },
     {
       "a_turn_idx": 12,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to Democrats and progressive political actors, consistent with the broader context of the discussion about political strategy and coalition-building.\",\n  \"reason\": \"Claim C (turn 20) states that 'not all Democrats want to hear that,' referring to the idea of overcoming partisan gridlock and building cross-partisan coalitions. While this acknowledges resistance within the Democratic base to certain political strategies, it does not explicitly state or verify the earlier"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to Democrats and progressive political actors, consistent with the broader context of the conversation about political leadership and national unity.\",\n  \"reason\": \"Claim C (turn 20) states that 'not all Democrats want to hear that,' referring to the idea of overcoming partisan gridlock and building cross-partisan coalitions. While this acknowledges resistance within the Democratic party to certain political strategies, it does not explicitly state or verify the earlier"
     },
     {
       "a_turn_idx": 12,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to SPEAKER_00, as established in the prior context. The claim in C ('the speaker believes that the listener ran for office') misidentifies the subject; SPEAKER_01 is asking about SPEAKER_00's actions, and SPEAKER_00 explicitly states in turn 15 that he 'didn't run for office'.\",\n  \"reason\": \"Claim C asserts that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to SPEAKER_00, as established in the prior context. The claim in C ('the speaker believes that the listener ran for office') misidentifies the subject: SPEAKER_01 is asking SPEAKER_00 about their actions, and SPEAKER_00 explicitly states they did not run for office (turn 14). Thus, C contradicts the factual content of the dialogue.\",\n  \""
     },
     {
       "a_turn_idx": 12,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical role of Republicans in civil rights progress, which is unrelated to assumption A (turn 12), which asserts that political power requires broad legitimacy beyond an electoral base. While both touch on political legitimacy and inclusivity, C does not state, verify, or even imply"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical role of Republicans in civil rights progress, which is unrelated to assumption A (turn 12), which asserts that political power requires broad legitimacy beyond an electoral base. While both touch on political legitimacy and inclusivity, C does not state, verify, or even reference"
     },
     {
       "a_turn_idx": 12,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the prior context. 'It' in turn 13 refers to Trump's behavior of avoiding non-supporting regions, which is directly addressed in C.\",\n  \"reason\": \"Claim C explicitly states that if elected, the speaker would prioritize visiting areas where they would receive less than 30% of the vote—directly verifying the assumption in A that Trump's behavior reflects intentional"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the prior context. 'It' in turn 13 refers to Trump's behavior of avoiding non-supporting regions, which is directly addressed in C.\",\n  \"reason\": \"Claim C explicitly states that if the speaker were elected president, they would prioritize visiting areas where they would receive less than 30% of the vote. This directly verifies the assumption in A—that Trump's"
     },
     {
       "a_turn_idx": 13,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these people' in turn 18 refers to the extremist factions in Congress (e.g., Freedom Caucus, Tea Party) mentioned in the prior context, which aligns with the broader theme of political division introduced in turn 13.\",\n  \"reason\": \"Claim C explicitly states that overcoming entrenched political factions requires sustained effort beyond a single election, which directly verifies the core idea in assumption A—that a president’s legitimacy depends on engagement beyond their base, not just"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these people' in turn 18 refers to the extremist factions in Congress (e.g., Freedom Caucus, Tea Party) mentioned in the prior context, which aligns with the broader political division discussed in turn 13.\",\n  \"reason\": \"Claim C explicitly states that overcoming entrenched political factions requires sustained effort beyond a single election, which directly verifies the core idea in assumption A—that a president’s legitimacy depends on engagement beyond their base, not just re-election"
     },
     {
       "a_turn_idx": 13,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our base' in turn 24 refers to the supporters of the speaker's political coalition, consistent with the earlier reference to 'the people who voted for him' in turn 13. 'Bring new people to the table' corresponds to 'engage beyond their base' in turn 13.\",\n  \"reason\": \"Claim C explicitly verifies the core substance of assumption A: that a leader's legitimacy requires engagement beyond their base. C states that the Keystone"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our base' in turn 24 refers to supporters of the speaker's political position, consistent with the broader context of political engagement beyond one's base. 'It' in 'it galvanized our base' refers to the Keystone Pipeline vote.\",\n  \"reason\": \"Claim C explicitly states that the Keystone Pipeline vote strengthened the speaker's base but failed to attract new supporters, directly verifying the core idea in assumption A—that a leader's legitimacy requires engagement beyond their base"
     },
     {
       "a_turn_idx": 13,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference resolution needed; 'the party' in turn 25 refers to the Republican Party, as established in the broader context.\",\n  \"reason\": \"Claim C states that civil rights bills in the mid-60s required Republican support, which is a factual historical assertion. However, this does not explicitly or directly verify the earlier assumption A, which concerns presidential legitimacy depending on engagement beyond one's base. While both touch on bipartisanship and reaching across divides"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference resolution needed; 'the party' in turn 25 refers to the Republican Party, which is consistent with the broader context.\",\n  \"reason\": \"Claim C states that civil rights bills in the mid-60s required Republican support, which is a factual historical assertion. However, this does not explicitly or directly verify the earlier assumption A, which concerns presidential legitimacy depending on engagement beyond one's base. While both statements touch on bipartisanship and political"
     },
     {
       "a_turn_idx": 13,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 38 refers to SPEAKER_00, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 38) expresses self-doubt about presidential campaign ability, which is tangentially related to the broader theme of political engagement beyond one's base. However, it does not explicitly state or verify the core idea in assumption A—that a president’s legitimacy depends on engaging beyond their base. While A emphasizes proactive outreach to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 38 refers to SPEAKER_00, consistent with prior turns. 'Somebody else' is a vague referent but likely contrasts with SPEAKER_00's self-assessment.\",\n  \"reason\": \"Turn 38 expresses personal doubt about the speaker's ability to run for president effectively, but it does not address or verify the core idea in assumption A—that a president’s legitimacy depends on engagement beyond their base. While"
     },
     {
       "a_turn_idx": 13,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the political actors and leaders discussed in the broader context, particularly the speaker (SPEAKER_00), who advocates for inclusive governance. 'A durable coalition' refers to the bipartisan, cross-sectional unity needed to address national challenges like climate change, echoing the earlier call to 'stitch this country back together'.\",\n  \"reason\": \"Claim C explicitly emphasizes the necessity of building a durable coalition to achieve lasting political solutions on"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the speaker and the broader political coalition they advocate for; 'the coalition' refers to a broad, cross-partisan group necessary for sustainable political outcomes.\",\n  \"reason\": \"Claim C explicitly states that a 'durable coalition' is necessary for lasting political solutions on climate change, which directly aligns with the core idea in assumption A—that the U.S. political climate requires intentional bridging efforts to overcome polarization. While"
     },
     {
       "a_turn_idx": 13,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'George H.W. Bush' is explicitly named and refers to the former U.S. president.\",\n  \"reason\": \"Claim C discusses George H.W. Bush's public stance on climate change, specifically his assertion that climate action would come from outside the White House. This is unrelated to Assumption A, which concerns the U.S. political climate's deep polarization and the need for intentional bridging efforts. While both topics touch on U.S. politics"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 13 refers to Donald Trump, and 'you' in turn 26 refers to George H.W. Bush. No overlap in referents between A and C.\",\n  \"reason\": \"Claim C discusses George H.W. Bush's public stance on climate change and the influence of money in politics, which is unrelated to the earlier assumption A about U.S. political polarization requiring intentional bridging efforts. While both touch on"
     },
     {
       "a_turn_idx": 14,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to 'elected officials' mentioned earlier in the sentence, which aligns with the broader discussion of senators and political representation.\",\n  \"reason\": \"Claim C states that elected officials are more responsive to special interests than to the public, which touches on a related theme of accountability and representation. However, it does not explicitly address or verify the specific assumption in A—that being appointed rather than elected undermines the legitimacy or authenticity of a"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to 'elected officials' mentioned earlier in the sentence, and 'the American people' is the intended audience of responsiveness.\",\n  \"reason\": \"Claim C states that elected officials are more responsive to special interests than to the public, which touches on a related theme of accountability and representation. However, it does not explicitly address or verify the specific assumption in A—that being appointed rather than elected undermines the legitimacy or authenticity of a"
     },
     {
       "a_turn_idx": 14,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to 'elected officials' mentioned earlier in the conversation, specifically those in Washington. 'The American people' and 'special interests' are contrasted as competing sources of responsiveness.\",\n  \"reason\": \"Claim C states that elected officials are more responsive to special interests than to the public, which aligns with a broader critique of political accountability present in the discussion. However, it does not explicitly address or verify the specific assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to 'elected officials' mentioned earlier in the conversation, particularly in the context of political representation and responsiveness.\",\n  \"reason\": \"Claim C states that elected officials are more responsive to special interests than to the public, which touches on a related theme of credibility and accountability in governance. However, it does not explicitly address or verify the specific claim in assumption A—that political appointments are less credible than election victories in public perception."
     },
     {
       "a_turn_idx": 16,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 42 refers to the speaker (SPEAKER_00), and 'our elected officials' refers to public officials in general, including senators and those at 1600 Pennsylvania Avenue.\",\n  \"reason\": \"Claim C states that there should be a high moral standard for elected officials, emphasizing responsibility, duty, and responsiveness to the people—aligning with the broader value of credibility in leadership. However, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 42 refers to the speaker (SPEAKER_00), and 'our elected officials' refers to public officials in general, including senators and the president.\",\n  \"reason\": \"Claim C states that there should be a high moral standard for elected officials, emphasizing responsibility, duty, and responsiveness to the people—aligning with the broader value of credibility in leadership. However, it does not explicitly mention electoral experience as a requirement for"
     },
     {
       "a_turn_idx": 16,

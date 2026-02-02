@@ -1,0 +1,87 @@
+{
+  "episode_id": "86274",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.527,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Governors of states like Texas and Mississippi are acting appropriately by rejecting mandates.",
+      "c_turn_idx": 2,
+      "claim_text": "Some doctors support policies in Texas and Mississippi regarding masks.",
+      "overlap_score": 2,
+      "c_time": 231.129,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'doctors' mentioned in the same sentence, and 'Texas and Mississippi' are the states referenced in assumption A.\",\n  \"reason\": \"Claim C explicitly states that 'some doctors support policies in Texas and Mississippi regarding masks,' which directly verifies the substance of assumption A—that governors of states like Texas and Mississippi are acting appropriately by rejecting mandates. The mention of doctors supporting these policies provides direct validation of the appropriateness of the"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.527,
+      "a_idx_in_turn": 7,
+      "assumption_text": "Personal judgment based on observation outweighs formal medical diagnosis when evaluating public leaders.",
+      "c_turn_idx": 2,
+      "claim_text": "There are differing medical opinions on the necessity of certain public health measures.",
+      "overlap_score": 2,
+      "c_time": 231.129,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'doctors' mentioned in turn 0, specifically those who disagree with federal public health measures.\",\n  \"reason\": \"Claim C explicitly states that there are differing medical opinions on public health measures, which directly verifies the substance of assumption A—that personal judgment based on observation can outweigh formal medical diagnosis. The mention of doctors agreeing with Texas and Mississippi (in turn 0) supports the existence of divergent medical views, and claim"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 198.865,
+      "a_idx_in_turn": 2,
+      "assumption_text": "Public health outcomes depend on widespread adherence to protective behaviors like masking.",
+      "c_turn_idx": 2,
+      "claim_text": "There are differing medical opinions on the necessity of certain public health measures.",
+      "overlap_score": 2,
+      "c_time": 231.129,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'doctors' mentioned in the prior context, specifically those who disagree with mask mandates in Texas and Mississippi.\",\n  \"reason\": \"Claim C explicitly states that there are differing medical opinions on the necessity of public health measures, which directly verifies the substance of assumption A—that public health outcomes depend on widespread adherence to protective behaviors like masking—by acknowledging that not all medical professionals agree on the necessity of such measures. This is a direct"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 198.865,
+      "a_idx_in_turn": 3,
+      "assumption_text": "The term 'Neanderthal thinking' reflects a moral judgment that dismisses certain attitudes as primitive or unreasonably resistant to evidence.",
+      "c_turn_idx": 2,
+      "claim_text": "Joe Biden often uses 'Neanderthal thinking' in his rhetoric.",
+      "overlap_score": 2,
+      "c_time": 231.129,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 2, 'Joe Biden' refers to the same individual mentioned in turn 1. 'Neanderthal thinking' is used in both turns to describe a dismissive rhetorical stance toward opposing views.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden uses the phrase 'Neanderthal thinking' in his rhetoric, which directly verifies the substance of assumption A—that the term reflects a moral judgment dismissing certain attitudes as primitive or unreasonably resistant to evidence. The context"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 198.865,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Audience members believe they should act based on scientific guidance rather than personal preference during a public health crisis.",
+      "c_turn_idx": 2,
+      "claim_text": "There are differing medical opinions on the necessity of certain public health measures.",
+      "overlap_score": 2,
+      "c_time": 231.129,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'doctors' mentioned in the prior context, specifically those who disagree with federal public health guidance.\",\n  \"reason\": \"Claim C explicitly states that there are differing medical opinions on the necessity of public health measures, which directly verifies the substance of assumption A—that audience members believe they should act based on scientific guidance rather than personal preference—by acknowledging that scientific disagreement exists. This clarifies that the belief in acting on science does not"
+    }
+  ]
+}

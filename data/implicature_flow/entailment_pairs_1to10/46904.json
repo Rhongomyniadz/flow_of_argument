@@ -2976,7 +2976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the evaluation of A and C. 'The speaker' in A refers to SPEAKER_06; 'I' in C refers to SPEAKER_09, a different individual.\",\n  \"reason\": \"Claim C (turn 47) discusses a different speaker (SPEAKER_09) who has spent 20 years building businesses, which is unrelated to the earlier assumption A (turn 25) about SPEAKER_"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in claim C refers to SPEAKER_09, who is unrelated to SPEAKER_06 in turn 25.\",\n  \"reason\": \"Claim C (turn 47) discusses the speaker's personal experience building businesses over 20 years, which is entirely unrelated to the assumption in turn 25 about having legitimate authority to speak on educational policy in the state. There is no mention of education, policy,"
     },
     {
       "a_turn_idx": 25,
@@ -3006,7 +3006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in turn 48 refers to SPEAKER_08, distinct from SPEAKER_06 in turn 25.\",\n  \"reason\": \"Turn 48 discusses the speaker's personal success in business, which is unrelated to the assumption in turn 25 about legitimate authority to speak on educational policy in the state. There is no overlap in topic, subject, or claim. The two statements are entirely disconnected in content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in turn 48 refers to SPEAKER_08, who is unrelated to SPEAKER_06 in turn 25.\",\n  \"reason\": \"Turn 48 discusses the personal success of SPEAKER_08 in running and investing in businesses, which is entirely unrelated to the assumption in turn 25 about SPEAKER_06's legitimate authority to speak on educational policy in the state. There is no"
     },
     {
       "a_turn_idx": 25,
@@ -3017,11 +3017,11 @@
       "claim_text": "The speaker has a new podcast titled 'Aspire With Em Agreed'.",
       "overlap_score": 2,
       "c_time": 1554.157,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference relevant; 'the speaker' in C refers to SPEAKER_08, distinct from SPEAKER_06 in A.",
-      "reason": "Claim C discusses a new podcast hosted by SPEAKER_08 and does not address or verify any authority related to educational policy in the state. There is no connection between the speaker's legitimacy in education policy (A) and the podcast announcement (C). The two speakers and topics are entirely different.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'the speaker' in C refers to SPEAKER_08, distinct from SPEAKER_06 in A.\",\n  \"reason\": \"Claim C discusses a new podcast hosted by SPEAKER_08 and does not address or verify any authority related to educational policy in the state. There is no connection between the speaker's legitimacy in education policy (A) and the podcast announcement (C). The two speakers and topics are entirely different.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'the speaker' in claim C refers to SPEAKER_08, distinct from SPEAKER_06 in assumption A.\",\n  \"reason\": \"Claim C discusses a new podcast hosted by SPEAKER_08 and does not address or verify any authority related to educational policy in the state. There is no overlap in subject matter or claim about legitimacy in education policy. The speaker in C is different from the speaker in A, and the topic is unrelated"
     },
     {
       "a_turn_idx": 26,
@@ -3036,7 +3036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the speaker (SPEAKER_06) and potentially their legislative team, indicating collective action capability.\",\n  \"reason\": \"Claim C states that the speaker believes they have the capacity to facilitate connections between skilled individuals and employment opportunities, which directly supports the substance of assumption A—that airlines can identify and pursue new business opportunities (specifically, talent pipelines). While C does not explicitly mention airlines, it affirms the ability"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the speaker (SPEAKER_06) and potentially the broader group of policymakers mentioned in the conversation, including Senator Tillis and others involved in the legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes they have the capacity to facilitate connections between highly skilled individuals and employment opportunities, which directly verifies the substance of assumption A—that airlines have the capacity to identify and pursue new business opportunities. The phrase"
     },
     {
       "a_turn_idx": 26,
@@ -3111,7 +3111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to the owner of Oshkosh Defense, as established in the prior context. 'They' in turn 37 refers to veterans in Wisconsin.\",\n  \"reason\": \"Turn 37 asks about the state of veterans in Wisconsin, which is tangentially related to the earlier assumption A about a shared understanding of 'pipeline' in employment contexts. However, it does not explicitly state or verify the idea that both speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to the owner of Oshkosh Defense, as established in the prior context. 'They' in turn 37 refers to veterans in Wisconsin.\",\n  \"reason\": \"Turn 37 asks about the state of veterans in Wisconsin, which is tangentially related to the idea of a 'pipeline' discussed in turn 27—namely, connecting veterans to employment opportunities. However, it does not explicitly state"
     },
     {
       "a_turn_idx": 28,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 48 refers to SPEAKER_08, who is the subject of the statement about running and investing in businesses. There is no direct reference to 'skilled people' or 'opportunities' from turn 28.\",\n  \"reason\": \"Turn 48 states that the speaker has experienced success in running and investing in businesses, which implies some level of access to or influence over resources and ventures. However, it does not"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 48 refers to SPEAKER_08, who is the subject of the statement about running and investing in businesses. There is no direct reference to 'skilled people' or 'opportunities' from turn 28.\",\n  \"reason\": \"Turn 48 mentions personal success in running and investing in businesses, which implies some level of access to or influence over resources, but does not explicitly or clearly verify the specific claim in"
     },
     {
       "a_turn_idx": 28,
@@ -3276,7 +3276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these legislative efforts' in turn 40 refers to the American Aviator Act and the BRAVE Act mentioned earlier in the conversation.\",\n  \"reason\": \"Claim C mentions an apprenticeship program related to the legislative efforts (the American Aviator Act and the BRAVE Act), which are discussed in context. However, it does not explicitly state or verify the audience's value for transparency about legislative efforts and their sponsors—this is the core of assumption A. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these legislative efforts' in turn 40 refers to the American Aviator Act and the BRAVE Act mentioned earlier in the conversation.\",\n  \"reason\": \"Claim C mentions an apprenticeship program related to the legislative efforts (the American Aviator Act and the BRAVE Act), which are discussed in the context of supporting veterans through employment. However, it does not explicitly state or verify the audience's value for transparency about legislative efforts and their sponsors—this is the"
     },
     {
       "a_turn_idx": 30,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the veteran entrepreneur mentioned in turn 32 as the owner of Applied Fab and Machining.\",\n  \"reason\": \"Claim C states that the speaker visited a veteran-owned business named Applied Fab and Machining, which directly supports the broader assumption in A that non-veteran-owned businesses (or employers) are capable of and willing to improve veteran hiring and retention when incentivized. While C does not explicitly mention incentives or"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to the veteran entrepreneur mentioned in turn 32 as the owner of Applied Fab and Machining.\",\n  \"reason\": \"Claim C states that the speaker visited a veteran-owned business named Applied Fab and Machining, which aligns with the broader context of supporting non-veteran-owned businesses that recruit and retain veterans through incentives. While C does not explicitly state that non-veteran-owned businesses are capable or willing to improve"
     },
     {
       "a_turn_idx": 30,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to the veteran entrepreneur mentioned in turns 32–34, who owns Applied Fab and Machining. The claim 'Oshkosh Defense is a veteran-owned business' is explicitly stated in turn 35, directly verifying the assumption in turn 32 that veteran-owned businesses are exemplary models.\",\n  \"reason\": \"Turn 35 explicitly states that the veteran-owned business (Applied Fab and Machining)"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to the veteran entrepreneur mentioned in turns 32–34, who owns Applied Fab and Machining. 'It' in 'it has been a great opportunity' refers to the veteran-owned business.\",\n  \"reason\": \"Claim C explicitly states that Oshkosh Defense is a veteran-owned business, which directly verifies the assumption in A that veteran-owned businesses are trustworthy or exemplary models for economic engagement. While the context"
     },
     {
       "a_turn_idx": 34,
@@ -3456,7 +3456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the veteran-owned business owner mentioned in turn 33. The claim in turn 35 ('Oshkosh Defense has successfully hired several veterans') directly verifies the implication in turn 34 that the business works with veterans through its partnership with the veteran-owned business, and the context confirms the veteran-owned business already employs several veterans.\",\n  \"reason\": \"Turn 34 assumes the speaker trusts the accuracy of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the veteran-owned business owner mentioned in turn 33. The claim in turn 35 ('Oshkosh Defense has successfully hired several veterans') directly references the same business owner's goal of hiring more veterans, implying success in this effort.\",\n  \"reason\": \"Turn 35 explicitly states that the veteran-owned business owner has several veterans working for him, which confirms that Oshkosh Defense has successfully"
     },
     {
       "a_turn_idx": 34,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'veterans employed by Oshkosh Defense', which is consistent with the context in turn 34 where the speaker discusses veterans working with Oshkosh Defense.\",\n  \"reason\": \"Claim C explicitly states that veterans employed by Oshkosh Defense perform their jobs well, which directly verifies the implicit assumption in turn 34 that the speaker trusts the accuracy of the example involving Oshkosh Defense."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'veterans employed by Oshkosh Defense', which is consistent with the context from turn 34 where the speaker discusses veterans working with Oshkosh Defense.\",\n  \"reason\": \"Claim C explicitly states that veterans employed by Oshkosh Defense perform their jobs well, which directly verifies the implicit assumption in turn 34 that the speaker trusts the accuracy of the example involving Oshkosh Defense."
     },
     {
       "a_turn_idx": 34,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to Oshkosh and other companies mentioned earlier, specifically linking back to Oshkosh Defense from turn 35. 'Returning veterans' is a direct reference to veterans transitioning from military service, aligning with the context of workforce integration discussed in turn 35.\",\n  \"reason\": \"Claim C explicitly states that Oshkosh makes a point to hire returning veterans, which directly verifies the assumption in A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to Oshkosh and other companies mentioned earlier, specifically linking back to Oshkosh Defense as discussed in turn 35.\",\n  \"reason\": \"Claim C explicitly states that Oshkosh makes a point to hire returning veterans, which directly verifies the assumption in A that veterans possess valuable skills relevant to employment at Oshkosh Defense. The statement goes beyond mere relevance by affirming intentional hiring practices,"
     },
     {
       "a_turn_idx": 35,
@@ -3591,7 +3591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Oshkosh and other companies mentioned in the context, specifically aligning with the focus on Oshkosh Defense from turn 35.\",\n  \"reason\": \"Claim C explicitly states that Oshkosh makes a point to hire returning veterans, which directly verifies the substance of assumption A—that returning veterans are often overlooked in existing job placement systems—by providing a concrete example of a company actively addressing this gap. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to Oshkosh and other companies mentioned in the context, specifically linking back to the discussion of Oshkosh Defense and its hiring practices for veterans.\",\n  \"reason\": \"Claim C explicitly states that Oshkosh makes a point to hire returning veterans, which directly verifies the substance of assumption A—that returning veterans are often overlooked in job placement systems—by providing a concrete example of a company actively seeking them out"
     },
     {
       "a_turn_idx": 35,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 39 refers to the speaker and the broader community of Wisconsin, consistent with the context of discussing state-level veteran issues.\",\n  \"reason\": \"Claim C explicitly states that homelessness among veterans remains an ongoing challenge in Wisconsin, which directly verifies the substance of assumption A—that the speaker values the listener's perspective on the condition of veterans in Wisconsin. The mention of 'still working on ending homelessness' confirms an acknowledged struggle, aligning with the idea"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 39 refers to the speaker and the broader community of Wisconsin, consistent with the context of state-level issues discussed.\",\n  \"reason\": \"Claim C explicitly states that homelessness among veterans remains an ongoing issue in Wisconsin, which directly verifies the substance of assumption A — that the speaker values the listener's perspective on the condition of veterans in Wisconsin. The mention of 'still working on ending homelessness' confirms a current struggle, aligning with the idea"
     },
     {
       "a_turn_idx": 37,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'us' in turn 41 refers to organizations serving veterans, as established by the context of hosting visits and supporting veterans.\",\n  \"reason\": \"Claim C discusses inviting elected representatives to visit programs that serve veterans, which indirectly relates to the idea of evaluating veterans' conditions through firsthand experiences. However, it does not explicitly address or verify the substance of assumption A, which centers on evaluating veterans' conditions via subjective perspectives like personal observation or lived experience. While the visit"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in turn 41 refers to organizations serving veterans, as established by the context of hosting visits and supporting veterans.\",\n  \"reason\": \"Claim C discusses inviting elected representatives to visit organizations that serve veterans, which is unrelated to the assumption A that veterans' conditions can be meaningfully evaluated through subjective perspectives like personal observation or lived experience. While both topics relate to veterans, C does not state, verify, or even imply anything about evaluating veterans' conditions via"
     },
     {
       "a_turn_idx": 38,

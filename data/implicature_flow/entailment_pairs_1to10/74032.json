@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in C refers to SPEAKER_04, while 'the speaker' in A refers to SPEAKER_02. The claims are about different individuals and contexts.\",\n  \"reason\": \"Claim C (turn 28) discusses the efforts of a political figure (presumably Biden) and others in addressing the pandemic, which is unrelated to assumption A (turn 12), which concerns the weight of the speaker's opinion"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_04, while 'the speaker' in assumption A refers to SPEAKER_02. The two speakers express opposing views on political figures and pandemic response.\",\n  \"reason\": \"Claim C (turn 28) asserts that the speaker (SPEAKER_04) and others put in significant effort to address the pandemic, which is unrelated to assumption A (turn 12"
     },
     {
       "a_turn_idx": 12,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 29 refers to the female speaker (likely Karine Jean-Pierre) mentioned in turn 28, who is a public figure making claims about the pandemic and the previous administration.\",\n  \"reason\": \"Claim C states that journalists are failing to challenge false claims made by public figures, which aligns with the broader concern in assumption A that public figures should be held accountable. However, C does not explicitly state or verify the core idea"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 29 refers to the female speaker (likely Karine Jean-Pierre) mentioned in the prior context. 'They' in 'they keep getting away with it' refers to journalists or media figures who are not challenging false claims.\",\n  \"reason\": \"Claim C states that journalists are failing to challenge false claims made by public figures, which aligns with the criticism in turn 29 about media figures spreading misinformation and not confronting falsehoods"
     },
     {
       "a_turn_idx": 13,
@@ -1011,7 +1011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to the person being discussed (likely Joe Biden or someone associated with him), and 'the person being discussed' in turn 24 refers to the same individual. However, the claim in turn 24 ('lying about them the entire time') contradicts the assumption in turn 13 that the person is capable of change through listening to others.\",\n  \"reason\": \"Turn 13 assumes the person can change"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to the person being discussed (likely a public figure involved in a personal or professional conflict). In turn 24, 'lying about them the entire time' refers to House Republicans, not the same individual. There is no clear coreference between the person in turn 13 and the subject of the lie in turn 24.\",\n  \"reason\": \"Turn 13 expresses an assumption that the person being discussed"
     },
     {
       "a_turn_idx": 13,
@@ -1041,7 +1041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting assumption A to claim C. 'He' in turn 13 refers to a person in a relationship (likely a romantic partner), while 'Carrie' in turn 23 is a different individual involved in political discourse.\",\n  \"reason\": \"Claim C discusses Carrie's actions from the dais being political despite her claims otherwise, focusing on political behavior and legislative responsibility. Assumption A concerns emotional recovery in relationships after conflict. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, as established by context. 'That dais' refers to the platform or public speaking position from which Carrie spoke.\",\n  \"reason\": \"Claim C asserts that Carrie's actions from the dais constitute political behavior despite her claim of non-political conduct under the Hatch Act. This is unrelated to assumption A, which concerns the belief that emotional relationships can recover after conflict. There is no overlap in subject matter,"
     },
     {
       "a_turn_idx": 13,
@@ -1056,7 +1056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_04, while 'the speaker' in A refers to SPEAKER_02. The claims are about entirely different topics: emotional recovery vs. origin of the virus.\",\n  \"reason\": \"Claim C discusses the origin of the virus being a lab leak, which is unrelated to assumption A, which concerns the possibility of emotional relationships recovering after conflict. There is no overlap in subject matter, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 28 refers to SPEAKER_04, who expresses a belief about the virus origin. Turn 13 involves SPEAKER_02 expressing hope for reconciliation in an emotional relationship.\",\n  \"reason\": \"Turn 13 expresses a belief in the possibility of recovery in emotional relationships after conflict. Turn 28 expresses a belief about the origin of the virus being a lab leak, which is entirely unrelated in"
     },
     {
       "a_turn_idx": 14,
@@ -1071,7 +1071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to the listener (SPEAKER_07), as established in prior turns where SPEAKER_02 addresses them directly.\",\n  \"reason\": \"Turn 33 claims the listener has the capacity to generate ideas (e.g., creating a parody about 'walking the talk'), which implies value in their creativity. However, this does not directly state or verify the specific assumption in turn 14—that the listener has"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to the listener (SPEAKER_07), as established in prior turns where SPEAKER_02 addresses them directly.\",\n  \"reason\": \"Turn 33 claims the listener has the capacity to generate ideas (e.g., creating a parody about 'walking the talk'), which aligns with the idea that the listener is valuable or worth investing in. However, it does not explicitly state or verify the specific claim"
     },
     {
       "a_turn_idx": 14,
@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of making statements from the dais. The claim in C focuses on Carrie's actions being political despite her claims of non-political conduct under the Hatch Act.\",\n  \"reason\": \"Turn 14 expresses an emotional investment in a personal relationship despite cost, suggesting that emotional value outweighs financial expense. Turn 23 discusses political behavior by Carrie, asserting that her actions from"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of making statements from the dais. The claim in C focuses on Carrie's actions being political despite her claims of non-political conduct under the Hatch Act.\",\n  \"reason\": \"Turn 14 expresses an emotional investment in a personal relationship despite cost, emphasizing value beyond financial expense. Turn 23 discusses political behavior by Carrie, asserting her actions from the dais are"
     },
     {
       "a_turn_idx": 14,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to the listener (SPEAKER_07), and 'she' refers to the same listener as well, based on context.\",\n  \"reason\": \"Turn 37 questions whether the listener sent a note, which relates to interpersonal interaction and emotional engagement, but does not explicitly state or verify the idea that emotional connection warrants investment despite cost. While there is a thematic link to personal connection and effort ('I feel like"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to the listener (SPEAKER_07), and 'she' refers to the listener as well, based on context.\",\n  \"reason\": \"Turn 37 questions whether the listener sent a note, which relates to interpersonal interaction but does not explicitly state or verify the emotional connection warranting investment despite cost. While there is a thematic link to emotional engagement and personal investment (e.g., 'I really feel like"
     },
     {
       "a_turn_idx": 14,
@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to the listener (SPEAKER_07), as established by prior interaction. 'That note' likely refers to a gesture or communication related to emotional support or appreciation.\",\n  \"reason\": \"Turn 37 questions whether the listener sent a note, implying an expectation of emotional acknowledgment. While this touches on the theme of mutual understanding and appreciation, it does not explicitly verify or state the speaker's belief that the listener"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 37 refers to the listener (SPEAKER_07), as established by prior interaction. 'That note' likely refers to an emotional or expressive gesture, possibly related to the affectionate tone mentioned in turn 14.\",\n  \"reason\": \"Turn 37 questions whether the listener sent a note, implying a concern about communication or emotional expression. While this touches on interpersonal connection and perceived emotional effort, it does not explicitly"
     },
     {
       "a_turn_idx": 16,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Joe Pags Show' in turn 31 refers to 'Joe Pags.com' mentioned in turn 16, establishing direct identity between the website and the show.\",\n  \"reason\": \"Turn 31 explicitly states 'It is the Joe Pags Show, 88941 Pags, 888-941-7247,' which directly identifies the website 'JoePags.com' (from turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Joe Pags Show' in turn 31 refers to 'Joe Pags.com' mentioned in turn 16, establishing direct identity between the website and the show.\",\n  \"reason\": \"Turn 31 explicitly states 'It is the Joe Pags Show, 88941 Pags, 888-941-7247,' which directly identifies the website 'Joe Pags.com' (from turn"
     },
     {
       "a_turn_idx": 16,
@@ -1176,7 +1176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the audience (viewers), and 'they' in the context refers to those discussing or spreading misinformation, consistent with the broader conversation about political discourse.\",\n  \"reason\": \"Claim C explicitly states that viewers should look up information about the situation, which directly verifies the assumption in A that Democratic party membership or related political positions are open to doubt or debate. By urging the audience to 'look it up,' the speaker acknowledges"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the audience/viewers, and 'they' in the context refers to those discussing or spreading claims about Democratic party membership. The phrase 'look it up' directly addresses the need to verify information, making the belief in uncertainty about Democratic party membership explicit.\",\n  \"reason\": \"Claim C explicitly urges viewers to use the internet to verify information, which directly supports and verifies the assumption in A that the topic of Democratic party membership"
     },
     {
       "a_turn_idx": 16,
@@ -1221,7 +1221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of being on the dais and claiming non-political conduct under the Hatch Act. The statement 'that's kind of political to me' directly addresses the legitimacy of her actions, aligning with the assumption that questioning political affiliations or behaviors is warranted.\",\n  \"reason\": \"Claim C explicitly challenges the notion that Carrie's actions from the dais are non-political, asserting"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of being on the dais and claiming non-political conduct under the Hatch Act. The speaker challenges this claim by asserting that her actions—criticizing Republicans—are inherently political.\",\n  \"reason\": \"Claim C explicitly states that Carrie's actions from the dais, though claimed to be non-political due to the Hatch Act, are nonetheless political. This directly verifies the earlier"
     },
     {
       "a_turn_idx": 16,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is likely a misstatement or nickname for Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Turn 29 claims Karine Jean-Pierre lied during her appearance, which challenges her credibility. However, it does not explicitly affirm or verify the specific claim in turn 17—that she is a credible source on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is likely a misstatement or nickname for Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Claim C asserts that Karine Jean-Pierre lied during her appearance, which challenges her credibility. However, it does not explicitly verify or state the assumption that she is a credible source on fiscal policy. While both involve her"
     },
     {
       "a_turn_idx": 17,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a nickname for Karine Jean-Pierre, establishing coreference.\",\n  \"reason\": \"Claim C states that Karine Jean-Pierre will criticize Republicans and praise Democrats in future media appearances, which aligns with the general behavior implied in assumption A (that she is a credible source on fiscal policy). However, C does not explicitly verify or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a nickname for Karine Jean-Pierre, resolved via context.\",\n  \"reason\": \"Claim C states that Karine Jean-Pierre will criticize Republicans and praise Democrats in future media appearances, which aligns with the general partisan tone implied in assumption A (that she is a credible source on fiscal policy). However, C does not explicitly verify"
     },
     {
       "a_turn_idx": 17,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a misnomer for Karine Jean-Pierre, likely due to a mishearing or nickname.\",\n  \"reason\": \"Claim C states that Karine Jean-Pierre will pursue a high-paying media career after her role, which is unrelated to the credibility of her statements on fiscal policy. While both refer to the same person, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a misstatement of Karine Jean-Pierre, likely due to confusion or nickname.\",\n  \"reason\": \"Claim C states that Karine Jean-Pierre will pursue a high-paying media career after her role, which is unrelated to the credibility of her statements on fiscal policy. There is no mention of fiscal policy, nor does C verify or"
     },
     {
       "a_turn_idx": 17,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'her' in turn 32 refers to Kareem Jean-Pierre, who is distinct from Queen Jean Pierre mentioned in turn 17. No connection is made between the two individuals.\",\n  \"reason\": \"Claim C discusses a command video about Kareem Jean-Pierre, who is a different person from Queen Jean Pierre mentioned in assumption A. There is no mention of fiscal policy, credibility, or any substantive link to the claim that Queen Jean Pierre is a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'her' in turn 32 refers to Kareem Jean-Pierre, but this is likely a misgendering or error; the correct reference should be to Jean-Pierre, who is male. However, this does not align with the earlier assumption A, which concerns Queen Jean Pierre as a credible source on fiscal policy.\",\n  \"reason\": \"Claim C discusses a command video about Kareem Jean-Pierre and a parody involving 'walking the talk,' which is"
     },
     {
       "a_turn_idx": 17,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'her' in turn 32 refers to Kareem Jean-Pierre, who is likely a misspelling or misreference of Queen Jean-Pierre from turn 17. 'Kareem' may be a confusion with 'Jean-Pierre', suggesting a possible identity error.\",\n  \"reason\": \"Claim C mentions a command video about 'Kareem Jean-Pierre' and references 'walk in the talk,' which loosely connects to the theme of public"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'her' in turn 32 refers to Kareem Jean-Pierre, who is likely a misspelling or misreference of Queen Jean Pierre (from turn 17). This suggests an attempt to refer to the same individual, though the name discrepancy weakens the link.\",\n  \"reason\": \"Claim C mentions a command video about 'Kareem Jean-Pierre' and references 'walk in the talk,' which loosely connects to the idea of public perception"
     },
     {
       "a_turn_idx": 17,
@@ -1341,7 +1341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of speaking from the dais. 'KJP' in turn 21 is identified as Queen Jean Pierre (from turn 17), resolving the coreference.\",\n  \"reason\": \"Claim C discusses Carrie's actions from the dais being political despite her claims otherwise, which relates to the broader theme of influential figures shaping public perception. However, it does not explicitly address"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of speaking from the dais. 'KJP' in turn 21 is identified as Queen Jean Pierre (from turn 17), resolving the coreference.\",\n  \"reason\": \"Claim C discusses Carrie's actions from the dais being political despite her claims otherwise, which relates to the broader theme of public perception influenced by figures like Queen Jean Pierre. However, C"
     },
     {
       "a_turn_idx": 17,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Queen Jean Pierre refers to Karine Jean-Pierre; 'she' in turn 29 refers to Karine Jean-Pierre.\",\n  \"reason\": \"Claim C (turn 28) discusses the origin of the virus being a lab leak, which is unrelated to assumption A (turn 17), which concerns public perception of Biden's budget influenced by Karine Jean-Pierre. There is no overlap in subject matter or logical connection between the two claims. Claim C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Queen Jean Pierre refers to Karine Jean-Pierre; 'she' in turn 29 refers to Karine Jean-Pierre.\",\n  \"reason\": \"Claim C (turn 28) discusses the origin of the virus being a lab leak, which is unrelated to assumption A (turn 17), which concerns public perception of Biden's budget being influenced by Karine Jean-Pierre. There is no overlap in subject matter or semantic content. Claim C does not state,"
     },
     {
       "a_turn_idx": 17,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a colloquial reference to Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Turn 29 explicitly claims that Karine Jean-Pierre lied during her recent appearance, which directly verifies the assumption in turn 17 that her statements (e.g., 'everything's great') shape public perception. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a clear reference to Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Turn 29 explicitly claims that Karine Jean-Pierre lied during her appearance, which directly verifies the assumption in turn 17 that her statements (e.g., 'everything's great') shape public perception. The claim in C"
     },
     {
       "a_turn_idx": 17,
@@ -1386,7 +1386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Queen Jean Pierre refers to Karine Jean-Pierre; 'she' in turn 29 refers to Karine Jean-Pierre.\",\n  \"reason\": \"Claim C states that journalists fail to challenge false claims by public figures, which relates to the broader theme of media accountability. However, it does not explicitly verify or state the specific assumption in A—that public perception of the budget depends heavily on influential figures like Queen Jean Pierre. While both involve criticism of Jean-Pierre’s influence,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Queen Jean Pierre refers to Karine Jean-Pierre; 'she' in turn 29 refers to Karine Jean-Pierre.\",\n  \"reason\": \"Claim C states that journalists fail to challenge false claims by public figures, which relates to the broader theme of media accountability. However, it does not explicitly verify or state the specific assumption in A—that public perception of the budget depends heavily on influential figures like Queen Jean Pierre. While both involve criticism of Karine Jean-Pierre and"
     },
     {
       "a_turn_idx": 17,
@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29, which resolves to the same individual mentioned as 'Queen Jean Pierre' in turn 17. 'Queen Jean Pierre' is a nickname for Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Turn 29 explicitly states that Karine Jean-Pierre will criticize Republicans and praise Democrats in future media appearances, which directly verifies the assumption in turn 17 that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29, which resolves to the same individual mentioned as 'Queen Jean Pierre' in turn 17. The term 'Queen Jean Pierre' appears to be a colloquial or informal reference to Karine Jean-Pierre.\",\n  \"reason\": \"Claim C explicitly states that Karine Jean-Pierre will criticize Republicans and praise Democrats in future media appearances, which directly verifies the assumption in A that public perception"
     },
     {
       "a_turn_idx": 17,
@@ -1416,7 +1416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a likely misstatement or nickname for Karine Jean-Pierre, the White House Press Secretary.\",\n  \"reason\": \"Turn 29 claims Karine Jean-Pierre will pursue a high-paying media career after her role, which implies she is seeking influence beyond government. While this suggests she may be shaping public perception through media, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Karine Jean-Pierre is referred to as 'she' in turn 29; 'Queen Jean Pierre' in turn 17 is a likely misstatement or nickname for Karine Jean-Pierre, the White House press secretary.\",\n  \"reason\": \"Turn 29 claims Karine Jean-Pierre will pursue a high-paying media career after her role, which implies she is seeking influence beyond government. While this touches on the idea of public influence, it does not explicitly"
     },
     {
       "a_turn_idx": 17,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to House Republicans, which aligns with the subject of assumption A. 'Democratic colleagues' in C corresponds to the bipartisan cooperation mentioned in A.\",\n  \"reason\": \"Claim C asserts that House Republicans are not focused on meaningful policy but instead engage in political stunts, which contrasts with the idea in assumption A that political cooperation between Democrats and Republicans is meaningful and significant. While C acknowledges the possibility of collaboration ('work with their colleagues,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to House Republicans, consistent with the context in turn 18 where Democrats and Republicans are discussed in terms of collaboration.\",\n  \"reason\": \"Claim C asserts that House Republicans are focused on political stunts rather than meaningful policy, which contrasts with assumption A that political cooperation between Democrats and Republicans is meaningful when it occurs. While C acknowledges the possibility of collaboration (e.g., working with Democrats), it dismisses such efforts as insinc"
     },
     {
       "a_turn_idx": 18,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to Karine Jean-Pierre as 'she' in turn 29, resolving the pronoun to the individual mentioned in turn 18 (implied through context of political commentary).\",\n  \"reason\": \"Claim C discusses Karine Jean-Pierre criticizing Republicans and praising Democrats in future media appearances, which is a general prediction about her behavior. However, it does not explicitly verify or state the substance of assumption A—that political cooperation between Democrats"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to Karine Jean-Pierre as 'she' in turn 29, resolving the pronoun to the individual mentioned in turn 18 via contextual inference.\",\n  \"reason\": \"Claim C states that Karine Jean-Pierre will criticize Republicans and praise Democrats in future media appearances, which is a speculative prediction about her behavior. However, it does not explicitly verify or state the substance of assumption A—that political cooperation between Democrats and Republicans is meaningful"
     },
     {
       "a_turn_idx": 18,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'any executive order' in claim C refers to the same subject mentioned in assumption A—policies or actions by the Biden administration that may affect inflation. No ambiguity exists in the referent.\",\n  \"reason\": \"Claim C explicitly states that any executive order with a $1 billion or more annual budgetary effect must be studied for inflationary effects before implementation. This directly verifies the substance of assumption A, which asserts that assessing inflationary effects is an important policy"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'any executive order' in claim C refers to the same subject mentioned in assumption A—policies or actions by the Biden administration that may affect inflation. No ambiguity in referents.\",\n  \"reason\": \"Claim C explicitly states that any executive order with a $1 billion or more annual budgetary effect must be studied for inflationary effects before implementation. This directly verifies the substance of assumption A, which asserts that assessing inflationary effects is an important policy responsibility."
     },
     {
       "a_turn_idx": 18,
@@ -1506,7 +1506,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 18. 'Walking the talk' is a direct synonym for 'talk and they're doing the work' and 'walk in the talk' from turn 18.\",\n  \"reason\": \"Turn 32 explicitly references 'walking the talk' and 'talking the walk', which are synonymous with the phrase used in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 18. 'Walking the talk' is a direct synonym for 'talk and they're doing the work' and 'walk in the talk' from turn 18.\",\n  \"reason\": \"Claim C explicitly references 'walking the talk' and 'talking the walk', which are synonymous with the phrase used in assumption A ('walk in"
     },
     {
       "a_turn_idx": 18,
@@ -1521,7 +1521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the audience, including both the viewers and the political actors being discussed. 'Be better' implicitly calls for alignment between rhetoric and action, which corresponds to the moral standard of 'walking the talk' mentioned in turn 18.\",\n  \"reason\": \"Claim C urges the audience to 'be better' than their current behavior, which directly addresses the gap between words and actions—precisely the moral standard implied in"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the audience, including both the viewers and participants in the discussion. 'Be better' is a call to align actions with stated values, implicitly referencing the expectation of 'walking the talk'.\",\n  \"reason\": \"Claim C urges the audience to 'be better' than their current behavior, which directly addresses the moral standard implied in assumption A—namely, that 'walking the talk' is a relevant benchmark for ethical"
     },
     {
       "a_turn_idx": 18,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 18. 'Joe Talk Shows' is the Instagram handle of SPEAKER_02.\",\n  \"reason\": \"Turn 32 mentions 'walk in the talk' in the context of a parody idea, referencing a prior discussion about Kamala Harris and the concept. However, it does not explicitly state or verify the assumption that the audience"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 18. 'Joe Talk Shows' is the Instagram handle of SPEAKER_02.\",\n  \"reason\": \"Turn 32 mentions 'walk in the talk' in the context of a parody idea, referencing the phrase discussed earlier. However, it does not explicitly state or verify the assumption that the audience recognizes 'walk in the talk"
     },
     {
       "a_turn_idx": 19,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 20 refers to Democrats, as established in the context where Democrats are described as opposing the bill.\",\n  \"reason\": \"Claim C explicitly states that Democrats opposed the bill and rejected Republican claims about government actions causing inflation. This directly verifies the substance of assumption A, which asserts that the speaker views Republican actions as politically motivated rather than neutral. By highlighting Democratic opposition to the GOP's inflation narrative, C confirms the political framing of the Republican effort"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 20 refers to Democrats, as established in the context where Democrats are described as opposing the bill.\",\n  \"reason\": \"Claim C explicitly states that Democrats rejected Republican arguments that government actions caused inflation, which directly verifies the substance of assumption A—that Republicans' actions are politically motivated rather than neutral. The rejection of GOP claims by Democrats underscores the political nature of the Republican bill, aligning with the view that their actions are driven by political strategy"
     },
     {
       "a_turn_idx": 19,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to Republicans, and 'the bill' refers to the legislative effort mentioned in turn 19. In turn 22, 'this fake attack' refers to the same legislative action described in turn 19, and 'political attack against Joe Biden's family' explicitly frames the Republican action as politically motivated.\",\n  \"reason\": \"Turn 22 explicitly labels the Republican legislative effort as a 'fake attack' and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to Republicans, and 'the bill' refers to the legislative action described in the context. In turn 22, 'this fake attack' refers to the Republican-led bill mentioned earlier, and 'political attack against Joe Biden's family' explicitly frames the Republican action as politically motivated, aligning with the assumption in turn 19.\",\n  \"reason\": \"Turn 22 explicitly labels the Republican bill as a '"
     },
     {
       "a_turn_idx": 19,
@@ -1596,7 +1596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to House Republicans, consistent with the context in turn 19 where Republicans are discussed as acting politically.\",\n  \"reason\": \"Claim C suggests House Republicans should focus on collaboration rather than attacks, implying criticism of their current behavior as politically motivated. While this aligns with the general sentiment of assumption A—that Republican actions are politically driven—it does not explicitly state or verify the specific claim that their actions are viewed as politically motivated rather"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to House Republicans, as established in the prior context.\",\n  \"reason\": \"Claim C suggests House Republicans should focus on collaboration rather than attacks, implying criticism of their current behavior. While this indirectly reflects skepticism about their motives—aligning with assumption A that their actions are politically driven—it does not explicitly state or verify that their actions are politically motivated rather than neutral. The claim critiques their approach but lacks direct affirmation of the underlying"
     },
     {
       "a_turn_idx": 19,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context as speaking from the dais. 'Her' in 'her claim' also refers to Carrie.\",\n  \"reason\": \"Claim C explicitly states that Carrie's actions from the dais are political, despite her assertion that they are not due to the Hatch Act. This directly verifies the earlier assumption A, which holds that Republican actions are politically motivated rather than neutral. The statement '"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context as speaking from the dais. 'Her' in 'her claim' also refers to Carrie.\",\n  \"reason\": \"Claim C explicitly states that Carrie's actions from the dais are political, despite her assertion that they are not due to the Hatch Act. This directly verifies the earlier assumption A that Republican actions are politically motivated rather than neutral. The claim identifies a specific instance"
     },
     {
       "a_turn_idx": 19,
@@ -1626,7 +1626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, as established in the prior context where SPEAKER_04 discusses Carrie's remarks. 'They' in turn 23 refers to House Republicans.\",\n  \"reason\": \"Claim C explicitly states that Carrie's remarks were 'politically charged,' which directly verifies the earlier assumption A that Republican actions are viewed as politically motivated rather than neutral. The context confirms that Carrie's statements targeted Republicans, framing their actions as"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the prior context as making remarks that are being evaluated. 'They' in turn 23 refers to House Republicans.\",\n  \"reason\": \"Claim C explicitly states that Carrie's remarks were 'politically charged,' which directly verifies the earlier assumption A that Republican actions are viewed as politically motivated rather than neutral. The context confirms that Carrie's statements targeted Republicans, framing their actions as political attacks"
     },
     {
       "a_turn_idx": 19,
@@ -1641,7 +1641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 38 refers to SPEAKER_02, and 'you' refers to the person who claimed to have 'brought it' during the break (likely SPEAKER_07).\",\n  \"reason\": \"Claim C discusses the nature of a contribution being 'attitude rather than substance,' which touches on perception of intent versus action. However, it does not explicitly address or verify the earlier assumption A that Republican actions are politically motivated"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 38 refers to SPEAKER_02, and 'you' refers to the person who claimed to have 'brought it' during the break (likely SPEAKER_07).\",\n  \"reason\": \"Claim C discusses the nature of a contribution being 'attitude rather than substance,' which touches on perception of intent versus actual impact. However, it does not explicitly address or verify the earlier assumption A that Republican actions are politically"
     },
     {
       "a_turn_idx": 20,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'House Republicans' in both turn 20 and turn 22; 'they' in turn 20 refers to House Republicans; 'the American people' and 'colleagues' are consistent across both turns.\",\n  \"reason\": \"Claim C explicitly states that House Republicans should focus on delivering for the American people by working with their colleagues instead of engaging in political attacks, which directly verifies the core idea in assumption A that political"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'House Republicans' in both turn 20 and turn 22; 'they' in turn 20 refers to House Republicans; 'the American people' and 'colleagues' are consistent across both turns.\",\n  \"reason\": \"Claim C explicitly states that House Republicans should focus on delivering for the American people by working with their colleagues instead of engaging in political attacks. This directly verifies the core idea in assumption A—that political"
     },
     {
       "a_turn_idx": 20,
@@ -1682,11 +1682,11 @@
       "claim_text": "Uber is about more than just providing rides or delivering food.",
       "overlap_score": 2,
       "c_time": 784.994,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'Uber' refers to the company throughout.",
-      "reason": "Claim C discusses Uber's role beyond transportation or delivery, emphasizing emotional and personal significance. Assumption A concerns political narratives around death serving rhetorical or emotional purposes. There is no semantic connection between Uber's function and political narratives about death. The topics are entirely unrelated, and C does not address, verify, or imply A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Uber' refers to the company throughout.\",\n  \"reason\": \"Claim C discusses Uber's role beyond transportation or delivery, emphasizing emotional and personal significance. Assumption A concerns political narratives around death serving rhetorical or emotional purposes. There is no semantic connection between Uber's function and political narratives about death. The topics are entirely unrelated, and C does not address, verify, or imply A in any way.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Uber' refers to the company, not a person or entity tied to the earlier assumption about political narratives.\",\n  \"reason\": \"Claim C discusses Uber as a service that enables people to show up for important moments, emphasizing emotional and personal significance. This is unrelated to assumption A, which concerns political narratives surrounding individuals' deaths serving rhetorical or emotional purposes rather than factual reporting. There is no overlap in subject matter, theme, or semantic content. Thus,"
     },
     {
       "a_turn_idx": 20,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 38 refers to SPEAKER_07, who made the earlier assumption A in turn 20.\",\n  \"reason\": \"Claim C states that the other person's contribution was primarily attitude rather than substance, which aligns partially with assumption A that political narratives about deaths serve rhetorical or emotional purposes rather than factual reporting. However, C focuses narrowly on the nature of a personal contribution (attitude vs. substance), while A addresses broader"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 38 refers to SPEAKER_07, who made the earlier assumption A in turn 20.\",\n  \"reason\": \"Claim C states that the other person's contribution was primarily attitude rather than substance, which aligns partially with assumption A that political narratives about deaths serve rhetorical or emotional purposes rather than factual reporting. However, C focuses narrowly on tone and delivery ('attitude') without explicitly addressing the broader claim about political narratives serving"
     },
     {
       "a_turn_idx": 20,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the viewers/chat participants. 'They' in 'they have the internet' refers to the viewers/chat participants.\",\n  \"reason\": \"Claim C states that viewers should look up information, which aligns with the speaker's frustration about people spreading unverified claims (e.g., about Richie Simbor's death). However, C does not explicitly state or verify the belief that the claim about Richie Simbor's death is false"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the viewers/chat participants. 'They' in turn 21 refers to the people in the chat room who are spreading unverified claims about Richie Simbor.\",\n  \"reason\": \"Claim C (turn 21) urges viewers to look up information, which implies skepticism toward unverified claims circulating online—specifically, the claim about Richie Simbor's death mentioned in turn 20. However, C does"
     },
     {
       "a_turn_idx": 20,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of making claims from the dais. 'Her' in 'her claim' also refers to Carrie.\",\n  \"reason\": \"Claim C states that Carrie's actions from the dais are political despite her claim of non-political conduct. This does not relate to assumption A, which concerns the falsity or misleading nature of a claim about Richie Simbor's death. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to Carrie, who is mentioned in the context of making claims from the dais. The claim in turn 23 focuses on Carrie's actions being political despite her assertion of non-political conduct under the Hatch Act.\",\n  \"reason\": \"Turn 23 discusses Carrie's behavior from the dais as political, regardless of her claims of non-involvement. This is unrelated to turn 20, which concerns"
     },
     {
       "a_turn_idx": 20,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. 'Talking the walk' and 'walking the talk' are synonymous phrases used in both A and C.\",\n  \"reason\": \"Claim C mentions the speaker's attempt to create a social media post about 'walking the talk,' which relates to the theme of performative action discussed in assumption A. However, C does not explicitly state or verify the belief"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. 'Talking the walk' and 'walking the talk' are synonymous phrases used in both A and C.\",\n  \"reason\": \"Claim C mentions the speaker's attempt to create a social media post about 'talking the walk' or 'walking the talk', which is thematically related to the phrase used in assumption A. However, C does not"
     },
     {
       "a_turn_idx": 20,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'Joy Behar' is a person mentioned in C, but unrelated to 'Richie Simbor' in A.\",\n  \"reason\": \"Claim C discusses the speaker's perceived superiority over Joy Behar, which is entirely unrelated to the belief about the falsity or misleading nature of the claim regarding Richie Simbor's death. There is no overlap in subject matter, semantics, or implied content between A and C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between the speaker's belief about Richie Simbor's death and the claim about being 'above Joy Behar'.\",\n  \"reason\": \"Claim C (turn 49) discusses the speaker's self-perception relative to Joy Behar, which is entirely unrelated to the earlier assumption A about the falsity or misleading nature of claims regarding Richie Simbor's death. There is no semantic connection, overlap in subject matter, or logical entailment"
     },
     {
       "a_turn_idx": 21,
@@ -1806,7 +1806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'House Republicans' as the subject of the claim, which aligns with the earlier mention of Republicans in turn 21. 'They' in turn 21 refers to Republicans, consistent with the subject in turn 23.\",\n  \"reason\": \"Claim C explicitly states that House Republicans are not focused on meaningful policy but instead engage in political stunts, which directly verifies the substance of assumption A—that 'walking the talk' ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'House Republicans' as the subject of the claim, which aligns with the earlier mention of Republicans in turn 21. 'They' in turn 21 refers to Republicans, consistent with the subject in turn 23.\",\n  \"reason\": \"Claim C explicitly states that House Republicans are not focused on meaningful policy but instead engage in political stunts, which directly verifies the substance of assumption A—that 'walking the talk' is"
     },
     {
       "a_turn_idx": 21,
@@ -1821,7 +1821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 21. 'Walking the talk' is the phrase used in both turns.\",\n  \"reason\": \"Claim C mentions the attempt to create a social media post about 'walking the talk', which references the phrase discussed in assumption A. However, C does not affirm or verify the relevance or meaningfulness of the phrase in evaluating political performance—only"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 21. 'Walking the talk' is the phrase used in both turns.\",\n  \"reason\": \"Claim C mentions attempting to create a social media post about 'walking the talk', which references the phrase discussed in assumption A. However, C does not explicitly affirm or verify the relevance or meaningfulness of 'walking the talk' in evaluating political"
     },
     {
       "a_turn_idx": 21,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'House Republicans', which is consistent with the subject of assumption A. 'They' in turn refers to the same group mentioned in A as being unfairly portrayed as lazy or disengaged.\",\n  \"reason\": \"Claim C explicitly states that House Republicans are not focused on meaningful policy but instead engage in political stunts, which directly verifies the core substance of assumption A—that Republicans are unfairly portrayed as not doing the work. The claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to House Republicans, consistent with the subject of assumption A. 'They' in turn refers to the same group mentioned in A as being unfairly portrayed as lazy or disengaged.\",\n  \"reason\": \"Claim C explicitly states that House Republicans are not focused on meaningful policy but instead engage in political stunts, which directly verifies the core substance of assumption A—that Republicans are unfairly portrayed as lazy or disengaged. The claim clarifies"
     },
     {
       "a_turn_idx": 21,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_02, who is the same speaker as in turn 21. 'Walking the talk' is the repeated phrase in both turns.\",\n  \"reason\": \"Claim C explicitly references the phrase 'walking the talk' from turn 21 and states that the speaker attempted but failed to create a social media post about it. This directly addresses the rhetorical repetition noted in assumption A, suggesting it was used"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. 'Walking the talk' is the repeated phrase in both A and C.\",\n  \"reason\": \"Claim C explicitly references the phrase 'walking the talk' and states that the speaker attempted but failed to create a social media post about it, which directly connects to the earlier assumption A that the repetition of 'walking the talk' suggests rhetorical manipulation. While"
     },
     {
       "a_turn_idx": 21,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'walk' in turn 34 refers to the phrase 'walking the talk' from turn 21, though used metaphorically in a humorous, performative context.\",\n  \"reason\": \"Claim C (turn 34) references 'walking the talk' in a playful, performative way—suggesting a parody or joke about the phrase—but does not address or verify the assumption that the repetition of 'walking the talk' constitutes rhetorical manipulation"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'walk' in turn 34 refers to the phrase 'walking the talk' from earlier, but used metaphorically in a humorous, performative context.\",\n  \"reason\": \"Claim C (turn 34) references 'walking the talk' in a playful, performative way—suggesting a parody or joke about the phrase—but does not address or verify the assumption that the repetition of 'walking the talk' constitutes rhetorical manipulation. While it"
     },
     {
       "a_turn_idx": 21,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the choice between 'walking this way' and 'walking like a man'' refers to a humorous, metaphorical interpretation of 'walking the talk', not the rhetorical manipulation implied in A.\",\n  \"reason\": \"Claim C discusses a playful, ambiguous wordplay on 'walking the talk' involving song titles ('Walk This Way' vs. 'Walk Like a Man'), which is unrelated to the substantive critique of rhetorical manipulation in A. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the choice between 'walking this way' and 'walking like a man'' refers to a humorous, metaphorical comparison unrelated to the earlier assumption about rhetorical manipulation.\",\n  \"reason\": \"Claim C discusses a playful, ambiguous choice between two phrases ('walking this way' vs. 'walking like a man') in the context of a parody, likely referencing choreography or performance. This is unrelated to the earlier assumption A, which critiques the repeated phrase '"
     },
     {
       "a_turn_idx": 22,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 29 refers to Carrie Jean-Pierre, as established in prior turns. 'They' in turn 29 refers to Democrats or liberal commentators.\",\n  \"reason\": \"Claim C states that more vaccinated people are currently getting COVID than unvaccinated people, which is a factual claim about vaccine efficacy and infection rates. Assumption A, however, is about the effectiveness of working with colleagues versus partisan confrontation. There is no semantic connection"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 29 refers to Carrie Jean-Pierre, as established in prior turns. 'They' in turn 29 refers to Democrats or liberal commentators, consistent with earlier context.\",\n  \"reason\": \"Claim C (turn 29) states that more vaccinated people are currently getting COVID than unvaccinated people, which is a factual claim about vaccine efficacy and infection rates. Assumption A (turn 22) asserts that working"
     },
     {
       "a_turn_idx": 22,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'a parody' and 'the Kamala Harris laugh' are clear referents.\",\n  \"reason\": \"Claim C discusses the feasibility of a parody versus a direct recreation of Kamala Harris's laugh, citing difficulty. This is unrelated to assumption A, which argues that working with colleagues is more effective than partisan confrontation. There is no overlap in semantic content, and C neither states nor verifies A. The topic shifts entirely to performance art and imitation, making"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'a parody' and 'direct recreation' refer to performance methods, not people or entities in prior turns.\",\n  \"reason\": \"Claim C discusses the feasibility of a parody versus a direct recreation of Kamala Harris's laugh, focusing on technical difficulty. This is unrelated to assumption A, which argues that working with colleagues is more effective than partisan confrontation. There is no overlap in subject matter, intent, or semantic content between the two statements. Thus,"
     },
     {
       "a_turn_idx": 22,

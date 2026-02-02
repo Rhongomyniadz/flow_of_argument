@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 17 refers to SPEAKER_00, who is discussing personal behavior regarding mask-wearing. No reference to an asterisk or the legitimacy of a season is present.\",\n  \"reason\": \"Claim C discusses personal conduct related to mask-wearing, specifically rejecting extreme behaviors on both sides of the issue. This topic is unrelated to assumption A, which concerns the legitimacy of a shortened baseball season despite an asterisk indicating diminished legitimacy. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 17 refers to SPEAKER_00, who is the speaker making the claim about not engaging in extreme behavior regarding mask-wearing.\",\n  \"reason\": \"Claim C (turn 17) discusses avoiding extreme or intransigent behavior related to mask-wearing, such as refusing to wear masks or being overly aggressive about them. However, this does not address or verify the earlier assumption A, which concerns the legitimacy of a"
     },
     {
       "a_turn_idx": 1,
@@ -137,11 +137,11 @@
       "claim_text": "Not seeking medical help during illness does not demonstrate toughness.",
       "overlap_score": 2,
       "c_time": 368.514,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Men' in C refers to a general demographic, not tied to any specific antecedent in A.\",\n  \"reason\": \"Claim C discusses men's resistance to seeking medical help and equates it with foolishness, while assumption A concerns the legitimacy of a shortened baseball season with an asterisk. The topics are entirely unrelated—A is about sports season validity, C is about health behavior. There is no overlap"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; claim C discusses not seeking medical help and masculinity, while assumption A concerns the legitimacy of a shortened baseball season with an asterisk.",
+      "reason": "Claim C discusses the misconception that avoiding medical care demonstrates toughness, particularly among men, which is unrelated to the topic of a shortened baseball season and its perceived legitimacy. There is no overlap in semantic content between A and C. Therefore, the claim does not support or verify assumption A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses not seeking medical help and masculinity, while assumption A concerns the legitimacy of a shortened baseball season with an asterisk.\",\n  \"reason\": \"Claim C discusses the misconception that avoiding medical care demonstrates toughness, particularly among men, which is unrelated to the topic of a shortened baseball season and its perceived legitimacy. There is no overlap in semantic content between A and C. Therefore, the claim does not support or verify assumption A.\"\n}\n```"
     },
     {
       "a_turn_idx": 1,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 28 refers to the addressee, not the speaker. The speaker does not refer to themselves as having friends.\",\n  \"reason\": \"Claim C (turn 28) discusses the speaker's observation about someone having many friends due to financial generosity, but it does not assert or verify the speaker's personal familiarity with players mentioned in turn 3. There is no mention of players, sports, or personal experience with"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the addressee (SPEAKER_01), not the speaker (SPEAKER_00). The claim 'you have a lot of friends' does not refer to the speaker's personal familiarity with players.\",\n  \"reason\": \"Claim C (turn 28) discusses the addressee having many friends due to financial generosity, which is unrelated to the earlier assumption A that the speaker has personal"
     },
     {
       "a_turn_idx": 4,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in 'Don Zimmer was a hundred years old. He probably was, but he looked it.' refers to Don Zimmer.\",\n  \"reason\": \"Claim C states that Don Zimmer appeared to be very old, which directly supports the implicit assumption in A that the listener knows about the Pedro Martinez, Don Zimmer incident, where Don Zimmer's age was a notable aspect. While C does not explicitly mention the incident itself, it confirms a key detail (Zimmer's"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in 'Don Zimmer was a hundred years old. He probably was, but he looked it.' refers to Don Zimmer.\",\n  \"reason\": \"Claim C states that Don Zimmer appeared to be very old, which directly supports the implication in assumption A that the listener knows about the Pedro Martinez, Don Zimmer incident—specifically, that Don Zimmer was perceived as elderly during the event. While C does not explicitly mention the incident itself, it confirms a key detail"
     },
     {
       "a_turn_idx": 4,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this stuff' in turn 14 refers to the broader discussion about social distancing, mask-wearing, and public behavior during the pandemic, which is not directly related to the specific fight involving Pedro mentioned in turn 6.\",\n  \"reason\": \"Claim C discusses general societal behaviors and debates around mask-wearing and virtue signaling, which is unrelated to the specific event of a fight involving Pedro. While both occur within the same conversation, C does not address or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this stuff' in turn 14 refers to the broader discussion about social distancing, mask-wearing, and public behavior during the pandemic, as established in turns 12–13. There is no direct reference to 'Pedro' or a fight.\",\n  \"reason\": \"Claim C (turn 14) discusses general societal behaviors and debates around mask-wearing and virtue signaling, which is unrelated to the specific assumption A about a fight involving Pedro"
     },
     {
       "a_turn_idx": 6,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 35 refers to SPEAKER_01, who is the same speaker as in turn 6.\",\n  \"reason\": \"Turn 35 states that the speaker has been president of a nonprofit in North Dakota, which is unrelated to the emotional attachment to visual representations mentioned in turn 6. There is no mention of visuals, pictures, or emotional connection to imagery in turn 35. Therefore, the claim does not verify or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 35 refers to SPEAKER_01, who is the same speaker as in turn 6.\",\n  \"reason\": \"Turn 35 states that the speaker has been president of a nonprofit in North Dakota, which is unrelated to the emotional attachment to visual representations mentioned in turn 6. There is no mention of images, pictures, or emotional connection to visual media in turn 35. Therefore, the claim does not verify"
     },
     {
       "a_turn_idx": 6,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 27 refers to Speaker Pelosi, as established in turn 25. 'Her own caucus and her own conference' refers to Pelosi's political groupings within Congress.\",\n  \"reason\": \"Claim C discusses Speaker Pelosi's independent political base ('her own caucus and her own conference') and her ability to push legislation without Republican consultation. This does not address or verify the earlier assumption A, which concerns the speaker's trust in their own perception"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 27 refers to Speaker Pelosi, as established in turn 25. 'Her own caucus and her own conference' refers to Pelosi's internal party leadership structure.\",\n  \"reason\": \"Claim C discusses Speaker Pelosi's independent political power and decision-making within her party, which is unrelated to the earlier assumption A about trusting one's own perception of public mood as representative of broader trends. There is no mention of public sentiment, perception, or"
     },
     {
       "a_turn_idx": 7,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to individuals who avoid medical care, particularly men, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 20) discusses avoiding medical help and reframes it as unwise rather than tough, which is unrelated to assumption A (turn 8), which concerns continued caution not leading to isolation or stagnation. There is no overlap in semantic content between the two statements; C addresses health behavior and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to men in general, particularly those who avoid medical care and show up to work while sick. 'That' in 'that makes you an idiot' refers to the behavior of not seeking medical help during illness.\",\n  \"reason\": \"Claim C states that not seeking medical help during illness does not demonstrate toughness, which is a distinct idea from assumption A, which concerns the relationship between continued caution and stagnation. While both discuss"
     },
     {
       "a_turn_idx": 8,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to people, particularly men, who return to work while sick. 'That' in 'that makes you an idiot' refers to the behavior of returning to work despite illness.\",\n  \"reason\": \"Claim C states that returning to work without proper recovery does not lead to productive outcomes, which aligns with the idea in assumption A that continued caution (such as staying home when sick) does not imply stagnation or isolation."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to individuals who return to work while unwell, particularly men, as contextually linked to the discussion about workplace behavior and health.\",\n  \"reason\": \"Claim C states that returning to work without proper recovery does not lead to productive outcomes, which aligns with the concern in assumption A about cautious behavior not leading to stagnation. However, C focuses on the negative consequences of premature return to work due to illness, rather than"
     },
     {
       "a_turn_idx": 8,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'friends' in turn 28 refers to metaphorical associates in financial contexts, not people expressing opinions about reopening.\",\n  \"reason\": \"Claim C (turn 28) discusses metaphorical 'friends' appearing during spending moments, relating to financial behavior and accountability. This is unrelated to assumption A (turn 9), which concerns public sentiment and emerging consensus about reopening society during a pandemic. There is no overlap in semantic content or topic, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those friends' in turn 28 refers to people who appear supportive during spending moments, but this does not relate to the idea of hearing multiple people implying consensus or an emerging trend as stated in turn 9.\",\n  \"reason\": \"Claim C discusses the transient nature of friendships during financial spending, which is unrelated to the concept of public sentiment or consensus emerging from hearing multiple voices. There is no overlap in semantic content between the assumption about collective public desire to return"
     },
     {
       "a_turn_idx": 9,

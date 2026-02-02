@@ -4836,7 +4836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the audience' refers to attendees of the play, not the audience in the political context of turn 15.\",\n  \"reason\": \"Claim C discusses a theatrical performance where actors interact with the audience, which is entirely unrelated to the political/legal assumption in A about public acceptance of constitutional objections versus fraud allegations. There is no overlap in subject matter, context, or semantic content. The mention of 'audience' in C is literal and situational"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the audience' refers to attendees at a play, not the general public discussed in assumption A.\",\n  \"reason\": \"Claim C discusses a theatrical performance involving audience interaction, which is entirely unrelated to assumption A, which concerns public acceptance of constitutional legal objections versus personal ignorance of fraud. There is no overlap in subject matter, context, or semantic content. The mention of 'audience' in C is literal and situational, not referring to the public"
     },
     {
       "a_turn_idx": 16,
@@ -4862,11 +4862,11 @@
       "claim_text": "The speaker has served in the Senate for two years.",
       "overlap_score": 2,
       "c_time": 1320.154,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, consistent with context.\",\n  \"reason\": \"Claim C states that the speaker has served in the Senate for two years, which is irrelevant to assumption A, which concerns trust in judicial processes and advocacy for compliance with legal outcomes. There is no mention or implication in C of trust in judicial processes, acceptance of court rulings, or willingness to comply with legal decisions. Thus, C does"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, consistent with context.",
+      "reason": "Claim C states that the speaker has served in the Senate for two years, which is irrelevant to assumption A, which concerns trust in judicial processes and advocacy for compliance with legal outcomes. There is no mention of judicial trust, legal compliance, or related concepts in C. Thus, C neither supports nor verifies A and is clearly unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, consistent with context.\",\n  \"reason\": \"Claim C states that the speaker has served in the Senate for two years, which is irrelevant to assumption A, which concerns trust in judicial processes and advocacy for compliance with legal outcomes. There is no mention of judicial trust, legal compliance, or related concepts in C. Thus, C neither supports nor verifies A and is clearly unrelated.\"\n}"
     },
     {
       "a_turn_idx": 16,
@@ -4896,7 +4896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'their' in turn 17 refers to the Pennsylvania Supreme Court. The phrase 'the substance of that claim' refers to the constitutional challenge to Pennsylvania's mail-in ballot statute.\",\n  \"reason\": \"Claim C explicitly states that the Pennsylvania Supreme Court did not resolve the substantive issue regarding the constitutionality of the statute, which directly verifies the core assertion in assumption A: that a constitutional issue requires substantive judicial review rather than procedural dismissal. The claim confirms that the"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'their' in turn 17 refers to the Pennsylvania Supreme Court. The phrase 'the substance of that claim' in turn 19 refers to the constitutional challenge mentioned in turn 17.\",\n  \"reason\": \"Claim C explicitly states that the Pennsylvania Supreme Court did not resolve the substantive issue regarding the constitutionality of Pennsylvania's mail-in ballot statute, which directly verifies the core assertion in assumption A that a constitutional issue requires substantive judicial review rather than procedural"
     },
     {
       "a_turn_idx": 17,
@@ -4925,8 +4925,8 @@
       "entailment_score": 9,
       "confidence": 0.95,
       "coref_notes": "The pronoun 'their' in turn 19 refers to Pennsylvania's legal doctrine, as established in the prior context.",
-      "reason": "Claim C explicitly states that Pennsylvania's legal doctrine holds that the doctrine of laches does not apply in constitutional challenges to laws, which directly verifies the substance of assumption A—that procedural dismissals like laches should not override constitutional concerns. The statement in C is clear, direct, and matches the core meaning of A without ambiguity.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 19 refers to Pennsylvania's legal doctrine, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that Pennsylvania's legal doctrine holds that the doctrine of laches does not apply in constitutional challenges to laws, which directly verifies the substance of assumption A—that procedural dismissals like laches should not override constitutional concerns. The statement in C is clear, direct, and matches the core meaning of A without ambiguity.\"\n}\n```"
+      "reason": "Claim C explicitly states that Pennsylvania's legal doctrine holds that the doctrine of laches does not apply in constitutional challenges to laws, which directly verifies the substance of assumption A—that procedural dismissals like laches should not override constitutional concerns when they arise. The claim is clear, direct, and matches the core meaning of A without ambiguity.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 19 refers to Pennsylvania's legal doctrine, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that Pennsylvania's legal doctrine holds that the doctrine of laches does not apply in constitutional challenges to laws, which directly verifies the substance of assumption A—that procedural dismissals like laches should not override constitutional concerns when they arise. The claim is clear, direct, and matches the core meaning of A without ambiguity.\"\n}"
     },
     {
       "a_turn_idx": 17,
@@ -4971,7 +4971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the speaker and the voters they represent, consistent with the context of political action and representation.\",\n  \"reason\": \"Claim C states that all available channels should be used to address political concerns, which aligns with the core idea in assumption A that procedural dismissals like laches should not override constitutional concerns. Both emphasize the need to pursue constitutional issues through appropriate means when legal avenues are blocked. While C does not explicitly mention 'l"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the speaker and the voters they represent, consistent with the context of political action and concern.\",\n  \"reason\": \"Claim C states that all available channels should be used to address political concerns, which aligns with the core idea in assumption A that procedural dismissals like laches should not override constitutional concerns. Both emphasize the need to pursue constitutional issues through appropriate means when legal avenues are blocked. While C does not explicitly mention 'l"
     },
     {
       "a_turn_idx": 17,
@@ -5046,7 +5046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to the individual (likely a U.S. Senator) who had the opportunity to object to the electoral vote count, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that the individual had the procedural right to object to the electoral vote count, which directly verifies the core idea in assumption A—that the delay in raising issues undermines credibility—by affirming that the right to object existed despite the legal delays"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to the individual (likely a U.S. Senator) who had the opportunity to object to the electoral vote count, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that the individual had the procedural right to object to the electoral vote count, which directly verifies the substance of assumption A—that the delay in raising issues undermines credibility—by affirming that the right to object existed despite the delay. The"
     },
     {
       "a_turn_idx": 18,
@@ -5076,7 +5076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the party that failed to raise constitutional challenges earlier; in turn 31, 'the left' is referenced, but no clear link is established between 'the left' and the entity in turn 18. The speaker in turn 31 does not address credibility or delays in raising issues.\",\n  \"reason\": \"Turn 31 states the speaker feels they are merely doing their job, which is unrelated to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the party that failed to raise constitutional challenges earlier; in turn 31, 'the left' is referenced, but no clear link is established between 'the left' and the entity in turn 18. The speaker in turn 31 does not address credibility or delays in raising issues.\",\n  \"reason\": \"Turn 31 states that the speaker feels they are merely doing their job, which is unrelated"
     },
     {
       "a_turn_idx": 18,
@@ -5106,7 +5106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to the media, as established by context in turn 28 and 29.\",\n  \"reason\": \"Claim C (turn 29) states that 'there is no distinction in the media,' which is unrelated to assumption A (turn 19), which asserts a meaningful distinction between procedural dismissal and substantive resolution of constitutional issues. C does not address legal doctrine, constitutional review, or procedural vs. substantive outcomes"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to the media, as established by context; no other coreference is relevant.\",\n  \"reason\": \"Claim C (turn 29) states 'there is no distinction in the media,' which is unrelated to assumption A (turn 19), which asserts a meaningful distinction between procedural dismissal and substantive resolution of constitutional issues. C does not address legal doctrine, judicial processes, or constitutional review. Instead, it critiques media"
     },
     {
       "a_turn_idx": 19,
@@ -5196,7 +5196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 38 refers to the speaker addressing the audience.\",\n  \"reason\": \"Claim C states that judges should not rewrite statutes to achieve desired outcomes, emphasizing adherence to statutory text. While this reflects a general principle of judicial restraint, it does not explicitly address or verify the specific claim in assumption A—that the doctrine of laches should not bar constitutional claims. Although both touch on judicial interpretation and constitutional matters, C focuses on statutory interpretation and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 38 refers to the speaker addressing the audience.\",\n  \"reason\": \"Claim C (turn 38) discusses judges not rewriting statutes to achieve desired outcomes, emphasizing adherence to statutory text. While this reflects a broader principle of judicial restraint, it does not explicitly address or verify the specific claim in assumption A (turn 19), which concerns the doctrine of laches not barring constitutional claims. The two ideas are topically"
     },
     {
       "a_turn_idx": 19,
@@ -5256,7 +5256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the political left, consistent with the discussion in turn 20 and later turns. 'My job' refers to the speaker's role as a U.S. Senator, specifically in raising objections to electoral certification.\",\n  \"reason\": \"Turn 31 states that the speaker believes they are 'just doing my job,' which aligns with the earlier assumption in turn 19 that transparency and scrutiny of judicial decisions are"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the political left, consistent with the discussion in turn 20 and later turns about partisan behavior.\",\n  \"reason\": \"Turn 31 states that the speaker believes they are 'just doing my job,' which aligns with the earlier assumption in turn 19 that transparency and scrutiny of judicial decisions are important public values. While 'doing my job' is not a direct restatement of the value of transparency,"
     },
     {
       "a_turn_idx": 20,
@@ -5406,7 +5406,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to the left/liberal Democrats, not related to the Republican-led states mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the Democratic Party's willingness to pass legislation without Republican support, particularly citing the infrastructure bill and reconciliation. This is unrelated to assumption A, which concerns the validity of election outcomes certified by Republican-led states. There is no overlap in subject matter, logic, or content. Claim C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to the left/liberal Democrats, not related to the Republican-led states mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the Democratic Party's willingness to pass legislation without Republican support, particularly regarding the infrastructure bill, which is unrelated to the assumption that Republican-led state certifications constitute valid evidence of election outcomes. There is no mention of election certification, judicial review, or the legal standing of state-certified results in"
     },
     {
       "a_turn_idx": 20,
@@ -5436,7 +5436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in claim C refers to judges, consistent with context.\",\n  \"reason\": \"Claim C states that judges should not rewrite statutes to achieve desired outcomes, emphasizing adherence to statutory text. Assumption A asserts that criminal rioters should not influence political decisions through threats or disruption. While both touch on principles of integrity in governance—A on political accountability and C on judicial restraint—their core ideas differ: A focuses on political actors being undeterred by"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 38 refers to the speaker (SPEAKER_01), and 'the court' refers to the U.S. Supreme Court.\",\n  \"reason\": \"Claim C states that judges should not rewrite statutes to match desired outcomes, which aligns with a general principle of statutory interpretation. However, it does not explicitly address or verify the specific idea in assumption A—that criminal rioters should not influence political decisions through threats or disruption"
     },
     {
       "a_turn_idx": 21,
@@ -5496,7 +5496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_01, consistent with earlier turns. The phrase 'change course' refers to abandoning the objection, as established in turn 22.\",\n  \"reason\": \"Claim C explicitly states that changing course would lead people to interpret the initial stance as motivated by strategic convenience rather than genuine belief. This directly verifies the core idea in assumption A—that publicly stated positions can be performative rather than reflective of true beliefs. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_01, consistent with earlier turns. The phrase 'change course' refers to abandoning the objection, as established in turn 22.\",\n  \"reason\": \"Claim C explicitly states that changing course would lead people to interpret the action as driven by strategic convenience rather than genuine conviction, which directly verifies the core idea in assumption A—that publicly stated positions can be performative rather than reflective of true beliefs. The ph"
     },
     {
       "a_turn_idx": 22,
@@ -5541,7 +5541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_01, and 'that incident' refers to the photograph of SPEAKER_01 raising his fist during a peaceful protest.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_02) does not fully understand why people are fixated on the photograph, which implies that the incident (the fist gesture) is being scrutinized despite its context. This indirectly supports assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_01, and 'that incident' refers to the photograph of SPEAKER_01 raising his fist during a peaceful protest.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_02) does not fully understand why people are fixated on the photograph, which implies that the incident (the fist-raising gesture) is being scrutinized despite its context. This indirectly supports"
     },
     {
       "a_turn_idx": 24,
@@ -5586,7 +5586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 52 refers to the 'new left' mentioned earlier in the same turn, which aligns with the broader political group discussed in the context. 'You' in 'you didn't like his position' refers to the opposing political faction, consistent with the earlier discussion of Democratic senators and left-wing actors.\",\n  \"reason\": \"Claim C explicitly states that the 'new left' seeks to define what constitutes legitimate speech, directly verifying the core"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 52 refers to the 'new left' mentioned earlier in the same turn, which aligns with the broader political group discussed in the context. 'You' in 'you didn't like his position' refers to the opposing political faction, consistent with the earlier discussion of Democratic senators and left-wing activists.\",\n  \"reason\": \"Claim C explicitly states that the 'new left' seeks to define what constitutes legitimate speech, directly verifying the core"
     },
     {
       "a_turn_idx": 24,
@@ -5661,7 +5661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 40 refers to President Biden, and 'the country' refers to the United States. There is no reference to the photograph or the speaker's authority to redirect the conversation.\",\n  \"reason\": \"Claim C (turn 40) expresses concern about the direction of the country under President Biden, which is unrelated to assumption A (turn 25), which concerns the speaker's authority or legitimacy to redirect the conversation toward the photograph."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 40 refers to President Biden, and 'the country' refers to the United States. There is no mention of authority or legitimacy to redirect the conversation toward the photograph.\",\n  \"reason\": \"Claim C (turn 40) expresses concern about the direction of the country under President Biden, which is unrelated to assumption A (turn 25), which concerns the speaker's authority or legitimacy to redirect the conversation to the photograph. There"
     },
     {
       "a_turn_idx": 26,
@@ -5736,7 +5736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_01, and 'left field' is used as a synonym for 'left wing'.\",\n  \"reason\": \"Claim C (turn 32) discusses the term 'left field' in relation to 'left wing', which is unrelated to assumption A (turn 26), which concerns the moral justification of peaceful dissent through gestures. There is no mention of protest, gestures, morality, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_01, and 'left field' is used as a synonym for 'left wing'.\",\n  \"reason\": \"Claim C (turn 32) discusses the term 'left wing' and equates it with 'left field', which is unrelated to assumption A (turn 26). Assumption A concerns the moral justification of peaceful dissent through gestures, while claim C addresses political alignment and rhetoric"
     },
     {
       "a_turn_idx": 26,
@@ -5751,7 +5751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 41 refers to Senator Hawley, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 41) discusses when rhetorical attacks become dangerous and references a hypothetical scenario involving a mob attacking a family, which is unrelated to the earlier assumption A about the moral justification of peaceful dissent through gestures. While both involve public expression and potential consequences, C does not state, verify, or even reference the specific claim in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 41 refers to Senator Hawley, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 41) discusses when rhetorical attacks become dangerous and references a hypothetical scenario involving a mob attacking a family, which is unrelated to the earlier assumption A about peaceful dissent via gestures being morally justified. While both involve public expression and potential consequences, C does not state, verify, or even address the moral justification of peaceful"
     },
     {
       "a_turn_idx": 26,
@@ -5766,7 +5766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 48) discusses the speaker's future evaluation of Republican candidates, particularly in the context of the 2024 election, and his role as a voter. This topic is entirely unrelated to assumption A (turn 26), which concerns the moral justification of peaceful dissent through gestures like raising a fist. There is no mention, implication, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 48) discusses the speaker's future evaluation of Republican candidates in 2024, which is unrelated to assumption A (turn 26), which concerns the moral justification of peaceful dissent through gestures. There is no mention of protest, gestures, morality, or the First Amendment in C. The topics are entirely distinct, making the claim irrelevant"
     },
     {
       "a_turn_idx": 26,
@@ -5886,7 +5886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 48) discusses the speaker's future evaluation of Republican candidates, particularly in the context of the 2024 election, and mentions assessing candidates alongside other Republican voters. This is unrelated to assumption A (turn 26), which concerns audience acceptance of the speaker's self-defense without needing extensive justification. There is no mention of self-defense,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 48) discusses the speaker's future evaluation of Republican candidates, particularly in the context of the 2024 election, and mentions assessing candidates alongside other Republican voters. This is unrelated to Assumption A (turn 26), which concerns audience acceptance of the speaker's self-defense without needing extensive justification. There is no mention of justification,"
     },
     {
       "a_turn_idx": 26,
@@ -12501,7 +12501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to competitor social media startups, which is distinct from the subject of assumption A (social media statements used to influence public opinion).\",\n  \"reason\": \"Claim C discusses the failure or acquisition of competitor social media startups due to monopolistic practices, which is unrelated to assumption A, which concerns the use of social media statements as tools for influencing public opinion and accountability. There is no overlap in semantic content, and C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in claim C refers to competitor social media startups, which is distinct from the subject of assumption A (social media statements used to influence public opinion).\",\n  \"reason\": \"Claim C discusses the failure or acquisition of competitor social media startups due to monopolistic practices, which is unrelated to assumption A, which concerns the use of social media statements as tools for influencing public opinion and accountability. There is no overlap in semantic content, and C does"
     },
     {
       "a_turn_idx": 63,
@@ -12531,7 +12531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'MySpace' is a proper noun and refers to the specific social media platform.\",\n  \"reason\": \"Claim C states that MySpace is no longer a major player in social media, which is unrelated to assumption A, which concerns the use of social media statements as tools for influencing public opinion and accountability. While both involve social media, C makes no reference to influence, accountability, or strategic communication. It instead discusses market competition and the decline of My"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'MySpace' is a proper noun referring to the social media platform.\",\n  \"reason\": \"Claim C states that MySpace is no longer a major player in social media, which is unrelated to assumption A, which concerns the use of social media statements to influence public opinion and accountability. While both involve social media, C makes no reference to public opinion, accountability, or strategic communication. It instead discusses market competition and data privacy, making the connection irrelevant"
     },
     {
       "a_turn_idx": 63,
@@ -12576,7 +12576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 75 refers to the Antifa-affiliated group mentioned in turn 63, as established by the prior context linking the group's actions to Antifa affiliation.\",\n  \"reason\": \"Claim C states that the speaker views the connection between Antifa and the violence in Portland as significant. This aligns with assumption A, which asserts trust in the group's self-description as Antifa-affiliated. While C does not explicitly restate A"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 75, 'the violence in Portland' refers to the violent actions described in earlier turns, particularly the attack on Speaker_01's home, which was carried out by a group identified as Antifa-affiliated. 'Antifa' is linked to the group mentioned in turn 63.\",\n  \"reason\": \"Claim C states that the speaker views the connection between Antifa and the violence in Portland as significant. This aligns with assumption A, which asserts"
     },
     {
       "a_turn_idx": 64,
@@ -12606,7 +12606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Section 230 and big tech liability, while assumption A concerns standing up to falsehoods under threat. No shared semantic content.\",\n  \"reason\": \"Claim C discusses legal protections for big tech under Section 230 and their responsibility for harmful content, whereas assumption A asserts the value of confronting falsehoods despite threats. The topics are entirely different—A is about moral courage in the face of intimidation, while C is about regulatory"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to big tech companies, which is consistent with context.\",\n  \"reason\": \"Claim C discusses Section 230 protections for big tech companies regarding harmful content, which is unrelated to assumption A, which asserts the value of standing up against falsehoods under threat. There is no overlap in semantic content, intent, or logical connection between the two statements. Claim C addresses legal liability and platform responsibility for content, while assumption"
     },
     {
       "a_turn_idx": 65,
@@ -12651,7 +12651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 81 refers to big tech companies, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 81) discusses Republican opposition to changing Section 230 due to fears of increased litigation and censorship, which is unrelated to assumption A (turn 66), which asserts that emotional volatility after childbirth is biologically inevitable due to hormonal changes. There is no overlap in subject matter, concept, or logical"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 81 refers to big tech companies, consistent with earlier discussion.\",\n  \"reason\": \"Claim C (turn 81) discusses Republican opposition to changing Section 230 due to fears of increased litigation and censorship, which is unrelated to assumption A (turn 66), which asserts that emotional volatility after childbirth is biologically inevitable due to hormonal changes. There is no overlap in subject matter, concept, or logical"
     },
     {
       "a_turn_idx": 66,
@@ -12666,7 +12666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to SPEAKER_01 (Senator Hawley), and 'Simon and Schuster' is the publisher mentioned in the context.\",\n  \"reason\": \"Claim C (turn 70) states that Simon and Schuster gave a defensive explanation for canceling the book, which is not supported by the content of turn 66. Turn 66 expresses the belief that emotional self-control in postpartum women should"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to SPEAKER_01 (Senator Hawley), and 'Simon and Schuster' is the publisher mentioned in the context.\",\n  \"reason\": \"Claim C (turn 70) states that Simon and Schuster gave a defensive explanation for canceling the book, which is unrelated to assumption A (turn 66). Assumption A concerns lenient judgment of emotional self-control in postpartum women, while"
     },
     {
       "a_turn_idx": 66,
@@ -12681,7 +12681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 79 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Turn 79 makes no mention of emotional self-control, postpartum women, or leniency in judging their emotions. Instead, it discusses Senator Klobuchar's bill in the context of antitrust and tech regulation, which is entirely unrelated to the earlier assumption about postpartum emotional control. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 79 refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 79) discusses Senator Klobuchar's bill and a state antitrust lawsuit, asserting they address the same problem. However, assumption A (turn 66) concerns emotional self-control in postpartum women and the leniency with which it should be judged. There is no semantic"
     },
     {
       "a_turn_idx": 66,
@@ -12696,7 +12696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 84 refers to SPEAKER_01, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 84) discusses the alignment of the current interpretation of Section 230 with its intended function, arguing that the original intent—protecting platforms for third-party content—should be preserved. However, this is unrelated to Assumption A (turn 66), which concerns lenient judgment"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 84 refers to SPEAKER_01, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 84) discusses the alignment of the current interpretation of Section 230 with its intended function, specifically arguing that the original intent—protecting platforms for third-party content—should be preserved. However, assumption A (turn 66) concerns the lenient judgment of emotional self-control"
     },
     {
       "a_turn_idx": 66,
@@ -12741,7 +12741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 72 refers to the left/liberal establishment, and 'the cop from the Breonna Taylor case' refers to the officer involved in the incident, whose name is not specified but is contextually clear.\",\n  \"reason\": \"Claim C (turn 72) discusses a perceived double standard in public response between the Capitol Hill riot and BLM-related protests, focusing on media and corporate reactions to books by individuals associated with each event."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 72 refers to the left/liberal establishment, and 'the cop from the Breonna Taylor case' refers to the officer involved in the incident. These are consistent with prior context.\",\n  \"reason\": \"Claim C (turn 72) discusses a perceived double standard in public response between the Capitol Hill riot and BLM-related protests, focusing on media and corporate reactions to books by individuals associated with each event. However, assumption A"
     },
     {
       "a_turn_idx": 67,
@@ -12756,7 +12756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in claim C refers to traditional media figures, consistent with context.\",\n  \"reason\": \"Claim C (turn 73) discusses declining influence of traditional media figures due to perceived bias and loss of public trust, while assumption A (turn 67) asserts that public figures should be held accountable for personal details from their youth. These ideas are unrelated in substance—C addresses media credibility and public trust, whereas A concerns accountability for past"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context discussing media influence. However, no direct link exists between 'traditional media figures' and the earlier assumption about public figures being held accountable for past personal details.\",\n  \"reason\": \"Claim C discusses declining influence of traditional media figures with the public, which is unrelated to the core idea in assumption A—that public figures should be held accountable for personal details from their youth. While"
     },
     {
       "a_turn_idx": 67,
@@ -12771,7 +12771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context of criticism toward media coverage in prior turns.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is a general assertion about media credibility and reach. However, this does not explicitly or implicitly verify the specific assumption in A, which is that media profiles should focus on scandalous or embarrassing aspects of public figures' pasts."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context of criticism toward media coverage in prior turns.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is a general assertion about media credibility and reach. However, assumption A specifically claims that media profiles should focus on scandalous or embarrassing aspects of public figures' pasts. Claim C does not address or verify this specific claim about"
     },
     {
       "a_turn_idx": 67,
@@ -12801,7 +12801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 92 refers to the audience or users of social media platforms, consistent with the broader context of digital privacy and corporate surveillance discussed earlier.\",\n  \"reason\": \"Claim C discusses the need for alternative social media platforms due to monopolistic practices and lack of competition, which relates to concerns about data privacy and corporate control. However, it does not explicitly address or verify the specific assumption in A—that media profiles should focus on scandalous or embarrassing aspects"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 92 refers to the audience or users of social media platforms, consistent with the broader context of digital privacy and corporate surveillance discussed earlier.\",\n  \"reason\": \"Claim C discusses the need for alternative social media platforms that prioritize user privacy, which is tangentially related to the earlier assumption A about media focusing on scandalous personal details. However, C does not explicitly state or verify A’s core claim—that media should emphasize embarrassing pasts of public"
     },
     {
       "a_turn_idx": 67,
@@ -12831,7 +12831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Simon and Schuster' as the entity that canceled Senator Hawley's book; 'you' in turn 70 refers to Senator Hawley.\",\n  \"reason\": \"Claim C states that Simon and Schuster gave a defensive explanation for canceling the book, but the text in turn 70 does not contain any such defensive explanation. Instead, Speaker 01 (Senator Hawley) describes the cancellation as outrageous and driven by"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to Senator Hawley, as established in the prior context. 'Simon and Schuster' is the subject of the action in both turns.\",\n  \"reason\": \"Claim C (turn 70) states that Simon and Schuster canceled Senator Hawley's book, which is consistent with the narrative. However, it does not address or verify the earlier assumption A (turn 67), which concerns the belief that irony"
     },
     {
       "a_turn_idx": 67,
@@ -12846,7 +12846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Senator Klobuchar' and 'her bill' refer to the same entity mentioned in turn 79.\",\n  \"reason\": \"Claim C (turn 79) states that Senator Klobuchar's bill addresses the same problem as the state lawsuit against Facebook. However, assumption A (turn 67) concerns the belief that irony and mockery are effective rhetorical tools in political discourse. There is no semantic connection between the two claims—C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Senator Klobuchar' and 'her bill' refer to the same entity as mentioned in turn 79.\",\n  \"reason\": \"Claim C (turn 79) states that Senator Klobuchar's bill addresses the same problem as the state lawsuit against Facebook. However, assumption A (turn 67) concerns the belief that irony and mockery are effective rhetorical tools in political discourse. There is no semantic connection between the two claims—"
     },
     {
       "a_turn_idx": 67,
@@ -12861,7 +12861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 84) states that the current interpretation of Section 230 aligns with its intended function, which contradicts the broader argument in the surrounding context. Speaker 01 explicitly argues in turn 85 that the current interpretation of Section 230 bears little resemblance to the original law and has been rewritten by courts to benefit"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 84) states that the current interpretation of Section 230 aligns with its intended function, which contradicts the speaker's later argument in turn 85 that the current interpretation bears little resemblance to the original law and has been systematically rewritten by courts to favor big tech. The speaker explicitly rejects the current application of Section 2"
     },
     {
       "a_turn_idx": 67,
@@ -12876,7 +12876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 91) discusses public support for behavioral tracking regulation, which is unrelated to assumption A (turn 67), which concerns the effectiveness of irony and mockery in political discourse. There is no overlap in subject matter, nor does C state or verify any aspect of A. The topics are entirely distinct—C focuses on data privacy and regulation, while"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 91) discusses public support for behavioral tracking regulation, which is unrelated to assumption A (turn 67), which concerns the effectiveness of irony and mockery in political discourse. There is no overlap in subject matter, intent, or semantic content between the two. Therefore, C does not support, verify, or relate to A in any meaningful way"
     },
     {
       "a_turn_idx": 67,
@@ -12891,7 +12891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Senator Hawley, consistent with prior context. 'My middle school classmates' in turn 67 is directly referenced in turn 68 as 'what my middle school classmates predicted might be my political views in 30 years'.\",\n  \"reason\": \"Claim C explicitly states that the predictions made by middle school classmates about future political views are irrelevant, which directly verifies the substance of assumption A — that audiences find"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Senator Hawley, consistent with prior context. 'My middle school classmates' in turn 67 refers to the individuals whose past predictions about political views are discussed.\",\n  \"reason\": \"Claim C explicitly states that the predictions made by middle school classmates about future political views are irrelevant, which directly verifies the substance of assumption A—that audiences find amusement in exposing trivial personal facts about political opponents. The irrelevance of such predictions"
     },
     {
       "a_turn_idx": 67,
@@ -12921,7 +12921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Senator Hawley, as established in the prior context. 'My middle school classmates' in turn 67 refers to the individuals whose past predictions about his political views are being discussed.\",\n  \"reason\": \"Claim C explicitly states that the predictions made by middle school classmates about future political views are irrelevant, which directly verifies the substance of assumption A — that such early-life experiences (like middle school) are used to define"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Senator Hawley, consistent with prior context. 'My middle school classmates' in turn 68 refers to the individuals mentioned in turn 67 who made predictions about his future political views.\",\n  \"reason\": \"Claim C explicitly states that predictions made by middle school classmates about future political views are irrelevant, which directly verifies the substance of assumption A—that there is a shared cultural understanding that such early-life experiences define adult"
     },
     {
       "a_turn_idx": 67,
@@ -12936,7 +12936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 91 refers to companies that track online behavior.\",\n  \"reason\": \"Claim C (turn 91) discusses opposition to tracking online behavior, but it does not address or verify the earlier assumption A (turn 67), which concerns a shared cultural belief that high school and middle school experiences define adult behavior. The topics are entirely unrelated—C is about digital privacy and corporate surveillance, while A is about cultural narratives shaping"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'people' in turn 91 refers to general individuals opposing data tracking.\",\n  \"reason\": \"Claim C (turn 91) discusses opposition to tracking online behavior, but it does not address or verify the specific assumption A (turn 67), which concerns a shared cultural belief that high school and middle school experiences define adult behavior. The topics are entirely unrelated—A is about long-term behavioral influence of youth experiences, while C is about digital"
     },
     {
       "a_turn_idx": 68,
@@ -12951,7 +12951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context discussing media reactions to political events and cancellations.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is a general observation about media credibility. Assumption A, however, asserts that public figures should be held accountable only through rational, evidence-based critique. While both relate to media and public discourse, C does not explicitly state or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context discussing media reactions to political events and cancellations.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is tangentially related to assumption A's focus on accountability through rational, evidence-based critique. However, C does not explicitly state or verify the substance of A—namely, that public figures should be held accountable only through rational"
     },
     {
       "a_turn_idx": 68,
@@ -12981,7 +12981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context discussing media and publishing decisions by entities like Simon & Schuster.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is a general assertion about media credibility and public trust. However, assumption A (turn 69) concerns the expectation for public figures to avoid gestures that could be interpreted as extremist. There is no semantic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'traditional media figures', which is consistent with the broader context discussing media reactions to controversies involving public figures like Senator Hawley and the cop from the Breonna Taylor case.\",\n  \"reason\": \"Claim C states that traditional media figures have less influence with the public, which is a general assertion about media credibility and public trust. However, this does not explicitly or implicitly verify the earlier assumption A, which concerns public figures being expected to"
     },
     {
       "a_turn_idx": 69,
@@ -12996,7 +12996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'these companies' and 'big government giveaways' as the source of monopolies; 'these companies' in turn refers to the dominant tech companies mentioned earlier in the conversation.\",\n  \"reason\": \"Claim C explicitly states that the rise of dominant tech companies resulted from government interventions rather than free-market dynamics. This directly verifies the substance of assumption A, which claims that cancel culture reflects genuine moral outrage rather than performative activism. While A focuses on"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 80 refers to the dominant tech companies mentioned in the preceding context, including Google and Facebook. 'Big government' and 'government interventions' refer to federal policies such as Section 230 and regulatory decisions under the Obama and Biden administrations.\",\n  \"reason\": \"Claim C explicitly states that the rise of dominant tech companies was due to government interventions rather than free-market dynamics, which directly verifies the substance of assumption A—that cancel culture"
     },
     {
       "a_turn_idx": 69,
@@ -13011,7 +13011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'traditional media figures' in turn 73, which aligns with 'media institutions' in turn 69. 'People don't trust them' directly contradicts assumption A, which claims audiences trust media institutions to uphold inclusive standards without needing justification.\",\n  \"reason\": \"Assumption A asserts that audiences inherently trust media institutions to maintain inclusive standards without requiring justification. Claim C explicitly states that traditional media figures have less influence and that '"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'traditional media figures' in turn 73, which aligns with 'media institutions' in turn 69. 'People don't trust them' directly contradicts assumption A, which claims audiences trust media institutions to uphold inclusive standards without needing justification.\",\n  \"reason\": \"Assumption A asserts that audiences inherently trust media institutions to maintain inclusive standards without requiring justification. Claim C explicitly states that traditional media figures have less influence and that people"
     },
     {
       "a_turn_idx": 69,
@@ -13026,7 +13026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'John Stassel' is a proper noun and clearly refers to a specific individual introduced in the sentence.\",\n  \"reason\": \"Claim C (turn 88) states that John Stassel is a libertarian and a personal acquaintance of the speaker. This is unrelated to assumption A (turn 69), which concerns the speaker's personal experience with fear around gestures indicating widespread cultural anxiety about symbolism. There is no overlap in semantic content between the two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 88 refers to John Stassel, a libertarian and personal acquaintance of the speaker, as established in the sentence itself.\",\n  \"reason\": \"Claim C (turn 88) states that John Stassel is a libertarian and a personal acquaintance of the speaker. This is unrelated to assumption A (turn 69), which concerns the speaker's personal experience with fear around gestures indicating widespread cultural anxiety about symbolism. There is no overlap in"
     },
     {
       "a_turn_idx": 69,
@@ -13086,7 +13086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 94 refers to the bill discussed in prior turns, specifically Senator Hawley's proposed antitrust legislation targeting big tech.\",\n  \"reason\": \"Claim C (turn 94) asks whether there is any chance a bill like the speaker's will pass, which is a speculative inquiry about legislative feasibility. Assumption A (turn 69) asserts the existence of a coordinated effort by influential individuals to enforce ideological conformity. While both relate"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 94 refers to the bill discussed in prior turns, specifically Senator Hawley's proposed antitrust legislation targeting big tech.\",\n  \"reason\": \"Claim C (turn 94) asks whether there is a chance that 'your bill or a bill like it' will pass, which is a speculative inquiry about legislative feasibility. Assumption A (turn 69) asserts the existence of a coordinated effort among influential individuals to enforce ideological conformity"
     },
     {
       "a_turn_idx": 69,
@@ -13101,7 +13101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Senator Hawley, consistent with the context. 'Simon and Schuster' is the subject of both A and C.\",\n  \"reason\": \"Claim C states that the speaker believes Simon and Schuster gave a defensive explanation for canceling the book. However, in turn 71, Speaker 01 explicitly rejects any defensive justification, calling the cancellation 'outrageous' and based on 'total lies,' and frames"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Senator Hawley, consistent with the context. 'Simon and Schuster' is the subject of both A and C.\",\n  \"reason\": \"Claim C states that the speaker believes Simon and Schuster gave a defensive explanation for canceling the book. However, in turn 71, Speaker 01 explicitly rejects any defense, calling the cancellation 'outrageous' and based on 'total lies,' and frames it as"
     },
     {
       "a_turn_idx": 69,
@@ -13131,7 +13131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 84 refers to Section 230, as established by context. 'They' in turn 84 refers to the platforms (e.g., YouTube, Facebook, Twitter).\",\n  \"reason\": \"Claim C states that the current interpretation of Section 230 aligns with its intended function. However, Speaker 01 explicitly argues in turn 84 and beyond that the current interpretation diverges significantly from the original"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 84 refers to Section 230, as established by context. 'They' in turn 84 refers to the platforms (e.g., YouTube, Facebook, Twitter).\",\n  \"reason\": \"Claim C states that the current interpretation of Section 230 aligns with its intended function. However, assumption A expresses concern about perceived censorship and the need to resist silencing, especially by powerful entities like big tech."
     },
     {
       "a_turn_idx": 69,
@@ -13146,7 +13146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 91) states that most people would support behavioral tracking regulation, which is unrelated to assumption A (turn 69), which asserts that viewers should resist perceived censorship while maintaining moral clarity. C discusses consumer privacy and data tracking regulation, while A focuses on resistance to cancel culture and ideological suppression. There is no overlap in semantic content, and C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 91) states that most people would support behavioral tracking regulation, which is unrelated to assumption A (turn 69), which asserts that viewers should resist perceived censorship while maintaining moral clarity. C discusses consumer privacy and data tracking regulation, while A focuses on resistance to cancellation culture and ideological silencing. There is no overlap in semantic content, and"
     },
     {
       "a_turn_idx": 69,
@@ -13161,7 +13161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 99 refers to the speaker's children, and 'these mobile platforms' refers to social media-based apps mentioned in the immediate context.\",\n  \"reason\": \"Claim C states that mobile platforms and social media-based apps are highly engaging for children, which is not related to assumption A, which concerns resisting perceived censorship while maintaining moral clarity. Claim C discusses parental concerns about screen time and child engagement with technology, a topic entirely separate from the ideological"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 99 refers to the speaker's children, and 'these mobile platforms' refers to social media-based apps mentioned in the immediate context.\",\n  \"reason\": \"Claim C states that mobile platforms and social media-based apps are highly engaging for children, which is not related to assumption A, which concerns resisting perceived censorship while maintaining moral clarity. Claim C discusses parental concerns about screen time and child engagement with technology, a topic entirely separate from the political"
     },
     {
       "a_turn_idx": 70,
@@ -13176,7 +13176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which are discussed in the context of government interventions and monopolistic behavior. However, 'they' does not refer to Regnery, which is the subject of assumption A.\",\n  \"reason\": \"Claim C discusses the role of government interventions in creating tech monopolies, which is unrelated to assumption A about Regnery's support for conservative voices reflecting a principled commitment rather than opportunism. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which are discussed in the context of government interventions and monopolistic behavior. However, 'they' does not refer to Regnery, which is the subject of assumption A.\",\n  \"reason\": \"Claim C discusses the role of government interventions in creating tech monopolies, which is unrelated to assumption A about Regnery's support for conservative voices reflecting principled commitment rather than opportunism. There is no overlap"
     },
     {
       "a_turn_idx": 70,
@@ -13191,7 +13191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the tech companies mentioned in the broader context, particularly in relation to their role in content moderation and platform policies.\",\n  \"reason\": \"Claim C states that competition among platforms could enable diverse ideological preferences, such as welcoming conservative voices. This directly supports the substance of assumption A, which asserts that Regnery's support for controversial conservative voices reflects a principled commitment rather than opportunism. The idea that competitive platforms could allow space for"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the tech companies mentioned in the broader context, particularly in relation to their role in content moderation and platform policies.\",\n  \"reason\": \"Claim C states that competition among platforms could allow for diverse ideological preferences, including welcoming conservative voices. This directly supports the substance of assumption A, which asserts that Regnery’s support for controversial conservative voices reflects a principled commitment rather than opportunism. The idea that competitive platforms could create space for"
     },
     {
       "a_turn_idx": 70,
@@ -13206,7 +13206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Democrats, as established in the context of criticizing the use of tech platforms to suppress conservative voices. 'Conservative and libertarian voices' aligns with the earlier mention of Regnery supporting controversial conservative figures and the broader theme of censorship targeting right-leaning individuals.\",\n  \"reason\": \"Claim C explicitly states that Democrats benefit politically from using tech platforms to suppress conservative and libertarian voices, which directly verifies the substance of assumption A—that Regn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Democrats, as established in the context of criticizing the use of tech platforms to suppress conservative voices.\",\n  \"reason\": \"Claim C explicitly states that Democrats benefit politically from using tech platforms to suppress conservative and libertarian voices, which directly verifies the substance of assumption A—that Regnery's support for controversial conservative voices reflects a principled commitment rather than opportunism. The context implies that the suppression of conservative voices by major publishers and tech platforms"
     },
     {
       "a_turn_idx": 70,
@@ -13236,7 +13236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which are discussed in the context of political influence and monopolistic behavior. However, the earlier assumption A concerns publishers acting under ideological pressure, not the role of government in creating tech monopolies.\",\n  \"reason\": \"Claim C asserts that big government interventions, not free-market dynamics, created dominant tech companies—a claim about the origin of tech monopolies. Assumption A, however, focuses on publishers (like Simon"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which are discussed in the context of government intervention and monopolistic behavior. However, the earlier assumption A concerns publishers acting under ideological pressure, not tech companies or government intervention.\",\n  \"reason\": \"Claim C discusses the role of government intervention in creating tech monopolies, which is unrelated to assumption A, which focuses on publishers being influenced by ideological pressure rather than merit. There is no overlap in subject matter, causal"
     },
     {
       "a_turn_idx": 70,
@@ -13266,7 +13266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to SPEAKER_01, the speaker of the earlier assumption A. The phrase 'the Republican argument' refers to the broader ideological stance expressed by SPEAKER_01 in turns 70–71, particularly regarding political censorship by publishers and tech companies.\",\n  \"reason\": \"Turn 81 states that the speaker acknowledges the Republican argument has merit, which is a general endorsement of the perspective presented in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to SPEAKER_01, as established in the conversation flow. 'The Republican argument' refers to the broader stance presented by SPEAKER_01 regarding political censorship by big tech and publishers, including the claim that ideological pressure drives publishing decisions.\",\n  \"reason\": \"Turn 81 states that the speaker acknowledges the Republican argument has merit, which touches on the general theme of political bias in media and tech platforms."
     },
     {
       "a_turn_idx": 70,
@@ -13281,7 +13281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'tech companies', which aligns with the broader context of corporate censorship discussed in turn 70, where Simon & Schuster's cancellation of Senator Hawley's book is presented as an example of ideological pressure on publishers.\",\n  \"reason\": \"Claim C states that tech companies claim in their terms of service that they do not censor based on political viewpoint. While this touches on the broader theme of ideological bias in publishing and tech platforms"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'tech companies', which aligns with the broader context of corporate censorship discussed in turn 70, where 'Simon & Schuster' is cited as a publisher acting under ideological pressure. 'They' in C thus refers to large media/corporate entities similar to the publisher in A.\",\n  \"reason\": \"Claim C states that tech companies claim in their terms of service that they do not censor based on political viewpoint."
     },
     {
       "a_turn_idx": 70,
@@ -13296,7 +13296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Antifa, as established in the immediate context of turn 75 discussing violence in Portland. The earlier assumption A concerns the ideological motivation behind Simon & Schuster's cancellation of Senator Hawley's book.\",\n  \"reason\": \"Claim C discusses the perceived connection between Antifa and violence in Portland, which is entirely unrelated to assumption A, which asserts that the cancellation of Hawley's book was ideologically motivated rather than editorially"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, consistent with earlier turns.\",\n  \"reason\": \"Claim C states that the speaker views the connection between Antifa and the violence in Portland as significant. However, assumption A (turn 70) concerns the ideological motivation behind Simon & Schuster's cancellation of Senator Hawley's book, specifically asserting that the cancellation was ideologically driven rather than editorially justified. Claim C introduces"
     },
     {
       "a_turn_idx": 70,
@@ -13341,7 +13341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'nobody' in claim C refers to the speaker and their audience, as established in the context of the conversation. 'The left' in the surrounding context is referenced as the group responsible for canceling books, aligning with the broader critique of ideological bias.\",\n  \"reason\": \"Claim C explicitly states that no one present—including the speaker and audience—defends the Capitol Hill riot, which directly verifies the implicit assumption in A that public discourse around political events ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'nobody' in claim C refers to the speaker (SPEAKER_02), their audience, and the broader group they represent, as established in the context. 'Here' in 'nobody here' refers to the immediate conversational setting, including the speaker and listeners.\",\n  \"reason\": \"Claim C explicitly states that no one present—including the speaker and their audience—defends the Capitol Hill riot. This directly verifies the substance of assumption A,"
     },
     {
       "a_turn_idx": 70,
@@ -13356,7 +13356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'other people' refers to general societal beliefs about homeschooling and social exclusion.\",\n  \"reason\": \"Claim C (turn 100) discusses concerns about children being excluded from social events due to avoiding screens and social media, which is unrelated to the earlier assumption A (turn 70) about public discourse influencing institutional decisions like publishing choices. There is no overlap in subject matter, causal mechanism, or semantic content. The topics—social media"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'other people' refers to general societal beliefs about homeschooling and social exclusion.\",\n  \"reason\": \"Claim C discusses concerns about homeschooling leading to exclusion from social events, while assumption A addresses how public discourse on political events influences institutional decisions like publishing. The topics are entirely unrelated—C focuses on parenting and social integration, whereas A centers on media and political censorship. There is no overlap in semantic content, and C does not state, verify, or"
     },
     {
       "a_turn_idx": 71,
@@ -13386,7 +13386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Democrats, as established in the prior context (turn 95), where Speaker_01 suggests Democrats benefit from tech companies' ability to censor conservatives.\",\n  \"reason\": \"Claim C explicitly states that giving more power to big tech would result in more censorship, which directly verifies the core idea in assumption A—that private corporate power (like that of big tech) functions as a form of censorship equivalent to state-imposed censorship."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Democrats, as established in the prior context (turn 95), where Speaker_01 suggests Democrats benefit from tech companies' censorship of conservative voices.\",\n  \"reason\": \"Claim C explicitly states that giving more power to big tech would result in more censorship, which directly verifies the core idea in assumption A—that private corporate power (like that of big tech) functions as a form of censorship equivalent to state-imposed censorship."
     },
     {
       "a_turn_idx": 71,
@@ -13416,7 +13416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which aligns with the subject of assumption A. 'Good faith' refers to the justification for content removal by these companies.\",\n  \"reason\": \"Claim C discusses Section 230 protecting big tech companies when removing content in good faith, which touches on the broader theme of tech companies exercising control over speech. However, it does not explicitly address or verify the specific claim in assumption A—that big tech and large"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which aligns with the subject of assumption A. 'Good faith' refers to the removal of content by these companies.\",\n  \"reason\": \"Claim C discusses Section 230 protecting big tech companies when removing content in good faith, which touches on the broader theme of tech companies exercising control over speech. However, it does not explicitly address or verify the specific claim in assumption A—that big tech and large publishers"
     },
     {
       "a_turn_idx": 71,
@@ -13431,7 +13431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'big tech companies,' which aligns with the subject of assumption A. 'They' in A refers to 'big tech and large publishers,' consistent with the broader corporate actors discussed.\",\n  \"reason\": \"Claim C discusses Section 230 protecting big tech companies from liability for failing to remove harmful content, which touches on the theme of corporate power and censorship. However, it does not explicitly address or verify the specific claim in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to big tech companies, which aligns with the subject of assumption A (big tech and large publishers).\",\n  \"reason\": \"Claim C discusses Section 230 protections for big tech companies, emphasizing their immunity from liability even when failing to remove harmful content. While this touches on the broader theme of tech companies wielding unchecked power, it does not explicitly address or verify the specific claim in assumption A—that big tech and large publishers act"
     },
     {
       "a_turn_idx": 71,
@@ -13446,7 +13446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'big tech' as established in the context, which aligns with the subject of assumption A.\",\n  \"reason\": \"Claim C states that Section 230 enables big tech to control content without producing it, which directly reflects the core idea in assumption A that big tech and large publishers act as instruments of political control when aligned with liberal interests. While C does not explicitly mention 'liberal interests' or 'censor"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'big tech' as established in the context, which aligns with the subject of assumption A.\",\n  \"reason\": \"Claim C states that Section 230 enables big tech to control content without producing it, which directly addresses the mechanism by which large tech platforms exert influence—aligning with assumption A’s assertion that big tech acts as an instrument of political control. While C does not explicitly mention 'liberal interests'"
     },
     {
       "a_turn_idx": 71,

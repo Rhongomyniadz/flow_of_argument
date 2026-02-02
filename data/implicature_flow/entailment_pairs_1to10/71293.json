@@ -1071,7 +1071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 11 refers to the speaker (SPEAKER_07) and their team, who are monitoring the situation from the U.S. The phrase 'the Secretary of State putting out a statement' directly refers to official communication from a high-level government source.\",\n  \"reason\": \"Claim C explicitly states that the Secretary of State has issued a public statement, which directly verifies the speaker's access to reliable, authoritative information about the situation—"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'the Secretary of State' in turn 11, which aligns with the subject of the earlier assumption A about having access to reliable information. 'We're just getting news in from the Secretary of State' establishes direct access to authoritative information.\",\n  \"reason\": \"Claim C explicitly states that the Secretary of State has issued a public statement, which directly verifies the substance of assumption A—that the speaker has access to reliable information about the situation"
     },
     {
       "a_turn_idx": 9,
@@ -1086,7 +1086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the situation in Sudan described in prior turns, particularly the violence and lack of communication mentioned in turn 10 and the deteriorating security conditions in turn 9.\",\n  \"reason\": \"Claim C explicitly states that the situation on the ground in Sudan is 'very dangerous,' which directly verifies the substance of assumption A—that the speaker has access to reliable information about the situation on the ground. The detailed context in turn 21"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the situation in Sudan described in turn 9, particularly the sudden deterioration of security and loss of communication, which aligns with the assertion that the situation is unprecedented and dangerous.\",\n  \"reason\": \"Claim C explicitly states that the situation on the ground in Sudan is 'very dangerous,' which directly verifies the implied danger in assumption A—namely, that the speaker has access to reliable information about a severe and urgent crisis. The"
     },
     {
       "a_turn_idx": 9,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 21 refers to the ongoing situation in Sudan, specifically the danger posed by active conflict and lack of security, not stable internet access.\",\n  \"reason\": \"Claim C (turn 21) discusses the danger of operating in Sudan due to active conflict, violence, and lack of security, which is unrelated to the necessity of stable internet access for real-time communication. While both statements relate to challenges in Sudan, C does not address,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 21 refers to the ongoing situation in Sudan, specifically the danger posed by active conflict and lack of security, not stable internet access.\",\n  \"reason\": \"Claim C (turn 21) discusses the danger of operating in Sudan due to active conflict, violence, and lack of security, which is unrelated to the necessity of stable internet access for real-time communication. While both statements relate to the broader crisis in Sudan, C does not"
     },
     {
       "a_turn_idx": 10,
@@ -1217,11 +1217,11 @@
       "claim_text": "China and India are among the significant nations at the UN that support or sympathize with the Russian narrative regarding Ukraine.",
       "overlap_score": 2,
       "c_time": 370.05,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' and 'India' refer to nations mentioned in turn 14.\",\n  \"reason\": \"Claim C discusses China and India's support for the Russian narrative at the UN, which is entirely unrelated to the lack of internet connectivity as a barrier to safety and emotional support in Sudan. There is no overlap in subject matter, context, or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'China' and 'India' refer to nations mentioned directly.",
+      "reason": "Claim C discusses China and India's support for the Russian narrative at the UN, which is entirely unrelated to the lack of internet connectivity as a barrier to safety and emotional support in Sudan. There is no overlap in topic, context, or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the earlier assumption.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' and 'India' refer to nations mentioned directly.\",\n  \"reason\": \"Claim C discusses China and India's support for the Russian narrative at the UN, which is entirely unrelated to the lack of internet connectivity as a barrier to safety and emotional support in Sudan. There is no overlap in topic, context, or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the earlier assumption.\"\n}\n```"
     },
     {
       "a_turn_idx": 10,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my father' in turn 25 refers to Speaker_08's father, who experienced World War II. There is no mention of Sudan, internet services, or the speaker's access to information about Sudan in this claim.\",\n  \"reason\": \"Claim C discusses a comparison between the current geopolitical situation (Russia-Ukraine conflict and China-Taiwan tensions) and World War II through the lens of Speaker_08's personal history. It does not address"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my father' in turn 25 refers to Speaker_08's father, who experienced World War II. There is no mention of Sudan, internet services, or the speaker's access to information about Sudan in this claim.\",\n  \"reason\": \"Claim C discusses a comparison between the current geopolitical situation and World War II based on the speaker's personal experience with their father. This is entirely unrelated to assumption A, which concerns the availability of accurate information about internet"
     },
     {
       "a_turn_idx": 10,
@@ -1367,11 +1367,11 @@
       "claim_text": "The speaker wonders whether the listener has received updates on the efforts to free Paul Whelan.",
       "overlap_score": 2,
       "c_time": 803.961,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'Paul Whelan' is explicitly named and distinct from the Sudan context.",
-      "reason": "Claim C discusses updates on efforts to free Paul Whelan, a different individual involved in a separate geopolitical issue (Ukraine/Russia). Assumption A concerns access to accurate information about internet services in Sudan. There is no overlap in subject matter, context, or implied connection. Therefore, C does not relate to or verify A and is clearly unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Paul Whelan' is explicitly named and distinct from the Sudan context.\",\n  \"reason\": \"Claim C discusses updates on efforts to free Paul Whelan, a different individual involved in a separate geopolitical issue (Ukraine/Russia). Assumption A concerns access to accurate information about internet services in Sudan. There is no overlap in subject matter, context, or implied connection. Therefore, C does not relate to or verify A and is clearly unrelated.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 26 refers to SPEAKER_06, who is discussing Paul Whelan's case, unrelated to the Sudan internet status in turn 10.\",\n  \"reason\": \"Claim C discusses updates on efforts to free Paul Whelan and a Wall Street Journal reporter in Russia, which is entirely unrelated to the assumption A about access to accurate information on internet services in Sudan. There is no overlap in topic, subject matter"
     },
     {
       "a_turn_idx": 10,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 25 refers to the speaker (SPEAKER_08), and 'my father's war' refers to World War II, which is the historical context established in the statement.\",\n  \"reason\": \"Claim C explicitly states that the current geopolitical situation is comparable to the global conflict experienced by the speaker's father during World War II. This directly verifies the core idea in assumption A—that the speaker views the current situation as deeply contradictory—"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 25 refers to the speaker (SPEAKER_08), and 'my father's war' refers to World War II, which is explicitly linked to the current geopolitical situation.\",\n  \"reason\": \"Claim C explicitly states that the current geopolitical situation is comparable to the global conflict experienced by the speaker's father during World War II. This directly verifies the core idea in assumption A—that the speaker views the current situation as deeply contradictory—"
     },
     {
       "a_turn_idx": 13,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_12 refers to 'the worsening violence in Sudan' as a current situation, which aligns with the broader context of conflict in Sudan mentioned in turn 13. However, 'worsening violence' is not equivalent to 'deeply contradictory' geopolitical situation.\",\n  \"reason\": \"Claim C states that the situation in Sudan involves worsening violence, which is related to the context of conflict discussed in assumption A. However, it does not explicitly state or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_12 refers to 'the current situation in Sudan' in turn 18, which aligns with the broader context of the conflict mentioned in turn 13. 'Worsening violence' is implied by the need for a ceasefire and the ongoing humanitarian crisis.\",\n  \"reason\": \"Claim C states that the situation in Sudan involves worsening violence, which is consistent with the context of the ceasefire being fragile and the urgent need for humanitarian aid. However, it"
     },
     {
       "a_turn_idx": 13,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to Paul Whelan, the U.S. Marine imprisoned in Russia. 'The Biden administration' is the subject of the claim about being manipulated.\",\n  \"reason\": \"Claim C (turn 27) asserts that the Biden administration was manipulated in a prisoner exchange, specifically by releasing a dangerous arms dealer for only one hostage instead of two. This claim is unrelated to assumption A, which concerns the moral condemnation of Russia’s"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to Paul Whelan, a U.S. Marine imprisoned in Russia. 'The Biden administration' is the subject of the claim about being manipulated.\",\n  \"reason\": \"Claim C (turn 27) asserts that the Biden administration was manipulated in a prisoner exchange, specifically by releasing a dangerous arms dealer for only one hostage instead of two. This does not address or verify the moral judgment in assumption A (turn 1"
     },
     {
       "a_turn_idx": 14,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, Paul, who is being held captive by the Russian regime. The claim in C focuses on the speaker's lack of familiarity with her brother's current appearance due to his imprisonment.\",\n  \"reason\": \"Claim C discusses the speaker's personal emotional response to not knowing her brother's current appearance, which is unrelated to the moral evaluation of war crimes or the actions of Russia in Ukraine. Assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, Paul, who is being held captive by Russia. The claim in C focuses on the speaker's lack of familiarity with her brother's current appearance, which is unrelated to the moral evaluation of war crimes in A.\",\n  \"reason\": \"Claim C discusses personal emotional distress over not recognizing her brother due to lack of recent images, while assumption A concerns the moral condemnation of specific wartime actions (murder"
     },
     {
       "a_turn_idx": 14,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the speaker's brother, Paul Whelan, based on context from turns 35–36. 'I' in turn 37 refers to SPEAKER_06.\",\n  \"reason\": \"Claim C states that the speaker believes they were able to fulfill the role of being present on behalf of someone else (Paul Whelan), which is a personal, performative statement about representation. However, this does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the speaker's brother, Paul Whelan, based on context from turns 35–36. 'I' in turn 37 refers to SPEAKER_06.\",\n  \"reason\": \"Claim C states that the speaker believes they were able to fulfill the role of being present on behalf of someone else (Paul Whelan), which is a personal, performative statement about representation. Assumption A,"
     },
     {
       "a_turn_idx": 14,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the list of historical events mentioned in turn 15, which are described as 'a constant theme of Russian grievances against the West'. The subject 'Russia' is clearly linked to the actions and narratives attributed to Sergey Lavrov and the Russian government.\",\n  \"reason\": \"Claim C explicitly states that Russia views several events over the past 25 years as part of its ongoing grievances against the West, which directly verifies the substance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the list of historical events mentioned in turn 15, which are described as 'a constant theme of Russian grievances against the West'. The subject 'Russia' is clearly linked to the actions and statements of the Russian Foreign Minister, Sergei Lavrov.\",\n  \"reason\": \"Claim C explicitly states that Russia views several events over the past 25 years as part of its ongoing grievances against the West, which directly verifies the substance"
     },
     {
       "a_turn_idx": 14,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my father' in turn 25 refers to the speaker (SPEAKER_08), establishing a personal connection to World War II.\",\n  \"reason\": \"Claim C explicitly draws a parallel between the current geopolitical situation—specifically Russia's invasion of Ukraine and broader global tensions—and the speaker's father's experience in World War II. This aligns with assumption A, which frames media appearances as platforms for shaping public perception of global political events. By invoking"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my father' in turn 25 refers to the speaker (SPEAKER_08), establishing a personal connection to World War II.\",\n  \"reason\": \"Claim C explicitly draws a parallel between the current geopolitical situation—specifically Russia's invasion of Ukraine and broader global tensions—and the global conflict experienced by the speaker's father during World War II. This aligns with assumption A, which frames media appearances as platforms for shaping public perception of global political events"
     },
     {
       "a_turn_idx": 15,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, Paul, who is detained in Russia. No reference is made to Russia's grievances against the West or their resonance beyond Russia.\",\n  \"reason\": \"Claim C discusses the speaker's lack of familiarity with her brother's current appearance due to his detention, which is unrelated to the earlier assumption A about the widespread acknowledgment of Russia's grievances against the West. There is no overlap in semantic content, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, Paul, who is detained in Russia. There is no mention of Russia's grievances against the West or any related international resonance.\",\n  \"reason\": \"Claim C discusses the speaker's lack of familiarity with her brother's current appearance due to his detention, which is unrelated to the earlier assumption A about the widespread acknowledgment of Russia's grievances against the West. There is no overlap in semantic content, and"
     },
     {
       "a_turn_idx": 15,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 36 refers to the speaker's brother, who is imprisoned in Russia. This is unrelated to the earlier assumption A, which concerns Russia's grievances being acknowledged beyond Russia.\",\n  \"reason\": \"Claim C discusses personal support for the speaker's imprisoned brother and mentions that he saw the speaker's speech on Russian TV. This is entirely about individual familial advocacy and does not address or verify the assumption that Russia's grievances against the West are widely acknowledged"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 36 refers to the speaker's brother, who is imprisoned in Russia. This is unrelated to the earlier assumption A, which concerns Russia's grievances against the West being acknowledged internationally.\",\n  \"reason\": \"Claim C discusses personal support for an imprisoned individual (the speaker's brother) and mentions that efforts to support him will continue. This is entirely separate from assumption A, which asserts that Russia's grievances against the West are widely acknowledged or reson"
     },
     {
       "a_turn_idx": 15,
@@ -2151,7 +2151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, not Lavrov. The claim that 'the speaker delivered a speech that aired on Russian television' is about the brother, not Lavrov's speech.\",\n  \"reason\": \"Claim C discusses the brother's speech being broadcast on Russian television, which is unrelated to assumption A about audience interpretation of Lavrov’s speech. There is no mention of Lavrov’s speech being interpreted as coordinated critique, nor"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, not Lavrov. The claim that 'the speaker delivered a speech that aired on Russian television' is about the brother, not Lavrov's speech.\",\n  \"reason\": \"Claim C discusses the brother's speech being broadcast on Russian television, which is unrelated to assumption A about audience interpretation of Lavrov’s speech. There is no mention of Lavrov's speech being interpreted as coordinated critique, nor"
     },
     {
       "a_turn_idx": 15,
@@ -2166,7 +2166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, who is imprisoned in Russia. This individual is not related to the audience's interpretation of Lavrov’s speech.\",\n  \"reason\": \"Claim C discusses a personal anecdote about the speaker's brother watching part of a speech on Russian television, which is unrelated to the audience's perception of Lavrov’s speech as a coordinated critique. There is no mention of audience interpretation, coordination, or rhetorical framing"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, who is imprisoned in Russia. This individual is distinct from Sergey Lavrov and is not involved in interpreting Lavrov's speech.\",\n  \"reason\": \"Claim C discusses a brother watching part of a speech on Russian television, which is unrelated to audience interpretation of Lavrov's speech as a coordinated critique. There is no mention of audience perception, coordination, or political interpretation of Lavrov's remarks."
     },
     {
       "a_turn_idx": 15,
@@ -2181,7 +2181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, not Lavrov. The claim that 'the individual who watched the speech was aware that the speaker was advocating for him' misrepresents the context, where the brother watched a broadcast of the speaker's speech on Russian TV and was delighted, but there is no indication he interpreted the speech as being directed at him or that the speaker was advocating for him.\",\n  \"reason\": \"Claim C asserts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to the speaker's brother, not Lavrov. The claim that 'the individual who watched the speech was aware that the speaker was advocating for him' misrepresents the context, where the brother watched a broadcast of the speaker's speech on Russian TV and was delighted, but there is no indication that he interpreted the speech as a coordinated critique of Lavrov or that he understood the speaker's advocacy in the way implied.\","
     },
     {
       "a_turn_idx": 15,
@@ -2301,7 +2301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to Sergey Lavrov, as established in prior context. 'Paul' and 'Evan Gerschkovich' are individuals detained in Russia, mentioned in the conversation.\",\n  \"reason\": \"Claim C (turn 26) asks about updates on efforts to free Paul Whelan and Evan Gerschkovich, which is unrelated to assumption A (turn 16), which concerns the legitimacy of the speaker's authority"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to Sergey Lavrov, as established in prior context. 'Paul' and 'Evan Gerschkovich' are individuals detained in Russia, mentioned in the discussion.\",\n  \"reason\": \"Claim C (turn 26) asks about updates on efforts to free Paul Whelan and Evan Gerschkovich, which is unrelated to assumption A (turn 16), which concerns the legitimacy of the speaker's authority"
     },
     {
       "a_turn_idx": 16,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to Sergey Lavrov, the Russian foreign minister. In turn 33, 'Paul' refers to a different individual, likely a U.S. citizen imprisoned in Russia, as mentioned in the context. There is no connection between Paul and the authority of the speaker to represent collective values.\",\n  \"reason\": \"Turn 33 discusses the speaker's lack of recent visual contact with their brother Paul, a separate issue unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to Sergey Lavrov, the Russian foreign minister. In turn 33, 'Paul' is a different individual, likely a U.S. citizen imprisoned in Russia, as referenced in the context. There is no connection between the authority of Lavrov (assumption A) and the statement about Paul.\",\n  \"reason\": \"Turn 33 discusses the speaker's lack of recent images of their brother Paul, a U"
     },
     {
       "a_turn_idx": 16,
@@ -2421,7 +2421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 29 refers to Russia's actions, specifically the arbitrary detention of American citizens like Paul Whelan, which is contextually linked to the broader discussion of Russia's conduct toward Ukraine and the West.\",\n  \"reason\": \"Claim C states that Russia acts like a terrorist state, which reflects a strong moral and political judgment about Russia's behavior. However, it does not explicitly address or verify the specific assumption A—that 'unprovoked' implies"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to Russia's actions, specifically the arbitrary detention of American citizens like Paul Whelan, which is contextually linked to the broader discussion of Russia's conduct toward Ukraine and the West.\",\n  \"reason\": \"Claim C states that Russia acts like a terrorist state, which is a strong moral and political characterization based on specific actions (detaining U.S. citizens). However, it does not explicitly address or verify the assumption in A—that '"
     },
     {
       "a_turn_idx": 16,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'U.S. Secretary of State Antony Blinken' and 'Russian Foreign Minister Sergey Lavrov' are explicitly named.\",\n  \"reason\": \"Claim C discusses the absence of a planned meeting between Blinken and Lavrov, which is unrelated to assumption A. Assumption A concerns the implication of the term 'unprovoked' in the context of Russia's invasion of Ukraine and the prior state of peace. Claim C does not address the nature of the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a meeting between U.S. Secretary of State Antony Blinken and Russian Foreign Minister Sergey Lavrov, which is unrelated to the concept of 'unprovoked' in turn 16.\",\n  \"reason\": \"Claim C states there are no plans for a meeting between Blinken and Lavrov, which is unrelated to the assumption in A that 'unprovoked' implies a prior state of peace and mutual non-hostility between Russia and"
     },
     {
       "a_turn_idx": 17,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the speaker (SPEAKER_06), who is discussing Russian diplomatic behavior. 'Lavrov' is referenced as the target of criticism, but the term 'Lazy' is used to describe the Russian diplomatic strategy, not directly linked to the principle of fairness and non-discrimination.\",\n  \"reason\": \"Turn 37 claims the Russian diplomatic strategy is 'Lazy', which is a critique of tactics or approach"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the speaker (SPEAKER_06), who is discussing Russian diplomatic behavior. 'Lavrov' is referenced as the target of criticism, but the term 'Lazy' is used to describe the Russian diplomatic strategy, not directly linked to the principle of fairness and non-discrimination.\",\n  \"reason\": \"Claim C states that the speaker refers to the Russian diplomatic strategy as 'Lazy', which is a critique of"
     },
     {
       "a_turn_idx": 17,
@@ -2541,7 +2541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 42 refers to the speaker and their allies, including the U.S. government and others advocating for Paul's release. 'Our point' refers to the broader diplomatic stance against Russia's actions.\",\n  \"reason\": \"Claim C states that the speaker believes their actions are effectively communicating a message despite the absence of direct diplomacy. While this reflects a general belief in indirect communication of principles, it does not explicitly state or verify the specific assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 42 refers to the speaker and their allies, including the U.S. government and supporters of Paul, as established in the prior context.\",\n  \"reason\": \"Claim C states that the speaker believes their actions are effectively communicating a message despite the lack of direct diplomacy. While this reflects a general stance on indirect communication of political messages, it does not explicitly address or verify the specific principle of fairness and non-discrimination in international diplomatic conduct mentioned"
     },
     {
       "a_turn_idx": 17,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Elizabeth Whelan refers to herself as the sister of Paul Whelan; 'she' in turn refers to Elizabeth Whelan.\",\n  \"reason\": \"Claim C states that Elizabeth Whelan attended the UN Security Council meeting as a spectator, which aligns with the context that she spoke before the session began and was present during the meeting. However, this does not explicitly verify or state the earlier assumption A—that the speaker sees the UN Security Council as a legitimate forum where diplomatic norms matter."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"Elizabeth Whelan refers to herself as the sister of Paul Whelan; 'she' in turn refers to Elizabeth Whelan.\",\n  \"reason\": \"Claim C states that Elizabeth Whelan attended the UN Security Council meeting as a spectator, which is consistent with the context. However, it does not address or verify the earlier assumption A, which concerns the speaker's belief in the legitimacy of the UN Security Council as a forum where diplomatic norms matter. While Elizabeth Whelan's presence and speech may"
     },
     {
       "a_turn_idx": 17,
@@ -2661,7 +2661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Elizabeth Whelan refers to Paul Whelan, her brother, who is detained in Russia; 'she' in turn refers to Elizabeth Whelan.\",\n  \"reason\": \"Claim C states that Elizabeth Whelan spoke at the UN prior to the Security Council session, which aligns with the context of diplomatic engagement at the UN. While C does not explicitly restate the legitimacy of the UN Security Council as a forum for diplomatic norms, it demonstrates active participation in the Council’s proceedings—a clear"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Elizabeth Whelan refers to Paul Whelan, her brother, who is detained in Russia; 'she' in turn refers to Elizabeth Whelan.\",\n  \"reason\": \"Claim C states that Elizabeth Whelan spoke at the UN prior to the Security Council session, which aligns with the broader context of diplomatic engagement at the UN. While A asserts that the speaker views the UN Security Council as a legitimate forum where diplomatic norms matter, C does not explicitly restate this belief. However,"
     },
     {
       "a_turn_idx": 17,
@@ -2781,7 +2781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, not Lavrov. The claim in C is about the speaker's lack of familiarity with their brother's current appearance, which is unrelated to the diplomatic weight of Lavrov's remarks.\",\n  \"reason\": \"Claim C discusses the personal emotional impact of not knowing one's brother's current appearance due to imprisonment, while assumption A concerns the perceived diplomatic significance of Lavrov's statements. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, not Lavrov. The claim in C is about the speaker's lack of familiarity with their brother's current appearance, which is unrelated to the diplomatic weight of Lavrov's remarks.\",\n  \"reason\": \"Claim C discusses the speaker's personal emotional reaction to not recognizing their brother due to prolonged detention, while assumption A concerns the perceived diplomatic significance of Lavrov's statements. There is no overlap in"
     },
     {
       "a_turn_idx": 18,
@@ -2796,7 +2796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to the brother mentioned in the context, not Lavrov. The belief in C is about ongoing support for the brother, not about Lavrov's diplomatic weight.\",\n  \"reason\": \"Claim C discusses the speaker's belief that efforts to support the brother continue, which is unrelated to the earlier assumption A about Lavrov’s remarks carrying diplomatic weight. Although both involve Russia and a sense of political struggle, the subject and focus differ significantly."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to the brother mentioned in the context, not Lavrov. The earlier assumption A concerns Lavrov's diplomatic weight, while claim C discusses ongoing support for the brother, a different individual.\",\n  \"reason\": \"Claim C expresses belief in continued efforts to support the brother, which is unrelated to the assumption that Lavrov’s remarks carry diplomatic weight. Although both involve Russia and a sense of resistance, the subject and focus differ significantly. No"
     },
     {
       "a_turn_idx": 18,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the Americans left behind in Sudan, as established by the context of the conversation about evacuation risks.\",\n  \"reason\": \"Claim C states that the person addressed (Americans in Sudan) will be in serious danger, which aligns with the general concern about safety expressed in assumption A. However, A specifically emphasizes the moral importance of evacuating embassy employees, while C focuses on physical danger without explicitly addressing morality or the act of evacuation itself"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the Americans left behind in Sudan, as established by the context of the conversation about evacuation risks.\",\n  \"reason\": \"Claim C states that the person addressed (Americans left behind) will be in serious danger, which aligns with the general concern about safety expressed in assumption A. However, A specifically emphasizes the moral importance of evacuating embassy employees, while C focuses on physical danger without explicitly addressing morality or the act of evacuation itself"
     },
     {
       "a_turn_idx": 19,
@@ -3066,7 +3066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 36, 'him' refers to the speaker's brother, who was imprisoned by Russia. This is distinct from the embassy employees mentioned in turn 19.\",\n  \"reason\": \"Claim C discusses ongoing support for the speaker's brother, who is a separate individual from the embassy employees referenced in assumption A. While both involve moral concern and advocacy, C does not address evacuation efforts or the moral importance of rescuing embassy personnel. The core subject and context differ significantly"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to the speaker's brother, who is detained in Russia. This is unrelated to the evacuation of embassy employees mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses ongoing support for a detained individual (the speaker's brother) and the persistence of advocacy efforts, which is entirely separate from the moral importance of evacuating embassy employees in Sudan. There is no overlap in subject matter, context, or implied connection between the two claims."
     },
     {
       "a_turn_idx": 19,
@@ -3111,7 +3111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 25 refers to the current global conflict involving Russia and Ukraine, which is linked to broader geopolitical tensions described in earlier turns. 'My father's war' refers to World War II, establishing a historical parallel.\",\n  \"reason\": \"Turn 25 draws a broad historical analogy between the current conflict and World War II, emphasizing the scale and global nature of the threat. However, it does not explicitly address or verify the specific assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 25 refers to the current geopolitical situation involving Russia's aggression in Ukraine and broader global tensions, which is linked to the speaker's personal history with World War II.\",\n  \"reason\": \"Turn 25 draws a parallel between the current global conflict and the speaker's father's experience in World War II, emphasizing the gravity and scale of the situation. However, it does not explicitly address or verify the assumption in turn 19—that"
     },
     {
       "a_turn_idx": 19,
@@ -3126,7 +3126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 37, 'I' refers to SPEAKER_06, who previously discussed the evacuation efforts in Sudan (turn 19). The phrase 'I was able to do it for him' refers to representing someone else (likely Paul Whelan) at the UN, which aligns with the idea of fulfilling a role on behalf of another.\",\n  \"reason\": \"Turn 19 asserts that the speaker believed their role or actions were essential to the evacuation's"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 37, 'I' refers to SPEAKER_06, who previously discussed the evacuation efforts in Sudan (turn 19). The phrase 'I was able to do it for him' refers to representing someone else (likely Paul Whelan) at the UN, which aligns with the idea of fulfilling a role on behalf of another.\",\n  \"reason\": \"Turn 37 indicates that the speaker fulfilled a representational role on behalf of someone else ("
     },
     {
       "a_turn_idx": 19,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the speaker (SPEAKER_06), who is discussing Russian diplomatic strategy. The claim 'Lazy' refers to a characterization of Russia's approach, not related to the number or status of stranded Americans.\",\n  \"reason\": \"Claim C discusses the Russian diplomatic strategy being labeled 'Lazy', which is unrelated to the assumption A about having reliable information on stranded Americans. There is no mention of the number, status,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Lavrov, as established by context (turn 36 mentions Lavrov and the speaker's desire to confront him). The claim in turn 37 is about labeling Russian diplomatic strategy as 'Lazy', which is unrelated to the assumption in turn 20 about access to reliable information regarding stranded Americans.\",\n  \"reason\": \"Turn 20 assumes the speaker has reliable information about the number and status of stranded Americans"
     },
     {
       "a_turn_idx": 20,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to Lavrov, as established by the context of addressing him directly. 'Your brother' in turn 31 refers to Paul Whelan, who is the subject of the discussion.\",\n  \"reason\": \"Turn 31 expresses a desire for Lavrov to empathize with the emotional pain of missing a sibling over four years, which touches on the theme of emotional distress due to separation. However, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to Lavrov, as established by the context of addressing him directly. 'Your brother' in turn 31 refers to Paul Whelan, who is the subject of the discussion.\",\n  \"reason\": \"Turn 31 expresses a desire for Lavrov to empathize with the emotional pain of missing a sibling over four years, which touches on the theme of emotional weight related to separation. However, it does not explicitly"
     },
     {
       "a_turn_idx": 21,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to 'the current team on the ground, both the United Nations and U.S. officials', which aligns with the actors mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly identifies multiple actors involved in the conflict—UAE, Egypt, General Haftar, and other regional factors—which directly supports the idea that evacuation efforts require coordination among multiple actors, as stated in assumption A. While A focuses on the need"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to 'the current team on the ground, both the United Nations and U.S. officials', which aligns with the actors mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly identifies multiple actors involved in the conflict—UAE, Egypt, General Haftar, and other regional factors—which directly supports the idea that evacuation efforts require coordination among multiple actors, as stated in assumption A. While A focuses on the U"
     },
     {
       "a_turn_idx": 21,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to the speaker's brother, who is detained in Russia. This is unrelated to the earlier assumption A, which concerns public scrutiny of U.S. evacuation efforts in Sudan.\",\n  \"reason\": \"Claim C discusses ongoing support for a detained individual (the speaker's brother) in Russia, focusing on personal advocacy and media visibility. Assumption A addresses U.S. response to evacuation challenges in Sudan under conflict conditions. There is no overlap in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to the speaker's brother, who is detained in Russia. This is unrelated to the earlier assumption A, which concerns public scrutiny of U.S. evacuation efforts in Sudan.\",\n  \"reason\": \"Claim C discusses ongoing support for a detained individual (the speaker's brother) in Russia, focusing on emotional and political advocacy. Assumption A is about U.S. evacuation efforts in Sudan and the impact of perceived insufficiency on public scrutiny"
     },
     {
       "a_turn_idx": 22,
@@ -3424,9 +3424,9 @@
       "c_time": 1430.374,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the State Department' in A and 'Justice Department' in C are distinct entities.",
-      "reason": "Claim C discusses the Justice Department's involvement in an airline investigation, which is entirely unrelated to the State Department's role in coordinating evacuations as mentioned in assumption A. There is no overlap in subject matter, entity, or implied connection. Thus, the claim contradicts the relevance of A and cannot be seen as verifying it.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the State Department' in A and 'Justice Department' in C are distinct entities.\",\n  \"reason\": \"Claim C discusses the Justice Department's involvement in an airline investigation, which is entirely unrelated to the State Department's role in coordinating evacuations as mentioned in assumption A. There is no overlap in subject matter, entity, or implied connection. Thus, the claim contradicts the relevance of A and cannot be seen as verifying it.\"\n}\n``````"
+      "coref_notes": "No coreference resolution needed; 'the State Department' in A and 'Justice Department' in C refer to distinct entities.",
+      "reason": "Claim C discusses the Justice Department's involvement in an airline investigation, which is entirely unrelated to the State Department's role in coordinating evacuations as stated in assumption A. There is no overlap in subject matter, entity, or implied connection. Thus, the claim contradicts the relevance of A and cannot be seen as making it explicit.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the State Department' in A and 'Justice Department' in C refer to distinct entities.\",\n  \"reason\": \"Claim C discusses the Justice Department's involvement in an airline investigation, which is entirely unrelated to the State Department's role in coordinating evacuations as stated in assumption A. There is no overlap in subject matter, entity, or implied connection. Thus, the claim contradicts the relevance of A and cannot be seen as making it explicit.\"\n}"
     },
     {
       "a_turn_idx": 22,
@@ -3441,7 +3441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my father' in turn 25 refers to Speaker_08's father, establishing a personal connection to World War II. No coreference links to the earlier assumption A (turn 22) exist.\",\n  \"reason\": \"Claim C (turn 25) draws a parallel between the current geopolitical situation and World War II based on personal experience, but does not address or verify the earlier assumption A, which concerns the risk of deterioration in the Sudan"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 25 refers to SPEAKER_08, who is reflecting on the current global situation in comparison to World War II. The reference to 'my father's war' establishes personal context but does not directly connect to the earlier assumption about the risk of deterioration in Sudan.\",\n  \"reason\": \"Claim C draws a parallel between the current geopolitical situation and World War II, emphasizing global conflict and aggression. However, it does not explicitly address or"
     },
     {
       "a_turn_idx": 22,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Biden administration' in claim C refers to the U.S. government, specifically the leadership under President Biden, which aligns with the broader context of U.S. diplomatic actions discussed in turn 22.\",\n  \"reason\": \"Claim C states that the Biden administration was manipulated in a negotiation involving prisoner exchanges, specifically by releasing a dangerous arms dealer for only one hostage instead of two. While this reflects a belief in poor strategic decision-making, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Biden administration' in claim C refers to the U.S. government, specifically the leadership under President Biden, which aligns with the broader context of U.S. diplomatic actions discussed in turn 22.\",\n  \"reason\": \"Claim C states that the Biden administration was 'played' by releasing a dangerous arms dealer for only one hostage instead of two, implying a strategic miscalculation or manipulation in negotiations. However, this does not directly address or verify"
     },
     {
       "a_turn_idx": 22,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, who was previously mentioned in turn 32 and 33.\",\n  \"reason\": \"Claim C (turn 34) states that the speaker has no current visual knowledge of their brother's appearance, which is unrelated to assumption A (turn 22), which concerns the potential deterioration of a geopolitical situation if not managed properly. There is no overlap in subject matter, semantics, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, who was imprisoned by the regime mentioned in turn 32.\",\n  \"reason\": \"Claim C (turn 34) states that the speaker has no current visual knowledge of their brother's appearance, which is unrelated to assumption A (turn 22), which concerns the potential deterioration of a geopolitical situation in Sudan if not managed properly. There is no overlap in subject matter, context,"
     },
     {
       "a_turn_idx": 22,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, who is mentioned in turn 32 and 33 as being imprisoned and previously seen only at his trial three years ago.\",\n  \"reason\": \"Claim C states that the speaker has no idea what their brother looks like now, which is unrelated to assumption A, which concerns the potential deterioration of the situation in Sudan if not managed properly. There is no overlap in subject matter, context,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 34 refers to the speaker's brother, who is mentioned in prior turns as being imprisoned by the regime.\",\n  \"reason\": \"Claim C states that the speaker does not know what their brother looks like, which is unrelated to assumption A, which concerns the potential deterioration of the situation in Sudan if not managed properly. There is no overlap in subject matter, context, or semantic content between the two statements. Claim C discusses personal loss of"
     },
     {
       "a_turn_idx": 22,
@@ -3636,7 +3636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to Russia's diplomatic approach, which is explicitly linked to the behavior described in assumption A—Russia's rhetoric undermining its credibility. The term 'less than sophisticated' in C directly addresses the lack of credibility and maturity implied in A.\",\n  \"reason\": \"Claim C explicitly states that Russia's diplomatic approach involves arbitrarily detaining American citizens to extract concessions, which directly verifies the substance of assumption A—that Russia’s rhetoric undermines its credibility as a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to Russia's diplomatic approach, which is explicitly linked to the behavior described in assumption A—Russia's rhetoric undermining its credibility. The term 'less than sophisticated' directly addresses the lack of credibility and maturity implied in A.\",\n  \"reason\": \"Claim C explicitly states that Russia's diplomatic approach involves arbitrarily detaining American citizens to extract concessions, which directly verifies the substance of assumption A—that Russia’s rhetoric undermines its credibility as a diplomatic partner"
     },
     {
       "a_turn_idx": 23,
@@ -3711,7 +3711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to the imprisoned individual (Paul Whelan), and 'I' refers to SPEAKER_06, who is speaking on behalf of Paul.\",\n  \"reason\": \"Claim C states that the speaker believes they were able to fulfill the role of being present on behalf of someone else (Paul Whelan). This does not relate to or verify assumption A, which concerns the belief that public criticism by high-ranking officials reflects genuine state"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Paul Whelan, as established in turn 36 and context. 'I' refers to SPEAKER_06.\",\n  \"reason\": \"Claim C states that the speaker believes they were able to fulfill the role of being present on behalf of someone else (Paul Whelan), which is unrelated to assumption A, which concerns the belief that public criticism by high-ranking officials reflects genuine state policy. There is no mention"
     },
     {
       "a_turn_idx": 23,
@@ -3726,7 +3726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 42 refers to the group of individuals involved in advocating for Paul Wieland's release, consistent with the context of diplomatic efforts mentioned in earlier turns.\",\n  \"reason\": \"Claim C states that actions are effectively communicating a message despite lack of direct diplomacy, which aligns with the broader theme of indirect pressure and advocacy seen in the conversation. However, it does not explicitly address or verify the specific assumption A—that public criticism by high-ranking"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 42 refers to the group of individuals, including the speaker, who are attempting to secure Paul Wieland's release. 'Our point' refers to the broader diplomatic or moral stance being communicated through actions.\",\n  \"reason\": \"Claim C states that actions are effectively communicating a message despite the absence of direct diplomacy, which aligns with a general belief in indirect influence. However, it does not explicitly address or verify the specific assumption in"
     },
     {
       "a_turn_idx": 23,
@@ -3831,7 +3831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Ukraine' in claim C refers to the same entity discussed in assumption A, which involves geopolitical dynamics including Russian aggression and international negotiations. No ambiguous references exist.\",\n  \"reason\": \"Claim C explicitly states that Ukraine should negotiate from a position of strength rather than weakness, which directly verifies the underlying assumption in A that geopolitical power dynamics—particularly involving Russia and Western powers—determine the feasibility and outcome of negotiations. The emphasis on strength as a precondition for negotiation align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Ukraine' in claim C refers to the same entity discussed in assumption A, which involves geopolitical dynamics including external actors like Russia and the U.S. The reference to 'position of strength' directly aligns with the idea that negotiations must be based on strategic advantage, not weakness, which implicitly supports the notion that the conflict is shaped more by global power struggles than purely local factors.\",\n  \"reason\": \"Claim C explicitly states that Ukraine should negotiate from a position of"
     },
     {
       "a_turn_idx": 23,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 25 refers to the audience/listeners; 'my father's war' refers to World War II, which is explicitly linked to the current global conflict.\",\n  \"reason\": \"Claim C states that the current geopolitical situation resembles the global conflict of World War II, which aligns with the broader implication in assumption A that the conflict in Sudan is driven by larger geopolitical competition—specifically involving Russia, the U.S., and regional powers—"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 25 refers to the audience/listeners; 'my father's war' refers to World War II, which is explicitly linked to the current global conflict.\",\n  \"reason\": \"Claim C states that the current geopolitical situation resembles the global conflict of World War II, which aligns with the broader implication in assumption A that the Sudan conflict is driven by larger geopolitical competition—specifically involving Russia and China—mirroring the global power struggles of"
     },
     {
       "a_turn_idx": 23,
@@ -4941,7 +4941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Elizabeth Whelan refers to the sister of Paul Whelan mentioned in turn 29; 'her' in turn 29 refers to Elizabeth Whelan.\",\n  \"reason\": \"Turn 30 explicitly states that Elizabeth Whelan is joining the conversation, which confirms her presence and active role as described in turn 29. While turn 29 assumes her trustworthiness and moral standing, turn 30 does not explicitly verify those attributes—only her participation. However"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Elizabeth Whelan refers to the sister of Paul Whelan mentioned in turn 29; 'her' in turn 29 refers to Elizabeth Whelan.\",\n  \"reason\": \"Turn 30 explicitly states that Elizabeth Whelan is joining the conversation, which confirms her presence and active role as the speaker referenced in turn 29. While it does not directly restate the trust in her account or moral standing, it explicitly verifies her identity and participation, which is essential to"
     },
     {
       "a_turn_idx": 29,
@@ -5046,7 +5046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 51 refers to SPEAKER_03, who is discussing the Justice Department's investigation into Southwest Airlines. This is unrelated to the earlier assumption about naming and shaming countries influencing policy.\",\n  \"reason\": \"Turn 51 states that the speaker is not ready to publicly disclose certain details regarding the investigation into Southwest Airlines. This is entirely unrelated to the earlier assumption (turn 29) that naming and sh"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 51 refers to SPEAKER_03, who is discussing airline investigations and passenger reimbursements.\",\n  \"reason\": \"Claim C (turn 51) states that the speaker is not ready to publicly disclose certain details, which is unrelated to assumption A (turn 29), which concerns the belief that naming and shaming countries publicly influences policy outcomes. There is no overlap in subject matter, intent, or"
     },
     {
       "a_turn_idx": 29,
@@ -5061,7 +5061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 53 refers to SPEAKER_06, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 53) discusses ongoing investigations into passenger complaints and ensuring all affected individuals are properly cared for, which is unrelated to the earlier assumption A (turn 29) about naming and shaming countries influencing policy outcomes. There is no overlap in subject matter, intent, or semantic content between the two"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 53 refers to SPEAKER_06, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 53) discusses ongoing investigations into passenger complaints and ensuring all affected individuals are properly cared for, which is unrelated to the earlier assumption A (turn 29) about naming and shaming countries influencing policy outcomes. There is no overlap in subject matter, intent, or semantic content. The two"
     },
     {
       "a_turn_idx": 30,
@@ -5181,7 +5181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 36, 'him' refers to Paul Whelan, as established in the context where Elizabeth Whelan discusses her brother's imprisonment and recent contact with him.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes efforts to support Paul Whelan (referred to as 'him') continue and will persist. This directly verifies the substance of assumption A, which posits that the listener values the speaker’s perspective on grief and will respond appropriately. The speaker’s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in claim C refers to Paul Whelan, as established in the context where Elizabeth Whelan discusses her brother's imprisonment and recent contact with him.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes efforts to support Paul Whelan (referred to as 'him') will continue, which directly verifies the earlier assumption A that the listener values the speaker’s perspective on grief and will respond appropriately. The emotional weight and ongoing advocacy expressed in C—"
     },
     {
       "a_turn_idx": 31,
@@ -5196,7 +5196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 53 refers to SPEAKER_06, who is not the same individual as the speaker in turn 31 (SPEAKER_06 in turn 31 is Elizabeth Whelan, while in turn 53 it is likely a different speaker, possibly a government official).\",\n  \"reason\": \"Claim C (turn 53) discusses ongoing investigations into airline passenger complaints and ensuring all passengers"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_06, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 53) discusses ongoing investigations into passenger complaints and ensuring all affected individuals are properly cared for, which is unrelated to assumption A (turn 31), which concerns the listener valuing the speaker’s perspective on grief and responding appropriately. There is no overlap in subject matter, intent, or content. C does"
     },
     {
       "a_turn_idx": 32,
@@ -5301,7 +5301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Paul Whelan, as established in the context (e.g., 'my brother', 'Paul Whelan'). 'Lavrov' is the subject of the gaze described in turn 32, and the speaker's desire to be present at the event aligns with the emotional weight of confronting the regime.\",\n  \"reason\": \"Turn 37 explicitly states that the speaker 'loved to have been there'"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Paul Whelan, as established in the context (e.g., 'my brother', 'Paul Whelan'). 'Lavrov' is the subject of the gaze described in both A and C.\",\n  \"reason\": \"Claim C explicitly states that the speaker 'loved to have been there' to confront Lavrov, which directly verifies the emotional and symbolic significance of being present during the detention-related event—precis"
     },
     {
       "a_turn_idx": 32,
@@ -5312,11 +5312,11 @@
       "claim_text": "The speaker is not ready to publicly disclose certain details at this time.",
       "overlap_score": 2,
       "c_time": 1478.239,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 51 refers to SPEAKER_03, who is discussing the Justice Department's investigation into Southwest Airlines. This is unrelated to the earlier assumption about publicly supporting detainees.\",\n  \"reason\": \"Turn 51 states that the speaker is not ready to publicly disclose certain details regarding the Justice Department's investigation into Southwest Airlines. This topic is entirely unrelated to the earlier assumption (turn 32), which concerns public support"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No relevant coreference links; 'the speaker' in turn 51 refers to SPEAKER_03, who is discussing airline investigations, not detainee advocacy.",
+      "reason": "Claim C (turn 51) discusses the speaker's unwillingness to disclose information about airline investigations, which is unrelated to the earlier assumption A about publicly supporting detainees to strengthen credibility. There is no overlap in topic, subject, or semantic content. The claims are entirely disconnected.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in turn 51 refers to SPEAKER_03, who is discussing airline investigations, not detainee advocacy.\",\n  \"reason\": \"Claim C (turn 51) discusses the speaker's unwillingness to disclose information about airline investigations, which is unrelated to the earlier assumption A about publicly supporting detainees to strengthen credibility. There is no overlap in topic, subject, or semantic content. The claims are entirely disconnected.\"\n}\n```"
     },
     {
       "a_turn_idx": 34,
@@ -5361,7 +5361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the person' in turn 47 refers to Don Lemon, unrelated to the brother mentioned in turn 34.\",\n  \"reason\": \"Claim C (turn 47) states that Don Lemon will forever be part of CNN and its family, which is unrelated to the earlier assumption A about valuing visual recognition to maintain emotional closeness with a brother. There is no overlap in subject matter, context, or semantic content. The topics shift"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the person' in turn 47 refers to Don Lemon, unrelated to the brother mentioned in turn 34.\",\n  \"reason\": \"Claim C (turn 47) states that Don Lemon will forever be part of CNN and its family, which is unrelated to the earlier assumption A about valuing visual recognition to maintain emotional closeness with a brother. There is no overlap in subject matter, context, or semantic content. The topics are"
     },
     {
       "a_turn_idx": 35,
@@ -5421,7 +5421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Paul, the brother of the speaker. In turn 42, 'Paul' is referenced again, confirming continuity of subject.\",\n  \"reason\": \"Turn 42 states that the speaker believes their actions are effective in communicating a message, which aligns with the broader theme of advocacy and visibility for Paul. However, it does not explicitly address or verify the specific belief about Paul's past life being valuable and meaningful"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Paul, the brother mentioned throughout the conversation. In turn 42, 'Paul' is referenced again, confirming continuity of subject.\",\n  \"reason\": \"Turn 35 expresses the assumption that Paul's past life was valuable and meaningful, implied through the emotional weight of losing contact and the act of posting old pictures. Turn 42 states that the speaker believes their actions are effectively communicating a message despite lack of"
     },
     {
       "a_turn_idx": 35,
@@ -5436,7 +5436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 53 refers to SPEAKER_06, who is the same speaker as in turn 35.\",\n  \"reason\": \"Turn 53 discusses continuing investigations into passenger complaints and ensuring all affected individuals are properly cared for. This is unrelated to the earlier assumption in turn 35, which concerns the belief that the individual's past life was valuable and meaningful. There is no overlap in semantic content between the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 53 refers to SPEAKER_06, who is also the subject in turn 35.\",\n  \"reason\": \"Turn 53 discusses continuing investigations into passenger complaints and ensuring all affected individuals are properly cared for. This is unrelated to the earlier assumption in turn 35, which concerns the belief that the individual's past life was valuable and meaningful. There is no overlap in semantic content between the two"
     },
     {
       "a_turn_idx": 35,
@@ -5481,7 +5481,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 36 refers to the brother, and 'they' refers to the Russian state media.\",\n  \"reason\": \"Claim C discusses the absence of a planned meeting between U.S. and Russian foreign ministers, which is unrelated to the assumption in A that Russian state media typically does not broadcast speeches critical of Russia. While both relate to Russia's media and diplomatic behavior, C does not address or verify the substance of A. The connection"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 36 refers to the brother, and 'they' refers to the Russian state media.\",\n  \"reason\": \"Claim C discusses the absence of a planned meeting between U.S. and Russian foreign ministers, which is unrelated to the assumption in A that Russian state media typically does not broadcast speeches critical of Russia. While both relate to Russia's media and diplomatic behavior, C does not address or verify the substance of A. The mention"
     },
     {
       "a_turn_idx": 36,
@@ -5541,7 +5541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 36 refers to the brother, who is the subject of the broadcast on Russian TV.\",\n  \"reason\": \"Turn 42 discusses the absence of a planned meeting between U.S. and Russian officials, which is unrelated to the assumption in turn 36 about broadcasting a foreign political message implying strategic or symbolic tolerance. While both involve Russia and international diplomacy, turn 42 does not address or verify the implication of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 36 refers to the brother, and 'they' refers to Russia. Turn 42 discusses a diplomatic meeting between U.S. and Russian officials, which is tangentially related to the broader geopolitical context but does not address the implication of broadcasting a political message on Russian TV.\",\n  \"reason\": \"Turn 42 discusses the absence of a planned meeting between U.S. and Russian foreign ministers, which is a diplomatic"
     },
     {
       "a_turn_idx": 36,
@@ -5556,7 +5556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'he' in A refers to the brother, while 'the announcement' in C refers to Biden's potential reelection announcement.\",\n  \"reason\": \"Claim C discusses the tone of a future political announcement (low-key vs. grandiose), which is entirely unrelated to assumption A, which concerns the authenticity of a brother's emotional reaction to a speech broadcast on Russian television. There is no overlap in subject matter, context"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 36 refers to the brother, but turn 64 discusses a different topic entirely (Biden's campaign announcement style).\",\n  \"reason\": \"Turn 64 discusses the tone of President Biden's potential reelection announcement (low-key vs. grandiose), which is unrelated to the earlier assumption in turn 36 about trusting a positive reaction as genuine emotional impact rather than politeness. There is no overlap in"
     },
     {
       "a_turn_idx": 37,
@@ -5661,7 +5661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in turn 53 refers to passengers, not the individuals mentioned in turn 38.\",\n  \"reason\": \"Turn 53 discusses ongoing investigations into airline passenger complaints and ensuring all affected parties are properly compensated. This is unrelated to the earlier assumption in turn 38, which concerns the perceived pattern or connection between the arrests of Paul Whelan, Trevor Reed, and Evan Gerskovich. There is no mention of these"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in C refers to passengers, not the individuals mentioned in A.\",\n  \"reason\": \"Claim C discusses ongoing investigations into airline passenger complaints and ensuring all passengers are properly cared for, which is unrelated to the belief that the arrests of Paul Whelan, Trevor Reed, and Evan Gerskovich are connected or part of a pattern. There is no mention of the individuals, their arrests, or any pattern in the claims. Thus, C"
     },
     {
       "a_turn_idx": 38,
@@ -5676,7 +5676,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Republican candidate' refers to a future opponent in the election, distinct from the individuals mentioned in turn 38.\",\n  \"reason\": \"Claim C (turn 66) discusses the perceived contrast between Biden and the Republican candidate in the upcoming election, focusing on messaging and political strategy. This is entirely unrelated to assumption A (turn 38), which concerns the belief that the arrests of Paul Whelan, Trevor Reed, and Evan G"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Republican candidate' refers to a future opponent in the election, distinct from the individuals mentioned in turn 38.\",\n  \"reason\": \"Claim C (turn 66) discusses the perceived contrast between Biden and the Republican candidate in the upcoming election, focusing on messaging and political strategy. This is entirely unrelated to assumption A, which concerns the belief that the arrests of Paul Whelan, Trevor Reed, and Evan Gerskovich are connected"
     },
     {
       "a_turn_idx": 38,
@@ -8781,7 +8781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 80 refers to Cosgrove, the officer discussed in turn 75. 'That' in 'that cleared him' refers to the state of Kentucky's determination of no wrongdoing.\",\n  \"reason\": \"Claim C explicitly identifies a 'good old boy' system in law enforcement/legal proceedings, which directly supports the broader societal expectation of justice mentioned in assumption A. While A focuses on public expectations regarding consequences for lethal force, C explains"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 80 refers to Cosgrove, the officer discussed in turn 75. 'That' in 'that cleared him' refers to the state of Kentucky's determination of no wrongdoing.\",\n  \"reason\": \"Claim C explicitly identifies a 'good old boy' system in law enforcement/legal proceedings, which directly supports the broader societal expectation of justice (assumption A) by implying systemic failure to hold officers accountable. While C does not repeat"
     },
     {
       "a_turn_idx": 79,
@@ -8796,7 +8796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 79 refers to the officer involved in the raid, and 'a grand jury' in turn 79 refers to the federal grand jury mentioned in turn 80. The phrase 'a federal grand jury was convened' in turn 80 explicitly confirms the existence and action of the grand jury implied in turn 79.\",\n  \"reason\": \"Turn 80 explicitly states that a federal grand jury was convened, which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 79 refers to the officer involved in the raid, and 'a grand jury' in turn 79 refers to the federal grand jury mentioned in turn 80.\",\n  \"reason\": \"Turn 80 explicitly states 'A federal grand jury was convened,' which directly verifies the substance of assumption A in turn 79, which claims that the involvement of a grand jury implies a formal investigation into potential criminal conduct. The mention"
     },
     {
       "a_turn_idx": 79,
@@ -8826,7 +8826,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 79 refers to the officer mentioned in prior turns (likely Cosgrove), and 'miles' in turn 80 is likely a reference to another individual involved in the case, possibly Miles (a name mentioned in context). The phrase 'this good old boy system' in turn 80 directly references systemic bias or favoritism in law enforcement.\",\n  \"reason\": \"Claim C explicitly identifies a 'good old boy system"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 80 refers to the systemic issue described in turn 79, specifically the pattern of misconduct and lack of accountability involving false statements to obtain a warrant and the subsequent leniency shown by grand juries.\",\n  \"reason\": \"Claim C explicitly identifies a 'good old boy system' in law enforcement or legal proceedings, which directly verifies the underlying assumption in A—that there is a credible basis for believing false statements were made to obtain a"
     },
     {
       "a_turn_idx": 82,

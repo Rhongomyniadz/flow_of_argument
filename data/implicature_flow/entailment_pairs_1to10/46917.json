@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 24 refers to SPEAKER_05, who is discussing interactions with various officials including 'commissioners'. However, 'the speaker' in assumption A refers to SPEAKER_03, who announces the lottery game. There is no direct link between SPEAKER_05 and SPEAKER_03, nor does turn 24 address the legitimacy or authority to announce a game.\",\n  \"reason\": \"Turn 24"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 24 refers to SPEAKER_05, who is the speaker in the current context. 'Commissioners' refers to government officials mentioned in the same sentence.\",\n  \"reason\": \"Turn 24 mentions the speaker's interactions with government commissioners, which implies some level of official engagement. However, this does not explicitly confirm or verify the earlier assumption that the speaker has authority or legitimacy to announce when it is time to play the game"
     },
     {
       "a_turn_idx": 0,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 24 refers to SPEAKER_05, who is the speaker in the current context. 'Mayors' is a plural noun referring to local government officials.\",\n  \"reason\": \"Turn 24 mentions that the speaker has met with mayors, which indicates engagement with local authorities, but does not establish or verify the speaker's authority or legitimacy to announce when it is time to play a game. The claim in turn 0"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 24 refers to SPEAKER_05, who is the speaker in the current context. 'Mayors' is a plural noun referring to local government officials.\",\n  \"reason\": \"Turn 24 mentions that the speaker has met with mayors, which indicates engagement with local authorities, but does not establish or verify the speaker's authority or legitimacy to announce when it is time to play the game. There is no direct or indirect"
     },
     {
       "a_turn_idx": 0,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the state legislature' refers to the legislative body responsible for creating policies, and 'they' in turn refers to the state legislature. No coreference resolves to the speaker in turn 3.\",\n  \"reason\": \"Claim C asserts that the speaker assumes good intentions on behalf of the state legislature, which directly contradicts assumption A, where the speaker believes the right to bear arms includes a duty to use force against the state if necessary. Assumption A implies deep distrust"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to the state legislature, which is consistent with the subject of assumption A. However, the claim in C assumes good intentions on behalf of the state legislature, which directly contradicts the aggressive stance in A that the right to bear arms includes a duty to use force against the state.\",\n  \"reason\": \"Assumption A asserts a belief in the necessity of using force against the state if rights are threatened, implying deep distrust and"
     },
     {
       "a_turn_idx": 3,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in both A and C refers to SPEAKER_01.\",\n  \"reason\": \"Claim C (turn 33) expresses admiration for Lauren Boebert and her dedication to preserving American rights, but it does not mention or imply anything about the right to bear arms or a duty to use force against the state. Assumption A (turn 3) is a specific ideological claim about the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'She' in C refers to Lauren Boebert, distinct from the subject of A.\",\n  \"reason\": \"Claim C expresses admiration for Lauren Boebert's political activity and dedication, particularly in defending constitutional rights. However, it does not address or verify the specific assumption in A—that the right to bear arms includes a duty to use force against the state. While both A and C touch on resistance to government"
     },
     {
       "a_turn_idx": 3,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 13 refers to Democrats, which aligns with the broader ideological framing in turn 4.\",\n  \"reason\": \"Claim C (turn 13) discusses lack of visibility into legislative processes and criticizes partisan dynamics in the House, particularly Democrats pushing bills without debate. However, it does not address or verify the specific ideological divide regarding the construction of legitimacy mentioned in assumption A (turn 4). While both statements reflect"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 13 refers to Democrats, which aligns with the broader ideological framing in turn 4.\",\n  \"reason\": \"Claim C (turn 13) discusses lack of transparency and bipartisanship in legislative processes, focusing on unilateral Democratic actions and forced votes. However, it does not address or verify the specific ideological divide regarding the construction of legitimacy mentioned in assumption A (turn 4). While both statements reflect a"
     },
     {
       "a_turn_idx": 5,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Democrats' as established in turn 10, which matches the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that the Democrats' goal in packing the Supreme Court is to achieve ultimate power and control, which directly verifies the core substance of assumption A—that packing the Supreme Court is a legitimate and current policy issue worth discussing—by framing it as a strategic move for dominance. The claim does not merely imply"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Democrats' as established in turn 10, which explicitly states their intent to gain ultimate power and control through Supreme Court packing.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by stating that the Democrats' motivation for packing the Supreme Court is to achieve 'ultimate power and control,' which aligns precisely with the core idea in A that the issue is legitimate and worth discussing due to its implications"
     },
     {
       "a_turn_idx": 8,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Democrats, as established in turn 9 and turn 10 where the speaker discusses Democratic actions and motivations.\",\n  \"reason\": \"Claim C explicitly states that the Democrats’ goal in packing the Supreme Court is to achieve ultimate power and control, which directly and unambiguously verifies the substance of assumption A, which posits that the listener shares skepticism toward legislative attempts to expand the Supreme Court—specifically, that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Democrats, as established in turn 10 where 'democrats already have a house they have the senate...' establishes the subject.\",\n  \"reason\": \"Claim C explicitly states that the Democrats’ goal in packing the Supreme Court is to achieve ultimate power and control, which directly verifies the substance of assumption A—the listener’s shared skepticism toward legislative attempts to expand the Supreme Court, specifically framed as a power grab. The phrasing"
     },
     {
       "a_turn_idx": 9,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Democrats' as established in turn 10, which discusses Democrats seeking control of the Supreme Court.\",\n  \"reason\": \"Claim C explicitly states that Democrats needed four additional justices to secure a majority on the Supreme Court, which directly verifies the substance of assumption A—that the listener shares skepticism toward legislative attempts to expand the Supreme Court. The mention of 'the number four' in turn 10, tied to securing a majority"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Democrats' as established in turn 10, which explicitly discusses Democrats seeking to pack the Supreme Court.\",\n  \"reason\": \"Claim C explicitly states that the Democrats needed four additional justices to secure a majority on the Supreme Court, which directly verifies the substance of assumption A—that the listener shares skepticism toward legislative attempts to expand the Supreme Court. The mention of 'the number four' in turn 10, tied to securing"
     },
     {
       "a_turn_idx": 9,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 12 refers to the Democratic Party, consistent with the context in turn 10 where the speaker criticizes the Democrats' pursuit of power.\",\n  \"reason\": \"Turn 12 raises a question about whether there is any alternative sensibility within the Democratic Party, which indirectly acknowledges the existence of internal diversity. However, it does not explicitly state or verify the assumption in turn 10—that the Democratic Party has a monolithic agenda"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 12 refers to the Democratic Party, consistent with the context in turn 10 where the speaker criticizes the Democrats' pursuit of power.\",\n  \"reason\": \"Turn 12 raises a question about whether there is any alternative sensibility within the Democratic Party, which indirectly acknowledges the existence of a dominant, unified Democratic stance—aligning with the assumption in turn 10 that the party acts with a monolithic agenda. However"
     },
     {
       "a_turn_idx": 10,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these policies' in turn 26 refers to Democratic policies discussed in prior turns, particularly those implemented by state legislatures under Democratic influence, as established in turn 25.\",\n  \"reason\": \"Claim C explicitly states that voters should be made aware of the real-world negative consequences of Democratic policies, which directly verifies the underlying assumption in A—that Democratic members should align against external threats (i.e., public ignorance or misinformation). By emphasizing exposure of policy impacts to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these policies' in turn 26 refers to Democratic policies discussed in earlier turns, particularly those related to state-level implementation and their negative real-world impacts on communities.\",\n  \"reason\": \"Claim C explicitly states that voters should be made aware of the actual consequences of Democratic policies, which directly verifies the underlying assumption in A—that Democratic members should align against external threats (i.e., to protect the public from harmful policy outcomes). The emphasis on exposing real-world harm caused"
     },
     {
       "a_turn_idx": 12,
@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 46 refers to SPEAKER_01, who is the same individual as in turn 29.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker works in the tech industry, which is unrelated to assumption A (turn 29), which concerns the audience's shared concern about media and tech power structures. While the speaker mentions being in the tech world, this does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' in turn 46 refers to SPEAKER_01.\",\n  \"reason\": \"Claim C states that the speaker works in the tech industry, which is unrelated to assumption A, which concerns the audience's shared concern about media and tech power structures. While the speaker mentions familiarity with the tech world in turn 46, this does not make assumption A explicit. There is no statement verifying or asserting that the audience shares the speaker’s concern"
     },
     {
       "a_turn_idx": 29,
@@ -2931,7 +2931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 46 refers to SPEAKER_01, who is the same speaker as in turn 29.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker studied the H1B visa issue due to their personal involvement in the tech sector. This is unrelated to assumption A (turn 29), which concerns the audience's shared concern about media and tech power structures. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 46 refers to SPEAKER_01, who is the same speaker as in turn 29.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker studied the issue due to their involvement in the tech sector, which is unrelated to assumption A (turn 29), which concerns the audience's shared concern about media and tech power structures. C provides no information about the audience's"
     },
     {
       "a_turn_idx": 29,
@@ -2946,7 +2946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 34 refers to Lauren Boebert, consistent with prior mentions in turns 31–33.\",\n  \"reason\": \"Claim C states that the speaker (Lauren Boebert) was delayed due to extra votes in Congress, which directly explains her lateness mentioned in turn 29 ('I'm actually three minutes late for my meeting now'). While turn 29 frames the delay as a consequence of advocacy-related responsibilities"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 34 refers to Lauren Boebert, consistent with prior mentions in turns 31–33.\",\n  \"reason\": \"Claim C states that the speaker (Lauren Boebert) was delayed due to extra votes in Congress, which directly explains her lateness mentioned in turn 29 ('I'm actually three minutes late for my meeting now'). While turn 29 implies the delay is due to advocacy-related responsibilities ("
     },
     {
       "a_turn_idx": 29,
@@ -2961,7 +2961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, as established in the prior dialogue. 'I' refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 43) discusses historical alignment with the Democratic position on protecting workers from job loss due to outsourcing, which is entirely unrelated to assumption A (turn 29), which concerns the social acceptability of delaying a meeting due to advocacy. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, and 'the Democrat side' refers to the Democratic Party. No coreference resolves to the earlier assumption about delaying meetings due to advocacy.\",\n  \"reason\": \"Claim C discusses historical alignment with Democratic positions on trade and worker protection, which is entirely unrelated to the earlier assumption A about the social acceptability of delaying a meeting due to advocacy. There is no mention of meeting delays, advocacy,"
     },
     {
       "a_turn_idx": 29,
@@ -2991,7 +2991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Lauren Boebert' in turn 33, which is the same person referenced as 'you' in turns 31 and 32. The pronoun 'she' in turn 33 refers to Lauren Boebert.\",\n  \"reason\": \"Claim C states that the speaker believes Lauren Boebert is amazing, which is a positive evaluation of her character and work ethic. However, assumption A is about the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Lauren Boebert' in turn 33, which is the same person referenced in turn 30 as 'the speaker' (SPEAKER_05). However, the belief expressed in C ('Lauren Boebert is amazing') does not align with or verify the assumption in A ('the group will welcome their return'). The claim in C is praise for Boebert’s work ethic and political stance, while"
     },
     {
       "a_turn_idx": 30,
@@ -3006,7 +3006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, who is distinct from SPEAKER_05 in A.\",\n  \"reason\": \"Claim C asserts that the bill's author is attempting to deceive the listener, which is unrelated to assumption A, which expresses belief that the group will welcome the speaker's return. There is no overlap in subject matter, sentiment, or content between A and C. C discusses political deception regarding H1B"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, who is distinct from the speaker in A (SPEAKER_05).\",\n  \"reason\": \"Claim C asserts that the bill's author is attempting to deceive the listener, which is unrelated to assumption A, which expresses belief that the group will welcome the speaker's return. There is no overlap in subject matter, sentiment, or content between A and C. C discusses political"
     },
     {
       "a_turn_idx": 30,
@@ -3036,7 +3036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Lauren' in turn 31, which resolves to SPEAKER_05 (Lauren Boebert) based on context and prior mention.\",\n  \"reason\": \"Turn 31 explicitly states 'I just want to say thank you' to Lauren, directly verifying the sentiment of gratitude implied in assumption A (trust allowing affectionate expression). The statement is clear, direct, and confirms the emotional tone and intent of A without"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Lauren' as the subject of gratitude, which aligns with SPEAKER_05's identity in the conversation. 'You' in turn 31 refers to SPEAKER_05 (Lauren), resolving coreference.\",\n  \"reason\": \"Turn 31 explicitly states 'I just want to say thank you' directed at Lauren, directly verifying the emotional sentiment of appreciation implied in assumption A. The claim is not only"
     },
     {
       "a_turn_idx": 31,
@@ -3051,7 +3051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the system' in C refers to political governance, but no clear link to Lauren's actions or representative behavior.\",\n  \"reason\": \"Claim C discusses the potential overgeneralization in political discourse, particularly regarding Democrats, and questions the breadth of criticism. However, it does not address or verify the specific assumption in A—that Lauren’s actions reflect a model for effective governance. There is no mention of Lauren, her conduct, or representative democracy in C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the system' in C refers to political governance, but no clear link to Lauren's actions or representative behavior.\",\n  \"reason\": \"Claim C discusses perceived overgeneralization in political discourse, particularly regarding Democrats, and questions the breadth of criticism. It does not address or verify the earlier assumption A that Lauren’s actions reflect model governance. There is no mention of Lauren, her conduct, or representative behavior. The topics diverge entirely—A focuses on"
     },
     {
       "a_turn_idx": 32,
@@ -3066,7 +3066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_01 refers to 'you' and 'we' in turn 39, which likely includes the listeners and the speaker(s). 'Everyone' in 'everyone hit the share button' refers to the audience, aligning with the listeners in turn 32.\",\n  \"reason\": \"Turn 39 calls on listeners to act as advocates by sharing content, which implies a level of engagement and trust in the relationship between speaker and audience. However, this"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_01 refers to 'you' and 'we' in turn 39, which likely includes the listeners and the speaker(s). 'Everyone' and 'what we're doing' refer to the collective audience and the show's mission.\",\n  \"reason\": \"Turn 39 claims that the speaker wants listeners to act as advocates for their cause, which implies a level of engagement and shared purpose. However, this does not explicitly verify or state the existence of"
     },
     {
       "a_turn_idx": 33,
@@ -3081,7 +3081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 44 refers to the bill expanding H1B visas, which is discussed in the prior context. The claim in C is that the bill's author is attempting to deceive the listener.\",\n  \"reason\": \"Claim C asserts that the bill's author (a Republican) is trying to deceive the listener by promoting an H1B visa expansion, implying bad faith or misleading intent. However, assumption A concerns the belief that preserving constitutional rights is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 44 refers to the bill expanding H1B visas, which is discussed in the prior context.\",\n  \"reason\": \"Claim C states that the bill's author is attempting to deceive the listener, which contradicts the substance of assumption A. Assumption A asserts that preserving constitutional rights is a key duty of elected officials—a value-oriented principle about integrity and responsibility. Claim C, however, accuses a political actor of deception, which is a"
     },
     {
       "a_turn_idx": 33,
@@ -3126,7 +3126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 46 refers to SPEAKER_01, who is discussing their personal experience in the tech sector.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker studied the H1B visa issue due to their involvement in the tech sector, which is unrelated to assumption A (turn 34), which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 46 refers to SPEAKER_01, who is discussing personal experience in the tech sector.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker studied the H1B visa issue due to their involvement in the tech sector, which is unrelated to assumption A (turn 34), which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. There is"
     },
     {
       "a_turn_idx": 34,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_01, who is the speaker making the claim about having experience in the tech industry.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker has experience in the tech industry, which is unrelated to assumption A (turn 34), which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. While both involve the tech sector, C provides"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 46 refers to SPEAKER_01, who is the speaker making the claim.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker has experience in the tech industry, which is unrelated to assumption A (turn 34), which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. While both involve the tech sector, C provides no evidence or statement"
     },
     {
       "a_turn_idx": 34,
@@ -3156,7 +3156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_01, who is the speaker making the claim about working in the tech industry.\",\n  \"reason\": \"Claim C states that the speaker currently works in the tech industry, which is unrelated to assumption A, which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. While the speaker mentions having studied and being in the tech world, this does not explicitly verify or support the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_01, who is the speaker making the claim about working in the tech industry.\",\n  \"reason\": \"Claim C states that the speaker currently works in the tech industry, which is unrelated to assumption A, which concerns the recognition of big tech censorship as a significant issue within the speaker's circle. While the speaker mentions familiarity with the tech world due to past experience, this does not explicitly verify or support"
     },
     {
       "a_turn_idx": 34,
@@ -3171,7 +3171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in turn 53 refers to the speaker and their audience, but the claim 'overwhelmed us' does not address or verify the specific assumption that 'BS' reflects a shared political judgment about legislation among the audience.\",\n  \"reason\": \"Claim C (turn 53) discusses the speaker feeling overwhelmed by the political situation, which is unrelated to the earlier assumption A that the term 'BS' signifies a shared political judgment about legislation within the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'us' in turn 53 refers to the speaker and their audience, consistent with the collective identity implied in turn 34.\",\n  \"reason\": \"Turn 53 mentions that the political situation 'overwhelmed us,' which indicates a strong emotional or cognitive load related to political dynamics. However, it does not explicitly state or verify the specific assumption in turn 34—that 'BS' reflects a shared political judgment about legislation among the audience. While"
     },
     {
       "a_turn_idx": 34,
@@ -3186,7 +3186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Marjorie' and 'Taylor Greene' as individuals to be interviewed; 'her' in turn 36 refers to Marjorie Taylor Greene, resolving the coreference.\",\n  \"reason\": \"Claim C explicitly states that multiple high-profile interviews are scheduled for next week, which directly verifies the earlier assumption A that future interviews will be prioritized based on topic importance. The mention of specific high-profile figures like Marjorie Taylor Greene"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Marjorie' and 'Taylor Greene' as individuals to be interviewed; 'her' in turn 36 refers to Marjorie Taylor Greene, resolving coreference.\",\n  \"reason\": \"Claim C explicitly states that multiple high-profile interviews are scheduled for next week, which directly verifies the earlier assumption A that future interviews will be prioritized based on topic importance. The mention of specific high-profile figures like Marjorie Taylor Greene and"
     },
     {
       "a_turn_idx": 34,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals who identify as Democrats, and 'American' refers to U.S. citizens. The term 'Democratic policy' refers to policies associated with the Democratic Party.\",\n  \"reason\": \"Claim C (turn 41) asserts that no American should support any Democratic policy, which is a blanket condemnation of the entire Democratic Party and its policies. In contrast, assumption A (turn 34) expresses a belief that media coverage"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals who identify as Democrats, and 'American' refers to U.S. citizens. The term 'Democratic policy' refers to policies associated with the Democratic Party.\",\n  \"reason\": \"Claim C asserts that no American should support any Democratic policy, which is a blanket condemnation that contradicts the nuanced stance implied in assumption A. Assumption A suggests media coverage should reflect substantive policy discussions—implying engagement with differing viewpoints, including"
     },
     {
       "a_turn_idx": 34,
@@ -3216,7 +3216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 44 refers to the listener in the conversation, not the speaker. The claim in C is about the bill's author attempting to deceive the listener, which is unrelated to the earlier assumption A about media coverage reflecting substantive policy discussions.\",\n  \"reason\": \"Assumption A concerns the media's role in covering meaningful policy debates. Claim C, however, asserts that the bill's author is attempting to deceive the listener, which introduces a new topic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 44 refers to the listener in the conversation, and 'the bill' refers to the H1B visa expansion bill discussed in prior turns.\",\n  \"reason\": \"Claim C states that the bill's author is attempting to deceive the listener, which contradicts the earlier assumption A that media coverage should reflect substantive policy discussions. Claim C introduces a personal accusation of deception without referencing policy substance, and instead focuses on intent and credibility, which is"
     },
     {
       "a_turn_idx": 34,
@@ -3231,7 +3231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 52 refers to SPEAKER_01, consistent with prior turns. The phrase 'most economic policy on both sides' refers to Democratic and Republican economic policies.\",\n  \"reason\": \"Claim C states that the speaker understands most economic policy on both Democratic and Republican sides, which touches on the general idea of engaging with policy across party lines. However, this does not explicitly verify or state the specific assumption A—that media coverage should reflect substantive"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 52 refers to SPEAKER_01, who is also the speaker in turn 34. The phrase 'most economic policy on both sides' refers to Democratic and Republican economic policies.\",\n  \"reason\": \"Turn 52 states that the speaker understands most economic policy on both Democratic and Republican sides, which touches on the general idea of engaging with substantive policy discussions. However, it does not explicitly address media coverage or its role"
     },
     {
       "a_turn_idx": 34,
@@ -3246,7 +3246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 52) discusses personal impact of economic policy on hiring decisions, while assumption A (turn 34) concerns media coverage reflecting substantive policy discussions. The topics are unrelated—C focuses on individual economic decision-making, whereas A addresses media representation of policy debates. There is no overlap in semantic content, and C neither states nor verifies A. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 52) discusses personal experience with economic policy affecting hiring decisions, which is unrelated to assumption A (turn 34), which concerns media coverage reflecting substantive policy discussions. There is no overlap in topic, intent, or content. The mention of economic policy in C does not address or verify the media's role in covering policy debates, making the"
     },
     {
       "a_turn_idx": 34,
@@ -3261,7 +3261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the organizers of the rally, consistent with the speakers in the conversation. 'The elections' in C refers to the broader electoral process discussed in A, particularly regarding accountability and voting system integrity.\",\n  \"reason\": \"Claim C explicitly states that the rally aims to address concerns about election system integrity, which directly verifies the substance of assumption A—that Congress has failed to address digital platform and election-related accountability. While A focuses on legislative failure"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the organizers of the rally, consistent with the speakers in the conversation. 'The elections' in C refers to the broader electoral process discussed in A, particularly regarding accountability and voting system integrity.\",\n  \"reason\": \"Claim C explicitly states that the rally aims to push for accountability in elections and specifically mentions addressing 'voting systems that have integrity issues that are compromised.' This directly verifies the substance of assumption A, which asserts that Congress"
     },
     {
       "a_turn_idx": 35,
@@ -3276,7 +3276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to Republicans, as established in the prior context discussing Republican policy positions.\",\n  \"reason\": \"Claim C discusses Republican policy shifts on tariffs and H1B visas being driven by pressure on domestic companies, which is a general explanation of policy motivation. However, assumption A asserts that fierce conservative figures like Boebert and Greene represent a viable path forward for policy change—emphasizing their commitment, authenticity, and role in advancing"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to Republicans, as established by the prior discussion about Republican policy shifts on tariffs and H1B visas.\",\n  \"reason\": \"Claim C discusses Republican policy changes on tariffs and H1B visas being driven by pressure on domestic companies, which is a general causal explanation. However, assumption A asserts that fierce conservative figures like Boebert and Greene represent a viable path forward for policy change—emphasizing their commitment, authenticity"
     },
     {
       "a_turn_idx": 35,
@@ -3291,7 +3291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which includes both Republicans and Democrats. In assumption A, the focus is specifically on Republican behavior—refusing to act under presidential direction—as reflecting ideological integrity. Claim C generalizes about most politicians acting due to lobbying, which is a broader and different causal mechanism.\",\n  \"reason\": \"Claim C discusses a general motivation for political behavior—lobbying influence versus grassroots input—which diverges from assumption A’s specific claim"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians' broadly, which includes Republicans and Democrats. In assumption A, the focus is specifically on Republican refusal to act under presidential direction as reflecting ideological integrity. Claim C generalizes about most politicians acting due to lobbying, which is a different causal mechanism.\",\n  \"reason\": \"Claim C discusses a broad generalization about politicians being influenced by lobbying rather than grassroots input, which is not equivalent to or supportive of assumption A,"
     },
     {
       "a_turn_idx": 35,
@@ -3306,7 +3306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Republicans, and 'she' refers to Lauren Boebert. In turn 47, 'Republicans' is used explicitly, maintaining the subject from turn 35.\",\n  \"reason\": \"Claim C states that Republicans are more aligned with business interests (e.g., Chamber of Commerce) than Democrats, which touches on a related theme of Republican identity and values. However, it does not explicitly address or verify the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Republicans, and 'she' refers to Congresswoman Boebert. In turn 47, 'Republicans' is used explicitly, maintaining the subject from turn 35.\",\n  \"reason\": \"Claim C states that Republicans are more aligned with business interests like the Chamber of Commerce compared to Democrats, which touches on a related theme of Republican identity and values. However, it does not explicitly address or verify the specific"
     },
     {
       "a_turn_idx": 35,
@@ -3321,7 +3321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Republicans, and 'she' refers to Lauren Boebert. In turn 53, 'Republican than Democrat' is a self-identification by the speaker, but does not address the specific claim about Republican refusal to act under presidential direction reflecting ideological integrity.\",\n  \"reason\": \"Claim C states the speaker's personal political alignment as more Republican than Democrat, which is a general self-identification. However, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Republicans, and 'she' refers to Lauren Boebert. In turn 53, 'Republican than Democrat' is a self-identification by the speaker, but does not address the specific claim about Republican refusal to act under presidential direction reflecting ideological integrity.\",\n  \"reason\": \"Claim C (turn 53) states the speaker's personal political alignment as more Republican than Democrat, which is a general identity statement"
     },
     {
       "a_turn_idx": 35,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_02, consistent throughout.\",\n  \"reason\": \"Claim C states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies. This directly contradicts Assumption A, which claims that Republican refusal to act under presidential direction reflects ideological integrity rather than political cowardice. Claim C undermines the moral and ideological stance of Republicans by suggesting alignment with Democratic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_02, consistent throughout.\",\n  \"reason\": \"Claim C states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies. This directly contradicts Assumption A, which asserts that Republican refusal to act under presidential direction reflects ideological integrity rather than political cowardice. Claim C undermines the notion of Republican ideological consistency by suggesting alignment with Democratic economic"
     },
     {
       "a_turn_idx": 35,
@@ -3366,7 +3366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 63 refers to SPEAKER_02, consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker identifies as more libertarian than Republican, particularly on business and criminal justice issues, which contrasts with establishment Republicans. This does not explicitly verify or state the earlier assumption A, which claims that Republican refusal to act under presidential direction reflects ideological integrity rather than political cowardice. While both statements critique establishment Republicans and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 63 refers to Donald Trump, as established in prior context.\",\n  \"reason\": \"Claim C states that the speaker is 'more libertarian than Republican' on specific issues like business and criminal justice reform, which contrasts with the mainstream Republican stance. However, this does not explicitly verify or state the earlier assumption A, which claims that Republican refusal to act under presidential direction reflects ideological integrity rather than political cowardice. While both statements"
     },
     {
       "a_turn_idx": 35,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to 'politicians', which aligns with the broader political actors mentioned in turn 35, including Congress members and party figures.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which touches on a related theme of political bias and external influence. However, it does not explicitly verify or state the specific claim in A—that the Southern Poverty Law Center is viewed as politically"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to 'politicians', which aligns with the broader political actors discussed in turn 35, including Congress members and party figures.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which touches on a related theme of political bias and external influence. However, it does not explicitly verify or state the specific claim in A—that the Southern Poverty Law Center is viewed as politically"
     },
     {
       "a_turn_idx": 36,
@@ -3396,7 +3396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_01, who is the same speaker as in turn 36.\",\n  \"reason\": \"Claim C states that the speaker has experience in the tech industry, which is unrelated to assumption A, which concerns the speaker's influence over scheduling and securing prominent speakers. There is no overlap in semantic content between the two statements. While both involve the speaker's capabilities, the domains (tech industry vs. media"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_01, who is the speaker making the claim about their own experience.\",\n  \"reason\": \"Claim C states that the speaker has experience in the tech industry, which is unrelated to assumption A, which concerns the speaker's influence over scheduling and securing prominent speakers. There is no overlap in semantic content between the two statements. While the speaker mentions understanding the H1B visa issue due to being in the tech world"
     },
     {
       "a_turn_idx": 36,
@@ -3426,7 +3426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 42, 'it' refers to the generalization made in prior statements about Democrats, particularly the sweeping claims about their character and policies. 'It' is used to describe the broad brush applied to Democrats.\",\n  \"reason\": \"Turn 42 introduces a critique of overgeneralization in the discourse, suggesting that the way certain claims are framed may be too broad. However, it does not explicitly verify or state the specific assumption from turn 37—that audience"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the generalization made in the prior discussion about Democrats, particularly the sweeping statements about their character and policies.\",\n  \"reason\": \"Claim C (turn 42) introduces a concern about overgeneralization in the previous discourse, suggesting that broad statements may not accurately reflect intent. However, it does not explicitly address or verify the specific assumption in A (turn 37), which is about audience members relying solely on podcasts not"
     },
     {
       "a_turn_idx": 37,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, as established in the prior context. The phrase 'the Democrat platform' refers to the political platform of the Democratic Party, which is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the Democratic platform includes policies on trade and worker protection, which directly counters the earlier assumption A that supporting Democratic policies equates to moral complicity in systemic wrongdoing. By affirm"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, as established in the prior context. The phrase 'the Democrat platform' refers to the political platform of the Democratic Party discussed throughout the exchange.\",\n  \"reason\": \"Claim C explicitly states that the Democratic platform includes policies on trade and worker protection, which directly verifies the substance of assumption A — that supporting Democratic policies equates to moral complicity in systemic wrongdoing. While A frames such support negatively"
     },
     {
       "a_turn_idx": 41,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'I' in turn 55, which aligns with the speaker in turn 41. 'Democrat policies' in turn 55 refers to the same subject as in turn 41.\",\n  \"reason\": \"Turn 55 states that the speaker aligns with Democratic policies on trade, H-1B visas, and corporate giveaways, which indicates support for certain Democratic positions. However, this does not make explicit"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'I' in turn 55, which aligns with the speaker in turn 41. 'Democrat policies' in turn 55 refers to the same subject as in turn 41.\",\n  \"reason\": \"Turn 55 states that the speaker aligns with Democratic policies on trade, H-1B visas, and corporate giveaways, which contradicts the core assertion in turn 41 that supporting Democratic policies"
     },
     {
       "a_turn_idx": 41,
@@ -3531,7 +3531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, who made the earlier assumption A. The phrase 'the Democrat platform' refers to the political platform of the Democratic Party discussed in turn 41.\",\n  \"reason\": \"Claim C explicitly affirms that the Democratic platform includes policies on trade and worker protection, which directly counters the implicit assertion in assumption A that Democratic policies are ineffective and harmful. By stating that the Democratic platform contains such policies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 43 refers to SPEAKER_01, as established in the prior context where SPEAKER_01 is questioning the effectiveness of Democratic policies. The phrase 'what is good about the Democrat platform' directly responds to SPEAKER_01's earlier claim in turn 41.\",\n  \"reason\": \"Turn 43 explicitly states that the Democratic platform includes policies on trade and worker protection, which directly verifies a counterpoint to"
     },
     {
       "a_turn_idx": 41,
@@ -3561,7 +3561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the speaker in turn 43. The phrase 'I line up more with the Democrat side' directly refers to the speaker's historical alignment with Democratic positions.\",\n  \"reason\": \"Claim C explicitly states that the speaker historically aligns more with the Democratic position on protecting workers from job loss due to outsourcing. This directly verifies the substance of assumption A, which asserts that non-partisan charitable"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. The phrase 'I line up more with the Democrat side' directly refers to the speaker's alignment with Democratic positions.\",\n  \"reason\": \"Claim C explicitly states that the speaker historically aligns more with the Democratic position on protecting workers from job loss due to outsourcing. This directly verifies the substance of assumption A, which asserts that non-partisan charitable efforts"
     },
     {
       "a_turn_idx": 41,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 47 refers to the H1B visa policy discussed in turns 45-46, which Speaker_01 argues is not exclusively Republican. Speaker_02's claim that 'it's more of a Republican thing' directly contradicts Speaker_01's argument that the policy was a bipartisan effort.\",\n  \"reason\": \"Claim C (turn 47) asserts that the H1B visa policy is more aligned"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 47 refers to the H1B visa policy discussed in turns 45–46, which Speaker_01 argues is not exclusively Republican. 'Republicans' and 'Democrats' are used to contrast party affiliations regarding business interests.\",\n  \"reason\": \"Claim C (turn 47) asserts that the H1B visa policy is more aligned with Republicans than Democrats, contradicting Speaker_01's earlier argument in"
     },
     {
       "a_turn_idx": 41,
@@ -3591,7 +3591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Republicans' and 'Democrats' are clear referents.\",\n  \"reason\": \"Claim C states that Republicans are more aligned with the Chamber of Commerce than Democrats, which is unrelated to assumption A, which asserts that non-partisan charitable efforts are more effective at solving homelessness than Democratic policies. C does not mention homelessness, charitable efforts, effectiveness, or any related concepts. While both statements critique Democratic policy, C focuses on party-business alignment, not policy outcomes"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Republicans' and 'Democrats' are clear referents.\",\n  \"reason\": \"Claim C states that Republicans are more aligned with the Chamber of Commerce than Democrats, which is unrelated to Assumption A, which claims non-partisan charitable efforts are more effective at solving homelessness than Democratic policies. C does not mention homelessness, charitable efforts, effectiveness, or any related concepts. It shifts focus to party alignment with business interests, which is a different topic entirely."
     },
     {
       "a_turn_idx": 41,
@@ -3606,7 +3606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Republican than Democrat' as a self-identification; 'they' in turn 52 refers to the speaker (SPEAKER_01), though the statement in turn 53 is attributed to SPEAKER_02.\",\n  \"reason\": \"Claim C states that the speaker identifies as more Republican than Democrat, which reflects political alignment but does not explicitly verify or state the substantive claim in assumption A—that non-partisan charitable efforts"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Republican than Democrat' as a self-identification; 'they' in prior context refers to the speaker(s), with SPEAKER_01 being the primary voice asserting the claim about Democrats.\",\n  \"reason\": \"Claim C states the speaker identifies as more Republican than Democrat, which reflects political alignment but does not explicitly verify or state the substantive claim in A—that non-partisan charitable efforts are more effective at solving homelessness than Democratic policies. While"
     },
     {
       "a_turn_idx": 41,
@@ -3621,7 +3621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 63 refers to Donald Trump, as established in the prior context (turn 62). 'I' refers to SPEAKER_02.\",\n  \"reason\": \"Claim C states that SPEAKER_02 is more libertarian than Republican, particularly on business and criminal justice reform, and aligns more with Democrats on these issues. This contrasts with Assumption A (turn 41), which asserts that non-partisan charitable efforts"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 63 refers to SPEAKER_02, who is the speaker in the context. No other coreference issues are present.\",\n  \"reason\": \"Claim C (turn 63) states that SPEAKER_02 is more libertarian than Republican, particularly on business and criminal justice reform, and aligns more with Democrats on these issues. However, this does not make explicit or verify the earlier assumption A (turn 41"
     },
     {
       "a_turn_idx": 41,
@@ -3651,7 +3651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my generation' in turn 71 refers to Gen Z, as established in the prior context (turns 69–70).\",\n  \"reason\": \"Claim C (turn 71) asserts that there is more conservatism in Gen Z than commonly acknowledged, which is unrelated to assumption A (turn 41), which claims that non-partisan charitable efforts are more effective than Democratic policies in solving homelessness. There is no overlap in subject matter"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'my generation' refers to Gen Z, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 71) asserts that there is more conservatism in the speaker's generation than commonly acknowledged, which is unrelated to assumption A (turn 41), which claims non-partisan charitable efforts are more effective than Democratic policies. There is no overlap in subject matter, logic, or content. C does not state, imply, or verify any"
     },
     {
       "a_turn_idx": 41,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to politicians, specifically Democrats and Republicans, as discussed in the broader context.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which is a generalization about political motivation. Assumption A claims that labeling entire groups as racist is a form of political manipulation rather than truthful critique. While both statements critique political behavior and suggest manipulation, C does not address the specific mechanism of group"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to politicians, specifically Democrats and Republicans as discussed in the broader context.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which is a generalization about political motivation. Assumption A, however, focuses on the specific claim that labeling entire groups as racist is a form of political manipulation rather than truthful critique. While both statements critique political behavior and suggest manipulation, C does not address the"
     },
     {
       "a_turn_idx": 43,
@@ -3681,7 +3681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which aligns with the broader critique of political actors in the prior discussion, particularly Democrats and Republicans. 'Lobbying influence' and 'grassroots input' are central themes in the exchange, especially in turn 58 where the speaker criticizes politicians for following lobbyists instead of community needs.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which aligns with the broader critique of political actors in the prior discussion, particularly Democrats and Republicans. 'Lobbying influence' and 'grassroots input' are not directly tied to the specific claim in A about evaluating policies based on merit vs. opposition to a political figure.\",\n  \"reason\": \"Claim C discusses politicians acting based on lobbying rather than grassroots input, which is a tangential theme related to"
     },
     {
       "a_turn_idx": 43,
@@ -3696,7 +3696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with the speaker in turn 43. 'Democratic policies' and 'Republican policies' are directly tied to the comparative alignment discussed in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies—directly verifying the substance of assumption A, which asserts that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with the speaker in turn 43. 'Democratic policies' and 'Republican policies' are directly linked to the specific issues mentioned in A: trade, H-1B visas, and corporate giveaways.\",\n  \"reason\": \"Claim C explicitly states that the speaker aligns more with Democratic policies than Republican policies on three specific issues—trade, H-1B visas, and corporate giveaways—which"
     },
     {
       "a_turn_idx": 43,
@@ -3711,7 +3711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Republican policymakers, as established in the context of shifting policies on tariffs and H1B visas. 'Companies' refers to domestic businesses facing pressure from economic realities.\",\n  \"reason\": \"Claim C states that Republican policy shifts on H1B visas and tariffs are driven by pressure on domestic companies, which directly supports the core idea in assumption A—that the Republican Party’s support for H1B visas reflects prioritization of corporate interests over"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Republican policymakers, as established in the prior context discussing Republican policy shifts on tariffs and H1B visas. 'Companies' refers to domestic businesses facing pressure from economic realities.\",\n  \"reason\": \"Claim C states that Republican policy shifts on H1B visas and tariffs result from pressure on domestic companies, which directly supports the core idea in assumption A—that the Republican Party’s support for H1B visas reflects prioritization of corporate interests"
     },
     {
       "a_turn_idx": 43,
@@ -3726,7 +3726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 44 refers to the bill to expand H1B visas, which is the subject of discussion in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the bill to expand H1B visas was written by a Republican, which directly verifies the assertion made in assumption A (turn 43) that the Republican Party is the party of H1B visas. Although speaker 02 initially challenges this view, claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 44 refers to the bill to expand H1B visas, which is the subject of the discussion in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the bill to expand H1B visas was written by a Republican, which directly verifies the assertion in assumption A that the Republican Party is the party of H1B visas. Although A is framed as a generalization ('the Republican Party is the party of H"
     },
     {
       "a_turn_idx": 43,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A (turn 43). The phrase 'I line up more with the Democrat side' directly corresponds to 'I line up more with the Democrat side than the Republican side' in turn 43.\",\n  \"reason\": \"Claim C explicitly verifies the core substance of assumption A by stating that the speaker aligns more with Democratic policies on trade, H"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who previously expressed alignment with Democratic positions on trade and worker protection in turn 43. 'H-1B visas' and 'corporate giveaways' are direct references to the same issues discussed in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies."
     },
     {
       "a_turn_idx": 43,
@@ -3801,7 +3801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 63 refers to SPEAKER_02, who is the speaker of both turns 61–63. 'They' in turn 62 refers to establishment Republicans.\",\n  \"reason\": \"Claim C states that there are many positions regarding business issues, which acknowledges internal diversity within political parties—specifically, that some individuals (like SPEAKER_02) align more with Democrats on certain issues despite being Republican-leaning."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 63 refers to SPEAKER_02, who is the speaker of both turns 61–63. The phrase 'there's a lot of positions' refers to ideological diversity within political parties, particularly on business issues.\",\n  \"reason\": \"Claim C states that there are many positions regarding business issues, which acknowledges internal diversity within parties—specifically, that some individuals align more with Democratic views on certain issues despite being Republican"
     },
     {
       "a_turn_idx": 43,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 63 refers to SPEAKER_02, who is the speaker of turn 43. 'Those issues' in turn 63 refers to business issues and criminal justice reform, which are discussed in the broader context.\",\n  \"reason\": \"Turn 63 mentions that there are multiple positions on criminal justice reform and that SPEAKER_02 aligns more with Democrats than establishment Republicans on certain issues. However, this does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 63 refers to SPEAKER_02, who is the speaker of turn 43. 'Those issues' in turn 63 refers to business issues and criminal justice reform, which are discussed in turn 43.\",\n  \"reason\": \"Turn 63 mentions that there are multiple positions on criminal justice reform and that SPEAKER_02 aligns more with Democrats than establishment Republicans on certain issues. While this acknowledges"
     },
     {
       "a_turn_idx": 44,
@@ -3831,7 +3831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 58 refers to 'politicians', which includes both Republicans and Democrats as discussed in the broader context. 'They don't represent our interests' directly aligns with the claim that politicians act out of self-interest rather than public good.\",\n  \"reason\": \"Claim C explicitly states that politicians (including Republicans and Democrats) do not represent the public interest, which directly verifies the core substance of assumption A—that Republicans act out of self-interest rather"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which aligns with the subject of assumption A (Republicans). The phrase 'they don't represent our interests' directly verifies the core claim in A that Republicans act out of self-interest rather than public good.\",\n  \"reason\": \"Claim C explicitly states that politicians (including Republicans) do not represent the public interest, which directly verifies the substance of assumption A—that Republicans act out of self-interest rather than public good"
     },
     {
       "a_turn_idx": 44,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which aligns with the broader political actors discussed in assumption A, particularly Republicans. 'Lobbying influence' corresponds to the implicit motivation behind Republican actions on immigration/H1B policy described in A.\",\n  \"reason\": \"Claim C states that most politicians act based on lobbying influence rather than grassroots input, which directly supports the substance of assumption A—that Republicans act out of self-interest (here, aligned with lobbying"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'politicians,' which aligns with the broader political actors discussed in assumption A, particularly Republicans. 'Lobbying influence' corresponds to the influence of special interest groups (e.g., lobbyists for H1B visas) mentioned in turn 44.\",\n  \"reason\": \"Claim C generalizes that most politicians act based on lobbying influence rather than grassroots input, which directly supports the substance of assumption A—that Republicans act out"
     },
     {
       "a_turn_idx": 44,
@@ -5001,7 +5001,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the Democratic Party, as established by the context discussing historical party positions on tariffs and labor protection.\",\n  \"reason\": \"Claim C states that historically, Democrats have supported tariffs to protect American workers, which is linked to their alignment with labor unions. This directly supports the substance of assumption A—that the Republican Party has undergone significant internal division—by contrasting the Republican Party’s pro-business, free-trade stance with the Democratic Party’s"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the Democratic Party, as established by the context discussing historical party positions on tariffs and labor protection.\",\n  \"reason\": \"Claim C states that historically, Democrats have supported tariffs to protect American workers, which is directly tied to the idea that the Democratic Party has been more aligned with labor interests. This supports the broader assumption in A that the Republican Party is internally divided, particularly in its alignment with big business versus working-class concerns"
     },
     {
       "a_turn_idx": 53,
@@ -5181,7 +5181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with the speaker in turn 54. The phrase 'I line up more with' directly refers to the speaker's alignment with Democratic policies, which matches the substance of assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies. This directly verifies the core content of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with the speaker in turn 54. The phrase 'I line up more with' directly corresponds to the speaker's alignment with Democratic policies as stated in turn 55.\",\n  \"reason\": \"Claim C explicitly states that the speaker aligns more with Democratic policies on trade, H-1B visas, and corporate giveaways than with Republican policies. This directly verifies the substance of assumption A"
     },
     {
       "a_turn_idx": 54,
@@ -5541,7 +5541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'they' in turn 57 refers to Republicans as established in prior context.\",\n  \"reason\": \"Claim C states that free trade agreements may result in job losses overseas, which is a general observation about consequences of such agreements. However, assumption A specifically claims that job losses due to international trade are primarily attributable to specific legislative actions (i.e., trade agreements) rather than broader market forces. While C touches on a related consequence (job losses),"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'Republicans' as established in the prior context, particularly in turn 56 where 'Republicans' are linked to free trade agreements.\",\n  \"reason\": \"Claim C states that free trade agreements may result in job losses overseas, which aligns with the general topic of job losses due to trade. However, it does not explicitly state or verify the core assertion in assumption A—that job losses are primarily attributable to specific legislative actions rather"
     },
     {
       "a_turn_idx": 56,
@@ -5646,7 +5646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'kids' or 'young people' mentioned in turn 80-81, but the claim C attributes pandemic-level societal issues to the Democratic Party and radical global ideologies, which is unrelated to the specific claim about labor unions influencing Democratic policy in turn 57.\",\n  \"reason\": \"Claim C asserts that pandemic-level societal issues stem from the Democratic Party and radical global ideologies, which is a broad, ideologically charged"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 82 refers to 'kids' or 'young people' mentioned earlier, but the claim about 'pandemic-level societal issues originating from the Democratic Party and radical global ideologies' does not address or verify the specific claim in turn 57 about labor unions influencing Democratic policy. The two statements are unrelated in content and direction.\",\n  \"reason\": \"Turn 57 asserts that labor unions significantly influence Democratic party policy, particularly regarding protection"
     },
     {
       "a_turn_idx": 58,
@@ -5766,7 +5766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 82 refers to SPEAKER_01's daughter, established in turn 80.\",\n  \"reason\": \"Claim C (turn 82) states that the speaker's daughter has been taught to think independently, which is unrelated to assumption A (turn 59), which concerns the speaker's basis for judging the listener's position relative to 'them'. There is no semantic connection between teaching independence and assessing someone's political alignment"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 82 refers to SPEAKER_01's daughter, as established in turn 80.\",\n  \"reason\": \"Claim C (turn 82) states that the speaker's daughter has been taught to think independently, which is unrelated to assumption A (turn 59), which concerns the speaker's basis for judging the listener's position relative to 'them'. There is no semantic connection between teaching independence and assessing someone's political"
     },
     {
       "a_turn_idx": 59,

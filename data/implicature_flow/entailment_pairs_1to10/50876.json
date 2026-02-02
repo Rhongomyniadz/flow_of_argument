@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits held by tech firms at Silicon Valley Bank, as described in turns 15–16.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank could not afford to pay higher interest rates on the large, uninsured deposits held by tech firms, which directly verifies the underlying assumption in A that Silicon Valley has a unique ecosystem where startups receive massive upfront capital without immediate profitability, leading to a"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits held by tech firms at Silicon Valley Bank, as described in turns 15–16.\",\n  \"reason\": \"Claim C states that Silicon Valley Bank could not afford to pay higher interest rates on its deposits due to the large volume of uninsured deposits, particularly from tech firms. This directly supports the substance of assumption A, which asserts that Silicon Valley has a unique ecosystem for tech startups differing from"
     },
     {
       "a_turn_idx": 11,
@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this bank' in turn 24 refers to Silicon Valley Bank, which is consistent with turn 11.\",\n  \"reason\": \"Claim C (turn 24) discusses the timing of Silicon Valley Bank's failure relative to another event and focuses on regulatory oversight and deposit instability. It does not address or verify the core assumption in A (turn 11), which is about Silicon Valley having a distinct ecosystem for tech startups differing from traditional"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this bank' in turn 24 refers to Silicon Valley Bank, consistent with turn 11.\",\n  \"reason\": \"Claim C (turn 24) discusses the timing of Silicon Valley Bank's failure relative to another event and focuses on regulatory oversight and deposit instability. It does not address or verify the core assumption in A (turn 11), which is about Silicon Valley having a distinct ecosystem for tech startups differing from traditional business environments."
     },
     {
       "a_turn_idx": 11,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 24 refers to Silicon Valley Bank, and 'the San Francisco Fed' is identified as a regulator. 'California regulator' refers to the state-level oversight body.\",\n  \"reason\": \"Claim C discusses the dual regulation of Silicon Valley Bank by the California state regulators and the San Francisco Fed, which is contextually relevant to the broader ecosystem described in assumption A. However, C does not explicitly state or verify the core claim of A—that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 24 refers to Silicon Valley Bank, and 'the San Francisco Fed' is identified as a regulator. 'California regulator' refers to the state-level oversight body.\",\n  \"reason\": \"Claim C mentions that Silicon Valley Bank was jointly regulated by California state regulators and the San Francisco Fed, which provides institutional context about its oversight. However, this does not explicitly or directly verify the substance of assumption A, which concerns the unique ecosystem of tech"
     },
     {
       "a_turn_idx": 11,
@@ -1022,11 +1022,11 @@
       "claim_text": "Tech companies in early years prioritize market share over profitability.",
       "overlap_score": 2,
       "c_time": 461.365,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'these firms' in turn 14 refers to the tech companies mentioned in turn 11, establishing clear coreference.",
-      "reason": "Claim C explicitly states that in early years, tech companies prioritize market share over profitability, which directly verifies the assumption in A that profitability is not a primary goal during initial phases. The context confirms that venture capital firms intentionally delay profitability to focus on growth and market share, aligning perfectly with the substance of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech companies mentioned in turn 11, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that in early years, tech companies prioritize market share over profitability, which directly verifies the assumption in A that profitability is not a primary goal during initial phases. The context confirms that venture capital firms intentionally delay profitability to focus on growth and market share, aligning perfectly with the substance of A.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to 'tech companies' mentioned in turn 11. 'Early years' in turn 14 corresponds to 'initial phases' in turn 11.\",\n  \"reason\": \"Claim C explicitly states that in the early years, tech companies prioritize market share over profitability, which directly verifies the assumption in A that profitability is not a primary goal during the initial phases of high-tech startups. The causal link between VC"
     },
     {
       "a_turn_idx": 11,
@@ -1041,7 +1041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to the venture capital (VC) firms and tech companies mentioned in turn 11. 'These firms' in turn 14 refers to the startup tech companies described in turn 11.\",\n  \"reason\": \"Turn 14 explicitly verifies the substance of assumption A by stating that profitability is not desired in early years; instead, revenue is reinvested to grow market share, with the real financial return coming"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to the venture capital (VC) firms and tech companies mentioned in turn 11. 'These firms' in turn 14 refers to the startup tech companies described in turn 11.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that profitability is not desired in early years, and instead, the focus is on market share and eventual exits via IPOs, SPACs,"
     },
     {
       "a_turn_idx": 11,
@@ -1056,7 +1056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to 'tech startups' mentioned in turn 11. 'Revenues' in turn 14 corresponds to 'cash' and 'upfront capital' discussed in turn 11.\",\n  \"reason\": \"Claim C explicitly states that venture capital firms expect early-stage tech companies to reinvest their revenues back into the business, which directly verifies the assumption in A that profitability is not a primary goal during initial phases"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to 'tech startups' mentioned in turn 11. 'Revenues' in turn 14 corresponds to the financial resources discussed in turn 11.\",\n  \"reason\": \"Turn 14 explicitly states that venture capital firms expect early-stage tech companies to reinvest their revenues back into the business, which directly verifies the assumption in turn 11 that profitability is not a primary goal during initial phases."
     },
     {
       "a_turn_idx": 11,
@@ -1086,7 +1086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech startups mentioned in turn 11. 'They' in turn 11 refers to the venture capital firms backing the startups.\",\n  \"reason\": \"Claim C explicitly states that SVB's deposit base grew due to relationships with tech startups and VCs, which directly supports and verifies the assumption in A that profitability is not a primary goal in early startup phases. The context shows that startups were given large"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech startups mentioned in turn 11. 'They' in turn 11 refers to the venture capital firms backing the startups.\",\n  \"reason\": \"Claim C explicitly states that SVB's deposit base grew due to relationships with tech startups and VCs, which directly supports and verifies the assumption in A that profitability is not a primary goal in early-stage startups. The context confirms that these startups were funded"
     },
     {
       "a_turn_idx": 11,
@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'money that needs to be used for payroll, for routine expenses to operate the business', which directly corresponds to the operational financial needs implied in turn 11 about young entrepreneurs lacking familiarity with mainstream business models, particularly regarding cash flow and expense management.\",\n  \"reason\": \"Claim C explicitly states that money must be reserved for payroll and routine operational expenses, which directly verifies the substance of assumption A—that young, tech-s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'money that needs to be used for payroll, for routine expenses to operate the business', which directly corresponds to the operational financial needs implied in turn 11 about young entrepreneurs lacking familiarity with mainstream business models, particularly regarding cash flow and expense management.\",\n  \"reason\": \"Claim C explicitly states that money designated for payroll and routine operational expenses is 'sticky' and must be reserved to keep the business running, which directly"
     },
     {
       "a_turn_idx": 11,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to 'tech startups' mentioned in turn 11. 'Revenues' and 'plow that revenue right back into the business' directly correspond to the idea of reinvesting capital for long-term growth.\",\n  \"reason\": \"Claim C explicitly states that venture capital firms expect tech startups to reinvest early revenues into growth, which directly verifies the assumption in A that investors in tech startups value long-term growth potential"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to 'tech startups' mentioned in turn 11. 'Revenues' and 'reinvest' align with 'cash' and 'drawn down' in the prior context.\",\n  \"reason\": \"Claim C explicitly states that venture capital firms expect tech startups to reinvest early revenues into growth, which directly verifies the assumption in A that investors in tech startups value long-term growth potential over short-term profits. The"
     },
     {
       "a_turn_idx": 11,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to venture capital firms and private equity firms mentioned in turn 11. 'These tech companies' refers to the startup tech companies described in turn 11.\",\n  \"reason\": \"Claim C states that Silicon Valley Bank provides lines of credit to tech startups alongside venture capital investments, which aligns with the broader context of venture capital firms prioritizing long-term growth over short-term profitability—supporting the assumption that investors value"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech startups mentioned in turn 11. 'Silicon Valley Bank' is the subject of both turns and maintains consistent identity.\",\n  \"reason\": \"Claim C states that Silicon Valley Bank provides lines of credit to tech startups alongside venture capital investments, which aligns with the broader context of venture capital firms prioritizing long-term growth over short-term profitability—central to assumption A. While C does not explicitly state"
     },
     {
       "a_turn_idx": 11,
@@ -1176,7 +1176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the investors managing Silicon Valley Bank, which aligns with the venture capital and private equity firms mentioned in turn 11.\",\n  \"reason\": \"Turn 32 discusses investors using long-duration bonds based on expectations of falling interest rates, which reflects a strategic focus on long-term returns. While this implies a long-term orientation, it does not explicitly connect to the specific assumption in turn 11—that investors in tech"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the investors managing Silicon Valley Bank, which aligns with the venture capital and private equity firms mentioned in turn 11.\",\n  \"reason\": \"Turn 32 discusses investors using long-duration bonds based on expectations of falling interest rates, which reflects a strategic focus on long-term returns. While this implies a long-term orientation, it does not explicitly connect to the valuation of long-term growth potential over short-term profits in"
     },
     {
       "a_turn_idx": 11,
@@ -1191,7 +1191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to Silicon Valley Bank, which is established in the prior context as having a focus on tech startups and venture capital clients.\",\n  \"reason\": \"Claim C states that Silicon Valley Bank had exposure to long-term fixed-rate assets, which implies a strategic focus on long-term investments—consistent with the earlier assumption A that investors in tech startups value long-term growth over short-term profits. While C does not explicitly state the motivation behind the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to Silicon Valley Bank, which is established in the context as having a focus on tech startups and venture capital clients, consistent with turn 11.\",\n  \"reason\": \"Claim C states that Silicon Valley Bank had exposure to long-term fixed-rate assets, which implies a strategic focus on long-term investments—aligning with assumption A that investors in tech startups prioritize long-term growth over short-term profits. While C does not explicitly"
     },
     {
       "a_turn_idx": 11,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech companies mentioned in turn 11, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that in early years, tech companies prioritize market share over profitability, which directly verifies the substance of assumption A—that success is measured by innovation and market disruption rather than immediate revenue. The emphasis on reinvesting revenue and delaying profitability until an exit aligns precisely with A’s core idea. The connection"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these firms' in turn 14 refers to the tech companies mentioned in turn 11, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that early-stage tech companies prioritize market share over profitability, which directly verifies the substance of assumption A—that success is measured by innovation and market disruption rather than immediate revenue. The emphasis on reinvesting revenue and delaying profitability until an exit (IPO/SPAC) aligns precisely with the idea"
     },
     {
       "a_turn_idx": 11,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to the young entrepreneurs and managers at Silicon Valley Bank, as established in prior context.\",\n  \"reason\": \"Claim C discusses the lack of experience with bond market bear markets among the younger generation involved in Silicon Valley Bank, which is tangential to assumption A. Assumption A concerns the measurement of startup success via innovation and market disruption versus revenue, while Claim C focuses on financial risk mismanagement due to inexperience with interest rate"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to the young entrepreneurs and managers at Silicon Valley Bank, as established in prior context.\",\n  \"reason\": \"Claim C discusses the lack of experience with bond market bear markets among the younger generation involved in Silicon Valley Bank, which is tangential to assumption A. Assumption A concerns the measurement of startup success via innovation and market disruption over profitability, while Claim C focuses on financial risk mismanagement due to inexperience with interest rate"
     },
     {
       "a_turn_idx": 12,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in claim C refers to 'tech startups' mentioned in assumption A, which are the entities receiving upfront capital and expected to reinvest revenues.\",\n  \"reason\": \"Claim C explicitly states that venture capital firms expect tech startups to reinvest early revenues into growth, which directly verifies the substance of assumption A—that capital expenditures are a necessary part of the project or venture. The context confirms that the upfront capital is used for business operations, salaries, and growth"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'these firms' in claim C refers to 'tech startups' mentioned in assumption A, which are the subject of both statements.\",\n  \"reason\": \"Claim C explicitly states that venture capital firms expect tech startups to reinvest early revenues into growth, which directly verifies the substance of assumption A—that capital expenditures are a necessary part of the project or venture. The context confirms that the upfront capital and early revenues are intended for business expansion, not profitability, aligning perfectly with"
     },
     {
       "a_turn_idx": 12,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the tech startups mentioned in turn 12. 'They' in turn 14 refers to the VC firms and the tech companies.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank offers lines of credit to tech startups alongside venture capital investments, which directly verifies the substance of assumption A—that capital expenditures are a necessary part of the project or venture. The context confirms that the upfront capital from VCs"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the tech startups mentioned in prior turns. 'They' in turn 14 refers to the VC firms and the tech companies collectively.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank offers lines of credit to tech startups alongside venture capital investments, which directly verifies the substance of assumption A—that capital expenditures are a necessary part of the project or venture—by showing that financial support (in the form of credit"
     },
     {
       "a_turn_idx": 12,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'money from venture capital firms that's going to be used next year, two years down the road', which aligns with the earlier assumption about upfront capital being used over time in the project or venture.\",\n  \"reason\": \"Claim C states that venture capital funds intended for future use do not earn interest, which implies they are held idle and not reinvested—supporting the idea that such funds are part of"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'money from venture capital firms that's gonna be used next year, two years down the road', which aligns with the concept of upfront capital being used over time in turn 12.\",\n  \"reason\": \"Claim C states that venture capital funds intended for future use do not earn interest, which implies they are held idle and not deployed productively—supporting the idea that such funds are part of capital expenditures"
     },
     {
       "a_turn_idx": 12,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to the young entrepreneurs mentioned in turn 11, who are the subject of discussion regarding their salaries and funding.\",\n  \"reason\": \"Turn 13 states 'you got a very big salary,' which refers to the young entrepreneurs receiving large salaries from the upfront capital. However, this does not explicitly verify or state the earlier assumption A—that the speaker has sufficient knowledge about the financial trajectory of the initiative. While the statement"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to the young entrepreneurs mentioned in turn 11, who are the subject of discussion regarding their salaries and funding.\",\n  \"reason\": \"Turn 13 states 'you got a very big salary,' which refers to the young entrepreneurs receiving large compensation. However, this does not explicitly verify or state the earlier assumption A—that the speaker has sufficient knowledge about the financial trajectory of the initiative. While the mention of high salaries relates"
     },
     {
       "a_turn_idx": 12,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 12. 'This event' refers to the collapse of Silicon Valley Bank, which is the broader context of the discussion.\",\n  \"reason\": \"Turn 40 states that the speaker received information about the event (the bank's collapse), but does not explicitly confirm or verify the specific assumption in turn 12—that the speaker has sufficient"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 12. 'This event' refers to the collapse of Silicon Valley Bank, which is the broader context of the discussion.\",\n  \"reason\": \"Turn 40 states that the speaker received information about the event (the bank's collapse), but does not explicitly confirm or verify the earlier assumption A—that the speaker has sufficient knowledge about the financial"
     },
     {
       "a_turn_idx": 12,
@@ -1326,7 +1326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 40 refers to SPEAKER_01, who is the original source of the information about the bank's events.\",\n  \"reason\": \"Claim C (turn 40) states that the speaker received information about the event, which is unrelated to assumption A (turn 12), which concerns a shared understanding about the term 'upfront capital'. There is no mention of 'upfront capital', shared understanding"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 12. 'This event' refers to the bank's collapse and the run on deposits described in turns 38–41.\",\n  \"reason\": \"Turn 40 states that SPEAKER_03 received information about the bank's collapse and the impending withdrawal of funds, which is related to the broader context of the discussion."
     },
     {
       "a_turn_idx": 14,
@@ -1341,7 +1341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to 'the bank's deposits', which is consistent with the context of Silicon Valley Bank's deposits mentioned in turn 14.\",\n  \"reason\": \"Claim C explicitly states that the bank had more than 90% of its deposits uninsured, which directly verifies the substance of assumption A in turn 14, which asserts that the bank became 'totally out of balance or idiosyncratic in that 9"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to 'the bank's deposits', which is consistent with the subject of turn 14 ('all of their deposits').\",\n  \"reason\": \"Claim C explicitly states that the bank had more than 90% of its deposits uninsured, which directly verifies the substance of assumption A in turn 14, which asserts that 90% plus of the bank's deposits were uninsured. The phrasing in C is precise"
     },
     {
       "a_turn_idx": 14,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is consistent with the referent in turn 16.\",\n  \"reason\": \"Claim C states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which aligns with the substance of assumption A that startups trusted SVB's financial stability enough to commit large deposits despite risk exposure. While C does not explicitly mention startups"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is consistent with the referents discussed in turn 14 (e.g., US Bank, PNC, etc.).\",\n  \"reason\": \"Claim C states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which aligns with the substance of assumption A that startups trusted SVB's financial stability enough to commit"
     },
     {
       "a_turn_idx": 14,
@@ -1386,7 +1386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to large super-regional U.S. banks, as established by the context and the list of example banks provided (US Bank, PNC, etc.).\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the key numerical assertion made in assumption A about the typical level of uninsured deposits in such banks. This"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to large super-regional U.S. banks, as established by the context and the list of example banks (US Bank, PNC, etc.) provided immediately before.\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the corresponding part of assumption A. Assumption A relies on the contrast between SVB's"
     },
     {
       "a_turn_idx": 14,
@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in the prior context. 'Tech firms' refers to the startups mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the level of uninsured deposits among tech firms at Silicon Valley Bank was significantly higher than typical for large super-regional banks. This directly verifies the substance of assumption A, which posits that startups trusted SVB’s financial stability enough to commit large deposits despite risk exposure"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context. 'Tech firms' refers to the startups mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the level of uninsured deposits among tech firms at Silicon Valley Bank was significantly higher than typical for large super-regional banks. This directly verifies the substance of assumption A, which posits that startups trusted SVB’s financial stability enough to commit large deposits despite risk exposure—"
     },
     {
       "a_turn_idx": 14,
@@ -1431,7 +1431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits at Silicon Valley Bank, which is directly tied to the context established in turn 14 about startups parking large, uninsured deposits with SVB.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the substance of assumption A—that startups trusted SVB enough to commit large deposits despite risk exposure (i.e., uninsured status)."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits at Silicon Valley Bank, which is directly tied to the context established in turn 14 about startups parking large, uninsured deposits with SVB.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the substance of assumption A—that startups trusted SVB enough to commit large deposits despite risk exposure, resulting in a high volume of"
     },
     {
       "a_turn_idx": 14,
@@ -1446,7 +1446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the large amount of uninsured deposits at Silicon Valley Bank, which is the central subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank held a large amount of unstable, uninsured deposits. This directly verifies the core substance of assumption A, which asserts that startups trusted SVB's financial stability enough to commit large deposits despite being uninsured. The context confirms that these deposits were indeed large, uninsured,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'uninsured deposits' mentioned in turn 14, and 'money' in turn 23 refers to the deposits held by startups at SVB.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank held a large amount of 'unstable, uninsured deposits,' which directly verifies the substance of assumption A—that startups trusted SVB's financial stability enough to commit large deposits despite being uninsured. Turn"
     },
     {
       "a_turn_idx": 14,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 30 refers to the managers of Silicon Valley Bank, which aligns with the subject of turn 14 (tech companies and their financial decisions).\",\n  \"reason\": \"Turn 30 discusses interest rate risk and asset-liability mismatch in the context of long-duration securities, which relates to the broader financial risk profile of SVB. However, it does not explicitly address or verify the specific assumption in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 30 refers to the managers of Silicon Valley Bank, which aligns with the subject of turn 14 (tech companies and their financial decisions).\",\n  \"reason\": \"Turn 30 discusses the financial vulnerability of banks holding long-duration securities in a high-interest-rate environment due to interest rate risk, which relates to the broader systemic risk in SVB's asset-liability structure. However, it does not explicitly address"
     },
     {
       "a_turn_idx": 14,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this bank' in turn 38 refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C (turn 38) discusses the bank's lack of hedging against interest rate risk, which is unrelated to assumption A (turn 14), which concerns startups trusting SVB's financial stability enough to hold large uninsured deposits. While both relate to SVB's risk profile, C does not state, verify, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this bank' in turn 38 refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C states that the bank did not hedge its exposure to interest rate risk, which is unrelated to assumption A, which concerns startups trusting SVB's financial stability enough to commit large deposits despite risk exposure. While both relate to SVB's risk profile, C discusses interest rate hedging strategy, whereas A focuses on depositor confidence based"
     },
     {
       "a_turn_idx": 14,
@@ -1506,7 +1506,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is consistent with the referent in turn 14.\",\n  \"reason\": \"Claim C states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which aligns with the substance of assumption A that the banking model relying on large-scale deposits from high-growth tech firms is sustainable without significant liquidity risk. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is consistent with the context in turn 16.\",\n  \"reason\": \"Claim C states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which aligns with the substance of assumption A that the banking model relying on large-scale deposits from high-growth tech firms is sustainable without significant liquidity risk. While C does"
     },
     {
       "a_turn_idx": 14,
@@ -1521,7 +1521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'it' in turn 15 refers to Silicon Valley Bank, as established by context. 'Their deposits' refers to the deposits held by the tech firms at the bank.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank became financially unbalanced due to its high proportion of uninsured deposits. This directly verifies the substance of assumption A, which posits that the banking model relying on large-scale deposits from high-growth tech firms is sustainable without significant liquidity"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'it' in turn 15 refers to Silicon Valley Bank, as established by context. 'Their deposits' refers to the deposits held by the tech firms at the bank.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank became financially unbalanced due to its high proportion of uninsured deposits, which directly verifies the substance of assumption A — that the banking model relying on large-scale deposits from high-growth tech firms is sustainable without significant liquidity risk. The"
     },
     {
       "a_turn_idx": 14,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to large super-regional banks in the U.S., which is clarified by the specific examples given in turn 16 (US Bank, PNC, etc.). The term 'uninsured deposits' is consistently used across both turns.\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the key numerical claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'large super-regional banks in the United States', as established by the context and speaker's enumeration of examples (US Bank, PNC, etc.).\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the key numerical assertion made in assumption A about the typical level of uninsured deposits in such banks."
     },
     {
       "a_turn_idx": 14,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in the prior context. 'Some of these tech firms' refers back to the high-growth tech firms mentioned in turn 14.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that certain tech firms held extremely large uninsured deposits (upwards of 200–300 million dollars) at Silicon Valley Bank. This directly supports the idea that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in the prior context. 'Some of these tech firms' refers back to the high-growth tech firms mentioned in turn 14.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that certain tech firms held extremely large uninsured deposits (up to 200–300 million dollars) at Silicon Valley Bank. This directly supports the idea that the bank"
     },
     {
       "a_turn_idx": 14,
@@ -1596,7 +1596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits held by tech firms at Silicon Valley Bank, as established in turns 14–16.\",\n  \"reason\": \"Claim C states that the zero-interest nature of the large, uninsured deposits became a significant problem as interest rates rose. This directly addresses a critical vulnerability implied in assumption A—that the banking model relying on such deposits is sustainable without liquidity risk. While A assumes sustainability based on large-scale"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits held by tech firms at Silicon Valley Bank, as established in turns 14–16.\",\n  \"reason\": \"Claim C states that the zero-interest nature of the large, uninsured deposits became a significant problem due to rising interest rates. This directly addresses a critical vulnerability implied in assumption A—that the banking model relying on such deposits is sustainable without liquidity risk. While A assumes sustainability, C exposes"
     },
     {
       "a_turn_idx": 14,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits at Silicon Valley Bank, which is the central claim in assumption A.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the core substance of assumption A—that the bank’s reliance on large-scale deposits from tech firms, most of which were uninsured, formed the basis of its model. The context confirms that this was a defining"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits at Silicon Valley Bank, which is the central claim in assumption A.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the core substance of assumption A—that the bank’s reliance on large-scale deposits from high-growth tech firms, many of which were uninsured, formed the basis of its model. The context confirms that these"
     },
     {
       "a_turn_idx": 14,
@@ -1626,7 +1626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the large amount of uninsured deposits at Silicon Valley Bank, which is the central subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank held a large amount of unstable, uninsured deposits, which directly verifies the core substance of assumption A—that the bank’s sustainability relied on large-scale deposits from tech firms, many of which were uninsured. The context in turn 23 further clarifies that these"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'uninsured deposits' mentioned in turn 14, and 'money' in turn 23 refers to the deposits held by tech firms as described in the context.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank held a large amount of 'unstable, uninsured deposits,' which directly verifies the core substance of assumption A—that the bank's sustainability relied on large-scale deposits from high-growth"
     },
     {
       "a_turn_idx": 14,
@@ -1641,7 +1641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the management of Silicon Valley Bank, which is consistent with the context of the bank's investment strategy discussed in turn 14.\",\n  \"reason\": \"Claim C states that holding long-duration securities in a high-interest-rate environment creates financial vulnerability due to interest rate risk, which directly addresses a key structural weakness implied in assumption A. Assumption A claims the banking model based on large-scale deposits from tech firms is sustainable without"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the management of Silicon Valley Bank, which is consistent with the subject of the earlier assumption A regarding the bank's funding model.\",\n  \"reason\": \"Claim C discusses the financial vulnerability of banks holding long-duration securities in a high-interest-rate environment, specifically mentioning interest rate risk and asset-liability mismatch. While this relates to the broader structural risks in the banking model described in assumption A, it does not explicitly verify the core"
     },
     {
       "a_turn_idx": 14,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is explicitly mentioned in the context of turn 16. No ambiguous references exist.\",\n  \"reason\": \"Claim C explicitly states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which directly verifies the substance of assumption A—that regulatory frameworks like FDIC insurance reduce perceived risk in depositing large sums. The context confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'large super-regional banks in the U.S.', which is explicitly mentioned in the context of turn 16. 'Uninsured deposits' refers to deposits exceeding the $250,000 FDIC limit, consistent with the discussion in turn 14.\",\n  \"reason\": \"Claim C explicitly states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits"
     },
     {
       "a_turn_idx": 14,
@@ -1686,7 +1686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to large super-regional U.S. banks, as established by the preceding list of examples (US Bank, PNC, etc.). The term 'uninsured deposits' is consistent across both A and C.\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the key quantitative assertion made in assumption A about"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'large super-regional banks in the United States', as established by the list of examples (US Bank, PNC, etc.) provided immediately before.\",\n  \"reason\": \"Claim C explicitly states that the total amount of uninsured deposits in large super-regional U.S. banks is approximately thirty percent, which directly verifies the corresponding part of assumption A. Assumption A asserts that regulatory frameworks like FDIC insurance reduce perceived"
     },
     {
       "a_turn_idx": 14,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to 'bank regulators' mentioned in the prior context. 'All deposits' refers to both insured and uninsured deposits, which aligns with the earlier assumption about regulatory frameworks reducing perceived risk.\",\n  \"reason\": \"Claim C explicitly states that bank regulators viewed all deposits—insured and uninsured—as relatively stable after the 2018 regulatory relief law. This directly verifies the substance of assumption A, which posits that regulatory"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to 'bank regulators' mentioned in the prior context. 'All deposits' refers to both insured and uninsured deposits, which aligns with the broader claim about stability in turn 22.\",\n  \"reason\": \"Claim C explicitly states that bank regulators viewed all deposits—insured and uninsured—as relatively stable after the 2018 regulatory relief law. This directly verifies the underlying assumption in A that regulatory frameworks (like"
     },
     {
       "a_turn_idx": 14,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to Silicon Valley Bank, as established by context. 'FDSC' appears to be a typo or misreference; likely intended to be 'Silicon Valley Bank'. 'FDIC' is correctly referenced.\",\n  \"reason\": \"Claim C states that 'the FDSC had FDIC insurance,' which is factually consistent with the broader context that Silicon Valley Bank was FDIC-insured. However, this statement does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to Silicon Valley Bank, as established in the prior context. 'FDSC' is a likely typo or shorthand for 'Silicon Valley Bank' based on surrounding discussion.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had FDIC insurance, which directly verifies the substance of assumption A—that regulatory frameworks like FDIC insurance reduce perceived risk in depositing large sums with commercial banks. While A discusses the existence and"
     },
     {
       "a_turn_idx": 14,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to Silicon Valley Bank, which is the subject of the discussion throughout the context. 'The FDIC' is the regulatory body mentioned in both A and C.\",\n  \"reason\": \"Claim C states that the bank was regulated by the FDIC because it had FDIC insurance, which directly connects to the premise in A that FDIC insurance reduces perceived risk. While C does not explicitly restate the risk-reduction mechanism,"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to Silicon Valley Bank, which is the subject of the discussion. 'The FDIC' is correctly referenced as the entity providing insurance.\",\n  \"reason\": \"Claim C states that FDIC insurance implies regulation by the FDIC, which is a partial alignment with assumption A, which posits that regulatory frameworks like FDIC insurance reduce perceived risk. However, C does not address the risk-reduction mechanism or the role of insurance"
     },
     {
       "a_turn_idx": 14,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 34 refers to Silicon Valley Bank, consistent with prior context.\",\n  \"reason\": \"Claim C discusses interest rate risk management by other banks, which is unrelated to assumption A about regulatory frameworks reducing perceived risk via FDIC insurance. While both relate to banking risks, C does not state, verify, or even reference FDIC insurance or deposit insurance's role in reducing perceived risk. There is no semantic connection between the two claims.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 34 refers to Silicon Valley Bank, consistent with prior context.\",\n  \"reason\": \"Claim C discusses interest rate risk management by other banks, which is unrelated to assumption A about regulatory frameworks reducing perceived risk via FDIC insurance. While both relate to banking risks, C does not state, verify, or even reference FDIC insurance or deposit insurance's role in reducing perceived risk. Thus, it fails to make assumption A explicit and"
     },
     {
       "a_turn_idx": 15,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to 'corporate account' as established in the prior context. 'That' in 'that it's money that needs to be used...' refers to 'operating money'.\",\n  \"reason\": \"Claim C explicitly defines 'operating money' as a corporate account exceeding the insurance limit, which directly verifies the substance of assumption A—that the $250,000 insurance limit serves as a benchmark for assessing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to 'corporate account' as established in the prior context; 'operating money' is defined as a corporate account exceeding the insurance limit.\",\n  \"reason\": \"Claim C explicitly defines 'operating money' as a corporate account that exceeds the $250,000 insurance limit, which directly verifies the substance of assumption A—that the $250,000 limit is a standard benchmark for"
     },
     {
       "a_turn_idx": 15,
@@ -1806,7 +1806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to 'uninsured deposits' mentioned in turn 15. 'They' in turn 23 refers to the deposits at Silicon Valley Bank.\",\n  \"reason\": \"Turn 23 explicitly states that Silicon Valley Bank held a large amount of 'unstable, uninsured deposits,' which directly verifies the core claim in turn 15 that the bank became unstable due to a large majority of its deposits being uninsured."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'uninsured deposits' mentioned in assumption A. 'Silicon Valley Bank' is the subject in both A and C, maintaining identity.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank held a large amount of 'unstable, uninsured deposits,' which directly verifies the core content of assumption A—that the bank became unstable due to a large majority of uninsured deposits. The term 'unstable' in C align"
     },
     {
       "a_turn_idx": 15,
@@ -1821,7 +1821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'large super-regional banks in the U.S.' as established in the prior sentence. 'Uninsured deposits' refers back to the concept introduced in turn 15 regarding deposits exceeding the $250,000 FDIC limit.\",\n  \"reason\": \"Claim C explicitly states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'large super-regional banks in the U.S.', as established by the context and the list of example banks provided.\",\n  \"reason\": \"Claim C explicitly states that large super-regional banks in the U.S. serve high-net-worth individuals with uninsured deposits, which directly verifies the substance of assumption A—that a financial institution becomes unstable when a large majority of its deposits are uninsured—by contrasting the typical structure of"
     },
     {
       "a_turn_idx": 15,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context. 'Tech firms' refers to the depositors mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that the level of uninsured deposits at Silicon Valley Bank among tech firms was significantly higher than typical for large super-regional banks. This directly verifies the substance of assumption A, which asserts that the bank became unstable due to a large majority of its deposits being uninsured"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context. 'Tech firms' refers to the depositors mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that the level of uninsured deposits among tech firms at this bank was significantly higher than typical for large super-regional banks. This directly verifies the substance of assumption A, which asserts that the bank became unstable due to a large majority of its deposits being uninsured."
     },
     {
       "a_turn_idx": 15,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits at Silicon Valley Bank, which is the central claim in assumption A. The term 'uninsured deposits' is directly linked across both turns.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the core substance of assumption A—that a financial institution becomes unstable when a large majority of its deposits are uninsured. While A specifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the large percentage of uninsured deposits mentioned in turn 15, specifically the context of Silicon Valley Bank's deposit structure.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank had a large percentage of uninsured deposits, which directly verifies the core assertion in assumption A—that a financial institution becomes unstable when a large majority of its deposits are uninsured. The context confirms that SVB’s deposits were overwhelmingly uninsured (over"
     },
     {
       "a_turn_idx": 15,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'such banks' in claim C refers to large super-regional banks mentioned in turn 16, which are contrasted with Silicon Valley Bank in turn 15. This maintains continuity and clarity.\",\n  \"reason\": \"Claim C explicitly states that the percentage of uninsured deposits in large super-regional banks (like those named in turn 16) may reach thirty-five percent, which directly verifies the quantitative claim made in turn 15 about the typical range"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'such banks' in claim C refers to large super-regional banks mentioned in turn 16, which are contrasted with Silicon Valley Bank in turn 15. The term 'uninsured deposits' is consistent across both A and C.\",\n  \"reason\": \"Claim C states that in some cases, the percentage of uninsured deposits in large super-regional banks may reach thirty-five percent, which directly supports and clarifies the earlier assumption A that a financial"
     },
     {
       "a_turn_idx": 15,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that some tech firms held very large uninsured deposits (upwards of 200-300 million dollars) at the bank, which directly supports the idea that the bank had a massive concentration of uninsured deposits—central to A. The specificity and alignment with prior mention of '200"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context. 'These tech firms' refers to the same group mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that some tech firms held very large uninsured deposits (upwards of 200-300 million dollars) at Silicon Valley Bank, which directly supports the idea that a large majority of deposits were uninsured—a"
     },
     {
       "a_turn_idx": 15,
@@ -1907,11 +1907,11 @@
       "claim_text": "One tech firm reportedly held up to one billion dollars in uninsured deposits at this bank.",
       "overlap_score": 2,
       "c_time": 568.056,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that a single tech firm held up to one billion dollars in uninsured deposits at the bank, which directly supports the idea that a large majority of deposits were uninsured—aligning with A's assertion about the bank's instability due to a high proportion of uninsured deposits. The specificity and direct reference to the same"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context.",
+      "reason": "Claim C explicitly verifies the substance of assumption A by stating that a single tech firm held up to one billion dollars in uninsured deposits at the bank, which directly supports the idea that a large majority of deposits were uninsured—aligning with A's assertion about the bank's instability due to a high proportion of uninsured deposits.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this bank' in claim C refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that a single tech firm held up to one billion dollars in uninsured deposits at the bank, which directly supports the idea that a large majority of deposits were uninsured—aligning with A's assertion about the bank's instability due to a high proportion of uninsured deposits.\"\n}\n```"
     },
     {
       "a_turn_idx": 15,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits mentioned in turn 15, specifically the large corporate deposits exceeding the $250,000 insurance limit.\",\n  \"reason\": \"Claim C explicitly states that the deposits were large in size, which directly verifies the substance of assumption A—that a financial institution becomes unstable when a large majority of its deposits are uninsured—by highlighting the scale of the uninsured deposits (e.g., hundreds of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those deposits' in turn 17 refers to the uninsured deposits mentioned in turn 15, specifically the large corporate deposits exceeding the $250,000 insurance limit.\",\n  \"reason\": \"Claim C explicitly states that the deposits were large in size, which directly verifies the substance of assumption A—that a financial institution becomes unstable when a large majority of its deposits are uninsured—by highlighting the scale of the uninsured deposits. This supports the instability risk"
     },
     {
       "a_turn_idx": 15,
@@ -2196,7 +2196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to bank regulators, and 'all deposits' refers to both insured and uninsured deposits.\",\n  \"reason\": \"Claim C states that post-Dodd-Frank, regulators viewed all deposits—insured and uninsured—as relatively stable. This contradicts assumption A, which asserts that uninsured deposits pose a significant risk to a bank’s solvency. While C acknowledges distinctions within uninsured deposits (e.g., operating vs. non-operating"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to bank regulators, and 'all deposits' refers to both insured and uninsured deposits.\",\n  \"reason\": \"Claim C states that bank regulators viewed all deposits (insured and uninsured) as relatively stable after Dodd-Frank, which contradicts the substance of assumption A—that uninsured deposits represent a significant risk to a bank’s solvency. While C acknowledges distinctions within uninsured deposits (e.g., operating vs. non-operating"
     },
     {
       "a_turn_idx": 15,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the large amount of uninsured deposits at Silicon Valley Bank, which was previously discussed in turn 16.\",\n  \"reason\": \"Turn 23 explicitly states that Silicon Valley Bank held a large amount of unstable, uninsured deposits, which directly verifies the substance of assumption A in turn 16—that the bank had a very unusual concentration of uninsured deposits. The context confirms that these deposits were not just uninsured but also unstable"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the large amount of uninsured deposits at Silicon Valley Bank, which was previously discussed in turn 16.\",\n  \"reason\": \"Turn 23 explicitly states that Silicon Valley Bank held a large amount of unstable, uninsured deposits, which directly verifies the substance of assumption A in turn 16—that the bank had an unusually high proportion of uninsured deposits. The context confirms that these deposits were not only large in volume but"
     },
     {
       "a_turn_idx": 16,
@@ -2571,7 +2571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to 'bank regulators' mentioned in the prior context. 'All deposits' refers to both insured and uninsured deposits, which aligns with the earlier discussion about the composition of SVB's deposits.\",\n  \"reason\": \"Claim C explicitly states that bank regulators viewed all deposits—insured and uninsured—as relatively stable after the 2018 regulatory relief law. This directly verifies the underlying assumption in A, which is that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to 'bank regulators' mentioned earlier in the context. 'All deposits' refers to both insured and uninsured deposits, which aligns with the earlier discussion about the composition of SVB's deposits.\",\n  \"reason\": \"Turn 22 explicitly states that bank regulators viewed all deposits—insured and uninsured—as relatively stable after the 2018 regulatory relief law. This directly verifies the underlying assumption in turn 1"
     },
     {
       "a_turn_idx": 16,
@@ -2706,7 +2706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that bank' in turn 20 refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Claim C states that a large amount of money went into the bank due to its size, which aligns loosely with the idea that the bank accumulated massive uninsured deposits. However, it does not explicitly state or verify the core assumption in A—that such deposits pose a risk to bank solvency. While the context implies a connection (e.g.,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that bank' in turn 20 refers to Silicon Valley Bank, established in prior context.\",\n  \"reason\": \"Turn 20 states that a large amount of money went into the bank due to its size, which relates to the broader context of large uninsured deposits. However, it does not explicitly state or verify the specific assumption in A—that the audience should understand that large uninsured deposits pose a risk to bank solvency. While the claim touches on the"
     },
     {
       "a_turn_idx": 16,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the funds from venture capital firms mentioned in turn 16, specifically the money intended for future use and not currently needed for operations.\",\n  \"reason\": \"Turn 23 explicitly states that money from venture capital firms that will be used in future years earns no interest, which directly verifies the assumption in turn 16 that tech firms do not normally maintain massive uninsured balances in retail banks—because such deposits are idle"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 23 refers to the funds from venture capital firms mentioned in turn 16, specifically those intended for future use and not currently needed for operations.\",\n  \"reason\": \"Turn 23 explicitly states that money from VC firms intended for future use earns no interest, which directly verifies the assumption in turn 16 that tech firms do not normally maintain massive uninsured balances in retail banks—because such deposits are idle, non-interest-bearing,"
     },
     {
       "a_turn_idx": 16,
@@ -4926,7 +4926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'Silicon Valley Bank' as established in prior context. 'Many other banks' contrasts with SVB's failure, implying SVB did not act like those banks.\",\n  \"reason\": \"Claim C states that many banks successfully managed interest rate risk during a rising rate environment, implicitly contrasting with SVB’s failure. This supports assumption A, which posits that cash-rich banks should invest prudently in low-risk"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'cash-rich banks' mentioned in assumption A, specifically the context of SVB and similar institutions managing interest rate risk.\",\n  \"reason\": \"Claim C states that many other banks in the country managed their interest rate risk in a rising rate environment, which directly addresses the implicit assumption in A that such banks would invest prudently in low-risk instruments—implying responsible risk management. While C does not explicitly mention 'pr"
     },
     {
       "a_turn_idx": 28,
@@ -4971,7 +4971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the Federal Reserve, as established by the context of monetary policy actions and inflation causation.\",\n  \"reason\": \"Claim C explicitly states that the Federal Reserve had to rapidly tighten monetary policy, which directly verifies the consequence implied in assumption A — that prolonged stimulus measures by the Fed caused inflation, necessitating rapid tightening. The causal chain from A to C is fully supported, with C making the outcome of A explicit and un"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the Federal Reserve, as established by the context of monetary policy actions and inflation causation.\",\n  \"reason\": \"Claim C explicitly states that the Federal Reserve had to rapidly tighten monetary policy, which directly verifies the consequence implied in assumption A—that prolonged stimulus measures by the Fed caused inflation, necessitating rapid tightening. The causal chain from A to C is fully supported, with C stating a clear, direct outcome of the Fed"
     },
     {
       "a_turn_idx": 28,
@@ -5016,7 +5016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to banks or financial institutions investing in long-duration securities, consistent with the subject in assumption A (the banking system). 'Long duration securities' and 'hold to maturity' from turn 28 are directly referenced in turn 30.\",\n  \"reason\": \"Claim C explicitly states that investing in long-duration securities leads to interest rate risk when rates rise sharply, which directly verifies the core idea in assumption A—that low interest rates during"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to banks or financial institutions investing in long-duration securities, consistent with the subject of turn 28 (the bank's investment strategy). 'They' in turn 28 refers to the bank's management, which aligns with the implied subject of C.\",\n  \"reason\": \"Claim C explicitly states that investing in long-duration securities leads to interest rate risk when rates rise sharply, which directly verifies the core idea in assumption A—that"
     },
     {
       "a_turn_idx": 28,
@@ -5031,7 +5031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, who invested in long-duration securities without managing interest rate risk.\",\n  \"reason\": \"Claim C explicitly states the inverse relationship between bond prices and interest rates, which directly verifies the mechanism described in assumption A: that prolonged low interest rates led to investments in long-duration bonds, creating vulnerability when rates rose. This causal link—low rates → long-term bond investment → price decline"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, who invested in long-duration securities without managing interest rate risk.\",\n  \"reason\": \"Claim C explicitly states the inverse relationship between bond prices and interest rates, which directly verifies the mechanism described in assumption A: that prolonged low interest rates led to investments in long-duration bonds, creating vulnerability when rates rose. This causal link—low rates → long-term bond investments → losses when"
     },
     {
       "a_turn_idx": 28,
@@ -5046,7 +5046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the guys managing' SVB, which resolves to the bank management mentioned in turn 28.\",\n  \"reason\": \"Claim C explicitly states the inverse relationship between bond prices and interest rates, which directly verifies the mechanism behind the inflationary pressure described in assumption A. Specifically, A claims that low interest rates during recovery led to excessive inflation, which forced rapid rate hikes. C explains that such rate hikes cause bond price declines—especially for"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, specifically those who invested in long-duration securities without managing interest rate risk.\",\n  \"reason\": \"Claim C explicitly states the inverse relationship between bond prices and interest rates, which directly explains the mechanism behind the inflationary pressure and monetary policy missteps described in assumption A. By clarifying that long-duration bonds lose value when interest rates rise—precisely the scenario caused by"
     },
     {
       "a_turn_idx": 28,
@@ -5061,7 +5061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, specifically those who invested in long-duration securities without managing interest rate risk.\",\n  \"reason\": \"Claim C explicitly states that longer-maturity bonds suffer greater price declines when interest rates rise, which directly verifies the mechanism behind the inflationary pressure described in assumption A—namely, that prolonged low interest rates led to risky investments in long-duration assets, which then became vulnerable when"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, specifically those who invested in long-duration securities without managing interest rate risk.\",\n  \"reason\": \"Claim C explicitly states that longer-maturity bonds experience greater price declines when interest rates rise, which directly verifies the core mechanism behind assumption A: that low interest rates during recovery can lead to excessive inflationary pressure, prompting rapid rate hikes that harm institutions holding long-duration bonds. This"
     },
     {
       "a_turn_idx": 28,
@@ -5076,7 +5076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, specifically those who failed to manage interest rate risk.\",\n  \"reason\": \"Claim C states that capital appreciation is maximized by owning a 30-year zero-coupon bond if interest rates are expected to fall, which implies that long-duration bonds benefit from falling rates—a concept directly relevant to the risk exposure described in assumption A. Assumption A claims that low interest rates"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the bank managers mentioned in turn 28, specifically the management of Silicon Valley Bank who failed to manage interest rate risk.\",\n  \"reason\": \"Claim C states that capital appreciation is maximized by owning a 30-year zero-coupon bond if interest rates are expected to fall, which implicitly supports the idea that holding long-duration bonds during periods of falling interest rates can lead to significant gains. This aligns with"
     },
     {
       "a_turn_idx": 28,
@@ -5181,7 +5181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in claim C refers to the 'failures of monetary and fiscal policy' mentioned in turn 29, which are the same conditions described as causing the rapid rise in interest rates.\",\n  \"reason\": \"Claim C explicitly identifies the root cause of the rapid rise in interest rates as 'failures of monetary and fiscal policy,' which directly corresponds to the causal chain in assumption A: that prolonged monetary expansion and fiscal overspending led to 40-year"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in claim C refers to the 'failures of monetary and fiscal policy' mentioned in turn 29, which are the root causes of the rapid rise in interest rates.\",\n  \"reason\": \"Claim C explicitly identifies the failures of monetary and fiscal policy as the underlying cause of the rapid rise in interest rates, which directly verifies the substance of assumption A—namely, that rapid tightening of monetary policy was necessary due to economic pressures arising after 4"
     },
     {
       "a_turn_idx": 29,
@@ -5286,7 +5286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the underlying cause' in turn 48 refers to the sequence of events described in turns 29–31, particularly the rapid tightening of monetary policy due to inflation, which stems from prior monetary and fiscal policy failures.\",\n  \"reason\": \"Claim C explicitly identifies the failures of monetary and fiscal policy as the underlying cause of the situation, which directly verifies the substance of assumption A—namely, that Fed monetary policy decisions were driven by macroeconomic conditions"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Fed' in turn 29 refers to the Federal Reserve, which is the subject of the monetary policy discussion. In turn 48, 'monetary and fiscal policy' explicitly references the same institutions and actions discussed in turn 29, particularly the Fed's role in creating inflation through prolonged low rates and subsequent rapid tightening.\",\n  \"reason\": \"Turn 48 explicitly identifies the failures of monetary and fiscal policy as the underlying cause of the situation"
     },
     {
       "a_turn_idx": 29,
@@ -5376,7 +5376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'the guys managing Silicon Valley Bank' mentioned in turn 32, which aligns with the subject of the earlier assumption A regarding long-duration fixed-income securities.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank failed to manage interest rate risk in a rising rate environment, which directly verifies the substance of assumption A—that rising interest rates lead to declining values of long-maturity fixed-income securities. The context confirms that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'the guys managing Silicon Valley Bank' mentioned in turn 32, which aligns with the subject of interest rate risk exposure discussed in turn 30.\",\n  \"reason\": \"Claim C explicitly states that the bank failed to manage interest rate risk in a rising rate environment, which directly verifies the substance of assumption A—that rising interest rates lead to declining values of long-maturity fixed-income securities. The context confirms"
     },
     {
       "a_turn_idx": 30,
@@ -5391,7 +5391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'Silicon Valley Bank' as established in turn 32 and further clarified in turn 35.\",\n  \"reason\": \"Claim C states that many other banks successfully managed interest rate risk during a rising rate environment, which implicitly confirms that such risk exists and must be addressed—directly supporting assumption A that long-maturity fixed-income securities lose value when interest rates rise. While C does not explicitly restate the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'Silicon Valley Bank' mentioned in turn 32, which is consistent with the context of interest rate risk exposure.\",\n  \"reason\": \"Claim C states that many other banks successfully managed interest rate risk during a rising rate environment, implying that such management is possible and expected. This indirectly supports assumption A by affirming that interest rate increases do indeed impact long-maturity fixed-income securities (via price declines), and"
     },
     {
       "a_turn_idx": 30,
@@ -5406,7 +5406,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, as established in prior turns (e.g., turn 34). 'Their' in turn 35 also refers to Silicon Valley Bank.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank did not hedge its interest rate risk, which directly verifies the substance of assumption A—that long-duration fixed-income securities carry interest rate risk in a rising rate environment. While A focuses on the theoretical"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, which is consistent with the subject of the prior discussion about interest rate risk exposure.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank did not hedge its interest rate risk, which directly verifies the substance of assumption A—that long-duration fixed-income securities carry interest rate risk in a rising rate environment. While A focuses on the theoretical risk, C confirms that SVB failed to manage that risk in"
     },
     {
       "a_turn_idx": 30,
@@ -5421,7 +5421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, as established in the prior context (turns 34–35). 'Their' in turn 35 also refers to Silicon Valley Bank.\",\n  \"reason\": \"Claim C explicitly confirms that Silicon Valley Bank had unhedged interest rate risk at the time of its failure, which directly verifies the substance of assumption A—that long-duration fixed-income securities carry interest rate risk in a rising rate"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, as established in prior turns discussing the bank's risk exposure.\",\n  \"reason\": \"Claim C explicitly confirms that Silicon Valley Bank had unhedged interest rate risk at the time of its failure, which directly verifies the substance of assumption A—that long-duration fixed-income securities carry interest rate risk in a rising rate environment. The statement explicitly ties the lack of hedging to the bank’s vulnerability, thereby making"
     },
     {
       "a_turn_idx": 30,
@@ -5451,7 +5451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to 'the bank' mentioned in turn 37, which is consistent with the subject of the earlier assumption A regarding interest rate risk in long-duration securities.\",\n  \"reason\": \"Claim C explicitly states that the bank invested in long-duration securities, which directly verifies the substance of assumption A—that interest rate increases lead to declining market values of fixed-income securities with long maturities. By specifying 'long-duration securities' and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to 'the bank' mentioned in turn 37, which is the subject of the discussion regarding investment strategy.\",\n  \"reason\": \"Claim C explicitly states that the bank invested in long-duration securities, which directly verifies the substance of assumption A—that interest rate increases lead to declining market values of fixed-income securities with long maturities—by demonstrating that the bank took on such exposure in a rising rate environment. The ph"
     },
     {
       "a_turn_idx": 30,
@@ -5556,7 +5556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the managers of Silicon Valley Bank, as established in the subsequent turn (32). The claim about capital appreciation via a 30-year zero-coupon bond is directly tied to the discussion of interest rate risk in long-duration securities from turn 30.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by highlighting the systemic risk associated with holding long-duration securities (like a 30-year"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to the managers of Silicon Valley Bank, as established in the subsequent turn (32). The term 'this lesson' in turn 32 refers to the concept of interest rate risk in long-duration bonds discussed in turn 30.\",\n  \"reason\": \"Claim C explicitly states a direct consequence of falling interest rates—capital appreciation from holding long-duration bonds—specifically highlighting a 30-year zero-coupon bond"
     },
     {
       "a_turn_idx": 30,
@@ -5601,7 +5601,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to 'banks' mentioned earlier, specifically highlighting the behavior of Silicon Valley Bank as an example of risky investment in long-duration securities.\",\n  \"reason\": \"Claim C explicitly states that the current economic environment features rising interest rates, which directly supports and verifies the systemic implication described in assumption A—namely, that raising short-term interest rates significantly creates interest rate risk and asset-liability mismatches for banks holding long-duration securities."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to 'banks' mentioned earlier, specifically highlighting the behavior of Silicon Valley Bank as an example of risky investment in long-duration securities.\",\n  \"reason\": \"Claim C explicitly states that the current economic environment features rising interest rates, which directly supports and verifies the systemic implication described in assumption A—namely, that raising short-term interest rates significantly creates interest rate risk for banks holding long-duration securities. The context confirms that the rise"
     },
     {
       "a_turn_idx": 30,
@@ -5691,7 +5691,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 31. 'This event' refers to the SVB collapse described in turns 38–41.\",\n  \"reason\": \"Turn 40 states that the speaker received information about the event (the SVB collapse), which indirectly relates to the earlier assumption in turn 31 that there was a misleading perception about the safety of"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who previously discussed the risks of long-duration bonds and the misperception of treasury safety. 'This event' refers to the SVB collapse described in turns 38–39.\",\n  \"reason\": \"Claim C states that the speaker received information about the event (SVB collapse), which indirectly supports the earlier assumption A that there is a misleading perception about security guarantees—specifically"
     },
     {
       "a_turn_idx": 31,
@@ -5751,7 +5751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, as established in prior turns discussing the bank's risk exposure.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank did not hedge its interest rate risk, which directly verifies the substance of assumption A—that interest rate changes have predictable effects on bond valuations—by confirming the bank's failure to manage this known risk. This confirms the real-world consequence of the inverse relationship between interest rates and bond"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to Silicon Valley Bank, as established in prior turns. 'Their' in turn 34 also refers to the same entity.\",\n  \"reason\": \"Claim C explicitly states that Silicon Valley Bank did not hedge its interest rate risk, which directly verifies the substance of assumption A—that interest rate changes have predictable effects on bond valuations—by demonstrating a failure to manage that risk in a rising rate environment. This confirms the real"
     },
     {
       "a_turn_idx": 32,
@@ -6741,7 +6741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, as established by the prior discussion about hedging practices in banking. 'Your spread' refers to the interest rate spread of banks.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would destroy the interest rate spread, which directly verifies the substance of assumption A—that hedging involves financial instruments used to mitigate interest rate risk—and reinforces the economic trade-off mentioned in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, consistent with the subject of interest rate risk management discussed in turn 35.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would destroy the interest rate spread, which directly verifies the substance of assumption A—that hedging involves financial instruments used to mitigate interest rate risk—and reinforces the economic trade-off mentioned in A. The causal link between full hedging and"
     },
     {
       "a_turn_idx": 35,
@@ -6756,7 +6756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 36 refers to the bank's interest rate spread, as established in the prior context discussing banking risk management.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would require spending every dollar of the interest rate spread on insurance, which directly verifies the economic consequence implied in assumption A—that hedging involves significant cost that undermines profitability. This confirms the core idea in A that hedging is a financial instrument used"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 36 refers to the bank's interest rate spread, as established in the prior context discussing banking risk management.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would require spending every dollar of the interest rate spread on insurance, which directly verifies the substance of assumption A—that hedging involves financial instruments used to mitigate interest rate risk—and reinforces the economic trade-off described in A. The phrasing 'you"
     },
     {
       "a_turn_idx": 35,
@@ -6846,7 +6846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, specifically referencing the context of hedging behavior discussed in turn 35.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would destroy the interest rate spread, which directly verifies the substance of assumption A—that Silicon Valley Bank failed to hedge due to the cost implications of full hedging. This aligns with the economic rationale presented in A, where the lack"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, specifically referencing the context of hedging behavior discussed in turn 35.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would destroy the interest rate spread, which directly verifies the substance of assumption A—that Silicon Valley Bank failed to hedge due to the cost implications of full hedging. This aligns with the earlier implication in A that hedging was not"
     },
     {
       "a_turn_idx": 35,
@@ -6861,7 +6861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, specifically contextualized by the discussion of Silicon Valley Bank's hedging practices.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would require spending all income from the interest rate spread on insurance, which directly verifies the economic constraint implied in assumption A—that the lack of hedging at Silicon Valley Bank was due to the cost of full hedging destroying profitability. This"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 36 refers to banks or financial institutions, specifically addressing the practical limitation of full hedging. 'Your interest rate spread' refers to the profit margin banks earn from lending, which is central to the economic rationale in turn 35.\",\n  \"reason\": \"Claim C explicitly states that attempting 100% hedging would require spending all income from the interest rate spread on insurance, directly verifying the economic constraint implied in assumption A"
     },
     {
       "a_turn_idx": 35,
@@ -6906,7 +6906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 53 refers to First Citizens Bank of North Carolina acquiring Silicon Valley Bank (SVB).\",\n  \"reason\": \"Claim C (turn 53) states that First Citizens Bank of North Carolina is acquiring SVB, which is unrelated to assumption A (turn 35), which concerns the lack of hedging against interest rate risk as a cause of SVB's failure. While both refer to SVB, C does not state"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 53 refers to First Citizens Bank of North Carolina acquiring Silicon Valley Bank (SVB). No coreference resolves to the concept of hedging or interest rate risk.\",\n  \"reason\": \"Claim C (turn 53) states that First Citizens Bank is acquiring SVB, which is unrelated to the specific claim in assumption A about the lack of hedging against interest rate risk. While both relate to SVB, C does not mention"
     },
     {
       "a_turn_idx": 35,
@@ -7176,7 +7176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the bank' in turn 48 refers to Silicon Valley Bank, which is the subject of the discussion in turn 38. 'Long-duration securities' and 'rising interest rate environment' are consistent across both turns.\",\n  \"reason\": \"Claim C explicitly states that the bank failed to hedge the risks of holding long-duration securities during a rising interest rate environment, which directly verifies the substance of assumption A—that investing in such securities without hedging is inherently high"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the bank' in turn 48 refers to Silicon Valley Bank, which is the subject of the discussion in turn 38. 'Long-duration securities' and 'risk of holding long duration securities' are consistent across both turns.\",\n  \"reason\": \"Turn 48 explicitly states that the bank failed to hedge against the risks of holding long-duration securities during a rising interest rate environment, which directly verifies the core claim in turn 38 that investing in"
     },
     {
       "a_turn_idx": 38,
@@ -10581,7 +10581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, as established in the surrounding context. This aligns with the broader critique of policymakers in turn 83.\",\n  \"reason\": \"Claim C asserts that current policymakers are deflecting blame for inflation and rising interest rates, implying they are responsible. While this touches on the theme of accountability and understanding economic causes, it does not explicitly state or verify the"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the current policymakers, including the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, as established in the surrounding context.\",\n  \"reason\": \"Claim C asserts that policymakers are deflecting blame for inflation and rising interest rates, implying they are responsible. This touches on the broader theme in assumption A—that understanding economic distinctions is essential for responsible policy—but does not explicitly state or verify the core claim that such understanding is"
     },
     {
       "a_turn_idx": 83,
@@ -10596,7 +10596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 89, 'their' refers to the Federal Reserve, and 'the fed' in turn 83 refers to the same entity. The claim in C focuses on the Fed's need to remain non-committal on policy debates, particularly fiscal policy, to maintain independence.\",\n  \"reason\": \"Turn 83 asserts that the Fed should be staffed by experts with deep economic and financial knowledge, implying a need for technical competence and sound judgment. Turn 8"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 89 refers to the Federal Reserve. 'They' in turn 89 refers to the Fed.\",\n  \"reason\": \"Claim C (turn 89) states that the Federal Reserve should remain non-committal on policy debates, particularly fiscal policy, emphasizing its independence. This contradicts assumption A (turn 83), which asserts that the Fed should be staffed by experts with deep knowledge of economics and financial systems—im"
     },
     {
       "a_turn_idx": 83,
@@ -10611,7 +10611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 89 refers to the Federal Reserve, and 'the fed' is used interchangeably with 'Federal Reserve'.\",\n  \"reason\": \"Claim C states that Federal Reserve independence requires neutrality on political matters, which aligns with the broader concern in assumption A about appointing non-experts (e.g., political hacks, environmentalists) to the Fed. However, C does not explicitly state or verify the specific claim in A that the Fed"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 89 refers to the Federal Reserve, and 'the fed' is used consistently throughout the context to refer to the Federal Reserve.\",\n  \"reason\": \"Claim C states that Federal Reserve independence requires neutrality on political matters, which aligns with the broader concern in assumption A about appointing non-experts (e.g., political hacks, environmentalists) to the Fed. However, C does not explicitly state or verify the specific claim in A"
     },
     {
       "a_turn_idx": 83,
@@ -10626,7 +10626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 91 refers to the Federal Reserve, consistent with the subject of turn 83. No other coreference issues.\",\n  \"reason\": \"Turn 91 states that the Fed's monetary policy does not operate independently of fiscal policy, which introduces a new idea about interdependence between monetary and fiscal policy. However, this does not explicitly verify or state the earlier assumption in turn 83—that the Fed should be staffed by experts"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 91 refers to the Federal Reserve, consistent with the subject of turn 83. 'Their monetary policy' in turn 91 refers to the Fed's actions discussed in turn 83.\",\n  \"reason\": \"Turn 91 states that the Fed's monetary policy is influenced by fiscal policy, which introduces a broader systemic context. However, this does not explicitly verify or state the core claim of turn 83—that"
     },
     {
       "a_turn_idx": 83,
@@ -10641,7 +10641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 91 refers to the Federal Reserve, consistent with the subject of turn 83. 'The Fed' and 'they' both refer to the Federal Reserve.\",\n  \"reason\": \"Claim C states that the Federal Reserve incorrectly characterized inflation as temporary, which implies a failure in economic judgment due to lack of proper expertise—directly supporting the assumption in A that the Fed should be staffed by experts with deep knowledge of economics and financial"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 91 refers to the Federal Reserve, consistent with the subject of turn 83. 'The Fed' in turn 91 is coreferent with 'the Federal Reserve' in turn 83.\",\n  \"reason\": \"Claim C states that the Federal Reserve incorrectly characterized inflation as temporary, which implies a failure in economic judgment and expertise—directly supporting the assumption in A that the Fed should be staffed by experts with"
     },
     {
       "a_turn_idx": 83,
@@ -10656,7 +10656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 83 refers to the individuals appointed to the Federal Reserve board, specifically mentioning 'an environmentalist' and 'Raskin'. In turn 89, 'the fed' refers to the Federal Reserve, and 'their job' refers to the Fed's role in maintaining independence. No direct mention of environmentalists or qualifications is made in turn 89.\",\n  \"reason\": \"Turn 89 discusses the Federal Reserve's independence"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 83 refers to the individuals appointed to the Federal Reserve board, specifically mentioning 'an environmentalist' and 'Raskin'. In turn 89, 'the fed' refers to the Federal Reserve, and 'their job' refers to the Fed's role in maintaining neutrality. No direct mention of environmentalists or qualifications is made in turn 89.\",\n  \"reason\": \"Turn 89 discusses the Federal Reserve's independence"
     },
     {
       "a_turn_idx": 83,
@@ -10671,7 +10671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 89 refers to the Federal Reserve, and 'the fed' is used consistently throughout. No coreference resolves to 'environmentalists' or 'Raskin'.\",\n  \"reason\": \"Claim C (turn 89) discusses the Federal Reserve's need to remain non-committal and independent, particularly regarding fiscal policy. This is unrelated to assumption A, which claims that environmentalists lack qualifications to serve on the Federal Reserve board"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 89 refers to the Federal Reserve, and 'the fed' is used consistently throughout. No coreference resolves to 'environmentalist' or related figures from turn 83.\",\n  \"reason\": \"Claim C (turn 89) discusses the Federal Reserve's need to remain non-committal and independent, particularly regarding fiscal policy. This does not address or verify the assumption in A (turn 83), which claims that environmental"
     },
     {
       "a_turn_idx": 83,
@@ -10701,7 +10701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 83, 'an environmentalist' refers to a person appointed to the Fed board without proper economic qualifications. In turn 91, 'the Fed' is discussed in terms of its policy misjudgment regarding inflation, but no mention is made of environmentalists or their qualifications.\",\n  \"reason\": \"Claim C discusses the Federal Reserve's characterization of inflation as temporary, which is a separate issue from the qualification of individuals like environmentalists serving on the Fed board."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'they' in turn 91 refers to the Federal Reserve.\",\n  \"reason\": \"Claim C states that the Fed incorrectly characterized inflation as temporary, which relates to the broader critique of Fed policy but does not explicitly address or verify the specific assumption in A—that environmentalists lack qualifications to serve on the Federal Reserve board. While both statements criticize the Fed’s decision-making, C focuses on a different issue (inflation characterization) rather than the credentials of"
     },
     {
       "a_turn_idx": 83,
@@ -10746,7 +10746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Tom' in turn 106 is not linked to any prior mention or context related to the speaker's authority or expertise in judging economists. There is no indication that 'Tom' refers to a person being evaluated for economic legitimacy.\",\n  \"reason\": \"Claim C (turn 106) introduces a new address ('To the Tom') without any connection to the earlier assumption A (turn 85), which concerns the speaker's authority to judge whether"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference link between 'Tom' and the speaker or any entity related to the assumption about economic expertise. 'Tom' is likely a person being addressed, not a reference to the speaker or the subject of the earlier claim.\",\n  \"reason\": \"Claim C (turn 106) states that the speaker is addressing someone named Tom, which is unrelated to the earlier assumption A (turn 85) about the speaker's authority or expertise to judge legitimacy as an economist"
     },
     {
       "a_turn_idx": 86,
@@ -10761,7 +10761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 86 refers to 'these people' mentioned in turn 85, who are described as non-economists with an environmental focus. In turn 104, 'a bank' and 'they' refer to financial institutions making loans, but the claim focuses on historical private banking practices rather than climate-related financial risk or judgment about policy emphasis.\",\n  \"reason\": \"Claim C discusses the historical practice of banks taking personal financial risk"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which aligns with the general subject of financial institutions mentioned in turn 86. The term 'private banking' and 'putting their own money at risk' relates to financial responsibility, but does not directly address 'climate-related financial risk' or 'overemphasis'.\",\n  \"reason\": \"Claim C discusses banks taking personal financial risk in lending, which touches on broader themes of risk"
     },
     {
       "a_turn_idx": 86,
@@ -10776,7 +10776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in A refers to progressives, but C discusses banks and private banking risk, not policy priorities.\",\n  \"reason\": \"Claim C discusses historical practices in private banking, specifically that banks once took personal financial risk when making loans. This is unrelated to the assumption in A, which claims that progressives prioritize climate-related financial risk over other policy areas. C does not mention progressives, climate policy, or policy prioritization. The topics are entirely different,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in A refers to progressives, while C discusses banks and private banking practices without referencing progressives or policy priorities.\",\n  \"reason\": \"Claim C discusses historical banking practices involving private risk, which is unrelated to the assumption that progressives prioritize climate-related financial risk over other policy areas. There is no mention of progressives, policy priorities, or climate risk in C. The topics are distinct, and C does not state, imply, or verify the substance of"
     },
     {
       "a_turn_idx": 86,
@@ -10821,7 +10821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 93) states the speaker believes there are three things involved, but provides no information about Chairman Palace Chairman Pal or any assertion regarding his authority or influence. There is no mention of the speaker's belief about the chairman’s role, power, or impact on the discussion. Thus, C does not support, verify, or relate to assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 93) states the speaker believes there are three things involved, but does not mention Chairman Palace Chairman Pal, authority, influence, or any aspect of the earlier assumption A. There is no explicit or implicit connection between the belief in three things and the speaker's belief about the chairman's authority. Thus, C is unrelated to A and does"
     },
     {
       "a_turn_idx": 88,
@@ -10836,7 +10836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the position mentioned in turn 96.\",\n  \"reason\": \"Claim C states that the Treasury Secretary position is a big job, indicating significant responsibility. However, it does not address or verify the specific assumption A about Chairman Palace Chairman Pal's authority or influence. While both involve high-level government roles, there is no direct link between the Treasury Secretary's workload and the perceived authority of Chairman Pal. Thus, the connection is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the position mentioned in turn 96 and 97.\",\n  \"reason\": \"Claim C states that the Treasury Secretary position is a big job, indicating significant responsibility, but does not mention Chairman Palace Chairman Pal or any authority/influence related to him. While both involve high-level government roles, C does not address or verify the specific assumption about Chairman Pal's authority or influence. Thus, there is only a weak topical"
     },
     {
       "a_turn_idx": 88,
@@ -10896,7 +10896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 89 refers to the Federal Reserve; 'their' in turn 91 refers to the Federal Reserve's monetary policy.\",\n  \"reason\": \"Claim C explicitly states that the Federal Reserve's monetary policy does not operate in a vacuum and occurs within the backdrop of fiscal policy, which directly verifies the substance of assumption A—that the Fed's independence requires neutrality and avoidance of partisan positions, especially regarding fiscal policy. While A emphasizes the need for"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 89 refers to the Federal Reserve; 'their' in turn 91 refers to the Federal Reserve's monetary policy.\",\n  \"reason\": \"Claim C explicitly states that the Federal Reserve's monetary policy does not operate in a vacuum and occurs within the backdrop of fiscal policy, directly verifying the substance of assumption A, which asserts that the Fed's independence requires neutrality and non-partisanship—implying it must remain cognizant"
     },
     {
       "a_turn_idx": 89,
@@ -10956,7 +10956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 93 refers to the Treasury and possibly the Fed, based on context. However, 'three things' is vague and not linked to the specific belief about intentional behavior in turn 90.\",\n  \"reason\": \"Turn 93 introduces the idea of 'three things' but does not clarify or verify the claim that the Treasury's behavior is intentional. There is no explicit mention of intentionality, nor does it address the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 93 refers to the Treasury and possibly the Fed, based on context. However, 'three things' is vague and not linked to the specific claim about intentionality in turn 90.\",\n  \"reason\": \"Turn 93 introduces the idea of 'three things' but does not clarify or verify the claim that the Treasury's behavior is intentional. There is no explicit mention of intentionality, nor does it address the substance of"
     },
     {
       "a_turn_idx": 90,
@@ -10971,7 +10971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are collectively described as responsible for the crisis. This aligns with the subject of the Treasury's behavior in turn 90.\",\n  \"reason\": \"Claim C explicitly attributes responsibility for the crisis to the current leadership (Biden administration, Warren, Barr, Gruenberg), stating they caused inflation, failed to supervise banks, and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are collectively described as responsible for the crisis. This aligns with the implied subject of 'the Treasury' in assumption A, as the Treasury is part of the broader federal leadership under the Biden administration.\",\n  \"reason\": \"Claim C explicitly attributes responsibility for the crisis to the current leadership (Biden administration, Warren, Barr, Gruenberg"
     },
     {
       "a_turn_idx": 90,
@@ -10986,7 +10986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_01, consistent with A.\",\n  \"reason\": \"Claim C (turn 96) asks about serving as Treasury Secretary under a Republican president, which is unrelated to the assumption in A (turn 90) that the Treasury’s behavior is intentional. C does not state, verify, or even reference the intentionality of the Treasury’s actions. There is no semantic connection between the two"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 96 refers to SPEAKER_01, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 96) asks whether the addressee would serve as Treasury Secretary under a Republican president, which is unrelated to assumption A (turn 90), which concerns the belief that the Treasury's behavior is intentional. There is no statement or implication in C that confirms, addresses, or verifies the"
     },
     {
       "a_turn_idx": 90,
@@ -11001,7 +11001,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 99 refers to the speakers collectively, but there is no reference to the Treasury's behavior or intentionality. 'This stuff' refers to financial topics discussed earlier, not the Treasury's intent.\",\n  \"reason\": \"Claim C discusses the necessity of teaching financial content to youth, which is unrelated to the assumption that the Treasury's behavior is intentional. There is no mention of intentionality, accident, or the Treasury's motives in C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 90 refers to the Treasury, and 'the Treasury is funny' suggests intentional behavior. In turn 99, 'we have to have more people young people learning the stuff' refers to teaching financial content to youth, which is unrelated to the Treasury's intentionality.\",\n  \"reason\": \"Turn 99 discusses the necessity of teaching financial content to youth, which is unrelated to the claim in turn 90 that the Treasury"
     },
     {
       "a_turn_idx": 90,
@@ -11016,7 +11016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 96, 'the treasury' refers to the same governmental body mentioned in turn 90, specifically the U.S. Department of the Treasury, as indicated by the context of political leadership and economic policy roles.\",\n  \"reason\": \"Turn 96 explicitly references 'the treasury' in the context of serving as Treasury Secretary under a Republican president, which directly verifies the assumption in turn 90 that 'the Treasury' refers to a specific governmental body (the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Treasury' in turn 90 refers to the U.S. Department of the Treasury, a specific governmental body. In turn 96, 'the treasury' is used in the context of serving as Treasury Secretary, which explicitly references the same governmental institution.\",\n  \"reason\": \"Turn 96 explicitly refers to 'the treasury' in the context of holding the position of Treasury Secretary under a Republican president, which directly verifies the assumption in turn 9"
     },
     {
       "a_turn_idx": 90,
@@ -11031,7 +11031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Treasury' in turn 90 refers to the U.S. Department of the Treasury, a specific governmental body. In turn 97, 'the treasury secretary' refers to the head of that same department, establishing a link between the two references.\",\n  \"reason\": \"Turn 97 mentions the 'treasury secretary' as a significant role, implying institutional importance, but does not explicitly confirm or verify the expectation from turn 90 that the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Treasury' in turn 90 refers to the U.S. Department of the Treasury, a specific governmental body. In turn 97, 'the treasury secretary' refers to the head of that same department, establishing a link between the two references.\",\n  \"reason\": \"Turn 97 mentions the 'treasury secretary' as a significant role, implying recognition of the Treasury as an important governmental institution. However, it does not explicitly state or verify"
     },
     {
       "a_turn_idx": 91,
@@ -11091,7 +11091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which likely refers to banks in general, including those mentioned earlier in turn 94 as having mismanaged interest rate risk.\",\n  \"reason\": \"Claim C discusses banks taking personal financial risk when making loans, which relates to broader risk management but does not explicitly address interest rate risk exposure—the specific focus of assumption A. While both touch on bank risk behavior, C shifts focus to loan risk"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which likely refers to banks in general, including those mentioned earlier such as Silicon Valley Bank and community banks. 'They' in turn 94 refers to regulators and policymakers who failed to supervise banks.\",\n  \"reason\": \"Claim C discusses banks taking personal financial risk when making loans, which relates to the broader theme of accountability and risk management. However, it does not explicitly address or verify"
     },
     {
       "a_turn_idx": 94,
@@ -11121,7 +11121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are criticized for blaming regulatory reforms and pushing excessive regulation. In turn 104, 'we' refers to the speaker (SPEAKER_03), advocating for banks to take personal financial risk again, which indirectly relates to reducing reliance on public safety nets like the FDIC.\",\n  \"reason\": \"Turn 10"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are criticized for blaming regulatory reforms and pushing new regulations. In turn 104, 'we' refers to the speaker (SPEAKER_03), who advocates for returning to a model where banks take personal financial risk—implying a rejection of current systemic risk-sharing via FDIC. This contrasts with A’s focus"
     },
     {
       "a_turn_idx": 94,
@@ -11136,7 +11136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are criticized for blaming regulatory reforms. In turn 104, 'we' refers to the speaker (SPEAKER_03), discussing a return to pre-FDIC private banking practices, which indirectly relates to reducing reliance on deposit insurance.\",\n  \"reason\": \"Claim C discusses moving away from deposit insurance and returning to private"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, who are criticized for blaming regulatory reforms. In turn 104, 'we' refers to the speaker (SPEAKER_03), discussing a return to pre-FDIC private banking practices.\",\n  \"reason\": \"Claim C discusses moving away from deposit insurance and socializing private risk via the FDIC, which relates to the"
     },
     {
       "a_turn_idx": 94,
@@ -11151,7 +11151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Biden administration, Elizabeth Warren, and Vice Chairman Barr, who are criticized for blaming regulatory reforms. In turn 105, 'Kentucky community banks' are contrasted with 'a woke, mismanaged bank like Silicon Valley,' implying that community banks are well-managed and responsible, thus supporting the idea that they should not face disproportionate regulatory burdens.\",\n  \"reason\": \"Claim C explicitly states that Kentucky community"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 105 refers to 'Kentucky community banks', which are the subject of the claim. 'They' in the phrase 'have to consolidate everything into too big to fail Wall Street banks' (from turn 95) is linked to the regulatory pressure mentioned in turn 94.\",\n  \"reason\": \"Claim C states that Kentucky community banks are well managed, which directly supports the implicit assumption in A that community and regional banks"
     },
     {
       "a_turn_idx": 94,
@@ -11181,7 +11181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg as mentioned in turn 94.\",\n  \"reason\": \"Claim C explicitly states that regulatory pressures will force community and regional banks to consolidate into 'too big to fail Wall Street banks,' which directly verifies the concern raised in assumption A about creating a 'too big to fail' system. This consolidation would lead to greater systemic risk and undermine market fairness,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden administration, Elizabeth Warren, Vice Chairman Barr, and Gruenberg, as established in turn 94.\",\n  \"reason\": \"Claim C explicitly states that regulatory pressures will force community and regional banks to consolidate into 'too big to fail Wall Street banks,' which directly verifies the concern raised in assumption A about creating a 'too big to fail' system that increases systemic risk and undermines market fairness. The phrasing in"
     },
     {
       "a_turn_idx": 94,
@@ -11196,7 +11196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03's use of 'private sector risk' refers to the risk associated with banks' operations, which aligns with the 'too big to fail' system's implications discussed in turn 94. 'Socializing' risk via the FDIC corresponds to the systemic risk and unfair burden on smaller institutions mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the FDIC system transfers private sector risk to the public, which directly verifies the concern in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03's use of 'private sector risk' refers to the risk associated with banks' operations, which aligns with the 'too big to fail' system's implications discussed in turn 94. 'Socializing' risk via the FDIC corresponds to the systemic risk and unfair burden on smaller banks mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the FDIC system transfers private sector risk to the public, which directly verifies the concern in"
     },
     {
       "a_turn_idx": 95,
@@ -11211,7 +11211,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which likely refers to commercial banks in general, including large ones mentioned in turn 95. No direct pronoun resolution needed as the subject is general.\",\n  \"reason\": \"Turn 104 discusses banks taking personal financial risk when making loans, which contrasts with the current system of deposit insurance and risk socialization. While this touches on systemic risk indirectly by criticizing risk-sharing mechanisms,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which likely refers to commercial banks in general, including large ones mentioned in turn 95. No direct pronoun resolution needed as the subject is general.\",\n  \"reason\": \"Turn 104 discusses banks taking personal financial risk when making loans, which contrasts with the current system of deposit insurance and risk socialization via the FDIC. While this touches on systemic risk indirectly by criticizing"
     },
     {
       "a_turn_idx": 95,
@@ -11226,7 +11226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 105 refers to Kentucky community banks, as established by the contrast with 'a woke, mismanaged bank like Silicon Valley'. 'It' in 'it's not fair' refers to the burden placed on well-managed community banks due to the failure of larger institutions.\",\n  \"reason\": \"Claim C explicitly states that Kentucky community banks 'know how to manage interest rate risk', which directly supports the implied assumption in A that consolidation into"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 105 refers to Kentucky community banks, as established by the contrast with 'a woke, mismanaged bank like Silicon Valley'.\",\n  \"reason\": \"Claim C states that Kentucky community banks understand how to manage interest rate risk, which indirectly supports the idea that smaller, well-managed banks can handle risk effectively—contrasting with the systemic risk implied in assumption A. However, C does not explicitly state or verify the causal link between"
     },
     {
       "a_turn_idx": 95,
@@ -11241,7 +11241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_01, and 'the speaker' in C is SPEAKER_03, who is not the same person.\",\n  \"reason\": \"Claim C (turn 106) expresses a positive sentiment toward being in the current company (likely referring to the conversation or event), which is unrelated to assumption A (turn 95), which criticizes the financial structure for concentrating power and blaming"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_01, and 'the speaker' in C is SPEAKER_03, who is not the same person.\",\n  \"reason\": \"Claim C (turn 106) expresses a positive sentiment toward being in the current company (likely referring to the conversation or event), which is unrelated to assumption A (turn 95), which criticizes the current financial structure for concentrating power and"
     },
     {
       "a_turn_idx": 95,
@@ -11256,7 +11256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'a bank' in turn 104, which likely refers to commercial banks in general, including those mentioned earlier such as Silicon Valley Bank. No direct pronoun resolution is needed beyond general referential consistency.\",\n  \"reason\": \"Claim C discusses the historical practice of banks taking personal financial risk when making loans, which contrasts with current practices involving deposit insurance and government safety nets. While this touches on broader themes related to systemic risk and moral"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 95 refers to the Biden administration and regulators mentioned earlier. In turn 104, 'we' refers to the speakers discussing policy reform, not directly referencing government bailouts.\",\n  \"reason\": \"Turn 104 discusses returning to private banking practices where banks risk their own capital, which contrasts with current systemic risk-sharing via FDIC insurance. While this implies criticism of socialized risk—potentially including bailouts—it does"
     },
     {
       "a_turn_idx": 96,
@@ -11301,7 +11301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' in turn 97 refers directly to the role mentioned in turn 96.\",\n  \"reason\": \"Turn 97 explicitly states that the Treasury Secretary role is 'a big job,' which directly verifies the substance of assumption A—that the addressee has political ambitions or qualifications relevant to serving as Treasury Secretary—by affirming the significance and weight of the position. This confirms the implied importance of the role, making the assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' in turn 97 refers directly to the role mentioned in turn 96.\",\n  \"reason\": \"Turn 97 explicitly states that the Treasury Secretary role is 'a big job,' which directly verifies the substance of assumption A—that the addressee has political ambitions or qualifications relevant to serving as Treasury Secretary—by affirming the significance and weight of the position. This confirms the implied importance of the role, making the earlier"
     },
     {
       "a_turn_idx": 96,
@@ -11316,7 +11316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the role discussed in turn 96.\",\n  \"reason\": \"Claim C explicitly states that the Treasury Secretary position is 'a big job,' which strongly entails the idea that it requires significant responsibility and effort. While it does not directly mention political ambitions or qualifications as in assumption A, it implicitly supports the notion that the role is substantial and demanding—consistent with the idea that someone with relevant qualifications or ambitions would be needed."
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the role mentioned in turn 96.\",\n  \"reason\": \"Turn 97 explicitly states that the Treasury Secretary position is 'a big job,' which strongly entails the idea that it involves substantial work. This aligns with the substance of assumption A, which implies the role requires significant qualifications or ambition. While C does not explicitly mention political ambitions or qualifications, it confirms the weight and importance of the role, supporting the"
     },
     {
       "a_turn_idx": 96,
@@ -11331,7 +11331,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the same role mentioned in turn 96.\",\n  \"reason\": \"Claim C explicitly states that the Treasury Secretary role is a 'big job,' which directly supports the idea that the position is significant and could be assigned based on political alignment or personal capability—central to assumption A. While C does not explicitly mention 'political alignment' or 'personal capability,' it strongly entails the substantive notion of the role being substantial and consequential"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the same role mentioned in turn 96.\",\n  \"reason\": \"Claim C explicitly states that the Treasury Secretary role is a 'big job,' which directly supports the idea that the position is significant and could be assigned based on political alignment or personal capability—central to assumption A. While C does not explicitly mention 'political alignment' or 'personal capability,' it strongly entails the substantive notion that the role carries substantial weight,"
     },
     {
       "a_turn_idx": 96,
@@ -11346,7 +11346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the same role mentioned in turn 96.\",\n  \"reason\": \"Turn 97 explicitly states that the Treasury Secretary position is 'a big job,' which aligns with the idea that the role requires significant responsibility and could be influenced by political alignment or personal capability—key aspects of assumption A. While it does not explicitly mention 'political alignment' or 'personal capability,' the emphasis on the job being 'big'"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the treasury secretary' refers to the same role mentioned in turn 96.\",\n  \"reason\": \"Turn 97 explicitly states that the Treasury Secretary position is 'a big job,' which aligns with the idea that the role requires significant responsibility and could be influenced by political alignment or personal capability—central to assumption A. While it does not explicitly mention 'political alignment' or 'personal capability,' the emphasis on the job being 'big' strongly"
     },
     {
       "a_turn_idx": 102,
@@ -11361,7 +11361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 103 refers to the bank holding company and its community bank charters, which are described as offering insured deposits through multiple institutions.\",\n  \"reason\": \"Claim C explicitly states the existence of private sector solutions involving bank holding companies with multiple community bank charters, which directly verifies the substance of assumption A—namely, that private sector solutions are relevant and valid alternatives to public ones. The description of how these structures enable higher deposit insurance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 103 refers to the bank holding company and its community bank charters, which are described as offering insured deposits through multiple institutions.\",\n  \"reason\": \"Claim C explicitly describes a specific private sector solution—bank holding companies with multiple community bank charters—that enables higher deposit insurance coverage by distributing accounts across subsidiaries. This directly verifies the substance of assumption A, which asserts that private sector solutions are relevant and valid alternatives to public ones. The"
     },
     {
       "a_turn_idx": 102,
@@ -11376,7 +11376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 104 refers to policymakers or financial system participants, and 'the FDIC' is the entity through which private sector risk is being socialized.\",\n  \"reason\": \"Claim C explicitly states that the current FDIC system 'socializes private sector risk,' which directly verifies the underlying assumption in A that private sector solutions are valid alternatives to public ones—by highlighting the problem of public subsidization of private risk. This confirms the relevance and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 104 refers to policymakers or financial system participants, and 'the FDIC' is the institution responsible for deposit insurance. The phrase 'socializing private sector risk' directly refers to transferring risk from private actors to the public via the FDIC.\",\n  \"reason\": \"Claim C explicitly states that the current FDIC system involves socializing private sector risk, which directly verifies the underlying assumption in A that private sector solutions are valid alternatives to"
     },
     {
       "a_turn_idx": 102,
@@ -11391,7 +11391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 104 refers to banks, as established by the context of banking practices and risk-taking behavior.\",\n  \"reason\": \"Claim C explicitly states that in the past, banks took personal financial risk when making loans, which directly verifies the core idea in assumption A that the discussion involves private sector risk mitigation strategies—specifically, the historical practice of banks bearing their own risk rather than relying on public insurance mechanisms like the FDIC. The statement"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 104 refers to 'banks' as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that banks historically put their own money at risk when making loans, which directly verifies the core idea in assumption A that private sector risk mitigation strategies—such as personal financial risk by banks—were part of past practices. This aligns with the broader theme of institutional risk management and contrasts current reliance on FDIC insurance, thus"
     },
     {
       "a_turn_idx": 103,
@@ -11406,7 +11406,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 104 refers to banks, as established by the context of private banking and lending practices.\",\n  \"reason\": \"Claim C explicitly states that under the old system, banks were not reliant on deposit insurance, which directly verifies the assumption in A that deposit insurance applies per institution rather than per holding company. The statement 'They weren't worried about deposit insurance' confirms a historical lack of dependence on the current FDIC framework, aligning with"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 104 refers to banks, as established by the context of private banking and lending practices.\",\n  \"reason\": \"Claim C explicitly states that under the old system, banks were not reliant on deposit insurance, which directly verifies the assumption in A that deposit insurance applies per institution rather than per holding company. The reference to 'old idea of private banking' and the emphasis on banks putting their own money at risk aligns with the notion that"
     },
     {
       "a_turn_idx": 103,
@@ -11421,7 +11421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the current company' in turn 106 is ambiguous but likely refers to the speaker's current organization or affiliation, which is unrelated to the concept of deposit insurance per institution vs. per holding company discussed in turn 103.\",\n  \"reason\": \"Turn 106 expresses a positive sentiment toward being with someone ('Great to be with you') and does not mention deposit insurance, institutions, holding companies, or any related financial mechanism. It fails"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the current company' in turn 106 is ambiguous but likely refers to the speaker's current organization or affiliation, which is unrelated to the concept of deposit insurance per institution vs. per holding company discussed in turn 103.\",\n  \"reason\": \"Turn 106 expresses a positive sentiment toward being with someone ('Great to be with you') and does not mention deposit insurance, institutions, holding companies, or any related financial mechanism. It does"
     },
     {
       "a_turn_idx": 103,
@@ -11432,11 +11432,11 @@
       "claim_text": "The speaker appreciates the audience for listening.",
       "overlap_score": 2,
       "c_time": 2617.442,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the speaker' in C refers to SPEAKER_00, who is the host of the show.",
-      "reason": "Claim C expresses appreciation for the audience's attention but does not address or verify the assumption in A that the audience understands banking regulatory frameworks like FDIC coverage. There is no mention of FDIC, deposit insurance, or regulatory knowledge in C. The two statements are unrelated in semantic content.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in C refers to SPEAKER_00, who is the host of the show.\",\n  \"reason\": \"Claim C expresses appreciation for the audience's attention but does not address or verify the assumption in A that the audience understands banking regulatory frameworks like FDIC coverage. There is no mention of FDIC, deposit insurance, or regulatory knowledge in C. The two statements are unrelated in semantic content.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in C refers to SPEAKER_00, who is not the same as SPEAKER_01 in A.\",\n  \"reason\": \"Claim C expresses appreciation for the audience listening, which is unrelated to the assumption in A that the audience understands banking regulatory frameworks like FDIC coverage. There is no mention, verification, or even reference to FDIC, banking regulations, or the concept of deposit insurance in C. The two statements address"
     },
     {
       "a_turn_idx": 103,
@@ -11451,7 +11451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 103 refers to banks, as established by the context of bank holding companies and community banks. In turn 104, 'when a bank made a loan' clearly refers to the same subject, maintaining consistent coreference.\",\n  \"reason\": \"Turn 104 explicitly states that banks historically took personal financial risk when making loans, which directly verifies the implicit assumption in turn 103 that innovative financial structuring was"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 103 refers to banks, as established by the context of bank holding companies and community banks. In turn 104, 'when a bank made a loan' clearly refers to the same subject.\",\n  \"reason\": \"Claim C explicitly states that in the past, banks took personal financial risk when making loans, which directly verifies the core assumption in A that the goal is to highlight innovative financial structuring for risk diversification—"
     }
   ]
 }

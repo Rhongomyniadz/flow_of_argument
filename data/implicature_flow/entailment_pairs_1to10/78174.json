@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to the same-sex couple mentioned in turn 18, who are raising two daughters and are described as providing a loving and caring environment.\",\n  \"reason\": \"Claim C explicitly states that 'even republicans say we need children to have caring and loving parents,' which directly verifies the core idea in assumption A—that children thrive best in families where both parents are emotionally committed and loving. The context confirms that the example couples ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to the same-sex couples mentioned in turn 18, specifically the two men raising two daughters. 'Children' in turn 24 refers back to the 'two beautiful daughters' from turn 18.\",\n  \"reason\": \"Claim C explicitly states that 'children need caring and loving parents,' which directly verifies the core substance of assumption A—that children thrive best in families where both parents are emotionally committed and loving."
     },
     {
       "a_turn_idx": 18,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A. 'Other countries' in C refers to geopolitical entities like Saudi Arabia and North Korea, not the audience's openness to LGBTQ+ relationships.\",\n  \"reason\": \"Claim C discusses foreign policy and diplomatic relations with other nations, particularly regarding oil and geopolitical strategy. Assumption A concerns societal acceptance of LGBTQ+ relationships and inclusive family structures. There is no semantic overlap or logical connection between the two topics. Therefore, C does not make"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'other countries' in turn 30 refers to foreign nations in general, not linked to the audience or LGBTQ+ topic.\",\n  \"reason\": \"Claim C (turn 30) discusses diplomatic relations and friendly ties with other countries, particularly in the context of oil and geopolitics. This is entirely unrelated to assumption A, which concerns societal openness to LGBTQ+ relationships and inclusive families. There is no overlap in subject matter, nor does C verify"
     },
     {
       "a_turn_idx": 18,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to the general audience, not tied to prior speakers or entities.\",\n  \"reason\": \"Claim C (turn 30) discusses the importance of friendly relationships with other countries, which is unrelated to assumption A (turn 19), which concerns legal recognition of same-sex relationships and fairness. There is no overlap in subject matter, nor does C state or verify any aspect of A. The topics are entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to the general audience, not tied to prior claims about same-sex relationships.\",\n  \"reason\": \"Claim C (turn 30) discusses foreign policy and diplomatic relations with other countries, which is entirely unrelated to the earlier assumption A about legal recognition of same-sex relationships and fairness. There is no overlap in subject matter, semantics, or implied connection. Thus, the claim does not support, verify, or"
     },
     {
       "a_turn_idx": 19,
@@ -1427,11 +1427,11 @@
       "claim_text": "The speaker believes users are currently stuck in some outdated state.",
       "overlap_score": 2,
       "c_time": 771.009,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'users' in turn 43 refers to general audience, not tied to prior discussion about parenting.",
-      "reason": "Claim C discusses being stuck in an outdated state related to technology and routine, while assumption A concerns the universal importance of caring and loving parenting. The topics are entirely unrelated, with no overlap in semantic content. C does not mention parenting, children, or care, and thus neither states nor verifies A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' in turn 43 refers to general audience, not tied to prior discussion about parenting.\",\n  \"reason\": \"Claim C discusses being stuck in an outdated state related to technology and routine, while assumption A concerns the universal importance of caring and loving parenting. The topics are entirely unrelated, with no overlap in semantic content. C does not mention parenting, children, or care, and thus neither states nor verifies A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' in turn 43 refers to general audience, not tied to prior speakers or concepts.\",\n  \"reason\": \"Claim C (turn 43) discusses being stuck in an outdated state related to a digital experience or routine, while assumption A (turn 24) concerns the universal importance of caring and loving parenting for child development. The topics are entirely unrelated, with no overlap in semantic content. There is no indication that C addresses"
     },
     {
       "a_turn_idx": 26,
@@ -1446,7 +1446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'you' in turn 30 refers to the interlocutors discussing foreign relations.\",\n  \"reason\": \"Turn 30 expresses a general belief in maintaining friendly relationships with other countries, which is tangentially related to the idea in turn 26 that one might know all details of a private discussion. However, C does not address or verify the assumption that it is possible to know all details of a private discussion. Instead, it shifts focus"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to the speaker (SPEAKER_02), but the claim 'put in friendly enough with other countries' is a vague statement that does not clearly reference or verify the specific belief in turn 26 about knowing all details of a private discussion.\",\n  \"reason\": \"Turn 30 expresses a general preference for friendly relations with other countries, which is only loosely related to turn 26’s assumption that it"
     },
     {
       "a_turn_idx": 26,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the global oil production level, which is linked to geopolitical dynamics in turn 28.\",\n  \"reason\": \"Claim C states that increased oil production leads to lower oil prices, which is related to the economic consequences of oil production but does not explicitly address or verify the geopolitical dynamics mentioned in assumption A. While both statements involve oil production, C focuses on price mechanisms in the international market rather than its influence on geopolitical relations"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the global oil production level, which is linked to geopolitical dynamics in turn 28.\",\n  \"reason\": \"Claim C states that increased oil production leads to lower oil prices, which is related to the economic consequences of oil production but does not explicitly address or verify the geopolitical dynamics mentioned in assumption A. While both statements involve oil production, C focuses on price mechanisms in the international market rather than its influence on geopolitical relationships"
     },
     {
       "a_turn_idx": 28,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the U.S. government or American policy, consistent with the broader geopolitical context involving U.S. relations with oil-producing nations like Saudi Arabia.\",\n  \"reason\": \"Claim C discusses the desirability of increased domestic U.S. energy production to reduce reliance on imported oil, which relates to the broader theme of energy dynamics in geopolitics introduced in assumption A. However, C does not explicitly state or verify that discussions about"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the U.S. government or American society, consistent with the broader geopolitical context involving U.S. relations with oil-producing nations like Saudi Arabia.\",\n  \"reason\": \"Claim C discusses the desirability of increased domestic U.S. energy production to reduce reliance on imported oil, which relates to the broader theme of energy dynamics in geopolitics introduced in assumption A. However, C does not explicitly state or verify that discussions about"
     },
     {
       "a_turn_idx": 28,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'gasoline prices' in turn 38 refers directly to the topic introduced in turn 32.\",\n  \"reason\": \"Turn 38 states that gasoline prices were over three dollars before the pandemic, which provides contextual background about historical gasoline pricing. However, it does not explicitly state or verify the causal relationship claimed in turn 32—that lower oil prices lead to reduced gasoline prices at the pump. While the statement is topically related,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to the group of congressional members mentioned in turn 39, but this does not affect the relationship between A and C.\",\n  \"reason\": \"Claim C states that gasoline prices were over three dollars before the pandemic, which provides contextual background about historical prices. However, it does not explicitly state or verify the causal relationship in assumption A—that lower oil prices lead to reduced gasoline prices at the pump. While C offers a data"
     },
     {
       "a_turn_idx": 32,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'gasoline prices' in turn 38 refers directly to the topic introduced in turn 32.\",\n  \"reason\": \"Claim C states that current gasoline prices are 30-40% higher than pre-pandemic levels, which provides contextual background about gasoline pricing but does not explicitly state or verify the causal relationship in assumption A—that lower oil prices lead to reduced gasoline prices at the pump. While both statements concern gasoline prices, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'gasoline prices' in turn 38 refers directly to the topic introduced in turn 32.\",\n  \"reason\": \"Claim C states that current gasoline prices are 30-40% higher than pre-pandemic levels, which provides contextual background about gasoline pricing but does not explicitly state or verify the causal relationship in assumption A—that lower oil prices lead to reduced gasoline prices at the pump. While both statements concern gasoline prices, C"
     },
     {
       "a_turn_idx": 32,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in turn 35 refers to the situation regarding gasoline prices, which is the subject of assumption A. 'Progress' refers to the reduction in gasoline prices mentioned in turn 34.\",\n  \"reason\": \"Claim C explicitly states that 'progress is being made on reducing prices,' which directly verifies the substance of assumption A—that reducing gasoline prices is a desirable outcome—by confirming that such progress is occurring. The context confirms that the speaker views the drop"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in turn 35 refers to the situation regarding gasoline prices, which is the subject of assumption A. 'Progress' refers to the reduction in gasoline prices mentioned in turn 34.\",\n  \"reason\": \"Claim C explicitly states that 'progress is being made on reducing prices,' which directly verifies the substance of assumption A—that reducing gasoline prices is a desirable outcome—by confirming that such progress is occurring. The context confirms that the speaker views lower prices"
     },
     {
       "a_turn_idx": 34,

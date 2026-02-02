@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 10 refers to attending West Point, as established by the prior context. 'The normal path' refers back to the typical route after high school.\",\n  \"reason\": \"Claim C explicitly states that attending West Point was not part of the typical pathway after high school, which directly verifies the assumption in A that being invited to West Point implies high status or accomplishment—because such an invitation deviates from the norm, making it exceptional and prestigious"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 10 refers to attending West Point, as established by context from turn 8 and prior.\",\n  \"reason\": \"Claim C explicitly states that attending West Point was 'not the normal path' after high school, which directly verifies the assumption in A that being invited to West Point implies high status or accomplishment—because such an invitation deviates from the norm, making it a significant achievement. The statement clearly confirms the exceptional nature of the opportunity"
     },
     {
       "a_turn_idx": 8,
@@ -1517,11 +1517,11 @@
       "claim_text": "The speaker requests information about the listener's business.",
       "overlap_score": 2,
       "c_time": 179.736,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your business' refers to the listener's business, not the speaker's.\",\n  \"reason\": \"Claim C (turn 16) asks about the listener's business, while assumption A (turn 11) concerns the listener's knowledge about the 8th district. There is no overlap in subject matter or content. C does not state, verify, or relate to the idea that the listener has relevant knowledge about the 8th district"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'your business' refers to the speaker's own business, not the listener's.",
+      "reason": "Claim C (turn 16) asks the speaker about their own business, while assumption A (turn 11) concerns the listener's knowledge about the 8th district. There is no connection between the two topics. C does not state or verify anything about the listener’s knowledge, making it unrelated to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your business' refers to the speaker's own business, not the listener's.\",\n  \"reason\": \"Claim C (turn 16) asks the speaker about their own business, while assumption A (turn 11) concerns the listener's knowledge about the 8th district. There is no connection between the two topics. C does not state or verify anything about the listener’s knowledge, making it unrelated to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 11,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_00, who is the same speaker as in turn 12.\",\n  \"reason\": \"Claim C (turn 28) states that the speaker has lived in the town for about a year, which is unrelated to the assumption A (turn 12) that the speaker has accurate knowledge of congressional district boundaries. There is no mention of district boundaries, geographic knowledge, or any related content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 28) states that the speaker has lived in the town for about a year, which is unrelated to assumption A (turn 12), which concerns the speaker's accurate knowledge of congressional district boundaries. There is no mention of geographic knowledge, district lines, or related content in C. Thus, C does not support, verify, or"
     },
     {
       "a_turn_idx": 12,
@@ -1847,11 +1847,11 @@
       "claim_text": "The speaker believes serving less than two years as a township trustee does not constitute a career.",
       "overlap_score": 2,
       "c_time": 357.011,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 25 refers to SPEAKER_00, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses the speaker's belief about serving less than two years as a township trustee not constituting a career. This is unrelated to assumption A, which concerns the listener's journey involving crossing national borders. There is no mention of borders, travel, or migration in C, and no semantic connection to A. Thus,"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'the speaker' in C refers to SPEAKER_00, consistent with A.",
+      "reason": "Claim C discusses the speaker's belief about serving less than two years as a township trustee not constituting a career. This is unrelated to assumption A, which concerns the listener's journey involving crossing national borders. There is no overlap in semantic content or topic between A and C. Therefore, C neither supports nor relates to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_00, consistent with A.\",\n  \"reason\": \"Claim C discusses the speaker's belief about serving less than two years as a township trustee not constituting a career. This is unrelated to assumption A, which concerns the listener's journey involving crossing national borders. There is no overlap in semantic content or topic between A and C. Therefore, C neither supports nor relates to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 14,

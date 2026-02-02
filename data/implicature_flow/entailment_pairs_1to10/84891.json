@@ -122,11 +122,11 @@
       "claim_text": "The United States legally immigrates more people annually than any other country in the world combined.",
       "overlap_score": 2,
       "c_time": 396.998,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the United States' in claim C refers directly to the nation discussed in assumption A.",
-      "reason": "Claim C explicitly states that the U.S. legally admits more immigrants annually than any other country combined, which directly verifies the legitimacy of migrants' interest in legal entry pathways mentioned in assumption A. This supports the idea that legal avenues exist and are substantial, thereby making the earlier assumption explicit and substantiated.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the United States' in claim C refers directly to the nation discussed in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the U.S. legally admits more immigrants annually than any other country combined, which directly verifies the legitimacy of migrants' interest in legal entry pathways mentioned in assumption A. This supports the idea that legal avenues exist and are substantial, thereby making the earlier assumption explicit and substantiated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the United States' in turn 13 refers to the same entity as implied in turn 1, and 'legally immigrates more people' directly supports the idea that legal pathways exist.\",\n  \"reason\": \"Claim C explicitly states that the U.S. legally admits more immigrants annually than any other country combined, which directly verifies the substance of assumption A—that migrants have a legitimate interest in knowing how to enter legally. This factual assertion confirms the existence"
     },
     {
       "a_turn_idx": 1,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to 'legal immigrants' mentioned in turn 16 and 17, and 'the system' refers to the U.S. immigration system established in turn 1.\",\n  \"reason\": \"Claim C explicitly states that the most angry and outspoken individuals contacting the officer are those who have gone through the immigration system legitimately, directly verifying the existence and functionality of legal entry mechanisms (assumption A). The statement confirms that these"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to 'legal immigrants' mentioned in turn 17, and 'the system' refers to the U.S. immigration system established in turn 1.\",\n  \"reason\": \"Claim C explicitly states that the most angry and outspoken individuals contacting the officer are those who have gone through the immigration system legitimately, which directly verifies the existence and functionality of legal entry mechanisms (assumption A). The statement confirms that people have successfully navig"
     },
     {
       "a_turn_idx": 2,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 12 refers to the idea of closing all immigration, which is not related to the existence of a legal framework governing immigration relief.\",\n  \"reason\": \"Claim C discusses a sentiment advocating for shutting down all immigration, which is unrelated to the existence of a legal framework defining eligibility for immigration relief. There is no mention of laws, criteria, or legal structures in C. In fact, C's focus is on political sentiment and border security,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'there' in turn 12 refers to a general sentiment expressed by callers.\",\n  \"reason\": \"Claim C discusses a sentiment among callers advocating to shut down all immigration, which is unrelated to assumption A, which asserts the existence of a legal framework defining eligibility for immigration relief. C does not mention or verify any legal framework, eligibility criteria, or the structured nature of immigration relief. Instead, it focuses on public sentiment against immigration, which contradicts"
     },
     {
       "a_turn_idx": 2,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the house' in turn 9 refers to the U.S. House of Representatives, which is the legislative body mentioned in the context of passing the Secure the Border Act of 2023.\",\n  \"reason\": \"Claim C states that the House has taken action on immigration-related legislation, which directly supports the idea that the U.S. government (specifically its legislative branch) is exercising authority over immigration enforcement. This aligns with assumption A, which asserts"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the house' in turn 9 refers to the U.S. House of Representatives, which is consistent with the context of legislative action mentioned in turn 4 and turn 5.\",\n  \"reason\": \"Claim C states that the House has taken action on immigration-related legislation, which directly supports the idea that the U.S. government is exercising its authority to enforce immigration policies—specifically, through legislative action. This aligns with assumption A, which asserts that the"
     },
     {
       "a_turn_idx": 3,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 uses 'government' in turn 15 to refer to the federal government, which aligns with the US government mentioned in assumption A. 'This is the number one responsibility of the federal government' directly refers to managing national borders and immigration.\",\n  \"reason\": \"Claim C explicitly states that managing national borders and immigration is the 'number one responsibility of the federal government,' which directly verifies the core idea in assumption A—that the US government has legitimate authority"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 uses 'government' and 'federal government' to refer to the US government, which aligns with the subject of assumption A. 'This is the number one responsibility of the federal government' directly refers to managing national borders and immigration.\",\n  \"reason\": \"Claim C explicitly states that managing national borders and immigration is the 'number one responsibility of the federal government,' which directly verifies the core idea in assumption A—that the US government has legitimate authority to"
     },
     {
       "a_turn_idx": 3,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to asylum seekers who are fleeing persecution; 'that' in 'if you are being abused' refers to individuals facing persecution based on protected grounds.\",\n  \"reason\": \"Claim C explicitly states that asylum is justified when someone faces persecution due to religion, gender, or other protected grounds, which aligns with the core substance of assumption A—that asylum seekers must meet specific legal criteria (including genuine fear of persecution) before qualifying."
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to asylum seekers who are fleeing persecution; 'that' in 'if you are being abused' refers to individuals facing persecution based on protected grounds.\",\n  \"reason\": \"Claim C explicitly states that asylum is justified when someone faces persecution due to religion, gender, or other protected grounds, which aligns with the core substance of assumption A—that asylum seekers must meet specific legal criteria (including genuine fear of persecution) before being granted"
     },
     {
       "a_turn_idx": 3,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to asylum seekers who come through another country into Mexico, as established in the preceding context.\",\n  \"reason\": \"Claim C suggests that individuals who enter Mexico via another country likely already have asylum or protective status there, implying they are already protected. This touches on the idea that such individuals may not need further protection in the U.S., which indirectly relates to the legitimacy of their right to request protection under U.S. law."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to asylum seekers who come through another country into Mexico, as established in the preceding context.\",\n  \"reason\": \"Claim C suggests that individuals who enter Mexico via another country likely already have asylum or protective status there, implying they are already protected. This touches on the idea that such individuals may not need further protection in the U.S., which indirectly relates to the legitimacy of their right to seek asylum in the U.S. However"
     },
     {
       "a_turn_idx": 4,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 15 refers to the removal of Title 42, which is explicitly linked to increased migration flows.\",\n  \"reason\": \"Claim C explicitly states that the removal of Title 42 has led to increased migration flows at the border, which directly verifies the substance of assumption A—that border enforcement efforts are insufficient to deter large-scale migration. The causal link between the removal of Title 42 and the surge in migration is clearly articulated,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 15 refers to the removal of Title 42, which is explicitly linked to increased migration flows.\",\n  \"reason\": \"Claim C directly and explicitly verifies assumption A by stating that the removal of Title 42 has led to increased migration flows at the border, which aligns with the core idea that current border enforcement is insufficient to deter large-scale migration. The causal link between policy change (removal of Title 42)"
     },
     {
       "a_turn_idx": 4,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 11 refers to the legislative action mentioned in turn 5, specifically the Secure the Border Act. 'They' in 'they're OK with the carnage' refers to the Senate and the White House, consistent with the actors mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly states that the White House has not proposed any legislative measures, which directly verifies the earlier assumption A that legislative action requires approval from both the Senate"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 11 refers to the legislative action mentioned in turn 5, specifically the Secure the Border Act of 2023. 'They' in 'they're OK with the carnage' refers to the Senate and the White House, consistent with the earlier mention of needing Senate and White House approval.\",\n  \"reason\": \"Claim C explicitly states that the White House has not proposed any legislative measures, which directly verifies the earlier assumption A"
     },
     {
       "a_turn_idx": 5,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 13 refers to the legislation mentioned in turn 5, specifically the Secure the Border Act of 2023.\",\n  \"reason\": \"Claim C explicitly states that the legislation will force the Senate to take some form of action, which directly verifies the earlier assumption A that legislative action requires approval from both the Senate and the White House. While A focuses on the necessity of Senate approval, C extends this by asserting that the legislation creates"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 13 refers to the legislation mentioned in turn 5, specifically the Secure the Border Act of 2023.\",\n  \"reason\": \"Claim C explicitly states that the legislation will force the Senate to take some form of action, which directly verifies the earlier assumption A that legislative action requires approval from both the Senate and the White House. While A focuses on the necessity of Senate approval, C confirms that the legislation creates a mechanism compelling"
     },
     {
       "a_turn_idx": 6,
@@ -681,7 +681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the bill mentioned in turn 6, which is the Secure the Border Act of 2023. The mention of 'one Democrat' and the possible years (2013 or 2019) directly address the uncertainty expressed in turn 6 about whether any Democrat voted on the bill.\",\n  \"reason\": \"Claim C explicitly addresses the assumption in A—that there was a bill under consideration requiring a vote"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 7 refers to the bill mentioned in turn 6, specifically the Secure the Border Act of 2023. The mention of 'one Democrat' and the possible years 2013 or 2019 directly addresses the uncertainty expressed in turn 6 about whether any Democrats supported the bill.\",\n  \"reason\": \"Claim C explicitly verifies the core assumption in A—that a bill was under consideration requiring a vote—by"
     },
     {
       "a_turn_idx": 6,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to the speaker (SPEAKER_04), and 'my officer' refers to the speaker's office or staff. 'They' in 'they've been through it' refers to legal immigrants who have followed the system.\",\n  \"reason\": \"Claim C explicitly states that the speaker's office receives complaints from individuals who have followed legal procedures, which directly verifies the substance of assumption A—that the speaker believes their lack of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to the speaker (SPEAKER_04), and 'my officer' refers to the speaker's office or staff. The phrase 'people who've gone through the system' refers to legal immigrants who followed legal procedures.\",\n  \"reason\": \"Claim C explicitly states that the speaker's office receives complaints from individuals who have followed legal procedures—directly verifying the substance of assumption A, which asserts that the speaker believes their"
     },
     {
       "a_turn_idx": 6,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 8 refers to the Secure the Border Act, which is the subject of discussion in the conversation. The speaker's personal judgment about the bill's prospects is evident in their tone and content.\",\n  \"reason\": \"Claim C (turn 8) asks about hopefulness regarding the bill's passage in the Senate, which reflects a personal assessment of its prospects. However, it does not explicitly state or verify the earlier assumption A—that the speaker’s"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 8 refers to the Secure the Border Act, which is the subject of discussion in the preceding turns. The speaker's personal judgment about the bill's prospects is evident in their tone and content.\",\n  \"reason\": \"Claim C (turn 8) asks about hopefulness regarding the bill's passage in the Senate, which reflects a personal assessment of its prospects. However, it does not explicitly state or verify the earlier assumption A—that the speaker"
     },
     {
       "a_turn_idx": 7,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to individuals who entered Mexico via another country, and 'they' is used to refer to those seeking asylum in the U.S. after being in Mexico.\",\n  \"reason\": \"Claim C states that individuals entering Mexico from another country likely have asylum or protective status there, which is a factual assertion about the status of migrants in Mexico. However, this does not address or verify the earlier assumption A, which concerns the existence of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to individuals who entered Mexico via another country, and 'they' is used to denote people seeking asylum in the U.S. after being in Mexico.\",\n  \"reason\": \"Claim C states that individuals entering Mexico from another country likely have asylum or protective status there, which is a factual assertion about the status of migrants in Mexico. However, this does not address or verify the earlier assumption A, which concerns the existence of a"
     },
     {
       "a_turn_idx": 8,

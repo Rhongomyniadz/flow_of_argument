@@ -1,0 +1,27 @@
+{
+  "episode_id": "90996",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.031,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The speaker believes their involvement in Venezuelan politics was significant enough to merit accusations of assassination.",
+      "c_turn_idx": 1,
+      "claim_text": "The speaker believes their performance was exceptionally bad.",
+      "overlap_score": 2,
+      "c_time": 31.028,
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'I' refers to the speaker throughout.",
+      "reason": "Claim C states the speaker believes their performance was exceptionally bad, which is unrelated to assumption A, which concerns the belief that their involvement in Venezuelan politics was significant enough to merit assassination accusations. There is no mention or implication in C of political significance or accusations of assassination. The topics diverge entirely.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to the speaker throughout.\",\n  \"reason\": \"Claim C states the speaker believes their performance was exceptionally bad, which is unrelated to assumption A, which concerns the belief that their involvement in Venezuelan politics was significant enough to merit assassination accusations. There is no mention or implication in C of political significance or accusations of assassination. The topics diverge entirely.\"\n}\n```"
+    }
+  ]
+}

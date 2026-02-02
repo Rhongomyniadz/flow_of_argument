@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about medical treatment for prostate cancer, while assumption A concerns public perception of scalping. No shared subject matter.\",\n  \"reason\": \"Claim C discusses a personal medical decision regarding prostate cancer treatment, specifically surgical intervention versus monitoring. Assumption A addresses public bias toward individual resellers in scalping, not institutional actors. The topics are entirely unrelated, with no overlap in subject matter, context, or semantic content. Therefore, C does not support"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about personal medical treatment and does not reference or relate to assumption A about public perception of scalping.\",\n  \"reason\": \"Claim C discusses a personal medical decision regarding prostate cancer treatment, specifically surgical intervention versus monitoring. Assumption A concerns public bias toward individual resellers in scalping versus institutional actors. There is no semantic connection between the two topics. Therefore, the claim does not address, verify, or relate to the earlier assumption in any"
     },
     {
       "a_turn_idx": 15,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 17 refers to Senator Tillis and his office, as established in the prior context where he discusses his role in drafting the bill.\",\n  \"reason\": \"Claim C explicitly states that the bill advances religious liberties without sanctioning same-sex marriage at the federal level, which directly verifies the substance of assumption A—that respect for marriage includes recognizing evolving societal attitudes toward same-sex relationships—by clarifying that while the bill does not endorse same-sex marriage"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 17 refers to Senator Tillis and his office, as established in the prior context where he discusses his role in drafting the bill.\",\n  \"reason\": \"Claim C explicitly states that the bill advances religious liberties without sanctioning same-sex marriage at the federal level. This directly verifies the substance of assumption A, which asserts that respect for marriage includes recognizing evolving societal attitudes toward same-sex relationships. While A focuses on societal evolution, C clarifies"
     },
     {
       "a_turn_idx": 16,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 19 refers to the speaker (SPEAKER_01), and 'the field' refers to the presidential race. No other coreference issues.\",\n  \"reason\": \"Turn 19 states the speaker will review the situation before forming an opinion, which indicates a willingness to consider multiple candidates and delay judgment. However, this does not explicitly verify or state the substance of assumption A, which concerns the appropriateness of asking about"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 19 refers to the speaker (SPEAKER_01), and 'the field' refers to the presidential race.\",\n  \"reason\": \"Turn 19 states the speaker will review the situation before forming an opinion, which indicates openness to reconsidering positions based on new information. However, this does not explicitly verify or state the earlier assumption A, which concerns the appropriateness of asking about personal alignment with changing public opinion without"
     },
     {
       "a_turn_idx": 16,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 19) discusses forming an opinion on a presidential candidate by spring, which is unrelated to assumption A (turn 16), which concerns the appropriateness of asking about personal alignment with public opinion on gay marriage without implying hypocrisy. There is no overlap in semantic content or logical connection between the two statements. Therefore, the entailment score"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (turn 19) discusses forming an opinion on a presidential candidate by spring, which is unrelated to assumption A (turn 16), which concerns the appropriateness of asking about personal alignment with public opinion on gay marriage without implying hypocrisy. There is no overlap in semantic content between the two statements. Claim C does not address, verify, or"
     },
     {
       "a_turn_idx": 16,
@@ -1367,11 +1367,11 @@
       "claim_text": "In my case, the doctor recommended surgical intervention rather than monitoring.",
       "overlap_score": 2,
       "c_time": 896.883,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference relevant; claim C is about medical treatment for prostate cancer, while assumption A concerns public interpretation of a bill regarding religious freedom vs. discrimination.",
-      "reason": "Claim C discusses a personal medical decision regarding prostate cancer treatment, which is entirely unrelated to the political and social interpretation of a legislative bill concerning religious freedom and discrimination. There is no overlap in subject matter, context, or semantic content between A and C.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; claim C is about medical treatment for prostate cancer, while assumption A concerns public interpretation of a bill regarding religious freedom vs. discrimination.\",\n  \"reason\": \"Claim C discusses a personal medical decision regarding prostate cancer treatment, which is entirely unrelated to the political and social interpretation of a legislative bill concerning religious freedom and discrimination. There is no overlap in subject matter, context, or semantic content between A and C.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about medical treatment for prostate cancer, while assumption A concerns public interpretation of a bill related to religious freedom and same-sex marriage.\",\n  \"reason\": \"Claim C discusses a personal medical decision regarding prostate cancer treatment, specifically mentioning surgical intervention versus monitoring. Assumption A is about public perception of a legislative bill concerning religious freedom and discrimination. There is no semantic connection between the two statements; C does not address, verify, or relate to A in"
     },
     {
       "a_turn_idx": 17,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 19 refers to SPEAKER_01, the same speaker as in turn 18. The phrase 'form an opinion on one candidate or another' directly corresponds to the idea of being ready to support a candidate, which is the substance of the assumption in turn 18.\",\n  \"reason\": \"Turn 19 explicitly states that the speaker will form an opinion on a presidential candidate by spring, which directly verifies the assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 19 refers to SPEAKER_01, the same speaker as in turn 18. The phrase 'form an opinion on one candidate or another' directly corresponds to the idea of being ready to support a candidate, which is the focus of turn 18.\",\n  \"reason\": \"Turn 19 explicitly states that the speaker will form an opinion on a presidential candidate by spring, which directly verifies the assumption in turn"
     },
     {
       "a_turn_idx": 18,
@@ -1806,7 +1806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'its' in turn 30 refers to CMPD, as established by the context of the conversation about CMPD's initiatives.\",\n  \"reason\": \"Claim C states that CMPD has established a new crime gun suppression team, which aligns with the substance of assumption A that the deputy chief views the gun suppression team as a 'major win.' While C does not explicitly state that the team contributed to reducing crime, it confirms the existence of the team, which"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'its' in turn 30 refers to CMPD, as established by the context of the conversation about CMPD's initiatives.\",\n  \"reason\": \"Claim C states that CMPD has established a new crime gun suppression team, which aligns with the substance of assumption A that the deputy chief identified the gun suppression team as a 'major win.' While C does not explicitly state that the team contributed to reducing crime, it confirms the existence of the team, which"
     },
     {
       "a_turn_idx": 24,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these initiatives' in turn 26 refers to the mental health response team and the pilot team of mental health professionals mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that CMPD is piloting a team of two mental health professionals to respond to low-level calls, which directly supports and verifies the earlier assumption A that mental health crises should be addressed through therapeutic and supportive interventions rather than punitive measures. The pilot team's focus on non-punitive, therapeutic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these initiatives' in turn 26 refers to the mental health response team and the pilot team of mental health professionals mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that CMPD is piloting a team of two mental health professionals to respond to low-level calls, which directly supports and verifies the earlier assumption A that mental health crises should be addressed through therapeutic and supportive interventions rather than punitive measures. The pilot team's focus on non-punitive, mental"
     },
     {
       "a_turn_idx": 25,

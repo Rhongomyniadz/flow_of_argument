@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to potential customers mentioned in the context, and 'PureTalk' is the same entity as the veteran-led company introduced in turn 1.\",\n  \"reason\": \"Claim C explicitly states that supporting veterans can be achieved by switching to PureTalk, which directly verifies the substance of assumption A—that supporting veterans through donations aligns with shared moral values—by offering a clear, actionable method (switching service) that contributes to veteran support."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'supporting veterans' in claim C refers to the action described in assumption A, where donating or supporting veterans is linked to moral values. 'Switching to PureTalk' is the specific method introduced in C that fulfills the broader idea of supporting veterans.\",\n  \"reason\": \"Claim C explicitly states that supporting veterans can be achieved by switching to PureTalk, which directly verifies the actionable pathway implied in assumption A. While A frames the act as aligned with moral values"
     },
     {
       "a_turn_idx": 1,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a cell phone plan' in turn 2 refers to PureTalk's service mentioned in turn 1.\",\n  \"reason\": \"Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies a key detail from assumption A about PureTalk being a provider of cell phone services. While A mentions consumer trust in PureTalk as a reliable provider, C confirms a concrete aspect of its service offering—pricing—which supports the reliability"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a cell phone plan' in turn 2 refers to PureTalk's service mentioned in turn 1.\",\n  \"reason\": \"Claim C explicitly states that PureTalk offers a cell phone plan for $25 per month, which directly verifies a key detail from assumption A about PureTalk being a reliable provider. While A mentions consumer trust, C confirms a concrete aspect of the service (price) that supports reliability, making it a direct and explicit verification of part of"
     },
     {
       "a_turn_idx": 1,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the cell phone plan mentioned in turn 1, specifically the $25/month plan offered by PureTalk to veterans.\",\n  \"reason\": \"Claim C states that the cell phone plan is available to deserving veterans, which aligns with the substance of assumption A that consumers trust PureTalk as a reliable provider. While C does not explicitly state trust in PureTalk, it reinforces the idea that PureTalk offers a valuable, targeted service"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the cell phone plan mentioned in turn 1, specifically the $25/month plan offered by PureTalk to veterans.\",\n  \"reason\": \"Claim C states that the cell phone plan is available to deserving veterans, which aligns with the substance of assumption A that consumers trust PureTalk as a reliable provider. The availability of the plan to veterans supports the idea of PureTalk’s reliability and mission-driven service, reinforcing consumer trust."
     },
     {
       "a_turn_idx": 2,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Speaker_03 refers to themselves as 'I' in turn 13; no coreference issues with earlier assumption A.\",\n  \"reason\": \"Claim C (turn 13) states that the speaker is a meat cutter by trade, which is a personal occupational identity. Assumption A (turn 3) concerns strong identification with Trump’s political agenda and its association with national success. There is no mention of political alignment, Trump, or national success in claim C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Speaker_03 refers to themselves as 'I' and identifies as a meat cutter by trade; no coreference issues with other entities.\",\n  \"reason\": \"Claim C (turn 13) states that the speaker is a meat cutter by trade, which is unrelated to assumption A (turn 3), which concerns strong identification with Trump’s political agenda and its association with national success. There is no mention of political alignment, Trump, or national success in C. The two"
     },
     {
       "a_turn_idx": 3,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 26 refers to the listener (the audience), and 'our country' refers to the United States. No mention of domestic manufacturing or economic strength is present.\",\n  \"reason\": \"Claim C expresses a fear about the country's future under socialism/communism, specifically referencing starvation, loss of freedom, and government overreach. This is unrelated to the earlier assumption A, which concerns domestic manufacturing revival as a contributor to national economic strength"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 26 refers to the listener (the audience or the person being addressed), and 'our country' refers to the United States. No coreference resolves to the speaker's belief about domestic manufacturing revival.\",\n  \"reason\": \"Claim C expresses a fear about the future of the country under socialist or communist governance, specifically referencing starvation, loss of freedom, and government overreach. This is unrelated to the earlier assumption A, which concerns the economic"
     },
     {
       "a_turn_idx": 4,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 25 refers to listeners/generally, not tied to any prior entity in turn 4.\",\n  \"reason\": \"Claim C discusses a black market for meat due to scarcity in grocery stores, which is unrelated to the assumption A that consumers benefit from increased market competition due to greater domestic supply. The topics diverge: A focuses on economic benefits of domestic production and competition, while C describes extreme scarcity and black markets under"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'there' refers to the lack of meat in grocery stores, which is a factual claim about scarcity, not related to market competition or domestic supply.\",\n  \"reason\": \"Claim C discusses a black market for meat due to scarcity in grocery stores, which is unrelated to the assumption A that consumers benefit from increased market competition due to greater domestic supply. The topics diverge: A focuses on economic competition and supply-driven benefits, while C describes a situation of"
     },
     {
       "a_turn_idx": 6,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the congressman. In turn 18, 'congressman' is referenced again, maintaining the same referent.\",\n  \"reason\": \"Turn 18 discusses the congressman's role in addressing grocery store prices and critiques Biden's economic policies, but it does not explicitly state or verify the claim that the congressman's background (family-owned grocery store) gives him superior credibility. While the context implies his relevance due to personal"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to the congressman. In turn 18, 'congressman' is referenced again, maintaining the same referent.\",\n  \"reason\": \"Turn 18 discusses the congressman's role in addressing grocery store prices and critiques Biden's economic policies, but it does not explicitly state or verify the claim that the congressman has superior credibility due to his background. While the speaker expresses trust in the congressman's perspective, this is not"
     },
     {
       "a_turn_idx": 8,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 18 refers to the general public, particularly consumers facing rising grocery prices. 'Bidenomics' is used to refer to the economic policies of President Biden, which the speaker attributes to the current price increases.\",\n  \"reason\": \"Claim C explicitly states that current grocery store prices reflect 'ridiculous Biden economics,' directly linking the observed price increases to specific economic policies under President Biden. This aligns with assumption A, which holds that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 18 refers to the general public, particularly consumers affected by rising prices; 'Bidenomics' refers to the economic policies under President Biden.\",\n  \"reason\": \"Claim C explicitly states that current grocery store prices reflect 'ridiculous Biden economics,' directly linking the observed price increases to specific economic policies. This aligns with assumption A, which holds that the events (rising prices) are significant enough to warrant attention. C not only"
     },
     {
       "a_turn_idx": 10,
@@ -1986,7 +1986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to the listener (SPEAKER_14), and 'our country' refers to the United States. No coreference resolves to the concept of 'cost' in production contexts.\",\n  \"reason\": \"Claim C expresses a fear about the future of the country under a certain political system, specifically referencing socialism and communism leading to starvation and collapse. This is unrelated to assumption A, which concerns shared understanding of 'cost'"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to the listener (SPEAKER_14), and 'our country' refers to the United States. No coreference resolves to the concept of 'cost' in production contexts.\",\n  \"reason\": \"Claim C expresses a fear about the future of the country under a certain political system, specifically referencing socialism and communism leading to starvation and collapse. This is unrelated to the earlier assumption A, which concerns shared understanding of '"
     },
     {
       "a_turn_idx": 21,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_12 refers to 'Congressman Rulie' as the source of the observation about grocery store experiences; this aligns with SPEAKER_12's prior personal observations at borders (turn 25), where they described similar conditions of scarcity and hardship.\",\n  \"reason\": \"Claim C explicitly references Congressman Rulie's observation about grocery store experiences, which echoes the substance of assumption A—personal observation at borders providing evidence of governance failure. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_12 refers to 'Congressman Rulie' as the source of the observation about grocery store experiences; this aligns with SPEAKER_12's prior personal observations at borders (turn 25), where he described similar conditions in socialist/communist countries.\",\n  \"reason\": \"Claim C explicitly references Congressman Rulie's observation about grocery store experiences, which mirrors the substance of assumption A—personal observation at borders providing evidence of governance failure."
     },
     {
       "a_turn_idx": 26,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Sarah Carter' is a proper name and directly referenced.\",\n  \"reason\": \"Claim C (turn 33) expresses goodwill toward Sarah Carter, stating 'God bless you, Sarah,' which is unrelated to the assumption in A (turn 28) about acting quickly upon entering Congress. There is no mention of urgency, legislative action, or immediate steps in Congress. The two statements address different topics—personal blessing vs. political action—making"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Sarah Carter' is a proper name and directly referenced.\",\n  \"reason\": \"Claim C (turn 33) expresses a blessing toward Sarah Carter, which is unrelated to the assumption in A (turn 28) about acting quickly upon entering Congress. There is no mention of urgency, legislative action, or immediate steps in Congress in C. The two statements address different topics—personal goodwill versus political strategy—making them clearly unrelated. Thus,"
     },
     {
       "a_turn_idx": 28,
@@ -2556,7 +2556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 45 refers to SPEAKER_01, who discusses a stolen car. Turn 28's assumption A concerns acting quickly upon entering Congress.\",\n  \"reason\": \"Claim C (turn 45) states the speaker believes their car was stolen, which is entirely unrelated to assumption A (turn 28), which asserts the importance of acting quickly upon entering Congress. There is no overlap in subject matter,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 45 refers to SPEAKER_01, who claims their car was stolen. Turn 28 involves a different speaker (SPEAKER_12) discussing urgency in Congress.\",\n  \"reason\": \"Claim C (turn 45) states the speaker believes their car was stolen, which is entirely unrelated to assumption A (turn 28), which concerns acting quickly upon entering Congress. There is no"
     },
     {
       "a_turn_idx": 28,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in C refers to SPEAKER_01, distinct from SPEAKER_13 in A.\",\n  \"reason\": \"Claim C states that the speaker believes their car was stolen, which is entirely unrelated to assumption A, which concerns the effectiveness of grassroots mobilization through personal networks. There is no overlap in subject matter, concept, or implied connection. The two statements address completely different topics and contexts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in C refers to SPEAKER_01, while 'the speaker' in A refers to SPEAKER_13.\",\n  \"reason\": \"Claim C (turn 45) states that the speaker believes their car was stolen, which is entirely unrelated to assumption A (turn 29), which concerns the effectiveness of grassroots mobilization through personal networks. There is no overlap in subject matter"
     },
     {
       "a_turn_idx": 29,
@@ -2706,7 +2706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to the current political system in Venezuela, which is linked to the broader critique of systemic failure introduced in turn 29. However, 'the current system' in turn 29 refers to procedural rules in the U.S. political process, while in turn 35 it refers to Venezuela’s governance model.\",\n  \"reason\": \"Turn 35 discusses deteriorating conditions in Venezuela under its current system, which is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'the current system' in turn 29 refers to the existing political/economic framework in the U.S., while 'its current system' in turn 35 refers to Venezuela’s system. The two systems are distinct.\",\n  \"reason\": \"Turn 35 discusses deteriorating conditions in Venezuela under its current system, which is used as a cautionary example against current U.S. policies. However, it does not explicitly state or verify the"
     },
     {
       "a_turn_idx": 29,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_09, who is discussing personal experiences of loss and victimization, particularly regarding the theft of their vehicle. There is no reference to economic issues or leadership choices.\",\n  \"reason\": \"Claim C (turn 46) discusses personal victimization related to a stolen car and perceived threats from cartels, which is unrelated to the economic issues tied to leadership choices stated in assumption A (turn 2"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 46 refers to SPEAKER_09, who is discussing personal experiences of loss and victimization, particularly regarding the theft of their vehicle.\",\n  \"reason\": \"Claim C (turn 46) states that the speaker feels like a victim in multiple contexts, which is unrelated to assumption A (turn 29), which concerns the belief that economic issues like rising prices are tied to leadership choices. There is no mention of economic"
     },
     {
       "a_turn_idx": 29,
@@ -2852,11 +2852,11 @@
       "claim_text": "The speaker urges people to vote and take action to preserve the nation.",
       "overlap_score": 2,
       "c_time": 734.963,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'our nation' in claim C refers to the nation mentioned in assumption A, maintaining consistent referent throughout.",
-      "reason": "Claim C explicitly states the necessity of voting and taking action to ensure the nation survives, which directly verifies the substance of assumption A—that the nation risks losing its significance without deliberate action. The urgency and call to action in C align precisely with the implied conditionality in A, making the connection clear and explicit.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our nation' in claim C refers to the nation mentioned in assumption A, maintaining consistent referent throughout.\",\n  \"reason\": \"Claim C explicitly states the necessity of voting and taking action to ensure the nation survives, which directly verifies the substance of assumption A—that the nation risks losing its significance without deliberate action. The urgency and call to action in C align precisely with the implied conditionality in A, making the connection clear and explicit.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our nation' in claim C refers to the nation mentioned in assumption A, maintaining consistent referent throughout.\",\n  \"reason\": \"Claim C explicitly states the necessity of voting and taking action to ensure the nation survives, which directly verifies the substance of assumption A—that the nation risks losing its significance without deliberate action. The urgency and existential framing ('It will not survive. I promise you that') align closely with the implied risk in A, making the connection strong and explicit"
     },
     {
       "a_turn_idx": 31,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to Brennan, Clapper, and Comey, who are explicitly named as individuals involved in national security matters.\",\n  \"reason\": \"Claim C states that Brennan, Clapper, and Comey worked together on national security issues, which is a factual assertion about institutional roles. However, it does not address or verify the substantive moral or ethical claim in assumption A—that people have agency and moral responsibility to defend national values and institutions. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to Brennan, Clapper, and Comey, who are explicitly named as individuals involved in national security matters.\",\n  \"reason\": \"Claim C discusses the collaboration of specific officials (Brennan, Clapper, Comey) on national security issues, which is tangentially related to the broader idea of national values and institutions. However, it does not address or verify the core assumption in A—that individuals have agency and moral responsibility to"
     },
     {
       "a_turn_idx": 31,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 33 refers to citizens collectively, consistent with the collective action implied in turn 31. 'Our nation' in turn 33 refers to the nation mentioned in turn 31.\",\n  \"reason\": \"Claim C explicitly states that 'our nation will not survive' without decisive civic action, which directly verifies the moral necessity and urgency of 'fighting for' the nation as implied in assumption A. The phrase 'We've"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to citizens collectively, consistent with 'nation' and 'each individual person' in assumption A. 'Our nation' in C aligns with 'our country' in A.\",\n  \"reason\": \"Claim C explicitly states that 'our nation will not survive' without decisive civic action (voting), which directly verifies the moral necessity and urgency of 'fighting for' the nation as implied in assumption A. The phrase 'We've"
     },
     {
       "a_turn_idx": 31,
@@ -2901,7 +2901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 33 refers to the collective citizens mentioned in turn 31, and 'our nation' refers back to 'the nation' in turn 31.\",\n  \"reason\": \"Claim C explicitly states the necessity of taking action—specifically voting—to ensure the survival of the nation, which directly verifies the moral justification and necessity of 'fighting for' the nation as implied in assumption A. The urgency and moral imperative in C align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective citizens mentioned in assumption A, and 'our nation' refers back to the nation discussed in turn 31.\",\n  \"reason\": \"Claim C explicitly states the necessity of taking action—specifically voting—to ensure the survival of the nation, which directly verifies the moral justification and necessity of 'fighting for' the nation as asserted in assumption A. The urgency and collective responsibility emphasized in C align precisely with the core"
     },
     {
       "a_turn_idx": 31,

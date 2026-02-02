@@ -2901,7 +2901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_04, who is the original speaker of assumption A. However, the claim in C is about fear regarding court reform, which is unrelated to the duty to maintain confidentiality mentioned in A.\",\n  \"reason\": \"Assumption A concerns a moral obligation to keep information confidential despite trust issues, while claim C discusses fear about court reform and its political consequences. There is no overlap in subject matter or semantic content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_04, as she is the one who previously discussed court reform. The phrase 'Do you fear that without court reform?' is attributed to her by SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 66) discusses fear regarding court reform, specifically the consequences of expanding the court, which is unrelated to the earlier assumption A (turn 37) about maintaining confidentiality despite"
     },
     {
       "a_turn_idx": 38,
@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 40, 'Trump' refers to the former president mentioned in turn 38. 'His conversation' likely refers to the conversation discussed in turn 38 involving potential tipping off.\",\n  \"reason\": \"Claim C states that Trump had some connection to the conversation, which aligns with the concern raised in assumption A about Trump potentially having access to confidential information. However, C does not explicitly confirm or verify that Trump had access to confidential information—only that he"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 40, 'Trump' refers to the former president mentioned in turn 38. 'His conversation' likely refers to the conversation discussed in turn 38 involving potential tipping off.\",\n  \"reason\": \"Claim C states that Trump had some connection to the conversation, which aligns with the concern raised in assumption A about Trump potentially having access to confidential information. However, C does not explicitly confirm or verify the substance of A—namely, that Trump had"
     },
     {
       "a_turn_idx": 38,
@@ -2931,7 +2931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Trump' as the subject of the conversation, maintaining continuity from SPEAKER_06's concern about Trump's potential access to confidential information.\",\n  \"reason\": \"Claim C raises questions about Trump's involvement in a conversation, implying scrutiny over his role and potentially his access to sensitive information. However, it does not explicitly state or verify the belief that Trump had access to confidential information during his presidency—only that his involvement is being questioned."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Trump' as the subject of the conversation, maintaining continuity from SPEAKER_06's concern about Trump potentially tipping someone off. 'His conversation' in turn 40 likely refers to the prior discussion involving sensitive information.\",\n  \"reason\": \"Turn 40 raises a question about Trump's role in a conversation, which indirectly relates to the assumption that Trump had access to confidential information. However, it does not explicitly state or verify"
     },
     {
       "a_turn_idx": 38,
@@ -2946,7 +2946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Kerry' as a person being questioned about a teaching position; no connection to Trump or confidential information is present.\",\n  \"reason\": \"Claim C asks about Kerry's teaching position at the University of Pennsylvania, which is entirely unrelated to assumption A, which concerns Trump's access to confidential information during his presidency. There is no overlap in subject matter, nor does C verify or state any part of A. The topics are distinct and unrelated.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to Kerry, not Trump. The claim in C is about Kerry's teaching position at the University of Pennsylvania, which is unrelated to the assumption in A about Trump having access to confidential information.\",\n  \"reason\": \"Claim C discusses whether Kerry taught at the University of Pennsylvania, which is entirely unrelated to the assumption in A that Trump had access to confidential information during his presidency. There is no overlap in subject matter, and the"
     },
     {
       "a_turn_idx": 38,
@@ -3002,11 +3002,11 @@
       "claim_text": "The speaker believes others would recognize Kelly's emotions from her facial expression.",
       "overlap_score": 2,
       "c_time": 703.425,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Kelly' in C refers to a different person (likely a witness or figure in the Charlottesville incident), not related to Trump or confidential information.\",\n  \"reason\": \"Claim C discusses Kelly's facial expression conveying emotion during a discussion about the Charlottesville rally, which is unrelated to the assumption that Trump had access to confidential information during his presidency. There is no mention of Trump, classified information, or presidential access in C."
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'Kelly' in turn 53 refers to a person whose emotional expression is discussed, unrelated to Trump or confidential information.",
+      "reason": "Claim C discusses Kelly's facial expression conveying emotion, which is entirely unrelated to the assumption that Trump had access to confidential information. There is no mention of Trump, classified information, or presidential access in C. The topics are distinct and unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Kelly' in turn 53 refers to a person whose emotional expression is discussed, unrelated to Trump or confidential information.\",\n  \"reason\": \"Claim C discusses Kelly's facial expression conveying emotion, which is entirely unrelated to the assumption that Trump had access to confidential information. There is no mention of Trump, classified information, or presidential access in C. The topics are distinct and unrelated.\"\n}\n```"
     },
     {
       "a_turn_idx": 38,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 54 refers to Trump, but this does not connect to the claim in turn 38.\",\n  \"reason\": \"Claim C discusses Trump's statement about 'very fine people' at Charlottesville and clarifies that he explicitly excluded white supremacists. This is unrelated to the earlier assumption A, which concerns Trump's access to confidential information during his presidency. There is no overlap in subject matter or semantic content between A and C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Trump's statement about 'very fine people' at Charlottesville, which is unrelated to the topic of Trump having access to confidential information during his presidency.\",\n  \"reason\": \"Claim C discusses Trump's statement regarding the Charlottesville rally and explicitly denies that he included white supremacists as 'very fine people.' This is entirely unrelated to assumption A, which concerns Trump's access to confidential information during his presidency. There is no overlap in subject matter, and"
     },
     {
       "a_turn_idx": 38,
@@ -3051,7 +3051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_04, who is discussing concerns about court reform. However, the claim in turn 66 does not address Trump's access to confidential information.\",\n  \"reason\": \"Claim C discusses fears about court reform and its potential political consequences, which is entirely unrelated to the assumption A about Trump having access to confidential information during his presidency. There is no overlap in subject matter or semantic content, and the claim"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_04, who is discussing court reform. The claim in C is about fear regarding court reform, which is unrelated to the earlier assumption A about Trump having access to confidential information.\",\n  \"reason\": \"Claim C discusses concerns about court reform and its potential political consequences, while assumption A is about Trump's access to confidential information during his presidency. There is no overlap in subject matter or semantic content. The"
     },
     {
       "a_turn_idx": 40,
@@ -3110,8 +3110,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference links relevant; 'Kelly' refers to a different person than mentioned in turn 40.",
-      "reason": "Claim C discusses Kelly's facial expression and emotional recognition, which is unrelated to the assumption in A about Trump's role in a conversation or public understanding of his involvement. There is no overlap in subject matter, context, or implied belief. The two statements address entirely different topics and individuals.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' refers to a different person than mentioned in turn 40.\",\n  \"reason\": \"Claim C discusses Kelly's facial expression and emotional recognition, which is unrelated to the assumption in A about Trump's role in a conversation or public understanding of his involvement. There is no overlap in subject matter, context, or implied belief. The two statements address entirely different topics and individuals.\"\n}\n```"
+      "reason": "Claim C discusses Kelly's facial expression and emotional recognition, which is unrelated to the assumption in A about Trump's role in a conversation or public perception of collusion with Russia. There is no overlap in subject matter, context, or implied belief. Thus, C does not support, verify, or relate to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' refers to a different person than mentioned in turn 40.\",\n  \"reason\": \"Claim C discusses Kelly's facial expression and emotional recognition, which is unrelated to the assumption in A about Trump's role in a conversation or public perception of collusion with Russia. There is no overlap in subject matter, context, or implied belief. Thus, C does not support, verify, or relate to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 40,
@@ -3126,7 +3126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Trump' and 'Biden' consistently; 'he' in turn 54 refers to Trump, and 'Joe Biden' is the subject of the accusation of misrepresentation.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden misrepresents Trump's statement by omitting key context, which directly verifies the assumption in A that the listener should understand Trump's role in the original conversation. C clarifies that Trump's comment was"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Trump, as established in the prior context discussing Trump's statement at the Charlottesville rally.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden misrepresents Trump's statement by omitting key context, which directly verifies assumption A—that the listener should know or understand Trump's role in the context. C clarifies that Trump's comment about 'very fine people on both sides' referred to the debate over Confederate monuments,"
     },
     {
       "a_turn_idx": 40,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience, and 'carry it' is a call to action related to following on Instagram. The subject 'Trump' from assumption A is not mentioned or implied in claim C.\",\n  \"reason\": \"Claim C discusses an audience call to action regarding Instagram engagement, which is unrelated to the assumption that the listener should understand Trump's role in a political context. There is no mention of Trump, the conversation about collusion, or any"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to the audience, and 'carry it' is a call to action related to following on Instagram. The speaker assumes the audience will comply with this request.\",\n  \"reason\": \"Claim C (turn 59) expresses belief that the audience will follow the call to action (e.g., follow on Instagram), which aligns with a general expectation of audience compliance. However, this does not address or verify the specific assumption"
     },
     {
       "a_turn_idx": 40,
@@ -3156,7 +3156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asked the question about court reform.\",\n  \"reason\": \"Turn 66 expresses confusion about the question, specifically noting that the speaker doesn't know what 'court reform' refers to, implying a lack of shared understanding. However, this does not explicitly verify or state the earlier assumption A, which is about the listener's presumed knowledge of Trump's role in a prior conversation. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asked the question about court reform.\",\n  \"reason\": \"Turn 66 expresses confusion about the question, specifically noting that the speaker doesn't know what 'court reform' refers to, implying a lack of shared understanding. However, this does not explicitly address or verify the earlier assumption in turn 40, which concerns Trump's role in a conversation and whether the listener should understand"
     },
     {
       "a_turn_idx": 40,
@@ -3186,7 +3186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 50, 'Trump' refers to the same individual mentioned in turn 40, establishing continuity in subject matter.\",\n  \"reason\": \"Claim C explicitly mentions 'Trump' as part of the discussion, which aligns with assumption A that Trump’s involvement is significant. While C does not explicitly state the significance or relevance of Trump’s role, it confirms that Trump is a central topic in the conversation, thereby strongly entailing the core idea of A. The reference"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 50, 'Trump' refers to the same individual mentioned in turn 40, establishing continuity of subject matter.\",\n  \"reason\": \"Claim C explicitly mentions 'Trump' in the context of discussion, aligning with assumption A that Trump’s involvement is significant. While C does not explicitly state the significance of Trump’s role, it confirms that Trump is a central topic of discussion, which strongly supports the assumption that his relevance is being treated as important. The ph"
     },
     {
       "a_turn_idx": 40,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Kelly refers to the young woman mentioned in turn 51 (a bystander killed during the Charlottesville rally). The phrase 'Kelly's face told it all' implies recognition of emotion, but does not address the trust in the listener recognizing the importance of clarifying Trump's role.\",\n  \"reason\": \"Claim C focuses on emotional recognition via facial expression, specifically Kelly's reaction to a traumatic event. Assumption A concerns the listener's ability to grasp the significance of clarifying Trump's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Kelly refers to the young woman mentioned in turn 51 (a bystander killed during the Charlottesville rally).\",\n  \"reason\": \"Claim C states that Kelly's facial expression conveyed her emotions, which is unrelated to assumption A, which concerns trust that the listener recognizes the importance of clarifying Trump's role in a political context. There is no overlap in subject matter, intent, or content between A and C. The mention of Kelly’s face does not address Trump’s role or"
     },
     {
       "a_turn_idx": 40,
@@ -3317,11 +3317,11 @@
       "claim_text": "The speaker believes others would recognize Kelly's emotions from her facial expression.",
       "overlap_score": 2,
       "c_time": 703.425,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'Kelly' refers to a person whose facial expression is discussed, but no link to the earlier assumption about political convictions exists.",
-      "reason": "Claim C discusses recognizing emotions from facial expressions, specifically Kelly's reaction, which is unrelated to the earlier assumption A about reevaluating political beliefs based on new evidence. There is no mention of political convictions, evidence, or reconsideration in C. The topics are entirely distinct, making the connection nonexistent.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Kelly' refers to a person whose facial expression is discussed, but no link to the earlier assumption about political convictions exists.\",\n  \"reason\": \"Claim C discusses recognizing emotions from facial expressions, specifically Kelly's reaction, which is unrelated to the earlier assumption A about reevaluating political beliefs based on new evidence. There is no mention of political convictions, evidence, or reconsideration in C. The topics are entirely distinct, making the connection nonexistent.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Kelly' in turn 53 refers to a person previously mentioned in the context (likely a bystander or participant in the Charlottesville incident).\",\n  \"reason\": \"Claim C (turn 53) discusses Kelly's facial expression conveying emotion, which is unrelated to assumption A (turn 41), which concerns reevaluating political beliefs based on new evidence. There is no mention of political convictions, evidence, or reconsideration in C."
     },
     {
       "a_turn_idx": 41,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 59 refers to the audience, but does not relate to the belief about re-evaluating political convictions.\",\n  \"reason\": \"Claim C (turn 59) discusses audience compliance with a call to action related to following on Instagram and promoting a show, which is entirely unrelated to the earlier assumption A about re-evaluating political convictions in light of new evidence. There is no mention, implication, or verification of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 59 refers to the audience, but does not relate to the belief about re-evaluating political convictions.\",\n  \"reason\": \"Claim C (turn 59) discusses audience compliance with a call to action related to following on Instagram and promoting a show, which is entirely unrelated to the idea of reconsidering political convictions in light of new evidence. There is no mention, implication, or verification of assumption A. The"
     },
     {
       "a_turn_idx": 41,
@@ -3366,7 +3366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 71 refers to the person who decided to leave, not related to the subject of turn 41.\",\n  \"reason\": \"Turn 71 discusses approval of a response regarding court reform and the decision not to add new justices, which is unrelated to the idea of reconsidering long-held political convictions in light of new evidence. There is no mention of re-evaluating past beliefs or new evidence affecting political views. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 71 refers to an unnamed individual who decided to leave, not related to the subject of turn 41.\",\n  \"reason\": \"Turn 71 discusses approval of a response regarding court reform and the decision not to add new justices, which is unrelated to the idea of reconsidering political convictions in light of new evidence. There is no mention of reevaluating beliefs, evidence, or political convictions. The topics and"
     },
     {
       "a_turn_idx": 41,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this court' in turn 71 refers to the U.S. Supreme Court, which is implied by the mention of 'young conservative justices'. No direct reference to 'long-held political convictions' or 'new evidence' is made.\",\n  \"reason\": \"Claim C discusses concerns about the current Supreme Court and the potential harm from its composition, particularly due to young conservative justices, advocating for court reform. However, it does not address the idea of re-evalu"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this court' in turn 71 refers to the U.S. Supreme Court, which is the subject of discussion. 'Young conservatives' refers to the current conservative justices.\",\n  \"reason\": \"Turn 71 expresses concern about the potential harm caused by the current Supreme Court due to its composition, specifically the young conservative justices, and calls for reform. However, it does not address the idea of re-evaluating long-held political convictions in light of new"
     },
     {
       "a_turn_idx": 42,
@@ -3396,7 +3396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Joe Biden, as established in the prior context and consistent with the subject of criticism in turn 42.\",\n  \"reason\": \"Claim C (turn 54) focuses on Joe Biden misrepresenting Trump's statement by omitting context, particularly regarding the Charlottesville rally and Trump's actual words. While this touches on the broader theme of public figures' communication, it does not explicitly address or verify the specific assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Joe Biden, as established in the prior context and consistent with the discussion of Biden's speech and interpretation of Trump's statement.\",\n  \"reason\": \"Claim C asserts that Joe Biden misrepresents Trump's statement by omitting context, which relates to the broader critique of Biden's communication style in turn 42. However, turn 42 focuses on Biden's delivery—mumbling and lack of clarity—while"
     },
     {
       "a_turn_idx": 42,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 45 refers to Kerry, as established in turn 44 and contextually supported by turn 43.\",\n  \"reason\": \"Claim C states that the speaker (Kerry) has never taught a class, which directly contradicts the earlier assumption A that the speaker has sufficient observational grounds to judge others' states based on visual cues. However, C does not address or verify A at all; instead, it challenges the credibility of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'he' in turn 45 as the person who never taught a class, which refers to Kerry mentioned in turn 43. The claim in C is about the speaker (SPEAKER_02) not having taught a class, but the subject of the claim is Kerry, not the speaker.\",\n  \"reason\": \"Claim C states that 'the speaker has never taught a class,' but the speaker (SPEAKER_"
     },
     {
       "a_turn_idx": 42,
@@ -3426,7 +3426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'he' in turn 45 as Kerry, who was mentioned in turn 44. 'He' in turn 45 refers to Kerry.\",\n  \"reason\": \"Claim C (turn 45) states that the speaker has a million dollars and holds the title of professor without teaching, which is unrelated to assumption A about having observational grounds to judge others' states based on visual cues. There is no mention of observation,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'he' in turn 45 as the subject of the statement about having a million dollars and being a professor without teaching; however, this does not relate to the assumption in turn 42 about judging others' states via visual cues.\",\n  \"reason\": \"Claim C (turn 45) discusses financial status and academic title, which is unrelated to the assumption in A (turn 42) about observational judgment based on visual"
     },
     {
       "a_turn_idx": 42,
@@ -3512,11 +3512,11 @@
       "claim_text": "The speaker believes others would recognize Kelly's emotions from her facial expression.",
       "overlap_score": 2,
       "c_time": 703.425,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference links relevant; 'Kelly' in turn 53 refers to a different individual than 'Kerry' in turn 44.",
-      "reason": "Turn 53 discusses Kelly's emotional expression, which is unrelated to the assumption in turn 44 about Kerry possibly having held a teaching role at the University of Pennsylvania. There is no overlap in subject matter, context, or implied content. The claims are entirely distinct and unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' in turn 53 refers to a different individual than 'Kerry' in turn 44.\",\n  \"reason\": \"Turn 53 discusses Kelly's emotional expression, which is unrelated to the assumption in turn 44 about Kerry possibly having held a teaching role at the University of Pennsylvania. There is no overlap in subject matter, context, or implied content. The claims are entirely distinct and unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' in turn 53 refers to a different individual than 'Kerry' in turn 44.\",\n  \"reason\": \"Turn 53 discusses Kelly's emotional expression, which is unrelated to the assumption in turn 44 about Kerry possibly having held a teaching role at the University of Pennsylvania. There is no overlap in subject matter, context, or implied content. The claims are entirely distinct and do not support or verify each other"
     },
     {
       "a_turn_idx": 44,
@@ -3531,7 +3531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to the audience, and 'carry it' is a call to action related to following on Instagram.\",\n  \"reason\": \"Claim C (turn 59) expresses belief that the audience will follow the call to action (e.g., follow on Instagram), which is unrelated to assumption A (turn 44), which concerns whether Kerry taught at the University of Pennsylvania. There is no semantic connection between the two claims;"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in C refers to the speaker (SPEAKER_02), not Kerry.\",\n  \"reason\": \"Claim C (turn 59) discusses the speaker's belief that the audience will follow a call to action (e.g., visiting JoePAGs.com and following on Instagram). This is unrelated to assumption A, which concerns whether Kerry could have held a teaching role at the University of Pennsylvania"
     },
     {
       "a_turn_idx": 44,
@@ -3546,7 +3546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who raised the concern about court reform. The speaker (SPEAKER_02) questions the premise of fear regarding court reform, but does not address or verify the earlier assumption about Kerry teaching at the University of Pennsylvania.\",\n  \"reason\": \"Turn 66 discusses fear related to court reform, which is entirely unrelated to the earlier assumption in turn 44 that Kerry could have"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, as she is the one who posed the question about court reform.\",\n  \"reason\": \"Claim C (turn 66) discusses the speaker's belief about the listener's fear regarding court reform, which is unrelated to assumption A (turn 44), which concerns whether Kerry taught at the University of Pennsylvania. There is no overlap in subject matter, content, or logical connection between the"
     },
     {
       "a_turn_idx": 44,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'JoePAGs.com' and 'Kerry' are distinct entities with no connection in context.\",\n  \"reason\": \"Claim C discusses the existence and relevance of 'JoePAGs.com' and social media promotion, which is unrelated to the assumption that university affiliation affects Kerry’s credibility or identity. There is no mention of Kerry, the University of Pennsylvania, or any aspect of academic credentials in C. The topic shifts entirely to a website"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'JoePAGs.com' and 'Kerry' are distinct entities with no connection in context.\",\n  \"reason\": \"Claim C discusses the existence and relevance of 'JoePAGs.com' and social media promotion, which is unrelated to the assumption that university affiliation affects Kerry’s credibility or identity. There is no mention of Kerry, the University of Pennsylvania, or any aspect of academic credentials in C. The topics are entirely disjoint, making"
     },
     {
       "a_turn_idx": 45,
@@ -3587,11 +3587,11 @@
       "claim_text": "The website 'pags' does not correspond to the number nine.",
       "overlap_score": 2,
       "c_time": 804.824,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'pags' refers to a website or username, not related to financial wealth or educational credibility.\",\n  \"reason\": \"Claim C discusses the website 'pags' and its numerical correspondence, which is entirely unrelated to the concept of financial wealth conferring educational credibility. There is no semantic connection between the two statements, and C neither states nor verifies A. The topic shifts completely to a critique of a website and online presence, making the relationship irrelevant.\""
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; 'pags' refers to a website or username, not related to financial wealth or educational credibility.",
+      "reason": "Claim C discusses the website 'pags' and its numerical correspondence, which is entirely unrelated to the concept of financial wealth conferring educational credibility. There is no semantic connection between the two statements, and C neither states nor verifies the substance of A. Therefore, the entailment score is 1.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'pags' refers to a website or username, not related to financial wealth or educational credibility.\",\n  \"reason\": \"Claim C discusses the website 'pags' and its numerical correspondence, which is entirely unrelated to the concept of financial wealth conferring educational credibility. There is no semantic connection between the two statements, and C neither states nor verifies the substance of A. Therefore, the entailment score is 1.\"\n}\n```"
     },
     {
       "a_turn_idx": 45,
@@ -3651,7 +3651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 45 refers to the individual with financial wealth and a professor title who never taught a class; 'it' in turn 75 refers to the situation or status of being a high-profile figure regardless of their actual qualifications.\",\n  \"reason\": \"Claim C states that it doesn't matter whether the person is Trump or someone else, implying that personal status or wealth (like Trump's) does not determine credibility. This touches on the idea"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 45 refers to the individual with financial wealth and a professor title who never taught a class; 'it' in turn 75 refers to the person's identity or status regardless of political affiliation.\",\n  \"reason\": \"Claim C states that it doesn't matter whether the person is Trump or someone else, which touches on the idea that personal status or wealth (implied by the context of Trump) should not override credibility. However,"
     },
     {
       "a_turn_idx": 48,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' in turn 53 refers to a different person/context than the disaster site mentioned in turn 48.\",\n  \"reason\": \"Claim C discusses recognizing emotions from facial expressions in a different context (Charlottesville aftermath), while assumption A concerns the seriousness of being at a disaster site. There is no semantic connection between the two claims. C does not state, imply, or verify anything about the stakes of being at a disaster site,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Kelly' in turn 53 refers to a different person/context than the disaster site mentioned in turn 48.\",\n  \"reason\": \"Claim C discusses recognizing emotions from facial expressions in a different context (Charlottesville aftermath), while assumption A concerns the seriousness of being at a disaster site. There is no semantic connection between the two claims. C does not address or verify A, nor does it relate to the idea of high-stakes contexts"
     },
     {
       "a_turn_idx": 48,
@@ -3681,7 +3681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to the audience, and 'carry it' refers to following through on the call to action (e.g., visiting PAGs.com and following on Instagram).\",\n  \"reason\": \"Claim C asserts that the audience will comply with the call to action (e.g., visiting a website and following on Instagram), while assumption A concerns the seriousness of being at a disaster site. These ideas are semantically unrelated—A is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' refers to SPEAKER_02 in both A and C.\",\n  \"reason\": \"Claim C (turn 59) discusses audience compliance with a call to action (e.g., following on Instagram), while assumption A (turn 48) concerns the seriousness of being at a disaster site. The two statements address entirely different topics—A is about political context and public correction, while C is about social media engagement. There"
     },
     {
       "a_turn_idx": 48,
@@ -3696,7 +3696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who is the one asking about court reform. The claim in C focuses on the speaker's interpretation of the listener's fear regarding court reform, which is unrelated to the assumption in A about disaster sites.\",\n  \"reason\": \"Assumption A concerns the seriousness of being at a disaster site, while claim C discusses fear about court reform, which is a completely different topic. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who is the one asking about court reform. However, there is no mention of disaster sites, stakes, or seriousness in the context of turn 66.\",\n  \"reason\": \"Turn 66 discusses concerns about court reform and the definition of reform, which is entirely unrelated to the assumption in turn 48 about disaster sites implying high-stakes contexts. There is no overlap in"
     },
     {
       "a_turn_idx": 48,
@@ -3726,7 +3726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asks about court reform. 'It' in 'we know what court reform is' refers to the concept of court reform mentioned earlier.\",\n  \"reason\": \"Turn 66 does not address or verify the assumption in turn 48 about 'Rocky something' being a known reference point. Instead, it shifts focus entirely to a different topic—court reform—and questions the shared"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asked the question about court reform. The phrase 'we know what court reform is' implies shared understanding, but does not connect to 'Rocky something' from turn 48.\",\n  \"reason\": \"Turn 66 discusses uncertainty about the term 'court reform' and questions whether the listener understands it, which is unrelated to the assumption in turn 48 about the listener"
     },
     {
       "a_turn_idx": 48,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'that' in turn 66 refers to 'court reform', not 'Rocky something'.\",\n  \"reason\": \"Turn 66 discusses uncertainty about the listener's understanding of 'court reform', while turn 48 concerns the listener's knowledge of 'Rocky something' as a reference point. The topics are entirely different—no overlap in subject matter, context, or implied meaning. Thus, C does not address, support, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in turn 48 refers to the president; 'she' in turn 66 refers to SPEAKER_06.\",\n  \"reason\": \"Claim C (turn 66) questions the listener's understanding of 'court reform' and challenges the assumption that the term is commonly understood. This is unrelated to assumption A, which concerns the listener's knowledge of 'Rocky something' as a"
     },
     {
       "a_turn_idx": 48,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting assumption A and claim C. 'He' in A refers to Trump; 'the speaker' in C refers to SPEAKER_02. No shared referents or conceptual overlap.\",\n  \"reason\": \"Claim C (turn 56) discusses reaching a follower count and stopping requests for support, which is unrelated to the assumption in A (turn 48) that the listener will interpret a fragmented narrative as meaningful. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in A refers to Trump; 'the speaker' in C refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 56) discusses reaching a follower count and ceasing requests for support, which is unrelated to the assumption in A (turn 48) that the listener will interpret a fragmented narrative as meaningful. There is no mention of narrative interpretation, trust in interpretation"
     },
     {
       "a_turn_idx": 48,
@@ -3771,7 +3771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience/listener, consistent with the implied audience in assumption A.\",\n  \"reason\": \"Claim C expresses belief in audience compliance with a call to action (e.g., following on Instagram), while assumption A concerns trust that a fragmented narrative will be interpreted as meaningful. These are semantically distinct: one is about narrative interpretation, the other about behavioral response to a prompt. There is no overlap in substance, and C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to the audience/listeners, and 'carry it' is a call to action related to following on Instagram.\",\n  \"reason\": \"Claim C (turn 59) expresses belief that the audience will follow a call to action (e.g., visiting a website and following on Instagram), which is unrelated to assumption A (turn 48), which concerns trust that a fragmented narrative will be interpreted as meaningful. There is"
     },
     {
       "a_turn_idx": 48,
@@ -3786,7 +3786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asks about court reform. The phrase 'Do you fear that without court reform?' is attributed to her.\",\n  \"reason\": \"Claim C (turn 66) does not address or verify the assumption that the listener interprets a fragmented narrative as meaningful. Instead, it shifts focus to a completely different topic—fears about court reform—and questions the clarity of the term 'court"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who asked about court reform. The phrase 'Do you fear that without court reform?' is attributed to her.\",\n  \"reason\": \"Claim C (turn 66) does not address or verify the assumption that the listener will interpret a fragmented narrative as meaningful. Instead, it shifts focus to a completely different topic—fears about court reform—and questions the clarity of the term 'court"
     },
     {
       "a_turn_idx": 48,
@@ -3801,7 +3801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who is asking about court reform. The phrase 'we know what court reform is' implies an assumed shared understanding.\",\n  \"reason\": \"Turn 66 questions whether the listener understands what court reform entails, which touches on the assumption that the listener interprets the concept correctly. However, it does not explicitly verify or state the earlier assumption A—that the speaker trusts the listener will interpret a"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who is asking about court reform. The phrase 'we know what court reform is' implies an assumed shared understanding.\",\n  \"reason\": \"Turn 66 questions whether the listener understands what court reform entails, which touches on the assumption that the listener interprets the discussion as meaningful. However, it does not explicitly verify or state the speaker's trust in the listener's interpretation of a fragmented"
     },
     {
       "a_turn_idx": 48,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the relationship between A and C; 'he' in C refers to a political figure mentioned in the discussion, not the speaker in A.\",\n  \"reason\": \"Claim C (turn 71) discusses approval of a statement about not adding new Supreme Court justices and critiques a question about court reform. This topic is entirely unrelated to assumption A (turn 48), which concerns the speaker's trust that a fragmented narrative will be interpreted meaningfully."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'he' in C refers to a political figure mentioned in the discussion, distinct from the speaker in A.\",\n  \"reason\": \"Claim C discusses approval of a statement about not adding new Supreme Court justices and critiques a question about court reform. This topic is entirely unrelated to assumption A, which concerns the speaker's trust that a fragmented narrative will be interpreted as meaningful. There is no overlap in subject matter, intent,"
     },
     {
       "a_turn_idx": 49,
@@ -3830,8 +3830,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'this court' refers to the current Supreme Court, and 'young conservatives' refers to the justices on it.",
-      "reason": "Claim C discusses concerns about the current court with young conservative justices causing significant harm without reform. This is unrelated to assumption A, which asserts that being corrected is a significant or memorable event. There is no overlap in semantic content between the two statements, and C does not state, imply, or verify A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this court' refers to the current Supreme Court, and 'young conservatives' refers to the justices on it.\",\n  \"reason\": \"Claim C discusses concerns about the current court with young conservative justices causing significant harm without reform. This is unrelated to assumption A, which asserts that being corrected is a significant or memorable event. There is no overlap in semantic content between the two statements, and C does not state, imply, or verify A.\"\n}\n```"
+      "reason": "Claim C discusses concerns about the current court with young conservative justices causing significant harm without reform. This is unrelated to assumption A, which asserts that being corrected is a significant or memorable event. There is no overlap in semantic content between the two statements. The topics, subjects, and implications are entirely different.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this court' refers to the current Supreme Court, and 'young conservatives' refers to the justices on it.\",\n  \"reason\": \"Claim C discusses concerns about the current court with young conservative justices causing significant harm without reform. This is unrelated to assumption A, which asserts that being corrected is a significant or memorable event. There is no overlap in semantic content between the two statements. The topics, subjects, and implications are entirely different.\"\n}\n```"
     },
     {
       "a_turn_idx": 49,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Kelly' in turn 53 refers to a person previously mentioned in turn 51-52, likely the mother of the deceased young woman.\",\n  \"reason\": \"Claim C states that Kelly's emotions were evident from her facial expression, which is unrelated to assumption A, which concerns the significance of being corrected as a memorable event. There is no overlap in semantic content between the belief about correction being memorable (A) and the perception of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Kelly' in turn 53 refers to a person previously mentioned in the context (likely the young woman killed in Charlottesville).\",\n  \"reason\": \"Claim C states that Kelly's emotions were evident from her facial expression, which is unrelated to assumption A, which concerns the significance of being corrected as a memorable event. There is no overlap in semantic content between the belief about correction being memorable (A) and the recognition of emotions via facial expression ("
     },
     {
       "a_turn_idx": 49,
@@ -3906,7 +3906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to the speaker (SPEAKER_02), who is also the subject of the earlier assumption A. The phrase 'I will commentate over this' indicates live commentary, which aligns with the context of real-time observation.\",\n  \"reason\": \"Turn 71 describes the speaker providing live commentary during an event, which implies immediate, real-time engagement. However, this does not explicitly state or verify the belief"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to the speaker (SPEAKER_02), and 'her' refers to the woman mentioned in turn 69-70, likely the journalist or talk show host.\",\n  \"reason\": \"Turn 71 states that the speaker is providing live commentary during an event, which is a new claim about the speaker's role and actions. However, it does not address or verify the earlier assumption in turn"
     },
     {
       "a_turn_idx": 49,
@@ -4926,7 +4926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who raised the concern about the conservative majority in turn 64.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_06) fears something related to court reform, which aligns with the substance of assumption A—that without court reform, the conservative majority might cause excessive harm. While C does not explicitly state the full content of A (e.g., the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who raised the concern about the conservative majority in turn 64.\",\n  \"reason\": \"Claim C states that the listener (SPEAKER_06) fears something related to court reform, which aligns with the substance of assumption A—that without court reform, the conservative majority may cause excessive harm. While C does not explicitly state the full content of A (e.g., the"
     },
     {
       "a_turn_idx": 64,
@@ -4941,7 +4941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who made the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly challenges the assumption that the audience understands what court reform is, which directly verifies the substance of assumption A—that court reform is necessary to prevent harm by the conservative majority. By questioning whether the listener truly grasps the concept of court reform, C highlights the implicit assumption in A that reform is both known and needed, thereby"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 66 refers to SPEAKER_06, who made the earlier assumption A. 'It' in 'as if we know what court reform is' refers to the concept of court reform introduced in A.\",\n  \"reason\": \"Claim C explicitly challenges the assumption that the audience understands court reform, which directly addresses the implicit premise in A that court reform is a known and viable solution to prevent harm from the conservative majority. By questioning whether"
     },
     {
       "a_turn_idx": 64,
@@ -5076,7 +5076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to SPEAKER_07, who previously mentioned not wanting to add justices. 'This court with the young conservatives' refers to the same group discussed in turn 66.\",\n  \"reason\": \"Claim C explicitly states concern that the current court, composed of young conservative justices, could cause significant harm without reform. This directly aligns with the substance of assumption A, which questioned whether the term 'court reform' was"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to SPEAKER_07, who previously suggested adding more justices. 'This court with the young conservatives' refers to the current Supreme Court composition mentioned in earlier turns.\",\n  \"reason\": \"Claim C explicitly states concern that the current court, composed of young conservative justices, could cause significant harm without reform. This directly aligns with the substance of assumption A, which posits that the listener assumes 'court reform' is"
     },
     {
       "a_turn_idx": 66,
@@ -5091,7 +5091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to the person who decided to leave, likely SPEAKER_07 based on context. The phrase 'this court with the young conservatives that are on it' directly refers to the same group mentioned in turn 66 ('this conservative majority is too young and too conservative').\",\n  \"reason\": \"Claim C explicitly states the belief that the current court, composed of young conservative justices, could cause significant harm without reform."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 71 refers to the person who previously stated that they would not add any justices (SPEAKER_07 in turn 67). The phrase 'this court with the young conservatives that are on it' directly refers to the same group mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states the belief that the current court, composed of young conservative justices, could cause significant harm without reform. This directly verifies the core"
     },
     {
       "a_turn_idx": 68,
@@ -5106,7 +5106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this court' in turn 71 refers to the current Supreme Court mentioned in turn 68, and 'young conservatives' refers to the justices discussed in the context of potential reform.\",\n  \"reason\": \"Claim C explicitly states a belief that the current court—specifically one with young conservative justices—can cause significant harm without reform. This aligns with assumption A, which asserts that reform implies a pre-existing flaw or distortion. While C does not use"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this court' in turn 71 refers to the current Supreme Court mentioned in turn 68, and 'young conservatives' refers to the justices discussed in the context of potential distortion.\",\n  \"reason\": \"Claim C explicitly states that the current court, composed of young conservative justices, could cause significant harm without reform. This aligns with assumption A, which asserts that reform implies a pre-existing flaw or distortion. While C does not use the exact phrasing"
     },
     {
       "a_turn_idx": 68,

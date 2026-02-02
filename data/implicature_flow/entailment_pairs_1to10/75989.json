@@ -2226,7 +2226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 47 refers to Scott Pruitt, not the speaker. The claim in C is about explaining the context of Scott Pruitt's statement, not about the speaker's religious identity.\",\n  \"reason\": \"Claim C (turn 47) discusses explaining the context of Scott Pruitt's statement involving biblical references, which is unrelated to the earlier assumption A (turn 23) about the relevance of the speaker's religious identity and status"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 47 refers to Scott Pruitt, not the speaker.\",\n  \"reason\": \"Claim C (turn 47) discusses Scott Pruitt's use of a biblical quote from Joshua to justify policy decisions at the EPA, particularly regarding conflicts of interest between serving the public and receiving grants. This does not address or make explicit the speaker's own religious identity or status, which was the focus of assumption A (turn 23)."
     },
     {
       "a_turn_idx": 23,
@@ -2346,7 +2346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, as established in turn 46. The phrase 'this is what he said' clarifies that Pruitt made the statement about choosing whom to serve, referencing Joshua.\",\n  \"reason\": \"Claim C (turn 47) introduces a new topic—explaining the context behind Scott Pruitt’s statement—without explicitly addressing or verifying the earlier assumption A (turn 24), which concerns a shared or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, as established in turn 46. The phrase 'this is what he said' clearly identifies Pruitt as the speaker of the quote.\",\n  \"reason\": \"Claim C states that the speaker will explain the context behind Scott Pruitt’s statement, which is a future intention rather than a direct assertion of the earlier assumption A. Assumption A concerns the existence of a shared or understandable reference point in the conversation."
     },
     {
       "a_turn_idx": 25,
@@ -2496,7 +2496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 48 refers to Scott Pruitt's use of biblical text to justify policy decisions, and 'he' refers to Pruitt.\",\n  \"reason\": \"Claim C asserts that Pruitt is promoting a corrupt agenda by using religion as a cover, which is a specific accusation about political manipulation and hypocrisy. Assumption A, however, is about the fragility of religious belief when subjected to scrutiny—a general observation about personal religious doubt. There is no direct or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 48 refers to Scott Pruitt's use of biblical text to justify policy decisions at the EPA.\",\n  \"reason\": \"Claim C asserts that Scott Pruitt is promoting a corrupt agenda by using religion as a cover, which is a specific accusation about political manipulation and hypocrisy. Assumption A, however, is about the fragility of religious belief when subjected to scrutiny—a general epistemological observation about religion unraveling under critical examination. There is no"
     },
     {
       "a_turn_idx": 26,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 52 refers to SPEAKER_03 as the listener.\",\n  \"reason\": \"Turn 52 expresses uncertainty about integrating religious texts with environmentalism, which touches on themes of religious interpretation and public policy. However, it does not explicitly state or verify the assumption in turn 26—that the listener shares skepticism toward religious institutions. While the topic is related, the claim in C is about a specific application (religion"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by prior context where SPEAKER_04 is asking about SPEAKER_03's position.\",\n  \"reason\": \"Claim C expresses uncertainty about integrating religious texts with environmentalism, which touches on themes of religious interpretation and skepticism toward religious influence in public life. However, it does not explicitly state or verify the earlier assumption A—that the listener shares skepticism toward religious institutions. While"
     },
     {
       "a_turn_idx": 26,
@@ -2897,11 +2897,11 @@
       "claim_text": "She would have been hurt by being identified as non-religious.",
       "overlap_score": 2,
       "c_time": 592.631,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'she' in claim C refers to SPEAKER_03's mother, established in turn 30.",
-      "reason": "Claim C explicitly states that the mother would have been hurt by the public identification as non-religious, which directly verifies the implied emotional consequence in assumption A—that discussing the topic would have been expected or appropriate given the mother's strong religious beliefs. The statement confirms the anticipated reaction, making the earlier assumption explicit.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to SPEAKER_03's mother, established in turn 30.\",\n  \"reason\": \"Claim C explicitly states that the mother would have been hurt by the public identification as non-religious, which directly verifies the implied emotional consequence in assumption A—that discussing the topic would have been expected or appropriate given the mother's strong religious beliefs. The statement confirms the anticipated reaction, making the earlier assumption explicit.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to SPEAKER_03's mother, established in turn 30.\",\n  \"reason\": \"Claim C explicitly states that the mother would have been hurt by the speaker publicly identifying as non-religious, which directly verifies the implied emotional consequence in assumption A—that discussing the topic would have been expected or appropriate given the mother's strong religious beliefs. The statement confirms both the sensitivity of the topic and the expectation of silence due to potential"
     },
     {
       "a_turn_idx": 29,
@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the same speaker as in turn 29. 'The topic at hand' refers to religious belief, spirituality, and the speaker's personal journey questioning faith.\",\n  \"reason\": \"Turn 56 states 'I got a lot more questions than answers,' which directly reflects the ongoing uncertainty and internal struggle implied in turn 29, where the speaker refrains from discussing their"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the same speaker as in turn 29. 'The topic at hand' refers to religious belief, spirituality, and existential questions discussed throughout the conversation.\",\n  \"reason\": \"Turn 56 explicitly states that the speaker has 'a lot more questions than answers,' which directly verifies the earlier assumption in turn 29 that talking about the topic (religious belief and personal faith"
     },
     {
       "a_turn_idx": 29,
@@ -2931,7 +2931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the subject of the earlier assumption A. 'The speaker' in C is equivalent to SPEAKER_03.\",\n  \"reason\": \"Claim C states that the speaker has 'a lot more questions than answers,' which directly reflects the ongoing uncertainty and inquiry described in assumption A, where the speaker acknowledges their mother's potential relevance due to her religious background and the speaker's own struggle"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the subject of the earlier assumption A. 'The topic at hand' refers to religious belief, spirituality, and personal faith, which is consistent with the context of turn 29.\",\n  \"reason\": \"Claim C (turn 56) states 'I got a lot more questions than answers,' which directly reflects the ongoing uncertainty and inquiry about religious and spiritual matters that under"
     },
     {
       "a_turn_idx": 29,
@@ -2946,7 +2946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 47, 'he' refers to Scott Pruitt, who is the subject of the discussion. The phrase 'the context behind Scott Pruitt’s statement' refers to the interpretation of the biblical quote from Joshua, which is discussed in detail in the same turn.\",\n  \"reason\": \"Turn 47 mentions explaining the context behind Scott Pruitt’s statement, which involves his use of a biblical quote from Joshua. However, this does not explicitly address or verify the earlier assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 47, 'he' refers to Scott Pruitt, and 'this' refers to Pruitt's statement about choosing whom to serve, drawing from the Book of Joshua. The phrase 'the context behind Scott Pruitt’s statement' indicates an intent to clarify the background of his words.\",\n  \"reason\": \"Claim C (turn 47) mentions explaining the context of Scott Pruitt's statement, which aligns with the general topic of interpreting a religious reference in a political context"
     },
     {
       "a_turn_idx": 30,
@@ -2961,7 +2961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 30 refers to SPEAKER_03's mother, who remained religious throughout her life. The claim in turn 33 ('space for non-religious individuals to serve in Congress') reflects a personal consequence of religious commitment (the mother's disapproval), implying psychological pressure from religious expectations.\",\n  \"reason\": \"Turn 33 explicitly addresses the tension between religious identity and public service, motivated by the speaker's personal experience of conflict"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 30 refers to SPEAKER_03's mother, who remained religious throughout her life. The claim in turn 33 ('space for non-religious individuals to serve in Congress') reflects a personal consequence of religious commitment (i.e., the emotional burden of disappointing a deeply religious parent), which aligns with the psychological pressure implied in assumption A.\",\n  \"reason\": \"Claim C does not directly state that religious commitment causes psychological pressure"
     },
     {
       "a_turn_idx": 30,
@@ -2976,7 +2976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'some' in turn 59 refers to 'individuals involved in charity,' which is consistent with the broader discussion of moral action and community service introduced earlier.\",\n  \"reason\": \"Claim C discusses individuals in charity being motivated by religious faith, which touches on the theme of religious commitment but does not address the psychological pressure associated with such commitment. While both A and C relate to religion and personal experience, C does not explicitly state or verify the psychological burden described in A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'some individuals' refers to people involved in charity, which is consistent with the broader context of religious motivation.\",\n  \"reason\": \"Claim C states that some individuals in charity are motivated by religious faith, which is tangentially related to assumption A (religious commitment creating psychological pressure). However, C does not address or verify the psychological pressure aspect of A. Instead, it mentions religious motivation in a positive, respectful context without referencing internal conflict, doubt, or emotional strain"
     },
     {
       "a_turn_idx": 30,
@@ -2991,7 +2991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 30. The phrase 'my religious views' in turn 40 directly refers back to the speaker's past religious identity and the struggle described in turn 30.\",\n  \"reason\": \"Turn 40 explicitly states that the speaker felt compelled to be honest about their religious views, which directly verifies the earlier assumption in turn 3"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 30. The phrase 'my religious views' in turn 40 directly refers to the speaker's personal relationship with religion discussed in turn 30.\",\n  \"reason\": \"Turn 40 explicitly states that the speaker felt the need to be honest about their religious views, which directly verifies the earlier assumption in turn 30 that"
     },
     {
       "a_turn_idx": 30,
@@ -3006,7 +3006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the act of religious proselytizing by Congress members, which is directly tied to the speaker's prior experience of feeling constrained by religious expectations (A). The speaker's discomfort with religious expression in politics stems from their personal journey away from religious belief, particularly influenced by their mother's devoutness.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds religious proselytizing by Congress members offensive, which directly reflects and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 30 refers to the speaker's mother, who remained religious throughout her life. The claim in turn 33 explicitly connects the speaker's personal experience of being constrained by religious expectations (from losing faith after their father's death and the mother's religious adherence) to their current discomfort with religious proselytizing in politics.\",\n  \"reason\": \"Turn 33 directly states that the speaker finds religious proselytizing by Congress members"
     },
     {
       "a_turn_idx": 30,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 30 refers to the speaker's mother, who remained religious throughout her life. The claim in turn 33 does not directly mention the mother, but the broader context of feeling constrained by religious expectations—especially due to her religious adherence—is reflected in the speaker's discomfort with religious proselytizing in politics, which stems from their personal struggle with faith after her death.\",\n  \"reason\": \"Turn 33 expresses the speaker's"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 30 refers to the speaker's mother, who remained religious throughout her life. The claim in turn 33 does not directly reference the speaker's personal feelings of constraint due to religious expectations, but rather shifts focus to institutional religious proselytizing in Congress.\",\n  \"reason\": \"While turn 33 discusses the speaker's discomfort with religious proselytizing in politics and implies a personal stance shaped by their religious upbringing, it"
     },
     {
       "a_turn_idx": 30,
@@ -3051,7 +3051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 30. The phrase 'my religious views' in turn 40 connects back to the speaker's past experience with religious expectations mentioned in turn 30.\",\n  \"reason\": \"Turn 40 mentions the speaker's need to be honest about their religious views and to demonstrate that one does not need to be a religious zealot to"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 30. The phrase 'my religious views' in turn 40 connects back to the speaker's past experience with religious expectations mentioned in turn 30.\",\n  \"reason\": \"Claim C mentions the speaker's need to be honest about their religious views and demonstrates that one does not need to be a religious zealot to serve in Congress"
     },
     {
       "a_turn_idx": 30,
@@ -3066,7 +3066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 48 refers to the audience or general public, and 'this guy' refers to Scott Pruitt. The phrase 'this reasoning' refers back to the idea of choosing whom to serve, as introduced in the prior discussion about religious obligation and moral choice.\",\n  \"reason\": \"Claim C (turn 48) explicitly critiques the use of religious texts to justify political actions, particularly in the context of environmental policy. This reflects a broader rejection"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 48 refers to the audience or general public, and 'this guy' refers to Scott Pruitt. The phrase 'this reasoning' refers back to the idea of choosing whom to serve, which originates from the biblical quote discussed earlier.\",\n  \"reason\": \"Claim C (turn 48) explicitly criticizes the use of religious texts to justify political actions, particularly in the context of industrial lobbying at the EPA. This reflects a broader rejection"
     },
     {
       "a_turn_idx": 30,
@@ -3081,7 +3081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'natural resources' is a standalone term in turn 52.\",\n  \"reason\": \"Claim C (turn 52) asks whether 'natural resources' was mentioned previously and discusses its potential connection to religious views on environmental protection. This is unrelated to assumption A, which concerns the speaker's personal experience of feeling constrained by religious expectations. There is no mention, implication, or verification of the emotional or psychological constraint described in A. The topic shift"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'natural resources' is a standalone term in turn 52.\",\n  \"reason\": \"Claim C (turn 52) asks whether 'natural resources' was mentioned previously and discusses its potential connection to religious views on environmental protection. This is unrelated to assumption A, which concerns the speaker's feeling of being constrained by religious expectations. There is no mention, implication, or verification of the emotional or psychological constraint described in A. The topic shift to"
     },
     {
       "a_turn_idx": 30,
@@ -3096,7 +3096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, who is the speaker expressing past religious constraints. 'The Bible' and 'religious texts' are coreferential.\",\n  \"reason\": \"Turn 52 expresses uncertainty about integrating religious texts (specifically the Bible) with environmentalism, which is tangentially related to the speaker's earlier experience of being constrained by religious expectations. However, it does not explicitly state or verify the assumption that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, who is the speaker expressing past religious constraints. 'The speaker' in C refers to SPEAKER_03.\",\n  \"reason\": \"Turn 52 expresses uncertainty about integrating religious texts with environmentalism, which is a new topic not directly tied to the earlier assumption A that the speaker felt constrained by religious expectations. While there is a thematic connection—religion and its role in personal"
     },
     {
       "a_turn_idx": 30,
@@ -3126,7 +3126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation context.\",\n  \"reason\": \"Turn 54 claims the speaker is 'overtly hostile to religious displays,' which is not supported by the content of turn 30. Turn 30 expresses that the speaker felt constrained by religious expectations and that their mother’s religiosity contributed to their eventual decision to publicly identify as non-religious. However,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation and context.\",\n  \"reason\": \"Turn 54 claims the speaker is 'overtly hostile to religious displays,' which is not supported by the content of turn 30. Turn 30 expresses that the speaker felt constrained by religious expectations and that their mother’s religiosity contributed to their eventual decision to publicly identify as non-religious. However"
     },
     {
       "a_turn_idx": 30,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the speaker in turn 30. No other coreference issues.\",\n  \"reason\": \"Turn 56 asks for clarification on the concept of being 'searching,' which relates to the speaker's ongoing questioning of faith introduced in turn 30. However, it does not explicitly state or verify the assumption that the speaker felt constrained by religious expectations. While there is a"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the speaker in turn 30. The phrase 'what that means' refers back to the speaker's self-description as 'searching,' which relates to the questioning of faith introduced in turn 30.\",\n  \"reason\": \"Turn 56 asks for clarification on the speaker's current state of being 'searching,' which is thematically connected to the earlier experience of"
     },
     {
       "a_turn_idx": 31,
@@ -3156,7 +3156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 31 refers to the act of publicly identifying as non-religious, which would cause emotional harm to Speaker 03's mother.\",\n  \"reason\": \"Claim C explicitly affirms the necessity of space for non-religious individuals in Congress, which directly supports the assumption in A that being identified as non-religious carries negative emotional consequences—specifically, the fear of hurting a loved one. The statement in C implies that such identification is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 31 refers to SPEAKER_03's mother, who is described as very religious and would have been hurt by SPEAKER_03's public identification as non-religious.\",\n  \"reason\": \"Claim C explicitly affirms the need for space for non-religious individuals in Congress, which directly supports the assumption in A that being identified as non-religious carries negative emotional consequences—specifically, the fear of hurting a loved one"
     },
     {
       "a_turn_idx": 31,
@@ -3171,7 +3171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The 'colleague' in turn 36 refers to the conservative Republican from Missouri mentioned in turn 36, who is the same person referenced in the context of the emotional reaction.\",\n  \"reason\": \"Claim C describes a colleague visibly reacting emotionally (misting up, nodding, affirming) to a religious statement in a political speech, indicating deep personal investment in the religious message. This supports the idea that being non-religious could lead to negative emotional consequences—specific"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The 'colleague' in turn 36 refers to the conservative Republican from Missouri mentioned in turn 36, who is a member of Congress and represents a religiously committed group.\",\n  \"reason\": \"Claim C describes a strong emotional reaction (misting up, nodding, affirming) from a Republican colleague during a religiously charged moment in a political speech, indicating deep personal investment in the religious message. This supports the idea that being non-religious could lead to"
     },
     {
       "a_turn_idx": 31,
@@ -3186,7 +3186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, as established in the prior context. The phrase 'this is sort of like the Joshua principle' refers to Pruitt's invocation of religious text to justify policy decisions.\",\n  \"reason\": \"Claim C states that the speaker has concerns about a policy where religious rhetoric is used to justify actions favoring polluters and big oil. This aligns with assumption A, which asserts that the speaker has strong feelings about how"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, as established in the prior context. The phrase 'this is sort of like the Joshua principle' refers to Pruitt's invocation of religious text to justify policy decisions.\",\n  \"reason\": \"Claim C states that the speaker has concerns about the stated policy, specifically regarding Scott Pruitt's use of religious scripture (Joshua) to justify EPA decisions that favor industry over independent scientific review. This aligns with assumption A"
     },
     {
       "a_turn_idx": 31,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 52 refers to SPEAKER_03, consistent with prior context.\",\n  \"reason\": \"Claim C discusses uncertainty about integrating religious texts with environmentalism, which is unrelated to assumption A, which concerns the speaker's strong feelings about being perceived as non-religious. While both touch on religion and public identity, C does not state or verify any aspect of A. There is no explicit or implicit connection between the emotional stance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 52 refers to SPEAKER_03, consistent with prior context.\",\n  \"reason\": \"Claim C discusses uncertainty about integrating religious texts with environmentalism, which is unrelated to assumption A, which concerns the speaker's strong feelings about being perceived as non-religious. While both involve religion, C does not address perception, emotional investment, or personal identity related to religiosity. There is no explicit or implicit verification of A"
     },
     {
       "a_turn_idx": 31,
@@ -3216,7 +3216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker has many unresolved questions, which reflects uncertainty or introspection about religious identity. However, this does not explicitly verify or state the earlier assumption A, which is about having strong feelings regarding how one is perceived about religion. While there is a thematic connection (personal views on religion), C does not address perception or emotional"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, consistent with prior turns.\",\n  \"reason\": \"Turn 56 states the speaker has 'a lot more questions than answers,' indicating uncertainty about religious identity and beliefs. While this reflects introspection and emotional complexity, it does not explicitly state or verify the earlier assumption that the speaker has strong feelings about how she is perceived regarding religion. The connection is thematic—both involve personal religious identity—but"
     },
     {
       "a_turn_idx": 31,
@@ -3246,7 +3246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 31. 'My religious views' directly refers to the speaker's identity as non-religious, which aligns with the emotional weight of being perceived negatively by her mother.\",\n  \"reason\": \"Claim C explicitly states that the speaker felt the need to be honest about their religious views, which directly verifies the earlier assumption A that the speaker has"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker as in turn 31. 'My religious views' in turn 40 directly refers to the speaker's identity as non-religious mentioned in turn 31.\",\n  \"reason\": \"Turn 40 explicitly states that the speaker felt the need to be honest about their religious views, which directly verifies the earlier assumption in turn 31 that the"
     },
     {
       "a_turn_idx": 31,
@@ -3306,7 +3306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, consistent with prior turns.\",\n  \"reason\": \"Turn 56 states the speaker feels they have more questions than answers, indicating uncertainty about their beliefs. However, this does not explicitly address or verify the earlier assumption (turn 31) that the speaker has strong feelings about how they are perceived regarding religion. While there is a thematic link to identity and belief, the claim in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, consistent with prior turns.\",\n  \"reason\": \"Turn 56 states the speaker has 'a lot more questions than answers,' indicating uncertainty about their beliefs, particularly regarding religion and spirituality. While this reflects a personal struggle with identity and perception, it does not explicitly state or verify the earlier assumption (turn 31) that the speaker has strong feelings about how they are perceived regarding religion"
     },
     {
       "a_turn_idx": 31,
@@ -3321,7 +3321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to a non-religious individual, which aligns with the identity mentioned in assumption A (publicly identifying as non-religious). The phrase 'space for someone who's not religious' directly corresponds to the social significance of identifying as non-religious.\",\n  \"reason\": \"Claim C explicitly affirms the necessity of allowing non-religious individuals to serve in Congress, which directly verifies the underlying assumption in A that there is a socially significant"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to a non-religious individual, which aligns with the identity mentioned in assumption A (publicly identifying as non-religious). The phrase 'space for someone who's not religious' directly corresponds to the social significance of being non-religious vs. religious.\",\n  \"reason\": \"Claim C explicitly affirms the necessity of allowing non-religious individuals to serve in Congress, which directly verifies the underlying assumption in A that there is a"
     },
     {
       "a_turn_idx": 31,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_03, who is the same speaker as in assumption A. The phrase 'a fair amount of that offensive' refers back to the religious proselytizing by Congress members mentioned in the prior sentence.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds religious proselytizing by Congress members offensive, which directly verifies the substance of assumption A—that there is a socially significant difference between identifying as religious"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_03, who is the same speaker as in assumption A. The phrase 'a fair amount of that offensive' refers back to the proselytizing by Congress members described in turn 33.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds religious proselytizing by Congress members offensive, which directly verifies the substance of assumption A—that there is a socially significant difference between identifying as religious"
     },
     {
       "a_turn_idx": 31,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, who is mentioned in turn 46 as quoting from the Book of Joshua.\",\n  \"reason\": \"Claim C discusses a policy requiring individuals to choose between serving on a committee providing independent counsel to the EPA or receiving a grant from the agency, but not both. This is presented as a metaphorical application of the biblical 'choose this day whom you're going to serve' quote. However, this claim"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, who is mentioned in turn 46. The phrase 'this is sort of like the Joshua principle' refers to a biblical reference used by Pruitt to justify policy decisions.\",\n  \"reason\": \"Claim C discusses a policy requiring individuals to choose between serving on a committee providing independent counsel to the EPA or receiving a grant from the agency, but not both. This is presented as a direct application of a religious"
     },
     {
       "a_turn_idx": 31,
@@ -3366,7 +3366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 47 refers to Scott Pruitt, as established in the prior context. The phrase 'this is what he said' clarifies that Pruitt made the statement about choosing whom to serve based on the Book of Joshua.\",\n  \"reason\": \"Claim C discusses Scott Pruitt's use of a biblical quote to justify policy decisions at the EPA, particularly framing a conflict between serving the public versus receiving grants. While this touches on themes of identity and religious expression"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Scott Pruitt' as the subject of the statement; 'he' in turn 48 refers to Scott Pruitt.\",\n  \"reason\": \"Claim C (turn 47) introduces the context of Scott Pruitt's statement involving the Book of Joshua, but does not address the earlier assumption A (turn 31) about the listener understanding the speaker's identity and its sensitivity. While the broader conversation involves personal and religious identity, C focuses"
     },
     {
       "a_turn_idx": 32,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 48 refers to the behavior described in turns 46–47, specifically using religious texts (e.g., Book of Joshua) to justify political decisions at the EPA.\",\n  \"reason\": \"Claim C explicitly identifies the political use of religion—specifically invoking the Old Testament to legitimize a controversial environmental policy—as a recurring practice within the current administration. This directly verifies the substance of assumption A, which asserts that political uses of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 48 refers to the behavior described in turns 46–47, specifically using religious texts (e.g., Book of Joshua) to justify political decisions at the EPA, which aligns with the political use of religion mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly identifies the political use of religion—specifically invoking the Old Testament to justify a controversial environmental policy—as a recurring practice within the current administration. This directly"
     },
     {
       "a_turn_idx": 32,
@@ -3396,7 +3396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the same speaker expressing the view in turn 32.\",\n  \"reason\": \"Turn 40 explicitly states that the speaker felt the need to be honest about their religious views due to the problematic imposition of religion into government—a direct reflection of the concern raised in turn 32 about the fraught use of religion in politics. The claim verifies the moral unease and risk associated"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who is the speaker expressing personal views on religion and politics.\",\n  \"reason\": \"Claim C explicitly states that the speaker felt the need to be honest about their religious views due to the problematic imposition of religion in government—a direct reflection of the earlier assumption A that religious influence in politics is morally questionable. The reasoning in C aligns precisely with the concern raised in A about the risks and moral"
     },
     {
       "a_turn_idx": 32,
@@ -3426,7 +3426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 33 refers to the act of religious proselytizing in Congress mentioned in the prior turn.\",\n  \"reason\": \"Turn 33 expresses a desire for an example of religious proselytizing in Congress, which is related to the concern raised in turn 32 about the fraught nature of religion in politics. However, it does not explicitly state or verify the assumption that religious influence in politics is inherently risky or morally questionable."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 33 refers to the act of religious proselytizing in Congress mentioned in the prior turn.\",\n  \"reason\": \"Turn 33 expresses a desire for an example of religious proselytizing in Congress, which is related to the concern raised in turn 32 about the fraught nature of religion in politics. However, it does not explicitly state or verify the speaker's view that religious influence in politics is inherently risky or morally"
     },
     {
       "a_turn_idx": 32,
@@ -3441,7 +3441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 37 refers to Donald Trump, as established in the prior context. 'Religion' and 'religious manipulation' refer to the use of religious language in political speeches, particularly in the State of the Union address.\",\n  \"reason\": \"Turn 37 explicitly states that religion is being 'cynically manipulated' by Trump, which directly verifies the earlier assumption in turn 32 that religious influence in politics is inherently risky or morally"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 37 refers to Donald Trump, as established in the prior context involving his State of the Union address.\",\n  \"reason\": \"Claim C explicitly states that religion is being 'cynically manipulated' by Trump, which directly verifies the substance of assumption A—that religious influence in politics is inherently risky or morally questionable. The term 'cynically manipulated' captures the insincerity and deliberate use of religion for political effect, aligning precisely"
     },
     {
       "a_turn_idx": 32,
@@ -3456,7 +3456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to the speaker (SPEAKER_03), and 'we' refers to the broader group of non-religious individuals seeking representation in Congress.\",\n  \"reason\": \"Claim C explicitly states that one does not need to be a religious zealot to serve in the US Congress, which directly verifies the concern raised in assumption A about the moral and political risks of religious influence in politics. The statement reinforces the idea that religious"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to the audience or potential political figures, and 'I' refers to SPEAKER_03. The phrase 'you don't have to be a religious zealot...' directly addresses the concern raised in turn 32 about the problematic use of religion in politics.\",\n  \"reason\": \"Turn 40 explicitly states that one does not need to be a religious zealot to serve in Congress, which directly verifies the underlying"
     },
     {
       "a_turn_idx": 32,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this guy' in turn 48 refers to Scott Pruitt, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds it offensive that Scott Pruitt used religious texts (the Book of Joshua) to justify a politically motivated, industry-friendly agenda at the EPA. This directly verifies the earlier assumption A—that religious influence in politics is morally questionable—by providing a concrete example where religious rhetoric is weaponized to legitimize corruption and bias"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this guy' in turn 48 refers to Scott Pruitt, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds it offensive that Scott Pruitt used religious texts (the Book of Joshua) to justify a politically motivated and corrupt agenda at the EPA. This directly verifies the earlier assumption A that religious influence in politics is morally questionable or risky. The claim goes beyond mere criticism by highlighting the misuse of religious scripture to legitimize"
     },
     {
       "a_turn_idx": 32,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior conversation context where SPEAKER_03 is discussing religious views in public policy.\",\n  \"reason\": \"Turn 52 expresses uncertainty about integrating religious texts (specifically the Bible) with environmentalism, which touches on the broader theme of religious influence in public discourse. However, it does not explicitly state or verify the claim that religious influence in politics is inherently risky"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior conversation context where SPEAKER_03 is discussing religious views in public policy.\",\n  \"reason\": \"Claim C expresses uncertainty about integrating religious texts (specifically the Bible) with environmentalism, which touches on the broader theme of religious influence in public affairs discussed in assumption A. However, C does not explicitly state or verify the moral or risk-based judgment about religious"
     },
     {
       "a_turn_idx": 32,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation and context.\",\n  \"reason\": \"Claim C states that the speaker is 'overtly hostile to religious displays,' which aligns with the substance of assumption A—that religious influence in politics is inherently risky or morally questionable. While C uses the phrase 'overtly hostile,' which is stronger than A’s 'fraught' or 'offensive,' it"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation and context.\",\n  \"reason\": \"Claim C states that the speaker is 'overtly hostile to religious displays,' which aligns with the substance of assumption A—that religious influence in politics is inherently risky or morally questionable. While C does not use identical wording, it explicitly affirms a strong critical stance toward religious expressions in public/political settings, particularly when"
     },
     {
       "a_turn_idx": 32,
@@ -3546,7 +3546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 62 refers to the religious practice or belief system mentioned in the context of the speaker's past, as implied by the contrast with current non-religious identity and the desire for replacement.\",\n  \"reason\": \"Claim C suggests the speaker once had a religious practice or belief system, which aligns with the background of their personal history (e.g., having a deeply religious mother). However, C does not explicitly state or verify the moral or"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 62 refers to the religious practice or belief system mentioned in the context of the speaker's past, as implied by the contrast with current non-religious identity and the desire for replacement.\",\n  \"reason\": \"Claim C suggests the speaker once had a religious practice or belief system, which aligns with the background of their personal history (e.g., having a deeply religious mother and feeling conflicted about publicly identifying as non-religious). However"
     },
     {
       "a_turn_idx": 32,
@@ -3561,7 +3561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 62 refers to the religious experience mentioned in prior turns, particularly the emotional and communal aspects of religion discussed by SPEAKER_03.\",\n  \"reason\": \"Claim C states that no replacement for the religious experience has been found, which reflects a sentiment of loss or incompleteness regarding religious influence. While this implies a recognition of the value or depth of religious experience, it does not explicitly state or verify the moral or inherent risk associated"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 62 refers to the religious experience mentioned in prior turns, particularly the emotional and communal aspects of religion discussed by SPEAKER_03.\",\n  \"reason\": \"Claim C states that no replacement for the religious experience has been found, which reflects a sentiment of loss or incompleteness regarding religious community and meaning. While this implies a recognition of the value or depth of religious experience, it does not explicitly state or verify the moral or ethical"
     },
     {
       "a_turn_idx": 32,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Donald Trump, and 'the flag' and 'God' refer to specific elements mentioned in the State of the Union address.\",\n  \"reason\": \"Claim C discusses audience reaction to symbolic references in a political speech, specifically applause for the flag and God, which reflects emotional and performative religiosity. However, it does not address or verify the assumption that audience members recognize 'fraught' as a meaningful descriptor of religion"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'audience members' in C refers to listeners in the room during the State of the Union address.\",\n  \"reason\": \"Claim C discusses audience members applauding for the flag and 'God' during Trump's State of the Union address, which illustrates emotional and performative reactions to religious symbolism. However, this does not address or verify assumption A, which concerns whether audience members recognize 'fraught' as a meaningful descriptor of religion-politics intersections. The"
     },
     {
       "a_turn_idx": 32,
@@ -3591,7 +3591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 36 refers to the example of Donald Trump's State of the Union address, specifically the line about staying true to God. The phrase 'a lot of the folks I served with' refers to members of Congress, particularly conservative Republicans.\",\n  \"reason\": \"Claim C states that religion plays a significant role in the work of many members of Congress, which aligns with the observation in turn 36 that a Republican colleague was visibly moved"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 36 refers to the example of Donald Trump's State of the Union address, particularly the line about staying true to God, which illustrates how religion influences congressional behavior.\",\n  \"reason\": \"Claim C states that religion plays a significant role in the work of many members of Congress, which aligns with the broader idea in assumption A that religion-politics intersections are meaningful. However, C does not explicitly verify that audience members recognize 'fraught"
     },
     {
       "a_turn_idx": 32,
@@ -3606,7 +3606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to 'non-religious individuals,' which aligns with the idea of a non-religious person serving in Congress, as implied in assumption A.\",\n  \"reason\": \"Claim C explicitly states that there must be space for non-religious individuals to serve in Congress, which directly verifies the underlying assumption in A that religion and politics should remain distinct domains. The emphasis on non-religious representation in a political institution like Congress reflects a clear commitment"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in claim C refers to non-religious individuals, which aligns with the implied subject in assumption A. The phrase 'space for someone who's not religious' directly clarifies the shared cultural understanding mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that there should be space for non-religious individuals to serve in Congress, which directly verifies the core idea in assumption A—that religion and politics should remain distinct domains. This is a clear, direct"
     },
     {
       "a_turn_idx": 32,
@@ -3621,7 +3621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'folks' in turn 43 refers to individuals who may use religious claims to justify discriminatory actions, consistent with the broader context of religious expression in politics discussed in turn 32.\",\n  \"reason\": \"Claim C explicitly addresses the misuse of religion as a justification for discrimination, which aligns with the underlying assumption in A that religion and politics should be kept separate. While C does not directly restate the idea of a 'shared cultural understanding,' it strongly"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'folks' in turn 43 refers to individuals who claim religious grounds to justify discriminatory actions, consistent with the broader context of religious expression in politics.\",\n  \"reason\": \"Claim C explicitly states that religious claims are used as a pretext to justify discrimination, which aligns with the core idea in assumption A that religion and politics should be kept separate. While A focuses on the cultural norm of separation, C demonstrates how that boundary is violated in practice—by weapon"
     },
     {
       "a_turn_idx": 32,
@@ -3651,7 +3651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to the individuals on the science advisory board, not public officeholders. The subject matter shifts from religious representation in public office (A) to industrial influence on environmental policy (C).\",\n  \"reason\": \"Claim C discusses industrial interests versus environmental efforts, particularly regarding grant recipients and industry shills, which is unrelated to the core idea in assumption A—that public officeholders should represent constituents over promoting specific religions. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to 'industry' or 'shills for industry' mentioned earlier in turn 51, but this is unrelated to the concept of public officeholders representing constituents versus promoting religion in turn 33.\",\n  \"reason\": \"Claim C discusses industrial influence on environmental policy and criticizes industry shills, which is entirely unrelated to the assumption that public officeholders should represent constituents rather than promote specific religions. There is no overlap in subject"
     },
     {
       "a_turn_idx": 33,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'his' in turn 37 as referring to Donald Trump, consistent with the context of the State of the Union address and the prior discussion about Trump's use of religious language.\",\n  \"reason\": \"Claim C explicitly states that religion is being 'cynically manipulated' in a deliberate and insincere manner, which directly verifies the substance of assumption A—that religious expression in Congress crosses into inappropriate advocacy. The example in turn 3"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Donald Trump, as established in the prior context (turns 35–36). 'Religion' in turn 37 refers to the religious rhetoric used in the State of the Union address discussed earlier.\",\n  \"reason\": \"Claim C explicitly states that religion is being 'cynically manipulated' in a deliberate and insincere manner, which directly verifies the substance of assumption A—that some religious expressions"
     },
     {
       "a_turn_idx": 33,
@@ -3681,7 +3681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 40 refers to the practice of using congressional platform for religious proselytizing mentioned in turn 33.\",\n  \"reason\": \"Claim C explicitly states that one does not need to be a religious zealot to serve in Congress, directly verifying the concern raised in assumption A that religious expression in Congress can cross into inappropriate advocacy. The statement reinforces the idea that such advocacy undermines the secular role of public office, aligning precisely with the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to the audience or potential lawmakers; 'that' in 'demonstrate that you don't have to be a religious zealot...' refers back to the idea of serving in Congress, as established in turn 33.\",\n  \"reason\": \"Claim C explicitly states that one does not need to be a religious zealot to serve in Congress, which directly verifies the concern raised in assumption A—that certain religious expressions in Congress"
     },
     {
       "a_turn_idx": 33,
@@ -3696,7 +3696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who expressed the belief in turn 33 that religious advocacy in Congress is problematic.\",\n  \"reason\": \"Claim C explicitly states that the speaker felt the need to be honest about their religious views because religious imposition on government is wrong—a direct validation of the earlier assumption A that some religious expressions in Congress cross into inappropriate advocacy. The statement 'that's all that matters' and 'that's"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_03, who expressed the belief in turn 33 that religious advocacy in Congress is problematic.\",\n  \"reason\": \"Claim C explicitly states that the speaker felt the need to be honest about their religious views because religious imposition on government is wrong—a direct verification of the earlier assumption A that some religious expressions in Congress cross into inappropriate advocacy. The statement 'that's all that matters' and 'that's"
     },
     {
       "a_turn_idx": 33,
@@ -3726,7 +3726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to individuals serving in the US Congress, consistent with the subject of turn 33. 'Phony' refers to insincere religious expression, aligning with the critique of proselytizing in turn 33.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by rejecting the idea that religious advocacy is necessary or authentic for congressional service. It directly addresses the concern from turn 33"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 40 refers to individuals serving in the US Congress, consistent with the subject of turn 33. 'That' in 'that's wrong' refers back to the act of imposing religion into government, which aligns with the concern in turn 33 about religious advocacy in Congress.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that one does not need to be a 'religious zealot or a"
     },
     {
       "a_turn_idx": 33,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 43 refers to the idea of persecution of Christians in other countries, which is distinct from the earlier assumption about religious expression in Congress.\",\n  \"reason\": \"Claim C discusses religious persecution of Christians in other countries, which is unrelated to assumption A, which concerns inappropriate religious advocacy by members of Congress. While both touch on religion in public life, C does not state, verify, or even reference the idea that religious expression in Congress crosses into"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 43 refers to the idea of persecution of Christians in other countries, which is distinct from the assumption in turn 33 about religious expression in Congress.\",\n  \"reason\": \"Claim C discusses religious persecution of Christians in other countries, which is unrelated to assumption A, which concerns inappropriate religious advocacy by members of Congress. The two topics are distinct: one addresses foreign religious persecution, while the other critiques religious proselytizing within U.S"
     },
     {
       "a_turn_idx": 33,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this guy' in turn 48 refers to Scott Pruitt, who is the subject of the prior discussion about using religious texts to justify policy decisions at the EPA.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds it offensive that religious texts (specifically the Book of Joshua) are being used to justify industrial lobbying at the EPA, which directly verifies the earlier assumption A that religious expression in Congress (or high-level government roles) can cross into inappropriate"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this guy' in turn 48 refers to Scott Pruitt, who is the subject of the prior discussion about using religious texts to justify policy decisions at the EPA.\",\n  \"reason\": \"Claim C explicitly states that the speaker finds it offensive that Scott Pruitt is using religious texts (specifically the Book of Joshua) to justify industrial lobbying at the EPA, which directly verifies the earlier assumption A that religious expression in Congress (or high-level government roles) can cross into"
     },
     {
       "a_turn_idx": 33,
@@ -3771,7 +3771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior context and the flow of conversation. 'This' in 'this aggressive use of our public lands' refers to the interpretation of biblical texts to justify resource exploitation.\",\n  \"reason\": \"Claim C explicitly states that incorporating the Bible into discussions about environmental protection is unusual, which directly aligns with assumption A’s core idea that religious expression in Congress—particularly when used to"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior context and the flow of conversation. 'This' in 'this aggressive use of our public lands' refers to the interpretation of biblical texts to justify resource exploitation.\",\n  \"reason\": \"Claim C states that incorporating the Bible into discussions about environmental protection is unusual, which aligns with the core concern in assumption A—that religious expression in Congress can cross into inappropriate advocacy."
     },
     {
       "a_turn_idx": 33,
@@ -3786,7 +3786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior context and the flow of conversation.\",\n  \"reason\": \"Claim C discusses the integration of religious texts (specifically the Bible) with environmentalism, expressing uncertainty about its characterization. While this touches on religious expression in public discourse, it does not explicitly state or verify the earlier assumption A, which concerns religious advocacy in Congress crossing into inappropriate territory. Although both involve religion"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to SPEAKER_03, as established by the prior context and the flow of conversation.\",\n  \"reason\": \"Claim C expresses uncertainty about integrating religious texts with environmentalism, which is tangentially related to the broader concern in assumption A about religious expression in Congress. However, C does not explicitly state or verify the specific idea that religious advocacy in Congress crosses into inappropriate territory. While both touch on religion in public political discourse"
     },
     {
       "a_turn_idx": 33,
@@ -3801,7 +3801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 53 refers to religious leaders who advocate for planetary care; 'that' in 'I applaud that' refers to the religious leaders' view on stewardship of the planet.\",\n  \"reason\": \"Claim C explicitly acknowledges and endorses religious leaders who interpret their faith as calling for environmental stewardship, which contrasts with the earlier assumption A that some religious expressions in Congress cross into inappropriate advocacy. While C does not directly restate A, it"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 53 refers to religious leaders who advocate for planetary care; 'that' in 'I applaud that' refers to the view of religious leaders caring for the planet.\",\n  \"reason\": \"Claim C explicitly acknowledges and endorses religious leaders who interpret their faith as calling for environmental stewardship, which contrasts with the earlier assumption A that some religious expressions in Congress cross into inappropriate advocacy. While C does not directly restate A, it clearly verifies"
     },
     {
       "a_turn_idx": 33,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation. 'Overtly hostile' is a direct characterization of SPEAKER_03's stance.\",\n  \"reason\": \"Claim C states that SPEAKER_03 is 'overtly hostile to religious displays,' which goes beyond the original assumption A. Assumption A expresses concern that some religious expressions in Congress cross into inappropriate advocacy, particularly when individuals use"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_03, as established by the prior conversation. 'Overtly hostile' is a direct characterization of SPEAKER_03's stance.\",\n  \"reason\": \"Turn 54 claims that SPEAKER_03 is 'overtly hostile to religious displays,' which goes beyond the original assumption in turn 33. While turn 33 expresses discomfort with religious expression in Congress—specific"
     },
     {
       "a_turn_idx": 33,
@@ -3831,7 +3831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who previously expressed discomfort with religious advocacy in Congress (turn 33).\",\n  \"reason\": \"Turn 56 states that the speaker has more questions than answers, indicating uncertainty about their beliefs, but does not explicitly affirm or verify the earlier assumption that some religious expressions in Congress constitute inappropriate advocacy. While the context shows the speaker is reflective and open-minded, the claim in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 56 refers to SPEAKER_03, who is the same speaker as in turn 33.\",\n  \"reason\": \"Turn 56 expresses that the speaker has more questions than answers, indicating uncertainty about their beliefs, particularly regarding religion and spirituality. However, this does not explicitly state or verify the earlier assumption in turn 33—that some religious expressions in Congress cross into inappropriate advocacy. While the speaker’s personal stance on"
     },
     {
       "a_turn_idx": 33,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'some of them' in turn 59 refers to individuals involved in charity work mentioned in the prior context.\",\n  \"reason\": \"Claim C states that some individuals in charity are motivated by religious faith, which is a general observation about motivation. However, it does not explicitly address or verify the specific concern in assumption A—that religious expression in Congress crosses into inappropriate advocacy. While both touch on religion and public action, C discusses charitable motivations outside of Congress"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'some of them' in turn 59 refers to individuals involved in charitable work mentioned in the prior sentence.\",\n  \"reason\": \"Claim C states that some individuals in charity are motivated by religious faith, which is a general observation about motivation. Assumption A, however, concerns the inappropriate advocacy of religious expression in Congress, particularly when members act as faith leaders rather than legislators. While both touch on religion in public life, C does not address or"
     },
     {
       "a_turn_idx": 33,

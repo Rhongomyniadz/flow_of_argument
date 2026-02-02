@@ -1,0 +1,102 @@
+{
+  "episode_id": "86757",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 1.553,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Listeners trust the podcast’s framing of topics as important and timely.",
+      "c_turn_idx": 3,
+      "claim_text": "FairUS.org is the website where listeners can contact the podcast.",
+      "overlap_score": 2,
+      "c_time": 110.799,
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'FairUS.org' refers to the podcast's website.",
+      "reason": "Claim C states the website for listener contact, which is unrelated to the assumption that listeners trust the podcast’s framing of topics as important and timely. There is no mention or implication of listener trust, perception of importance, or timeliness in C. Thus, it does not support, verify, or relate to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'FairUS.org' refers to the podcast's website.\",\n  \"reason\": \"Claim C states the website for listener contact, which is unrelated to the assumption that listeners trust the podcast’s framing of topics as important and timely. There is no mention or implication of listener trust, perception of importance, or timeliness in C. Thus, it does not support, verify, or relate to A.\"\n}\n```"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 18.22,
+      "a_idx_in_turn": 0,
+      "assumption_text": "A secure border is necessary to reduce the flow of illicit drugs into the U.S.",
+      "c_turn_idx": 2,
+      "claim_text": "Securing the U.S.-Mexico border would significantly reduce drug supply.",
+      "overlap_score": 2,
+      "c_time": 42.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 2 refers to the issue of drug supply via the U.S.-Mexico border, as established in turn 1. 'It' in turn 2 refers to a secure border.\",\n  \"reason\": \"Claim C explicitly states that securing the U.S.-Mexico border would significantly reduce drug supply, which directly verifies the substance of assumption A—that a secure border is necessary to reduce the flow of illicit drugs into the U.S. The causal link"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 18.22,
+      "a_idx_in_turn": 1,
+      "assumption_text": "The speaker believes that immigration enforcement is directly linked to public health outcomes related to drug use.",
+      "c_turn_idx": 2,
+      "claim_text": "Following financial flows related to drug trade is a key federal responsibility.",
+      "overlap_score": 2,
+      "c_time": 42.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 2 refers to the issue of drug trafficking and its connection to border security, which was discussed in turn 1. 'The federal government's role' in following financial flows ties directly to the claim about border security reducing drug supply.\",\n  \"reason\": \"Claim C explicitly states that following financial flows related to the drug trade is a key federal responsibility, which directly verifies the substance of assumption A—that immigration enforcement (via border security) is linked"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 18.22,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The audience accepts that foreign drug supply chains are relevant to domestic policy discussions.",
+      "c_turn_idx": 2,
+      "claim_text": "Securing the U.S.-Mexico border would significantly reduce drug supply.",
+      "overlap_score": 2,
+      "c_time": 42.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the issue of drug supply via the U.S.-Mexico border, which was explicitly discussed in turn 1 as being tied to foreign drug supply chains and domestic policy relevance.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by stating that securing the border would significantly reduce drug supply, which aligns with the argument in turn 1 that foreign drug supply chains (from Mexico) are central to domestic policy"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 18.22,
+      "a_idx_in_turn": 3,
+      "assumption_text": "The congressman will view border security as a key component in addressing the opioid crisis.",
+      "c_turn_idx": 2,
+      "claim_text": "The federal government has a role in addressing drug trafficking through border security.",
+      "overlap_score": 3,
+      "c_time": 42.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 2 refers to the issue of drug trafficking via the border, which was introduced in turn 1 as a concern tied to the opioid crisis.\",\n  \"reason\": \"Claim C explicitly states that the federal government has a role in addressing drug trafficking through border security, which directly verifies the substance of assumption A—that the congressman views border security as key to addressing the opioid crisis. The connection between border security and reducing drug supply (and thus the opioid"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 18.22,
+      "a_idx_in_turn": 4,
+      "assumption_text": "Drug trafficking networks operate across international borders with organized structure.",
+      "c_turn_idx": 2,
+      "claim_text": "The federal government has a role in addressing drug trafficking through border security.",
+      "overlap_score": 2,
+      "c_time": 42.649,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 2 refers to the issue of drug trafficking via Mexican cartels operating across borders, as established in turn 1.\",\n  \"reason\": \"Claim C explicitly states that the federal government has a role in addressing drug trafficking through border security, which directly verifies the substance of assumption A—that drug trafficking networks operate across international borders with an organized structure. The connection between border security and disrupting transnational criminal organizations is clearly articulated, aligning precisely with the"
+    }
+  ]
+}

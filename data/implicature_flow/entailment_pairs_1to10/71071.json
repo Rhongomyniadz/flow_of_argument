@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the speaker' in assumption A refers to SPEAKER_02 (Ekene), who is also the subject of claim C.\",\n  \"reason\": \"Claim C expresses the speaker's hope that the audience enjoys the episode, which is a common introductory gesture for a consistent host. However, it does not explicitly state or verify the assumption that the speaker is recognized by the audience as a consistent host. The claim touches on a related behavior (hosting an episode)"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the speaker' in assumption A refers to SPEAKER_02, who is identified as Ekene. In claim C, 'I' refers to SPEAKER_02, establishing the same individual.\",\n  \"reason\": \"Claim C expresses the speaker's hope that the audience enjoys the episode, which is tangentially related to being recognized as a consistent host, but does not explicitly state or verify the assumption that the speaker is recognized by the audience as such."
     },
     {
       "a_turn_idx": 1,
@@ -32,11 +32,11 @@
       "claim_text": "We have the pleasure of speaking with Congressman Scott Peters.",
       "overlap_score": 3,
       "c_time": 12.113,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Scott Peters' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C states that they are speaking with Congressman Scott Peters, which aligns with the context of discussing him as a guest. However, it does not explicitly state or verify his credibility on COVID and education, which is the core content of assumption A. While C supports the topic setup, it lacks any assertion about his credibility, making it only weakly related"
+      "entailment_score": 3,
+      "confidence": 0.85,
+      "coref_notes": "No coreference resolution needed; 'Congressman Scott Peters' is explicitly named in both A and C.",
+      "reason": "Claim C states that they are speaking with Congressman Scott Peters, which aligns with the context of turn 1. However, C does not explicitly verify or state the credibility of Scott Peters on COVID and education—only that he is being interviewed. Thus, while topically related, it does not make assumption A explicit.",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Scott Peters' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C states that they are speaking with Congressman Scott Peters, which aligns with the context of turn 1. However, C does not explicitly verify or state the credibility of Scott Peters on COVID and education—only that he is being interviewed. Thus, while topically related, it does not make assumption A explicit.\"\n}\n```"
     },
     {
       "a_turn_idx": 1,
@@ -47,11 +47,11 @@
       "claim_text": "Congressman Scott Peters represents the 52nd District of California.",
       "overlap_score": 3,
       "c_time": 12.113,
-      "entailment_score": 5,
-      "confidence": 0.85,
-      "coref_notes": "No coreference resolution needed; 'Congressman Scott Peters' is directly referenced in both A and C.",
-      "reason": "Claim C states that Congressman Scott Peters represents the 52nd District of California, which is consistent with the context but does not explicitly verify his credibility on COVID and education as stated in assumption A. While the representation detail supports his relevance, it does not confirm or address the evaluative claim about his credibility.",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Scott Peters' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C states that Congressman Scott Peters represents the 52nd District of California, which is consistent with the context but does not explicitly verify his credibility on COVID and education as stated in assumption A. While the representation detail supports his relevance, it does not confirm or address the evaluative claim about his credibility.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Scott Peters' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C states that Congressman Scott Peters represents the 52nd District of California, which is consistent with the context provided. However, it does not explicitly address or verify the credibility of Scott Peters on COVID and education, which is the core of assumption A. While the representation detail supports his relevance as a speaker on these topics, it does not confirm or"
     },
     {
       "a_turn_idx": 1,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'this digital divide' refers to lack of internet access mentioned in prior turn.\",\n  \"reason\": \"Claim C discusses the digital divide's impact on race during the pandemic and in education, which aligns topically with assumption A that Congressman Scott Peters is credible on COVID and education. However, C does not explicitly state or verify that Peters is a credible source—only that he speaks on these topics. The connection between his credibility and the claim is implied"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'this digital divide' refers to lack of internet access mentioned in prior turn.\",\n  \"reason\": \"Claim C discusses the digital divide and its correlation with race in the context of education and COVID-19, which aligns topically with assumption A's assertion that Congressman Scott Peters is credible on these issues. However, C does not explicitly state or verify that Peters is a credible source—only that the topic is being discussed with data and analysis."
     },
     {
       "a_turn_idx": 1,
@@ -81,7 +81,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'we' in turn 19, which includes the speaker and the audience; 'all of us' in turn 19 refers to students and educators affected by COVID, not specifically Congressman Scott Peters.\",\n  \"reason\": \"Claim C states that COVID-19 has had a significant negative impact on education, which aligns with the general topic introduced in assumption A. However, A asserts that Congressman Scott Peters is a credible source on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'COVID' in turn 19 refers to the pandemic mentioned in turn 1.\",\n  \"reason\": \"Turn 19 states that COVID-19 has negatively impacted education, which aligns with the general topic of the assumption in turn 1 (Scott Peters being credible on COVID and education). However, it does not explicitly verify or state that Congressman Scott Peters is a credible source, nor does it reference his credibility. The claim in turn"
     },
     {
       "a_turn_idx": 1,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'those communities' in turn 11 refers to low-income and underserved communities mentioned in prior turns.\",\n  \"reason\": \"Turn 11 discusses increased suicide and mental health challenges in affected communities, which aligns topically with the broader societal challenges mentioned in turn 1. However, it does not explicitly verify or state the audience's interest in political figures discussing such issues. The connection is weak because while the topic is relevant, the claim does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'those communities' in turn 11 refers to communities with inadequate internet access mentioned in prior turns.\",\n  \"reason\": \"Turn 11 discusses increased suicide and mental health challenges in communities affected by lack of internet access and school closures, which relates to societal challenges discussed in the broader context. However, it does not explicitly connect to the audience's interest in political figures discussing such challenges, nor does it verify or state the assumption that the audience has interest"
     },
     {
       "a_turn_idx": 2,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'my district' in turn 5 refers to the 52nd District of California, which was established in turn 2 as encompassing San Diego County.\",\n  \"reason\": \"Claim C mentions the San Diego office serving constituents in the district, which implies geographic coverage of San Diego County. However, it does not explicitly state or verify the political and geographic containment of San Diego County within the 52nd District. While the context supports the connection, the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'my district' in turn 5 refers to the 52nd District of California, which was established in turn 2 as encompassing San Diego County.\",\n  \"reason\": \"Claim C mentions the San Diego office serving constituents in 'my district,' which aligns with the geographic scope of the 52nd District of California as stated in assumption A. However, C does not explicitly state or verify the political and geographic containment of San Diego County within the"
     },
     {
       "a_turn_idx": 2,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 5 refers to Congressman Scott Peters, who was introduced in turn 2 as representing the 52nd District of California. 'My district' in turn 5 refers to the 52nd District, which encompasses San Diego County.\",\n  \"reason\": \"Claim C explicitly states that the speaker has an office in San Diego, which directly verifies the geographic and political containment of San Diego County within the 52nd Congressional District mentioned"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 5 refers to Congressman Scott Peters, who was introduced in turn 2 as representing the 52nd District of California. 'My district' in turn 5 refers to the 52nd District, which encompasses San Diego County.\",\n  \"reason\": \"Claim C explicitly states that the speaker has an office in San Diego, which directly verifies the geographic and political containment of San Diego County within the 52nd District of California"
     },
     {
       "a_turn_idx": 2,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 15 refers to the digital divide, not the geographical or political containment of San Diego County. 'San Diego' is used as a representative urban area, not in reference to its congressional district status.\",\n  \"reason\": \"Claim C discusses the digital connectivity gap in San Diego despite its reputation as a tech-savvy city, which is unrelated to the geographical and political containment of San Diego County within California's 52nd Congressional District"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 15 refers to the digital divide, not the geographical or political containment of San Diego County. 'San Diego' is used as a location, not as a representative of the congressional district.\",\n  \"reason\": \"Claim C discusses the digital connectivity of residents in San Diego, emphasizing a disparity despite its reputation as a tech-savvy area. This topic is unrelated to the geographical and political containment of San Diego County within California's 5"
     },
     {
       "a_turn_idx": 2,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to the communications team mentioned in the same sentence; 'people' refers to constituents.\",\n  \"reason\": \"Claim C explicitly states that the communications team works to ensure constituents are informed about the speaker's activities, votes, and legislative efforts—directly verifying the substance of assumption A, which posits that the listener knows about the congressman's daily routine. The content of C fully captures and confirms the informational role described in A.\""
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to the communications team mentioned in the same sentence. 'People' refers to constituents in the district.\",\n  \"reason\": \"Claim C explicitly states that the communications team works to ensure constituents are informed about the speaker's activities, votes, and legislative efforts. This directly verifies the substance of assumption A, which posits that the listener (constituents) possess knowledge about the congressman's daily activities. The content of C fully align"
     },
     {
       "a_turn_idx": 3,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to the staff members in the San Diego office, as established by the prior mention of 'Caesar who's with me today as part of my San Diego office'.\",\n  \"reason\": \"Claim C explicitly states that the San Diego office focuses on constituent services, including talking to district residents about federal government issues and gathering policy input—directly verifying the substance of assumption A, which asserts that understanding a congressman's routine (including"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to the staff members in the San Diego office, as established by the context where 'Caesar who's with me today as part of my San Diego office' is introduced just before.\",\n  \"reason\": \"Claim C explicitly states that the San Diego office focuses on constituent services, including talking to district residents about federal government issues and gathering policy input—directly verifying the substance of assumption A, which asserts that understanding a congressman's"
     },
     {
       "a_turn_idx": 3,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, the same individual who discussed their routine in turn 3. 'Their legal training' refers to the 15 years of law practice mentioned by SPEAKER_00.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes their legal training provides useful background for their current role, which directly verifies the substance of assumption A—that understanding a congressman's routine includes recognizing how prior experience like legal"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, the same individual who discussed their routine in turn 3. 'Their legal training' refers to the 15 years of law practice mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes their legal training provides useful background for their current role, which directly verifies the substance of assumption A—that understanding a congressman's routine includes recognizing how prior experience like legal training informs"
     },
     {
       "a_turn_idx": 3,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to the speaker (SPEAKER_00), and 'schools' refers to the educational institutions discussed in the context of the pandemic and the digital divide.\",\n  \"reason\": \"Claim C states that the speaker believes schools could reopen by September, which aligns with the idea of restoring a normal routine—specifically, the pre-pandemic schedule involving regular in-person schooling. Turn 4 expresses a desire to return"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to the speaker (SPEAKER_00), and 'schools' refers to the educational institutions discussed in the context of the pandemic's impact on education.\",\n  \"reason\": \"Claim C expresses the speaker's belief that schools could reopen by September, which aligns with the idea of restoring a normal routine—specifically, the pre-pandemic educational schedule. Turn 4 establishes the speaker's desire to return to"
     },
     {
       "a_turn_idx": 4,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_03, and 'I' refers to SPEAKER_00. The claim 'wanted to vaccinate the teachers first' is attributed to the speaker (SPEAKER_00) via indirect reporting ('I know that you wanted to vaccinate the teachers first'), but the speaker later clarifies uncertainty ('I don't know that').\",\n  \"reason\": \"Turn 24 mentions the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_03, and 'I' refers to SPEAKER_00. The claim 'wanted to vaccinate the teachers first' is attributed to the speaker (SPEAKER_00) via indirect reporting ('I know that you wanted to vaccinate the teachers first'), but the speaker himself expresses uncertainty about the decision-making process.\",\n  \"reason\": \"Turn 24 mentions that the speaker believes"
     },
     {
       "a_turn_idx": 4,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 27 refers to SPEAKER_00, consistent with earlier turns. 'It' in 'if we do it right' refers to the plan to distribute vaccines and address healthcare.\",\n  \"reason\": \"Claim C states that the speaker believes emphasizing vaccine distribution and healthcare is important, which aligns with the broader concern about restoring normalcy in schools by September. However, this does not explicitly state or verify the specific 'routine' mentioned"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 27 refers to SPEAKER_00, consistent with earlier turns. 'It' in 'if we do it right' refers to the plan to distribute vaccines and address healthcare.\",\n  \"reason\": \"Claim C states that the speaker believes emphasizing vaccine distribution and healthcare is important, which aligns with the broader concern about restoring normalcy in schools and public life. However, this does not directly or explicitly verify the specific assumption A—that"
     },
     {
       "a_turn_idx": 4,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to the speaker (SPEAKER_00) and the congressional office, which includes the San Diego office mentioned in turn 5.\",\n  \"reason\": \"Turn 15 discusses the lack of connectivity among residents in San Diego despite its reputation as a tech-savvy community, which indirectly relates to the idea that physical presence in San Diego may not ensure effective representation due to systemic inequities. However, it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to the speaker (SPEAKER_00) and the broader congressional effort, not directly tied to the specific claim about physical presence in Washington and San Diego.\",\n  \"reason\": \"Turn 15 discusses the digital divide in San Diego despite its reputation as tech-savvy, implying underrepresentation or lack of connectivity. However, it does not address or verify the claim from turn 5 that effective representation requires physical"
     },
     {
       "a_turn_idx": 5,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, specifically Congress, as established in the context. 'Schools in San Diego with high military populations' is a specific instance of the broader claim about federal support for schools with military-connected students.\",\n  \"reason\": \"Turn 5 asserts that effective representation requires physical presence in both Washington and San Diego. Turn 20 discusses federal support for schools in San Diego with high military populations, which is a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, specifically Congress, as established in the context. 'San Diego' is a location previously mentioned in turn 5.\",\n  \"reason\": \"Turn 5 asserts that effective representation requires physical presence in both Washington and San Diego. Turn 20 discusses special assistance for schools in San Diego with high military populations, which is a specific policy action related to San Diego but does not address or verify the necessity"
     },
     {
       "a_turn_idx": 5,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to Congress, consistent with the speaker's role as a congressman. 'Schools' and 'school districts' refer to local educational institutions mentioned in turn 5.\",\n  \"reason\": \"Claim C states that local school districts must secure additional funding when federal funds fall short, which aligns with the example in turn 20 where the Poway school district must find money for special education services because federal funding covers only"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to Congress, consistent with the speaker's role as a congressman. 'Schools' and 'school districts' refer to local educational institutions, aligning with the context of legislative action and funding.\",\n  \"reason\": \"Claim C states that when federal funds are insufficient, local districts must find additional funding independently. This reflects a partial alignment with assumption A, which emphasizes the importance of communication between local districts and national centers for legislative effectiveness"
     },
     {
       "a_turn_idx": 5,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which contrasts with the affluent Powell Unified School District mentioned earlier. This highlights disparities in resources but does not directly address the communication channels between local districts and national political centers.\",\n  \"reason\": \"Turn 32 discusses funding disparities and unequal access to educational resources between affluent and less fortunate districts, which is related to systemic inequities. However, it does not explicitly or implicitly verify the claim"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which contrasts with the affluent Powell Unified School District mentioned earlier. No direct reference to legislative effectiveness or communication channels between local districts and national centers.\",\n  \"reason\": \"Turn 32 discusses funding disparities and resource inequities between school districts, particularly between affluent and low-income areas. While this touches on a related theme—inequality in educational resources—it does not explicitly address or verify the"
     },
     {
       "a_turn_idx": 6,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Powell Unified School District' in turn 32 refers to the same district mentioned in turn 31, which is described as affluent and having access to resources like updated textbooks and after-school programs. 'We' in turn 32 refers to the local residents of the district.\",\n  \"reason\": \"Turn 32 expresses a belief that living in the Powell Unified School District is fortunate due to its affluence and access to educational resources. While this"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'Powell Unified School District' as an affluent area, which aligns with SPEAKER_00's mention of Poway Unified (likely a misspelling of Powell) having less need for food assistance. 'We' in SPEAKER_03's turn refers to residents of the district.\",\n  \"reason\": \"Turn 32 expresses a belief that living in the Powell Unified School District is fortunate, implying a positive evaluation of"
     },
     {
       "a_turn_idx": 6,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 19 refers to the speaker group (SPEAKER_00 and colleagues), consistent with prior discussion of federal efforts and policy roles.\",\n  \"reason\": \"Claim C states the group aims to understand strategies for addressing wealth disparities in education, which aligns with the concern raised in turn 6 about collective action being effective in addressing societal challenges. However, while C reflects a related societal challenge (education inequality), it does not explicitly verify"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 19 refers to the speaker group (SPEAKER_00 and possibly others involved in the discussion), consistent with the broader context of federal policy and educational funding.\",\n  \"reason\": \"Claim C states the group's aim to understand strategies for addressing wealth disparities in education, which aligns with the concern raised in turn 6 about collective action being effective in addressing societal challenges—particularly in the context of education inequities exacerbated by"
     },
     {
       "a_turn_idx": 6,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the $82 billion allocation for education in the $900 billion pandemic relief bill.\",\n  \"reason\": \"Claim C discusses the sustainability of funding for schools based on the $82 billion allocation, which relates to the broader concern about school funding mentioned in assumption A. However, C does not explicitly state or verify the belief that reopening schools is a priority worth discussing. Instead, it focuses on the duration of"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the $82 billion allocation for education in the $900 billion pandemic relief bill.\",\n  \"reason\": \"Claim C discusses the sustainability of the $82 billion education funding allocation, which relates to the broader context of school reopening and financial support. However, it does not explicitly state or verify the specific assumption in A—that the speaker believes reopening schools is a priority worth discussing. While the speaker’s concern about"
     },
     {
       "a_turn_idx": 7,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'Powell Unified School District' as an affluent area, which aligns with SPEAKER_00's implicit view in turn 7 that reopening schools is a priority. However, 'Powell Unified' is not directly linked to the broader assumption about prioritizing school reopening; instead, it serves as a contrast to underfunded districts.\",\n  \"reason\": \"Turn 32 expresses a belief that living in the Powell Unified School District"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Powell Unified School District' refers to the same entity mentioned in turn 32; 'we' in 'we're very lucky' refers to residents of the district, consistent with the speaker's prior context.\",\n  \"reason\": \"Claim C expresses a belief that living in the Powell Unified School District is fortunate due to its affluence and access to resources, which indirectly reflects a value placed on school quality. However, it does not explicitly state or verify the"
     },
     {
       "a_turn_idx": 7,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with earlier mentions in turns 8 and 20. 'The federal government' is the subject of both A and C.\",\n  \"reason\": \"Claim C states that the federal government provides 'some support' to schools, which aligns with the substance of assumption A—that reopening schools is seen as beneficial by at least some stakeholders. While C does not explicitly mention stakeholder sentiment, it"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with earlier mentions in turns 8 and 20.\",\n  \"reason\": \"Claim C states that the federal government provides 'some support' to schools, which aligns with the substance of assumption A—that reopening schools is seen as beneficial by at least some stakeholders. While C does not explicitly mention stakeholder sentiment, it confirms federal involvement in school funding, which supports the broader context of priorit"
     },
     {
       "a_turn_idx": 7,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which contrasts with the affluent Powell Unified School District mentioned earlier. No direct reference to reopening schools or stakeholder views on it.\",\n  \"reason\": \"Claim C discusses limited access to after-school programs in underfunded districts, which is tangentially related to educational equity but does not address the assumption in A—that reopening schools is seen as beneficial by some stakeholders. There is no explicit statement or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which contrasts with the affluent Powell Unified School District mentioned earlier. No direct reference to reopening schools or stakeholder views on it.\",\n  \"reason\": \"Claim C discusses limited access to after-school programs in underfunded districts, which is tangentially related to educational equity but does not address the assumption in A—that reopening schools is seen as beneficial by some stakeholders. There is no explicit statement verifying"
     },
     {
       "a_turn_idx": 7,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the speaker and the federal government, consistent with prior context. 'Schools' and 'school closures' refer to the same subject as in turn 7.\",\n  \"reason\": \"Claim C explicitly states that school closures lead to learning loss, which directly verifies the substance of assumption A—namely, that the current state of school closures is undesirable. The mention of learning loss in the context of school closures, especially in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the speaker and the federal government, consistent with prior context. 'Schools' and 'school closures' refer to the same subject as in turn 7.\",\n  \"reason\": \"Claim C explicitly states that school closures lead to learning loss, which directly verifies the substance of assumption A—namely, that the current state of school closures is undesirable. The mention of learning loss in the context of school closures aligns precisely"
     },
     {
       "a_turn_idx": 7,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the impact of school closures on learning, as established in turn 8 and elaborated in turn 9.\",\n  \"reason\": \"Claim C explicitly states that the impact of school closures on learning is worse for some families due to lack of resources, which directly verifies the substance of assumption A—that the current state of school closures is undesirable—by highlighting systemic inequities (e.g., lack of high-speed internet) that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the impact of school closures on learning, as established in turn 8 and elaborated in turn 9.\",\n  \"reason\": \"Claim C explicitly states that the impact of school closures on learning is worse for some families due to lack of resources, which directly verifies the substance of assumption A—that the current state of school closures is undesirable. This is supported by specific evidence in turn 9, including the lack of high-speed"
     },
     {
       "a_turn_idx": 7,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the lack of high-speed internet, which is explicitly mentioned as a factor exacerbating learning loss.\",\n  \"reason\": \"Claim C directly and explicitly states that lack of high-speed internet exacerbates learning loss during school closures, which is the core substance of assumption A—namely, that school closures are undesirable, particularly due to their disproportionate impact on low-income communities. The connection between internet access and learning loss is clearly articulated and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the lack of high-speed internet, which is explicitly mentioned as a factor exacerbating learning loss.\",\n  \"reason\": \"Claim C directly and explicitly states that lack of high-speed internet exacerbates learning loss during school closures, which is the core substance of assumption A—namely, that school closures are undesirable, especially in low-income communities where such disparities intensify negative outcomes. The claim clearly verifies the mechanism (internet access)"
     },
     {
       "a_turn_idx": 7,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'students' mentioned earlier in the conversation, specifically those in low-income communities without internet access.\",\n  \"reason\": \"Claim C explicitly states that students without internet access are less likely to attend school during the current situation, which directly verifies the substance of assumption A—that the current state of school closures is undesirable. This is supported by the context showing that lack of internet access prevents participation in remote learning, reinforcing the negative impact"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'students' mentioned earlier in the conversation, specifically those in low-income communities without internet access.\",\n  \"reason\": \"Claim C explicitly states that students without internet access are less likely to attend school during the current situation, which directly verifies the underlying concern in assumption A—that the current state of school closures is undesirable. This is supported by the context showing that lack of internet exacerbates educational inequity and prevents participation,"
     },
     {
       "a_turn_idx": 7,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Powell Unified School District' refers to the same entity mentioned in turn 32; 'we' in 'we're very lucky' refers to the speaker and others in the district, implying a positive evaluation of the district's conditions.\",\n  \"reason\": \"Turn 32 expresses a belief that living in the Powell Unified School District is fortunate due to its affluence and access to resources like updated textbooks and after-school programs. This contrasts with the situation in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Powell Unified School District' refers to the same entity mentioned in turn 32, and 'we' in 'we're very lucky' refers to the speaker and others in the district, implying a contrast with less affluent districts.\",\n  \"reason\": \"Claim C expresses a positive sentiment about living in the Powell Unified School District due to its affluence and access to resources, which indirectly reflects a judgment that other districts—particularly low-income ones—are lacking. However"
     },
     {
       "a_turn_idx": 7,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts', which aligns with the context of unequal resources discussed in turn 7. 'Powell Unified' is contrasted with less fortunate districts, clarifying the reference.\",\n  \"reason\": \"Turn 32 explicitly raises the question of how resources should be allocated to lower-income school districts, which directly addresses the concern in turn 7 that school closures are undesirable—especially for vulnerable communities."
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts', which aligns with the context of unequal resources discussed in turn 7.\",\n  \"reason\": \"Turn 32 explicitly raises the question of how resources should be allocated to lower-income school districts, which directly addresses the concern in turn 7 that school closures are undesirable—particularly because they disproportionately affect vulnerable communities. While turn 7 does not explicitly mention resource allocation, it establishes that school"
     },
     {
       "a_turn_idx": 7,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts' mentioned earlier in the same turn, indicating under-resourced school districts.\",\n  \"reason\": \"Claim C mentions ensuring equitable access to up-to-date textbooks and after-school programs in lower-income areas, which aligns with the concern in assumption A about the negative impact of school closures—particularly in low-income communities. However, C does not explicitly state or verify the idea that the current state of"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts' mentioned earlier, which aligns with the context of low-income communities discussed in turn 7.\",\n  \"reason\": \"Claim C discusses ensuring equitable access to up-to-date textbooks and after-school programs in lower-income districts, which reflects a concern for educational inequity. This relates to assumption A, which expresses dissatisfaction with the current state of school closures—particularly their disproportionate impact on low-income"
     },
     {
       "a_turn_idx": 8,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to 'closing the digital divide', and 'those' in 'those are the most important things' refers to 'ensuring access to food and special education funding'. No direct mention of education access or childcare systems.\",\n  \"reason\": \"Claim C discusses priorities in federal education support, stating that closing the digital divide is secondary to food assistance and special education funding. However, it does not address or verify the specific combination of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to 'closing the digital divide', and 'those' in 'those are the most important things' refers to 'ensuring access to food and special education funding'. No direct reference to education access or childcare systems.\",\n  \"reason\": \"Claim C discusses priorities in federal education support, stating that closing the digital divide is secondary to food assistance and special education funding. However, it does not address or verify the specific claim in"
     },
     {
       "a_turn_idx": 8,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8 where 'the federal government' is discussed as providing limited funding.\",\n  \"reason\": \"Claim C explicitly states that the federal government mandates special education services while funding only 10% of the cost, requiring school districts like Poway to find alternative funding—directly supporting the assumption in A that federal funding shortfalls necessitate alternative strategies (like vaccine distribution"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8 where 'the federal government' is discussed as providing limited funding.\",\n  \"reason\": \"Claim C explicitly states that federal funding for special education is insufficient (only 10% vs. promised 40%), and that school districts must still provide services despite this shortfall. This directly supports assumption A, which asserts that federal funding shortfalls necessitate alternative strategies"
     },
     {
       "a_turn_idx": 8,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8 where the federal government's limited funding role is discussed.\",\n  \"reason\": \"Claim C states that when federal funds fall short, local districts must secure funding independently, which directly reflects the substance of assumption A—that federal funding shortfalls necessitate alternative strategies (like vaccine distribution) to maintain school operations. While C does not mention vaccine distribution specifically, it captures the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8. 'School districts' in turn 20 corresponds to 'schools' in turn 8.\",\n  \"reason\": \"Claim C states that when federal funds are insufficient, local school districts must find funding independently—this directly reflects the implication in assumption A that federal funding shortfalls require alternative strategies (like vaccine distribution) to sustain school operations. While C does"
     },
     {
       "a_turn_idx": 8,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with the context in turn 8. 'Most of the funding' refers back to school funding mentioned in turn 8.\",\n  \"reason\": \"Claim C explicitly states that most school funding comes from the state rather than the federal government, which directly verifies the key point in assumption A that federal funding is minimal (only 8%) and thus necessitates alternative strategies like vaccine distribution to sustain school"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with the context in turn 8. 'Most of the funding' refers back to school funding mentioned in turn 8.\",\n  \"reason\": \"Claim C explicitly states that most school funding comes from the state rather than the federal government, which directly verifies the key point in assumption A that federal funding is minimal (only 8%) and thus necessitates alternative strategies like vaccine distribution to maintain school"
     },
     {
       "a_turn_idx": 8,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8. 'That' in 'we fund about 10% of that' refers to special education funding.\",\n  \"reason\": \"Claim C discusses federal funding for special education being only 10%, which reflects a broader pattern of inadequate federal financial support for education—consistent with the concern in assumption A about federal funding shortfalls. However, C focuses specifically"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context in turn 8. 'That' in 'we fund about 10% of that' refers to special education funding.\",\n  \"reason\": \"Claim C discusses federal funding for special education being only 10%, which reflects a broader pattern of inadequate federal financial support mentioned in assumption A. However, A focuses on general school operations and vaccine distribution due to federal funding short"
     },
     {
       "a_turn_idx": 8,
@@ -1397,11 +1397,11 @@
       "claim_text": "The speaker agrees with the previous point about students lacking internet access.",
       "overlap_score": 2,
       "c_time": 257.538,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 12 refers to the issue of students lacking internet access, which was explicitly raised in turn 9.\",\n  \"reason\": \"Claim C explicitly affirms agreement with the prior assertion that students lack high-speed internet access, directly verifying the substance of assumption A. The reference to the US Census Bureau statistic reinforces the claim and aligns with the concern about inequitable access highlighted in turn 9. The agreement is clear and unambiguous.\""
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'that' in turn 12 refers to the earlier claim in turn 9 about students lacking high-speed internet access.",
+      "reason": "Claim C explicitly affirms agreement with the prior statement about students lacking internet access, which directly corresponds to assumption A. The speaker cites a specific statistic (nine million students) to reinforce this point, thereby clearly verifying the substance of A without ambiguity.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 12 refers to the earlier claim in turn 9 about students lacking high-speed internet access.\",\n  \"reason\": \"Claim C explicitly affirms agreement with the prior statement about students lacking internet access, which directly corresponds to assumption A. The speaker cites a specific statistic (nine million students) to reinforce this point, thereby clearly verifying the substance of A without ambiguity.\"\n}\n```"
     },
     {
       "a_turn_idx": 9,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'students' in the context of lacking internet access, which aligns with the households mentioned in turn 9. 'They' and 'students' are coreferential.\",\n  \"reason\": \"Claim C states that students without internet access are less likely to attend school, which directly supports the idea in assumption A that households without high-speed internet face greater educational disadvantages during remote learning. While C focuses on attendance rather than"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'students' in the context of lacking internet access, which aligns with the earlier assumption about households without high-speed internet facing educational disadvantages.\",\n  \"reason\": \"Claim C states that students without internet access are less likely to attend school, which directly supports the core idea in assumption A that lack of high-speed internet exacerbates educational disadvantages during remote learning. While C focuses on attendance rather than the broader educational disadvantage, it"
     },
     {
       "a_turn_idx": 9,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts,' which aligns with the socioeconomic disparities mentioned in turn 9. 'Powell Unified' is contrasted with less fortunate districts, reinforcing the focus on income-based inequity.\",\n  \"reason\": \"Claim C explicitly asks how resources can be allocated to lower-income school districts, directly addressing the concern raised in assumption A—that policy decisions must consider socioeconomic disparities. The context shows that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts', which aligns with the focus on socioeconomic disparities in turn 9. 'Powell Unified' is contrasted with 'less fortunate districts', reinforcing the socioeconomic distinction.\",\n  \"reason\": \"Turn 32 explicitly asks how resources can be allocated to lower-income school districts, directly addressing the concern raised in turn 9 that policy decisions must consider socioeconomic disparities. The mention of outdated textbooks,"
     },
     {
       "a_turn_idx": 9,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which aligns with the socioeconomic disparities mentioned in turn 9. 'They' in turn 32 refers to students in those districts.\",\n  \"reason\": \"Claim C explicitly addresses inequities in educational resources—up-to-date textbooks, advanced classes, and after-school programs—in lower-income districts, which directly reflects the concern in assumption A about socioeconomic disparities affecting school outcomes. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 32 refers to 'other less fortunate districts', which aligns with the socioeconomic disparities mentioned in turn 9.\",\n  \"reason\": \"Claim C explicitly addresses inequities in educational resources—such as outdated textbooks and limited after-school programs—in lower-income districts, which directly reflects the concern in assumption A about socioeconomic disparities affecting school outcomes. While C does not mention policy decisions directly, it focuses on resource allocation to underserved areas, verifying"
     },
     {
       "a_turn_idx": 9,
@@ -1821,7 +1821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts', which aligns with the focus of assumption A regarding lower-income populations and internet access disparities.\",\n  \"reason\": \"Claim C explicitly raises the issue of resource allocation to lower-income school districts, which directly relates to the core concern in assumption A—that lower-income populations are disproportionately disadvantaged by inadequate internet infrastructure. While C does not mention internet access specifically, it addresses systemic inequities in educational resources"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'lower-income school districts', which aligns with the focus of assumption A regarding lower-income populations and their disadvantaged position due to inadequate internet infrastructure.\",\n  \"reason\": \"Claim C explicitly raises concerns about unequal resource allocation to lower-income school districts, including outdated textbooks, lack of advanced classes, and limited after-school programs—issues that stem from systemic inequities highlighted in assumption A. While C does not mention internet infrastructure"
     },
     {
       "a_turn_idx": 10,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'other less fortunate districts' which resolves to lower-income school districts; 'Powell Unified' is contrasted with these districts, indicating a difference in funding and resources.\",\n  \"reason\": \"Claim C states that lower-income school districts have less access to updated textbooks, advanced classes, and after-school programs, implying unequal funding. This aligns with the broader idea that systemic underfunding affects lower-income communities. However, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_03 refers to 'other less fortunate districts' which aligns with 'lower-income areas' mentioned in assumption A. 'Powell Unified' is contrasted with these districts, indicating a difference in funding and resources.\",\n  \"reason\": \"Claim C states that lower-income school districts have less access to updated textbooks, advanced classes, and after-school programs, implying unequal funding. This supports the broader idea that systemic inequities exist in educational resources, which relates"
     },
     {
       "a_turn_idx": 10,
@@ -2931,7 +2931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context of congressional and federal funding discussed in turn 19.\",\n  \"reason\": \"Claim C explicitly states that federal funding for special education is approximately 10% of the total cost, which directly verifies the substance of assumption A—that the audience understands the relationship between federal legislation and school funding mechanisms—by clarifying the actual extent of federal financial responsibility. This statement is clear,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the context of congressional and federal funding discussed in turn 19.\",\n  \"reason\": \"Claim C explicitly states that the federal funding for special education is approximately 10% of the total cost, which directly verifies the substance of assumption A—that the audience understands the relationship between federal legislation and school funding mechanisms. This statement clarifies a key aspect of that relationship by specifying the actual level"
     },
     {
       "a_turn_idx": 19,
@@ -3006,7 +3006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the federal government's role in supporting special education funding, which was introduced in turn 19 as an implicit assumption about congressional involvement in school funding mechanisms.\",\n  \"reason\": \"Claim C explicitly states that federal support for special education funding is a key priority, which directly verifies the substance of assumption A—that the audience understands the relationship between federal legislation and school funding mechanisms. The mention of federal funding for special education aligns precisely with"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the federal government's role in supporting special education funding, which was previously discussed in turn 20 and assumed in turn 19.\",\n  \"reason\": \"Claim C explicitly states that federal support for special education funding is a key priority, which directly verifies the underlying assumption in A that the audience understands the federal government's role in educational funding—specifically, its responsibility and influence in special education. The context confirms that this"
     },
     {
       "a_turn_idx": 20,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to 'other school districts' and 'less fortunate districts', which aligns with the idea in turn 20 that local school districts (especially those with fewer resources) are burdened by unfunded federal mandates.\",\n  \"reason\": \"Claim C explicitly contrasts Powell Unified (affluent) with other, less fortunate districts, highlighting disparities in resources such as updated textbooks, advanced classes, and after-school programs. This directly supports"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Powell Unified' in turn 32 refers to the 'Poway school district' mentioned in turn 20. Both refer to the same affluent school district in San Diego.\",\n  \"reason\": \"Claim C explicitly contrasts Powell Unified's affluence and access to resources with other, less fortunate districts, thereby making explicit the assumption in A that local school districts (especially less affluent ones) are burdened by financial shortfalls due to inadequate federal funding."
     },
     {
       "a_turn_idx": 20,
@@ -3096,7 +3096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with the speaker's prior statements about federal responsibilities and funding.\",\n  \"reason\": \"Claim C states that the federal government provides some financial support to schools, which directly aligns with the substance of assumption A—that the federal government has a responsibility to fund special education based on moral and legal obligations. While C does not explicitly mention 'special education' or 'disabled students,' it affirms federal financial"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the federal government, consistent with the speaker's prior statements about federal responsibilities and funding.\",\n  \"reason\": \"Claim C states that the federal government provides some financial support to schools, which directly aligns with the substance of assumption A—that the federal government has a responsibility to fund special education. While C does not explicitly mention 'moral and legal obligations,' it confirms the federal government's role in providing financial support, which"
     },
     {
       "a_turn_idx": 20,
@@ -3171,7 +3171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'special education funding,' which was explicitly discussed in assumption A as a critical area needing increased federal support.\",\n  \"reason\": \"Claim C explicitly identifies 'supporting our commitment to special education funding' as one of the most important roles for the federal government, directly verifying the core idea in assumption A—that increasing federal funding for students with disabilities is essential and should not compromise other priorities. The statement clearly affirms the central claim of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'special education funding,' which was explicitly discussed in assumption A as a critical area needing increased federal funding to avoid compromising other educational priorities.\",\n  \"reason\": \"Claim C explicitly identifies federal support for special education funding as a key priority, directly verifying the core substance of assumption A—that increasing federal funding for students with disabilities will improve outcomes without undermining other educational goals. The statement aligns precisely with the intent and content of A, leaving"
     },
     {
       "a_turn_idx": 20,
@@ -3216,7 +3216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 33 refers to the issue of unequal resource distribution in education, which is linked to the earlier assumption about San Diego’s military-connected schools facing unique challenges due to funding instability.\",\n  \"reason\": \"Claim C discusses state-level challenges in resource distribution, which aligns topically with assumption A’s focus on unique challenges in San Diego’s military-connected schools. However, C does not explicitly mention military-connected schools, nor does it verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 33 refers to the issue of unequal resource distribution in education, which is linked to the earlier assumption about San Diego’s military-connected schools facing unique challenges due to funding instability.\",\n  \"reason\": \"Claim C discusses state-level challenges in resource distribution, which is related to the broader theme of inequitable school funding mentioned in assumption A. However, C does not explicitly mention military-connected schools or their specific challenges, nor does it verify the"
     },
     {
       "a_turn_idx": 20,
@@ -3246,7 +3246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the federal government' in turn 31 refers to the speaker's organization (Congress/federal level) mentioned in turn 20. 'Special education funding' in turn 31 directly corresponds to the topic of federal funding for special education discussed in turn 20.\",\n  \"reason\": \"Turn 31 explicitly states that 'supporting our commitment to special education funding' is one of the most important things the federal government can do, which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the federal government' in turn 31 refers to the speaker's organization (Congress/federal level) mentioned in turn 20. 'Special education funding' in turn 31 directly corresponds to the topic discussed in turn 20.\",\n  \"reason\": \"Turn 31 explicitly states that 'supporting our commitment to special education funding' is one of the most important things the federal government can do, which directly verifies the assumption in turn"
     },
     {
       "a_turn_idx": 20,
@@ -3261,7 +3261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the federal government' in turn 31 refers to the speaker's organization (Congress/federal level), consistent with the context in turn 20.\",\n  \"reason\": \"Claim C explicitly states that the federal government's priority includes 'supporting our commitment to special education funding,' which directly verifies the assumption in A that the speaker's organization (federal government) holds influence over federal funding decisions regarding special education. The statement is clear, direct, and confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the federal government, consistent with the subject in turn 20. 'Special education funding' directly corresponds to the federal funding role discussed in turn 20.\",\n  \"reason\": \"Claim C explicitly states that 'supporting our commitment to special education funding' is one of the most important roles of the federal government, directly verifying the assumption in A that the federal government holds influence over special education funding decisions. The"
     },
     {
       "a_turn_idx": 20,
@@ -3276,7 +3276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the speaker's role and context. 'They' in turn 20 refers to school districts like Poway, which rely on state funding after federal underfunding.\",\n  \"reason\": \"Claim C explicitly states that most school funding comes from the state rather than the federal government, which directly verifies the implication in assumption A—that the federal government's influence over funding is limited. Turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the federal government, consistent with the speaker's role and context. 'They' in turn 20 refers to school districts like Poway, which rely on state funding when federal funding falls short.\",\n  \"reason\": \"Claim C explicitly states that most school funding comes from the state rather than the federal government, which directly verifies the implication in assumption A—that the federal government's influence over funding is limited. Turn"
     },
     {
       "a_turn_idx": 20,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the federal government's role in supporting special education funding, which was previously discussed in turn 20 as a critical issue due to the gap between promised (40%) and actual (10%) federal funding.\",\n  \"reason\": \"Claim C explicitly states that federal support for special education funding is a key priority, which directly verifies the substance of assumption A—that there is a shared understanding about the legitimacy and urgency of addressing under"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the federal government's role in supporting special education funding, which was previously discussed in turn 20 as a critical issue due to the gap between promised (40%) and actual (10%) federal funding.\",\n  \"reason\": \"Claim C explicitly states that federal support for special education funding is a key priority, directly verifying the substance of assumption A, which asserts a shared understanding about the legitimacy and urgency of addressing underf"
     },
     {
       "a_turn_idx": 20,
@@ -3366,7 +3366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'ensuring access to special education funding', which is explicitly mentioned in turn 20 as a critical issue due to the federal shortfall in funding (from 40% promised to 10% delivered).\",\n  \"reason\": \"Claim C explicitly ranks 'special education funding' as one of the two most important federal priorities, alongside food assistance, placing it above closing the digital divide. This directly verifies the assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'special education funding', which was discussed in turn 20 as a critical issue due to underfunding despite federal mandates.\",\n  \"reason\": \"Claim C explicitly states that ensuring access to special education funding is among the most important priorities for the federal government, directly verifying the assumption in A that there is a shared understanding about the legitimacy and urgency of addressing underfunded special education. The statement positions special education funding as a"
     },
     {
       "a_turn_idx": 20,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the federal government' refers consistently to the same entity throughout.\",\n  \"reason\": \"Claim C (turn 31) discusses extending food assistance year-round, which is unrelated to the earlier assumption A (turn 22) that the federal government should prioritize public health initiatives like vaccination during crises. While both involve federal government action on social welfare, the specific focus on vaccination as a public health priority in A is not addressed, verified, or implied"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the federal government' in both A and C refers to the same entity.\",\n  \"reason\": \"Claim C discusses extending food assistance year-round, which is unrelated to the prioritization of public health initiatives like vaccination during crises mentioned in assumption A. While both involve federal government action on social welfare, C does not state, verify, or imply the specific focus on vaccination or public health during crises. Therefore, it contradicts the substantive focus of A by"
     },
     {
       "a_turn_idx": 22,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_03, and 'wanted to vaccinate the teachers first' refers to the speaker's implied prioritization mentioned in turn 23, where the speaker emphasizes the importance of protecting healthcare workers and essential workers, including teachers, due to their exposure risk.\",\n  \"reason\": \"Claim C states that 'some people wanted to vaccinate teachers before children,' which aligns with the substance of assumption A—"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_03, and 'wanted to vaccinate the teachers first' refers to the speaker's prior suggestion in turn 23 that teachers are in a higher priority due to fear of returning to school.\",\n  \"reason\": \"Claim C states that 'some people wanted to vaccinate teachers before children,' which aligns with the substance of assumption A—specifically, the federal government's prioritization of public"
     },
     {
       "a_turn_idx": 22,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, as established by the prior context where SPEAKER_00 is discussing vaccine distribution priorities. The phrase 'you wanted to vaccinate the teachers first' is attributed to SPEAKER_00 based on the preceding statement about teachers being scared and needing higher priority.\",\n  \"reason\": \"Claim C states that 'some people wanted to vaccinate teachers before children,' which aligns with the substance"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, as established by the prior context where SPEAKER_00 is discussing vaccine distribution priorities. The phrase 'you wanted to vaccinate the teachers first' is attributed to SPEAKER_00 based on the preceding statement where they suggest teachers should be prioritized.\",\n  \"reason\": \"Claim C states that 'some people wanted to vaccinate teachers before children,' which aligns with the substance"
     },
     {
       "a_turn_idx": 23,
@@ -3591,7 +3591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to the federal government, which is the subject of assumption A. The claim about food assistance is related to federal support but is not about healthcare during crises.\",\n  \"reason\": \"Claim C discusses the federal government providing food assistance, which is a form of support, but it is not directly about healthcare during crises. While it shows federal involvement in social support, it does not explicitly verify or address the specific claim in A about"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to the federal government, which is consistent with the subject of assumption A.\",\n  \"reason\": \"Claim C mentions that the federal government provides food assistance through free and reduced lunch programs, which demonstrates federal involvement in supporting basic needs for children. While this supports the idea that the federal government plays a role in social welfare during crises, it does not directly address the specific claim in assumption A—that the federal government has both responsibility and"
     },
     {
       "a_turn_idx": 23,
@@ -3606,7 +3606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to the federal government's role in providing support, specifically in the context of special education funding and food assistance.\",\n  \"reason\": \"Claim C states that federal support for special education funding is a key priority, which aligns with the broader theme in assumption A that the federal government has both responsibility and capacity to support healthcare and related social services during crises. However, while C touches on a federal role in education support, it"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to the federal government's role in providing support, specifically in the context of special education funding and food assistance.\",\n  \"reason\": \"Claim C states that federal support for special education funding is a key priority, which aligns with the broader theme in assumption A that the federal government has both responsibility and capacity to support healthcare and related social services during crises. However, while C touches on a federal role in education support—specific"
     },
     {
       "a_turn_idx": 23,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the federal government' refers consistently to the same entity.\",\n  \"reason\": \"Claim C discusses the federal government providing food assistance through free and reduced lunch programs, which is unrelated to assumption A, which concerns trust in the federal government's ability to prioritize healthcare effectively. While both involve federal government actions, C addresses food assistance, not healthcare prioritization. There is no mention of healthcare, vaccine deployment, or economic recovery linked to healthcare in C. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the federal government' refers consistently to the same entity.\",\n  \"reason\": \"Claim C discusses the federal government providing food assistance through free and reduced lunch programs, which is unrelated to assumption A, which concerns trust in the federal government's ability to prioritize healthcare effectively. While both involve federal government actions, C does not address healthcare prioritization, nor does it verify or state the substance of A. The topics are distinct—food assistance vs. healthcare and"
     },
     {
       "a_turn_idx": 23,
@@ -3696,7 +3696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the Biden stimulus proposal mentioned earlier in the same turn.\",\n  \"reason\": \"Claim C states that parts of Biden's stimulus proposal are less targeted than the speaker would prefer. This aligns with assumption A, which asserts that the federal government's role should be protective rather than purely regulatory. The speaker’s concern about lack of targeting suggests a preference for focused, protective measures—such as prioritizing vaccine distribution and school reopening"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the Biden stimulus proposal, which is the subject of the speaker's evaluation. The phrase 'some of it' refers back to parts of the stimulus package.\",\n  \"reason\": \"Claim C states that some elements of Biden's stimulus proposal are less targeted than the speaker would prefer. This aligns with assumption A, which posits that the federal government's role should be protective rather than purely regulatory. The speaker’s concern"
     },
     {
       "a_turn_idx": 23,
@@ -3726,7 +3726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to 'food assistance', and 'the federal government' is consistently used to refer to the same entity across turns.\",\n  \"reason\": \"Claim C explicitly states that the federal government should extend food assistance year-round, which aligns with the protective role implied in assumption A—supporting vulnerable populations (like children in poverty) during crises. While A focuses on health-related federal action (vaccines), the underlying idea of"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 31 refers to 'food assistance', and 'the federal government' is consistently used to refer to the same entity across turns.\",\n  \"reason\": \"Claim C explicitly states that the federal government should extend food assistance year-round, which aligns with the idea that the federal government's role is protective—ensuring basic needs like food are met beyond temporary or seasonal support. This directly supports Assumption A, which posits that the federal"
     },
     {
       "a_turn_idx": 23,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 26 refers to SPEAKER_00 as the recipient of information.\",\n  \"reason\": \"Claim C discusses the allocation of funds in the pandemic relief bill, specifically $82 billion for education, which relates to public discourse on pandemic response. However, it does not address or verify the specific assumption that non-experts offer useful analogies during the pandemic. While both involve public discourse on pandemic-related issues, there is no"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'that' in turn 26 refers to the $900 billion pandemic relief bill.\",\n  \"reason\": \"Claim C discusses the allocation of funds in the pandemic relief bill, specifically $82 billion for education, which relates to public discourse about pandemic response. However, it does not address or verify the specific assumption that non-experts offer useful analogies during the pandemic. While both involve public discourse on pandemic-related topics, there is no direct"
     },
     {
       "a_turn_idx": 24,
@@ -3801,7 +3801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'special education funding' refers to federal support for educational programs for students with disabilities.\",\n  \"reason\": \"Claim C mentions federal support for special education funding as a key priority, which is unrelated to assumption A, which asserts that teachers are a high-priority group due to their role in education and public health. While both relate to education policy, C does not address teacher prioritization, nor does it verify or state the reasoning behind treating teachers as high"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout the context. No other coreference issues are present.\",\n  \"reason\": \"Claim C states that federal support for special education funding is a key priority, which is related to the broader theme of federal educational support mentioned in turn 24. However, turn 24 focuses specifically on teachers being a high-priority group due to their role in education and public health, not on special education funding. While both"
     },
     {
       "a_turn_idx": 25,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the $82 billion allocation for education in the $900 billion pandemic relief bill, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states the speaker's inquiry into the sustainability of the $82 billion education funding, which directly addresses the legitimacy and acceptability of uncertainty about the topic—specifically, whether this funding will be sufficient. This aligns with assumption A, which asserts that such"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_00, as established by the conversational flow where SPEAKER_03 is addressing SPEAKER_00's earlier uncertainty. The claim in C explicitly centers on the speaker's uncertainty about the sustainability of the $82 billion education funding, which directly reflects the legitimacy and acceptability of their prior uncertainty.\",\n  \"reason\": \"Turn 26 explicitly frames the speaker's lack of knowledge about"
     },
     {
       "a_turn_idx": 26,
@@ -3831,7 +3831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'lower-income school districts', which is clarified by the context in turn 32 where 'Powell Unified' is contrasted with 'other less fortunate districts'. The term 'these sources' refers to funding/resources mentioned earlier in the conversation.\",\n  \"reason\": \"Claim C explicitly asks how resources can be allocated to lower-income school districts, directly verifying the substance of assumption A—that funding allocated by Congress is expected to have a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'lower-income school districts,' which is clarified by the contrast with 'Powell Unified School District' mentioned earlier. 'These sources' refers to funding/resources discussed in turn 26.\",\n  \"reason\": \"Claim C explicitly addresses the allocation of resources to lower-income school districts, directly verifying the substance of assumption A—that funding allocated by Congress is expected to have a measurable impact on school operations—by asking how such funding can"
     },
     {
       "a_turn_idx": 26,

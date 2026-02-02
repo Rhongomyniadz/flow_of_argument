@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 27 refers to Speaker_00, the Congressman, who shares his personal motivations for entering politics.\",\n  \"reason\": \"Claim C discusses the deterioration of the political system and loss of core values, which aligns with the broader sentiment of disillusionment mentioned in turn 0 regarding underrepresented voices and lack of meaningful political discourse. However, C does not explicitly mention or verify the audience's valuation of underrepresented political voices. Instead,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 27 refers to Speaker_00, the Congressman, who shares his personal motivations for entering politics.\",\n  \"reason\": \"Claim C discusses the deterioration of the political system and loss of core values, which aligns with a general sentiment of disillusionment with politics. However, it does not explicitly state or verify the audience's valuation of underrepresented political voices, which is the specific assumption in A. While the speaker’s motivation stems from"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 3 refers to Speaker_00, who is making a statement about the name 'Anthony'.\",\n  \"reason\": \"Claim C states that 'Anthony' is not a family name, which contradicts the earlier assumption A that poor audio quality does not significantly detract from content value. There is no connection between the claim about the name 'Anthony' and the assumption about audio quality. Thus, the claim is unrelated and even potentially contradictory"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to 'Anthony' as a name not typically associated with family lineage, contradicting the idea that it might be a common family name.\",\n  \"reason\": \"Claim C states that 'Anthony' is not a family name, which directly contradicts the implication in assumption A that poor audio quality doesn't detract from content value—there is no logical or semantic connection between the two. The claim about the name being non-family-related is unrelated to audio"
     },
     {
       "a_turn_idx": 0,
@@ -47,11 +47,11 @@
       "claim_text": "One does not need to attend every part of a city government meeting.",
       "overlap_score": 2,
       "c_time": 272.116,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'you' refers to general audience, 'I' refers to speaker. No mention of audio quality or content value.",
-      "reason": "Claim C discusses attending city government meetings and suggests selective participation, which is unrelated to the assumption about poor audio quality not detracting from content value. There is no overlap in semantic content or topic. The claim does not address audio quality, content value, or any related concept.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' refers to general audience, 'I' refers to speaker. No mention of audio quality or content value.\",\n  \"reason\": \"Claim C discusses attending city government meetings and suggests selective participation, which is unrelated to the assumption about poor audio quality not detracting from content value. There is no overlap in semantic content or topic. The claim does not address audio quality, content value, or any related concept.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' refers to the listener/audience, consistent across turns.\",\n  \"reason\": \"Claim C (turn 8) discusses the feasibility of engaging with city government without attending every meeting, emphasizing selective participation and alternative forms of influence. However, it does not address audio quality or its impact on content value. Assumption A concerns the acceptability of poor audio quality in preserving content value, which is entirely unrelated to the topic of civic engagement or"
     },
     {
       "a_turn_idx": 0,
@@ -62,11 +62,11 @@
       "claim_text": "The policy does not professionalize sports.",
       "overlap_score": 2,
       "c_time": 613.795,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'it' in turn 19 refers to the policy being discussed, not related to audio quality.\",\n  \"reason\": \"Claim C (turn 19) discusses the impact of a policy on college sports, specifically stating that it does not professionalize sports. This is entirely unrelated to assumption A, which concerns audio quality and its effect on content value. There is no overlap in subject matter, semantics, or implied connection. Therefore, the claim"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; 'it' in turn 19 refers to the policy described in the legislative context, not the audio quality.",
+      "reason": "Claim C (turn 19) discusses the non-professionalization of college sports, which is entirely unrelated to the earlier assumption A about audio quality not detracting from content value. There is no overlap in subject matter, semantics, or implied connection. Thus, the claim neither supports nor relates to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'it' in turn 19 refers to the policy described in the legislative context, not the audio quality.\",\n  \"reason\": \"Claim C (turn 19) discusses the non-professionalization of college sports, which is entirely unrelated to the earlier assumption A about audio quality not detracting from content value. There is no overlap in subject matter, semantics, or implied connection. Thus, the claim neither supports nor relates to A.\"\n}"
     },
     {
       "a_turn_idx": 0,
@@ -79,9 +79,9 @@
       "c_time": 646.906,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; claim C discusses employment of student athletes and firing implications, which is unrelated to audio quality mentioned in assumption A.",
-      "reason": "Claim C discusses the implications of professionalizing college sports, specifically the potential for firing student athletes if performance or behavior does not meet expectations. Assumption A concerns poor audio quality not detracting from content value. These topics are entirely unrelated in subject matter and semantic content. Therefore, C neither supports nor relates to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses employment of student athletes and firing implications, which is unrelated to audio quality mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the implications of professionalizing college sports, specifically the potential for firing student athletes if performance or behavior does not meet expectations. Assumption A concerns poor audio quality not detracting from content value. These topics are entirely unrelated in subject matter and semantic content. Therefore, C neither supports nor relates to A.\"\n}"
+      "coref_notes": "No relevant coreference links; claim C discusses employment of student athletes, while assumption A concerns audio quality in a podcast.",
+      "reason": "Claim C discusses the implications of employing student athletes, particularly the possibility of firing them, which is entirely unrelated to the assumption A about poor audio quality not detracting from content value. There is no overlap in subject matter, context, or semantic content. Therefore, the claim does not support, relate to, or verify assumption A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; claim C discusses employment of student athletes, while assumption A concerns audio quality in a podcast.\",\n  \"reason\": \"Claim C discusses the implications of employing student athletes, particularly the possibility of firing them, which is entirely unrelated to the assumption A about poor audio quality not detracting from content value. There is no overlap in subject matter, context, or semantic content. Therefore, the claim does not support, relate to, or verify assumption A.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to Congressman Anthony Gonzalez, who is the guest. The claim in C is about the speaker's belief regarding the listener's experience as a student athlete and professional, which is not related to the earlier assumption A about the host's belief in their platform's credibility despite low production quality.\",\n  \"reason\": \"Turn 24 discusses the guest's personal experiences as a student athlete and professional, which is unrelated to the host's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to Congressman Anthony Gonzalez, who is the guest speaker. The claim in C is about the speaker's belief regarding the listener's experience as a student athlete and professional, but the earlier assumption A concerns the host's belief about their own platform's credibility despite low production quality.\",\n  \"reason\": \"Claim C discusses the speaker's belief about the guest's personal background as a student athlete and professional, which is unrelated to assumption A"
     },
     {
       "a_turn_idx": 1,
@@ -122,11 +122,11 @@
       "claim_text": "Student athletes are currently treated as developing individuals rather than employees.",
       "overlap_score": 3,
       "c_time": 646.906,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'student athletes' in C refers to a new subject not connected to 'parents' or 'naming practices' in A.\",\n  \"reason\": \"Claim C discusses the treatment of student athletes as developing individuals versus employees, which is entirely unrelated to the assumption in A about naming practices being determined by parents. There is no overlap in subject matter, concept, or semantic content. Thus, the claim does not support, relate to, or verify A.\""
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; claim C discusses student athletes' status as individuals vs. employees, while assumption A concerns naming practices being parent-determined.",
+      "reason": "Claim C discusses the treatment of student athletes as developing individuals rather than employees, which is unrelated to the topic of naming practices being determined by parents. There is no overlap in subject matter, concept, or semantic content between A and C. Therefore, the claims are clearly unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; claim C discusses student athletes' status as individuals vs. employees, while assumption A concerns naming practices being parent-determined.\",\n  \"reason\": \"Claim C discusses the treatment of student athletes as developing individuals rather than employees, which is unrelated to the topic of naming practices being determined by parents. There is no overlap in subject matter, concept, or semantic content between A and C. Therefore, the claims are clearly unrelated.\"\n}\n```"
     },
     {
       "a_turn_idx": 3,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the speaker's family, which is consistent with the context of turn 3 where the speaker discusses naming traditions within their family.\",\n  \"reason\": \"Claim C states that the speaker's family has frequent family functions, which directly supports the implicit assumption in A that the speaker has reliable information about their ancestry—because such knowledge typically comes from regular family interactions and shared stories during gatherings. While C does not explicitly mention ancestry, it provides"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 4 refers to the speaker's family, which is consistent with the context of discussing family members named Anthony.\",\n  \"reason\": \"Claim C states that the speaker's family has frequent family functions, which directly supports the implicit assumption in A that the speaker has reliable knowledge about their ancestry—specifically, that multiple family members share the name Anthony. The mention of 'whenever there's a family function' implies regular gatherings where familial identity and"
     },
     {
       "a_turn_idx": 3,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'you' refers to the listener/audience throughout.\",\n  \"reason\": \"Claim C (turn 8) discusses influencing the political system through engagement, particularly on issues one cares about, which aligns with the general idea of having agency in political processes. However, it does not explicitly address or verify the specific assumption A—that the speaker has access to reliable information about their own ancestry. While both involve personal connection to identity and systems, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to citizens or individuals interested in influencing politics, which aligns with the general audience implied in assumption A. No other coreference issues exist.\",\n  \"reason\": \"Claim C discusses the ability of individuals to influence political outcomes through engagement, particularly at local levels, which relates to the broader theme of personal agency in political systems. However, it does not explicitly address or verify the specific assumption that the speaker has access to reliable information about their"
     },
     {
       "a_turn_idx": 3,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 17 refers to the speaker's daughter, as indicated by 'my girl'. The claim 'the speaker has a female companion' is not supported by the context; instead, the speaker explicitly refers to a daughter, which is a familial relationship, not a companion in the sense of a romantic or social partner.\",\n  \"reason\": \"Claim C states the speaker has a female companion, but the context shows the speaker refers to a daughter ('"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 15 refers to the speaker's female companion, and 'my girl' in turn 17 refers to the same person, indicating a daughter or close female relative.\",\n  \"reason\": \"Claim C states that the speaker has a female companion, which is unrelated to assumption A, which concerns the speaker's access to reliable information about their own ancestry. There is no overlap in semantic content between the two statements. The mention of 'my"
     },
     {
       "a_turn_idx": 3,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Congressman Anthony Gonzalez, who is the speaker in turn 3. However, turn 3 makes no mention of being a student athlete or professional; it only discusses naming origins and family history.\",\n  \"reason\": \"Claim C asserts that the speaker (Congressman Gonzalez) has experience as both a student athlete and a professional, which is not mentioned or implied in assumption A. Assumption A concerns access to reliable information about ancestry,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Congressman Anthony Gonzalez, who is the speaker in turn 3. However, turn 3 makes no mention of being a student athlete or professional; it only discusses naming origins and ancestry.\",\n  \"reason\": \"Claim C asserts that the speaker believes the listener has experience as both a student athlete and a professional, which is unrelated to assumption A, which concerns access to reliable information about ancestry. There is no overlap in semantic content between"
     },
     {
       "a_turn_idx": 4,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'other members of the family' in A refers to family members mentioned in turn 4, while C discusses legislation introduced by members of Congress—no overlap in subject matter.\",\n  \"reason\": \"Claim C discusses legislative efforts by members of Congress on a different topic (college athlete compensation), while assumption A concerns family recognition of the speaker as Anthony. There is no semantic connection between the two statements. C does not address, verify, or even reference the idea"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'other members of the family' in A refers to family members mentioned in turn 4, while C discusses legislation introduced by members of Congress—no overlap in subject matter.\",\n  \"reason\": \"Claim C discusses legislative efforts by members of Congress on a different topic (college athlete compensation), while assumption A concerns family recognition of the speaker as Anthony. There is no semantic connection between the two statements. C does not address or verify any aspect of A, making"
     },
     {
       "a_turn_idx": 4,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to the speaker (SPEAKER_00), and 'yours' refers to the legislation proposed by SPEAKER_00. The earlier assumption A (turn 4) concerns recognition of the speaker as Anthony within the family, which is unrelated to legislative differences.\",\n  \"reason\": \"Claim C (turn 20) discusses differences between the speaker's legislation and other introduced bills, specifically regarding the professionalization"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 20 refers to the speaker (SPEAKER_00), and 'yours' refers to the legislation introduced by SPEAKER_00. The earlier assumption A (turn 4) concerns recognition of the speaker as Anthony within the family, which is unrelated to the legislative comparison in turn 20.\",\n  \"reason\": \"Turn 20 discusses differences between the speaker's legislation and other introduced bills, specifically regarding the"
     },
     {
       "a_turn_idx": 4,
@@ -290,8 +290,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'the country' refers to the United States, consistent with context.",
-      "reason": "Claim C discusses gratitude toward the country as a recurring topic in family conversations, which is unrelated to assumption A about the social dynamic caused by multiple Anthonys at family events. There is no overlap in semantic content or thematic connection between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the country' refers to the United States, consistent with context.\",\n  \"reason\": \"Claim C discusses gratitude toward the country as a recurring topic in family conversations, which is unrelated to assumption A about the social dynamic caused by multiple Anthonys at family events. There is no overlap in semantic content or thematic connection between the two statements.\"\n}\n```"
+      "reason": "Claim C discusses gratitude toward the country as a recurring topic in family conversations, which is unrelated to assumption A about multiple Anthonys creating a social dynamic at family events. There is no overlap in subject matter or semantic content. The mention of family conversations in C does not connect to the specific phenomenon described in A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the country' refers to the United States, consistent with context.\",\n  \"reason\": \"Claim C discusses gratitude toward the country as a recurring topic in family conversations, which is unrelated to assumption A about multiple Anthonys creating a social dynamic at family events. There is no overlap in subject matter or semantic content. The mention of family conversations in C does not connect to the specific phenomenon described in A.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -305,8 +305,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'you' in turn 22 refers to student athletes generally.",
-      "reason": "Claim C discusses athletic growth through structured programs, which is unrelated to assumption A about political engagement through music. There is no overlap in subject matter, intent, or semantic content. The two ideas are entirely distinct and C does not address, verify, or relate to A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 22 refers to student athletes generally.\",\n  \"reason\": \"Claim C discusses athletic growth through structured programs, which is unrelated to assumption A about political engagement through music. There is no overlap in subject matter, intent, or semantic content. The two ideas are entirely distinct and C does not address, verify, or relate to A in any way.\"\n}\n```"
+      "reason": "Claim C discusses athletic growth through structured programs, which is unrelated to assumption A about political engagement through music. There is no overlap in subject matter, intent, or semantic content. The two ideas are entirely distinct and C does not address, verify, or even reference political participation or music as a civic tool.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 22 refers to student athletes generally.\",\n  \"reason\": \"Claim C discusses athletic growth through structured programs, which is unrelated to assumption A about political engagement through music. There is no overlap in subject matter, intent, or semantic content. The two ideas are entirely distinct and C does not address, verify, or even reference political participation or music as a civic tool.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speaker and his wife, consistent with prior context. 'It' in 'it was our hope' refers to the United States, established in the context of immigration and gratitude.\",\n  \"reason\": \"Claim C expresses that the political system became unproductive and lost values the speaker valued as a child, which relates to a broader sentiment about disillusionment with politics. However, it does not explicitly state or verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speaker and his wife, consistent with context from turn 27 onward. 'It' in 'it was our hope' refers to the United States, established in the prior sentence.\",\n  \"reason\": \"Claim C expresses that the political system became unproductive and lost core values the speaker valued as a child, which aligns with a sentiment of disillusionment and disconnection from political ideals. However, it does"
     },
     {
       "a_turn_idx": 5,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to the speaker (SPEAKER_00), who is a former student athlete and advocate for the legislation. 'That act' refers to the Student Athlete Level Plan Act.\",\n  \"reason\": \"Claim C states that the legislation aims to help individuals, particularly student athletes in sports like football, feel connected to the political system. This aligns with assumption A, which posits that feeling connected to the political system"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to the speaker (SPEAKER_00), who is a former student athlete and advocate for the Student Athlete Level Plan Act. 'That act' refers to the legislation introduced by SPEAKER_00.\",\n  \"reason\": \"Claim C states that the legislation aims to help individuals, particularly student athletes in sports like football, feel connected to the political system. This relates to assumption A, which posits that"
     },
     {
       "a_turn_idx": 5,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'it' in turn 6 refers to the political system, consistent with turn 5.\",\n  \"reason\": \"Claim C states that the political system is broken in many respects, which aligns with the sentiment expressed in assumption A (turn 5) that people feel disconnected and that the system is broken. However, C does not explicitly address or verify the core claim of A—that feeling connected increases democratic legitimacy and motivation to participate. C only confirms a premise"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'it' in turn 6 refers to the political system, consistent with turn 5.\",\n  \"reason\": \"Claim C states that the political system is broken in many respects, which aligns with the sentiment expressed in assumption A (turn 5) that people feel disconnected and that the system is broken. However, C does not explicitly address or verify the causal link between feeling connected and increased democratic legitimacy or motivation to participate—this is the core content of"
     },
     {
       "a_turn_idx": 5,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to individuals feeling disconnected from the political system, as established in turn 5.\",\n  \"reason\": \"Claim C states that the political system is redeemable despite being broken, which aligns with the underlying assumption in A that engagement can restore connection and legitimacy. While C does not explicitly mention 'democratic legitimacy' or 'motivation to participate,' it directly supports the core idea that the system can be improved through involvement—key"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to individuals feeling disconnected from the political system, as established in turn 5.\",\n  \"reason\": \"Claim C states that the political system is redeemable despite being broken, which aligns with the underlying assumption in A that engagement can restore connection and legitimacy. While C does not explicitly mention 'democratic legitimacy' or 'motivation to participate,' it supports the core idea that systemic disconnection can be overcome through involvement—direct"
     },
     {
       "a_turn_idx": 5,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals engaging in the political process, consistent with the subject in assumption A. 'Earlier' in C corresponds to 'get involved earlier' in turn 6, which directly supports the causal link between early engagement and increased satisfaction.\",\n  \"reason\": \"Claim C explicitly states that engaging earlier in the political process leads to greater personal satisfaction with the system. This directly verifies the core idea in assumption A—that feeling connected to the political system"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals engaging in the political process, consistent with the subject in assumption A. 'Earlier' in C corresponds to 'get involved earlier' in turn 6, which directly supports the causal link between early engagement and positive outcomes.\",\n  \"reason\": \"Claim C explicitly states that engaging earlier in the political process leads to greater personal satisfaction with the system. This directly verifies the core idea in assumption A—that feeling connected to the political system"
     },
     {
       "a_turn_idx": 5,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"He refers to himself and his family; 'my grandmother' and 'I' are linked to the speaker. 'Our country' and 'the political system' are contextually related.\",\n  \"reason\": \"Claim C expresses a loss of faith in the political system due to its unproductivity and erosion of values, which reflects a feeling of disconnection. However, it does not explicitly state or verify the causal link between feeling connected and increased democratic legitimacy or motivation to participate—this"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"He refers to himself and his family; 'I' and 'my' refer to SPEAKER_00; 'our country' and 'the political system' are linked via context.\",\n  \"reason\": \"Claim C states that the political system became unproductive and lost core values the speaker valued as a child, which relates to a sense of disconnection from the political system. However, it does not explicitly state or verify the causal link between feeling connected and democratic legitimacy or motivation"
     },
     {
       "a_turn_idx": 5,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the system' in turn 5 refers to the political system, while 'the global system' in turn 32 refers to the international order based on liberal democratic values.\",\n  \"reason\": \"Claim C (turn 32) discusses the global system being based on American-led liberal democratic values, which is unrelated to assumption A (turn 5), which asserts that feeling connected to the political system increases democratic legitimacy and participation motivation. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the system' in turn 5 refers to the political system, while 'the global system' in turn 32 refers to the international order based on liberal democratic values.\",\n  \"reason\": \"Claim C (turn 32) discusses the global system being based on American-led liberal democratic values, which is unrelated to assumption A (turn 5), which asserts that feeling connected to the political system increases democratic legitimacy and motivation to participate. While both"
     },
     {
       "a_turn_idx": 5,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, the former student athlete and current legislator. 'Those involved in sports like football' refers to student athletes, specifically college athletes.\",\n  \"reason\": \"Claim C discusses legislation aimed at helping student athletes, particularly in football, feel connected to the political system. However, it does not explicitly address or verify the assumption that people who feel disconnected believe they lack influence over political outcomes. While the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, the former student athlete and current legislator. 'Those involved in sports like football' refers to student athletes, specifically college athletes.\",\n  \"reason\": \"Claim C discusses legislation aimed at helping student athletes, particularly in football, feel connected to the political system. However, it does not address or verify the specific psychological assumption in A—that people who feel disconnected believe they lack influence over political outcomes"
     },
     {
       "a_turn_idx": 6,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 8 refers to individuals seeking political engagement, consistent with the audience addressed in turn 6. 'The system' in turn 8 refers to the political system discussed in turn 6.\",\n  \"reason\": \"Claim C explicitly states that there are multiple avenues to impact policy decisions, which directly verifies the core idea in assumption A—that political participation has measurable impact on policy outcomes. The examples provided in C (scheduling meetings, rallying support,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 8 refers to citizens or individuals seeking political engagement, consistent with the audience addressed in turn 6. 'The system' in turn 8 refers to the political system discussed in turn 6.\",\n  \"reason\": \"Claim C explicitly states that there are multiple avenues to impact policy decisions, which directly verifies the core idea in assumption A—that political participation has measurable impact on policy outcomes. The examples provided in C (scheduling meetings, rallying"
     },
     {
       "a_turn_idx": 6,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the NCAA' refers to the organization, and 'institutions' refers to colleges/universities within the NCAA.\",\n  \"reason\": \"Claim C discusses the complexity of NCAA governance due to institutional diversity, which is unrelated to assumption A, which asserts that democratic institutions are worth engaging with despite flaws. There is no overlap in subject matter, logic, or semantic content between the two statements. Claim C does not address engagement, redemption, or value of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 25 refers to Speaker_00 and their wife, but this does not relate to assumption A.\",\n  \"reason\": \"Claim C discusses the complexity of NCAA governance due to institutional diversity, which is unrelated to the earlier assumption A that democratic institutions are worth engaging with despite flaws. There is no mention of democratic engagement, reform, or the value of participation in political systems in C. The topics and semantic content are entirely"
     },
     {
       "a_turn_idx": 6,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals who are concerned about issues, consistent with the audience addressed in assumption A. 'Your issue' in C corresponds to 'preferred candidates' and 'issues you care about' in A.\",\n  \"reason\": \"Claim C explicitly states that if someone cares deeply about an issue, there are ways to influence outcomes—directly verifying the core idea in assumption A that people value being able to influence governance through meaningful participation, especially by"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to individuals who are concerned about issues, consistent with the audience addressed in assumption A. 'Your issue' in C corresponds to 'preferred candidates' and 'issues you care about' in A.\",\n  \"reason\": \"Claim C explicitly states that if someone cares deeply about an issue, there are ways to influence outcomes—directly verifying the core idea in assumption A that people value being able to shape governance through meaningful participation, especially by"
     },
     {
       "a_turn_idx": 6,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the current system' in turn 21 refers to the college sports system, not the political system mentioned in turn 6.\",\n  \"reason\": \"Claim C (turn 21) discusses the college sports system allowing student athletes to gain both athletic and academic growth, which is unrelated to assumption A (turn 6), which concerns political competition in primary elections under a structurally constrained system. There is no overlap in subject matter or conceptual content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the current system' in C refers to college athletics policy, not the political system mentioned in A.\",\n  \"reason\": \"Claim C discusses the ability of student athletes to gain both athletic and academic growth under a proposed college sports policy, while assumption A concerns political competition in primary elections within the existing political system. The topics are entirely unrelated—C addresses college athletics reform, whereas A addresses democratic participation and electoral fairness. There is no overlap in subject matter"
     },
     {
       "a_turn_idx": 6,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, the former student athlete and politician. 'That act' refers to the Student Athlete Level Plan Act introduced by SPEAKER_00.\",\n  \"reason\": \"Claim C discusses legislation aimed at helping student athletes—particularly in football—feel connected to the political system. While this aligns loosely with the broader theme of civic engagement mentioned in assumption A, it does not explicitly verify or state"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, the former student athlete and politician. 'That act' refers to the Student Athlete Level Plan Act introduced by SPEAKER_00.\",\n  \"reason\": \"Claim C discusses legislation aimed at helping student athletes, particularly in football, feel connected to the political system. While this aligns loosely with the broader theme of civic engagement mentioned in assumption A, it does not explicitly address or verify"
     },
     {
       "a_turn_idx": 6,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the current system' in C refers to the college sports system, not the political system referenced in A.\",\n  \"reason\": \"Claim C discusses the educational development of young athletes within the college sports system, while assumption A concerns political competition in primary elections under the current political system. The topics, domains, and core concepts are entirely different—C does not address political systems, primaries, gerrymandering, or representation. There is no overlap in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The current system' in C refers to the college sports system, not the political system mentioned in A.\",\n  \"reason\": \"Claim C discusses the educational development of young athletes within the college sports system, while assumption A concerns political competition in primary elections under the current political system. The topics, domains, and referents are entirely different. There is no overlap in semantic content, and C does not address or verify"
     },
     {
       "a_turn_idx": 6,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to the speaker (SPEAKER_00), and 'our country' refers to the United States, consistent with the context of immigration and civic values.\",\n  \"reason\": \"Claim C expresses a personal disillusionment with the current political system, describing it as unproductive and having lost core values. While this reflects a negative evaluation of the system, it does not explicitly address or verify the earlier assumption A, which asserts"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the political system, which is consistent with the subject of assumption A in turn 6.\",\n  \"reason\": \"Claim C expresses a negative perception of the political system's productivity and loss of core values, particularly post-2016, which contrasts with assumption A’s assertion that the system allows genuine competition in primaries despite structural barriers. While both address the state of the political system, C does not verify or state"
     },
     {
       "a_turn_idx": 6,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the current global system' in turn 32 refers to the international order post-World War II, distinct from 'the current political system' in turn 6.\",\n  \"reason\": \"Claim C discusses the global system being based on American-led liberal democratic values, which is unrelated to assumption A, which concerns the possibility of genuine competition in U.S. primary elections despite structural barriers. The topics, scope, and focus differ entirely—A is about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the current global system' refers to the international order post-World War II, distinct from the domestic political system mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the global system being based on American-led liberal democratic values, which is unrelated to assumption A, which concerns the possibility of genuine competition in U.S. primary elections despite structural barriers. The topics, scope, and focus differ entirely—A is about domestic electoral processes and civic engagement,"
     },
     {
       "a_turn_idx": 7,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to citizens or activists engaging locally, consistent with the prior discussion. 'Those conversations' refers back to advocacy efforts mentioned in turn 8 and 9.\",\n  \"reason\": \"Claim C explicitly states that organized and assertive engagement at the local level can significantly impact educational outcomes, which directly verifies the broader assumption in A that meaningful political change often begins at the local level. While A is general, C provides a concrete example (education"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 10 refers to citizens or community members, consistent with the prior discussion about individual engagement in local politics. 'Those conversations' refers back to advocacy efforts mentioned in turn 8 and 9.\",\n  \"reason\": \"Claim C explicitly states that organized and assertive engagement at the local level can significantly impact educational outcomes, which directly verifies the broader assumption in A—that meaningful political change often begins at the local level—by providing a concrete example"
     },
     {
       "a_turn_idx": 7,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about the speaker's experience as a student athlete and professional, which is unrelated to assumption A about local political change.\",\n  \"reason\": \"Claim C discusses the speaker's personal background as a student athlete and professional, which is entirely unrelated to assumption A, which concerns the belief that meaningful political change begins at the local level. There is no overlap in semantic content, and C does not state, verify, or even reference A. Therefore,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses the speaker's experience as a student athlete and professional, which is unrelated to assumption A about local political change.\",\n  \"reason\": \"Claim C discusses the speaker's personal background as a student athlete and professional, which is irrelevant to assumption A that meaningful political change often begins at the local level. There is no semantic connection between the two statements, and C does not address, verify, or even reference the idea of local political engagement. Therefore"
     },
     {
       "a_turn_idx": 7,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 26 refers to SPEAKER_00.\",\n  \"reason\": \"Claim C states that the speaker finds sharing a personal political inspiration story exciting, which is unrelated to assumption A, which asserts that meaningful political change often begins at the local level. There is no mention of local-level change, grassroots involvement, or the importance of local governance in C. The topic shifts to personal motivation and inspiration, not the mechanism or locus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 26 refers to SPEAKER_00, consistent with prior context.\",\n  \"reason\": \"Claim C states that the speaker finds sharing a personal political inspiration story exciting, which is unrelated to assumption A, which asserts that meaningful political change often begins at the local level. While the speaker does share personal motivations in later turns, this does not make the earlier assumption about local-level change explicit. There is no semantic connection"
     },
     {
       "a_turn_idx": 7,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, not the listener. The claim in C is about SPEAKER_00's own experience as a student athlete and professional, not the listener's.\",\n  \"reason\": \"Claim C asserts that the speaker (SPEAKER_00) believes the listener has experience as a student athlete and professional. However, the context shows that SPEAKER_00 is referring to his own experiences"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, not the listener. The claim in C is about SPEAKER_00's own experience as a student athlete and professional, not the listener's.\",\n  \"reason\": \"Claim C asserts that the speaker (SPEAKER_00) believes the listener has experience as a student athlete and professional, which contradicts the actual content of the conversation. In reality, SPEAKER_0"
     },
     {
       "a_turn_idx": 7,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_00, as established in prior turns. No other coreference is relevant.\",\n  \"reason\": \"Claim C (turn 26) discusses the speaker's personal political inspiration story, which is unrelated to assumption A (turn 8), which concerns the speaker's political influence or access within city governance. While both relate to political engagement, C does not state, imply, or verify any aspect of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 26) discusses the speaker's personal political inspiration story, which is unrelated to assumption A (turn 8), which concerns the speaker's political influence or access within city governance. While turn 26 touches on motivation for entering politics, it does not state or verify any claim about actual influence, access, or role in city governance."
     },
     {
       "a_turn_idx": 8,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speaker and his wife; 'our country' refers to the United States, consistent with the context of immigration and civic values.\",\n  \"reason\": \"Claim C states that the political system became unproductive and lost core values the speaker valued as a child. However, this does not explicitly verify or state the earlier assumption A, which is that listening to constituents is a core component of effective leadership. While C expresses disillusion"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speaker and his wife; 'our country' and 'what I remembered growing up' refer to the U.S. and its values as perceived by the speaker.\",\n  \"reason\": \"Claim C states that the political system became unproductive and lost core values the speaker valued as a child. However, this does not explicitly verify or state the earlier assumption A, which is that listening to constituents is a core component of"
     },
     {
       "a_turn_idx": 8,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, but the claim C asserts that the listener (SPEAKER_03) has experience as both a student athlete and a professional, which is not supported by prior context. Turn 8 discusses the speaker's own experience as a basis for broader civic engagement patterns, not the listener's.\",\n  \"reason\": \"Claim C (turn 24) makes an assertion about the listener's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_00, but the claim C states that the listener (SPEAKER_03) has experience as both a student athlete and a professional, which is not supported by prior context. Turn 8 discusses the speaker's own experience reflecting broader civic patterns, not the listener's background.\",\n  \"reason\": \"Claim C (turn 24) asserts that the listener has personal experience as a student"
     },
     {
       "a_turn_idx": 8,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_00, and 'the idea of sharing a personal political inspiration story' refers to the narrative about the speaker's family history and post-2016 political disillusionment.\",\n  \"reason\": \"Claim C states that the speaker finds it exciting to share a personal political inspiration story, which is unrelated to assumption A, which asserts that the speaker's personal experience reflects broader patterns in civic engagement. While"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_00, consistent with A.\",\n  \"reason\": \"Claim C states that the speaker finds it exciting to share a personal political inspiration story, which is unrelated to assumption A, which asserts that personal experience reflects broader patterns in civic engagement. While C involves personal experience, it does not state, verify, or imply that such experiences reflect wider civic trends. There is no semantic connection between the excitement about"
     },
     {
       "a_turn_idx": 8,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 35 refers to the listener (SPEAKER_03), and 'a politician' refers to SPEAKER_00, as established in prior turns.\",\n  \"reason\": \"Claim C states that a politician first said the idea about manufacturing renewable energy technologies in the U.S., which aligns with SPEAKER_00's own statement in turn 10 about local decision-making and influence. However, C does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 35 refers to the listener (SPEAKER_03), and 'a politician' refers to SPEAKER_00, as established in prior turns.\",\n  \"reason\": \"Claim C states that a politician first said the idea about manufacturing renewable energy technologies in the U.S., which aligns with SPEAKER_00's statement in turn 35. However, this does not explicitly verify or state the earlier assumption A"
     },
     {
       "a_turn_idx": 9,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to university athletic programs and their treatment of student athletes; 'student athletes' is the subject of the claim.\",\n  \"reason\": \"Claim C states that student athletes are treated as developing individuals rather than employees, which directly contradicts the assumption in A that political action is more effective when grounded in grassroots mobilization. There is no overlap in subject matter or conceptual alignment between the two claims. A concerns civic engagement and local influence"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to university athletic programs and decision-makers; 'student athletes' is the subject of the claim. There is no reference to grassroots mobilization, top-down solutions, or political action.\",\n  \"reason\": \"Claim C discusses the treatment of student athletes as developing individuals versus employees, which is unrelated to the assumption A about political effectiveness through grassroots mobilization. There is no overlap in subject matter, nor does C verify or state the"
     },
     {
       "a_turn_idx": 10,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses population growth in Africa and its implications for fossil fuel use and renewable energy, which is unrelated to the topic of grassroots political mobilization in turn 10.\",\n  \"reason\": \"Claim C discusses future population growth in Africa and its implications for fossil fuel dependence and renewable energy innovation. This is unrelated to assumption A, which asserts that political action is more effective when driven by grassroots mobilization rather than top-down approaches. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses population growth in Africa and its implications for fossil fuel use and renewable energy, which is unrelated to the topic of grassroots political mobilization in turn 10.\",\n  \"reason\": \"Claim C discusses future population growth in Africa and its implications for global energy demand and fossil fuel dependence, which is unrelated to the earlier assumption A about the effectiveness of grassroots mobilization versus top-down political action. There is no mention of organizing, community engagement,"
     },
     {
       "a_turn_idx": 10,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses China's carbon emissions, which is unrelated to assumption A about grassroots political action.\",\n  \"reason\": \"Claim C states that China produces more than twice the carbon emissions of other regions, which is a factual claim about global emissions. Assumption A concerns the effectiveness of grassroots mobilization versus top-down political solutions. There is no semantic connection between the two claims—C does not state, imply, or verify anything about grassroots action or political effectiveness"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses China's carbon emissions, which is unrelated to the topic of grassroots political action in assumption A.\",\n  \"reason\": \"Claim C discusses China's carbon emissions in the context of renewable energy production and global climate efforts, while assumption A concerns the effectiveness of grassroots mobilization versus top-down political solutions. There is no overlap in subject matter, logic, or semantic content between the two statements. Therefore, C does not support, relate to, or"
     },
     {
       "a_turn_idx": 11,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_00, who is the same speaker as in turn 11. 'It' in 'give it up' refers to social media.\",\n  \"reason\": \"Claim C states that the speaker stopped using social media due to mental health concerns, which implies a personal choice to reallocate time away from social media. This aligns with the idea in assumption A that social media use is discretionary and can"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, who is the same speaker as in turn 11. 'It' in 'give it up' refers to social media.\",\n  \"reason\": \"Claim C states that the speaker stopped using social media due to mental health concerns, which implies that social media use is discretionary and can be consciously reduced or eliminated. This directly supports the idea in assumption A that social media use among young people is discretionary"
     },
     {
       "a_turn_idx": 11,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_00, who is the speaker in both turns 11 and 12. The phrase 'give it up social media' clearly refers to discontinuing social media use.\",\n  \"reason\": \"Claim C ('I have stopped using social media') directly supports the idea in assumption A that social media use is discretionary and can be reallocated. By stating he has given up social media for mental and"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_00, who is the speaker in both turns 11 and 12. The claim 'I have stopped using social media' directly reflects a personal action that aligns with the implication in turn 11 that social media use is discretionary and can be redirected toward meaningful issues.\",\n  \"reason\": \"Turn 12 explicitly states that the speaker has discontinued social media use for mental and familial"
     },
     {
       "a_turn_idx": 11,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my' in 'my mental sanity' refers to SPEAKER_00, and 'family's sanity' refers to SPEAKER_00's family. No ambiguous coreference.\",\n  \"reason\": \"Claim C states that the speaker stopped using social media due to concerns for their own mental well-being and their family's mental well-being. This supports the idea that social media use is discretionary—something that can be given up based on personal priorities. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my' in 'my mental sanity' refers to SPEAKER_00, and 'family's sanity' refers to SPEAKER_00's family. No ambiguous coreference.\",\n  \"reason\": \"Claim C explicitly states that the speaker stopped using social media due to concerns for mental well-being, both personal and familial. This supports the idea that social media use is discretionary—something that can be given up based on personal priorities. While it does not directly"
     },
     {
       "a_turn_idx": 11,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 12 refers to 'social media usage,' which is the subject of assumption A. 'I give it up' indicates cessation of social media use, aligning with the idea of reallocating discretionary time.\",\n  \"reason\": \"Claim C states that stopping social media use is a positive development ('good innovation'), which implies that such time can be redirected toward other purposes—directly supporting the core idea in assumption A that social media use is"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 12 refers to 'social media usage', as established by context and speaker intent.\",\n  \"reason\": \"Claim C states that stopping social media usage is a positive development ('good innovation') for the speaker's mental and family well-being. This aligns with assumption A, which posits that social media use among youth is discretionary and can be reallocated toward meaningful issues. While C does not explicitly mention reallocating time to issues, it"
     },
     {
       "a_turn_idx": 11,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_00, consistent with the context. 'It' in 'it's good innovation during' is ambiguous but likely refers to the decision to stop using social media.\",\n  \"reason\": \"Claim C states that the speaker stopped using social media due to mental health concerns, which is a personal motivation but does not address or verify the substantive idea in assumption A—that redirecting social media time toward civic or social causes has"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_00, who is the speaker in both turns 11 and 12. No other coreference issues are present.\",\n  \"reason\": \"Turn 12 states that the speaker stopped using social media for mental health reasons, which is a personal motivation but does not explicitly address or verify the claim in turn 11—that time spent on social media has potential value when redirected toward civic or"
     },
     {
       "a_turn_idx": 11,

@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_01 throughout. 'The vice president' is a distinct individual from the speaker, and 'he' in turn 15 refers to the vice president.\",\n  \"reason\": \"Claim C states that the speaker has a close personal friendship with the Vice President, which is unrelated to assumption A, which concerns the speaker's control over their location and decision to remain in the office. There is no mention of location, agency,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_01 throughout. 'The vice president' is a distinct individual from the speaker, and 'he' in turn 15 refers to the vice president.\",\n  \"reason\": \"Claim C (turn 14) states that the speaker has a close personal friendship with the Vice President, which is unrelated to assumption A (turn 6), which concerns the speaker's control over their location and decision to remain in the office"
     },
     {
       "a_turn_idx": 7,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 17 refers to the situation described in turn 7, which involves public disorder, breaking windows, and armed individuals entering the Capitol.\",\n  \"reason\": \"Claim C explicitly states that people were 'caught up in this thing,' where 'this' clearly refers to the violent, disorderly event described earlier—specifically, the rioting and breach of the Capitol. This directly verifies the substance of assumption A, which asserts that the situation"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in 'get caught up in this thing' refers to the situation involving public disorder or rioting described in turn 7, where people were breaking windows and security forces arrived with guns.\",\n  \"reason\": \"Claim C explicitly states that people were caught up in the situation, which directly verifies the substance of assumption A—that the scenario involved public disorder or rioting. The context confirms that the event described in C (a fiery speech leading to violence) align"
     },
     {
       "a_turn_idx": 8,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 14 refers to SPEAKER_01, who is the same speaker as in turn 8. The phrase 'I've always been real close to the vice president' is a new claim not related to the assumption about being in the Russell building.\",\n  \"reason\": \"Turn 14 claims a personal friendship with the Vice President, which is entirely unrelated to the assumption in turn 8 that the speaker has direct experience in the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 14 refers to SPEAKER_01, who is the same speaker as in turn 8. The claim in C is about a personal friendship with the Vice President, which is unrelated to the assumption in A about having direct experience in the Russell building.\",\n  \"reason\": \"Turn 8 assumes the speaker has direct experience in the Russell building, based on their long tenure and presence during events. Turn 14 introduces a completely"
     },
     {
       "a_turn_idx": 8,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some people' in turn 9 refers to individuals mentioned in turn 8 who expressed concern for their safety, specifically those who feared armed intruders.\",\n  \"reason\": \"Turn 9 explicitly states that 'there are clearly some people who were' worried due to reports of people coming with guns, which directly verifies the assumption in turn 8 that worrying about safety implies a perception of threat or danger. The mention of firearms confirms the nature of the perceived threat"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some people' in claim C refers to 'people who were coming over with guns' mentioned in turn 9, which aligns with the concern about safety in turn 8.\",\n  \"reason\": \"Claim C explicitly states that some individuals are worried about potential threats involving firearms, which directly verifies the substance of assumption A—that worrying about safety implies a perceived threat or danger. The mention of 'guns' and 'people who were coming over' clearly indicates a perception"
     },
     {
       "a_turn_idx": 8,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to SPEAKER_01, the interlocutor who has been present at the Capitol for 35 years. The term 'Trump' refers to Donald Trump, as established in the context.\",\n  \"reason\": \"Claim C asks about Trump's responsibility for the Capitol siege, which is a topic related to the broader discussion of events at the Capitol. However, it does not explicitly state or verify the earlier assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to SPEAKER_01, the interlocutor who has been present at the Capitol for 35 years. The term 'Trump' refers to the former U.S. president, as established in the context.\",\n  \"reason\": \"Claim C asks about Trump's responsibility for the Capitol siege, which is a new topic not directly tied to the earlier assumption A that the speaker finds the listener’s long-term presence at"
     },
     {
       "a_turn_idx": 10,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the President (Trump), as established by context in turn 16 and prior discussion.\",\n  \"reason\": \"Claim C states that the speaker believes Trump played a role in causing the events at the Capitol, which aligns with the broader sentiment expressed in turn 17 about the President's fiery speech and claims of election theft inciting violence. However, this does not explicitly verify the earlier assumption A—that firsthand experience"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the President (Trump), as established by context in turn 16 and prior discussion.\",\n  \"reason\": \"Claim C states that the speaker believes Trump played a role in causing the events at the Capitol, which aligns with the broader sentiment expressed in turn 17 about the President's fiery speech and claims of election fraud inciting violence. However, this does not explicitly verify the earlier assumption A—that firsthand experience"
     },
     {
       "a_turn_idx": 10,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to the President (Trump), as established by the context of the conversation and the prior mention of the president's speech.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the President (Trump) played a role in causing the events at the Capitol, which directly verifies the assumption in A that damage to public institutions like the Capitol reflects broader political unrest. The speaker links the President's fiery speech—repeating claims"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to the President (Trump), as established by the context of the conversation and prior mention of the president's speech.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the President (Trump) played a role in causing the events at the Capitol, which directly verifies the assumption in A that damage to public institutions like the Capitol reflects broader political unrest. The speaker links the violent actions to the President's fiery speech and"
     },
     {
       "a_turn_idx": 12,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 16 refers to the President (Trump), as established by the context of the conversation and the prior mention of the president's speech.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the President (Trump) played a role in causing the events at the Capitol, which directly verifies the earlier assumption A that the speaker views themselves as having a legitimate role in assessing or responding to the aftermath. The speaker’s belief about the President"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the President (Trump), as established by the context of the conversation and prior mention of the president's speech.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the President played a role in causing the events at the Capitol, which directly verifies the assumption in A that the speaker sees themselves as having a legitimate role in assessing or responding to the aftermath. The speaker’s attribution of responsibility to the President’s fiery"
     },
     {
       "a_turn_idx": 12,

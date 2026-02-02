@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Mint Mobile' refers to the same entity throughout.\",\n  \"reason\": \"Claim C states that Mint Mobile offers unlimited premium wireless service, which aligns with the product being advertised in turn 0. However, it does not explicitly address or verify the assumption that consumers prioritize affordability. While the pricing is mentioned in the context, the claim itself focuses on the service offering rather than consumer priorities. Thus, it partially supports the broader context but misses the key"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Mint Mobile' refers to the same entity throughout.\",\n  \"reason\": \"Claim C states that Mint Mobile offers unlimited premium wireless service, which aligns with the product being advertised in turn 0. While turn 0 does not explicitly state 'unlimited premium wireless,' it strongly implies affordability as a key factor in consumer choice, and the service details in turn 1 (including unlimited data) support this. The claim C substantiates the product offering"
     },
     {
       "a_turn_idx": 2,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the listener (likely the audience or guest), but there is no mention of promotional offers, time limits, or conditions in the statement. The claim is unrelated to the assumption about understanding promotional terms.\",\n  \"reason\": \"Turn 6 expresses a positive sentiment toward the listener's presence but does not address or verify any aspect of the assumption that the listener understands promotional offers have time limits and conditions. There is no semantic connection between"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the listener (likely the audience or guest), but there is no mention of promotional offers, time limits, or conditions in the statement. The claim is unrelated to the assumption about understanding promotional terms.\",\n  \"reason\": \"Turn 6 expresses appreciation for the listener's presence but does not address or verify any aspect of the assumption that the listener understands promotional offers have time limits and conditions. There is no semantic connection between the content"
     },
     {
       "a_turn_idx": 3,
@@ -140,8 +140,8 @@
       "entailment_score": 9,
       "confidence": 0.95,
       "coref_notes": "The pronoun 'he' in turn 6 refers to Chip Roy, who is explicitly named in turn 30 as representing the great state of Texas.",
-      "reason": "Turn 30 explicitly states 'Chip Roy. Great State of Texas,' which directly verifies the claim in turn 6 that the listener understands who Chip Roy is and his political role as a representative from Texas. The statement is clear, unambiguous, and confirms both identity and political affiliation.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 6 refers to Chip Roy, who is explicitly named in turn 30 as representing the great state of Texas.\",\n  \"reason\": \"Turn 30 explicitly states 'Chip Roy. Great State of Texas,' which directly verifies the claim in turn 6 that the listener understands who Chip Roy is and his political role as a representative from Texas. The statement is clear, unambiguous, and confirms both identity and political affiliation.\"\n}\n```"
+      "reason": "Turn 30 explicitly states that 'Chip Roy' represents the great state of Texas, which directly verifies the assumption in turn 6 that the listener understands who Chip Roy is and his political role. The claim is clear, unambiguous, and matches the core content of the earlier assumption.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 6 refers to Chip Roy, who is explicitly named in turn 30 as representing the great state of Texas.\",\n  \"reason\": \"Turn 30 explicitly states that 'Chip Roy' represents the great state of Texas, which directly verifies the assumption in turn 6 that the listener understands who Chip Roy is and his political role. The claim is clear, unambiguous, and matches the core content of the earlier assumption.\"\n}\n```"
     },
     {
       "a_turn_idx": 7,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 25 refers to Nancy Pelosi, as established by context and prior discussion. 'It' in 'she did it' refers to her action of following through on commitments.\",\n  \"reason\": \"Claim C (turn 25) states that Nancy Pelosi was effective despite disagreement with her actions, which is unrelated to assumption A (turn 8), which asserts that state-level actions reflect national political competence. There is no mention of state-level"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 25 refers to Nancy Pelosi, as established by context and prior discussion of her role as Speaker.\",\n  \"reason\": \"Claim C (turn 25) states that Nancy Pelosi was effective despite disagreement with her actions, which is unrelated to assumption A (turn 8), which asserts that state-level actions reflect national political competence. There is no mention of state-level actions, national competence, or any connection between them in C. The"
     },
     {
       "a_turn_idx": 8,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Kevin McCarthy, as established in prior context.\",\n  \"reason\": \"Claim C states that Kevin McCarthy is a 'very nice guy,' which is a personal characterization unrelated to the substantive claim in assumption A that his platform lacked sufficient strength to energize voters. There is no mention of policy, agenda, or electoral strategy in C, and it does not verify, support, or even address the core idea of A. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Kevin McCarthy, as established by context (e.g., 'I've interviewed him').\",\n  \"reason\": \"Claim C states that Kevin McCarthy is a 'very nice guy,' which is a personal characterization unrelated to the substantive claim in assumption A that his platform lacked sufficient strength to energize voters. There is no mention of policy, agenda, or electoral strategy in C, and no verification or even reference to the quality"
     },
     {
       "a_turn_idx": 11,

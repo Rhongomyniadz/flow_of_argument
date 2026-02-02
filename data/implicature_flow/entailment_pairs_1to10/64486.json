@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Mia Love is referred to as 'Congresswoman Mia Love' in turn 5, resolving the coreference from 'Mia Love' in turn 1.\",\n  \"reason\": \"Turn 5 explicitly confirms the presence and active role of Mia Love on the call, directly verifying the expectation in turn 1 that she would serve as an informed observer or informant. The phrase 'It is amazing. It truly is Congresswoman Mia Love on the line with us' explicitly acknowledges her"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Mia' in turn 1 refers to 'Congresswoman Mia Love' in turn 5, confirmed by the full name and title used in turn 5.\",\n  \"reason\": \"Turn 5 explicitly confirms that Mia Love is present and available on the call, directly verifying the expectation in turn 1 that she would serve as an informed observer or informant. The phrase 'It is amazing. It truly is Congresswoman Mia Love on the line with us'"
     },
     {
       "a_turn_idx": 1,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Chaffetz, as established by context. 'Webster' is a distinct individual mentioned in comparison.\",\n  \"reason\": \"Claim C (turn 18) discusses Chaffetz being a better leader than Webster, which is unrelated to assumption A (turn 1), which asserts that 'better to be lucky than good' is a widely understood cultural or professional truth in media circles. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Chaffetz refers to Jason Chaffetz; Webster refers to the unnamed individual contrasted with Chaffetz, likely a reference to a potential alternative candidate.\",\n  \"reason\": \"Claim C (turn 18) discusses Chaffetz being a better leader than Webster, which is unrelated to assumption A (turn 1). Assumption A concerns the cultural/professional truth of 'better to be lucky than good' in media circles, while C evaluates leadership qualities between two"
     },
     {
       "a_turn_idx": 1,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 10 refers to the congressional conference mentioned in earlier turns; 'speaker vote' refers to the delayed vote discussed in turn 2.\",\n  \"reason\": \"Claim C explicitly states that a speaker vote has not yet occurred, which directly verifies the substance of assumption A—that the speaker vote delay reflects institutional responsiveness to unforeseen challenges. The delay implies the vote hasn't taken place, and C confirms this timing gap, thereby explicitly validating the core"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 10 refers to the congressional conference mentioned in turn 2; 'speaker vote' refers to the delayed vote discussed in turn 2.\",\n  \"reason\": \"Claim C explicitly states that a speaker vote has not yet occurred, which directly verifies the substance of assumption A—that the speaker vote delay reflects institutional responsiveness to unforeseen challenges. The delay implies the institution is responding to unexpected circumstances, and C confirms the vote has not taken place,"
     },
     {
       "a_turn_idx": 2,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to Kevin McCarthy; 'the speaker vote' in turn 10 refers to the delayed vote mentioned in turn 2.\",\n  \"reason\": \"Claim C states that the timing of the speaker vote affects its outcome or relevance, which directly addresses the implication in assumption A that the delay reflects institutional responsiveness to unforeseen challenges. While C does not explicitly state 'institutional responsiveness,' it supports the core idea that the timing of the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 10 refers to the timing of the speaker vote, which is the subject of the claim. 'That' in turn 11 refers to the scenario of having a speaker vote today.\",\n  \"reason\": \"Claim C states that the timing of the speaker vote influences the outcome, specifically suggesting that voting today would favor Jason Chase over Daniel Webster. This directly supports the idea that the timing affects the relevance or outcome of the vote, which"
     },
     {
       "a_turn_idx": 2,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to SPEAKER_03 (Mia Love), and 'him' in 'supporting him for Speaker' refers to the candidate being discussed, likely McCarthy or another potential speaker. No direct mention of the American public or their input.\",\n  \"reason\": \"Claim C states that support for a candidate has been made public through official records, which is unrelated to assumption A, which asserts that the American public has legitimate input on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 9 refers to SPEAKER_03 (Mia Love), and 'him' in 'supporting him for Speaker' refers to the candidate being discussed, likely McCarthy or another potential speaker nominee.\",\n  \"reason\": \"Claim C states that support for a candidate has been made public through official records, which is a factual assertion about transparency and documentation. However, this does not explicitly verify or state the earlier assumption A—that the American public"
     },
     {
       "a_turn_idx": 5,
@@ -695,8 +695,8 @@
       "entailment_score": 9,
       "confidence": 0.95,
       "coref_notes": "Mia Love refers to the same person mentioned in turn 5; 'Congresswoman Mia Love' is explicitly named in both A and C.",
-      "reason": "Claim C explicitly confirms that Congresswoman Mia Love was recently interviewed, which directly verifies the assumption in A that her participation adds credibility or significance. The mention of her being interviewed immediately after the reference to her presence in the conversation confirms her active involvement, thus explicitly validating the substance of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Mia Love refers to the same person mentioned in turn 5; 'Congresswoman Mia Love' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C explicitly confirms that Congresswoman Mia Love was recently interviewed, which directly verifies the assumption in A that her participation adds credibility or significance. The mention of her being interviewed immediately after the reference to her presence in the conversation confirms her active involvement, thus explicitly validating the substance of A.\"\n}\n```"
+      "reason": "Claim C explicitly confirms that Congresswoman Mia Love was recently interviewed, which directly verifies the assumption in A that her participation adds credibility or significance. The mention of her being interviewed immediately after the initial reference in turn 5 confirms her active involvement and validates the assumption about her contribution's importance.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Mia Love refers to the same person mentioned in turn 5; 'Congresswoman Mia Love' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C explicitly confirms that Congresswoman Mia Love was recently interviewed, which directly verifies the assumption in A that her participation adds credibility or significance. The mention of her being interviewed immediately after the initial reference in turn 5 confirms her active involvement and validates the assumption about her contribution's importance.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Mia' in turn 13 refers to Congresswoman Mia Love, established in turn 5. The phrase 'I keep saying this one final quick question' indicates the speaker is addressing Mia Love directly, reinforcing their interaction.\",\n  \"reason\": \"Turn 13 explicitly confirms the speaker's direct engagement with Mia Love by asking her a final question, which implies a professional and respectful rapport. While it does not explicitly state 'we have a professional relationship,'"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Mia' in turn 13 refers to Congresswoman Mia Love, established in turn 5. The phrase 'I keep saying this one final quick question' indicates the speaker is addressing Mia Love directly.\",\n  \"reason\": \"Turn 13 explicitly acknowledges Mia Love as the current interlocutor and frames her as a source of direct insight ('you're the first of our delegation... that described it to us'), which confirms a level of professional access and"
     },
     {
       "a_turn_idx": 5,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"Mia Love is referred to as 'Congresswoman Mia Love' in turn 16; 'her' in turn 14 refers to Mia Love.\",\n  \"reason\": \"Turn 16 states that Congresswoman Mia Love is present at KSL News Radio, which confirms her physical presence at the location. However, this does not explicitly verify the earlier assumption A, which concerns the implied mutual trust or shared understanding in the act of 'letting us know.' While the setting"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"Mia Love is referred to as 'Congresswoman Mia Love' in turn 16; 'her' in turn 14 refers to Mia Love.\",\n  \"reason\": \"Turn 16 states that Congresswoman Mia Love is present at KSL News Radio, which confirms her physical presence at the location where the conversation is taking place. However, this does not explicitly verify the earlier assumption A, which concerns the implied mutual trust or shared understanding in the act of 'letting"
     },
     {
       "a_turn_idx": 5,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Mia Love is referred to as 'her' in turn 16, which resolves to the same individual mentioned in turn 5.\",\n  \"reason\": \"Turn 16 mentions Mia Love describing her experience during a meeting, which aligns with the general idea of her providing information. However, it does not explicitly state or verify the assumption in turn 5—that 'letting us know' implies shared understanding or mutual trust. The focus in turn 16 is on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Mia Love is referred to as 'her' in turn 16, which resolves to the same individual mentioned in turn 5.\",\n  \"reason\": \"Turn 16 mentions Mia Love describing her experience during a meeting, which aligns with the general idea of her sharing insights. However, it does not explicitly state or verify the specific assumption in turn 5—that 'letting us know' implies shared understanding or mutual trust. The claim in turn 16 focuses"
     },
     {
       "a_turn_idx": 5,

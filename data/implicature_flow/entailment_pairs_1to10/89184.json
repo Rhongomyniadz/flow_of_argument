@@ -1,0 +1,27 @@
+{
+  "episode_id": "89184",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 49.464,
+      "a_idx_in_turn": 5,
+      "assumption_text": "Personal credibility increases when one demonstrates deep familiarity with both sides of an issue.",
+      "c_turn_idx": 3,
+      "claim_text": "Effective communication requires knowing both one’s objective and one’s jury.",
+      "overlap_score": 2,
+      "c_time": 783.533,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience of the speaker, consistent with the broader context of persuasive communication addressed to listeners. No ambiguous coreferences exist.\",\n  \"reason\": \"Claim C explicitly states that effective communication requires knowing both one's objective and one's jury, which directly verifies the substance of assumption A—that personal credibility increases when one demonstrates deep familiarity with both sides of an issue. While A emphasizes knowledge of both sides as foundational to credibility, C specifies two"
+    }
+  ]
+}

@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Congressman' in turn 36 refers to Congressman Jim Himes, who is the same individual mentioned in turn 13. The reference is consistent across turns.\",\n  \"reason\": \"Turn 36 mentions Congressman Jim Himes in the context of economic issues, but does not address or verify the specific assumption in turn 13—that it is reasonable to ask him about upcoming House leadership based on his expertise. While Himes is acknowledged as a relevant"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Congressman' in turn 36 refers to Congressman Jim Himes, who is the same individual mentioned in turn 13. The mention of 'Congressman Jim Himes' in turn 36 is linked to economic issues discussed in the conversation.\",\n  \"reason\": \"Turn 36 mentions Congressman Jim Himes in the context of economic issues, particularly inflation and grocery prices, but does not address or verify the specific assumption in turn 13"
     },
     {
       "a_turn_idx": 13,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 35 refers to the Democratic party collectively.\",\n  \"reason\": \"Claim C (turn 35) discusses not sacrificing values in response to political outcomes, which is a general principle about political resilience. However, it does not address or verify the specific assumption A (turn 15), which asserts that local election outcomes are tied to public sentiment on crime and safety. There is no mention of crime, safety, or public"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 35 refers to the Democratic party collectively, not specifically to the speaker of turn 15.\",\n  \"reason\": \"Claim C (turn 35) states that one should not sacrifice values in response to political outcomes, which is a general normative principle. Assumption A (turn 15) claims that local election outcomes are tied to public sentiment on crime and safety—a factual, empirical claim about political behavior."
     },
     {
       "a_turn_idx": 15,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Biden one' in turn 19 refers to a congressional seat associated with President Biden, while turn 22 discusses the overall House majority, not the specific district or candidate.\",\n  \"reason\": \"Turn 22 makes no mention of 'the Biden one' or any reference to a specific district or candidate tied to President Biden. Instead, it discusses the overall closeness of the House race and the likelihood of a narrow majority. This"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the house' in turn 22 refers to the U.S. House of Representatives, consistent with prior discussion about congressional races.\",\n  \"reason\": \"Claim C discusses the likelihood of a narrow majority (one to three seats) in the U.S. House of Representatives, which relates to the broader context of close races in California mentioned in A. However, C does not explicitly address or verify the assumption in A—that audience members will understand 'the"
     },
     {
       "a_turn_idx": 19,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The Biden one' in A refers to a specific congressional seat associated with Biden; C discusses Trump and Republican control of the House and Washington DC power, with no mention of Biden, districts, or audience understanding of references.\",\n  \"reason\": \"Claim C does not address or verify the assumption in A that audience members will understand 'the Biden one' as referring to a specific district or candidate tied to President Biden."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The Biden one' in A refers to a specific congressional seat associated with Biden; C discusses Trump, Republican control of the House, and power in Washington DC.\",\n  \"reason\": \"Claim C does not address or verify the assumption in A that audience members will understand 'the Biden one' as referring to a specific district or candidate linked to President Biden. Instead, C shifts focus entirely to Trump, Republican control of"
     },
     {
       "a_turn_idx": 19,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_01, and 'the Republicans' refers to the Republican Party as discussed in the context of congressional representation.\",\n  \"reason\": \"Claim C explicitly confirms that the Republican Party holds a very slim majority in the House of Representatives, which directly verifies the substance of assumption A—that the term 'independent' pertains to political party affiliation (not organizational status), as seen in the prior discussion about Nathan H"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_01, and 'the Republicans' refers to the Republican Party as the political entity mentioned in turn 21. The term 'slim majority' aligns with the description of a one or two or three seat majority in turn 22.\",\n  \"reason\": \"Claim C explicitly confirms that the Republican Party holds a very slim majority in the relevant political body (the U.S. House of"
     },
     {
       "a_turn_idx": 21,
@@ -1910,8 +1910,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; claim C is unrelated to assumption A.",
-      "reason": "Claim C discusses encouraging firsthand experience of nature, while assumption A concerns the interpretation of 'independent' as referring to political party affiliation. There is no semantic connection between the two statements, and C does not address, verify, or relate to A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses encouraging firsthand experience of nature, while assumption A concerns the interpretation of 'independent' as referring to political party affiliation. There is no semantic connection between the two statements, and C does not address, verify, or relate to A in any way.\"\n}\n```"
+      "reason": "Claim C discusses encouraging firsthand experience of nature, while assumption A concerns the interpretation of 'independent' as referring to political party affiliation. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses encouraging firsthand experience of nature, while assumption A concerns the interpretation of 'independent' as referring to political party affiliation. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 21,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Democratic Party' in turn 34 refers to the same entity as 'Democrats' in prior turns.\",\n  \"reason\": \"Claim C (turn 34) discusses a secure border as a factor in the Democratic Party's political outperformance, while assumption A (turn 21) concerns the meaning of 'independent' in terms of political party affiliation versus organizational status. These topics are unrelated—C does not address, verify,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C does not reference or relate to the term 'independent' or its political party affiliation meaning.\",\n  \"reason\": \"Claim C discusses a secure border as a factor in Democratic political outperformance, which is unrelated to the earlier assumption A about the term 'independent' referring to political party affiliation rather than organizational status. There is no overlap in subject matter, semantics, or logical connection between A and C. Therefore, the claim does not support"
     },
     {
       "a_turn_idx": 22,
@@ -2376,7 +2376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'trumps' in claim C refers to Donald Trump, as established in the context of turn 30 and prior discussion.\",\n  \"reason\": \"Claim C explicitly states that immigration is likely to be at the forefront of Trump's agenda, which directly verifies the substance of assumption A—that immigration is a central ideological priority for Donald Trump and his political allies. The phrasing 'front and center of trumps agenda' in C matches the core idea in A, and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 32 refers to Donald Trump, consistent with the context in turn 30. 'Trump's agenda' is equivalent to 'their core' in turn 30, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that immigration is likely to be at the forefront of Trump's agenda, which directly verifies the substance of assumption A—that immigration is a central ideological priority for Donald Trump and his political allies. The ph"
     },
     {
       "a_turn_idx": 30,

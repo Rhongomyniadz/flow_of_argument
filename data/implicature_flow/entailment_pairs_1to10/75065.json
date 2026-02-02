@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Justine Whetrick, the interviewer, who is a veteran or has a veteran family member as implied by the context. In turn 14, 'Senator' refers to Tina Smith, the subject of the conversation.\",\n  \"reason\": \"Turn 14 does not address or verify the assumption that being a veteran or having a veteran family member is relevant to the discussion. Instead, it continues the conversation about the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Justine Whetrick, the interviewer, who is also the speaker in turn 14. The phrase 'Senator' in turn 14 refers to Tina Smith, consistent with earlier context.\",\n  \"reason\": \"Turn 14 mentions a conversation with the Senator, which aligns with the ongoing dialogue established in turn 1. However, it does not explicitly state or verify the assumption that being a veteran or"
     },
     {
       "a_turn_idx": 2,
@@ -182,11 +182,11 @@
       "claim_text": "Exposure during cleanup resulted in significant radiation exposure.",
       "overlap_score": 3,
       "c_time": 40.154,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'they' in claim C refers to 'U.S. service people' mentioned in turn 2, who participated in the cleanup operations.",
-      "reason": "Claim C explicitly states that exposure during cleanup resulted in significant radiation exposure, which directly verifies the core substance of assumption A—that veterans who cleaned up the Marshall Islands in the 1970s were exposed to dangerous radiation. This supports the justification for compensation, making the connection clear and explicit.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'U.S. service people' mentioned in turn 2, who participated in the cleanup operations.\",\n  \"reason\": \"Claim C explicitly states that exposure during cleanup resulted in significant radiation exposure, which directly verifies the core substance of assumption A—that veterans who cleaned up the Marshall Islands in the 1970s were exposed to dangerous radiation. This supports the justification for compensation, making the connection clear and explicit.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'U.S. service people' mentioned in turn 2, who participated in the cleanup operations.\",\n  \"reason\": \"Claim C explicitly states that exposure during cleanup resulted in significant radiation exposure, which directly verifies the core substance of assumption A—that veterans who cleaned up the Marshall Islands in the 1970s were exposed to dangerous radiation. This supports the justification for compensation, making the claim a clear and direct verification of"
     },
     {
       "a_turn_idx": 2,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'U.S. service people' refers to veterans involved in cleanup, consistent across turns.\",\n  \"reason\": \"Claim C states that nuclear tests occurred on the Marshall Islands from the late 1940s through the 1950s, which is factual background information. However, it does not address or verify the substantive assumption in A—that there is a clear connection between participation in the cleanup and subsequent health risks warranting compensation. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'U.S. service people' refers to veterans involved in cleanup, consistent across turns.\",\n  \"reason\": \"Claim C states a factual detail about nuclear tests on the Marshall Islands (late 1940s through 1950s), which is background information supporting the broader context of the cleanup. However, it does not address or verify the specific assumption A, which concerns a causal link between cleanup participation and subsequent health risks warranting compensation"
     },
     {
       "a_turn_idx": 2,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these veterans' in turn 7 refers back to 'service people' who cleaned up the Marshall Islands in the 1970s, as established in turn 3.\",\n  \"reason\": \"Claim C explicitly states that veterans involved in cleanup operations would be made eligible for the same benefits provided by the Radiation Exposure Compensation Act, directly verifying the substance of assumption A, which asserts that radiation exposure from cleanup activities constitutes a legitimate basis for disability and healthcare benefits."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these veterans' in turn 7 refers back to 'service people who went on to the Marshall Islands and cleaned up the radioactive debris' mentioned in turn 3.\",\n  \"reason\": \"Claim C explicitly states that veterans involved in cleanup operations would be made eligible for the same benefits provided by the Radiation Exposure Compensation Act, directly verifying the substance of assumption A, which asserts that radiation exposure from cleanup activities constitutes a legitimate basis for disability and healthcare benefits. The phrasing"
     },
     {
       "a_turn_idx": 3,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these veterans' in turn 7 refers back to 'veterans who participated in post-test cleanup' mentioned in turn 3.\",\n  \"reason\": \"Claim C explicitly states that making cleanup veterans eligible for benefits would result in them receiving the same advantages as other veterans covered under the Act. This directly verifies the core substance of assumption A, which asserts that cleanup veterans deserve recognition and support equivalent to those directly involved in test operations. The phrasing 'same benefits"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these veterans' in turn 7 refers back to 'veterans who participated in post-test cleanup' mentioned in turn 3.\",\n  \"reason\": \"Claim C explicitly states that making cleanup veterans eligible for benefits would result in them receiving the same advantages as other veterans covered under the Act, which directly verifies the substance of assumption A—that cleanup veterans deserve recognition and support equivalent to those directly involved in test operations. The phrasing 'same benefits' and 'eligible"
     },
     {
       "a_turn_idx": 3,
@@ -681,7 +681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 11 refers to the funding source for existing benefits for atomic veterans, which is linked to the broader context of the Radiation Compensation Act benefits mentioned in turn 7.\",\n  \"reason\": \"Claim C discusses the funding sources (VA and DoD) for existing atomic veteran benefits, which indirectly relates to the eligibility expansion proposed in assumption A. However, C does not explicitly state or verify that the current eligibility criteria exclude cleanup veterans or that they"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 11 refers to the funding source for existing benefits for atomic veterans, which is linked to the broader context of the Radiation Exposure Compensation Act mentioned in turn 7.\",\n  \"reason\": \"Claim C discusses the funding sources (VA and DoD) for existing benefits for atomic veterans, which indirectly relates to the idea that cleanup veterans should be included in those benefits. However, C does not explicitly state or verify the core assumption in A—that"
     },
     {
       "a_turn_idx": 7,

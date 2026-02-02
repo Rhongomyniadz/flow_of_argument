@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 1 refers to the announcement mentioned in turn 0, specifically the idea of announcing a new newsletter.\",\n  \"reason\": \"Claim C explicitly states that singing could be appropriate for announcements, which directly verifies the assumption in A that it is appropriate to ask someone directly about announcements in a conversational setting—particularly when considering alternative formats like singing. The context shows that the speaker entertains the idea of singing as a form of announcement, thereby validating"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 1 refers to the announcement mentioned in turn 0, specifically the idea of announcing a new newsletter.\",\n  \"reason\": \"Turn 1 explicitly questions whether the announcement should be sung, which directly addresses and verifies the appropriateness of using singing as a method for announcements—thus making the earlier assumption (that it's appropriate to ask about announcements directly) more explicit by exploring alternative forms of delivery. The claim strongly aligns with and verifies"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the 'first most effective thing' mentioned in the prior discussion, which is not directly linked to the newsletter or shared context in turn 0.\",\n  \"reason\": \"Turn 14 discusses guessing the first most effective thing based on an economist report, which is unrelated to the expectation about the newsletter's connection to a shared context. While both turns involve speculation, the subject matter shifts from the newsletter and its relevance to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the 'first most effective thing' mentioned in the context, which is not directly linked to the newsletter or shared context in turn 0.\",\n  \"reason\": \"Turn 14 discusses guessing the first most effective thing based on an economist report, which is unrelated to the expectation about the newsletter's connection to a shared context. While both turns involve speculation, the subject matter shifts significantly. There is no explicit or implicit"
     },
     {
       "a_turn_idx": 1,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our friends in the United States' in claim A refers to 'people in the United States' in claim C. 'Earth Day' is consistently referenced across both claims.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that people in the United States consider Earth Day a very significant day, which directly aligns with A's assertion that Earth Day is recognized as a significant annual event focused on environmental awareness. The phrasing is nearly identical"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our friends in the United States' in claim A refers to 'people in the United States' in claim C. 'Earth Day' is the shared subject in both claims.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that people in the United States consider Earth Day a very significant day, which directly matches the core idea in A that Earth Day is recognized as a significant annual event focused on environmental awareness, particularly in the U.S"
     },
     {
       "a_turn_idx": 4,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_08, who is the same speaker as in turn 6. The phrase 'Earth Day promotion function' directly aligns with the cultural significance implied in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker obtained a job in the Earth Day promotion function, which directly verifies the idea that Earth Day holds cultural significance in the United States—specifically, that it is recognized enough to warrant organized"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_08, who is the same speaker as in turn 6. 'Earth Day promotion function' is a clear reference to the cultural and organizational significance of Earth Day in the U.S., aligning with assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker obtained a job in the Earth Day promotion function, which directly verifies the idea that Earth Day holds cultural significance in the United States—specific"
     },
     {
       "a_turn_idx": 5,
@@ -707,11 +707,11 @@
       "claim_text": "China does not want to be perceived as acting on climate change due to pressure from the United States.",
       "overlap_score": 2,
       "c_time": 655.093,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses China's perception of climate action in relation to U.S. influence, while assumption A concerns Earth Day's cultural significance in the U.S.\",\n  \"reason\": \"Claim C discusses China's strategic positioning regarding climate action and its desire to avoid appearing responsive to U.S. pressure. This is unrelated to the cultural significance of Earth Day in the United States, which is the focus of assumption A. There is no overlap in semantic content between A"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'China' and 'the US' are clear referents.",
+      "reason": "Claim C discusses China's desire to avoid appearing pressured by the US in climate action, which is unrelated to assumption A, which asserts Earth Day's cultural significance in the United States. There is no overlap in semantic content between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' and 'the US' are clear referents.\",\n  \"reason\": \"Claim C discusses China's desire to avoid appearing pressured by the US in climate action, which is unrelated to assumption A, which asserts Earth Day's cultural significance in the United States. There is no overlap in semantic content between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 25 refers to China's announcement of climate action, which is linked to the broader context of international climate engagement discussed in turn 8.\",\n  \"reason\": \"Turn 25 discusses China's potential motivation for announcing climate action in response to U.S. policy shifts, which relates to the idea of large-scale international gatherings signaling commitment to climate change. However, it does not explicitly state or verify the core claim in turn 8—that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 25 refers to China's announcement of climate action, which is linked to the broader context of international climate engagement discussed in turn 8.\",\n  \"reason\": \"Claim C discusses China's potential motivation for announcing climate action in response to U.S. policy shifts, which relates to the broader theme of international gatherings signaling commitment to climate change. However, C does not explicitly state or verify the core assumption in A—that large-scale international gatherings themselves"
     },
     {
       "a_turn_idx": 8,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the Kigali Amendment, as established in the context. 'They' in turn refers to China and the US, who are the subjects of the ratification event described.\",\n  \"reason\": \"Claim C explicitly states that ratifying and implementing the Kigali Amendment is a major contribution to climate mitigation, which directly verifies the substance of assumption A—that the Kigali Amendment is a significant environmental agreement worth discussing on national media"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the Kigali Amendment, as established in the context. 'They' in turn refers to China and the US, who are discussed as ratifying the amendment.\",\n  \"reason\": \"Claim C explicitly states that ratifying and implementing the Kigali Amendment is a major contribution to climate mitigation, which directly verifies the substance of assumption A—that the Kigali Amendment is a significant environmental agreement worth discussing on national media. The"
     },
     {
       "a_turn_idx": 9,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the Montreal Protocol (context from turn 11). The speaker in turn 14 is referring to the economist report's ranking of the Montreal Protocol as second most effective.\",\n  \"reason\": \"Turn 14 does not address or verify the assumption in turn 13 about reducing scope increasing feasibility. Instead, it shifts focus to ranking effectiveness of policies and invites a guess about the top-ranked one. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the Montreal Protocol (context from turn 13). The speaker (SPEAKER_06) is referring to the report's ranking of the Montreal Protocol as second most effective.\",\n  \"reason\": \"Turn 14 does not state or verify the assumption that reducing scope increases feasibility. Instead, it introduces a new claim about effectiveness rankings and invites a guess about the top-ranked policy. While the context implies a"
     },
     {
       "a_turn_idx": 13,

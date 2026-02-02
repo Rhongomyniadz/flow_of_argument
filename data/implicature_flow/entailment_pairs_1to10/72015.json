@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the fossil fuel industry, which is the subject of the earlier assumption A regarding document releases from powerful industries like fossil fuels.\",\n  \"reason\": \"Claim C discusses re-instituting the export ban on fossil fuels as a solution to national security concerns, which aligns with the core idea in assumption A that documents from powerful fossil fuel industries carry significant public interest. While C does not explicitly mention document releases, it reinforces the importance of"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the fossil fuel industry, which is the subject of the earlier assumption A. 'Fossil fuels' in C corresponds to 'powerful industries like fossil fuels' in A.\",\n  \"reason\": \"Claim C explicitly discusses the national security implications of fossil fuel dependence, which aligns with the public interest concern raised in assumption A. While C does not directly state that document releases from fossil fuel industries carry public interest, it strongly verifies"
     },
     {
       "a_turn_idx": 1,
@@ -185,8 +185,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'it' in claim C refers to nationalizing the fossil fuel industry.",
-      "reason": "Claim C states opposition to nationalizing the fossil fuel industry, which is unrelated to assumption A, which asserts that environmental claims by fossil fuel companies are performative and not indicative of genuine sustainability efforts. There is no semantic connection between opposing nationalization and the performative nature of green claims. Thus, C does not verify, support, or relate to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'it' in claim C refers to nationalizing the fossil fuel industry.\",\n  \"reason\": \"Claim C states opposition to nationalizing the fossil fuel industry, which is unrelated to assumption A, which asserts that environmental claims by fossil fuel companies are performative and not indicative of genuine sustainability efforts. There is no semantic connection between opposing nationalization and the performative nature of green claims. Thus, C does not verify, support, or relate to A.\"\n}"
+      "reason": "Claim C states opposition to nationalizing the fossil fuel industry, which is unrelated to assumption A, which concerns the performative nature of environmental claims by fossil fuel companies. There is no semantic connection between opposing nationalization and asserting that green claims are insincere. Thus, C does not verify, support, or relate to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'it' in claim C refers to nationalizing the fossil fuel industry.\",\n  \"reason\": \"Claim C states opposition to nationalizing the fossil fuel industry, which is unrelated to assumption A, which concerns the performative nature of environmental claims by fossil fuel companies. There is no semantic connection between opposing nationalization and asserting that green claims are insincere. Thus, C does not verify, support, or relate to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to fossil fuel companies. In turn 26, 'big oil' is used, which aligns with the same referent.\",\n  \"reason\": \"Turn 26 discusses nationalization and export bans as solutions to national security concerns, but does not address or verify the claim that environmental claims by fossil fuel companies are performative or insincere. While both turns critique fossil fuel companies, the specific assumption in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 5 refers to fossil fuel companies. In turn 26, 'the big oil' and 'our own big oil companies' refer to the same group, maintaining continuity.\",\n  \"reason\": \"Turn 26 discusses nationalization and export bans as solutions to national security concerns related to fossil fuel dependence, but does not address or verify the claim that environmental claims by fossil fuel companies are performative or insincere. While both turns"
     },
     {
       "a_turn_idx": 5,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big oil companies' in turn 9 refers back to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Claim C explicitly states that big oil companies fund research at universities and nonprofits, which directly verifies the substance of assumption A—that big oil companies are powerful entities capable of influencing outcomes through coercion. The act of funding research to shape narratives and create the appearance of objectivity constitutes a form of coercive influence, aligning with A’s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big oil companies' in turn 9 refers back to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Claim C explicitly states that big oil companies fund research at universities and nonprofits, which directly verifies the substance of assumption A—that big oil companies are powerful entities capable of influencing outcomes through coercion. The act of funding research to shape narratives and create the appearance of objectivity constitutes a form of coercive influence, aligning with the core"
     },
     {
       "a_turn_idx": 7,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the subject of turn 7. 'Big oil companies' is the same entity discussed throughout the context.\",\n  \"reason\": \"Turn 15 explicitly states the speaker's concern about the 'lack of honesty' from big oil companies, which directly verifies the assumption in turn 7 that these companies are powerful entities capable of influencing outcomes through coercion—particularly via deceptive practices"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the subject of turn 7. 'Big oil companies' is the same entity discussed throughout the context.\",\n  \"reason\": \"Turn 15 explicitly states the speaker's concern about the 'lack of honesty' from big oil companies, which directly verifies the assumption in turn 7 that these companies are powerful entities capable of influencing outcomes through coercion—specifically via deceptive"
     },
     {
       "a_turn_idx": 7,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 29 refers to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Turn 29 mentions that big oil companies in Europe are paying windfall profit taxes, indicating recognition of their financial power and ability to generate massive profits. However, it does not explicitly state or verify the claim from turn 7 that big oil companies are powerful entities capable of influencing outcomes through coercion. While the mention of government action against"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 29 refers to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Turn 29 mentions that big oil companies in Europe are paying windfall profit taxes, indicating recognition of their financial power and ability to generate massive profits. However, it does not explicitly state or verify the claim from turn 7 that big oil companies are powerful entities capable of influencing outcomes through coercion. While the mention of profits and government"
     },
     {
       "a_turn_idx": 7,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big oil companies' in turn 15 refers back to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Claim C states that the internal goals of big oil companies directly contradict efforts to improve energy efficiency, which aligns with assumption A’s assertion that big oil companies are powerful entities capable of influencing outcomes through coercion. While C does not explicitly mention coercion, it confirms the adversarial stance of big oil companies toward environmental progress—im"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big oil companies' in turn 15 refers back to 'big oil companies' mentioned in turn 7.\",\n  \"reason\": \"Claim C states that the internal goals of big oil companies directly contradict efforts to improve energy efficiency, which aligns with assumption A’s assertion that big oil companies are powerful entities capable of influencing outcomes through coercion. While C does not explicitly mention coercion, it confirms the adversarial stance of these companies toward environmental progress—imply"
     },
     {
       "a_turn_idx": 7,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the subject of turn 7. 'These big oil companies' in turn 15 clearly refers back to the same entities discussed in turn 7.\",\n  \"reason\": \"Turn 15 explicitly states that big oil companies are prioritizing profit over emissions, which directly verifies the core claim in turn 7 that big oil companies are powerful entities capable of influencing outcomes through"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the subject of turn 7. 'Their' in turn 15 refers to the same companies.\",\n  \"reason\": \"Turn 15 explicitly states that big oil companies are prioritizing profit over emissions, which directly verifies the core assumption in turn 7 that these companies are powerful entities capable of influencing outcomes through coercion. While turn 7 focuses on coercive behavior"
     },
     {
       "a_turn_idx": 7,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker opposes nationalizing the fossil fuel industry, while assumption A (turn 7) concerns the ethical implications of achieving success through bullying. These are entirely different topics: A focuses on unethical tactics undermining legitimacy, whereas C addresses a policy proposal (nationalization) and the speaker's opposition to it. There is no semantic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker opposes nationalizing the fossil fuel industry, while assumption A (turn 7) asserts that success achieved via bullying undermines legitimate or ethical processes. These statements address entirely different concepts—C is about policy solutions (nationalization), while A concerns unethical tactics (bullying). There is no semantic connection between opposing nationalization"
     },
     {
       "a_turn_idx": 7,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the referent of 'big oil' in turn 7.\",\n  \"reason\": \"Turn 15 explicitly states concern about the 'lack of honesty' from 'big oil companies', directly verifying the assumption in turn 7 that these entities are recognized as having negative influence through deceptive practices. The claim in turn 15 expands on the nature of that influence—"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the referent of 'big oil' in turn 7.\",\n  \"reason\": \"Turn 15 explicitly states concern about the 'lack of honesty' from 'big oil companies', which directly verifies the assumption in turn 7 that the speaker expects the listener to recognize 'big oil' as a recognizable entity with negative influence—specifically, one engaged in deceptive"
     },
     {
       "a_turn_idx": 7,
@@ -1026,7 +1026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 26 refers to SPEAKER_04, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker does not support nationalizing the fossil fuel industry, which is unrelated to assumption A (turn 8), which concerns corporate motives in university funding being strategic rather than altruistic. There is no overlap in subject matter or logical connection between the two statements. Thus, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 26 refers to SPEAKER_04, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker does not support nationalizing the fossil fuel industry, which is unrelated to assumption A (turn 8), which concerns corporate motives in university funding being strategic rather than altruistic. There is no overlap in subject matter or logical connection. Thus, C neither supports nor verifies"
     },
     {
       "a_turn_idx": 8,
@@ -1161,7 +1161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the context of funding and influence discussed in turn 10.\",\n  \"reason\": \"Claim C expresses concern about the lack of honesty from big oil companies, which relates to the broader issue of transparency in funding mentioned in assumption A. However, C focuses on corporate deception and public representation rather than explicitly addressing institutional transparency about funding sources at universities. While there is a thematic connection"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to 'big oil companies', which is consistent with the context of funding and influence discussed in turn 10.\",\n  \"reason\": \"Claim C expresses concern about the lack of honesty from big oil companies, which relates to the broader theme of transparency in funding. However, it does not explicitly address the specific assumption in A—that universities lack transparency about their funding sources. While the concern about corporate deception is thematically related,"
     },
     {
       "a_turn_idx": 10,
@@ -1341,7 +1341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 26 refers to SPEAKER_02, who explicitly states opposition to nationalizing the fossil fuel industry.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker does not support nationalizing the fossil fuel industry, which contradicts the implication in assumption A (turn 12) that certain research is vulnerable to influence—particularly when funded by fossil fuel interests. However, C does not address or verify the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 26 refers to SPEAKER_02, consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker does not support nationalizing the fossil fuel industry, which contradicts the implication in assumption A that certain research (e.g., on carbon and climate) is vulnerable to influence due to funding sources. There is no direct or indirect connection between opposing nationalization and the belief that some research is more vulnerable"
     },
     {
       "a_turn_idx": 12,
@@ -1386,7 +1386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 13 refers to 'companies' (big oil companies), and 'it' refers to the 'bridge fuel' narrative. In turn 26, 'nationalizing the fossil fuel industry' is discussed as a potential solution to national security, but no mention is made of the 'bridge fuel' narrative or companies relying on it to justify fossil fuel investment.\",\n  \"reason\": \"Claim C discusses nationalization and export bans as solutions to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 13 refers to 'companies' (big oil companies), and 'it' refers to the 'bridge fuel' narrative. In turn 26, 'nationalizing the fossil fuel industry' is discussed as a potential solution to national security, but no mention is made of the 'bridge fuel' narrative or corporate justification for fossil fuel investment.\",\n  \"reason\": \"Claim C discusses nationalization and export bans as solutions to national security concerns"
     },
     {
       "a_turn_idx": 13,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'nationalizing the fossil fuel industry' as a proposed solution; SPEAKER_02 explicitly rejects this idea in turn 26 ('I'm not for nationalizing it').\",\n  \"reason\": \"Claim C (turn 26) explicitly rejects nationalization of the fossil fuel industry, which is unrelated to assumption A (turn 15). Assumption A concerns moral acceptability of companies admitting they don't care about climate change"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'nationalizing the fossil fuel industry' as a proposed solution; SPEAKER_02 responds with 'I'm not for nationalizing it,' which directly contradicts the moral acceptability of taking a stance that aligns with such a policy.\",\n  \"reason\": \"Assumption A claims it is morally acceptable for companies to admit they do not care about climate change if that reflects their true priorities. Claim C explicitly rejects nationalization, which implies"
     },
     {
       "a_turn_idx": 15,
@@ -1941,7 +1941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is the subject of the claim. No other coreference issues.\",\n  \"reason\": \"Claim C states that the speaker does not support nationalizing the fossil fuel industry, which contradicts the assumption in A that the government has the power or responsibility to enable behavior (such as regulating or restructuring the fossil fuel sector). A implies governmental agency in shaping industry behavior, while C explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is the subject of the claim. No other coreference issues.\",\n  \"reason\": \"Claim C states that the speaker does not support nationalizing the fossil fuel industry, which contradicts the idea that the government should take control of such industries. Assumption A posits that enabling behavior (i.e., allowing fossil fuel dominance) is within the government's power or responsibility."
     },
     {
       "a_turn_idx": 17,
@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 21 refers to the government or relevant authorities, as established by prior context involving EPA, DOJ, and legislative bodies.\",\n  \"reason\": \"Claim C states that some news coverage is already occurring, which is a peripheral observation about media activity. However, it does not address or verify the core idea in assumption A—that the government has agency in shaping outcomes. While news coverage may indirectly relate to governmental action, it does not confirm or explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 21 refers to the government or relevant authorities, as established by prior context involving EPA, Congress, and the White House.\",\n  \"reason\": \"Claim C states that some news coverage is already occurring, which is a tangential observation about media attention. However, it does not address or verify the core idea in assumption A—that the government has agency in shaping outcomes. While news coverage may relate to governmental actions, C does not assert or"
     },
     {
       "a_turn_idx": 17,
@@ -1986,7 +1986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to API and big oil, as established in the prior sentence. 'Rules' refers back to the methane emission regulations mentioned in turn 18.\",\n  \"reason\": \"Claim C explicitly states that there were previously rules requiring penalties for methane emissions, which directly verifies the substance of assumption A—that regulating methane emissions would reduce the viability of gas as an energy source—by confirming the existence and subsequent removal of such rules. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to API and big oil, as established in the context of lobbying efforts against methane rules.\",\n  \"reason\": \"Claim C explicitly states that there were previously rules requiring penalties for methane emissions, which directly verifies the substance of assumption A—that regulating methane emissions would reduce the viability of gas as an energy source—by implying that such regulations were once in place and removed due to industry pressure. The connection is clear and direct, with"
     },
     {
       "a_turn_idx": 18,
@@ -2016,7 +2016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is distinct from the assumption in turn 18 about fossil fuel companies influencing regulation.\",\n  \"reason\": \"Claim C states that nationalizing the fossil fuel industry is not acceptable, which does not address or verify the assumption that fossil fuel companies have influence over regulatory decisions. Instead, it presents a different policy stance. There is no explicit or implicit confirmation of the influence assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is distinct from the assumption in turn 18 about fossil fuel companies influencing regulation.\",\n  \"reason\": \"Claim C (turn 26) expresses opposition to nationalizing the fossil fuel industry, which is unrelated to the assumption in A (turn 18) that fossil fuel companies influence regulatory decisions. While both relate to fossil fuel industry power, C does not state"
     },
     {
       "a_turn_idx": 18,
@@ -2031,7 +2031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to fossil fuel companies, which is consistent with the discussion in turn 26 about big oil companies and their influence on national security and energy policy.\",\n  \"reason\": \"Turn 26 discusses nationalization and export bans as solutions to national security concerns related to fossil fuels, implying that fossil fuel companies currently hold significant power over energy policy and national security decisions. However, it does not explicitly state or verify the claim that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to fossil fuel companies, which is consistent with the discussion in turn 26 regarding big oil companies and their influence on national security and energy policy.\",\n  \"reason\": \"Turn 26 discusses nationalization and export bans as solutions to national security concerns related to fossil fuel dependence, implying that fossil fuel companies currently hold significant power over energy policy and national security decisions. However, it does not explicitly state or verify the claim"
     },
     {
       "a_turn_idx": 18,
@@ -2121,7 +2121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is distinct from the idea in turn 18 about policy changes constraining industry narratives.\",\n  \"reason\": \"Turn 18 asserts that policy changes (e.g., EPA regulations, Clean Air Act interpretations) can constrain fossil fuel industry narratives by limiting their ability to promote gas as a solution. Turn 26 explicitly rejects nationalization as a solution, which is unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is the subject of the claim. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 26) states that the speaker does not support nationalizing the fossil fuel industry, which directly contradicts the idea that policy changes can constrain fossil fuel industry narratives by fundamentally altering ownership or control. Assumption A suggests that policy tools (like EPA regulations) can"
     },
     {
       "a_turn_idx": 18,
@@ -2136,7 +2136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the fossil fuel industry. In turn 26, 'nationalizing the fossil fuel industry' is discussed as a proposed solution to national security concerns, but it does not address or verify the idea that policy changes can constrain the industry's narratives.\",\n  \"reason\": \"Turn 26 introduces a new proposal—nationalization—as a solution to national security, but it does not explicitly or implicitly confirm the earlier assumption that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the fossil fuel industry. In turn 26, 'nationalizing the fossil fuel industry' is discussed as a proposed solution to national security concerns, but it does not address or verify the idea that policy changes can constrain the industry's narratives.\",\n  \"reason\": \"Turn 26 introduces a new proposal—nationalization—as a solution to national security, but it does not explicitly or implicitly confirm or verify the earlier"
     },
     {
       "a_turn_idx": 18,
@@ -2166,7 +2166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the fossil fuel industry, which aligns with the subject of assumption A. 'Gas pricing' is linked to the broader discussion of policy impacts on industry narratives.\",\n  \"reason\": \"Claim C states that the industry claims gas pricing is solely due to environmental policy, which reflects a strategic narrative that contradicts the idea that the industry controls pricing. This relates to assumption A, which posits that policy changes can constrain such narratives."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the fossil fuel industry, which aligns with the subject of assumption A.\",\n  \"reason\": \"Claim C states that the industry claims gas pricing is solely due to environmental policy, which reflects a narrative that contradicts the idea that the industry has control over pricing. This relates to assumption A, which posits that policy changes can constrain such narratives. However, C does not explicitly state or verify that policy changes can limit the industry"
     },
     {
       "a_turn_idx": 18,
@@ -2181,7 +2181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to US fossil fuel companies, consistent with the context of corporate influence and policy resistance discussed in turn 18.\",\n  \"reason\": \"Claim C states that in the US, some believe climate policy can be stopped or delayed by ten years, which directly reflects the idea in assumption A that policy changes can constrain fossil fuel industry narratives. While C does not explicitly state that policy changes can constrain narratives, it implies that such constraints"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to US fossil fuel companies, consistent with the context of corporate influence and policy resistance discussed in turn 18.\",\n  \"reason\": \"Claim C states that in the US, some believe climate policy can be stopped or delayed by ten years, which directly reflects the idea in assumption A that policy changes can constrain fossil fuel industry narratives—specifically, that such industries actively resist or delay climate policy. While C does not explicitly"
     },
     {
       "a_turn_idx": 19,
@@ -2226,7 +2226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to 'big oil companies' mentioned in turn 29, which aligns with the subject of advertising influence in turn 19.\",\n  \"reason\": \"Claim C states that Super PACs exist and can operate within the political system, which directly supports the idea that corporate influence—specifically through financial contributions—can shape political decisions, as implied in assumption A. While C does not explicitly mention 'advertising campaigns"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to 'big oil companies' mentioned in turn 29, which aligns with the subject of advertising influence in turn 19.\",\n  \"reason\": \"Claim C states that Super PACs exist and can operate within the political system, which directly supports the idea that advertising campaigns (via Super PACs) can influence political decisions at the congressional level—exactly the substance of assumption A. While C does not explicitly"
     },
     {
       "a_turn_idx": 19,
@@ -2256,7 +2256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 35, 'they' refers to oil companies, which aligns with the context of big oil and fossil fuel companies mentioned in turn 19.\",\n  \"reason\": \"Claim C states that having less methane regulation is a First Amendment right, which touches on the idea of corporate speech related to policy, but it does not explicitly affirm or verify the audience's recognition of methane regulation's significance and policy implications as stated in assumption A. While C discusses corporate influence and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to oil companies, as established in the prior context (turn 34). The phrase 'less methane regulation' directly references the policy issue discussed in turn 19.\",\n  \"reason\": \"Claim C (turn 35) mentions the idea that oil companies have a First Amendment right to advocate for less methane regulation, which touches on the topic of methane regulation introduced in assumption A. However, A asserts that audience"
     },
     {
       "a_turn_idx": 20,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 31 refers to 'big oil companies' mentioned in prior turns.\",\n  \"reason\": \"Claim C discusses introducing alternative products to reduce the cost of existing ones like cars, which is unrelated to the assumption A that the EPA has discretionary authority under existing laws like the Clean Air Act. While both relate to energy policy and fossil fuels, C does not state, verify, or even reference the EPA's authority. The topic shifts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 31 refers to 'big oil companies' mentioned in prior turns.\",\n  \"reason\": \"Claim C (turn 31) discusses introducing alternative products to reduce the cost of existing ones like cars, which is unrelated to the earlier assumption A (turn 20) that the EPA has discretionary authority under existing laws like the Clean Air Act. While both relate to environmental regulation and fossil fuels, C does not state,"
     },
     {
       "a_turn_idx": 20,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 25 refers to the U.S. government and policymakers, particularly the administration and Congress, consistent with the context of regulatory authority and political control mentioned in turn 20.\",\n  \"reason\": \"Claim C discusses the urgency of addressing energy dependency due to geopolitical instability (e.g., Ukraine), which indirectly relates to political influence on energy policy. However, it does not explicitly state or verify the assumption that EPA regulatory actions are responsive to shifts"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 25 refers to the U.S. government and policymakers, consistent with the broader context of regulatory and political action. 'Petrostates' refers to oil-exporting nations like Russia, Saudi Arabia, and Venezuela.\",\n  \"reason\": \"Claim C discusses the urgency of reducing energy dependency due to geopolitical instability (e.g., Ukraine), which relates to the broader theme of political influence on energy policy. However, it does not explicitly address or"
     },
     {
       "a_turn_idx": 20,
@@ -2301,7 +2301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', and 're-instituting the export ban' is presented as a separate suggestion. The claim in C does not directly address or verify the hierarchy of regulatory methods implied in A.\",\n  \"reason\": \"Claim C discusses re-instituting an export ban as a national security solution, which touches on policy approaches to fossil fuels but does not explicitly state or verify the existence of a"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by the prior discussion about oil companies and their influence. 'Nationalizing the fossil fuel industry' and 're-instituting the export ban' are presented as alternative solutions to national security concerns.\",\n  \"reason\": \"Claim C mentions re-instituting the export ban as a potential solution to national security issues, which relates to the broader concern of dependency on fossil fuels. However,"
     },
     {
       "a_turn_idx": 20,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to US-based oil companies, as established in the prior context discussing corporate influence in US politics.\",\n  \"reason\": \"Claim C discusses a contrast between Europe and the US regarding acceptance of climate policy, suggesting that in Europe, climate policy is widely accepted as inevitable, while in the US, there remains resistance or attempts to delay it. This touches on the broader idea of differing attitudes toward policy inevitability, which relates to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 32 refers to US-based oil companies, as established in the prior context discussing corporate influence in US politics.\",\n  \"reason\": \"Claim C discusses a contrast between Europe and the US regarding acceptance of climate policy, suggesting that in Europe, climate policy is seen as inevitable, while in the US, there remains resistance or attempts to delay it. This touches on the broader idea of differing attitudes toward policy implementation, but it does not explicitly address"
     },
     {
       "a_turn_idx": 20,
@@ -2346,7 +2346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by context. 'Nationalizing the fossil fuel industry' is the subject of the claim.\",\n  \"reason\": \"Turn 21 expresses an assumption that the report contains significant or impactful information, particularly regarding oil companies' influence and potential policy responses. Turn 26 explicitly rejects nationalization of the fossil fuel industry as a solution, which is unrelated to the substance of A. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as clarified by context in turns 25–27.\",\n  \"reason\": \"Claim C states that the speaker opposes nationalizing the fossil fuel industry, which contradicts the assumption in A that the report contains significant or impactful information. There is no indication in C that the speaker believes the report’s content is impactful; rather, C focuses on rejecting a policy proposal (nationalization) unrelated"
     },
     {
       "a_turn_idx": 21,
@@ -2496,7 +2496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to 'big oil companies', which is the subject of claim C in turn 34.\",\n  \"reason\": \"Claim C states that oil companies are making a nuanced free speech argument in court, which reflects their strategic communication tactics. This aligns with assumption A, which posits that powerful entities like oil companies strategically frame public discourse—here, through legal arguments to influence policy. While C does not explicitly state that this"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to 'big oil companies', which is the subject of turn 34's claim about oil companies making a free speech argument.\",\n  \"reason\": \"Claim C (turn 34) explicitly discusses oil companies engaging in strategic legal arguments, which aligns with the assumption in A (turn 23) that powerful entities like oil companies strategically frame public attention—here, through a legal defense rooted in free speech."
     },
     {
       "a_turn_idx": 23,
@@ -2541,7 +2541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big old companies' in turn 31 refers to 'oil companies' mentioned in turn 23. 'They' in turn 30 also refers to oil companies.\",\n  \"reason\": \"Claim C explicitly states that oil companies have made substantial profits during periods of high oil prices, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally—by demonstrating their financial power and ability to operate during volatile"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these big old companies' in turn 31 refers to 'oil companies' mentioned in turn 23. 'They' in turn 30 also refers to oil companies.\",\n  \"reason\": \"Claim C explicitly states that oil companies have made substantial profits during periods of high oil prices, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally—by demonstrating their financial power and ability to act strategically during"
     },
     {
       "a_turn_idx": 23,
@@ -2556,7 +2556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'big oil' in turn 23 refers to 'oil companies' mentioned earlier in the conversation. In turn 24, 'big oil' is explicitly linked to 'record profits', directly verifying the claim about their capacity and influence.\",\n  \"reason\": \"Claim C explicitly states that Sheldon Whitehouse and the speaker have demonstrated that 'big oil' is having record profits, which directly verifies the assumption in A that oil companies have the capacity and influence to shape"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'big oil' in turn 23 refers to oil companies, and 'big oil' in turn 24 is a clear referent to the same entity, establishing coreference.\",\n  \"reason\": \"Claim C explicitly states that Sheldon Whitehouse and the speaker have demonstrated that big oil is having record profits, which directly verifies the assumption in A that oil companies have the capacity and influence to shape public discourse intentionally—by highlighting their financial power and ability to manipulate"
     },
     {
       "a_turn_idx": 23,
@@ -2616,7 +2616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 29 refers to 'big oil companies' mentioned in turn 23.\",\n  \"reason\": \"Claim C states that European governments recognize big oil companies are making huge profits, which directly supports the idea that these companies have the capacity and influence to shape public discourse—specifically, by maintaining narratives that obscure their profitability. While C does not explicitly state that oil companies intentionally shape discourse, it confirms their financial power and the fact that"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 29, 'these companies' refers to 'big oil companies' mentioned in turn 23. 'They' in turn 30 refers to the same entities.\",\n  \"reason\": \"Claim C states that European governments recognize big oil companies are making huge profits, which directly supports the idea that oil companies have the capacity and influence to shape public discourse—specifically, by enabling such recognition in Europe despite their efforts elsewhere. While C does not explicitly state that"
     },
     {
       "a_turn_idx": 23,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'oil companies' mentioned in assumption A, which is consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that oil companies should not be allowed to make false representations about climate-related topics to investors or the public, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally. The claim goes further by asserting that such actions constitute misrepresentation, thereby confirming both the intentional"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'oil companies' mentioned in assumption A, which is consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that oil companies should not be allowed to make false representations about climate-related topics to investors or the public, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally. The claim goes further by asserting that such actions constitute misrepresentation, thereby confirming the intentional manipulation"
     },
     {
       "a_turn_idx": 23,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'oil companies', which is consistent with the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that oil companies are making a nuanced free speech argument in court, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally. The claim demonstrates intentional strategic action (legal argumentation) aimed at influencing policy and public perception, confirming both the capability and deliberate effort implied in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'oil companies', which is consistent with the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that oil companies are making a nuanced free speech argument in court, which directly verifies the substance of assumption A—that oil companies have the capacity and influence to shape public discourse intentionally. The claim demonstrates intentional strategic action (legal argumentation) aimed at influencing policy and public perception, confirming both the capability and deliberate effort described in"
     },
     {
       "a_turn_idx": 23,
@@ -2706,7 +2706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the oil and gas industry, which aligns with 'big oil companies' mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the oil and gas industry has successfully promoted the narrative that they are not responsible for gas prices, which directly verifies the assumption in A that audiences are being distracted by gas prices and that oil companies believe people won't pay attention to other issues due to this focus. The claim confirms the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the oil and gas industry, which aligns with 'big oil companies' mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the oil and gas industry has successfully promoted the narrative that they are not responsible for gas prices, which directly verifies the assumption in A that audiences are being distracted by gas prices and that oil companies believe people won't pay attention to other issues due to this focus. The core idea—that"
     },
     {
       "a_turn_idx": 23,
@@ -2721,7 +2721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to 'the industry', which is the same entity as 'big oil companies' mentioned in turn 23.\",\n  \"reason\": \"Claim C states that the industry claims gas pricing is entirely due to environmental policy, which reflects the assumption in A that audiences are distracted by gas prices and thus less attentive to broader issues like environmental or geopolitical concerns. This aligns with A’s idea that oil companies benefit from shifting public focus"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to 'the industry', which is the same entity as 'big oil companies' mentioned in turn 23.\",\n  \"reason\": \"Claim C states that the industry claims gas pricing is entirely due to environmental policy, which reflects the assumption in A that audiences are distracted by gas prices and thus less attentive to broader issues like environmental or geopolitical concerns. This aligns with A’s idea that oil companies believe the public is focused"
     },
     {
       "a_turn_idx": 23,
@@ -2736,7 +2736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 25 refers to the speaker (SPEAKER_02) and their coalition advocating for policy change; 'renewable energy' is the clear subject of the recommendation.\",\n  \"reason\": \"Claim C explicitly states that renewable energy should be prioritized through increased investment and policy focus, which directly verifies the substance of assumption A—that there is a disconnect between media narratives (focused on gas prices and geopolitics) and the deeper systemic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 25 refers to the speaker (SPEAKER_02) and their coalition, consistent with prior turns. 'Renewable energy' is the direct subject of the claim and aligns with the broader systemic issue of energy policy dependence.\",\n  \"reason\": \"Claim C explicitly states that renewable energy should be prioritized through investment and policy focus, which directly verifies the substance of assumption A—that there is a disconnect between media narratives ("
     },
     {
       "a_turn_idx": 23,
@@ -2811,7 +2811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by context.\",\n  \"reason\": \"Claim C states that nationalizing the fossil fuel industry is not acceptable, which contradicts the idea that large corporations act strategically in public communication. Assumption A suggests that oil companies are acting strategically—implying calculated behavior in shaping narratives. Claim C does not verify or support this; instead, it introduces a different stance on policy solutions, implying"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by context.\",\n  \"reason\": \"Claim C states that nationalizing the fossil fuel industry is not acceptable, which contradicts the idea that large corporations act strategically in public communication. Assumption A suggests that oil companies are acting strategically (e.g., diverting attention to gas prices). Claim C does not verify or support this; instead, it introduces a different stance on policy solutions,"
     },
     {
       "a_turn_idx": 24,
@@ -2826,7 +2826,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 28 refers to 'oil and gas companies', which aligns with 'big oil' mentioned in turn 24.\",\n  \"reason\": \"Claim C explicitly states that oil and gas companies are experiencing historically high profits, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By highlighting that the public is beginning to recognize these record profits despite corporate narratives, C confirms and clar"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 28 refers to 'oil and gas companies', which aligns with 'big oil' mentioned in turn 24.\",\n  \"reason\": \"Claim C explicitly states that oil and gas companies are experiencing historically high profits, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By highlighting that the public is beginning to recognize these record profits despite corporate narratives, C confirms and explicitly"
     },
     {
       "a_turn_idx": 24,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 29 refers to 'big oil companies' mentioned in turn 24.\",\n  \"reason\": \"Claim C explicitly states that European governments recognize big oil companies are making huge profits, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By contrasting Europe’s recognition of these profits with the U.S. political environment, C confirms that the truth is known elsewhere, thereby making A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these companies' in turn 29 refers to 'big oil companies' mentioned in turn 24.\",\n  \"reason\": \"Claim C explicitly states that European governments recognize big oil companies are making huge profits, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By highlighting that even conservative European governments have implemented windfall profit taxes due to acknowledged high profits, C confirms that the reality of big oil’s"
     },
     {
       "a_turn_idx": 24,
@@ -2856,7 +2856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to 'big oil companies' as established in prior turns; 'these companies' in turn 29 refers to the same entity.\",\n  \"reason\": \"Claim C explicitly states that big oil companies in Europe are paying windfall profit taxes, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By highlighting that even conservative governments in Europe recognize and act on these profits"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to 'big oil companies' as established in prior turns. 'Windfall profit taxes' is a direct reference to the financial gains being discussed in turn 24.\",\n  \"reason\": \"Claim C explicitly states that big oil companies in Europe are paying windfall profit taxes, which directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented. By highlighting that European governments have acted"
     },
     {
       "a_turn_idx": 24,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to 'big oil companies' mentioned in turn 24. 'These companies' in turn 29 refers to the same entity.\",\n  \"reason\": \"Claim C explicitly states that in Europe, big oil companies are being held accountable through windfall profit taxes, and that European governments recognize their record profits. This directly verifies the assumption in A—that the truth about big oil’s profits is being obscured or misrepresented—by"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 29 refers to 'big oil companies', which is consistent with the subject of assumption A in turn 24.\",\n  \"reason\": \"Claim C explicitly states that in Europe, big oil companies are being held accountable through windfall profit taxes, and that European governments recognize their record profits. This directly verifies the substance of assumption A—that the truth about big oil’s profits is being obscured or misrepresented—by contrasting it with Europe, where"
     },
     {
       "a_turn_idx": 24,
@@ -3276,7 +3276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the idea of nationalizing the fossil fuel industry as a solution to national security problems, which is directly tied to the concern about dependence on foreign petrostates mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states the argument that nationalizing the fossil fuel industry is a solution to national security issues, which aligns with and directly verifies the underlying assumption in A that the audience values national security and geopolitical stability. The connection"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by the context of nationalization and export bans discussed in prior turns.\",\n  \"reason\": \"Claim C explicitly states that some people argue nationalizing the fossil fuel industry solves the national security problem, which directly aligns with the assumption in A that the audience values national security and geopolitical stability. The claim makes the underlying value—national security—explicitly central to the proposed solution, thereby"
     },
     {
       "a_turn_idx": 25,
@@ -3291,7 +3291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 're-instituting the export ban on fossil fuels', which is the subject of the claim. The phrase 'a potential solution to the national security problem' directly aligns with the earlier assumption in turn 25 that national security is a valued concern.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a solution to the national security problem, which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the export ban on fossil fuels, which is the subject of the discussion in turn 25 regarding national security and dependence on petrostates.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a solution to the national security problem, which directly verifies the underlying assumption in A that the audience values national security and geopolitical stability. The connection is clear and direct:"
     },
     {
       "a_turn_idx": 25,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to nationalizing the fossil fuel industry, as clarified by the context in turn 27 where Speaker_02 explicitly rejects nationalization.\",\n  \"reason\": \"Claim C explicitly states that the speaker is not in favor of nationalizing the fossil fuel industry, which directly addresses and verifies the assumption in A that fossil fuel dependency creates strategic vulnerability. While C does not repeat the full reasoning of A, it clearly affirms a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', as clarified by the context in turn 27 where Speaker_02 explicitly rejects nationalization.\",\n  \"reason\": \"Claim C explicitly states that the speaker is not in favor of nationalizing the fossil fuel industry, which directly addresses and verifies the assumption in A that fossil fuel dependency creates strategic vulnerability. While C does not repeat the full reasoning of A, it clearly affirms"
     },
     {
       "a_turn_idx": 25,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by the context of nationalization and export bans discussed in turns 25–27.\",\n  \"reason\": \"Claim C explicitly states that some people argue nationalizing the fossil fuel industry solves the national security problem, which directly verifies the underlying assumption in A—that fossil fuel dependency creates strategic vulnerability. The claim does not merely imply or suggest this; it explicitly frames nationalization as a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the fossil fuel industry, as established by the context of nationalization and export bans.\",\n  \"reason\": \"Claim C explicitly states that some people argue nationalizing the fossil fuel industry solves the national security problem, which directly verifies the core idea in assumption A—that fossil fuel dependency creates strategic vulnerability. While C presents an alternative proposal (nationalization), it does so in direct response to the national security concern raised in A,"
     },
     {
       "a_turn_idx": 25,
@@ -3366,7 +3366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 'nationalizing the fossil fuel industry', which is the subject of the argument being discussed. The claim in turn 26 explicitly presents the idea that nationalization is proposed as a solution to the national security problem.\",\n  \"reason\": \"Claim C (turn 26) explicitly states the argument that nationalizing the fossil fuel industry is a solution to the national security problem, which aligns with the core idea in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the idea of nationalizing the fossil fuel industry as a solution to national security problems, which is directly tied to the broader context of reducing dependence on foreign petrostates mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states the argument that nationalizing the fossil fuel industry is a solution to the national security problem, which aligns with the core idea in assumption A—that framing renewable energy as a national security imperative can mobil"
     },
     {
       "a_turn_idx": 25,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to 're-instituting the export ban on fossil fuels', which is the subject of the claim. The phrase 'a potential solution to the national security problem' aligns directly with the idea in A that renewable energy can be framed as a national security imperative.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a solution to the national security problem, which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the idea of re-instituting the export ban on fossil fuels, which is discussed in the context of national security.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a solution to the national security problem, which directly verifies the core idea in assumption A—that framing renewable energy as a national security imperative can mobilize public support. Although C focuses on the export"
     },
     {
       "a_turn_idx": 25,
@@ -3456,7 +3456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to political leaders like Whitehouse and Graham, who are cited as credible voices on national security and energy policy.\",\n  \"reason\": \"Claim C states that some people argue nationalizing the fossil fuel industry solves the national security problem, which aligns with the broader context of turn 25 where Whitehouse and Graham are presented as credible voices advocating for renewable energy as a national security solution. While C does not explicitly name White"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to political leaders like Whitehouse and Graham, who are cited as credible voices on national security and energy policy.\",\n  \"reason\": \"Claim C explicitly states that some people argue nationalizing the fossil fuel industry solves the national security problem, which directly addresses the national security concern introduced in assumption A. Although C does not repeat the specific names or the endorsement of Whitehouse and Graham, it engages with the same core idea—national"
     },
     {
       "a_turn_idx": 25,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some' in claim C refers to 'those who make the argument' mentioned in turn 26, specifically addressing the idea of re-instituting the export ban as a solution to national security problems.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a potential solution to the national security problem, which directly verifies the implicit assumption in A that political leaders like Whitehouse and Graham represent credible voices on national"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'some' in claim C refers to 'those who make the argument' mentioned in turn 26, which includes the suggestion of re-instituting the export ban as a solution to national security problems.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a potential solution to the national security problem, which directly verifies the implicit assumption in A that political leaders like Whitehouse and Graham represent credible voices on national"
     },
     {
       "a_turn_idx": 25,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the idea of nationalizing the fossil fuel industry as a solution to national security problems, which is directly tied to the broader context of reducing dependence on foreign and domestic fossil fuel sources mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly introduces the argument that nationalizing the fossil fuel industry is a solution to national security problems, which aligns with the core concern in assumption A—that the national security benefits of renewables are underem"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the idea of nationalizing the fossil fuel industry as a solution to national security problems, which is directly tied to the broader context of reducing dependence on foreign and domestic fossil fuel sources mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly introduces the argument that nationalizing the fossil fuel industry is a solution to national security issues, which aligns with the core concern in assumption A—that the public discourse fails to emphasize the national security"
     },
     {
       "a_turn_idx": 25,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the idea of re-instituting the export ban on fossil fuels, which is discussed in the context of national security.\",\n  \"reason\": \"Claim C states that re-instituting the export ban is considered by some as a solution to the national security problem, which aligns with the substance of assumption A—that the national security benefits of renewables are underemphasized. While C does not explicitly state that renewables are"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the idea of re-instituting the export ban as a solution to national security, which is directly mentioned in turn 26 and contextualized in turn 25.\",\n  \"reason\": \"Claim C explicitly states that re-instituting the export ban is considered by some as a solution to the national security problem, which directly verifies the underlying assumption in A that the national security benefits of renewables are underemphasized."
     },
     {
       "a_turn_idx": 25,

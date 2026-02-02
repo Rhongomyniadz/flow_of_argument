@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our job' in turn 12 refers to parents, consistent with the audience of parents addressed in turn 8. 'Children' in turn 12 corresponds to 'your child' in turn 8.\",\n  \"reason\": \"Claim C explicitly states that it is the parents' responsibility to ensure children understand that some things are unchangeable, which directly verifies the core idea in assumption A—that audience members identify with parents who have children experiencing unexplained pain"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our job' in claim C refers to parents, consistent with the audience addressed in assumption A ('every parent listening'). 'Children' in C corresponds to 'your child' in A.\",\n  \"reason\": \"Claim C explicitly states that parents have the responsibility to ensure children understand that some things are unchangeable, which directly verifies the core idea in assumption A—that audience members (parents) identify with parents whose children experience unexplained pain, implying a shared concern about"
     },
     {
       "a_turn_idx": 8,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Kathy Hochl' as 'New York Governor Kathy Hochul' in turn 11; 'Hochl' is a clear misspelling of 'Hochul', resolved via context. 'Those who have illegally given children...sex change drugs, hormones or surgeries' refers to individuals providing gender-affirming care to minors, aligning with the assumption that children under 14 cannot have legitimate gender identity experiences.\","
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Kathy Hochl' as 'New York Governor Kathy Hochul' in turn 11; 'Hochl' is a clear misspelling of 'Hochul', resolved via context. 'Those who have illegally given children...sex change drugs, hormones or surgeries' refers to providers of gender-affirming care to minors, aligning with SPEAKER_02's claim in turn 10.\",\n  \"reason"
     },
     {
       "a_turn_idx": 10,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 32 refers to the public display of the book containing explicit material, not the earlier assumption about gender identity.\",\n  \"reason\": \"Claim C (turn 32) expresses opposition to the public exposure of explicit material, likening it to pedophilia, but does not address or verify the earlier assumption A (turn 10), which concerns prioritizing traditional biological norms in public policy on gender identity. The two claims"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the public display of gender-affirming care materials in libraries, not the concept of prioritizing traditional biological norms.\",\n  \"reason\": \"Claim C expresses opposition to the public visibility of material related to gender transition, equating it to pedophilia. This is a moral and rhetorical comparison rather than an endorsement or explicit statement of the earlier assumption A, which asserts that public policy should prioritize traditional biological norms. While both statements"
     },
     {
       "a_turn_idx": 10,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to proponents of gender-affirming care, as established in the broader context. 'It' in 'it doesn't involve cutting body parts off' refers to the type of care described as 'affirming care'.\",\n  \"reason\": \"Claim C explicitly states that affirming care consists solely of emotional support such as giving hugs and telling someone their gender—directly verifying the core idea in assumption A that only non-medical"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 12 refers to parents, consistent with the speaker's role as a father of five mentioned in turn 12. 'It' in 'it doesn't involve cutting body parts off' refers to the type of care described as 'affirming care'.\",\n  \"reason\": \"Claim C explicitly states that affirming care consists solely of emotional support such as giving hugs and telling someone their gender, which directly verifies the core idea in"
     },
     {
       "a_turn_idx": 11,
@@ -3860,8 +3860,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference links relevant; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.",
-      "reason": "Claim C discusses upcoming media appearances and live content, with no mention of targeting children, defending such claims, or any related topic. It is entirely unrelated to assumption A, which concerns a belief about a claim involving targeting children. There is no semantic connection or verification of A in C.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses upcoming media appearances and live content, with no mention of targeting children, defending such claims, or any related topic. It is entirely unrelated to assumption A, which concerns a belief about a claim involving targeting children. There is no semantic connection or verification of A in C.\"\n}\n```"
+      "reason": "Claim C discusses upcoming media appearances and live content, which is entirely unrelated to the assumption A about the listener claiming to target children. There is no mention, implication, or verification of the idea that the listener made such a claim. The topics diverge completely, making the connection non-existent.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses upcoming media appearances and live content, which is entirely unrelated to the assumption A about the listener claiming to target children. There is no mention, implication, or verification of the idea that the listener made such a claim. The topics diverge completely, making the connection non-existent.\"\n}\n```"
     },
     {
       "a_turn_idx": 19,
@@ -3876,7 +3876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 28 refers to the library staff or institution, not the listener. The claim in turn 28 is about requesting adult magazines at a library, which is unrelated to the assumption in turn 19 about targeting children.\",\n  \"reason\": \"Turn 19 assumes the listener claims that someone is targeting children, specifically through promoting gender-affirming content. Turn 28 instead presents a hypothetical about requesting Playboy or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Playboy and Hustler' as publications that would be considered ridiculous in a public library; 'they' in turn refers to the library staff or institution defending gender-affirming children's books.\",\n  \"reason\": \"Claim C (turn 28) does not address or verify the assumption A (turn 19), which is about the listener claiming that someone is targeting children. Instead, C shifts focus to a comparison between adult"
     },
     {
       "a_turn_idx": 19,
@@ -3891,7 +3891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'it' in claim C refers to the book mentioned in prior context, which is distinct from the claim about targeting children in assumption A.\",\n  \"reason\": \"Claim C asserts that the content is pornographic by common standards, which is unrelated to assumption A, which concerns a belief that the listener claimed someone is targeting children. The topics diverge entirely—C focuses on the nature of the book's content, while A centers on perceived threats to children"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'it' in claim C refers to the book mentioned in prior context, which is distinct from the claim about targeting children in assumption A.\",\n  \"reason\": \"Claim C asserts that the content is pornographic by common standards, which is unrelated to assumption A, which concerns the belief that the listener claimed to be targeting children. There is no semantic connection between the idea of targeting children and the classification of material as pornographic. The two ideas are distinct"
     },
     {
       "a_turn_idx": 19,
@@ -3906,7 +3906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the group making claims about targeting children, which is later echoed in turn 31 through the emotional reaction 'I can't'—though not directly tied to the specific claim about children.\",\n  \"reason\": \"Turn 31 expresses strong emotional resistance ('I can't') to discussing or showing certain material, which indirectly reflects discomfort with content that may involve minors, but it does not explicitly state or verify the assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the group making claims about targeting children, which is later echoed in turn 31 through the emotional reaction 'I can't'—though not directly tied to the specific claim about targeting children.\",\n  \"reason\": \"Turn 31 expresses strong emotional resistance ('I can't') to discussing or showing certain material, which indirectly reflects discomfort with content perceived as inappropriate for children. However, it does not explicitly state or"
     },
     {
       "a_turn_idx": 19,
@@ -3936,7 +3936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, as established by the prior context where SPEAKER_10 discusses bringing the book to work. The phrase 'consenting adults doing things in their bedroom' refers back to the idea of private adult activities, which aligns with the broader concern raised in turn 19 about targeting children.\",\n  \"reason\": \"Claim C explicitly states that consensual adult activities should remain private, which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, as established by the prior context where SPEAKER_10 discusses bringing the book to work. The phrase 'consenting adults doing things in their bedroom' refers back to the idea of private adult activities, which aligns with the broader concern raised in turn 19 about targeting children.\",\n  \"reason\": \"Turn 32 explicitly states that consensual adult activities should remain private,"
     },
     {
       "a_turn_idx": 19,
@@ -3951,7 +3951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 32 refers to SPEAKER_10, who is the listener in the conversation.\",\n  \"reason\": \"Claim C (turn 32) discusses speaking at a public forum with the mayor and being heard, which is unrelated to assumption A (turn 19), which concerns the belief that the listener claimed to be targeting children. There is no mention of children, targeting, or defense of such claims in C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 32 refers to SPEAKER_10, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 32) discusses speaking at a public forum with the mayor and being heard, which is unrelated to assumption A (turn 19), which concerns the belief that the listener claimed to be targeting children. There is no mention of children, targeting, or defense of such claims in C. The topics diver"
     },
     {
       "a_turn_idx": 19,
@@ -3981,7 +3981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Isabel' as the person taking action to ensure children's safety; 'Isabel' is likely a misspelling of 'Isabelle' mentioned in turn 35.\",\n  \"reason\": \"Claim C discusses ensuring children's safety through public action, which aligns with the concern raised in assumption A about a claim involving targeting children. However, C does not explicitly state or verify that the listener made a claim about targeting children."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Isabel' as the person taking action to ensure children's safety; 'Isabel' is likely a misspelling of 'Isabelle' mentioned in turn 35.\",\n  \"reason\": \"Claim C discusses ensuring children's safety in the context of public access to adult material, which relates to the broader concern raised in assumption A about targeting children. However, C does not explicitly state or verify the specific belief in A—that the"
     },
     {
       "a_turn_idx": 19,
@@ -3996,7 +3996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 38 refers to the availability of adult-oriented material in public libraries, not the claim about targeting children. No coreference links connect the idea of 'targeting children' to the claim about societal acceptance of material.\",\n  \"reason\": \"Claim C discusses societal acceptance of adult material in public libraries, specifically criticizing its availability to children. Assumption A concerns a belief that the listener claimed to be 'coming for your children,' implying a threat"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 38 refers to the availability of adult material in public libraries, not the claim about targeting children. No coreference links connect the idea of 'targeting children' to the claim about societal acceptance of pornographic material.\",\n  \"reason\": \"Claim C discusses societal acceptance of adult material being available in public libraries, which is unrelated to the assumption A that the listener claimed someone is targeting children. There is no mention of children being targeted,"
     },
     {
       "a_turn_idx": 19,
@@ -4026,7 +4026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'someone' in C refers to a generic individual, not tied to any prior entity in A.\",\n  \"reason\": \"Claim C discusses a general emotional experience of being shown up during a critical moment, which is unrelated to the assumption in A about a shared understanding of what constitutes a serious or alarming statement like 'coming for our children.' The topics, context, and semantic content are entirely different, with no overlap in meaning or reference. Therefore, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'someone' in C refers to a generic individual, not tied to any prior speaker or entity in A.\",\n  \"reason\": \"Claim C discusses a general emotional experience of being shown up during a critical moment, which is unrelated to the assumption in A about a shared understanding of what constitutes a serious or alarming statement like 'coming for our children.' The topics, context, and semantic content do not align. C does not state, verify, or relate"
     },
     {
       "a_turn_idx": 19,
@@ -4041,7 +4041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the children's books on gender affirmation mentioned earlier, which are presented as examples of material being defended in public libraries.\",\n  \"reason\": \"Claim C explicitly states that gender-affirming children's books exist in Oklahoma libraries and are targeted for age groups three to ten, directly verifying the concern raised in assumption A about what constitutes a serious or alarming statement—namely, the idea that such content is being normalized in public"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the children's books on gender affirmation mentioned earlier, which are presented as examples of material being defended in public libraries.\",\n  \"reason\": \"Claim C explicitly states that gender-affirming children's books exist in Oklahoma libraries and are targeted for age groups three to ten, directly verifying the concern raised in assumption A about what constitutes a serious or alarming statement like 'coming for our children.' The presence of such books in public"
     },
     {
       "a_turn_idx": 19,
@@ -4056,7 +4056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with context.\",\n  \"reason\": \"Claim C discusses accessing past interviews via JoePags.com and promotes content like the Riley Gaines interview, but does not address or verify any moral evaluation of language use. Assumption A concerns the moral problem with unexplained inflammatory language (e.g., 'coming for your children'), which is not mentioned, implied, or supported in claim C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with context.\",\n  \"reason\": \"Claim C discusses accessing past interviews via JoePags.com and promotes content like the Riley Gaines interview, but does not address or verify the moral evaluation of language mentioned in assumption A. Assumption A concerns the ethical problem of using inflammatory language without explanation, while claim C is purely promotional and informational about media access. There is no mention of"
     },
     {
       "a_turn_idx": 19,
@@ -4071,7 +4071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'the book' and 'showing the pictures and read out of it', which aligns with the earlier concern about unexplained offensive content. 'They' in turn 32 refers to officials being embarrassed.\",\n  \"reason\": \"Claim C expresses intent to expose the book's content publicly to shame officials, implying moral objection to its presence in public spaces. While this reflects a moral stance toward the material, it does not explicitly state or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'the book' and 'it' in turn 32, which aligns with the controversial material discussed earlier (e.g., explicit content from a book in the library). The pronoun 'them' refers to officials like the city council or mayor.\",\n  \"reason\": \"Turn 32 expresses a strong moral stance against public exposure of explicit content, equating it to pedophilia and arguing it belongs in private spaces. While this"
     },
     {
       "a_turn_idx": 21,
@@ -4086,7 +4086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that person' in turn 22 refers to 'a mom or dad' mentioned immediately before, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that 'you have a child you have a either a mom or dad and that person is attempting to illegally provide that child with a sex change', which directly verifies the assumption that at least one parent (mom or dad) is involved in the situation. The phrasing leaves no ambiguity about the involvement"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that person' in turn 22 refers to 'a mom or dad' mentioned immediately before, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that 'you have a child you have a either a mom or dad and that person is attempting to illegally provide that child with a sex change,' which directly verifies the assumption that at least one parent (mom or dad) is involved in the situation. The phrasing leaves no ambiguity about the involvement"
     },
     {
       "a_turn_idx": 21,
@@ -4101,7 +4101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the public library staff or officials mentioned in turn 27, who are defending the presence of gender-affirming children's books.\",\n  \"reason\": \"Claim C (turn 28) uses a hypothetical scenario—requesting Playboy or Hustler at a public library—to highlight perceived absurdity in allowing gender-affirming books in libraries. This implies a distinction between sexually explicit material (seen as inappropriate for children"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the public library staff or officials mentioned in turn 27. The phrase 'this transitioning or gay like me or gender affirming care book' refers back to the children's books described as disturbing and age-appropriate for 3–10-year-olds.\",\n  \"reason\": \"Claim C suggests that requesting Playboy or Hustler at a public library would be seen as ridiculous, implying that such materials are inappropriate for children"
     },
     {
       "a_turn_idx": 21,
@@ -4116,7 +4116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'it' in claim C refers to the book mentioned in prior turns, which is described as containing gender-affirming care content.\",\n  \"reason\": \"Claim C asserts that the content is pornographic by common standards, which is a separate assertion from assumption A, which concerns the distinction between gender identity and sexual orientation. There is no mention or implication in C of the relationship between gender identity and sexual orientation. The two claims address different concepts—C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'it' in claim C refers to the book mentioned in prior turns, which is described as containing gender-affirming care content.\",\n  \"reason\": \"Claim C asserts that the content is pornographic by common standards, which is a separate assertion from assumption A, which concerns the distinction between gender identity and sexual orientation. There is no mention or implication in C that gender identity and sexual orientation are distinct, nor does C address or verify the conceptual framework"
     },
     {
       "a_turn_idx": 21,
@@ -4131,7 +4131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the public display of the book containing explicit material, which the speaker equates with pedophilia. The term 'pedophilia' is used metaphorically to express moral outrage over public exposure of adult content to minors, not to assert a belief about actual pedophilic behavior.\",\n  \"reason\": \"Claim C (turn 32) does not address or verify the assumption that gender identity and sexual orientation are distinct categories."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the public display of the book containing explicit material, which the speaker equates with pedophilia. The term 'pedophilia' is used metaphorically to express moral outrage over public exposure of adult content to minors, not to assert a belief about actual pedophilic behavior.\",\n  \"reason\": \"Claim C (turn 32) expresses opposition to the public display of explicit material involving minors, framing it as akin to"
     },
     {
       "a_turn_idx": 21,
@@ -4146,7 +4146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, as established by context. 'This' in 'this has to be brought out' refers to the controversial book being discussed.\",\n  \"reason\": \"Claim C states that consenting adult activities should remain private, which aligns with the broader concern about public exposure of adult content. However, it does not explicitly address or verify the specific assumption that gender identity and sexual orientation are distinct categories. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, as established in the prior context. The phrase 'consenting adults' refers to adults engaging in private activities, which aligns with the broader discussion of adult sexuality.\",\n  \"reason\": \"Claim C discusses the idea that consensual adult activities should remain private, particularly contrasting private behavior (in the bedroom) with public exposure (e.g., in libraries). While this touches on themes related to"
     },
     {
       "a_turn_idx": 21,
@@ -4161,7 +4161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with A.\",\n  \"reason\": \"Claim C discusses the possibility of being heard in a public forum and confronting authorities about controversial material, but it does not mention or verify anything about gender identity or sexual orientation being distinct categories. The content of C is entirely unrelated to the substance of assumption A, which concerns the conceptual separation of gender identity and sexual orientation. Therefore, C neither supports"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with A.\",\n  \"reason\": \"Claim C discusses public forums and speaking to the city council, which is unrelated to the assumption in A that gender identity and sexual orientation are distinct categories. There is no mention, implication, or verification of the distinction between gender identity and sexual orientation in C. The topics diverge entirely—C focuses on public speech and moral outrage over books in"
     },
     {
       "a_turn_idx": 21,
@@ -4176,7 +4176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the availability of explicit material in public spaces, not to gender identity or sexual orientation.\",\n  \"reason\": \"Claim C discusses societal acceptance of public access to pornography, specifically in libraries, and frames it as a failure of boundaries and values. This topic is unrelated to the earlier assumption A, which concerns the distinction between gender identity and sexual orientation. There is no mention of gender identity, sexual orientation, or their relationship in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 38 refers to the availability of explicit material in public spaces, not gender identity or sexual orientation.\",\n  \"reason\": \"Claim C discusses societal acceptance of public access to pornography, particularly in libraries, which is unrelated to the assumption that gender identity and sexual orientation are distinct categories. There is no mention of gender identity, sexual orientation, or their distinction in turn 38. The topic shifts entirely to censorship of adult content"
     },
     {
       "a_turn_idx": 21,
@@ -4191,7 +4191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses topics such as China, Iraq, Joe Biden, and the border, which are entirely unrelated to assumption A, which concerns the speaker's trust that the listener interprets the comparison between trans and gay populations as meaningful. There is no mention, implication, or verification of this trust or the comparison in claim C. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses topics such as China, Iraq, Joe Biden, and the border, which are entirely unrelated to the earlier assumption A about trusting that the listener interprets the comparison between trans and gay populations as meaningful. There is no mention of trans vs. gay populations, interpretation, trust, or any related concept. The content of"
     },
     {
       "a_turn_idx": 21,
@@ -4206,7 +4206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Gary Sinise appearing on two shows, unrelated to the trust in interpreting comparisons between trans and gay populations.\",\n  \"reason\": \"Claim C is entirely unrelated to assumption A, which concerns the speaker's trust that the listener will find a comparison between trans and gay populations meaningful. Claim C discusses media appearances and promotional content, with no mention of gender identity, population comparisons, or interpretation of such comparisons. There is no overlap in semantic content,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Gary Sinise' is a proper noun and clearly refers to the individual mentioned.\",\n  \"reason\": \"Claim C (turn 26) discusses Gary Sinise appearing on two shows, which is entirely unrelated to assumption A (turn 21), which concerns the speaker's trust that the listener interprets the comparison between trans and gay populations as meaningful. There is no overlap in topic, content, or implied meaning between the two statements. The"
     },
     {
       "a_turn_idx": 21,
@@ -4221,7 +4221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Dr. Ben Carson appearing on the speaker's show, which is unrelated to the assumption about interpreting comparisons between trans and gay populations.\",\n  \"reason\": \"Claim C states that Dr. Ben Carson will appear on the speaker’s show, which is entirely unrelated to the earlier assumption A that the listener will interpret the comparison between trans and gay populations as meaningful. There is no mention of trans vs. gay populations, interpretation, or trust in the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the claim; 'Dr. Ben Carson' is a new entity not connected to the assumption about interpreting comparisons between trans and gay populations.\",\n  \"reason\": \"Claim C (turn 26) states that Dr. Ben Carson will appear on the speaker’s show, which is entirely unrelated to assumption A (turn 21), which concerns the listener's interpretation of a comparison between trans and gay populations. There is no mention, implication, or verification"
     },
     {
       "a_turn_idx": 21,
@@ -4236,7 +4236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the material (pornography) being accessible in public libraries, which is contextually linked to the broader discussion of gender and sexuality topics introduced in turn 21.\",\n  \"reason\": \"Turn 38 expresses strong disapproval of certain material (pornography) being publicly accessible, framing it as inappropriate for children and society. While this reflects a concern about the visibility and normalization of sexual content—related to the broader"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the material being accessible in public libraries, specifically the explicit content mentioned in turns 36–37, such as Playboy and Hustler. The term 'garbage' is used to express strong disapproval of such material.\",\n  \"reason\": \"Claim C expresses a negative evaluation of certain material (pornography) being accessible in public spaces like libraries, but it does not address demographic trends in gender and sexuality."
     },
     {
       "a_turn_idx": 21,
@@ -4251,7 +4251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 40 refers to the same group mentioned in turn 21—those advocating for gender and sexual identity changes, particularly in relation to youth. 'Riley' is a person with whom Speaker 02 discussed gender transitions and sexuality in sports, linking back to broader societal shifts in gender norms.\",\n  \"reason\": \"Claim C explicitly discusses gender transitions and sexuality in sports, which aligns with the substance of assumption A—that demographic trends"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Riley refers to a prior conversation partner mentioned in turn 40; 'they' in 'talked to Riley about that' refers to SPEAKER_02.\",\n  \"reason\": \"Claim C explicitly discusses gender transitions and sexuality in sports, which aligns with the substance of assumption A—demographic trends in gender and sexuality being observable and significant. While C expands on A by linking these trends to broader ideological narratives (e.g., depopulation, undermining the nuclear"
     },
     {
       "a_turn_idx": 22,
@@ -4266,7 +4266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the same group mentioned in assumption A—those promoting gender transition and LGBTQ+ identity, interpreted as a coordinated effort. 'This' in 'this is about confusion' refers back to the broader societal shift described in A.\",\n  \"reason\": \"Claim C explicitly frames gender transition and being gay as part of a coordinated effort to create confusion, which aligns with the core idea in assumption A that gender transition for minors is legally contentious"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 40 refers to the broader ideological movement promoting gender transition and LGBTQ+ identity, which aligns with the 'law' and 'guardian' actions mentioned in turn 22. 'This' in 'this is about confusion' refers back to the coordinated effort described in the prior statement.\",\n  \"reason\": \"Claim C explicitly frames gender transition and being gay as part of a coordinated effort to create confusion, which directly supports the idea"
     },
     {
       "a_turn_idx": 22,
@@ -4281,7 +4281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in 'New York will protect you' refers to individuals performing the procedure in Texas, as established by the prior context where 'if we do it in Texas, then run to New York'. The 'doctor' mentioned in turn 23 is the subject being protected.\",\n  \"reason\": \"Claim C explicitly states that New York protects individuals who perform the procedure despite its illegality in Texas, which directly verifies the substance of assumption A—that New York protects"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in 'New York will protect you' refers to individuals performing the procedure in Texas, as established by the prior context where 'if we do it in Texas, then run to New York'. The 'doctor' mentioned in turn 23 is the subject being protected.\",\n  \"reason\": \"Claim C explicitly states that New York protects individuals who perform the procedure despite its illegality in Texas, which directly verifies the core substance of assumption A—that New York"
     },
     {
       "a_turn_idx": 22,
@@ -4296,7 +4296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 40 refers to the group promoting gender transitions and sexuality in sports, which aligns with the broader societal push mentioned in turn 22. 'Riley' is a person discussed in the context of gender transitions.\",\n  \"reason\": \"Claim C discusses gender transitions and sexuality in sports, which touches on the broader theme of gender-related interventions involving minors, as implied in assumption A. However, C does not explicitly address the legal vs"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 40 refers to the group promoting gender transitions and related ideologies, as established in the prior context. 'Riley' is a person previously mentioned in the conversation, likely a participant in discussions about gender and sexuality.\",\n  \"reason\": \"Claim C discusses conversations with Riley about gender transitions and sexuality in sports, which touches on the broader theme of gender identity and societal norms. However, it does not explicitly state or verify the specific assumption A"
     },
     {
       "a_turn_idx": 22,
@@ -4311,7 +4311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the presence of children's books on gender affirmation in Oklahoma libraries, which is consistent with the broader context of legal vs. illegal medical interventions on minors.\",\n  \"reason\": \"Claim C discusses the presence of children's books on gender affirmation in Oklahoma libraries, which touches on the broader societal and legal acceptance of gender-related content for minors. However, it does not explicitly address or verify the specific distinction between legal and illegal medical interventions on"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the presence of children's books on gender affirmation in Oklahoma libraries, which is consistent with the broader context of legal vs. illegal medical interventions discussed in assumption A.\",\n  \"reason\": \"Claim C discusses the presence of children's books on gender affirmation in Oklahoma libraries, which touches on the broader societal and legal acceptance of gender-related content for minors. However, it does not explicitly address or verify the specific distinction between legal and illegal medical"
     },
     {
       "a_turn_idx": 22,
@@ -4341,7 +4341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'they' refers to the group promoting gender transition and LGBTQ+ identity, which aligns with the 'guardian' mentioned in turn 22 (the parent involved in a child's transition). The claim that transitioning and being gay are part of a coordinated effort to create confusion directly expands on the idea introduced in turn 22 that parental involvement in a child's gender transition is inherently problematic or risky.\",\n  \"reason\": \"Claim C explicitly frames"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'they' refers to the group promoting gender transition and LGBTQ+ identity, which aligns with the 'guardian' mentioned in turn 22 (the parent involved in a child's transition). The claim that transitioning and being gay are part of a coordinated effort to create confusion directly extends the idea from turn 22 that parental involvement in a child's gender transition is suspect or dangerous.\",\n  \"reason\": \"Claim C explicitly frames gender transition and"
     },
     {
       "a_turn_idx": 23,
@@ -4371,7 +4371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the act of normalizing controversial content involving minors, which aligns with the earlier assumption about public nudity and normalization of objectionable acts involving children.\",\n  \"reason\": \"Claim C explicitly states that pedophilia should not occur on a public level, which directly verifies the core concern in assumption A—that objectionable behaviors (here, implicitly linked to sexualized content involving minors) should not be normalized in public spaces. The comparison"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the act of publicly displaying material related to gender transition in children, which was implied in turn 23 as being objectionable. The term 'pedophilia' is used metaphorically by Speaker 02 to express strong moral opposition to public normalization of adult-child sexualized content, aligning with the concern in A about public nudity and normalization.\",\n  \"reason\": \"Claim C explicitly states that pedophilia should not occur"
     },
     {
       "a_turn_idx": 23,
@@ -4386,7 +4386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to pornography, which aligns with the broader concern about inappropriate content being accessible to children, as implied in assumption A.\",\n  \"reason\": \"Claim C explicitly states that pornography should not be available at the local library, which directly supports the underlying concern in assumption A—that certain forms of public exposure (like nudity or sexual content) are objectionable and should not be normalized. While C focuses specifically on libraries and pornography rather than public nudity"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to pornography, which aligns with the broader concern about inappropriate content being accessible to children, as implied in assumption A.\",\n  \"reason\": \"Claim C explicitly states that pornography should not be available at the local library, which directly supports the idea that certain forms of public exposure to adult content—like nudity—are objectionable and should not be normalized. This aligns with assumption A, which asserts that public nudity is inherently objectionable and"
     },
     {
       "a_turn_idx": 23,
@@ -4401,7 +4401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the availability of material (e.g., pornography) for children, which aligns with the concern in assumption A about public nudity and inappropriate content being normalized for minors.\",\n  \"reason\": \"Claim C states that if something is available for children, it should be addressed in a public forum—this reflects a clear stance against unregulated access to adult content by minors, which supports the core idea in assumption A that certain behaviors (like"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the availability of material (e.g., pornography) for children, which aligns with the concern in assumption A about normalization of objectionable content, particularly in public spaces involving children.\",\n  \"reason\": \"Claim C states that if something is available for children, it should be addressed in a public forum—this reflects the underlying concern in assumption A that public nudity (and by extension, objectionable content) should not be normalized."
     },
     {
       "a_turn_idx": 23,
@@ -4416,7 +4416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the book discussed in turn 32, which contains images deemed inappropriate by the speaker. The book is the same object referenced in the context of public display and legal protection of procedures involving children.\",\n  \"reason\": \"Claim C explicitly states that the speaker would not show the book to children, directly verifying the concern raised in assumption A—that legalizing such acts (symbolized by the book) leads to societal normalization of harmful acts"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the book discussed in turn 32, which contains images deemed inappropriate by the speaker. The book is linked to the controversial procedure mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker would not show the book to children, directly verifying the concern in assumption A that legalizing such procedures leads to societal acceptance of harmful acts toward children. The emotional reaction described ('blushing') and the comparison to ped"
     },
     {
       "a_turn_idx": 23,
@@ -4431,7 +4431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the public library authorities mentioned in turn 27, who are defending the presence of gender-affirming children's books.\",\n  \"reason\": \"Claim C explicitly contrasts the acceptance of gender-affirming children's books in public libraries with the perceived absurdity of requesting adult-oriented publications like Playboy or Hustler—implying that such books should not be in libraries. This directly verifies the underlying assumption in A that the audience"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the public library authorities mentioned in turn 27, who are defending the presence of gender-affirming children's books.\",\n  \"reason\": \"Claim C explicitly contrasts the acceptance of gender-affirming children's books in public libraries with the perceived absurdity of requesting adult-oriented publications like Playboy or Hustler—implying that such materials would be rejected. This directly verifies the underlying assumption in A that the audience shares moral"
     },
     {
       "a_turn_idx": 23,
@@ -4446,7 +4446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the content' in claim C refers to books on gender-affirming care, which are discussed in the context. However, claim C asserts the content is pornographic, while assumption A concerns shared moral outrage over child-related issues.\",\n  \"reason\": \"Claim C states that the content is pornographic by common standards, which is a distinct assertion from assumption A, which centers on the speaker's belief that the audience shares their moral outrage regarding child-related"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'it' in claim C refers to the book described in prior turns, which is discussed as containing gender-affirming care content.\",\n  \"reason\": \"Claim C asserts that the content is identifiable as pornographic by common standards, which directly contradicts the substance of assumption A. Assumption A centers on shared moral outrage regarding child-related issues, particularly concerning gender-affirming care for minors, while Claim C shifts focus to labeling such material as porn"
     },
     {
       "a_turn_idx": 23,
@@ -4461,7 +4461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the act of publicly promoting or displaying material related to gender transition procedures for children, which was implied in turn 23 as morally outrageous.\",\n  \"reason\": \"Turn 32 explicitly states that pedophilia should not occur on a public level, directly verifying the moral outrage expressed in turn 23 regarding the public acceptance of medical procedures on children. The speaker frames the issue as a societal failure to draw boundaries between"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the act of publicly promoting or displaying material related to gender transition procedures on children, which was implied in turn 23 as morally outrageous.\",\n  \"reason\": \"Turn 32 explicitly states that pedophilia should not occur on a public level, directly verifying the moral outrage expressed in turn 23 regarding the public acceptance of medical procedures on children. The speaker frames the issue as a societal failure to draw boundaries between"
     },
     {
       "a_turn_idx": 23,
@@ -4476,7 +4476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the audience or potential activist, consistent with the prior discussion involving public action and moral judgment.\",\n  \"reason\": \"Claim C expresses a belief that consenting adult activities should remain private, which aligns with the broader concern in assumption A about protecting children and rejecting public normalization of controversial acts. However, C does not explicitly state or verify the specific assumption that the audience shares the speaker's moral outrage over child-related issues. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the audience or potential activist, consistent with the prior discussion involving public action. 'This' in 'this has to be brought out' refers to the controversial book and its public display.\",\n  \"reason\": \"Claim C expresses concern about public exposure of adult content, advocating for privacy in consensual adult activities. While this reflects a broader moral stance on boundaries between public and private, it does not explicitly verify or state the"
     },
     {
       "a_turn_idx": 23,
@@ -4491,7 +4491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the audience or individuals who share the speaker's moral outrage, consistent with the assumed shared sentiment in turn 23.\",\n  \"reason\": \"Claim C expresses the belief that speaking in a public forum with the mayor could lead to being heard, which aligns with the underlying assumption in A that the audience shares the speaker's moral outrage over child-related issues. The call to action—reading the book publicly, embarrassing officials"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the audience or potential advocates mentioned in prior turns, particularly those expressing moral concern about child-related issues. 'This' in 'this has to be brought out' refers back to the moral outrage expressed in turn 23 regarding the protection of procedures on children.\",\n  \"reason\": \"Claim C explicitly expresses the belief that speaking in a public forum (e.g., before the city council or mayor) can lead to being"
     },
     {
       "a_turn_idx": 23,
@@ -4506,7 +4506,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Thomas' refers to a person mentioned in the current turn, not related to assumption A.\",\n  \"reason\": \"Claim C (turn 38) states that the speaker is handing over time to Thomas for his response, which is unrelated to assumption A (turn 23), which concerns the audience's shared moral outrage over child-related issues. There is no mention, implication, or verification of the belief in shared moral outrage. The two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Thomas' in turn 38 refers to a person named Thomas mentioned in the context, but this has no connection to the earlier assumption A about shared moral outrage over child-related issues.\",\n  \"reason\": \"Claim C (turn 38) states that the speaker is handing over time to Thomas for his response, which is a procedural statement about transitioning to another speaker. It does not address, state, or verify the substance of assumption A, which concerns the"
     },
     {
       "a_turn_idx": 23,
@@ -4536,7 +4536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'Joe Pags' refers to the same individual mentioned in turn 24 ('Joe Pagg'), resolving the coreference. The claim in C asserts credibility of information presented by Joe Pags, which aligns with A's assertion that the anecdote involving Joe Pagg and Ted serves as a credible exemplar.\",\n  \"reason\": \"Claim C states that Joe Pags is presenting credible information, which directly supports the substance of assumption A—that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Joe Pags refers to the speaker (SPEAKER_02), who is the same individual mentioned in turn 24 as the presenter of the anecdote involving Joe Pagg and Ted.\",\n  \"reason\": \"Claim C explicitly states that Joe Pags is presenting credible information on the topic, which directly verifies the substance of assumption A—that the anecdote involving Joe Pagg and Ted serves as a credible exemplar of the intended emotional outcome. The context confirms that SPEAKER"
     },
     {
       "a_turn_idx": 25,
@@ -4551,7 +4551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. The phrase 'my show' in C refers to the speaker's own show mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the speaker has upcoming appearances on Sean Hannity’s show and their own show on Friday, totaling six hours of live content. This directly verifies the substance of assumption A, which asserts that the speaker has reliable information"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, who is the same speaker as in assumption A. 'My show' and 'Sean Hannity’s show' are clearly linked to the speaker's upcoming appearances.\",\n  \"reason\": \"Claim C explicitly states that the speaker (SPEAKER_02) will appear on Sean Hannity’s show and their own show on Friday, totaling six hours of live content. This directly verifies the substance of assumption A"
     },
     {
       "a_turn_idx": 25,
@@ -4566,7 +4566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_10, who is expressing personal discomfort with the content of the book. The earlier assumption A concerns SPEAKER_08's knowledge of Poe's appearance schedule, which is unrelated to the emotional reaction described in C.\",\n  \"reason\": \"Claim C states that the speaker repeatedly says 'I can't,' expressing personal distress about discussing or viewing the book's content. This is unrelated to assumption A, which asserts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_10, who is expressing personal discomfort with the content of the book. The earlier assumption A concerns SPEAKER_08's knowledge about Poe's appearance schedule.\",\n  \"reason\": \"Claim C states that the speaker repeatedly says 'I can't,' which reflects personal emotional distress about discussing or viewing the book's content. This is unrelated to assumption A, which asserts that SPEAKER_08 has reliable information"
     },
     {
       "a_turn_idx": 25,
@@ -4581,7 +4581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to SPEAKER_10, who is the listener in the conversation and has expressed strong opposition to the book's presence in libraries.\",\n  \"reason\": \"Turn 34 explicitly proposes that the listener (SPEAKER_10) take action by presenting the book to the city council, which directly aligns with the assumption in turn 25 that the listener is present and able to remain engaged until the end"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to SPEAKER_10, who is the listener in the conversation and has expressed strong opposition to the book's presence in libraries.\",\n  \"reason\": \"Claim C explicitly proposes that the listener (SPEAKER_10) take action by presenting the book to the city council, which directly aligns with the assumption in A that the listener is present and able to remain engaged until the end of the hour. The"
     },
     {
       "a_turn_idx": 26,
@@ -4596,7 +4596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the caller (SPEAKER_10), and 'they' in the subsequent turn refers to the library committee mentioned in turn 27.\",\n  \"reason\": \"Claim C explicitly states that requesting Playboy or Hustler at a public library would be considered ridiculous, which directly verifies the implied assumption in A that such publications are inappropriate for public libraries—aligning with the speaker's argument that the library's acceptance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the caller (SPEAKER_10), and 'they' in the following turn refers to the library committee mentioned in turn 27.\",\n  \"reason\": \"Claim C explicitly states that requesting Playboy or Hustler at a public library would be considered ridiculous, which directly verifies the implied assumption in A that such publications are inappropriate for public libraries—aligning with the speaker's argument that the library's acceptance of"
     },
     {
       "a_turn_idx": 26,
@@ -4626,7 +4626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the controversial children's books discussed in turns 27–31, which the speaker equates with pedophilia due to their inappropriate content.\",\n  \"reason\": \"Claim C states that pedophilia should not occur on a public level, which aligns with the speaker's concern about inappropriate material being accessible in public spaces like libraries. However, it does not explicitly address economic instability or precious metal investment. While the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the controversial children's books discussed in turns 27–31, which the speaker equates with pedophilia due to their inappropriate content.\",\n  \"reason\": \"Claim C states that pedophilia should not occur on a public level, which aligns with the speaker's concern about inappropriate material being accessible in public spaces like libraries. However, C does not explicitly address economic instability or precious metal investment. While the speaker"
     },
     {
       "a_turn_idx": 26,
@@ -4641,7 +4641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is discussing the inappropriate nature of certain books in public libraries. The phrase 'consenting adults doing things in their bedroom' refers back to the controversial content discussed in prior turns.\",\n  \"reason\": \"Claim C expresses a belief that adult activities should remain private, which aligns with the sentiment in assumption A that certain content (implied to be adult-oriented) should not be publicly accessible"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is discussing the inappropriate content in children's books. The phrase 'consenting adults' refers back to the discussion about adult material being inappropriate in public spaces.\",\n  \"reason\": \"Turn 32 expresses a belief that adult activities should remain private, specifically in the bedroom, which aligns with the broader concern about inappropriate content in public institutions like libraries. However, it does not explicitly"
     },
     {
       "a_turn_idx": 26,
@@ -4652,11 +4652,11 @@
       "claim_text": "The speaker believes speaking before a public forum with the mayor could lead to being heard.",
       "overlap_score": 2,
       "c_time": 1090.354,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with A.",
-      "reason": "Claim C discusses advocating for change through public forums and speaking before authorities, which is unrelated to the economic instability and precious metal investment belief expressed in assumption A. There is no overlap in semantic content, and C does not state or verify any aspect of A. The topics are entirely different—social policy vs. financial investment.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with A.\",\n  \"reason\": \"Claim C discusses advocating for change through public forums and speaking before authorities, which is unrelated to the economic instability and precious metal investment belief expressed in assumption A. There is no overlap in semantic content, and C does not state or verify any aspect of A. The topics are entirely different—social policy vs. financial investment.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is discussing the disturbing nature of children's books in public libraries.\",\n  \"reason\": \"Claim C (turn 32) discusses the possibility of being heard in a public forum with the mayor or city council regarding objectionable library content. However, this is unrelated to assumption A (turn 26), which asserts that economic instability is imminent and requires immediate action through precious metal investment"
     },
     {
       "a_turn_idx": 26,
@@ -4671,7 +4671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is the person reporting on the disturbing children's books in Oklahoma libraries.\",\n  \"reason\": \"Claim C (turn 32) discusses using the book's content to embarrass officials into taking corrective action, which is unrelated to assumption A (turn 26), which concerns economic instability and the need for immediate investment in precious metals. There is no overlap in subject matter, intent,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is the person reporting on the disturbing children's books in the library.\",\n  \"reason\": \"Claim C (turn 32) discusses using the book's content to embarrass officials into taking corrective action, which is unrelated to assumption A (turn 26), which concerns economic instability and the need for immediate investment in precious metals. There is no overlap in subject matter, intent,"
     },
     {
       "a_turn_idx": 26,
@@ -4686,7 +4686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the availability of gender-affirming materials in public libraries, as established in the prior context involving Isabel's complaint.\",\n  \"reason\": \"Claim C expresses concern about society passively accepting the availability of controversial material (pornography and gender-affirming content) in public spaces, particularly libraries. However, this does not relate to or verify assumption A, which concerns economic instability and the need for immediate investment in precious metals due to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 38 refers to the availability of gender-affirming material in public libraries, as established in prior turns (e.g., turn 27). The term 'this material' is coreferential with the controversial children's books discussed.\",\n  \"reason\": \"Claim C (turn 38) discusses society's passive acceptance of inappropriate material (pornography and gender-affirming content) being available in public libraries, which is unrelated"
     },
     {
       "a_turn_idx": 26,
@@ -4701,7 +4701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Joe Pags refers to the speaker (SPEAKER_02), who is promoting Swiss America and encouraging audience members to mention him to receive special deals.\",\n  \"reason\": \"Claim C states that Joe Pags is presenting credible information, which is a general assertion about his credibility. However, assumption A concerns the belief that mentioning Joe Pags increases the chance of receiving special deals—a behavioral incentive tied to referral. While C implies Joe Pags has authority, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Joe Pags refers to the speaker (SPEAKER_02), who is promoting his own platform and content.\",\n  \"reason\": \"Claim C states that Joe Pags is presenting credible information, which is a general assertion about credibility. However, assumption A concerns audience belief that personal referrals (e.g., mentioning Joe Pags) increase the chance of receiving special deals. While C implies authority or trustworthiness, it does not explicitly verify or address the belief about referral-driven"
     },
     {
       "a_turn_idx": 26,
@@ -4716,7 +4716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the controversial children's books discussed in turns 27 and 31, which contain material deemed inappropriate for children. The phrase 'pedophilia' is used metaphorically to express strong disapproval of exposing minors to adult-oriented content, aligning with the speaker's earlier concern about viewer engagement and content appropriateness.\",\n  \"reason\": \"Claim C explicitly states that pedophilia should not occur on a public level,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the controversial children's books discussed in turns 27 and 31, which contain material deemed inappropriate for children. 'Pedophilia' is used to describe the perceived nature of the content, not literal acts.\",\n  \"reason\": \"Claim C explicitly states that pedophilia should not occur on a public level, directly verifying the underlying assumption in A that viewers interpret 'Do not touch that dial' as a directive to"
     },
     {
       "a_turn_idx": 26,
@@ -4731,7 +4731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is the person expressing concern about the children's books. The phrase 'consenting adults doing things in their bedroom' directly corresponds to the idea of private adult activities.\",\n  \"reason\": \"Claim C explicitly states that consensual adult activities should remain private ('in the bedroom'), which directly verifies the underlying assumption in A that viewers interpret 'Do not touch that dial' as a directive to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to SPEAKER_10, who is the person expressing concern about the children's books. 'This' in 'this has to be brought out' refers to the controversial book being discussed.\",\n  \"reason\": \"Turn 32 explicitly states that consensual adult activities should be confined to private spaces ('in the bedroom'), which directly verifies the assumption in turn 26 that viewers interpret 'Do not touch that dial"
     },
     {
       "a_turn_idx": 26,
@@ -4746,7 +4746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 36 refers to SPEAKER_02, consistent with prior turns. 'Hustler' is a direct referent to the magazine mentioned in turn 28.\",\n  \"reason\": \"Claim C states that the speaker has never read Hustler, which contradicts the implicit assumption in A that viewers interpret 'Do not touch that dial' as a directive to stay engaged. However, C does not address or verify the assumption about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with earlier turns. The phrase 'Hustler' is directly referenced and negated in C.\",\n  \"reason\": \"Claim C explicitly denies having read Hustler, which contradicts the implied assumption in A that viewers interpret 'Do not touch that dial' as a directive to stay engaged. However, A is about audience interpretation of a slogan in a promotional context, while C is a personal"
     },
     {
       "a_turn_idx": 27,
@@ -4776,7 +4776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the public library officials mentioned in turn 27. The term 'ridiculous' in turn 28 aligns with the speaker's characterization of the gender-affirming books as 'disturbing' in turn 27.\",\n  \"reason\": \"Claim C explicitly states that requesting Playboy or Hustler at a public library would be considered ridiculous, which directly verifies the underlying assumption in A—that content deemed"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to the public library officials mentioned in turn 27. The term 'ridiculous' in turn 28 aligns with the speaker's characterization of the gender-affirming books as 'disturbing' in turn 27.\",\n  \"reason\": \"Claim C explicitly states that requesting Playboy or Hustler at a public library would be considered ridiculous, which directly verifies the underlying assumption in A that content deemed"
     },
     {
       "a_turn_idx": 27,
@@ -4806,7 +4806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the 'content' mentioned in assumption A, specifically the gender-affirming children's books described as 'disturbing'. The term 'explicit' in C aligns with the idea of being 'disturbing' and further specifies that the content meets the standard of being pornographic.\",\n  \"reason\": \"Claim C explicitly states that the content is identifiable as pornographic by common standards, which directly verifies the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 30 refers to the 'content' mentioned in turn 27, specifically the gender-affirming children's books described as 'disturbing'.\",\n  \"reason\": \"Turn 30 explicitly states that the content is 'identifiable as pornographic by common standards,' which directly verifies the assumption in turn 27 that such content is disturbing enough to warrant removal from public institutions. The claim goes beyond mere implication by asserting"
     },
     {
       "a_turn_idx": 27,

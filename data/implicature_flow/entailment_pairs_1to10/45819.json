@@ -334,9 +334,9 @@
       "c_time": 80.931,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the speaker' refers to SPEAKER_05, who is discussing upcoming content.",
+      "coref_notes": "No coreference issues; 'the speaker' in turn 4 refers to SPEAKER_05.",
       "reason": "Claim C states the speaker will discuss local news, which is unrelated to assumption A about viewers interpreting promotional content as credible due to station reputation. There is no mention of credibility, promotion, or audience perception in C. Thus, C does not support, verify, or relate to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_05, who is discussing upcoming content.\",\n  \"reason\": \"Claim C states the speaker will discuss local news, which is unrelated to assumption A about viewers interpreting promotional content as credible due to station reputation. There is no mention of credibility, promotion, or audience perception in C. Thus, C does not support, verify, or relate to A.\"\n}\n```"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 4 refers to SPEAKER_05.\",\n  \"reason\": \"Claim C states the speaker will discuss local news, which is unrelated to assumption A about viewers interpreting promotional content as credible due to station reputation. There is no mention of credibility, promotion, or audience perception in C. Thus, C does not support, verify, or relate to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 1,
@@ -455,8 +455,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference links relevant; 'the speaker' in turn 22 refers to SPEAKER_04, who introduces the show.",
-      "reason": "Turn 22 states that the speaker is introducing the show 'Political Breakdown', which is unrelated to the earlier assumption A that defeating an entrenched incumbent is a significant political achievement. There is no mention, implication, or verification of A in C. The two statements address entirely different topics.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 22 refers to SPEAKER_04, who introduces the show.\",\n  \"reason\": \"Turn 22 states that the speaker is introducing the show 'Political Breakdown', which is unrelated to the earlier assumption A that defeating an entrenched incumbent is a significant political achievement. There is no mention, implication, or verification of A in C. The two statements address entirely different topics.\"\n}\n```"
+      "reason": "Turn 22 states that the speaker is introducing the show 'Political Breakdown', which is unrelated to the earlier assumption A that defeating an entrenched incumbent is a significant political achievement. There is no mention, implication, or verification of A in C. The two claims are semantically disconnected.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 22 refers to SPEAKER_04, who introduces the show.\",\n  \"reason\": \"Turn 22 states that the speaker is introducing the show 'Political Breakdown', which is unrelated to the earlier assumption A that defeating an entrenched incumbent is a significant political achievement. There is no mention, implication, or verification of A in C. The two claims are semantically disconnected.\"\n}\n```"
     },
     {
       "a_turn_idx": 3,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to the person being addressed (SPEAKER_08), who is the congressman Eric Swalwell. The claim about discussing student loan debt is unrelated to the assumption about authority to introduce topics.\",\n  \"reason\": \"Claim C discusses the speaker's belief that the person being addressed has openly discussed student loan debt, which is unrelated to the earlier assumption A that the speaker has authority to introduce topics on the platform. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to the person being addressed (SPEAKER_08), who is the congressman Eric Swalwell. The claim about discussing student loan debt is specific to that individual.\",\n  \"reason\": \"Turn 4 asserts that the speaker has authority to introduce topics on the platform. Turn 33 claims the speaker believes the person being addressed has openly discussed their student loan debt. This does not address or verify the speaker's authority"
     },
     {
       "a_turn_idx": 5,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 8 refers to the idea that wildfires have become more extreme due to climate change, which aligns with the assumption in turn 6 about recent wildfires supporting the need for policy change.\",\n  \"reason\": \"Claim C explicitly states that climate change has made wildfires more extreme over the long term, which directly verifies the underlying assumption in A that recent wildfires provide evidence for the need for policy change. The connection is clear and direct, with C providing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 8 refers to the idea that recent wildfires have become more extreme due to climate change, which aligns with the assumption in turn 6 about wildfires providing evidence for policy change.\",\n  \"reason\": \"Claim C explicitly states that climate change has made wildfires more extreme over the long term, which directly supports and verifies the substance of assumption A—that recent wildfires provide evidence for the need for policy change. The causal link between climate change and increased wildfire"
     },
     {
       "a_turn_idx": 6,
@@ -2211,7 +2211,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A; 'the speaker' in C refers to a law enforcement officer, while 'the speaker' in A refers to a candidate with regional roots.\",\n  \"reason\": \"Claim C discusses the safety benefits of body cameras for police officers, which is unrelated to the assumption that personal connection to a region lends credibility to a political perspective. There is no overlap in semantic content between A and C, and C does not state, imply"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A; 'the speaker' in C refers to a law enforcement officer, while 'the speaker' in A refers to a candidate with regional roots.\",\n  \"reason\": \"Claim C discusses the personal safety benefits of body cameras for law enforcement, which is unrelated to the assumption that a personal connection to a region lends credibility to a political perspective. There is no overlap in semantic content between A and C, and C does not state"
     },
     {
       "a_turn_idx": 27,
@@ -2331,7 +2331,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 50 refers to the speaker's brother, a law enforcement officer. The claim in turn 50 concerns the legitimacy of complaints against police officers, specifically stating that certain complaints were 'BS' or baseless.\",\n  \"reason\": \"Turn 50 expresses a belief that some complaints against police are unnecessary or baseless, which is unrelated to the moral obligation to protect others from similar experiences discussed in turn 27. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'he' in turn 50, which resolves to the brother who works for the sheriff's office in Alameda County, as established in turn 49.\",\n  \"reason\": \"Claim C (turn 50) expresses that certain complaints were unnecessary or baseless ('BS'), specifically referring to false complaints against police officers. This contradicts the moral obligation implied in assumption A (turn 27), which asserts that protecting others"
     },
     {
       "a_turn_idx": 27,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 62 refers to SPEAKER_08, and 'my 16-year-old son' is a specific example used metaphorically to illustrate loss of effectiveness. 'Oppo research' refers to opposition research, implying political strategy work.\",\n  \"reason\": \"Turn 62 uses the hypothetical scenario of a 16-year-old son conducting the speaker's Oppo research as a metaphor for diminished effectiveness, suggesting the speaker may no"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 62 refers to SPEAKER_08, and 'my 16-year-old son' is a specific example used metaphorically to illustrate loss of effectiveness. 'Oppo research' refers to opposition research, implying political strategy work.\",\n  \"reason\": \"Turn 62 uses the image of a 16-year-old son conducting the speaker's Oppo research as a metaphor for the speaker feeling ineffective or outdated. While this"
     },
     {
       "a_turn_idx": 33,
@@ -3186,7 +3186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'Kamala Harris' in C is a separate topic from the Bush-Pelosi era political cooperation discussed in A.\",\n  \"reason\": \"Claim C discusses Kamala Harris's transition from prosecutor to politician and tensions in her public positions, which is unrelated to the earlier assumption A about bipartisan cooperation between Democrats and Republicans during the Bush-Pelosi era. There is no mention of Bush-Pelosi, student loan"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'Kamala Harris' in C is not linked to the Bush-Pelosi era or political cooperation between Democrats and Republicans.\",\n  \"reason\": \"Claim C discusses Kamala Harris's transition from prosecutor to politician and tensions between her past and present roles, which is unrelated to the assumption A about bipartisan cooperation during the Bush-Pelosi era. There is no mention of the Bush-Pelosi deal, student loan"
     },
     {
       "a_turn_idx": 35,
@@ -3651,7 +3651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to 'young families' mentioned earlier in the same turn, which are linked to the speaker's own experience with student loan debt. 'Just like me' establishes direct equivalence between the speaker and the group described.\",\n  \"reason\": \"Claim C explicitly states that young families in the district have 'a lot of student loan debt' similar to the speaker, directly verifying the core idea in assumption A—that the speaker believes their position"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to 'young families' mentioned earlier in the same turn, which are linked to the speaker's own experience with student loan debt. 'Just like me' establishes direct equivalence between the speaker and the group described.\",\n  \"reason\": \"Claim C explicitly states that young families in the district have substantial student loan debt 'just like me,' directly verifying the speaker's belief (from turn 38) that their position on student"
     },
     {
       "a_turn_idx": 38,
@@ -7279,9 +7279,9 @@
       "c_time": 1852.873,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'audience members' in A refers to listeners of the podcast, and 'you' in C refers to the same group.",
-      "reason": "Claim C discusses audience participation in a live discussion about housing issues, but does not address sponsorship disclosures or audience expectations regarding them. There is no mention of sponsorship, disclosure, or listener acceptance of such disclosures. Therefore, C is unrelated to A and does not verify or support its substance.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'audience members' in A refers to listeners of the podcast, and 'you' in C refers to the same group.\",\n  \"reason\": \"Claim C discusses audience participation in a live discussion about housing issues, but does not address sponsorship disclosures or audience expectations regarding them. There is no mention of sponsorship, disclosure, or listener acceptance of such disclosures. Therefore, C is unrelated to A and does not verify or support its substance.\"\n}\n```"
+      "coref_notes": "No coreference resolution needed; 'audience members' in C refers to listeners of the podcast, consistent with A.",
+      "reason": "Claim C discusses audience participation in a live discussion about housing issues, but does not address sponsorship disclosures or audience expectations regarding them. There is no mention of disclosures, sponsorships, or listener acceptance of such disclosures. Thus, C is unrelated to assumption A and does not verify its substance.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'audience members' in C refers to listeners of the podcast, consistent with A.\",\n  \"reason\": \"Claim C discusses audience participation in a live discussion about housing issues, but does not address sponsorship disclosures or audience expectations regarding them. There is no mention of disclosures, sponsorships, or listener acceptance of such disclosures. Thus, C is unrelated to assumption A and does not verify its substance.\"\n}\n```"
     },
     {
       "a_turn_idx": 91,

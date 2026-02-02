@@ -1937,11 +1937,11 @@
       "claim_text": "There is a reason behind companies' requests for employees to return to the office.",
       "overlap_score": 2,
       "c_time": 964.251,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'companies' and 'employees' are clear in context.",
-      "reason": "Claim C (turn 44) discusses companies' reasons for requesting employees to return to the office, which is entirely unrelated to assumption A (turn 17), which concerns federal funding allocation based on formal requests at specific times. There is no overlap in subject matter, logic, or semantic content between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'companies' and 'employees' are clear in context.\",\n  \"reason\": \"Claim C (turn 44) discusses companies' reasons for requesting employees to return to the office, which is entirely unrelated to assumption A (turn 17), which concerns federal funding allocation based on formal requests at specific times. There is no overlap in subject matter, logic, or semantic content between the two statements.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'companies' and 'employees' are clear in context.\",\n  \"reason\": \"Claim C (turn 44) discusses companies' reasons for requesting employees to return to the office, which is entirely unrelated to assumption A (turn 17), which concerns federal funding allocation based on formal requests at specific times. There is no overlap in subject matter, logic, or semantic content between the two statements. Therefore, the entailment score is 1.\""
     },
     {
       "a_turn_idx": 17,
@@ -2046,7 +2046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to the local officials and stakeholders involved in the bridge project, and 'the people at Al-Dott' refers to the Alabama Department of Transportation.\",\n  \"reason\": \"Turn 25 explicitly states the speaker's belief that convening a meeting with key stakeholders, including Governor Ivey and Al-Dott leadership, will lead to a resolution. This aligns with the earlier assumption in turn 17 that strategic timing—"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 25 refers to the local officials and stakeholders involved in the bridge project, and 'her' refers to Governor Ivey.\",\n  \"reason\": \"Claim C states that the speaker believes a resolution is achievable through convening a meeting with key figures, including Governor Ivey and Al-Dott leadership. This reflects a belief in strategic timing and coordination, which aligns with the idea that timing matters for policy influence (assumption A). However"
     },
     {
       "a_turn_idx": 17,
@@ -2061,7 +2061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to the Alabama Department of Transportation (Al-Dott), as established in prior context. 'The governor' is the ultimate authority over Al-Dott, as noted in turn 34.\",\n  \"reason\": \"Turn 34 states that the governor has the ability to drive the project and make it a success, implying that leadership and decision-making authority rest with the governor. This aligns with the core idea in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to the Alabama Department of Transportation (Al-Dott), as established in prior context. 'The governor' is the ultimate authority over Al-Dott, as noted in turn 34.\",\n  \"reason\": \"Turn 34 states that the governor has the ability to drive the project and make it a success, implying that leadership and decision-making authority reside with the governor. This aligns with the core idea in turn"
     },
     {
       "a_turn_idx": 17,
@@ -2106,7 +2106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 21 refers to the 'new plan' mentioned in turn 18, which is the central subject of both statements.\",\n  \"reason\": \"Turn 18 asserts that funding requests depend on having a viable plan, implying that without one, appeals to federal sources are ineffective. Turn 21 explicitly states that a viable road development plan can be agreed upon during a collaborative meeting, directly addressing and verifying the necessity of such a plan"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the 'new plan' mentioned in assumption A, which is the viable plan needed to secure funding.\",\n  \"reason\": \"Claim C explicitly states that a viable road development plan can be agreed upon during a meeting, directly verifying the core requirement in assumption A—that funding requests depend on demonstrating a viable plan. The context shows that Speaker 08 emphasizes the necessity of a new, workable plan before approaching federal authorities, and turn"
     },
     {
       "a_turn_idx": 18,
@@ -2136,7 +2136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to LDOT (Alabama Department of Transportation), as established in prior context. 'The speaker' refers to SPEAKER_08.\",\n  \"reason\": \"Claim C explicitly states that the speaker has presented a plan to LDOT, which directly verifies the assumption in A that the speaker has agency over their own resources and decisions. By asserting that they have already presented the proposal and are actively pushing for its adoption despite resistance,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to LDOT (Alabama Department of Transportation), as established in the context. 'The speaker' refers to SPEAKER_08.\",\n  \"reason\": \"Claim C explicitly states that the speaker has presented a plan to LDOT, which directly verifies the assumption in A that the speaker has agency over their own resources and decisions. The speaker asserts they have developed a plan, presented it, and are actively pushing for its adoption"
     },
     {
       "a_turn_idx": 18,
@@ -2151,7 +2151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference to resolve; 'personal hustle' and 'community support' in C are distinct from 'coordination and structured action' in A.\",\n  \"reason\": \"Claim C promotes individual initiative ('embracing personal hustle') and informal community networks, which contrasts with assumption A's emphasis on formal coordination and structured planning. There is no overlap in semantic content, and C does not verify or state the necessity of structured action. Instead, it suggests alternative pathways to success, making"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'personal hustle' and 'community support' in C do not align with 'coordination and structured action' in A.\",\n  \"reason\": \"Claim C promotes individual initiative ('embracing personal hustle') and informal community engagement, which contrasts with A's emphasis on formal coordination and structured planning. There is no overlap in substantive content, and C does not verify or state the necessity of organized, systematic action. Thus, the claim is unrelated and potentially contradictory"
     },
     {
       "a_turn_idx": 18,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'there are provisions' refers to the House-passed National Defense Authorization Act.\",\n  \"reason\": \"Claim C discusses provisions in the House-passed National Defense Authorization Act that the speaker dislikes, which is unrelated to the existence of a feasible alternative to the current plan (Assumption A). There is no mention of a new plan, alternative strategies, or feasibility of alternatives. The topics shift from infrastructure planning to defense legislation, making the claims semantically unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'there are provisions' refers to the House-passed National Defense Authorization Act.\",\n  \"reason\": \"Claim C discusses provisions in the House-passed National Defense Authorization Act that the speaker dislikes, which is unrelated to the existence of a feasible alternative to the current plan (Assumption A). While both involve policy planning, C does not address or verify the idea of having a new plan or an alternative to the current approach. There is no mention of a"
     },
     {
       "a_turn_idx": 19,
@@ -2256,7 +2256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 40 refers to provisions in the House-passed National Defense Authorization Act, which is unrelated to the 'new plan' mentioned in turn 19. No coreference connects the 'current plan' or 'alternative plan' to the defense bill provisions.\",\n  \"reason\": \"Turn 19 asserts the existence of a feasible alternative to the current plan, specifically a new plan for infrastructure funding. Turn 40 discusses provisions in a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_08 throughout.\",\n  \"reason\": \"Claim C discusses provisions in the House-passed National Defense Authorization Act that the speaker approves of, which is unrelated to the existence of a feasible alternative to the current plan (Assumption A). While both relate to policy planning, C does not address or verify the need for a new plan or the feasibility of alternatives. There is no mention of a new plan, alternative"
     },
     {
       "a_turn_idx": 19,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'World of Secrets' refers to a documentary series, which is unrelated to the concept of a 'new plan' or 'feasible alternative' in turn 19.\",\n  \"reason\": \"Claim C introduces a completely unrelated topic—a BBC documentary series titled 'World of Secrets'—with no connection to the idea of a feasible alternative to the current plan discussed in turn 19. There is no semantic overlap or verification of the assumption that a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'World of Secrets' refers to a documentary series, which is unrelated to the concept of a 'new plan' or 'feasible alternative' in turn 19.\",\n  \"reason\": \"Claim C discusses a BBC documentary series titled 'World of Secrets' about a murder case, which has no semantic connection to the idea of a feasible alternative to a current plan. There is no overlap in subject matter, intent, or content between the two statements"
     },
     {
       "a_turn_idx": 19,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 40 refers to Congress and legislative bodies, not the listeners mentioned in turn 19. No direct reference to 'a new plan' being created by the listeners or their acceptance of it.\",\n  \"reason\": \"Turn 40 discusses drafting a new National Defense Authorization Act, which is a procedural legislative action, but does not address the creation of a new plan in the context of local officials or the need for listeners to accept and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 40 refers to Congress and legislative bodies, not the listeners mentioned in turn 19. No direct reference to creating a new plan for local officials or the state-level initiative discussed in turn 19.\",\n  \"reason\": \"Turn 40 discusses drafting a new National Defense Authorization Act, which is a separate legislative process unrelated to the earlier assumption about local/state officials creating a new plan for federal funding. While both involve planning and"
     },
     {
       "a_turn_idx": 19,
@@ -2376,7 +2376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 48 refers to potential players of the game, not the listeners in turn 19.\",\n  \"reason\": \"Turn 48 discusses a video game feature and encourages users to download Call of Duty Mobile, which is entirely unrelated to the assumption in turn 19 about creating a new plan and gaining acceptance from listeners. There is no overlap in topic, subject, or implied action. The claim does not address,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'you' in turn 19 refers to stakeholders in the planning process, while 'you' in turn 48 refers to potential players of a video game.\",\n  \"reason\": \"Turn 48 discusses a mobile game feature and has no connection to the assumption in turn 19 about stakeholders accepting and acting on a new plan. The topics, context, and intended audience are entirely unrelated. There is no semantic overlap or logical support between the"
     },
     {
       "a_turn_idx": 19,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a project' in turn 20 refers to the 'new plan' mentioned in turn 19. 'Who's responsibility' implies the need for leadership, which aligns with the idea of someone leading the effort to create the new plan.\",\n  \"reason\": \"Turn 20 explicitly raises the question of who will lead the project to create a new plan, thereby making the implicit assumption in turn 19—that creating a new plan is feasible—"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a project' in turn 20 refers to the 'new plan' mentioned in turn 19. 'Head up' is synonymous with leading or taking responsibility for the project.\",\n  \"reason\": \"Turn 20 explicitly states that creating a new plan requires someone to lead the project, which directly verifies the implicit assumption in turn 19 that creating a new plan is feasible and within the group's capability—specifically by implying that leadership is necessary"
     },
     {
       "a_turn_idx": 19,
@@ -2421,7 +2421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'locals' in turn 20 refers to local officials mentioned in turn 18 and turn 21. The term 'local entities' in claim C is equivalent to 'local officials' and 'locals' in the context.\",\n  \"reason\": \"Claim C explicitly states that local entities may play a role in leading or participating in a new plan, which directly verifies the implicit assumption in A that creating a new plan is within the group’s capability—specific"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'locals' in turn 20 refers to local officials mentioned in turn 18 and turn 21, and 'that' in 'do locals need to get involved in that as well?' refers to the task of creating a new plan.\",\n  \"reason\": \"Claim C explicitly affirms that local entities may play a role in leading or participating in a new plan, which directly verifies the implicit assumption in A that creating a new plan is within the group"
     },
     {
       "a_turn_idx": 19,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to the State Department of Transportation (LDOT), as established in prior context. 'Al Dot' is a colloquial reference to LDOT.\",\n  \"reason\": \"Claim C explicitly states that the State Department of Transportation must initiate collaboration by proposing a new plan, which directly verifies the core idea in assumption A—that creating a new plan is within the group’s capability. The statement emphasizes that LDOT must take action ('"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to the State Department of Transportation (LDOT), as established in prior context. 'Al Dot' is a colloquial reference to LDOT.\",\n  \"reason\": \"Claim C explicitly states that the State Department of Transportation must initiate collaboration by proposing a new plan, which directly verifies the substance of assumption A—that creating a new plan is within the group’s capability—by asserting that LDOT, as the responsible entity,"
     },
     {
       "a_turn_idx": 20,
@@ -2481,7 +2481,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to 'Al Dot' (LDOT), which is established in turn 21 as the entity responsible for road projects. 'The governor' is the superior authority over LDOT, as clarified in turn 35.\",\n  \"reason\": \"Claim C explicitly states that leadership should be sought from the governor because LDOT works for the governor, thereby making clear that leadership responsibilities must be assigned at a higher level (the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 35 refers to 'Al Dot' (LDOT), which is established in turn 21 and contextually linked to the governor as their employer.\",\n  \"reason\": \"Claim C explicitly states that leadership should be sought from the governor because 'the folks at Al Dot work for the governor,' directly verifying the necessity of clear leadership assignment within the project—specifically, that leadership must come from a higher authority (the governor) to"
     },
     {
       "a_turn_idx": 20,
@@ -2511,7 +2511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to constituents, and 'the state and the federal government' refers to the entities mentioned in the context of planning initiatives.\",\n  \"reason\": \"Claim C discusses constituents wanting collaboration between state and federal governments, which relates to the broader theme of governance in planning. However, it does not explicitly state or verify the assumption that the state government has legitimate authority over regional planning. Instead, it focuses on coordination between levels of government,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to constituents, as indicated by the context of concern about the project and tolls.\",\n  \"reason\": \"Claim C discusses constituents wanting collaboration between state and federal government, which is related to the broader theme of governance and planning. However, it does not explicitly state or verify the specific assumption A—that the state government has legitimate authority over regional planning initiatives. While C implies stakeholder interest in coordination, it does not affirm or"
     },
     {
       "a_turn_idx": 20,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the state government, as the speaker is discussing state-level actions and funding. 'This money' refers to the federal funds received by the state from offshore gas wells.\",\n  \"reason\": \"Claim C discusses the state's access to federal funds ($25 million/year from offshore gas wells), which implies the state government has authority to receive and utilize such funds. However, it does not explicitly affirm or verify the legitimacy of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 32 refers to the state government, as contextually implied by the discussion of state-level planning and funding decisions. 'This money' refers to the federal funds received by the state from offshore gas wells.\",\n  \"reason\": \"Claim C discusses the state's access to federal funds ($25M/year) from offshore gas wells, which implies the state's role in managing such resources. However, it does not explicitly affirm or verify the"
     },
     {
       "a_turn_idx": 20,
@@ -2541,7 +2541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Al Dot' as the State Department of Transportation (LDOT), and 'the governor' as the entity overseeing LDOT. 'They' in 'they have to come to the feds' refers to LDOT, which is under the governor's authority.\",\n  \"reason\": \"Claim C explicitly states that the federal government cannot force the State Department of Transportation to act, which directly verifies the assumption in A that the state government holds legitimate"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Al Dot' as the State Department of Transportation (LDOT), and 'the governor' as the entity overseeing LDOT. 'They' in 'they have to come to the feds' refers to LDOT, which is under the governor's authority.\",\n  \"reason\": \"Claim C explicitly states that the federal government cannot force the State Department of Transportation to act, which directly verifies the assumption in A that the state government (via"
     },
     {
       "a_turn_idx": 20,
@@ -2616,7 +2616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Al Dot' as the State Department of Transportation (LDOT), and 'they' in turn refers to LDOT. The phrase 'the State Department of Transportation' in claim C is coreferential with LDOT mentioned in turn 21.\",\n  \"reason\": \"Claim C states that the federal government cannot force the State Department of Transportation (LDOT) to act, which aligns with the underlying assumption in A that effective transportation"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 uses 'Al Dot' and 'State Department of Transportation' interchangeably; 'they' in turn 35 refers to the State DOT.\",\n  \"reason\": \"Claim C states that the federal government cannot force the State DOT to act, which directly supports the idea that coordination across multiple levels of government (including state and federal) is necessary—aligning with assumption A that effective transportation infrastructure requires such coordination. While C does not explicitly mention local governments"
     },
     {
       "a_turn_idx": 21,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 40 refers to specific provisions in the House-passed National Defense Authorization Act, which is distinct from the road-building plans discussed in turn 21.\",\n  \"reason\": \"Claim C discusses disliked provisions in the National Defense Authorization Act, which is unrelated to the infrastructure or road-building plans mentioned in assumption A. While both involve policy planning and government action, C does not address or verify the existence of feasible alternative approaches to road-building."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 40 refers to the National Defense Authorization Act, which is the subject of discussion in the broader context.\",\n  \"reason\": \"Claim C discusses disliked provisions in the House-passed National Defense Authorization Act, which is unrelated to the topic of road-building alternatives mentioned in assumption A. While both involve policy planning and governmental decision-making, C does not address or verify the existence of feasible alternative approaches to current road-building plans. The connection is only"
     },
     {
       "a_turn_idx": 21,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_08, consistent with prior context.\",\n  \"reason\": \"Claim C discusses provisions in the House-passed National Defense Authorization Act that the speaker approves of, specifically related to naval procurement pricing. This is entirely unrelated to assumption A, which concerns feasible alternative approaches to current road-building plans in Alabama. There is no overlap in topic, subject matter, or semantic content between the two statements. Therefore, C neither"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_08, consistent with prior context.\",\n  \"reason\": \"Claim C discusses provisions in the House-passed National Defense Authorization Act that the speaker approves of, specifically related to naval procurement pricing. This is unrelated to the earlier assumption A, which concerns feasible alternative approaches to current road-building plans in Alabama. There is no mention of transportation planning, road alternatives, or LDOT responsibilities in C. Thus, C"
     },
     {
       "a_turn_idx": 21,
@@ -2676,7 +2676,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'we' in turn 47 refers to the hosts of The Wealth Break podcast, not related to the earlier discussion about collaboration in infrastructure planning.\",\n  \"reason\": \"Claim C discusses wealth-building through investing and community support, which is entirely unrelated to assumption A about collaboration leading to credible and sustainable political outcomes. There is no overlap in subject matter, context, or semantic content. The two statements address completely different domains—infrastructure governance vs. personal finance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'we' in turn 47 refers to the hosts of The Wealth Break podcast, not related to the earlier discussion about collaboration in infrastructure planning.\",\n  \"reason\": \"Claim C discusses wealth-building through investing and community support, which is entirely unrelated to assumption A about collaboration leading to credible and sustainable political outcomes. There is no overlap in subject matter, context, or semantic content. The two statements address completely different domains—infrastructure governance versus personal finance—and"
     },
     {
       "a_turn_idx": 21,
@@ -2721,7 +2721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_08, and 'the people' refers to constituents concerned about the project. The term 'constituents' is explicitly linked to 'all of the people that are concerned' via contextual continuity.\",\n  \"reason\": \"Turn 24 explicitly states that the speaker (SPEAKER_03) has noticed and heard from constituents who are concerned about the project and tolls. This directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to SPEAKER_08, and 'the people' refers to constituents concerned about the project. The term 'constituents' is coreferent with 'all of the people' mentioned in turn 24.\",\n  \"reason\": \"Turn 24 explicitly states that the speaker has noticed and heard from people concerned about the project and tolls, which directly verifies the substance of assumption A—that the speaker believes"
     },
     {
       "a_turn_idx": 22,
@@ -2751,7 +2751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to Al Dot (LDOT), as established in the prior context where SPEAKER_11 mentions Al Dot's claim about working twenty years. The phrase 'we can make these people from out of state pay for it' implies a plan to tax non-local users, which SPEAKER_08 rejects by stating 'that's not going to fly'. This rejection directly aligns with the claim that taxing locals is unacceptable.\","
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to Al Dot (LDOT), as established in the prior context where SPEAKER_11 mentions Al Dot's claim about working twenty years. The claim 'that's not going to fly' refers to the plan to tax locals, which is clarified by the speaker's explanation that 40% of traffic consists of local residents.\",\n  \"reason\": \"Turn 23 explicitly rejects the idea of taxing locals for the"
     },
     {
       "a_turn_idx": 22,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to 'constituents', as established by the context of concerns about the project and tolls expressed by the speaker.\",\n  \"reason\": \"Turn 24 explicitly states that constituents want a bridge, which directly verifies the assumption in turn 22 that Al Dot's claim about working twenty years is relevant to the concerns of those worried about the project. The mention of constituents being concerned about tolls and wanting a bridge"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 24 refers to 'constituents' as established by the prior context where SPEAKER_03 addresses 'your constituents'.\",\n  \"reason\": \"Turn 24 explicitly states that constituents want a bridge, which directly verifies the assumption in turn 22 that Al Dot's twenty-year effort is relevant to the concerns of those worried about the project. The mention of constituents being concerned about tolls and wanting a bridge confirms their"
     },
     {
       "a_turn_idx": 22,
@@ -2856,7 +2856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 37 refers to the claim made by Al Dot about working twenty years, as established in turn 22. 'We found out that in right, this in right' is a colloquial expression indicating confirmation of the truth behind the claim.\",\n  \"reason\": \"Turn 37 explicitly states that the speaker's office investigated the claim made by Al Dot (about working twenty years) and discovered the truth behind it. This directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 37 refers to SPEAKER_08's office, which is consistent with the context of investigating claims made by Al Dot. 'This' in 'we found out that in right, this in right' refers to the claim about Al Dot working twenty years, resolving the coreference.\",\n  \"reason\": \"Turn 37 explicitly confirms that the speaker's office investigated the claim made by Al Dot about working twenty years and verified its"
     },
     {
       "a_turn_idx": 22,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the ongoing infrastructure project discussed earlier, particularly the toll bridge plan involving Al Dot. However, the claim in turn 38 does not explicitly mention or verify the assumption that Al Dot's twenty-year timeline is relevant.\",\n  \"reason\": \"Turn 38 asks about upcoming legislative priorities, including infrastructure, which is related to the broader topic discussed in turn 22. However, it does not explicitly state or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the ongoing infrastructure project discussed earlier, particularly the toll bridge plan involving Al Dot. However, 'this' is not explicitly linked to the specific claim about Al Dot's twenty-year work.\",\n  \"reason\": \"Turn 38 asks about upcoming priorities for the person being addressed, which is a general question about legislative focus after summer recess. While the context suggests the infrastructure project is a major concern, the claim does not"
     },
     {
       "a_turn_idx": 22,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 39 refers to SPEAKER_08, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 39) discusses opposition to gun control legislation due to recent mass shootings, which is entirely unrelated to Assumption A (turn 22), which concerns the relevance of Al Dot's twenty-year work on a previous plan to the current project. There is no overlap in topic, subject, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 39 refers to SPEAKER_08, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 39) discusses opposition to gun control legislation due to recent mass shootings, which is entirely unrelated to assumption A (turn 22), which concerns the relevance of Al Dot's twenty-year work on a previous plan to the current project. There is no overlap in topic, subject, or implied"
     },
     {
       "a_turn_idx": 22,

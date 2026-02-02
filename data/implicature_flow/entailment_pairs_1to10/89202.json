@@ -1,0 +1,42 @@
+{
+  "episode_id": "89202",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.071,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Other retailers charge significantly more for comparable goods.",
+      "c_turn_idx": 3,
+      "claim_text": "One party may receive more jury strikes than the other.",
+      "overlap_score": 2,
+      "c_time": 424.195,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'one party' refers to legal parties in a trial context.\",\n  \"reason\": \"Claim C discusses procedural asymmetries in the criminal justice system (e.g., unequal jury strikes), which is unrelated to the economic comparison of retail pricing in assumption A. There is no overlap in semantic content between the idea that other retailers charge more and the claim about jury strikes. The topics are entirely different—pricing strategy vs. courtroom procedure—and no connection or verification"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.071,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker’s personal enthusiasm is a valid basis for recommending Burlington to others.",
+      "c_turn_idx": 1,
+      "claim_text": "The speaker hopes listeners will provide feedback on their personal definitions of fairness.",
+      "overlap_score": 2,
+      "c_time": 49.461,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_03, while 'the speaker' in C refers to SPEAKER_00. The claims are about different individuals and topics.\",\n  \"reason\": \"Claim C (turn 1) discusses the host's desire for listener feedback on personal definitions of fairness, which is unrelated to assumption A, which asserts that personal enthusiasm about Burlington is a valid basis for recommendation. The topics, speakers, and"
+    }
+  ]
+}

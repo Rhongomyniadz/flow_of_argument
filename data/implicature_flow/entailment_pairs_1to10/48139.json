@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 17 refers to SPEAKER_13, who claims to have voted for Trump in 2024. There is no reference to the speaker's authority to represent the donation initiative.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_13) has voted for Trump in the 2024 election, which is unrelated to the earlier assumption A about having legitimate authority to represent the donation initiative"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to SPEAKER_13, who is distinct from the speaker in turn 1 (SPEAKER_08). No coreference exists between the two.\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_13) has voted for Trump in 2024, which is unrelated to the earlier assumption A that SPEAKER_08 has legitimate authority to represent the donation initiative."
     },
     {
       "a_turn_idx": 1,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context. 'Trump's policies' in C corresponds directly to the economic success attributed to Trump in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the Democratic strategy avoids addressing Trump's policies and instead attacks his personality. This directly verifies the assumption in A that the economic success is directly attributable to Trump's policies, implying that opposing parties avoid engaging with the policy success. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context. 'Trump's policies' in C corresponds directly to the economic policies mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the Democratic strategy avoids addressing Trump's policies and instead attacks his personality. This directly verifies the assumption in A that Trump's economic success is attributable to his policies, implying that opponents are avoiding engagement with the policy successes. The statement 'the only"
     },
     {
       "a_turn_idx": 3,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Trump' in turn 23, which directly aligns with the earlier assumption A that the speaker identifies with or represents a group aligned with Trump’s agenda. The pronoun 'he' in turn 23 is resolved to Trump based on context.\",\n  \"reason\": \"Claim C explicitly states 'supporting Trump,' which directly verifies the substance of assumption A—that the speaker identifies with or represents a group aligned with Trump’s agenda."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Trump' in turn 23, which directly aligns with the group identified in turn 3 ('Trump country') and confirms active support.\",\n  \"reason\": \"Turn 3 assumes the speaker represents a group aligned with Trump’s agenda. Turn 23 explicitly states 'supporting Trump,' which directly verifies the substance of that assumption with no ambiguity. The context confirms continuity in political alignment, and 'supporting Trump' is a"
     },
     {
       "a_turn_idx": 4,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context (turns 30–31). The claim C discusses Kamala Harris's actions toward Jewish Americans in Michigan, which is unrelated to the topic of energy policy effectiveness under President Trump mentioned in assumption A.\",\n  \"reason\": \"Assumption A concerns the effectiveness of energy policies during Trump's presidency, particularly tax credits and economic outcomes. Claim C, however, asserts that"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context (turns 30–31). The claim C discusses Kamala Harris's actions toward Jewish Americans in Michigan, which is unrelated to the topic of energy policy effectiveness under President Trump mentioned in assumption A.\",\n  \"reason\": \"Assumption A concerns the effectiveness of energy policies during Trump's presidency, particularly tax credits and economic outcomes. Claim C, however, shifts focus"
     },
     {
       "a_turn_idx": 4,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'they' refers to people expressing opinions on social media, which aligns with the broader public sentiment mentioned in turn 5.\",\n  \"reason\": \"Claim C states that social media reflects public sentiment regarding political candidates, which directly supports the core idea in assumption A—that public opinion polls reflect genuine sentiment among demographic groups. While C shifts focus from formal polls to social media as a source of sentiment, it still verifies the substantive claim that public sentiment is observable"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 21, 'they' refers to people expressing opinions on social media, which aligns with the broader public sentiment mentioned in turn 5.\",\n  \"reason\": \"Claim C states that social media reflects public sentiment regarding political candidates, which relates to the idea in assumption A that public opinion polls reflect genuine sentiment. However, C shifts focus from formal polls to social media as a source of sentiment, which is not equivalent to the original claim. While both address public sentiment"
     },
     {
       "a_turn_idx": 5,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Barack Obama, as established in the context of turn 20 where Obama is discussed in relation to his appearance during events supporting Kamala Harris versus criticizing Trump.\",\n  \"reason\": \"Claim C discusses Barack Obama's demeanor—specifically that he appeared more animated while criticizing Trump than while supporting Kamala Harris. This contrasts with assumption A, which asserts that economic conditions under Trump were objectively better than under Biden/Harris. While both"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Barack Obama, as established in the context. 'Trump' and 'Kamala Harris' are consistent across both A and C.\",\n  \"reason\": \"Claim C discusses Barack Obama's demeanor during criticism of Trump versus support for Kamala Harris, suggesting he was more animated when attacking Trump. However, this does not explicitly verify or state the economic comparison in assumption A, which asserts that economic conditions under Trump were objectively better than"
     },
     {
       "a_turn_idx": 5,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context. 'Trump-like' refers to emulating Trump's economic policies, which aligns with the earlier assumption about Trump's economic success.\",\n  \"reason\": \"Claim C explicitly states that Kamala Harris is attempting to emulate Trump’s political approach, which directly verifies the underlying assumption in A that Trump’s economic policies were objectively better. The context reinforces that Trump’s economic outcomes—such"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Kamala Harris, as established in the surrounding context. 'Trump-like' refers to emulating Trump's economic policies, which aligns with the earlier assumption about Trump's economic success.\",\n  \"reason\": \"Claim C explicitly states that Kamala Harris is attempting to emulate Trump’s political approach, which directly verifies the underlying assumption in A that Trump’s economic policies were objectively better. The context reinforces that Trump’s economic performance—such"
     },
     {
       "a_turn_idx": 5,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 11, 'Barack Obama' refers to the same individual mentioned in turn 6 (SPEAKER_07's statement about Obama's comments). The pronoun 'he' in turn 6 is resolved to Barack Obama based on context.\",\n  \"reason\": \"Turn 11 mentions Barack Obama making a claim about Donald Trump, specifically regarding border security and economic benefits. However, it does not explicitly verify or state the assumption in turn 6—that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 11, 'Barack Obama' refers to the same individual mentioned in turn 6 (SPEAKER_07's statement about Obama's comments). The pronoun 'he' in turn 6 is resolved to Barack Obama based on context.\",\n  \"reason\": \"Turn 11 mentions Barack Obama making a claim about Donald Trump, specifically regarding border security and economic benefits. However, it does not explicitly verify or state the audience's trust in the speaker"
     },
     {
       "a_turn_idx": 6,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Barack Obama, as established in prior turns. 'It' in 'It will have no effect on black Americans' refers to Obama's statement or influence.\",\n  \"reason\": \"Claim C (turn 13) makes a prediction about the future impact of Barack Obama's statements, asserting they will have no effect on black Americans. This contradicts assumption A (turn 6), which relies on the audience trusting the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Barack Obama, as established in prior turns. 'It' in 'It will have no effect on black Americans' refers to Obama's statement or influence.\",\n  \"reason\": \"Claim C (turn 13) states a prediction about the future impact of Barack Obama's remarks, asserting they will have no effect on black Americans. This contradicts assumption A (turn 6), which relies on the audience trusting the"
     },
     {
       "a_turn_idx": 6,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_13, who is the same speaker as in assumption A (turn 6). The phrase 'I've already voted for Donald J. Trump' in turn 6 is explicitly reiterated and expanded in turn 17 as 'I voted already for Trump for 2024'.\",\n  \"reason\": \"Claim C directly and explicitly verifies the substance of assumption A by confirming the speaker's prior action of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 17 refers to SPEAKER_13, who is the same speaker as in turn 6. The phrase 'I've voted already' in turn 17 directly confirms the action stated in turn 6 ('I've already turned in my ballot').\",\n  \"reason\": \"Turn 6 asserts that the speaker has already voted for Trump, stating 'I've already turned in my ballot' and specifying it's for Trump."
     },
     {
       "a_turn_idx": 6,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'I' in turn 23, which resolves to the same speaker as in turn 6 ('I've already voted for Donald J. Trump'). The pronoun 'he' in turn 6 is not present; instead, the subject is self-referential and consistent across both turns.\",\n  \"reason\": \"Turn 6 asserts that the speaker has already voted for Trump and identifies this as a personal political act. Turn 2"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'I' in turn 23, which resolves to the same speaker as in turn 6 ('I've already voted for Donald J. Trump'). The pronoun 'he' in turn 6 is not present; instead, the subject is self-referential and consistent across both turns.\",\n  \"reason\": \"Turn 6 asserts that the speaker has already voted for Trump and identifies this as a personal political choice. Turn 2"
     },
     {
       "a_turn_idx": 7,
@@ -3951,7 +3951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Sherrod Brown, as established in prior context where Brown is criticized for his policies and political alignment. 'This guy' in turn 54 also refers to Sherrod Brown.\",\n  \"reason\": \"Claim C explicitly states that Sherrod Brown 'has got to go,' which directly verifies the belief that he should be removed from office. This aligns with the earlier assumption A that elected officials should prioritize Americans, implying"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 54, 'this guy' refers to Sherrod Brown, as established in prior turns. 'He' in 'he voted against stopping the flights...' also refers to Sherrod Brown.\",\n  \"reason\": \"Turn 54 explicitly states 'This guy's got to go, Sean,' which directly verifies the belief that the individual (Sherrod Brown) should be removed from office. This aligns with the core idea in turn 35—that elected officials should"
     },
     {
       "a_turn_idx": 35,
@@ -4011,7 +4011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Sherrod Brown' as the subject of the claim about children undergoing gender transition procedures; 'he' in turn 54 refers to Sherrod Brown.\",\n  \"reason\": \"Claim C (turn 53) asserts that Sherrod Brown believes children should undergo gender transition procedures, which is unrelated to assumption A (turn 35), which concerns elected officials prioritizing Americans. There is no semantic connection between the two claims—C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Sherrod Brown' as the subject of the claim about children undergoing gender transition procedures; 'he' in turn 54 refers to Sherrod Brown.\",\n  \"reason\": \"Claim C states that Sherrod Brown believes children should undergo gender transition procedures, which is unrelated to assumption A, which asserts that elected officials should prioritize Americans. There is no semantic connection between prioritizing Americans and beliefs about gender transition procedures. The claim in C contrad"
     },
     {
       "a_turn_idx": 35,
@@ -4056,7 +4056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 54, 'he' refers to Sherrod Brown, as established in prior context. 'Our auto industry' refers to Ohio's auto industry, consistent with earlier mention of Ohio's manufacturing strength.\",\n  \"reason\": \"Claim C states that Sherrod Brown's policies would cripple Ohio's auto industry, which directly aligns with assumption A's core idea that elected officials should prioritize Americans—specifically, Ohio workers and industries. The claim explicitly ties Brown's policy"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 54, 'he' refers to Sherrod Brown, as established in prior context where Brown is criticized for his policies. 'Our auto industry' refers to Ohio's auto industry, consistent with earlier mention of Ohio's manufacturing base.\",\n  \"reason\": \"Claim C states that Sherrod Brown's policies would cripple Ohio's auto industry, which directly supports the broader idea in assumption A that Brown does not prioritize Americans—specifically, Ohio workers and industries. While"
     },
     {
       "a_turn_idx": 35,
@@ -4071,7 +4071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The term 'illegal citizens' in turn 52 refers to 'undocumented immigrants' mentioned in turn 35. 'They' in turn 52 refers to Democrats, including Sherrod Brown, as established in prior context.\",\n  \"reason\": \"Claim C explicitly uses the term 'illegal citizens' to describe undocumented immigrants, which directly aligns with the substance of assumption A, where the speaker criticizes funding foreign wars and giving benefits to undocumented immigrants as betrayals of"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The term 'illegal citizens' in turn 52 refers to 'undocumented immigrants' mentioned in turn 35. 'He' in turn 52 refers to Sherrod Brown, who is the subject of the criticism in both turns.\",\n  \"reason\": \"Turn 52 explicitly uses the term 'illegal citizens' to describe undocumented immigrants, which directly aligns with the claim in turn 35 that Sherrod Brown voted to give taxpayer-funded benefits to 'illegal"
     },
     {
       "a_turn_idx": 35,
@@ -4251,7 +4251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'we' and 'our kids' refer to the broader American public and future generations.\",\n  \"reason\": \"Claim C discusses voting not out of self-interest or hatred, but for the future of the country and younger generations. However, it does not address or verify the specific assumption A—that taxpayer funds should not be allocated to non-citizens under any circumstances. While both involve moral reasoning about national priorities, C focuses on motivations for voting (avoid"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'we' and 'our kids' refer to the broader American public and future generations.\",\n  \"reason\": \"Claim C discusses voting not out of self-interest or hatred, but for the future of children and the nation. While this contrasts with the idea of prioritizing citizens over non-citizens, it does not explicitly address or verify the assumption that taxpayer funds should never go to non-citizens. The focus shifts from fiscal allocation to moral and"
     },
     {
       "a_turn_idx": 35,
@@ -4266,7 +4266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_13 refers to 'Kamala Harris' and 'he' in turn 52; 'he' likely refers to Bernie Moreno, who is the subject of the discussion. No reference to political leaders supporting foreign aid or immigration benefits as morally failing constituents.\",\n  \"reason\": \"Claim C discusses Kamala Harris's lack of scrutiny on universal healthcare and related progressive policies, which does not address or verify the assumption that leaders supporting foreign aid or immigration benefits are"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_13 refers to 'Kamala Harris' and 'he' in turn 52; 'he' likely refers to Bernie Moreno based on context, though the pronoun is ambiguous. However, the claim about Harris is unrelated to the moral failure of leaders supporting foreign aid or immigration.\",\n  \"reason\": \"Claim C discusses Kamala Harris's lack of scrutiny on universal healthcare and Green New Deal support, which is unrelated to the moral failure of leaders supporting"
     },
     {
       "a_turn_idx": 35,
@@ -4281,7 +4281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in 'this immigration policy' refers to the policy mentioned in turn 35 where Sherrod Brown is criticized for voting to give taxpayer-funded benefits to illegal aliens.\",\n  \"reason\": \"Claim C explicitly states that the speaker's group is exposing 'this immigration policy,' which directly references the specific policy criticized in assumption A—support for benefits to illegal aliens. This confirms the moral failure accusation in A, as the exposure of the policy serves to highlight the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in 'this immigration policy' refers to the policy mentioned in turn 35 where Sherrod Brown is criticized for voting to give taxpayer-funded benefits to illegal aliens.\",\n  \"reason\": \"Claim C explicitly states that the speaker's group is exposing 'this immigration policy,' which directly references the specific policy criticized in assumption A—support for benefits to illegal aliens. This aligns precisely with A’s assertion that supporting such policies constitutes a moral failure to prioritize Americans"
     },
     {
       "a_turn_idx": 35,
@@ -4386,7 +4386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 63 refers to a Democratic candidate mentioned in the broader context, likely Sherrod Brown or another progressive figure. However, this reference is not directly tied to the specific claim in turn 35 about political leaders supporting foreign aid or immigration benefits.\",\n  \"reason\": \"Turn 35 asserts that political leaders who support foreign aid or immigration benefits are morally failing their constituents. Turn 63 claims that a candidate would implement 'radical"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 63 refers to a Democratic candidate mentioned in the broader context, likely Sherrod Brown or another progressive figure. However, this reference is not directly tied to the specific claim in turn 35 about political leaders supporting foreign aid or immigration benefits.\",\n  \"reason\": \"Turn 63 discusses a candidate's 'radical policy positions' such as student loan forgiveness and subsidies, which are not equivalent to the moral failure of prioritizing foreign"
     },
     {
       "a_turn_idx": 35,
@@ -4401,7 +4401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Bernie Moreno' in turn 39 refers to the Senate candidate mentioned in prior turns; 'your race' refers to Moreno's campaign in Ohio.\",\n  \"reason\": \"Turn 39 states the speaker has been following Bernie Moreno's campaign, which indicates engagement with his political efforts. However, it does not explicitly state or verify the belief that endorsing Moreno aligns with protecting American interests—this is the core of assumption A. While the context implies alignment"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Bernie Moreno' in turn 39 refers to the Senate candidate mentioned in prior turns; 'your race' refers to Moreno's campaign in Ohio.\",\n  \"reason\": \"Claim C states that the speaker has been following Bernie Moreno's campaign, which indicates engagement with his political efforts. However, it does not explicitly state or verify the belief that endorsing Moreno aligns with protecting American interests—this is the core of assumption A. While the context implies alignment with"
     },
     {
       "a_turn_idx": 35,
@@ -4416,7 +4416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Bernie Moreno; 'Bernie Moreno' in turn 39 is the same individual.\",\n  \"reason\": \"Claim C (turn 39) expresses gratitude toward Bernie Moreno, which does not make explicit or verify the assumption in A (turn 35) that endorsing Moreno aligns with protecting American interests. While both statements involve support for Moreno, C lacks any reference to national interest, American priorities, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Bernie Moreno; 'Bernie Moreno' in turn 39 is the same individual.\",\n  \"reason\": \"Claim C (turn 39) expresses gratitude toward Bernie Moreno, which does not make explicit or verify the assumption in A (turn 35) that endorsing Moreno aligns with protecting American interests. While both statements involve support for Moreno, C lacks any reference to American interests, policy alignment, or"
     },
     {
       "a_turn_idx": 35,
@@ -4446,7 +4446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 52, 'he' refers to Sherrod Brown, as established in prior context where Brown is discussed as supporting Kamala Harris and other progressive policies.\",\n  \"reason\": \"Claim C explicitly states that Sherrod Brown supports Kamala Harris, which directly verifies the substance of assumption A—that endorsing Bernie Moreno aligns with protecting American interests—by framing Brown as a partisan Democrat whose alignment with Harris undermines American interests. The claim makes the political alignment (Brown supporting Harris)"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_13 refers to 'your friend Sherrod Brown' in turn 52, which resolves to Sherrod Brown mentioned in earlier turns. 'He' in 'he said that' refers to Sherrod Brown.\",\n  \"reason\": \"Turn 52 explicitly states that Sherrod Brown supports Kamala Harris, which directly verifies the assumption in turn 35 that endorsing Bernie Moreno aligns with protecting American interests—because opposing Brown’s support for Harris (a"
     },
     {
       "a_turn_idx": 35,
@@ -4491,7 +4491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_13 refers to 'he' in turn 54 as Sherrod Brown, based on prior context where Brown is criticized for voting against stopping flights from Cuba, Haiti, Nicaragua, and Venezuela.\",\n  \"reason\": \"Claim C states that the decision to not stop flights from Cuba, Haiti, Nicaragua, and Venezuela is 'insane,' which reflects a critique of Sherrod Brown's voting record. However, this does not explicitly or implicitly verify the earlier assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Sherrod Brown, as established in prior context where Brown is criticized for various policy positions.\",\n  \"reason\": \"Claim C (turn 54) states that the speaker finds it 'insane' to not stop flights from Cuba, Haiti, Nicaragua, and Venezuela—this is a specific policy critique of Sherrod Brown. However, assumption A (turn 35) asserts that endorsing Bernie Moreno aligns with"
     },
     {
       "a_turn_idx": 35,
@@ -4521,7 +4521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 63 refers to the Democratic candidate mentioned in the context (Sherrod Brown), not Bernie Moreno. The claim C discusses the Democratic candidate's policy positions, while assumption A concerns Bernie Moreno's alignment with American interests.\",\n  \"reason\": \"Claim C discusses the beliefs and policy intentions of a Democratic candidate (Sherrod Brown), whereas assumption A focuses on Bernie Moreno's alignment with American interests. There is no direct statement in C affirming or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 63 refers to the Democratic candidate mentioned in the context (Sherrod Brown), not Bernie Moreno. The claim C discusses the Democratic candidate's 'radical policy positions,' while assumption A concerns Bernie Moreno's alignment with American interests.\",\n  \"reason\": \"Claim C discusses the beliefs and policy positions of a Democratic candidate (Sherrod Brown), whereas assumption A focuses on Bernie Moreno's alignment with American interests. There is no direct statement linking Moreno"
     },
     {
       "a_turn_idx": 36,
@@ -4536,7 +4536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Bernie Moreno' in turn 39, which resolves the pronoun 'he' in turn 36 ('his name and he's doing really, really well') to Bernie Moreno.\",\n  \"reason\": \"Turn 39 states that the speaker has been following Bernie Moreno's campaign, which implies ongoing engagement with his political performance and polling data—directly supporting the assumption in turn 36 that the speaker has access to"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to Bernie Moreno, as established by context. Turn 39 uses 'Bernie Moreno' explicitly and references 'following your race,' which aligns with the speaker's access to recent polling data about Moreno's campaign.\",\n  \"reason\": \"Turn 39 states that the speaker has been following Bernie Moreno's campaign, which implies ongoing engagement with current developments, including polling data. This supports the assumption in turn 3"
     },
     {
       "a_turn_idx": 36,
@@ -4626,7 +4626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to Bernie Moreno, the Senate candidate mentioned in turn 36. 'Our side' refers to the political position supported by the speaker and Bernie Moreno.\",\n  \"reason\": \"Claim C states that people are shifting support to the speaker's side after learning more about the leader (Bernie Moreno), which aligns with the idea that the speaker trusts their own judgment about the significance of the poll—specifically, that Moreno"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to Bernie Moreno, as established in prior context. 'Our side' refers to the political position supported by the speaker and Bernie Moreno.\",\n  \"reason\": \"Claim C states that people are shifting support to the speaker's side after learning more about the leader (Bernie Moreno), which aligns with the idea that the speaker trusts their own judgment about the poll's significance—specifically, that Moreno is gaining traction due to"
     },
     {
       "a_turn_idx": 36,
@@ -4641,7 +4641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Bernie Moreno, not the speaker. The speaker (SPEAKER_13) is discussing Bernie Moreno's views and actions, not their own judgment about polls.\",\n  \"reason\": \"Turn 36 expresses the speaker's trust in their own judgment regarding the significance of a poll showing Bernie Moreno's lead. Turn 52 discusses the speaker's belief that Kamala Harris is not questioned about her policy positions,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Bernie Moreno, not the speaker. The speaker (SPEAKER_13) is discussing Bernie Moreno's views and actions, not their own judgment about polls.\",\n  \"reason\": \"Turn 36 expresses the speaker's trust in their own judgment regarding the significance of a poll showing Bernie Moreno's lead. Turn 52 discusses the speaker's belief that Kamala Harris is never questioned about her policy positions,"
     },
     {
       "a_turn_idx": 37,
@@ -4746,7 +4746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 37 refers to Sherrod Brown, but claim C does not reference him or the race context.\",\n  \"reason\": \"Claim C discusses voting toward positive goals rather than against negative ones, which is a general principle about political motivation. Assumption A concerns the implication of a one-point race for an incumbent, particularly that 'even worse' suggests deeper negative consequences beyond the narrow margin. While both involve political evaluation, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' and 'we' refer to general voters and citizens.\",\n  \"reason\": \"Claim C discusses voting toward positive goals rather than against negative ones, which is a general principle about political motivation. Assumption A concerns the implication of 'even worse' in the context of a one-point race for an incumbent, suggesting deeper negative consequences beyond mere polling proximity. While both touch on political outcomes and perceptions of negativity, C does not explicitly address or verify the"
     },
     {
       "a_turn_idx": 38,
@@ -4761,7 +4761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Sherrod Brown, as established in the context (e.g., 'this is who your friend Sherrod Brown is supporting').\",\n  \"reason\": \"Turn 52 discusses Kamala Harris's positions on issues like universal healthcare and the Green New Deal, and claims she is never questioned about them. This is unrelated to turn 38, which concerns the measurement of electoral success via vote percentages. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Sherrod Brown, as established in the prior context. 'She' refers to Kamala Harris, who is discussed in relation to policy positions.\",\n  \"reason\": \"Turn 52 discusses Kamala Harris's policy positions, such as supporting universal healthcare and eliminating private health insurance, and claims she is never questioned about them. However, this does not relate to the earlier assumption A, which concerns measuring electoral success by"
     },
     {
       "a_turn_idx": 38,
@@ -4776,7 +4776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 66 refers to the set of policies mentioned (student loan forgiveness, etc.), not the concept of electoral success or vote percentage.\",\n  \"reason\": \"Claim C (turn 66) discusses political motivations behind policy proposals, specifically suggesting that certain programs are used to 'buy votes.' This is unrelated to assumption A, which concerns how electoral success is measured—specifically, by percentage of votes or support. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 66 refers to the set of policies mentioned (student loan forgiveness, etc.), not the concept of electoral success or vote percentage.\",\n  \"reason\": \"Turn 66 claims that certain political actions (e.g., student loan forgiveness) may be motivated by electoral gain, which is unrelated to the earlier assumption in turn 38 that electoral success is measured by vote percentage. While both relate to politics and elections, C"
     },
     {
       "a_turn_idx": 38,
@@ -4791,7 +4791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to the opponent, Share Brown, as established in prior context (turns 38, 40). 'Our side' refers to the speaker's campaign.\",\n  \"reason\": \"Claim C states that people are shifting support to the speaker's side after learning more about the leader, implying a change in perception based on exposure. This relates to the idea that voter support is dynamic and influenced by information, which align"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to the opponent, Share Brown, as established in prior context. 'Our side' refers to the speaker's campaign.\",\n  \"reason\": \"Claim C states that people are shifting support to the speaker's side after learning more about the leader, implying a change in voter perception based on exposure. This relates to the idea that voter support is dynamic and influenced by information, which aligns with the broader concept behind assumption A—"
     },
     {
       "a_turn_idx": 38,

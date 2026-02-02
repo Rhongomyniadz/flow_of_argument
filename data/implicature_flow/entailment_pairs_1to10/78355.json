@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'House of Cards' refers to the TV show, and 'a House majority whip from the state of South Carolina' is a fictional character.\",\n  \"reason\": \"Claim C discusses a fictional portrayal in 'House of Cards' of a House majority whip from South Carolina, which does not verify or relate to the speaker's firsthand experience with civil rights activism in South Carolina during the 1960s. There is no explicit or implicit connection between"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'House of Cards' refers to the TV show, and 'a House majority whip from the state of South Carolina' is a fictional character.\",\n  \"reason\": \"Claim C discusses a fictional portrayal in 'House of Cards' of a House majority whip from South Carolina, which is unrelated to the speaker's firsthand experience with civil rights activism in South Carolina during the 1960s. There is no mention of personal involvement in activism, nor"
     },
     {
       "a_turn_idx": 8,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 22 refers to SPEAKER_00, as established by the prior exchange. 'I' in turn 23 refers to SPEAKER_00.\",\n  \"reason\": \"Claim C states that the speaker has 'a little bit of history' and mentions familiarity with historical figures and events (e.g., Lincoln, Four Times), indicating general awareness of U.S. political history. However, this does not explicitly verify or confirm"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 22 refers to SPEAKER_00, as established by the conversational context. No other coreference issues are present.\",\n  \"reason\": \"Claim C states that the speaker has 'some familiarity with U.S. political history,' which is a weaker and more general statement than assumption A, which asserts firsthand experience with civil rights activism in South Carolina during the 1960s. While the speaker’s mention of historical films"
     },
     {
       "a_turn_idx": 8,
@@ -1026,7 +1026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 31 refers to SPEAKER_00, who is the same speaker as in turn 8. 'March 15th, 1960' matches the date mentioned in turn 8 ('March 15, 1960') when the speaker participated in a demonstration.\",\n  \"reason\": \"Turn 31 explicitly states that the speaker was in jail on March 15, 19"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 31 refers to SPEAKER_00, who is the same speaker as in turn 8. 'March 15th, 1960' is the same date mentioned in turn 8 as the date of the demonstration in Orangeburg.\",\n  \"reason\": \"Turn 31 explicitly states that the speaker was in jail on March 15th, 1960, which aligns with the"
     },
     {
       "a_turn_idx": 8,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that flag' in turn 10 refers to the Confederate battle flag; 'I' in turn 11 refers to SPEAKER_00, who is the same person speaking in turn 10.\",\n  \"reason\": \"Claim C explicitly states that the Confederate flag was raised during the speaker's time teaching in Charleston, which directly verifies the historical fact implied in assumption A—that the flag's placement in 1962 (during the speaker's"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that flag' in turn 10 refers to the Confederate battle flag; 'I' in turn 11 refers to SPEAKER_00, who is the same person speaking in both turns.\",\n  \"reason\": \"Claim C explicitly states that the Confederate flag was raised during the speaker's time teaching in Charleston, which directly verifies the historical fact implied in assumption A—that the flag's placement in 1962 (during the speaker's teaching years"
     },
     {
       "a_turn_idx": 10,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Bob McNair, the former governor mentioned in the context.\",\n  \"reason\": \"Claim C states that Bob McNair chose not to display the Confederate flag on a particular day, which implies a moral or symbolic decision regarding the flag. This indirectly relates to the idea that historical context (e.g., the flag’s controversial origin in 1962, not the Civil War) should influence present-day actions. However"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Bob McNair, the former governor mentioned in the context.\",\n  \"reason\": \"Claim C states that Bob McNair chose not to display the Confederate flag on a particular day, which implies a moral or symbolic decision influenced by awareness of its controversial history. This aligns with assumption A, which asserts that historical facts about symbols like the Confederate flag should inform present-day moral judgments. While C does not explicitly state the full"
     },
     {
       "a_turn_idx": 10,
@@ -1367,11 +1367,11 @@
       "claim_text": "Public understanding of the majority whip role is largely shaped by media portrayals like House of Cards.",
       "overlap_score": 2,
       "c_time": 628.794,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the role of the majority whip' refers to the position discussed in turn 22.",
-      "reason": "Claim C discusses media portrayals shaping public understanding of the majority whip role, which is unrelated to assumption A about athletic ability being relevant for a public figure. There is no overlap in semantic content between A and C. C does not state, verify, or even reference athletic ability, making the connection irrelevant.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the role of the majority whip' refers to the position discussed in turn 22.\",\n  \"reason\": \"Claim C discusses media portrayals shaping public understanding of the majority whip role, which is unrelated to assumption A about athletic ability being relevant for a public figure. There is no overlap in semantic content between A and C. C does not state, verify, or even reference athletic ability, making the connection irrelevant.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the majority whip' refers to the position discussed in turn 22.\",\n  \"reason\": \"Claim C discusses media portrayals shaping public understanding of the majority whip role, while assumption A concerns athletic ability as a relevant quality for a public figure like a congressman. These topics are unrelated in substance. There is no overlap in semantic content between athletic ability and media portrayals of congressional roles. Therefore, C does not make A explicit and is clearly unrelated.\""
     },
     {
       "a_turn_idx": 14,
@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Mignon refers to the same person mentioned in turn 16; 'I' in turn 17 refers to SPEAKER_00.\",\n  \"reason\": \"Claim C explicitly states 'I was teaching school during the academic year,' which directly verifies the substance of assumption A—that teaching school was a significant life achievement worth referencing. The context confirms that teaching school was a central part of the speaker's life during a financially difficult period, underscoring its importance. The statement"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Mignon refers to the same person as 'Minyon' mentioned in turn 16; 'I' in turn 17 refers to SPEAKER_00.\",\n  \"reason\": \"Claim C explicitly states 'I was teaching school during the academic year,' which directly verifies the substance of assumption A—that teaching school was a significant life achievement worth referencing. The context confirms that teaching school was a central part of the speaker's life during a financially difficult period, underscoring"
     },
     {
       "a_turn_idx": 15,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_00, consistent with A.\",\n  \"reason\": \"Claim C discusses an urgent economic crisis requiring immediate action to avoid a 1929-like depression, while assumption A concerns a father's duty to act immediately when his child's safety is at risk. The topics, contexts, and core meanings are entirely different. There is no overlap in substance or intent. Thus, C does not support"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_00, consistent with A.\",\n  \"reason\": \"Claim C discusses an urgent financial crisis requiring immediate action to avoid economic collapse akin to 1929, while assumption A concerns a father's duty to act immediately when his child's safety is at risk. The topics, contexts, and core meanings are entirely different—C involves national economic policy and systemic risk, whereas A centers on personal"
     },
     {
       "a_turn_idx": 18,
@@ -1489,9 +1489,9 @@
       "c_time": 581.308,
       "entailment_score": 9,
       "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'he' in turn 19 refers to Bill Clinton based on context.",
+      "coref_notes": "No coreference issues; 'he' in turn 19 refers to Bill Clinton, as established by context.",
       "reason": "Claim C explicitly states that Bill Clinton has been playing golf longer than Barack Obama, which directly verifies the core content of assumption A—that both have sufficient golf experience to warrant comparison—by establishing a clear temporal advantage for Clinton, supporting the basis for comparison.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 19 refers to Bill Clinton based on context.\",\n  \"reason\": \"Claim C explicitly states that Bill Clinton has been playing golf longer than Barack Obama, which directly verifies the core content of assumption A—that both have sufficient golf experience to warrant comparison—by establishing a clear temporal advantage for Clinton, supporting the basis for comparison.\"\n}\n```"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 19 refers to Bill Clinton, as established by context.\",\n  \"reason\": \"Claim C explicitly states that Bill Clinton has been playing golf longer than Barack Obama, which directly verifies the core content of assumption A—that both have sufficient golf experience to warrant comparison—by establishing a clear temporal advantage for Clinton, supporting the basis for comparison.\"\n}\n```"
     },
     {
       "a_turn_idx": 18,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to President Obama, as established by context and prior mention.\",\n  \"reason\": \"Claim C explicitly states that President Obama initiated the idea of playing golf together during a phone call, which directly verifies the substance of assumption A—that both Clinton and Obama have sufficient golf experience to warrant comparison—by implying Obama's active interest and engagement in golf, thus supporting his level of experience. The statement is clear, direct, and confirms a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to President Obama, as established by context and prior mention.\",\n  \"reason\": \"Claim C explicitly states that President Obama initiated the idea of playing golf together during a phone call, which directly verifies the substance of assumption A—that both Clinton and Obama have sufficient golf experience to warrant comparison—by implying Obama's active interest and engagement in golf, thus supporting his level of experience. The statement is clear, direct, and leaves no"
     },
     {
       "a_turn_idx": 18,
@@ -1641,7 +1641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 21 refers to President Obama, as established in the prior context where Obama is discussed as the one eager to play golf.\",\n  \"reason\": \"Claim C states that the anxiety about playing golf stems from internal factors related to the individual's approach to the game, which aligns with the substance of assumption A — that the speaker believes the listener (a member of Congress) is among the very few who have had this specific interaction with Obama"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 21 refers to President Obama, as established in the prior context.\",\n  \"reason\": \"Claim C states that the anxiety about playing golf stems from internal factors related to the individual's approach to the game, which aligns with the substance of assumption A — that the speaker believes the listener is among the very few who have had this specific interaction with Obama. The mention of Obama's eagerness to play again implies personal motivation or internal drive"
     },
     {
       "a_turn_idx": 20,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to President Obama. In turn 21, 'him' refers to President Obama as well, indicating the speaker's focus on Obama's behavior toward the listener.\",\n  \"reason\": \"Turn 21 states that the speaker believes Obama is anxious about playing golf and thinks Obama has developed a strategy ('got in his game to give him a game'), which implies a specific mindset. However, this does not explicitly verify or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to President Obama. In turn 21, 'him' refers to President Obama as well, indicating the speaker's belief about Obama's eagerness to play golf.\",\n  \"reason\": \"Turn 21 states that the speaker believes Obama is anxious about playing golf and has developed a mindset to improve his game. This relates to the idea that Obama is motivated to play, which aligns with the assumption in turn"
     },
     {
       "a_turn_idx": 20,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 32 refers to SPEAKER_00, who is the same speaker as in turn 23. The phrase 'sitting there waiting to be' refers to the speaker's state after arrest, which is unrelated to the belief about implausible elements in historical shows.\",\n  \"reason\": \"Claim C discusses the speaker's experience of being in jail and awaiting a decision after arrest, which is entirely unrelated to the earlier assumption A about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout. 'She' in turn 32 refers to Emily, who is introduced in turn 33 as the woman who brought sandwiches to the jail.\",\n  \"reason\": \"Claim C (turn 32) discusses the speaker's experience of being in jail and waiting for a decision or processing after arrest. This is entirely unrelated to assumption A, which concerns the plausibility of historical elements in TV shows"
     },
     {
       "a_turn_idx": 23,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Members of Congress, consistent with the audience in turn 23. 'They' in 'they don't all see the world the same way' refers to members of Congress.\",\n  \"reason\": \"Claim C (turn 26) asserts that Members of Congress should never be surprised by elements of legislation, which is a specific normative statement about legislative transparency and preparation. Assumption A (turn 23"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Members of Congress, consistent with the audience in turn 23. 'They' in turn 26 refers to members of Congress, aligning with the audience in turn 23.\",\n  \"reason\": \"Claim C asserts that Members of Congress should never be surprised by elements of legislation, which is unrelated to assumption A, which concerns audience expectations regarding plausible depictions in historical dramas. While both involve expectations,"
     },
     {
       "a_turn_idx": 23,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to members who vote on legislation, consistent with the context of legislative roles discussed in turn 23.\",\n  \"reason\": \"Claim C states that members voting on legislation should understand the risks involved, which aligns with the broader concern in assumption A about expecting plausible depictions in historical dramas—specifically, that fictional portrayals (like House of Cards) should not mislead viewers about real political roles. While C does"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to members who vote on legislation, which aligns with the audience members mentioned in turn 23. 'They' in 'if they are going to take risks' refers to legislators.\",\n  \"reason\": \"Claim C states that members voting on legislation should understand the risks involved, which relates to the idea in assumption A that audiences should expect plausible depictions in historical dramas. However, C does not explicitly address plaus"
     },
     {
       "a_turn_idx": 23,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'she' in turn 33 refers to Emily, who is not connected to the earlier assumption A.\",\n  \"reason\": \"Turn 33 describes a personal anecdote about receiving food during a jail stay and a romantic encounter, which is entirely unrelated to the earlier assumption A about justifying a refund request based on past collaboration. There is no mention of financial requests, refunds, collaboration, or any related concept. The content of C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'she' in turn 33 refers to Emily, who is not connected to the earlier assumption A.\",\n  \"reason\": \"Turn 33 describes a personal anecdote about receiving food during a jail stay and a romantic encounter, which is entirely unrelated to the earlier assumption A about justifying a refund based on past collaboration. There is no mention of financial requests, refunds, collaboration, or any related concept. The content of C does not support"
     },
     {
       "a_turn_idx": 30,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 33 refers to Emily, who is introduced as the person who brought sandwiches to the jail in turn 32. The claim in turn 33 discusses Emily's actions during a tenth anniversary celebration, which is unrelated to the assumption in turn 30 about asking personal questions in public.\",\n  \"reason\": \"Turn 33 does not address or verify the assumption that it is appropriate to ask personal questions about romantic relationships in public"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 33 refers to Emily, who is mentioned as the person who brought sandwiches to the jail in turn 32. The claim in C is about learning about Emily’s act during a tenth anniversary celebration, which is unrelated to the assumption in A about asking personal questions in public settings.\",\n  \"reason\": \"Claim C discusses a private revelation about Emily's intentions during a personal milestone event, which does not address or verify the assumption that it"
     },
     {
       "a_turn_idx": 31,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout. 'She' in turn 33 refers to Emily, the speaker's wife, as established in the narrative.\",\n  \"reason\": \"Claim C states the speaker was in a 'standard jail facility,' which directly supports the implicit assumption in A that the speaker was in jail and expected to justify his presence there. While C does not explicitly state the expectation of justification, it confirms the setting (a standard jail"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout. 'She' in turn 32 refers to Emily, as established in turn 33.\",\n  \"reason\": \"Claim C states the speaker was in a 'standard jail facility,' which directly supports the implicit assumption in A that the speaker was in a conventional jail setting where people could expect justification for being there. While C does not explicitly state the expectation of justification, it confirms the context (a regular"
     },
     {
       "a_turn_idx": 31,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout. 'She' in turn 33 refers to Emily, as established in the narrative.\",\n  \"reason\": \"Claim C explicitly states the reason for the speaker's hunger—being in jail since 10 a.m. and it being 6–7 p.m.—which directly supports and verifies the implicit assumption in A that people expect an explanation for being in jail. The detail about hunger due to prolonged"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_00 throughout. 'She' in turn 33 refers to Emily, as established in the narrative.\",\n  \"reason\": \"Claim C explicitly states the reason for the speaker's hunger—being in jail since 10 a.m. and it being 6–7 p.m.—which directly supports and verifies the implied assumption in A that people expect an explanation for being in jail. The detail in C confirms the duration"
     },
     {
       "a_turn_idx": 32,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'I' in turn 36 refers to Speaker_02, who is distinct from Speaker_00 in turn 32.\",\n  \"reason\": \"Claim C (turn 36) states that the speaker identifies as voting Democratic, which is unrelated to assumption A (turn 32), which asserts that the speaker identifies as queer. There is no overlap in semantic content between the two claims. The speaker in turn 36"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'everybody votes Democratic' but this is unrelated to the earlier assumption A, which is about the speaker identifying as queer. No coreference resolves this claim to the prior assumption.\",\n  \"reason\": \"Claim C (turn 36) states that the speaker identifies as voting Democratic, which is unrelated to the earlier assumption A (turn 32) that the speaker identifies as queer. There is no semantic connection between political affiliation and sexual"
     }
   ]
 }

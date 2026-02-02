@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the guest (SPEAKER_01), and 'your grandparents' refers to the guest's grandparents. 'Tommy and Joyce Weldon' are identified as neighbors on Buckingham Court.\",\n  \"reason\": \"Claim C asserts that the listener (the guest) lived next door to Tommy and Joyce Weldon, or that their grandparents did. This is unrelated to assumption A, which concerns the validity of individual recollections as"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'you' in turn 6, which refers to SPEAKER_01 (the guest), and 'your grandparents' connects to the family home on Buckingham Court. 'Tommy and Joyce Weldon' are identified as neighbors.\",\n  \"reason\": \"Claim C asserts a specific residential relationship between the guest and Tommy and Joyce Weldon, suggesting proximity. However, this does not relate to or verify the earlier assumption A about individual recollections"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, who is discussing personal hair loss, not recollections or public expression.\",\n  \"reason\": \"Claim C discusses the speaker's belief about their hair not lasting long, which is entirely unrelated to the assumption that individual recollections are valid bases for public expression. There is no mention of recollections, public media, or expressing ideas. The topic shifts to personal physical appearance, making the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_01, who is discussing personal hair loss, not recollections or public media expression.\",\n  \"reason\": \"Claim C discusses the speaker's belief about their hair not lasting long, which is entirely unrelated to the earlier assumption A about individual recollections being valid bases for public media expression. There is no overlap in semantic content, and C does not state, imply, or verify any aspect of"
     },
     {
       "a_turn_idx": 0,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in turn 11 refers to Speaker 01 (Congressman McHenry), but this does not connect to the assumption in A.\",\n  \"reason\": \"Claim C (turn 12) discusses the speaker's hair and its expected longevity, which is entirely unrelated to the assumption in A about listeners understanding the distinction between personal opinion and institutional endorsement. There is no mention, implication, or verification"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 12 refers to Speaker_01, who is the guest (Congressman Patrick McHenry). The claim is about hair longevity, unrelated to the distinction between personal opinion and institutional endorsement.\",\n  \"reason\": \"Turn 12 discusses the speaker's personal belief about the short lifespan of their hair, which is entirely unrelated to the assumption in turn 0 about listeners understanding the difference between personal opinion and institutional endorsement. There"
     },
     {
       "a_turn_idx": 0,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the guest (SPEAKER_01), and 'your grandparents' refers to the guest's grandparents. 'Tommy and Joyce Weldon' are identified as neighbors on Buckingham Court.\",\n  \"reason\": \"Claim C asserts that the listener (the guest) lived next door to Tommy and Joyce Weldon, which is unrelated to assumption A, which concerns disclaimers protecting against misattribution of institutional views. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the guest (SPEAKER_01), and 'your grandparents' refers to the guest's grandparents. 'Tommy and Joyce Weldon' are identified as neighbors on Buckingham Court.\",\n  \"reason\": \"Claim C discusses the guest's potential proximity to Tommy and Joyce Weldon, which is unrelated to the earlier assumption A about disclaimers protecting against misattribution of institutional views. There is no overlap in semantic"
     },
     {
       "a_turn_idx": 0,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in A refers to SPEAKER_06; in C, 'I' refers to SPEAKER_01.\",\n  \"reason\": \"Claim C discusses the speaker's belief about their hair lasting only a short time, which is entirely unrelated to the assumption in A about disclaimers protecting against misattribution of institutional views. There is no overlap in semantic content, topic, or intent."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'he' in turn 11 refers to Speaker 01, but this does not connect to the claim in A.\",\n  \"reason\": \"Claim C (turn 12) discusses the speaker's hair and its expected longevity, which is entirely unrelated to the assumption in A about disclaimers protecting against misattribution of institutional views. There is no overlap in semantic content, and C neither states nor"
     },
     {
       "a_turn_idx": 0,
@@ -185,8 +185,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'Tripp McGill' is a specific individual mentioned in turn 18.",
-      "reason": "Claim C discusses the speaker's personal view of Tripp McGill as a mentor and someone who was constructively impactful, which is unrelated to assumption A about disclaimers protecting against misattribution of institutional views. There is no mention of disclaimers, institutional views, or any related concept in C. The topics are entirely distinct.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Tripp McGill' is a specific individual mentioned in turn 18.\",\n  \"reason\": \"Claim C discusses the speaker's personal view of Tripp McGill as a mentor and someone who was constructively impactful, which is unrelated to assumption A about disclaimers protecting against misattribution of institutional views. There is no mention of disclaimers, institutional views, or any related concept in C. The topics are entirely distinct.\"\n}\n```"
+      "reason": "Claim C discusses the speaker's personal view of Tripp McGill as a mentor and a positive influence, which is unrelated to assumption A about disclaimers protecting against misattribution of institutional views. There is no mention of disclaimers, institutional views, or any related concept in C. The two statements address entirely different topics.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Tripp McGill' is a specific individual mentioned in turn 18.\",\n  \"reason\": \"Claim C discusses the speaker's personal view of Tripp McGill as a mentor and a positive influence, which is unrelated to assumption A about disclaimers protecting against misattribution of institutional views. There is no mention of disclaimers, institutional views, or any related concept in C. The two statements address entirely different topics.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the guest (Patrick McHenry), and 'people you at die school with' is a likely typo for 'people you went to school with'. The question asks about maintaining relationships with former classmates, which is related to the idea of shared context from school, but does not explicitly verify the belief about understanding counting and geometry.\",\n  \"reason\": \"Turn 28 asks about staying in touch with former classmates, which touches"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the guest (Patrick McHenry), and 'people you at die school with' is a likely typo for 'people you went to school with'. The question asks about maintaining contact with former classmates, which is related to the idea of shared context from school, but does not explicitly verify the belief about understanding counting and geometry.\",\n  \"reason\": \"Turn 28 asks about staying in touch with former classmates, which touches"
     },
     {
       "a_turn_idx": 1,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 11 refers to SPEAKER_01, consistent with prior turns.\",\n  \"reason\": \"Claim C (white hair) is unrelated to assumption A, which concerns moral or social authority derived from a personal connection via shared neighborhood and family ties. The mention of white hair does not state, imply, or verify any aspect of the assumed authority or connection. There is no semantic link between physical appearance and the claimed basis of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' in turn 11 refers to SPEAKER_01.\",\n  \"reason\": \"Claim C (white hair) is unrelated to assumption A (moral or social authority based on hidden connection). Turn 11 discusses physical appearance and aging, while turn 5 asserts a social connection via shared neighborhood and family ties. There is no mention of authority, legitimacy, or exposure of true basis for access in C. Thus, C does not"
     },
     {
       "a_turn_idx": 5,
@@ -617,11 +617,11 @@
       "claim_text": "The speaker has had white hair for a significant period of time.",
       "overlap_score": 2,
       "c_time": 178.648,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 11 refers to SPEAKER_01, consistent with prior turns.\",\n  \"reason\": \"Claim C (white hair since Ashbrook) is unrelated to assumption A (moral/social authority to expose the listener’s access). A concerns a hidden connection via shared geography and family ties (wife of SPEAKER_05), while C discusses physical appearance and aging. There is no semantic link between having white hair and possessing"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'I' refers to SPEAKER_01 throughout.",
+      "reason": "Claim C (white hair since Ashbrook) is unrelated to assumption A (moral/social authority to expose the listener's true basis of access). A concerns a hidden connection via shared geography and family ties, while C discusses physical appearance and aging. There is no semantic overlap or verification of A in C.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_01 throughout.\",\n  \"reason\": \"Claim C (white hair since Ashbrook) is unrelated to assumption A (moral/social authority to expose the listener's true basis of access). A concerns a hidden connection via shared geography and family ties, while C discusses physical appearance and aging. There is no semantic overlap or verification of A in C.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Gastonia' is a proper noun and refers to the same location throughout.\",\n  \"reason\": \"Claim C (turn 31) states that Gastonia is no longer in the speaker's congressional district, which is unrelated to assumption A (turn 6), which concerns the listener's knowledge of Tommy and Joyce Weldon. There is no mention of Tommy, Joyce, or any familial or residential connection in C. Thus, C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Gastonia' is a proper noun and refers to the same location throughout.\",\n  \"reason\": \"Claim C (turn 31) states that Gastonia is no longer in the speaker's congressional district, which is unrelated to assumption A (turn 6), which concerns the listener's knowledge of Tommy and Joyce Weldon. There is no mention of Tommy, Joyce, or any familial or residential connection in C. The topics are entirely different"
     },
     {
       "a_turn_idx": 6,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to SPEAKER_06 and possibly the group they represent, consistent with the prior interaction. 'It' in turn 8 is resolved as the graduation year.\",\n  \"reason\": \"Claim C explicitly states that the group attempted to guess the graduation year without consulting yearbooks, which directly verifies the implicit assumption in A that asking someone directly about their graduation year is reasonable—here, by admitting they tried to guess rather than ask directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to SPEAKER_06 and possibly the group they represent, consistent with the prior interaction. 'It' in turn 8 is resolved as the graduation year.\",\n  \"reason\": \"Claim C explicitly states that the group attempted to guess the graduation year without consulting yearbooks, which directly verifies the implicit assumption in A that asking someone directly about their graduation year is reasonable—here, by admitting they tried to guess it before asking."
     },
     {
       "a_turn_idx": 8,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the addressee, consistent with prior turns. 'Gastonia' is a location previously discussed.\",\n  \"reason\": \"Turn 31 claims the speaker knows Gastonia is no longer in the addressee's congressional district. This is unrelated to turn 8, which assumes the addressee knows their own graduation year. There is no overlap in subject matter or logical connection between the two statements. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 31 refers to the addressee, consistent with turn 8.\",\n  \"reason\": \"Turn 31 makes a claim about the addressee's congressional district and Gastonia, which is unrelated to the assumption in turn 8 about the addressee knowing their own graduation year. There is no mention of graduation year, class of 90, or any knowledge about personal academic history. The topics are"
     },
     {
       "a_turn_idx": 8,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the addressee, consistent with prior turns. 'Gastonia' is the location discussed in both contexts.\",\n  \"reason\": \"Turn 31 claims the addressee reads something related to Gastonia, which is unrelated to the assumption in turn 8 that the addressee knows their own graduation year. There is no mention of graduation year, class of 90, or knowledge about personal academic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the addressee, consistent with prior turns. 'Gastonia' is the location discussed throughout.\",\n  \"reason\": \"Claim C (turn 31) discusses the addressee reading something related to Gastonia, which is unrelated to assumption A (turn 8), which concerns the addressee's knowledge of their own graduation year. There is no mention of graduation year, class of 90"
     },
     {
       "a_turn_idx": 8,

@@ -7776,7 +7776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 57 refers to SPEAKER_04, who is the same speaker as in turn 38. The claim in C (turn 57) about having extensive personal experience in hiring and interviewing does not relate to the assumption in A (turn 38) about legitimate authority to speak on national stability.\",\n  \"reason\": \"Turn 38 asserts that the speaker has legitimate authority to speak on national stability due to concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 57 refers to SPEAKER_04, who is the same speaker as in turn 38. The claim in C (turn 57) about having extensive personal experience in hiring and interviewing does not relate to the assumption in A (turn 38), which concerns the speaker's legitimacy to speak on national stability. There is no overlap in subject matter or logical connection.\",\n  \"reason\": \"Assumption A (turn"
     },
     {
       "a_turn_idx": 39,
@@ -7836,7 +7836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Gavin Newsom, the Governor of California, based on context from turn 47. 'They' in turn 48 refers to the Republican state attorneys general.\",\n  \"reason\": \"Claim C (turn 48) discusses California ceasing business with Walgreens due to its refusal to distribute abortion pills, and states that certain pharmaceuticals funded by the state may no longer be available at Walgreens. This"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Gavin Newsom, the Governor of California, based on context from turn 47. 'They' in turn 48 refers to Republican state attorneys general.\",\n  \"reason\": \"Claim C (turn 48) discusses California ceasing business with Walgreens due to its refusal to distribute abortion pills, and suggests that state-funded pharmaceuticals may no longer be available at Walgreens. This is unrelated to assumption"
     },
     {
       "a_turn_idx": 39,
@@ -7851,7 +7851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 40 refers to the speaker (SPEAKER_04), and 'them' refers to foreign recipients of U.S. financial aid, specifically Zelensky's government as implied in turn 39.\",\n  \"reason\": \"Claim C (turn 40) states 'I gotta let you go' which indicates the speaker is ending the conversation. This does not address or verify the assumption in A that the speaker has"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 40 refers to the speaker (SPEAKER_04), and 'them' refers to foreign recipients of U.S. financial aid, specifically Zelensky's government as implied in turn 39.\",\n  \"reason\": \"Claim C (turn 40) states 'I gotta let you go congressman' which indicates the speaker is ending the conversation. This does not address or verify the assumption in A that the speaker"
     },
     {
       "a_turn_idx": 39,
@@ -7911,7 +7911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to non-binary job seekers, and 'I' refers to SPEAKER_04, who is the same speaker as in turn 39.\",\n  \"reason\": \"Turn 53 claims the speaker has experience hiring many people, which implies professional judgment in personnel decisions. However, it does not explicitly state or verify the moral authority to decide who receives financial aid (A). While the speaker expresses strong opinions on hiring"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to non-binary job seekers, as established in the surrounding context. The speaker ('I') in turn 53 refers to SPEAKER_04, consistent with prior turns.\",\n  \"reason\": \"Turn 53 claims the speaker has experience hiring many people, which implies professional judgment in personnel decisions. However, it does not explicitly address or verify the moral authority to decide who receives financial aid (A). While the"
     },
     {
       "a_turn_idx": 39,
@@ -7926,7 +7926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 57 refers to job applicants, and 'I' refers to SPEAKER_04. The claim in C ('I've interviewed, I have been offered every professional job...') establishes personal experience in hiring, but does not address or verify the moral authority to decide financial aid distribution mentioned in A.\",\n  \"reason\": \"Turn 57 asserts the speaker's personal experience in hiring and interviewing, which is relevant to employment decisions but"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 57 refers to job applicants, not the speaker. The claim in turn 57 is about the speaker's experience in hiring and interviewing, which does not address or verify the moral authority to decide who receives financial aid mentioned in turn 39.\",\n  \"reason\": \"Turn 39 asserts that the speaker has moral authority to decide who receives financial aid, particularly in the context of cutting foreign aid (e.g., to Z"
     },
     {
       "a_turn_idx": 39,
@@ -8162,11 +8162,11 @@
       "claim_text": "Political affiliations may influence hiring outcomes in certain contexts like working for a Democratic Senator or AOC.",
       "overlap_score": 2,
       "c_time": 2333.601,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'you' in turn 57 refers to job applicants generally.",
-      "reason": "Claim C discusses political affiliations influencing hiring outcomes in specific contexts (e.g., working for a Democratic Senator or AOC), while assumption A concerns public calls influencing policy outcomes related to prison releases. These topics are unrelated in both subject matter and mechanism. There is no overlap in semantic content, and C does not address or verify A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 57 refers to job applicants generally.\",\n  \"reason\": \"Claim C discusses political affiliations influencing hiring outcomes in specific contexts (e.g., working for a Democratic Senator or AOC), while assumption A concerns public calls influencing policy outcomes related to prison releases. These topics are unrelated in both subject matter and mechanism. There is no overlap in semantic content, and C does not address or verify A in any way.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; both A and C are independent claims without shared referents.\",\n  \"reason\": \"Claim C discusses political affiliations influencing hiring outcomes in specific contexts (e.g., working for a Democratic Senator or AOC), while assumption A concerns public calls influencing policy outcomes related to prison releases. The topics are entirely different—hiring practices vs. criminal justice reform—and there is no overlap in semantic content. C does not state, imply, or verify A in any"
     },
     {
       "a_turn_idx": 41,
@@ -8181,7 +8181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_05 refers to 'your conservative perspectives' as a direct response to SPEAKER_04's prior statements, where 'you' likely refers to SPEAKER_04. The term 'conservative' is used to describe the speaker's political stance.\",\n  \"reason\": \"Claim C (turn 58) states that the person being addressed (SPEAKER_04) holds conservative views, which is a characterization of political orientation. However,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_05 refers to 'your conservative perspectives' as a direct response to SPEAKER_04's prior statements, where 'you' likely refers to SPEAKER_04. The term 'conservative' is used to describe the speaker's political stance.\",\n  \"reason\": \"Claim C (turn 58) states that the person being addressed has conservative views, which is a characterization of SPEAKER_04's political stance based on their prior remarks"
     },
     {
       "a_turn_idx": 41,
@@ -8256,7 +8256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to non-binary job seekers mentioned earlier in the same turn. 'Skins' in turn 43 is the listener being addressed, and while not directly referenced in turn 53, the term 'skins' is used again in turn 43 and appears to be a nickname or address for the listener, which may imply continuity in the interaction.\",\n  \"reason\": \"Claim C (turn 53) states"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 53 refers to non-binary job seekers mentioned earlier in the same turn. 'Skins' in turn 43 is a nickname used by the speaker for the listener, which is reused in turn 53, indicating continuity in address.\",\n  \"reason\": \"Claim C (turn 53) states that the speaker has experience hiring many people, which implies a basis for judgment about candidates, including those who use gender-neutral pron"
     },
     {
       "a_turn_idx": 43,
@@ -8331,7 +8331,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 48 refers to an unnamed male figure, likely a political figure mentioned earlier, but not relevant to the comparison between A and C.\",\n  \"reason\": \"Claim C (turn 48) states the speaker's belief that abortion pills are unsafe, especially if not taken properly. This is entirely unrelated to assumption A (turn 44), which concerns the accuracy of a quote attributed to Mayor Eric Adams regarding mask removal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 48 refers to an unnamed male figure, likely a political figure mentioned earlier, but not relevant to the comparison between A and C.\",\n  \"reason\": \"Claim C (turn 48) states the speaker's belief that abortion pills are unsafe, especially if not taken properly. This is entirely unrelated to assumption A (turn 44), which concerns the accuracy of a quote attributed to Mayor Eric Adams regarding mask mandates"
     },
     {
       "a_turn_idx": 44,
@@ -8346,7 +8346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to DeSantis, but the claim in turn 48 is about the FBI engaging in misconduct related to January 6th, which is unrelated to the earlier assumption A about the accuracy of a quote attributed to Mayor Adams.\",\n  \"reason\": \"Assumption A concerns the belief that a specific quote accurately reflects Mayor Adams' words, while claim C asserts that the FBI engaged in misconduct during January 6th investigations."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to DeSantis, but the claim in turn 48 is about the FBI engaging in misconduct related to January 6th, which is unrelated to the earlier assumption A about the accuracy of a quote attributed to Mayor Adams.\",\n  \"reason\": \"Assumption A concerns the belief that a specific quote accurately reflects Mayor Adams' words. Claim C asserts that the FBI engaged in misconduct during January 6th investigations. There"
     },
     {
       "a_turn_idx": 44,
@@ -8361,7 +8361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to non-binary individuals who identify with gender pronouns, which is consistent with the context of turn 54 discussing non-binary job seekers and their perceived political signaling.\",\n  \"reason\": \"Claim C (turn 54) asserts that an individual's political ideology is deeply ingrained and visible in all aspects of their behavior, particularly in the context of non-binary identity and workplace conduct. However, this does not relate to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to non-binary individuals who identify with gender pronouns, which is consistent with the context of the discussion about job seekers and DEIB. The term 'they/them' in turn 54 refers to non-binary people mentioned earlier.\",\n  \"reason\": \"Claim C (turn 54) asserts that an individual's political ideology is deeply ingrained and visible in all aspects of their behavior, particularly in the context of"
     },
     {
       "a_turn_idx": 45,
@@ -8406,7 +8406,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to abortion pills, as established by the immediate context discussing their safety and use.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes abortion pills are unsafe, especially if not taken properly. This directly verifies the substance of assumption A, which is the speaker's belief about the reliability and safety of medical interventions (in this case, abortion pills), despite the broader context involving crime trends and public health. While A mentions"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to abortion pills, as established by the immediate context discussing their safety and proper use.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes abortion pills are unsafe, particularly if not taken properly. This directly verifies the substance of assumption A, which is that the speaker holds a belief about the reliability and safety of medical interventions (in this case, abortion pills), based on proper usage. The claim is unambiguous and"
     },
     {
       "a_turn_idx": 46,
@@ -8466,7 +8466,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to non-binary job seekers who identify as such on resumes, as established in turn 53. 'Your political ideology and your agenda' refers to the personal beliefs signaled through identity markers.\",\n  \"reason\": \"Claim C (turn 54) expresses a belief that employees should leave personal ideologies at home, which contrasts with assumption A (turn 46), which asserts trust in informal observations over formal data in public"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to individuals who identify as non-binary and include gender pronouns in their resumes, as established in turn 53. 'Your political ideology and your agenda' refers to the personal beliefs signaled through resume choices.\",\n  \"reason\": \"Claim C (turn 54) expresses a belief that employees should leave personal ideologies at work, which contrasts with assumption A (turn 46), which asserts trust in informal observations over"
     },
     {
       "a_turn_idx": 46,
@@ -8496,7 +8496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these AGs' in turn 47 refers to the Republican state attorneys general mentioned earlier in the same turn.\",\n  \"reason\": \"Claim C explicitly states that the Republican attorneys general influenced Walgreens’ decision, directly verifying the substance of assumption A, which posits that human behavior (in this case, political pressure from state officials) affects the spread or management of public health issues (here, access to abortion pills). The causal link between the attorneys general’s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these AGs' in turn 47 refers to the Republican state attorneys general mentioned earlier in the same turn.\",\n  \"reason\": \"Claim C explicitly states that the Republican attorneys general influenced Walgreens’ decision, directly verifying the substance of assumption A, which posits that human actions (in this case, political pressure from state AGs) play a role in shaping public health outcomes (here, the distribution of abortion pills). The causal link between the AGs"
     },
     {
       "a_turn_idx": 46,
@@ -8511,7 +8511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_04, consistent with A. 'Individual' in C refers to non-binary job seekers, not relevant to A.\",\n  \"reason\": \"Claim C discusses the perceived toxicity of individuals based on political identity in employment contexts, while assumption A concerns the influence of human movement and settlement patterns on virus spread. The topics are entirely unrelated, and C does not address, verify, or even reference the idea"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_04, consistent with A. 'Individual' in C refers to non-binary job seekers, while A discusses human movement and settlement patterns.\",\n  \"reason\": \"Claim C (turn 54) discusses the perceived toxicity of individuals based on political ideology and identity signaling in employment contexts. Assumption A (turn 46) concerns the influence of human movement and settlement patterns on virus spread."
     },
     {
       "a_turn_idx": 47,
@@ -8586,7 +8586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'you' in turn 57 refers to job applicants generally, not tied to any entity in turn 47.\",\n  \"reason\": \"Claim C discusses political affiliation influencing hiring outcomes in specific roles (e.g., working for a Democratic Senator or AOC), while assumption A concerns public officials using economic leverage to signal political opposition to corporate policies. The topics diverge: A focuses on state-level political pressure on corporations via economic withdrawal, whereas"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'you' in turn 57 refers to job applicants generally, not tied to any entity in turn 47.\",\n  \"reason\": \"Claim C discusses political affiliation influencing hiring outcomes in specific roles (e.g., working for a Democratic Senator or AOC), while assumption A concerns public officials using economic leverage to signal political opposition to corporate policies. The topics diverge: A focuses on state-level economic pressure on corporations, whereas C addresses personal"
     },
     {
       "a_turn_idx": 47,
@@ -8631,7 +8631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to non-binary job seekers mentioned in turn 53, and 'your political ideology' refers to the ideological signaling discussed in the prior context.\",\n  \"reason\": \"Claim C states that the speaker believes political ideology is deeply ingrained and visible in all aspects of behavior, which aligns with the sentiment in A that the speaker trusts their own interpretation of legal and political dynamics. However, C does not explicitly verify or state"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to non-binary individuals who signal their identity in job searches, as discussed in turn 53. 'Your political ideology' in turn 54 corresponds to the broader ideological stance implied in turn 47.\",\n  \"reason\": \"Turn 54 expresses a belief that an individual's political ideology is deeply embedded in their behavior and identity, suggesting it permeates professional conduct. However, this does not explicitly verify or"
     },
     {
       "a_turn_idx": 47,
@@ -8646,7 +8646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to the speaker (SPEAKER_04), and 'skins' refers to the person previously mentioned in turn 47, likely a supporter of abortion rights.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes abortion pills are unsafe, especially if not taken properly. This directly verifies the substance of assumption A, which posits that 'skins' refers to a group or individual supportive of abortion rights,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to the speaker (SPEAKER_04), and 'skins' refers to the person being addressed (SPEAKER_05), consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes abortion pills are unsafe, especially if not taken properly. This directly verifies the substance of assumption A, which posits that 'skins' refers to a group or individual supportive of abortion rights—"
     },
     {
       "a_turn_idx": 47,

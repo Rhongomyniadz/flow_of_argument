@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Buzz Ball' as the product and 'you' as the person responsible for it, which aligns with SPEAKER_01 being the agent of Lonzo Ball. The phrase 'get blue balls this season' is a pun on the product name and the slang term, but does not explicitly address the speaker's role as agent or their legitimacy.\",\n  \"reason\": \"C expresses surprise at the phrase 'get blue balls this season with"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Lonzo Ball, as established in turn 0 where the speaker identifies themselves as his agent. 'Buzz Ball' is the product name, and 'blue balls' is a pun on both the product's color and the slang term.\",\n  \"reason\": \"Turn 1 expresses surprise at the phrase 'get blue balls this season with Buzz Ball,' which plays on a double meaning. However, it does not explicitly state or"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the claim; 'the speaker' in turn 25 refers to SPEAKER_00, who is not the same as the agent in turn 0.\",\n  \"reason\": \"Turn 25 asks whether the interlocutor has spoken to individuals representing the business-owner perspective, which is unrelated to the earlier assumption that the speaker's role as agent grants legitimacy to discuss business opportunities on behalf of Lonzo Ball. The future claim does not affirm"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The speaker in turn 25 refers to 'people on that end' (business-owner perspective), which contrasts with the earlier assumption A about the speaker's legitimacy as an agent. No coreference resolves the speaker in turn 25 to the agent in turn 0.\",\n  \"reason\": \"Turn 25 asks whether the speaker has consulted business-owner perspectives, implying a lack of engagement with or authority from that group. This contradicts assumption A, which claims the speaker ("
     },
     {
       "a_turn_idx": 0,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Buzz Ball' refers to the brand throughout.\",\n  \"reason\": \"Claim C states that Buzz Ball has fifty percent alcohol by volume, which is a factual detail about the product. However, this does not address or make explicit the assumption in A, which is about leveraging athlete identity and physical characteristics (specifically Lonzo Ball's hands) for branding. While both statements relate to Buzz Ball's marketing strategy, C provides no information about athlete identity or physical"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Buzz Ball' refers to the brand throughout.\",\n  \"reason\": \"Claim C states that Buzz Ball has fifty percent alcohol by volume, which is a factual detail about the product. However, this does not address or make explicit the assumption in A, which is about leveraging athlete identity and physical characteristics (specifically Lonzo Ball's hands) for branding. While both statements relate to Buzz Ball, C provides no information about branding strategy, athlete association, or"
     },
     {
       "a_turn_idx": 0,
@@ -62,11 +62,11 @@
       "claim_text": "Buzz Ball is produced by Buzz Ball's LLC.",
       "overlap_score": 2,
       "c_time": 19.6,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 0 refers to Buzz Ball's LLC, which is explicitly named in turn 1 as the producer of Buzz Ball.\",\n  \"reason\": \"Turn 1 explicitly states that Buzz Ball is produced by Buzz Ball's LLC, which directly verifies the implied organizational entity behind the brand mentioned in turn 0. This confirms the source of the product and strengthens the claim about the brand's strategic use of athlete identity, as the company is now clearly identified"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'they' in turn 0 refers to Buzz Ball's LLC, which is explicitly named in turn 1 as the producer of Buzz Ball.",
+      "reason": "Turn 1 explicitly states that Buzz Ball is produced by Buzz Ball's LLC, which directly verifies the implied organizational entity behind the brand mentioned in turn 0. This confirms the source of the brand, making the earlier assumption about the brand's identity and structure explicit.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 0 refers to Buzz Ball's LLC, which is explicitly named in turn 1 as the producer of Buzz Ball.\",\n  \"reason\": \"Turn 1 explicitly states that Buzz Ball is produced by Buzz Ball's LLC, which directly verifies the implied organizational entity behind the brand mentioned in turn 0. This confirms the source of the brand, making the earlier assumption about the brand's identity and structure explicit.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -81,7 +81,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'Buzz Ball's LLC' refers to the same entity throughout.\",\n  \"reason\": \"Claim C states that Buzz Ball's LLC is based in Carrollton, Texas, which is factual information mentioned in the context. However, this does not make explicit the earlier assumption A about leveraging athlete identity and physical characteristics. While the location detail is consistent with the context, it does not verify or state the substance of A, which concerns branding strategy involving athlete traits. Thus,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'Buzz Ball's LLC' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C states that Buzz Ball's LLC is based in Carrollton, Texas, which is factual information mentioned in the context. However, this does not make explicit the assumption in A about leveraging athlete identity and physical characteristics (e.g., Lonzo Ball's hands). While C provides contextual detail about the company, it does not address or verify the branding strategy described in"
     },
     {
       "a_turn_idx": 0,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Lonzo Ball, as established in turn 0. 'Buzz Ball' is the brand mentioned in both turns.\",\n  \"reason\": \"Claim C states that Buzz Ball is available in spirit lines and vaults, which directly supports the assumption in A that the brand leverages athlete identity (Lonzo Ball) through physical traits (big hands) in its marketing. While C does not explicitly mention branding potential or athlete identity,"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Lonzo Ball, as established in turn 0. 'Buzz Ball' is the brand mentioned in both turns.\",\n  \"reason\": \"Claim C states that Buzz Ball is available in spirit lines and vaults, which directly supports the assumption in A that the brand leverages athlete identity (Lonzo Ball) through its product placement and distribution. While C does not explicitly mention 'branding potential' or 'physical characteristics,'"
     },
     {
       "a_turn_idx": 0,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Lonzo Ball, as established in turn 0 where the agent addresses him directly. 'Buzz Ball' is the product name, which ties into the commercial opportunity discussed.\",\n  \"reason\": \"Claim C expresses surprise at the phrase 'get blue balls this season with Buzz Ball,' which directly references the double entendre linking Lonzo Ball's name and the product's branding. This confirms the assumption in A that the commercial opportunity"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 1 refers to Lonzo Ball, as established in turn 0 where the agent addresses him directly. 'Buzz Ball' is the product name, which ties into the commercial opportunity discussed.\",\n  \"reason\": \"Claim C expresses surprise at the phrase 'get blue balls this season with Buzz Ball,' which directly references the double entendre linking Lonzo Ball's name and the product's branding. This aligns with assumption A, which posits"
     },
     {
       "a_turn_idx": 1,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NCAA, as established in the prior context where the NCAA is discussed as failing to act on NIL regulations.\",\n  \"reason\": \"Claim C explicitly states that the NCAA is considering retroactive penalties for colleges using NIL deals to recruit athletes, which directly verifies the substance of assumption A—that name, image, likeness issues are significant enough to warrant congressional discussion. The mention of the NCAA's attempt to enforce rules after the fact underscores the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NCAA, as established in the prior context where the NCAA is discussed as failing to act on NIL regulations.\",\n  \"reason\": \"Claim C explicitly states that the NCAA is considering retroactive penalties for colleges using NIL deals to recruit athletes, which directly verifies the substance of assumption A—that name, image, likeness issues are significant enough to warrant congressional attention. The mention of the NCAA's attempt to enforce rules after the fact underscores the"
     },
     {
       "a_turn_idx": 3,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Trey Wallace refers to the same individual mentioned in turn 3; 'the SEC' in turn 19 is consistent with the context of his role as SEC coverage expert.\",\n  \"reason\": \"Claim C explicitly states that Trey Wallace will discuss the SEC on the show, which directly verifies the assumption in A that mentioning specific individuals like Trey Wallace establishes credibility through expert representation. The connection between Wallace and SEC expertise is confirmed in both A and C, making the verification direct and un"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Trey Wallace refers to the same individual mentioned in turn 3; 'the SEC' in turn 19 is consistent with the context of his role as SEC coverage expert.\",\n  \"reason\": \"Turn 19 explicitly states that Trey Wallace will discuss the SEC on the show, directly verifying the assumption in turn 3 that mentioning specific individuals like Trey Wallace establishes credibility through expert representation. The claim is clear, direct, and confirms the substance of the earlier assumption without ambiguity.\""
     },
     {
       "a_turn_idx": 4,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 18 refers to SPEAKER_07, who is discussing the NFL's satisfaction with the week's events.\",\n  \"reason\": \"Claim C (turn 18) states that the organization (NFL) is satisfied with how the week has unfolded, which is unrelated to assumption A (turn 4), which concerns the speaker's personal belief about spoiling children. There is no overlap in subject matter or semantic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 18 refers to SPEAKER_07, who is discussing the NFL's satisfaction with the week's events.\",\n  \"reason\": \"Claim C (turn 18) states that the organization (NFL) is satisfied with how the week has unfolded, which is unrelated to assumption A (turn 4), which concerns the speaker's personal belief about spoiling children. There is no overlap in subject matter, intent"
     },
     {
       "a_turn_idx": 4,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the NFL league, as established by the context of schedule release and network coverage.\",\n  \"reason\": \"Claim C states that the majority of the NFL schedule will be revealed tonight via specials on NFL Network and ESPN, which directly supports the idea that the schedule release is a significant, anticipated event. This aligns with assumption A, which frames the NFL schedule release as a widely recognized and celebrated occasion. While C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the NFL league, as established by the context of schedule release and network coverage.\",\n  \"reason\": \"Claim C states that the majority of the NFL schedule will be revealed tonight via specials on NFL Network and ESPN, which directly supports the idea that the schedule release is a significant event. This aligns with assumption A, which frames the NFL schedule release as a widely recognized and celebrated occasion. While C does not explicitly state"
     },
     {
       "a_turn_idx": 5,
@@ -305,8 +305,8 @@
       "entailment_score": 9,
       "confidence": 0.95,
       "coref_notes": "The pronoun 'that' in turn 6 refers to the NFL schedule release mentioned in turn 5.",
-      "reason": "Claim C explicitly expands on the idea introduced in assumption A by stating that the scheduling of major games goes beyond Week 4 Sunday Night Football, directly supporting the notion that the NFL schedule release carries symbolic and strategic significance beyond simple scheduling. This confirms and verifies the core meaning of A, particularly the idea that the event has broader cultural and commercial weight.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 6 refers to the NFL schedule release mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly expands on the idea introduced in assumption A by stating that the scheduling of major games goes beyond Week 4 Sunday Night Football, directly supporting the notion that the NFL schedule release carries symbolic and strategic significance beyond simple scheduling. This confirms and verifies the core meaning of A, particularly the idea that the event has broader cultural and commercial weight.\"\n}"
+      "reason": "Claim C explicitly expands on the idea introduced in assumption A by stating that the scheduling of major games goes beyond Week 4 Sunday Night Football, directly supporting the notion that the NFL schedule release carries symbolic and strategic significance beyond simple scheduling. This confirms the broader cultural and commercial weight implied in A.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 6 refers to the NFL schedule release mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly expands on the idea introduced in assumption A by stating that the scheduling of major games goes beyond Week 4 Sunday Night Football, directly supporting the notion that the NFL schedule release carries symbolic and strategic significance beyond simple scheduling. This confirms the broader cultural and commercial weight implied in A.\"\n}\n```"
     },
     {
       "a_turn_idx": 5,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this' in turn 29 refers to the process of addressing NCAA issues related to retroactive punishment, which is unrelated to the concept of 'quiet' complaints in turn 5.\",\n  \"reason\": \"Turn 29 discusses the timeline for resolving NCAA-related legal and regulatory issues, specifically stating that such processes will take years rather than months. This is entirely unrelated to the earlier assumption in turn 5, which concerns the psychological or behavioral implication of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'this' in turn 29 refers to the process of addressing NCAA accountability and retroactive punishment, which is unrelated to the concept of 'quiet' complaints in turn 5.\",\n  \"reason\": \"Turn 29 discusses the timeline for resolving NCAA accountability issues, specifically stating it will take years rather than months. This is unrelated to the earlier assumption in turn 5 about being 'quiet' while complaining implying suppression of expression. There is no overlap"
     },
     {
       "a_turn_idx": 6,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the rest' in turn 11 refers to other NFL teams not featured in the Christmas Day games, as established by the prior mention of specific teams (Dolphins-Packers, Rams-Broncos, Buccaneers-Cardinals).\",\n  \"reason\": \"Claim C (turn 11) states that 'the rest will play Christmas Eve,' which directly clarifies the implication in assumption A (turn 6) that scheduling decisions involve negotiated allocations among networks"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the rest' in turn 11 refers to other NFL teams not featured in the Christmas Day games, as established by the prior mention of specific teams (Dolphins-Packers on Fox, Rams-Broncos on CBS, Buccaneers-Cardinals on SNF).\",\n  \"reason\": \"Claim C (turn 11) states that 'the rest will play Christmas Eve,' which directly clarifies the implication in assumption A (turn 6) that"
     },
     {
       "a_turn_idx": 6,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 18 refers to the NFL and its scheduling process.\",\n  \"reason\": \"Claim C discusses the public release of the NFL schedule through network specials, which relates to the timing and dissemination of the schedule. However, it does not explicitly address or verify the substance of assumption A, which concerns the negotiated agreements between teams, networks, and players that shape the schedule. While both touch on the NFL schedule, C focuses on the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 18 refers to the NFL or league officials, consistent with prior discussion.\",\n  \"reason\": \"Claim C discusses the timing and method of schedule release (tonight via NFL Network and ESPN), which is tangentially related to the idea that the schedule is determined through negotiations (A). However, C does not state or verify the substance of A—namely, that the schedule reflects negotiated agreements between teams, networks, and"
     },
     {
       "a_turn_idx": 7,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NFL organization, which is consistent with the broader context of schedule releases and media leaks. However, 'the speaker' in C refers to SPEAKER_07, whose earlier statement (A) expresses frustration about leaks and misinformation, not satisfaction.\",\n  \"reason\": \"Claim C states that the speaker believes the organization is satisfied with how the week has unfolded, which directly contradicts the earlier assumption A, where SPEAKER_"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NFL organization, which is consistent with the broader context of schedule announcements and leaks. However, the claim C states that the organization is satisfied with the week's unfolding, which contradicts the speaker's expressed frustration in assumption A.\",\n  \"reason\": \"Assumption A asserts that the listener group knows the speaker's frustration patterns regarding leaks, particularly about misinformation spreading despite clear facts. Claim C, however, states that the speaker believes"
     },
     {
       "a_turn_idx": 7,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 9 refers to SPEAKER_07, who expressed frustration in turn 7. 'People' in turn 7 refers to individuals consuming misinformation, which aligns with the subject of the emotional reaction in turn 9.\",\n  \"reason\": \"Claim C explicitly states that the speaker feels emotionally overwhelmed ('I'm going crazy') due to people indiscriminately accepting and spreading misinformation, which directly verifies the assumption in A that the spread of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 9 refers to SPEAKER_07, who is the same speaker as in turn 7. 'People' in turn 7 refers to individuals who consume misinformation, which aligns with the subject of emotional reaction in turn 9.\",\n  \"reason\": \"Claim C explicitly states that the speaker feels emotionally overwhelmed ('I'm going crazy') due to people indiscriminately accepting and spreading misinformation, which directly verifies the assumption in A that"
     },
     {
       "a_turn_idx": 7,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 9 refers to the people spreading the rumor, as established in turn 7. 'It' in 'know it's BS' refers to the rumor about the Titans playing on Christmas Day on CBS.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the rumor is false based on logical reasoning—specifically, that CBS already had its Christmas Day game announced (Broncos vs. Rams), and since CBS, Fox, and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 7 refers to people who spread the rumor; 'it' in turn 9 refers to the rumor about the Titans playing on Christmas Day on CBS.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the rumor is false based on logical reasoning—specifically, that CBS already had its Christmas Day game announced (Broncos vs. Rams), and since CBS, Fox, and NBC each have one game, the Titans cannot be"
     },
     {
       "a_turn_idx": 7,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the NFL organization, which is consistent with the broader context of scheduling and media leaks.\",\n  \"reason\": \"Claim C states that the organization is satisfied with how the week has unfolded, which is unrelated to assumption A, which concerns the speaker's belief in their own authority to judge credibility and authenticity of information. There is no mention of judgment, credibility, or personal authority in C. Instead, C expresses a belief about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the NFL organization, which is consistent with the broader context of scheduling decisions and media leaks.\",\n  \"reason\": \"Claim C states that the organization is satisfied with how the week has unfolded, which is unrelated to assumption A, which concerns the speaker's belief in their own authority to judge credibility and authenticity of information. There is no mention of judgment, credibility, or personal authority in C. Instead, C expresses a belief"
     },
     {
       "a_turn_idx": 8,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 11 refers to CBS, as established in the prior context where CBS is discussed as one of the networks broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C explicitly states that all three major networks (CBS, Fox, and NBC) are carrying Christmas Day NFL games, which directly verifies the implicit assumption in A that CBS broadcasts NFL games on Christmas Day. The mention of CBS hosting the Rams vs. Broncos game confirms the specific instance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 11 refers to CBS, as established in the prior context where CBS is discussed as one of the networks carrying a Christmas Day game.\",\n  \"reason\": \"Claim C explicitly states that all three major networks (CBS, Fox, and NBC) are carrying Christmas Day NFL games, which directly verifies the earlier assumption A that CBS broadcasts NFL games on Christmas Day. The statement in C confirms CBS’s role in the Christmas Day lineup, including the"
     },
     {
       "a_turn_idx": 8,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in 'CBS has their day' refers to CBS, as established in the prior context where CBS is discussed as broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C ('CBS has their day') directly and explicitly verifies the substance of assumption A ('CBS broadcasts NFL games on Christmas Day'). The context confirms CBS is scheduled to broadcast the Rams vs. Broncos game on Christmas Day, making the statement both accurate and a clear confirmation of the earlier assumption."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in 'CBS has their day' refers to CBS, as established in the prior context where CBS is discussed as broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C ('CBS has their day') directly and explicitly verifies the substance of assumption A ('CBS broadcasts NFL games on Christmas Day'). The phrase 'has their day' is idiomatic but contextually clear—it means CBS is fulfilling its role by airing a Christmas Day game, which aligns exactly"
     },
     {
       "a_turn_idx": 8,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in 'CBS has their day' refers to CBS, as established in the prior context where CBS is discussed as broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C ('CBS has their day') strongly aligns with assumption A ('CBS broadcasts NFL games on Christmas Day') by affirming CBS's role in the Christmas Day schedule. While C does not explicitly state the full detail of the game (e.g., Broncos vs. Rams), it clearly"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in 'CBS has their day' refers to CBS, as established in the prior context where CBS is discussed as broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C ('CBS has their day') strongly aligns with assumption A ('CBS broadcasts NFL games on Christmas Day') by implicitly confirming CBS's role in broadcasting a game on that day. While C does not explicitly state the full content of A (e.g., specifying the game or network),"
     },
     {
       "a_turn_idx": 8,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 11 refers to CBS, as established in the prior context where CBS is discussed as broadcasting one of the Christmas Day games. 'The Dolphins hosting the Packers on Fox' is a direct statement of a specific game assignment.\",\n  \"reason\": \"Claim C explicitly states that CBS is broadcasting the Rams vs. Broncos game on Christmas Day, which directly verifies the earlier assumption A that CBS broadcasts NFL games on Christmas Day. While C does not repeat"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 11 refers to CBS, as established in the prior context where CBS is discussed as broadcasting the Rams vs. Broncos game. 'The Dolphins hosting the Packers on Fox' is a direct statement of a specific game assignment.\",\n  \"reason\": \"Claim C explicitly states that CBS is broadcasting the Rams vs. Broncos game on Christmas Day, which directly verifies the earlier assumption A that CBS broadcasts NFL games on Christmas Day. While C does not repeat"
     },
     {
       "a_turn_idx": 8,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'other NFL teams', which contrasts with assumption A's focus on CBS broadcasting NFL games on Christmas Day. There is no mention of CBS or network scheduling in C.\",\n  \"reason\": \"Claim C states that other NFL teams play on Christmas Eve, which is unrelated to assumption A, which asserts that CBS broadcasts NFL games on Christmas Day. While both relate to NFL scheduling on Christmas, C does not address CBS or confirm any broadcast"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the rest' in turn 11 refers to other NFL teams not playing on Christmas Day, which contrasts with assumption A about CBS broadcasting NFL games on Christmas Day.\",\n  \"reason\": \"Claim C states that other NFL teams play on Christmas Eve, which does not make assumption A explicit. Assumption A concerns CBS broadcasting a specific game (Broncos vs. Rams) on Christmas Day, while C shifts focus to the timing of other teams’ games (Christmas Eve"
     },
     {
       "a_turn_idx": 8,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 10 ('will cbs has their day') refers to CBS, as established by the prior discussion about CBS broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C explicitly states that the Rams are hosting the Broncos on CBS on Christmas Day, which directly verifies the assumption in A that 'their day' refers to CBS achieving a prominent or successful role in the Christmas Day broadcast. The statement confirms CBS's scheduled game, thereby making the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 10 ('will cbs has their day') refers to CBS, as established by the prior discussion about CBS broadcasting a Christmas Day game.\",\n  \"reason\": \"Claim C explicitly states that the Rams are hosting the Broncos on CBS on Christmas Day, which directly verifies the assumption in A that 'their day' refers to CBS achieving a prominent role in the Christmas Day broadcast. This is a clear, direct confirmation of the substance of A without"
     },
     {
       "a_turn_idx": 10,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NFL organization, which is consistent with the context of scheduling decisions. However, claim C discusses satisfaction with the week's unfolding schedule leaks, while assumption A concerns a prior assertion about CBS aligning with the current statement.\",\n  \"reason\": \"Claim C expresses Speaker 07's belief that the NFL organization is satisfied with the leaky schedule rollout, which is unrelated to the specific prior assertion about CBS mentioned in assumption A."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the NFL organization, which is consistent with the broader context of scheduling decisions. However, claim C makes no reference to any prior assertion by the speaker about CBS, nor does it address the specific belief in A about having previously stated something aligned with the current claim.\",\n  \"reason\": \"Claim C expresses Speaker 07's belief that the NFL organization is satisfied with the week's unfolding schedule leaks, particularly regarding the Christmas Day game"
     },
     {
       "a_turn_idx": 10,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 10 ('CBS has their day') refers to CBS's scheduling rights or role in the Christmas Day broadcast, which is made explicit in turn 11 as CBS carrying a game (Rams vs. Broncos).\",\n  \"reason\": \"Claim C explicitly states that all three major networks (CBS, Fox, NBC) are carrying Christmas Day NFL games, which directly verifies the implication in assumption A that CBS has its designated 'day'"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 10 ('CBS has their day') refers to CBS's scheduling of a Christmas Day game, which is made explicit in turn 11 as CBS carrying a game (Rams vs. Broncos). The phrase 'all three major networks' in turn 11 directly confirms that CBS, Fox, and NBC each have a game on Christmas Day, fulfilling the implied claim in turn 10.\",\n  \"reason\": \"Turn 1"
     },
     {
       "a_turn_idx": 10,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'they' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities needed for the NCAA, focusing on decision-making and legal expertise. Assumption A concerns network competition and temporary dominance ('having a day') during Christmas Day broadcasts. There is no semantic connection between the two topics—C does not address, reference, or verify any aspect of A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant between the claims; 'having a day' in turn 10 refers to network scheduling dominance, while 'having someone who knows how to lead people' in turn 32 refers to organizational leadership. The topics are unrelated.\",\n  \"reason\": \"Turn 10's assumption A concerns network competition and temporary dominance ('having a day') in scheduling Christmas Day games. Turn 32's claim C discusses leadership qualities needed in the NCAA, specifically"
     },
     {
       "a_turn_idx": 10,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities needed for the NCAA, specifically managing assets and making decisions, which is entirely unrelated to the earlier assumption A about network competition and 'having a day' implying temporary dominance in broadcasting schedules. There is no overlap in subject matter, semantics, or implied content. Thus, C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities needed for the NCAA, specifically managing assets and making decisions, which is entirely unrelated to the earlier assumption A about network competition and temporary dominance ('having a day') on Christmas Day broadcasts. There is no overlap in subject matter, context, or semantic content. Thus, C does"
     },
     {
       "a_turn_idx": 10,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'they' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities needed for the NCAA, particularly decision-making ability and action-oriented management. Assumption A concerns network competition and the concept of 'having a day' as temporary dominance in scheduling. There is no semantic connection between the two topics—C does not address networks, broadcasting rights, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities needed for the NCAA, specifically decision-making and management skills, while assumption A concerns network competition and temporary dominance ('having a day') during Christmas Day broadcasts. There is no semantic connection between the two topics. C does not address or verify any aspect of A, making the relationship"
     },
     {
       "a_turn_idx": 10,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'they' in C refers to the NCAA leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities for the NCAA, specifically distinguishing between leading people and managing assets, which is entirely unrelated to assumption A about network competition and temporary dominance ('having a day') on Christmas Day broadcasts. There is no overlap in subject matter, context, or semantic content. Thus, C neither supports"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links are relevant; 'item one' refers to a new claim about leadership and asset management, not related to the prior discussion about network scheduling and Christmas Day games.\",\n  \"reason\": \"Claim C (turn 32) discusses leadership qualities for the NCAA, specifically distinguishing between leading people and managing assets. This is entirely unrelated to Assumption A (turn 10), which concerns network competition and the idea that 'having a day' means temporary dominance in broadcasting"
     },
     {
       "a_turn_idx": 10,
@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to the NCAA and its leadership, not related to network competition in A.\",\n  \"reason\": \"Claim C discusses leadership qualities for the NCAA, particularly avoiding over-discussion and inaction, while assumption A concerns network competition and temporary dominance ('having a day') during Christmas Day broadcasts. There is no semantic connection between the two topics. C does not mention networks, broadcasting rights, or temporary"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'someone' in turn 32 refers to a future leader of the NCAA, not related to the networks or 'having a day' in turn 10. There is no coreference between the subject of turn 10 and turn 32.\",\n  \"reason\": \"Turn 10 discusses network competition and the idea of 'having a day' as temporary dominance in scheduling, particularly regarding CBS's Christmas Day game. Turn 32 discusses leadership"
     },
     {
       "a_turn_idx": 11,
@@ -8676,7 +8676,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 79 refers to universities and athletic departments, as established by the context of commissioners and school presidents discussing control over NIL funds.\",\n  \"reason\": \"Claim C states that universities want donations meant for athletes redirected to athletic department budgets, which reflects a financial interest in controlling NIL money. However, this does not explicitly verify or state the earlier assumption A—that athletes should have control over their own appearance during competition. While both topics relate to athlete autonomy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 79 refers to universities and athletic departments, as established by the context of commissioners and school presidents discussing control over NIL funds.\",\n  \"reason\": \"Claim C states that universities want donations meant for athletes redirected to athletic department budgets, which reflects a financial interest in controlling NIL money. However, this does not explicitly or directly verify the earlier assumption A—that athletes should have control over their own appearance during competition. While both relate to athlete autonomy in"
     },
     {
       "a_turn_idx": 62,
@@ -8706,7 +8706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 84 refers to 'conferences and commissioners and big money people', who are described as wanting to run their own organizations rather than having centralized control under the NCAA.\",\n  \"reason\": \"Claim C discusses powerful stakeholders (conferences, commissioners, big money people) preferring to manage their own organizations rather than centralizing control, which aligns with a broader theme of autonomy. However, it does not explicitly address athletes' control over their own"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 84 refers to 'conferences and commissioners and big money people', who are described as wanting to run their own organizations rather than having centralized control under the NCAA.\",\n  \"reason\": \"Claim C discusses stakeholders (conferences, commissioners, big money people) preferring to manage their own organizations, which aligns with a broader theme of autonomy. However, it does not explicitly address athletes' control over their own appearance during competition, which is"
     },
     {
       "a_turn_idx": 63,
@@ -8856,7 +8856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 84 refers to the ongoing dynamics of college sports governance, particularly the shift toward conference-led reform and the potential decline of the NCAA's central authority.\",\n  \"reason\": \"Claim C states that a new organization may emerge due to current governance dynamics, which directly addresses the underlying assumption in A that professional sports leagues could serve as a regulatory model. Turn 63 suggests that regulation akin to pro sports leagues is necessary to preserve amateurism,"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 84 refers to the ongoing dynamics of college sports governance, particularly the shift toward conference-led reform and the potential decline of centralized NCAA authority.\",\n  \"reason\": \"Claim C states that a new organization may emerge due to current governance dynamics, which directly addresses the underlying assumption in A that professional sports leagues could serve as a regulatory model. Turn 63 suggests that regulation akin to pro sports leagues is necessary to preserve amateurism, implying structural"
     },
     {
       "a_turn_idx": 63,
@@ -8916,7 +8916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 84 refers to 'conferences and commissioners', which are the entities mentioned in the context of having interests that need protection alongside athlete rights in turn 63.\",\n  \"reason\": \"Claim C states that conferences and commissioners have repeatedly discussed reform in college sports, which aligns with the idea in assumption A that institutions and conferences have legitimate interests needing protection. While C does not explicitly mention 'athlete rights' or 'protection' of"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 84 refers to 'conferences and commissioners', which aligns with the subject of the earlier assumption A regarding institutional interests.\",\n  \"reason\": \"Claim C states that conferences and commissioners have repeatedly discussed reform in college sports, which directly supports the idea that institutions (like conferences) have legitimate interests that need protection—specifically, their autonomy and ability to govern themselves. This aligns with assumption A, which posits that both athlete rights"
     },
     {
       "a_turn_idx": 63,
@@ -9006,7 +9006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 72 refers to the NCAA, as established by context. 'They' in 'I don't buy their threats' also refers to the NCAA.\",\n  \"reason\": \"Claim C (turn 72) states that the NCAA's threats of retroactive punishment are not credible. This directly contradicts assumption A (turn 64), which assumes the speaker has sufficient observational access to others' motivations regarding clarity—implying belief"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in turn 72 refers to the NCAA, as established by context (SPEAKER_06 discussing NCAA threats).\",\n  \"reason\": \"Claim C states that the NCAA has issued threats of retroactive punishment, which contradicts the earlier assumption A that the speaker has sufficient observational access to others' motivations regarding clarity. Assumption A implies a belief in the transparency or honesty of actors (e.g., coaches, NIL representatives) in conveying information"
     },
     {
       "a_turn_idx": 64,
@@ -9081,7 +9081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 78 refers to the inconsistency in NIL practices across schools and states, as clarified by the example of Texas-specific NIL offers.\",\n  \"reason\": \"Claim C explicitly states that current NIL practices lack consistency between schools and states, directly verifying the core concern in assumption A—that recruits lack reliable, independent access to accurate NIL policy information. The example of Texas-specific NIL offers illustrates how inconsistent rules create uncertainty, undermining trustworthy information. This aligns precisely"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 78 refers to the inconsistency in NIL practices across schools and states, as clarified by the example of Texas-specific NIL offers.\",\n  \"reason\": \"Claim C explicitly states that current NIL practices lack consistency between schools and states, which directly verifies the core concern in assumption A: that recruits lack sufficient independent access to accurate NIL policy information. The variability in NIL offerings—such as the Texas-specific $50,000 offer—d"
     },
     {
       "a_turn_idx": 65,
@@ -9126,7 +9126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Greg Sankey' and 'conferences and commissioners and big money people' as stakeholders who prefer managing their own organizations rather than centralized control by the NCAA.\",\n  \"reason\": \"Claim C states that powerful stakeholders (conferences, commissioners, big money people) prefer running their own organizations and resisting centralized control, which aligns with the idea that they avoid taking on the burden of overarching governance. However, it does not explicitly address the core"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Greg Sankey' and 'conferences and commissioners and big money people' as stakeholders who prefer managing their own organizations rather than centralized control by the NCAA.\",\n  \"reason\": \"Claim C states that powerful stakeholders (conferences, commissioners, big money people) prefer running their own organizations and resisting centralized control, which aligns with the idea that they avoid taking on the burden of overarching governance. However, it does not explicitly address the motivation"
     },
     {
       "a_turn_idx": 65,
@@ -9186,7 +9186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the prohibition of NIL-related discussions with high school recruits, as established in turn 66 and elaborated in turn 67.\",\n  \"reason\": \"Claim C explicitly states that the NCAA has attempted to ban NIL-related discussions with high school recruits, which directly verifies the substance of assumption A—that coaches and NIL representatives have conflicting incentives during recruitment. Turn 66 establishes the NCAA’s position of prohibiting such interactions before official signing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to NIL-related discussions with high school recruits, as established in turn 66 and elaborated in turn 67. 'They' in 'they said that law' refers to the NCAA.\",\n  \"reason\": \"Claim C explicitly states that the NCAA has attempted to ban NIL-related discussions with high school recruits, which directly verifies the substance of assumption A—that coaches and NIL representatives have conflicting incentives during recruitment. Turn 66"
     },
     {
       "a_turn_idx": 65,
@@ -9231,7 +9231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 77 refers to the athlete or recruit; 'that' in 'that's just Texas' refers to the specific NIL arrangement in Texas. 'These kids' refers to student-athletes in the context of recruitment and transfers.\",\n  \"reason\": \"Claim C explicitly states that NIL rights exist independently of formal contracts between players and schools, which directly verifies the core idea in assumption A—that differences in state-level NIL regulations matter and are relevant"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 77 refers to the athlete or recruit; 'that' in 'that's just Texas' refers to the specific NIL arrangement in Texas, which aligns with the state-specific nature discussed in turn 65.\",\n  \"reason\": \"Claim C explicitly states that NIL rights exist independently of formal contracts between players and schools, which directly verifies the core idea in assumption A—that differences in state-level NIL regulations are meaningful and relevant to decision-making"
     },
     {
       "a_turn_idx": 65,
@@ -9276,7 +9276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the PAC 12, as established by the context in turn 73 where Commissioner Sankey is mentioned as part of the PAC 12 leadership.\",\n  \"reason\": \"Claim C states that if the NCAA fails to act, the PAC 12 will form its own group to create NIL rules. This directly addresses the absence of a unified, authoritative source of truth in college recruiting (assumption A), which pos"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the PAC 12, as established by the context in turn 73 where Commissioner Sankey is mentioned as part of the PAC 12 leadership.\",\n  \"reason\": \"Claim C states that if the NCAA fails to act, the PAC 12 will form its own group to create NIL rules. This directly addresses the absence of a unified, authoritative source of truth in college recruiting (assumption A), by proposing"
     },
     {
       "a_turn_idx": 65,
@@ -9351,7 +9351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to high school athletes, consistent with the subject of assumption A. 'They' in 'they're all buying some of the law' is ambiguous but contextually aligns with high school athletes or institutions involved in NIL activities.\",\n  \"reason\": \"Claim C explicitly states a legislative proposal to prohibit high school athletes from earning marketing dollars before age eighteen or college enrollment, which directly verifies the core idea in assumption A that NCAA regulations aim to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to high school athletes, consistent with the subject of assumption A. 'They' in 'they're all buying some of the law' is ambiguous but contextually aligns with high school athletes or institutions involved in recruiting.\",\n  \"reason\": \"Claim C explicitly states a legislative proposal to prohibit high school athletes from earning marketing dollars before age eighteen or college enrollment, which directly verifies the core idea in assumption A: that NCAA regulations aim to"
     },
     {
       "a_turn_idx": 66,
@@ -9456,7 +9456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the athlete in the context of recruitment and NIL compensation; 'it' refers to receiving NIL benefits, which aligns with the earlier assumption about the timing of NIL income.\",\n  \"reason\": \"Claim C explicitly highlights the blurred boundary between pre-signing and post-signing access to NIL income, directly verifying the core concern in assumption A—that there is a perceived contradiction between strict pre-signing restrictions and the sudden availability of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the athlete in the context of recruitment and NIL compensation; 'it' refers to receiving NIL benefits, which aligns with the earlier assumption about the timing of NIL access.\",\n  \"reason\": \"Claim C explicitly highlights the blurred boundary between pre-signing and post-signing access to NIL income, directly verifying the core concern in assumption A—that there is a perceived contradiction between strict pre-signing restrictions and the sudden availability of"
     },
     {
       "a_turn_idx": 66,
@@ -9486,7 +9486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 78 refers to the commissioners overseeing multiple states and teams, who are advocating for legislation. 'These kids' refers to athletes being recruited or already enrolled.\",\n  \"reason\": \"Claim C explicitly calls for legislation to establish 'guardrails' around NIL policies, which directly addresses the core concern in assumption A: the perceived contradiction between strict pre-signing restrictions and the sudden, unrestricted availability of large NIL income after signing. C verifies A by"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 78 refers to the lack of consistent, standardized NIL policies across schools and states, which aligns with the concern in turn 66 about the sudden availability of large NIL income after previously restricted pre-signing interactions.\",\n  \"reason\": \"Turn 78 explicitly calls for legislation to establish 'guardrails' around NIL policies, directly addressing the core concern in turn 66: the perceived contradiction between strict pre-signing restrictions and"
     },
     {
       "a_turn_idx": 66,
@@ -9546,7 +9546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to 'athletes' in turn 66, and 'that question' refers to asking about financial compensation through NIL.\",\n  \"reason\": \"Claim C explicitly states that athletes will ask about financial compensation through NIL when considering colleges, which directly verifies the substance of assumption A—that athletes are expected to transition seamlessly from restricted pre-college status to unrestricted NIL earning capacity—by highlighting that athletes proactively seek financial information about NIL"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to 'athletes' in turn 66, and 'that' in 'ask about that' refers to 'financial compensation through NIL'.\",\n  \"reason\": \"Claim C explicitly states that athletes will ask about financial compensation through NIL when considering colleges, which directly verifies the substance of assumption A—that athletes are expected to transition seamlessly from restricted pre-college status to unrestricted NIL earning capacity—by highlighting that athletes proactively"
     },
     {
       "a_turn_idx": 66,
@@ -9561,7 +9561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to 'athletes' as the subject of inquiry about NIL earnings, consistent with the broader context of recruiting decisions.\",\n  \"reason\": \"Claim C explicitly states that collectives exist in part because athletes inquire about NIL earnings, which directly verifies the substance of assumption A—that athletes are expected to transition from restricted pre-college status to unrestricted NIL earning capacity. The causal link between athlete inquiry and the existence of collectives is clearly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to 'athletes' as established in the prior context, specifically top recruits making decisions about schools based on NIL opportunities.\",\n  \"reason\": \"Claim C explicitly states that collectives exist in part because athletes inquire about NIL earnings, which directly verifies the substance of assumption A—that athletes are expected to transition from restricted pre-college status to unrestricted NIL earning capacity. The reasoning in C (athletes asking about NIL financials,"
     },
     {
       "a_turn_idx": 66,
@@ -9576,7 +9576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'intelligent athletes' as established in turn 67, which aligns with 'every athlete that's smart' in turn 66.\",\n  \"reason\": \"Claim C explicitly states that NIL discussions are central to recruiting decisions for intelligent athletes, which directly verifies the substance of assumption A—that athletes are expected to transition seamlessly from restricted pre-college status to unrestricted NIL earning capacity—by highlighting that smart athletes actively seek financial"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to 'every athlete that's smart' mentioned earlier, which aligns with the subject of the assumption A regarding athletes transitioning into NIL earnings.\",\n  \"reason\": \"Claim C explicitly states that intelligent athletes will ask about NIL financial opportunities when choosing schools, directly verifying the assumption in A that athletes are expected to transition seamlessly from restricted pre-college status to unrestricted NIL earning capacity. The claim confirms that NIL considerations are central to recruitment"
     },
     {
       "a_turn_idx": 66,
@@ -9591,7 +9591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to 'athletes' as established in the prior context, specifically 'every athlete that's smart'.\",\n  \"reason\": \"Claim C explicitly states that athletes will ask about financial compensation through NIL when considering colleges, which directly verifies the substance of assumption A that large NIL earnings are a significant factor in recruitment decisions. The phrase 'every athlete that's smart is going to ask about that when they go to different schools' confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to athletes considering college recruitment, and 'that' in 'ask about that' refers to financial compensation through NIL.\",\n  \"reason\": \"Claim C explicitly states that athletes will ask about financial compensation through NIL when considering colleges, which directly verifies the substance of assumption A that large NIL earnings are a significant factor in athlete decisions, even if exceptional. The statement in C is clear, direct, and fully aligns with the implied"
     },
     {
       "a_turn_idx": 66,
@@ -9606,7 +9606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to the athlete in the recruitment process, consistent with the subject of turn 66. 'They' in 'they look at that' refers to schools or recruiting entities, which aligns with the context of institutional decision-making.\",\n  \"reason\": \"Claim C explicitly states that collectives exist in part because athletes inquire about NIL earnings, which directly verifies the causal relationship implied in assumption A—that athletes asking about NIL compensation drives"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 67 refers to the athlete, and 'collectives' refers to the organizations representing athletes in NIL negotiations, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that collectives exist in part because athletes inquire about NIL earnings, which directly verifies the substance of assumption A—that large NIL earnings are seen as exceptional but significant, and that athletes are actively seeking financial information during recruitment. The causal link between athlete inquiry and the existence"
     },
     {
       "a_turn_idx": 66,
@@ -10431,7 +10431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 84 refers to 'conferences and commissioners and big money people', which aligns with the stakeholders mentioned in the broader context of turn 77. 'My conference' and 'run my ship' refer to individual collegiate organizations.\",\n  \"reason\": \"Claim C states that powerful stakeholders (conferences, commissioners, big money people) prefer managing their own organizations rather than centralized control, which reflects a form of autonomy. Assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 84 refers to SPEAKER_06, and 'Greg Sankey' and 'conferences and commissioners' refer to the powerful stakeholders mentioned in the broader context.\",\n  \"reason\": \"Claim C states that powerful stakeholders (conferences, commissioners, big money people) prefer running their own organizations rather than centralized control, which aligns with the idea of autonomy in decision-making. However, it does not explicitly verify the specific claim in"
     },
     {
       "a_turn_idx": 77,
@@ -10551,7 +10551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 102 refers to the Warriors, and 'Memphis' is a proper noun.\",\n  \"reason\": \"Claim C (turn 102) discusses basketball statistics related to shot attempts, turnovers, and rebounding between Memphis and the Warriors, which is entirely unrelated to the financial incentives shaping institutional priorities mentioned in assumption A (turn 79). There is no overlap in subject matter, concepts, or semantic content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in turn 102 refers to the Warriors, not related to financial incentives or institutional priorities.\",\n  \"reason\": \"Claim C discusses basketball statistics, specifically shot differences due to offensive rebounding between Memphis and the Warriors, which is entirely unrelated to the financial incentives shaping institutional priorities mentioned in assumption A. There is no overlap in subject matter, semantics, or implied connection. Thus, the claim contradicts any relevance to A and scores a"
     },
     {
       "a_turn_idx": 79,

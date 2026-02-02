@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to the bomber, not the speaker. The speaker (SPEAKER_09) expresses belief about the bomber's statement, not about vote totals.\",\n  \"reason\": \"Claim C discusses the bomber's statement supporting Trump, which is unrelated to the assumption in A that vote totals are meaningful indicators of support. There is no mention of voting, electoral outcomes, or the relevance of vote counts in C. The topics are"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Donald J. Trump; 'the bomber' in turn 27 refers to the individual who detonated the Cybertruck, which is unrelated to the vote totals discussed in turn 7.\",\n  \"reason\": \"Claim C discusses the bomber's statement supporting Trump, which is unrelated to the assumption in A about vote totals being meaningful indicators of support. There is no semantic connection between the relevance of vote counts and the bomber's"
     },
     {
       "a_turn_idx": 7,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to the speaker (SPEAKER_09) and others involved in the discussion, consistent with prior claims about border policy and terrorism.\",\n  \"reason\": \"Claim C explicitly states that there has been a claim for over a year linking a potential terrorist attack to an open southern border, which aligns with the substance of assumption A—that identifying perpetrators carries political significance beyond legal accountability. While C does not directly mention 'political"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 15 refers to the speaker and others mentioned in the conversation, including SPEAKER_09 and SPEAKER_04, who are discussing the border and terrorism. 'This' in 'this ship' refers to the political alignment of the speaker's group.\",\n  \"reason\": \"Claim C states that there has been a claim for over a year linking a potential terrorist attack to an open southern border, which aligns with the political"
     },
     {
       "a_turn_idx": 9,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Raleigh' in turn 29 likely refers to the bomber mentioned in prior turns, though no direct link to 'two zero MAGA' is established. No mention of the slogan or its association with Trump's 2020 campaign occurs in C.\",\n  \"reason\": \"Claim C discusses quoting Raleigh behind Trump, implying some connection between the bomber and Trump, but does not address or verify the specific assumption that 'two zero MAGA' refers to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Raleigh' in turn 29 likely refers to the bomber mentioned in previous turns, though no prior mention of 'Raleigh' exists in the context. This creates ambiguity in coreference resolution.\",\n  \"reason\": \"Claim C (turn 29) suggests quoting 'Raleigh' behind Donald Trump, implying a connection between Raleigh and Trump. However, it does not explicitly state or verify that 'two zero MAGA' refers to Trump's 2"
     },
     {
       "a_turn_idx": 12,
@@ -872,11 +872,11 @@
       "claim_text": "The speaker believes that knowing the truth will become available within a few hours.",
       "overlap_score": 2,
       "c_time": 865.992,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'the speaker' refers to SPEAKER_09 throughout.",
-      "reason": "Claim C (turn 41) discusses the expectation that truth will emerge within hours, focusing on the FBI's timeline and public accountability. This is unrelated to assumption A, which asserts that the political right prioritizes rhetorical consistency over empathy in crises. There is no overlap in semantic content or logical connection between the two claims.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_09 throughout.\",\n  \"reason\": \"Claim C (turn 41) discusses the expectation that truth will emerge within hours, focusing on the FBI's timeline and public accountability. This is unrelated to assumption A, which asserts that the political right prioritizes rhetorical consistency over empathy in crises. There is no overlap in semantic content or logical connection between the two claims.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_09 throughout.\",\n  \"reason\": \"Claim C (turn 41) discusses the timing of truth revelation—specifically, that knowledge will become available within a few hours. This is unrelated to assumption A, which concerns the political right's prioritization of rhetorical consistency over empathy in crises. There is no mention of the political right, empathy, or rhetorical consistency in C. Thus, C does not support"
     },
     {
       "a_turn_idx": 14,
@@ -8661,7 +8661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim C refers to the general public, which aligns with the implied subject in assumption A. The phrase 'more screen time' in both A and C refers to intentional increase in screen usage.\",\n  \"reason\": \"Claim C explicitly states the common belief that people typically aim to reduce screen time, which directly contrasts with assumption A that screen time is generally seen as something worth increasing intentionally. This contrast confirms that C explicitly verifies the opposite of A,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim C refers to the general public, which aligns with the implied subject in assumption A. The phrase 'more screen time' in both A and C refers to intentional increase in screen time.\",\n  \"reason\": \"Claim C explicitly states the common belief that people typically aim to reduce screen time, which directly contrasts with assumption A that screen time is generally seen as something worth increasing intentionally. This contrast confirms that C clearly verbalizes the prevailing assumption ("
     },
     {
       "a_turn_idx": 106,
@@ -8676,7 +8676,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 107 refers to the general audience, and 'people' refers to the general public. The claim in C is about the belief that reducing screen time is typical, which contradicts the speaker's own action and argument in turn 106.\",\n  \"reason\": \"Turn 106 asserts that screen time is something worth increasing intentionally, reflecting a personal resolution to increase it. Turn 107 claims the speaker believes"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 107 refers to the general audience, and 'people' refers to individuals in general. The claim in C is about the belief that reducing screen time is typical, which contradicts the speaker's own action and argument in turn 106.\",\n  \"reason\": \"Turn 106 asserts that screen time is something worth increasing intentionally (the speaker's resolution). Turn 107 claims the opposite—that people typically try"
     },
     {
       "a_turn_idx": 106,

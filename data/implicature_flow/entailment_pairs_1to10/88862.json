@@ -1,0 +1,42 @@
+{
+  "episode_id": "88862",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 9.298,
+      "a_idx_in_turn": 3,
+      "assumption_text": "A global pandemic originated from a laboratory incident.",
+      "c_turn_idx": 2,
+      "claim_text": "There is speculation that the virus may have originated from a laboratory leak at the Wuhan Institute of Virology.",
+      "overlap_score": 2,
+      "c_time": 32.429,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the origin of the virus, specifically the possibility of a lab leak from the Wuhan Institute of Virology, as established in turn 1.\",\n  \"reason\": \"Claim C explicitly states that there is speculation about the virus originating from a laboratory leak at the Wuhan Institute of Virology, which directly verifies the core substance of assumption A — that a global pandemic originated from a laboratory incident. The reference to the Wu"
+    },
+    {
+      "a_turn_idx": 3,
+      "a_time": 50.328,
+      "a_idx_in_turn": 2,
+      "assumption_text": "A single individual could transmit the virus widely under certain conditions.",
+      "c_turn_idx": 6,
+      "claim_text": "Kentucky Senator Rand Paul stated that if the SARS virus had been the cause instead of COVID, the death toll could have reached 3 to 5 million globally.",
+      "overlap_score": 2,
+      "c_time": 180.564,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the hypothetical scenario of a highly lethal virus like SARS being released, which aligns with the idea of a single individual spreading a dangerous virus under certain conditions as discussed in assumption A.\",\n  \"reason\": \"Claim C discusses a scenario where a highly lethal virus (SARS) could lead to massive global deaths, implying that a single point of origin—such as a lab leak—could result in widespread transmission. This supports the"
+    }
+  ]
+}

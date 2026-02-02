@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_07, who is discussing post-debate analysis based on interviews with candidates. This is unrelated to the earlier assumption about PureTalk's corporate mission.\",\n  \"reason\": \"Claim C discusses the speaker's firsthand insights from interviewing candidates in the spin room after a Republican primary debate, which is entirely unrelated to the assumption that giving flags aligns with PureTalk's corporate mission. There is no overlap in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_07, distinct from SPEAKER_06 in A.\",\n  \"reason\": \"Claim C discusses post-debate analysis based on interviews with candidates in the spin room, which is entirely unrelated to the assumption A about PureTalk's corporate mission and giving flags to veterans. There is no overlap in subject matter, context, or implied belief. C does not mention PureTalk, flags, veterans,"
     },
     {
       "a_turn_idx": 0,
@@ -32,11 +32,11 @@
       "claim_text": "The speaker believes it is acceptable to discuss part of Matt’s message without a full announcement.",
       "overlap_score": 2,
       "c_time": 180.392,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Matt' refers to a person mentioned in turn 10, unrelated to the earlier assumption about PureTalk's mission.\",\n  \"reason\": \"Claim C discusses the acceptability of discussing part of Matt's message without a full announcement, which is entirely unrelated to the assumption that giving flags aligns with PureTalk's corporate mission. There is no mention of flags, veterans, PureTalk, or its mission in C"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'Matt' refers to a person mentioned in the context, but there is no link to the earlier assumption about PureTalk or flags.",
+      "reason": "Claim C discusses the acceptability of discussing part of Matt's message without a full announcement, which is unrelated to the earlier assumption that giving flags aligns with PureTalk's corporate mission. There is no overlap in subject matter, intent, or semantic content between A and C.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Matt' refers to a person mentioned in the context, but there is no link to the earlier assumption about PureTalk or flags.\",\n  \"reason\": \"Claim C discusses the acceptability of discussing part of Matt's message without a full announcement, which is unrelated to the earlier assumption that giving flags aligns with PureTalk's corporate mission. There is no overlap in subject matter, intent, or semantic content between A and C.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to SPEAKER_04, who is the same person referred to as 'we' in turn 12. 'This group' in turn 12 refers to the group mentioned in turn 8 that was sending real-time data.\",\n  \"reason\": \"Turn 12 explicitly confirms that the speaker had access to real-time data feeds from a group experienced in scraping social media data, which directly verifies the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to SPEAKER_04, who is the same person referred to as 'we' in turn 12. 'This group' in turn 12 refers to the group mentioned in turn 8 that was sending real-time data.\",\n  \"reason\": \"Turn 12 explicitly confirms that the speaker had access to real-time data feeds from a group experienced in scraping social media data, directly verifying the substance of turn"
     },
     {
       "a_turn_idx": 8,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 39, 'the American people' refers to the collective public mentioned in turn 10's context of sharing private messages with Matt, implying trust in the speaker's access to sensitive information.\",\n  \"reason\": \"Claim C states the speaker's goal is to influence the collective mental state of the American public ('bloodstream of consciousness'), which aligns with the substance of assumption A—Matt trusting the speaker enough to share private messages prior to public discussion. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 39, 'the American people' refers to the collective public mentioned in turn 10's context of sharing private messages with Matt, implying trust in the speaker's access to sensitive information. 'The bloodstream of consciousness' metaphorically aligns with capturing the public's mental state.\",\n  \"reason\": \"Claim C states the speaker's goal is to embed awareness of the scandal into the collective consciousness of the American public before November 2024. This directly"
     },
     {
       "a_turn_idx": 10,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_10, who is the same speaker as in turn 13. 'The message' refers to the data-driven interpretation of the debate's impact on social media, which aligns with the speaker's belief in their alternative assessment.\",\n  \"reason\": \"Turn 40 states the speaker believes they need to 'get the message out,' which relates to promoting their data-based interpretation of the debate's"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 40 refers to SPEAKER_10, who is the same speaker as in turn 13. 'The message' refers to the data-driven interpretation of the debate's impact on social media, which aligns with the speaker's belief in their alternative assessment.\",\n  \"reason\": \"Turn 40 states the speaker believes they need to 'get the message out,' which relates to promoting their data-based interpretation of the debate."
     },
     {
       "a_turn_idx": 13,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to Donald Trump, consistent with prior mentions in the conversation.\",\n  \"reason\": \"Claim C discusses Donald Trump spending money on lawyers instead of TV ads or polls, which is unrelated to the assumption A that debates should be evaluated based on measurable audience engagement rather than rhetorical effectiveness. While both involve Trump and public perception, C does not address debate evaluation criteria, audience engagement metrics, or the use of social media data as a measure"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to Donald Trump, consistent with prior mentions in the conversation.\",\n  \"reason\": \"Claim C discusses Donald Trump spending money on lawyers instead of TV ads or polls, which is unrelated to the assumption A that debates should be evaluated based on measurable audience engagement rather than rhetorical effectiveness. While both involve Trump and public perception, C does not address debate evaluation criteria, audience engagement metrics, or the use of social media data as discussed in"
     },
     {
       "a_turn_idx": 14,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A; 'every man and every woman who has faithfully served the country' is a general statement unrelated to Trump's specific political targeting.\",\n  \"reason\": \"Claim C promotes a business initiative offering flags to veterans, which is unrelated to the assertion in A that Donald Trump has been unjustly targeted politically. There is no mention of political persecution, legal proceedings, or fairness in the justice system in C. The two claims address entirely different"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'every man and every woman' refers broadly to veterans, not specifically to Donald Trump or the political targeting described in A.\",\n  \"reason\": \"Claim C discusses a business initiative to support veterans by providing American-made flags, which is unrelated to the specific political claim in A that Donald Trump has been unjustly targeted. While both A and C involve themes of patriotism and perceived injustice, C does not state, verify,"
     },
     {
       "a_turn_idx": 25,
@@ -6936,7 +6936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 73 refers to the President (Joe Biden), as established in the prior context discussing his absence during emergencies.\",\n  \"reason\": \"Claim C states that leaders should ensure resources are available during emergencies, which is a general principle about emergency preparedness and leadership response. However, this does not explicitly or implicitly address the specific concern in assumption A—that political leaders should avoid private business dealings that could influence policy. The two ideas are unrelated in substance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'leaders' in C refers broadly to political leaders, but the claim is about emergency resource availability, not private business dealings.\",\n  \"reason\": \"Claim C discusses the need for leaders to ensure resources are available during emergencies, which is unrelated to assumption A, which asserts that political leaders should not engage in private business dealings that could influence policy. The topics are entirely different—C focuses on crisis response and governmental presence, while A concerns conflicts of interest and"
     },
     {
       "a_turn_idx": 62,
@@ -7041,7 +7041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 75 refers to Mitch McConnell, who is explicitly named.\",\n  \"reason\": \"Claim C (turn 75) discusses the speaker's leadership style involving being outspoken and challenging Mitch McConnell. This is unrelated to assumption A (turn 65), which concerns the speaker's belief in having access to authoritative judgment on the dossier’s validity. There is no overlap in semantic content, and C does not address, verify,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 75 refers to Speaker_03, as established by context from turns 73–74 where Speaker_03 is discussed as someone who is 'above it' and not showing up. The claim in C is about Speaker_03's leadership style involving challenging Mitch McConnell.\",\n  \"reason\": \"Claim C (turn 75) discusses Speaker_03's outspokenness toward Mitch McConnell, which is unrelated to"
     },
     {
       "a_turn_idx": 65,
@@ -7176,7 +7176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 72 refers to individuals working in the Biden administration, as established in the prior context discussing accountability and political incentives.\",\n  \"reason\": \"Claim C states that individuals in the Biden administration have strong incentives to remain in power because losing power means losing their jobs and facing reputational damage due to perceived incompetence. This directly supports the idea that powerful individuals (here, those in the administration) have disproportionate influence over outcomes (staying in power)"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 72 refers to individuals working in the Biden administration, as established in the prior context discussing accountability and political incentives.\",\n  \"reason\": \"Claim C states that individuals in the Biden administration have strong incentives to remain in power because losing power means losing their jobs and facing reputational damage due to perceived incompetence. This directly supports the idea that powerful individuals (in this case, those in the administration) have disproportionate influence over outcomes—specifically,"
     },
     {
       "a_turn_idx": 67,
@@ -7416,7 +7416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to Senator Rick Scott, as established by the prior context where he is introduced and addressed directly.\",\n  \"reason\": \"Claim C states that the speaker will monitor Senator Rick Scott's political race closely, which directly reflects and makes explicit the assumption in A that the public perceives Senator Rick Scott as a prominent political figure worth featuring. The act of monitoring his race closely implies recognition of his significance and public relevance, thus strongly ent"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to Senator Rick Scott, as established by the prior context where he is introduced and addressed directly.\",\n  \"reason\": \"Claim C states that the speaker will monitor Senator Rick Scott's political race closely, which directly reflects and makes explicit the assumption in A that the public perceives Senator Rick Scott as a prominent political figure worth featuring. The act of monitoring his race closely implies recognition of his significance and visibility in the political landscape,"
     },
     {
       "a_turn_idx": 70,
@@ -7566,7 +7566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 75 refers to Mitch McConnell, as established in the prior context where Speaker 02 discusses challenging him. The claim in C focuses on the speaker's leadership style involving confrontation with McConnell.\",\n  \"reason\": \"Claim C states that the speaker believes being outspoken and challenging Mitch McConnell is part of their leadership style. This is unrelated to assumption A, which concerns the media's selective avoidance of pressing Democratic candidates on policy failures. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 75 refers to Mitch McConnell, as established in the prior context. The claim in C focuses on the speaker's leadership style of being outspoken and challenging McConnell, which is unrelated to the media's selective coverage of Democratic candidates mentioned in A.\",\n  \"reason\": \"Claim C discusses the speaker's leadership style involving confrontation with Mitch McConnell, while assumption A concerns the media's failure to hold Democratic candidates accountable for policy failures. There is no overlap"
     },
     {
       "a_turn_idx": 71,
@@ -7671,7 +7671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to Senator Rick Scott, as established in the context.\",\n  \"reason\": \"Claim C expresses confidence that Senator Rick Scott will perform well in his race, which is a positive prediction about his electoral prospects. However, this does not explicitly state or verify the earlier assumption A, which concerns the necessity and effectiveness of holding public officials accountable through direct questioning. While there is a loose topical connection—both involve political accountability—the specific belief"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 81 refers to Senator Rick Scott, as established in the context (e.g., 'Senator Rick Scott, great state, free state of Florida').\",\n  \"reason\": \"Claim C expresses confidence that Senator Rick Scott will perform well in his race, which is a positive prediction about his electoral prospects. However, this does not explicitly verify or state the earlier assumption A, which concerns the necessity and effectiveness of holding public officials accountable through direct"
     },
     {
       "a_turn_idx": 72,
@@ -7686,7 +7686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 73 refers to government leaders, specifically the President or a high-ranking official, as established by the context of leadership and crisis response. The phrase 'you show up within hours' implies effective mobilization by a leader.\",\n  \"reason\": \"Claim C states that government leaders have the ability to mobilize resources effectively, which directly supports the idea in assumption A that a leader's cognitive and physical fitness enables effective governance. Turn 73"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 73 refers to government leaders, specifically the President or a high-ranking official, as established by the context of leadership and crisis response. The phrase 'you show up within hours' refers to the leader's ability to act decisively.\",\n  \"reason\": \"Claim C states that government leaders have the ability to mobilize resources effectively, which aligns with the substance of assumption A—that a president's cognitive and physical fitness enables effective governance."
     },
     {
       "a_turn_idx": 72,
@@ -7701,7 +7701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 73 refers to SPEAKER_02, who is Senator Rick Scott. The statement 'when I was governor for the state government' explicitly identifies the speaker's past role as governor.\",\n  \"reason\": \"Turn 73 states that the speaker has previously served as governor, which is a factual claim about their background. However, this does not make explicit the earlier assumption in turn 72—that the Biden administration has failed in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 73 refers to SPEAKER_02, who is Senator Rick Scott based on context. The statement 'when I was governor for the state government' explicitly identifies the speaker's past role as governor.\",\n  \"reason\": \"Claim C states that the speaker has previously served as governor, which is a factual assertion about their background. However, this does not make explicit the earlier assumption A, which concerns the Biden administration's failure in governance"
     },
     {
       "a_turn_idx": 72,

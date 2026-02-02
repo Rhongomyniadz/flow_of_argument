@@ -2106,7 +2106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 40 refers to the United States, consistent with the national focus in turn 19. 'The goal at hand' refers to addressing climate change and improving national readiness, aligning with the concern raised in turn 19.\",\n  \"reason\": \"Turn 40 explicitly states that raising national ambitions is necessary to achieve the goal of addressing climate change, which directly verifies the substance of turn 19—that the nation is not"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 40 refers to the United States, consistent with the national focus in turn 19. 'The goal at hand' refers to addressing climate change and improving national readiness, as discussed in prior turns.\",\n  \"reason\": \"Turn 40 explicitly states that raising national ambitions is necessary to achieve the goal, which aligns directly with the substance of turn 19—namely, that the nation is not adequately prepared for global"
     },
     {
       "a_turn_idx": 19,
@@ -2117,11 +2117,11 @@
       "claim_text": "Joe Biden made climate change a central issue during his presidential campaign.",
       "overlap_score": 2,
       "c_time": 284.453,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 21 refers to Joe Biden, consistent with prior mention.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden made climate change a central issue during his presidential campaign, which directly verifies the broader assumption in A that climate change has significant and measurable impacts on public health—by highlighting a high-level political acknowledgment of the issue as a critical concern. While C does not restate the health impact directly, it strongly supports A by"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'he' in turn 21 refers to Joe Biden.",
+      "reason": "Claim C states that Joe Biden made climate change a central issue during his campaign, which is unrelated to assumption A, which asserts that climate change has significant and measurable impacts on public health. While both topics are related to climate change, C does not state, verify, or imply anything about health impacts. Therefore, there is no entailment.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 21 refers to Joe Biden.\",\n  \"reason\": \"Claim C states that Joe Biden made climate change a central issue during his campaign, which is unrelated to assumption A, which asserts that climate change has significant and measurable impacts on public health. While both topics are related to climate change, C does not state, verify, or imply anything about health impacts. Therefore, there is no entailment.\"\n}\n```"
     },
     {
       "a_turn_idx": 19,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the United States' in claim C refers to the nation mentioned in assumption A, which discusses national preparedness for climate-related health challenges.\",\n  \"reason\": \"Claim C asserts that dramatic domestic progress on climate change is necessary for the U.S. to lead globally, which implies that climate change has significant consequences requiring national action. This aligns with assumption A, which states that climate change has significant and measurable impacts on public health—a key reason why national preparedness and"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the United States' in claim C refers to the nation mentioned in assumption A, maintaining continuity in subject matter.\",\n  \"reason\": \"Claim C asserts that dramatic domestic progress on climate change is necessary for the U.S. to lead globally, which implies that climate change has significant consequences requiring action—directly supporting the idea that climate change has substantial impacts on public health (A). While C does not explicitly mention public health, it affirms the seriousness and necessity of"
     },
     {
       "a_turn_idx": 21,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 34 refers to 'climate change', which is the subject of assumption A. The phrase 'these huge, complicated, seemingly unsolvable issues' includes climate change as a primary example.\",\n  \"reason\": \"Claim C acknowledges that climate change is a large, complex, and seemingly unsolvable issue, which aligns with the idea that it demands significant attention and political focus—supporting the notion that it is a major national priority. However"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 34 refers to the 30 by 30 initiative, which was introduced in turn 21 as part of Biden's climate agenda.\",\n  \"reason\": \"Claim C states that climate change is a 'large, complex, and seemingly unsolvable issue,' which acknowledges the difficulty of addressing climate change—consistent with the implication in assumption A that it is a major national priority requiring significant political attention. However, C does not explicitly"
     },
     {
       "a_turn_idx": 21,
@@ -2421,7 +2421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"John Kerry refers to the new administration's international work on climate change; 'the new administration' refers to Joe Biden's administration mentioned in turn 21.\",\n  \"reason\": \"Claim C discusses John Kerry's focus on the new administration's international climate efforts, which includes rejoining the Paris Agreement. While this relates to broader climate action, it does not explicitly state or verify the specific claim in assumption A—that conserving land and water is an effective strategy for addressing climate change."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"John Kerry refers to the new administration's international work on climate change; 'the new administration' refers to Joe Biden's incoming administration mentioned in turn 21.\",\n  \"reason\": \"Claim C discusses John Kerry's focus on the new administration's international climate efforts, which includes rejoining the Paris Agreement. While this relates to broader climate action, it does not explicitly state or verify the specific claim in assumption A—that conserving land and water is an effective strategy for addressing climate change"
     },
     {
       "a_turn_idx": 21,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Secretary Kerry' refers to John Kerry, mentioned in turn 41.\",\n  \"reason\": \"Claim C states that Secretary Kerry wants to take action on climate change, which aligns with the general theme of climate action introduced in assumption A. However, C does not mention land or water conservation, nor does it explicitly connect to the specific strategy of conserving 30% of U.S. land and water by 2030. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Secretary Kerry' refers to John Kerry, mentioned in turn 41.\",\n  \"reason\": \"Claim C states that Secretary Kerry wants to take action on climate change, which aligns with the general theme of climate action introduced in assumption A. However, C does not mention land and water conservation or explicitly connect to the specific strategy of conserving 30% of U.S. land and water. While both relate to climate change, C lacks the"
     },
     {
       "a_turn_idx": 21,
@@ -2571,7 +2571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 36 refers to the '30 by 30 conservation goal' mentioned in turn 23, which is explicitly tied to protecting 30% of land and oceans by 2030.\",\n  \"reason\": \"Claim C explicitly states that the proposed legislation aims to establish a '30x30 conservation goal,' which directly verifies the substance of assumption A—that the 30 by 30 pledge refers"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 36 refers to the '30 by 30 conservation goal' mentioned in turn 23, which is explicitly defined as protecting 30% of land and oceans by 2030.\",\n  \"reason\": \"Claim C explicitly states that the proposed legislation aims to establish a '30x30 conservation goal,' which directly verifies the substance of assumption A—that the 30 by 30 pledge refers"
     },
     {
       "a_turn_idx": 23,
@@ -2586,7 +2586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' and 'the US' are explicitly named.\",\n  \"reason\": \"Claim C discusses disagreements between the US and China on various issues, including trade and geopolitical matters, which is unrelated to the feasibility of environmental policy commitments like 30 by 30. Assumption A concerns the value of assessing whether such environmental goals are realistic, while C focuses on bilateral tensions and economic competition. There is no mention of environmental policy feasibility, 3"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'China' and 'the US' are explicitly named.\",\n  \"reason\": \"Claim C discusses disagreements between the US and China on various issues, including trade and geopolitical matters, which is unrelated to the feasibility assessment of environmental policy commitments like 30 by 30. There is no mention of environmental policy, conservation goals, or the evaluation of their realism. Thus, C does not support, verify, or relate to assumption A, making the"
     },
     {
       "a_turn_idx": 24,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these areas' in turn 35 refers to the protected natural areas mentioned in the preceding context, including land and marine areas discussed in turns 34 and 36.\",\n  \"reason\": \"Claim C states that incentivizing protections for certain areas would lead to significant progress, which aligns with the broader concern about ecological collapse raised in assumption A. However, C does not explicitly state or verify the extreme consequence of human extinction or collapse due to degradation of"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these areas' in turn 35 refers to the protected natural areas mentioned in the preceding context, including land and marine areas discussed in turns 34 and 36.\",\n  \"reason\": \"Claim C states that incentivizing protections for certain areas would lead to significant progress, which aligns with the broader concern about ecological collapse raised in assumption A. However, C does not explicitly state or verify the specific consequence of human extinction or collapse due to degradation of"
     },
     {
       "a_turn_idx": 27,
@@ -2777,11 +2777,11 @@
       "claim_text": "There exists an administration that supports mobilizing the federal government.",
       "overlap_score": 2,
       "c_time": 464.046,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'an administration' refers to a governmental body, not linked to prior speakers or entities.\",\n  \"reason\": \"Claim C (turn 35) discusses the existence of an administration willing to mobilize the federal government for environmental protection. This is unrelated to assumption A (turn 27), which asserts a fundamental limit to human ability to engineer equivalent alternatives to natural systems. There is no mention of replacement capacity, engineering limits, or ecological services in"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'an administration' refers to a governmental body, not linked to any prior entity in turn 27.",
+      "reason": "Claim C discusses federal government mobilization for environmental protection, while assumption A concerns the inherent limits of replacing natural systems. The two ideas are unrelated in substance—C does not address or verify the existence of a fundamental limit to engineering alternatives. There is no overlap in semantic content, and C neither states nor implies A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'an administration' refers to a governmental body, not linked to any prior entity in turn 27.\",\n  \"reason\": \"Claim C discusses federal government mobilization for environmental protection, while assumption A concerns the inherent limits of replacing natural systems. The two ideas are unrelated in substance—C does not address or verify the existence of a fundamental limit to engineering alternatives. There is no overlap in semantic content, and C neither states nor implies A.\"\n}"
     },
     {
       "a_turn_idx": 27,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my' in claim C refers to SPEAKER_12, who is the subject of the anecdote. 'Explorer in Residence' is the full title mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the president recognized the title 'Explorer in Residence' upon seeing the business card, which directly verifies the assumption that audience members would recognize the title as notable. The context confirms the title's prestige through the president's reaction, supporting the recognition"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my' in claim C refers to SPEAKER_12, who is the subject of the anecdote. 'Explorer in Residence' is the full title mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the president recognized the title 'Explorer in Residence' upon seeing the business card, which directly verifies the assumption that audience members would recognize the title as notable. The context confirms the title's prestige through the president's reaction, supporting the idea"
     },
     {
       "a_turn_idx": 29,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 44 refers to the broader context of climate action and commitment, particularly the global shift toward decarbonization, but does not explicitly reference or verify the specific assumption about societal consensus on reducing carbon emissions.\",\n  \"reason\": \"Claim C states that a company announced plans to achieve net zero carbon emissions by 2040, which reflects a commitment to emission reduction. However, it does not address or verify the existence of a 'general"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 44 refers to the broader movement toward climate action, particularly corporate commitments to reduce carbon emissions, which is contextually linked to the general consensus on reducing emissions mentioned in turn 37.\",\n  \"reason\": \"Claim C discusses a company's commitment to net zero emissions by 2040, which reflects a trend toward climate action and aligns with the general sentiment that reducing carbon emissions is desirable. However, it does not explicitly"
     },
     {
       "a_turn_idx": 38,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"John Kerry refers to the special presidential envoy for climate, the role newly created by the administration; 'the new administration' refers to Biden's administration.\",\n  \"reason\": \"Claim C explicitly states that John Kerry's statement focused on the new administration's international work on climate change, which directly verifies the substance of assumption A—that international agreements are a viable substitute for legislative action. The mention of rejoining the Paris Agreement exemplifies such a substitute mechanism, confirming the relevance and intent behind A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"John Kerry refers to the 'new administration's international work on climate change' as the subject of his statement; 'the new administration' refers to Biden's administration, which is the focus of the prior discussion about executive actions and international agreements.\",\n  \"reason\": \"Claim C explicitly states that John Kerry's statement focused on the new administration's international work on climate change, which directly supports and verifies the earlier assumption A that executive orders and international agreements are viable substitutes for legislative action in advancing"
     },
     {
       "a_turn_idx": 39,

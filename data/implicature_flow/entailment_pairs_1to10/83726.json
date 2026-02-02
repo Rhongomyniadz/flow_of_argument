@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to SPEAKER_06, the interviewee. No coreference resolves to the speaker in turn 4.\",\n  \"reason\": \"Turn 34 asks about a 'zinger' the subject is proud of, which is unrelated to the assumption in turn 4 that the speaker has access to reliable sources about NASA missions. There is no mention of NASA, space probes, or information reliability in turn 34"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to SPEAKER_06, the person being interviewed. No coreference resolves to the earlier assumption A.\",\n  \"reason\": \"Turn 34 asks about a 'zinger' the interviewee is proud of, which is unrelated to the earlier assumption A that the speaker has access to reliable sources about NASA missions. There is no mention of NASA, space probes, or reliable sources in turn 34. The"
     },
     {
       "a_turn_idx": 4,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 12 refers to the listener (SPEAKER_04), who is being asked about their pre-compromise experiences. There is no reference to Mitt Romney or personal experience working with him.\",\n  \"reason\": \"Claim C (turn 12) discusses general experiences with compromise in political work, specifically referencing the speaker's own past compromises related to LGBT rights and financial reform. It does not mention Mitt Romney, nor does it refer"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 12 refers to the listener (SPEAKER_04), who is the subject of the earlier assumption A. However, 'the listener' in A refers to someone who worked with Mitt Romney as governor, while turn 12 discusses compromises related to LGBT rights and financial reform, which are unrelated to Romney or the prior context.\",\n  \"reason\": \"Claim C (turn 12) discusses personal experiences with political compromise in"
     },
     {
       "a_turn_idx": 5,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political positions on gay rights and same-sex marriage.\",\n  \"reason\": \"Claim C states that 'prudent politics' requires supporting a specific action—namely, opposing efforts to roll back same-sex marriage—which aligns with the belief expressed in assumption A that past behavior (e.g., voting records, public statements) provides valid insight into future political conduct. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political positions on gay rights.\",\n  \"reason\": \"Claim C states that 'prudent politics' requires supporting a specific action—here, opposing efforts to roll back same-sex marriage—which aligns with the belief in turn 5 that past behavior (e.g., voting records, public statements) provides valid insight into future political conduct. While C does not explicitly mention"
     },
     {
       "a_turn_idx": 5,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'he' in turn 6 refers to Mitt Romney, and 'the Supreme Court' refers to the Supreme Judicial Court of Massachusetts.\",\n  \"reason\": \"Turn 28 discusses the idea that not everyone must adopt the same view on same-sex marriage at the same pace, which touches on the broader social and political context of the issue. However, it does not explicitly state or verify the specific factual claim in turn 6—that the Supreme Judicial Court"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'he' in turn 6 refers to Romney, and 'the Supreme Court' refers to the Supreme Judicial Court of Massachusetts.\",\n  \"reason\": \"Turn 28 discusses the idea that not everyone needs to agree on same-sex marriage at the same pace, which touches on the broader social and political dynamics surrounding the issue. However, it does not explicitly state or verify the specific factual claim in turn 6—that the Supreme Judicial Court of Massachusetts ruled"
     },
     {
       "a_turn_idx": 6,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the three U.S. Senators mentioned earlier in the sentence, including John Kerry, George Bush, and Barack Obama, though the latter two are inaccurately described as having opposed same-sex marriage legislation; note that Obama's position evolved over time.\",\n  \"reason\": \"Claim C discusses three U.S. Senators voting against major legislation related to same-sex marriage, which touches on the broader political strategy of opposing gay rights for electoral"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the three U.S. Senators mentioned earlier in the sentence, including John Kerry, George Bush, and Barack Obama, though the latter two are inaccurately described as having opposed same-sex marriage legislation in the Senate. The reference to 'they' is clear but the factual accuracy of the claim is questionable.\",\n  \"reason\": \"Claim C discusses three U.S. Senators voting against major legislation related to same-sex marriage, which"
     },
     {
       "a_turn_idx": 7,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Mitt Romney; 'him' in turn 28 refers to Brendan Eich, not Romney.\",\n  \"reason\": \"Claim C (turn 28) discusses differing paces of acceptance of same-sex marriage and acknowledges that not everyone needs to agree immediately, which touches on the broader theme of political timing and public opinion. However, it does not explicitly address or verify the specific assumption in A—that opposing same-sex marriage"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Mitt Romney, and 'his governorship' refers to Romney's tenure as Governor of Massachusetts. In turn 28, Speaker 04 discusses differing paces of acceptance on same-sex marriage, but does not mention Romney or his motivations.\",\n  \"reason\": \"Turn 28 introduces a general perspective on varying timelines for accepting same-sex marriage, emphasizing tolerance for differing views. However, it does not address or verify"
     },
     {
       "a_turn_idx": 7,
@@ -1011,7 +1011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 14 refers to the American public, as established in the context of public education on LGBTQ+ issues.\",\n  \"reason\": \"Claim C states that the American public is now better educated about LGBTQ+ issues, which is only weakly related to assumption A, which concerns how the public views presidential candidates' positions on moral and legal issues as indicators of character and leadership. While both touch on public perception of political stances on LGBTQ+ matters"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference resolution needed; 'the American public' in turn 14 refers to the general populace, consistent with the broader societal context of turn 7.\",\n  \"reason\": \"Turn 14 states that the American public is now better educated about LGBTQ+ issues, which is only weakly related to turn 7's claim that the public views candidates' positions on moral/legal issues as indicators of character and leadership. While both touch on public perception of political stances"
     },
     {
       "a_turn_idx": 8,
@@ -1056,7 +1056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 12 refers to the listener, as established in the prior exchange where Speaker 04 is being addressed about serving a constituency. The phrase 'be in the job' refers to holding public office, consistent with the context of political service discussed in turn 8.\",\n  \"reason\": \"Turn 12 states that the listener should be in the job if they cannot achieve alignment between their values and their constituency, which directly reflects the core"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 12 refers to the listener, as established in the prior exchange where Speaker 04 is being addressed about serving a constituency. The phrase 'be in the job' refers to holding public office, consistent with the context of political service discussed in turn 8.\",\n  \"reason\": \"Turn 12 explicitly states that the listener should be in the job if they cannot align with their values due to constituency conflict, which directly reflects the"
     },
     {
       "a_turn_idx": 8,
@@ -1071,7 +1071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political stance on same-sex marriage. 'Prudent politics' refers to strategic political behavior aligned with constituent expectations, consistent with the idea in turn 8 about aligning with one's constituency.\",\n  \"reason\": \"Claim C states that the speaker believes prudent politics requires supporting a specific action—namely, opposing same-sex marriage initially despite personal beliefs, which aligns"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political stance on same-sex marriage. 'Prudent politics' refers to strategic political behavior aligned with electoral or institutional pragmatism.\",\n  \"reason\": \"Claim C states that the speaker believes prudent politics requires supporting a specific action—namely, taking a stand on same-sex marriage despite political risk. This directly aligns with assumption A, which asserts that public figures"
     },
     {
       "a_turn_idx": 8,
@@ -1086,7 +1086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the group discussing public figures and values, consistent with the broader conversation about political alignment and personal values in A. 'People who aren't on board with us' refers to those whose views differ from the speaker’s, aligning with the idea of considering public figures' alignment with one's own values.\",\n  \"reason\": \"Claim C explicitly calls for considering individuals who disagree with current positions, which directly extends the earlier assumption A that"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the group discussing public policy and social issues, consistent with the broader conversation involving public figures and their alignment with values. 'People who aren't on board with us' refers to those who disagree with the speaker's stance on gay rights, echoing the earlier concern about public figures aligning with their constituents' values.\",\n  \"reason\": \"Claim C explicitly calls for considering how to allocate resources to individuals who disagree with the current position,"
     },
     {
       "a_turn_idx": 8,
@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A. 'Ralph Nader' in C refers to a specific political figure, while 'public figures' in A refers broadly to political actors like Romney and the speaker themselves. There is no mention of values alignment, constituency, or personal integrity in C.\",\n  \"reason\": \"Claim C discusses Ralph Nader's unrealistic demands during a debate, criticizing his impracticality and loss of influence. This topic is unrelated to assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolves to connect claim C to assumption A. 'Ralph Nader' in C refers to a specific political figure, while 'public figures' in A refers broadly to political actors like Romney and Reagan. There is no mention of values alignment, constituencies, or personal integrity in C.\",\n  \"reason\": \"Claim C discusses Ralph Nader's unrealistic demands during a debate, criticizing his impracticality and loss of influence. This topic is unrelated to assumption A,"
     },
     {
       "a_turn_idx": 8,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'the American public' refers to the general populace, consistent across turns.\",\n  \"reason\": \"Claim C states that the American public is now better educated about LGBTQ+ issues, which is a general observation about societal awareness. However, it does not explicitly state or verify the specific assumption A—that public positions on issues like homosexuality are tied to electoral viability. While improved public education might indirectly support such a claim, C does not address electoral strategy, political calculation"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'the American public' refers to the general populace, consistent across turns.\",\n  \"reason\": \"Claim C states that the American public is now better educated about LGBTQ+ issues, which is tangentially related to assumption A (that public positions on homosexuality are tied to electoral viability). However, C does not explicitly verify or state the causal link between electoral strategy and policy positions on homosexuality. While improved public education might indirectly affect electoral viability, C does not address"
     },
     {
       "a_turn_idx": 8,
@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_04, who is also the speaker in turn 8. The phrase 'gay rights' in C corresponds to the topic of homosexuality discussed in A.\",\n  \"reason\": \"Claim C discusses the normalization of gay rights by comparing them to trivial physical traits like earlobe attachment, advocating for equal public discussion. While this reflects a broader stance on equality and public discourse, it does not explicitly address or verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is also the speaker in turn 8. The phrase 'gay rights' in turn 28 corresponds to the topic of homosexuality discussed in turn 8.\",\n  \"reason\": \"Turn 28 introduces a metaphor comparing gay rights to rights based on physical traits like earlobe attachment, arguing for equal public discussion. While this reflects a value judgment about fairness and inclusion, it does"
     },
     {
       "a_turn_idx": 9,
@@ -1161,7 +1161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the Democratic majority in the 2007 legislative session, consistent with the broader context of legislative advocacy.\",\n  \"reason\": \"Claim C states that the 2007 legislative session had the strongest recorded support for LGBT rights, which directly reflects and expands upon the earlier assumption A that constituent ideology influences legislative advocacy on LGBTQ+ rights. The speaker’s account of the 2007 session—where ideological"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the Democratic majority in the 2007 legislative session, consistent with the broader context of legislative advocacy.\",\n  \"reason\": \"Claim C states that the 2007 legislative session had the strongest recorded support for LGBT rights, which implies a direct link between ideological alignment (supporting LGBT rights) and legislative action. This supports assumption A, which posits a correlation between constituent ideology and legislative advocacy on LGBTQ"
     },
     {
       "a_turn_idx": 9,
@@ -1176,7 +1176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, who is the subject of the discussion about LGBTQ+ rights advocacy. The phrase 'block the efforts to undo it' clearly refers to preventing rollback of LGBTQ+ rights, aligning with the ideological stance discussed in turn 9.\",\n  \"reason\": \"Claim C explicitly affirms support for blocking efforts to undermine LGBTQ+ rights, which directly verifies the substance of assumption A—that legislators' positions on"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, who is the subject of the discussion and the speaker of the earlier assumption A. The phrase 'block the efforts to undo it' clearly refers to preventing rollback of LGBTQ+ rights, which aligns with the ideological stance discussed in turn 9.\",\n  \"reason\": \"Turn 21 explicitly affirms support for blocking efforts to undermine LGBTQ+ rights, which directly verifies the core idea in"
     },
     {
       "a_turn_idx": 9,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the addressee (SPEAKER_04), who is the subject of the earlier assumption A. The phrase 'I've heard your speeches many times' indicates repeated exposure to the addressee's public statements.\",\n  \"reason\": \"Claim C mentions that the speaker has listened to the addressee's speeches multiple times, which provides circumstantial evidence of familiarity with the addressee's public positions."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to the addressee (SPEAKER_04), who is the subject of the earlier assumption A. The phrase 'I've heard your speeches many times' indicates familiarity with the addressee's public statements.\",\n  \"reason\": \"Claim C mentions that the speaker has listened to the addressee's speeches multiple times, which implies awareness of the addressee's public positions. However, it does not"
     },
     {
       "a_turn_idx": 9,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the addressee (SPEAKER_04), who is the subject of the earlier assumption A. The claim in C explicitly extends the idea of public support for gay rights, aligning with the earlier assertion that the addressee has been open about their sexuality and supportive of gay rights.\",\n  \"reason\": \"Claim C explicitly affirms the moral equivalence between gay rights and trivial physical traits, which reflects a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 28 refers to the addressee (SPEAKER_04), who is the subject of the earlier assumption A. The claim in C explicitly extends the addressee's stance on gay rights to a broader principle of equality, reinforcing their public advocacy.\",\n  \"reason\": \"Turn 28 explicitly affirms the addressee's support for gay rights by equating it with fundamental personal rights (e.g., marrying based"
     },
     {
       "a_turn_idx": 9,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is the same speaker as in turn 9. The claim in turn 28 focuses on the moral stance against discrimination in business settings based on sexual orientation.\",\n  \"reason\": \"Turn 28 expresses a personal moral judgment that refusing service based on sexual orientation is wrong and discriminatory, which aligns with a broader political stance on LGBTQ+ rights. However, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is the same speaker as in turn 9. The claim in turn 28 focuses on the moral stance against discrimination in business settings based on sexual orientation.\",\n  \"reason\": \"Turn 28 expresses a personal moral judgment that refusing service based on sexual orientation is wrong and discriminatory, which aligns with a broader ethical stance on LGBTQ+ rights. However, it does not explicitly"
     },
     {
       "a_turn_idx": 9,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the Democratic majority in Congress, specifically Speaker 06 and colleagues. 'This' in 'this was the case' refers to the lack of sufficient votes to pass full protections for transgender people.\",\n  \"reason\": \"Claim C states that a bill banning employment discrimination based on sexual orientation and gender identity was introduced in 2007, which aligns with the timeline and topic of the discussion in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the Democratic majority in Congress, consistent with the context of legislative action. 'Transgender people' is a specific group mentioned in the bill, aligning with the broader category of 'sexual orientation and gender identity'.\",\n  \"reason\": \"Claim C states that a bill banning employment discrimination based on sexual orientation and gender identity was introduced in 2007, which is contextually relevant to the discussion of political positioning"
     },
     {
       "a_turn_idx": 9,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context (e.g., 'Ralph Nader' mentioned earlier in the sentence).\",\n  \"reason\": \"Claim C (turn 35) states that Nader's actions diminished his political influence and public impact, which is unrelated to assumption A (turn 9), which concerns the political nature of publicly disclosing one's sexual orientation. There is no mention of sexual orientation,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context (e.g., 'Ralph Nader' mentioned earlier in the sentence).\",\n  \"reason\": \"Claim C (turn 35) states that Nader's actions diminished his political influence and public impact, which is unrelated to assumption A (turn 9), which concerns the political nature of public disclosure of sexual orientation. There is no mention of sexual orientation, coming"
     },
     {
       "a_turn_idx": 9,
@@ -1326,7 +1326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'Reagan' in C refers to Ronald Reagan, not a person related to the earlier discussion about political closeting.\",\n  \"reason\": \"Claim C discusses the speaker's witty critique of Reagan's abortion policy and its influence on conservative Republicans, which is unrelated to the earlier assumption A about individuals remaining closeted in conservative districts due to constituent pressure. There is no mention of coming out, political identity, or constituency-based"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'Reagan' refers to Ronald Reagan, not related to the speaker's hypothetical situation in a conservative district.\",\n  \"reason\": \"Claim C discusses the speaker's witty critique of Reagan's abortion policy and its influence on some conservative Republicans, which is unrelated to the earlier assumption A about remaining closeted in a conservative district. There is no mention of coming out, political identity, or constituency-based concealment in C."
     },
     {
       "a_turn_idx": 11,
@@ -1341,7 +1341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to political officeholders, consistent with the subject of turn 11. The phrase 'stating a position you don't really have' directly addresses the idea of acting contrary to one's principles, which is central to assumption A.\",\n  \"reason\": \"Claim C explicitly discusses the ethical tension of stating a political position one does not genuinely hold—a direct manifestation of the core idea in assumption A, which asserts that officeholders"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to political officeholders, consistent with the subject of turn 11. The phrase 'stating a position you don't really have' refers to acting contrary to one's beliefs, which aligns with the idea of compromising one's principles.\",\n  \"reason\": \"Claim C explicitly addresses the idea of compromising one's stated position—specifically, stating a position one does not truly hold—which directly relates to the core idea"
     },
     {
       "a_turn_idx": 11,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context and prior discussion of Nader's political role and criticism.\",\n  \"reason\": \"Claim C states that Nader's actions diminished his political influence and public impact, which is tangentially related to the broader theme of political accountability and alignment with principles discussed in assumption A. However, C does not explicitly state or verify that political officeholders have a duty to align their actions with their"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context (e.g., 'Ralph Nader' mentioned earlier in the same sentence).\",\n  \"reason\": \"Claim C states that Nader's actions diminished his political influence and public impact, which is tangentially related to the broader theme of political accountability and alignment with principles discussed in assumption A. However, C does not explicitly state or verify that political officeholders have a duty"
     },
     {
       "a_turn_idx": 12,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context involving political positions on same-sex marriage.\",\n  \"reason\": \"Claim C states that 'prudent politics' requires supporting a specific action—namely, backing progressive legislation even when not fully aligned with personal ideals, as exemplified by Obama’s strategic support for LGBTQ+ rights despite initial hesitation. This aligns with assumption A, which posits that the listener has relevant experience"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context involving political positions on same-sex marriage.\",\n  \"reason\": \"Claim C states that 'prudent politics' requires supporting a specific action—namely, backing progressive legislation even when not fully aligned with personal ideals, as exemplified by Obama’s strategic support for LGBTQ+ rights despite initial reservations. This aligns with assumption A, which posits that the listener has relevant experience"
     },
     {
       "a_turn_idx": 12,
@@ -1386,7 +1386,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, the speaker of the previous turns. 'Your speeches' refers to SPEAKER_06's own speeches.\",\n  \"reason\": \"Turn 21 states that the speaker (SPEAKER_04) has listened to SPEAKER_06's speeches multiple times, which is tangentially related to the idea that SPEAKER_06 has experience with negotiation or decision-making."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, the speaker of the previous turns. 'Your speeches' refers to SPEAKER_06's own speeches.\",\n  \"reason\": \"Turn 21 states that the speaker (SPEAKER_04) has listened to SPEAKER_06's speeches multiple times, which indicates familiarity with the speaker’s views and communication style. However, this does not explicitly verify or state the"
     },
     {
       "a_turn_idx": 12,
@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, the speaker of the earlier assumption A. The phrase 'has a congressman or senator ever come up to you and said, you changed my mind on that because' directly queries whether the addressee (SPEAKER_06) has influenced elected officials through persuasion.\",\n  \"reason\": \"Assumption A posits that the listener (SPEAKER_04) has relevant experience"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 21 refers to SPEAKER_06, the speaker of the earlier assumption A. The phrase 'has a congressman or senator ever come up to you and said, you changed my mind on that because' directly addresses whether the listener (SPEAKER_04) has influenced elected officials, implying belief in the listener's persuasive power.\",\n  \"reason\": \"Claim C asks whether any elected official has been persuaded by the addres"
     },
     {
       "a_turn_idx": 12,
@@ -1416,7 +1416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to the listener (SPEAKER_04), consistent with the prior conversation. No other coreference issues.\",\n  \"reason\": \"Turn 34 asks about a 'zinger' the listener is proud of, which is unrelated to the assumption in turn 12 that the listener has experience with negotiation or decision-making. While the broader context involves negotiation and compromise, the specific claim in turn 34 does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to the listener (SPEAKER_04), and 'your' in 'your marketing materials' and 'your remarks' also refers to SPEAKER_04. No other coreference is critical.\",\n  \"reason\": \"Turn 34 asks the listener about personal 'zingers' and wit, specifically asking if they have one they're proud of. This does not address or verify the earlier assumption in turn"
     },
     {
       "a_turn_idx": 12,
@@ -1431,7 +1431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to the speaker (SPEAKER_06), as established by the conversational context and prior turns. 'Subject' in turn 34 refers to SPEAKER_06, consistent with the prior discussion.\",\n  \"reason\": \"Turn 34 asks about delivering a 'lacerating zinger,' which relates to rhetorical skill and sharp political wit, but does not address or verify the assumption in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 34 refers to the speaker (SPEAKER_06), as established by the conversational context. 'The subject' in C refers to SPEAKER_06, consistent with prior turns.\",\n  \"reason\": \"Turn 34 asks about delivering a 'lacerating zinger,' which relates to rhetorical skill and assertiveness in debate—traits indirectly connected to negotiation or decision-making experience. However, it does not explicitly"
     },
     {
       "a_turn_idx": 12,
@@ -1446,7 +1446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. The claim in C is about Ralph Nader's unrealistic demands during a debate, which is unrelated to the assumption A about the listener's experience with negotiation or decision-making.\",\n  \"reason\": \"Assumption A concerns the speaker's belief that the listener has relevant experience in negotiation or decision-making. Claim C, however, discusses Ralph Nader's perceived unrealistic demands during a debate"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. The claim in C is about Ralph Nader's unrealistic demands during a debate, which is unrelated to the assumption A about the listener's experience with negotiation or decision-making.\",\n  \"reason\": \"Assumption A (turn 12) concerns the speaker's belief that the listener has relevant experience in negotiation or decision-making. Claim C (turn 35) discusses the"
     },
     {
       "a_turn_idx": 12,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your mom' refers to the listener's mother, not the speaker's. The claim in C is about respecting a mother by ignoring her stated preference, while A concerns the listener's experience with negotiation or decision-making.\",\n  \"reason\": \"Claim C discusses respecting a mother by ignoring her stated preferences regarding gifts, which is unrelated to the assumption in A that the listener has experience with negotiation or decision-making. There is no overlap in semantic content, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your mom' refers to the listener's mother, not the speaker's. The claim in C is about respecting a mother by ignoring her stated preference (e.g., giving chocolate despite her saying she doesn't want it). This is unrelated to the earlier assumption A, which concerns the listener's experience with negotiation or decision-making.\",\n  \"reason\": \"Claim C discusses a personal moral dilemma involving respecting a mother by overriding her stated wishes, particularly in the"
     },
     {
       "a_turn_idx": 13,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political positions on same-sex marriage.\",\n  \"reason\": \"Claim C states that 'prudent politics' involves supporting a specific action—namely, backing incremental progress on LGBTQ+ rights despite not fully aligning with ideal standards. This directly reflects Assumption A, which holds that progress should be measured by tangible outcomes (e.g., passing partial legislation) rather than"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context discussing his political positions on same-sex marriage.\",\n  \"reason\": \"Claim C states that 'prudent politics' involves supporting a specific action—namely, backing incremental progress on LGBTQ+ rights despite not fully aligning with ideal standards. This directly reflects Assumption A, which holds that progress should be measured by tangible outcomes (e.g., passing legislation with partial protections)"
     },
     {
       "a_turn_idx": 13,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 35, 'he' refers to Ralph Nader, as established in the context of the debate and criticism of his demands.\",\n  \"reason\": \"Claim C states that Ralph Nader made 'very unrealistic demands' that were 'not possible,' which touches on the theme of unattainable ideals versus practical outcomes. However, it does not explicitly address or verify the specific belief in turn 13—that progress should be measured by tangible outcomes rather than ideal standards"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 35, 'he' refers to Ralph Nader, as established in the context of the debate and criticism of his demands.\",\n  \"reason\": \"Claim C states that Ralph Nader made 'very unrealistic demands' that were 'not possible,' which aligns with the idea of rejecting idealistic standards in favor of practical outcomes. However, it does not explicitly state or verify the core belief in turn 13—that progress should be measured by tangible outcomes rather than"
     },
     {
       "a_turn_idx": 13,
@@ -1502,11 +1502,11 @@
       "claim_text": "The speaker believes that respecting one's mother may sometimes require ignoring her stated preferences.",
       "overlap_score": 2,
       "c_time": 961.789,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'your mom' refers to the listener's mother, not the speaker's mother.",
-      "reason": "Claim C discusses respecting one's mother by sometimes ignoring her stated preferences (e.g., giving chocolate despite her saying she doesn't want it). This is unrelated to Assumption A, which concerns measuring progress by tangible outcomes rather than ideal standards. There is no overlap in semantic content or conceptual connection between the two claims.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your mom' refers to the listener's mother, not the speaker's mother.\",\n  \"reason\": \"Claim C discusses respecting one's mother by sometimes ignoring her stated preferences (e.g., giving chocolate despite her saying she doesn't want it). This is unrelated to Assumption A, which concerns measuring progress by tangible outcomes rather than ideal standards. There is no overlap in semantic content or conceptual connection between the two claims.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your mom' refers to the listener's mother, not the speaker's mother. The claim in turn 40 is about respecting a mother by ignoring her stated preference (e.g., refusing chocolate), while assumption A concerns measuring progress by tangible outcomes vs. ideal standards.\",\n  \"reason\": \"Claim C discusses respecting a mother by disregarding her stated wishes (e.g., giving her chocolate despite her refusal), which is unrelated to the idea of measuring"
     },
     {
       "a_turn_idx": 13,
@@ -1521,7 +1521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the Civil Rights Act of 1964, as established by the context and prior mention of the 1964 Civil Rights Bill in turn 13.\",\n  \"reason\": \"Claim C explicitly states that the Civil Rights Act of 1964 did not include voting rights, which directly verifies the substance of assumption A—that the audience values incremental progress in civil rights advocacy—by illustrating a historical"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the Civil Rights Act of 1964, as established by the context and prior mention of the 1964 civil rights bill.\",\n  \"reason\": \"Claim C explicitly states that the Civil Rights Act of 1964 did not include voting rights, which directly verifies the substance of assumption A—that the audience values incremental progress in civil rights advocacy—by illustrating a historical precedent where partial progress ("
     },
     {
       "a_turn_idx": 13,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, mentioned in turn 28 as the CEO of Mozilla who was forced from his post due to past donations against same-sex marriage.\",\n  \"reason\": \"Claim C discusses the normalization of gay rights in public discourse, comparing them to trivial physical traits like earlobe attachment, which reflects a broader argument about societal acceptance. However, it does not explicitly state or verify the specific assumption A—that historical precedents"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, mentioned in turn 28 as the CEO of Mozilla who was forced from his post due to past donations against same-sex marriage.\",\n  \"reason\": \"Claim C discusses the normalization of gay rights in public discourse, comparing them to trivial physical traits like earlobe attachment. While this reflects a broader argument about equality and societal acceptance, it does not explicitly state or verify the specific assumption in A—that historical"
     },
     {
       "a_turn_idx": 14,
@@ -1566,7 +1566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to advocates or supporters of LGBTQ+ rights, consistent with the broader context of legislative and social progress discussed by Speaker 06. 'Our position' refers to the stance supporting equal rights for LGBTQ+ individuals, as established in earlier turns.\",\n  \"reason\": \"Claim C explicitly addresses the need to allocate resources to individuals who disagree with the current progressive stance, which aligns with the earlier assumption A that legal systems should enable justice without"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to advocates or supporters of LGBTQ+ rights, consistent with the broader context of legislative and social progress discussed by Speaker 06 and Speaker 04.\",\n  \"reason\": \"Claim C explicitly addresses the need to allocate resources to individuals who disagree with the current position, which aligns with the core idea in assumption A that legal systems should enable justice without systemic barriers. While A focuses on structural access to justice, C extends this by"
     },
     {
       "a_turn_idx": 15,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context involving his stance on same-sex marriage and legislative actions.\",\n  \"reason\": \"Claim C states that the speaker believes 'prudent politics' requires supporting a specific action—namely, backing incremental progress despite incomplete outcomes. This aligns with assumption A, which asserts that delegating authority to the SEC was a reasonable resolution to inter-branch conflict, reflecting a pragmatic compromise."
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Barack Obama, as established in the prior context involving his stance on same-sex marriage and legislative actions.\",\n  \"reason\": \"Claim C states that the speaker believes 'prudent politics' requires supporting a specific action—namely, backing incremental progress even when full demands aren't met. This aligns with assumption A, which asserts that delegating authority to the SEC was a reasonable resolution to inter-branch conflict, reflecting"
     },
     {
       "a_turn_idx": 15,
@@ -1596,7 +1596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. No reference to the SEC, delegation of authority, or compromise involving legislative branches appears in turn 35.\",\n  \"reason\": \"Turn 35 discusses Ralph Nader's perceived unrealistic demands in a different context (political activism and debate), while turn 15 concerns a legislative compromise involving the SEC and inter-branch conflict. There is no overlap in subject matter,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. No reference to the SEC, delegation of authority, or compromise involving legislative branches appears in turn 35.\",\n  \"reason\": \"Turn 35 discusses Ralph Nader's perceived unrealistic demands in a political debate, criticizing his credibility and impact. This topic is entirely unrelated to the earlier assumption in turn 15, which concerns the delegation of authority to the SEC as"
     },
     {
       "a_turn_idx": 15,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Mom' in C refers to a personal figure, while 'SEC' in A refers to a government agency.\",\n  \"reason\": \"Claim C discusses respecting one's mother by sometimes ignoring her stated preferences, using a metaphor involving chocolate and berries. This is entirely unrelated to the earlier assumption A, which concerns the Speaker's belief that delegating authority to the SEC was a reasonable compromise in legislative conflict. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Mom' in C refers to a personal figure, while 'SEC' in A refers to a government agency.\",\n  \"reason\": \"Claim C discusses respecting a mother by sometimes ignoring her stated preferences, using a metaphor involving chocolate and berries. This is entirely unrelated to the earlier assumption A, which concerns the delegation of authority to the SEC as a reasonable political compromise. There is no overlap in subject matter, concept,"
     },
     {
       "a_turn_idx": 17,
@@ -1626,7 +1626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'you' in claim C refers to a general person, not tied to any prior speaker or entity in A.\",\n  \"reason\": \"Claim C discusses respecting one's mother by ignoring her stated preferences in a specific context (giving chocolate despite her refusal), which is a different domain (family ethics) than assumption A (public political positions not reflecting genuine beliefs). While both involve 'disregarding stated positions,' the contexts and meanings differ significantly. C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'you' in claim C refers to a general individual, not tied to any prior referent in A.\",\n  \"reason\": \"Claim C discusses respecting one's mother by ignoring her stated preferences in a specific context (giving chocolate despite her refusal), which is unrelated to the earlier assumption A about political compromises not reflecting genuine personal beliefs. There is no overlap in subject matter, logic, or semantic content. The idea of 'ignoring stated positions'"
     },
     {
       "a_turn_idx": 17,
@@ -1641,7 +1641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in claim C refers to Josh Levine, distinct from Speaker_04 in assumption A.\",\n  \"reason\": \"Claim C discusses boycotting a boxing match due to Mayweather's history of domestic violence and advises against spending $100 on it. Assumption A concerns political compromises where public positions may not reflect genuine personal beliefs. There is no semantic connection between the two claims; C does not state, verify, or relate to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in claim C refers to general audience, not linked to any prior speaker or entity in assumption A.\",\n  \"reason\": \"Claim C (turn 47) discusses a financial decision regarding watching a boxing match, specifically advising against spending $100 on it due to ethical concerns about Mayweather's past. Assumption A (turn 17) concerns political compromises and the idea that public positions may not reflect genuine personal beliefs. There"
     },
     {
       "a_turn_idx": 17,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 35, 'he' refers to Ralph Nader, as established by context (e.g., 'Ralph Nader who had been a very useful guy'). The claim 'Nader's actions diminished his political influence and public impact' is related to the broader theme of political compromise and authenticity, but does not explicitly address or verify the specific assumption in turn 17 about public positions not reflecting genuine beliefs.\",\n  \"reason\": \"While turn 35 discusses"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context (e.g., 'ralf nadar who the tragedy of ralph nadar's helping...').\",\n  \"reason\": \"Claim C states that Nader's actions diminished his political influence and public impact, which touches on the broader theme of political credibility and public perception. However, it does not explicitly address or verify the specific assumption in A—that public political positions may not"
     },
     {
       "a_turn_idx": 17,
@@ -1686,7 +1686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. The claim in turn 35 focuses on Nader's 'unrealistic demands' during a debate, which is unrelated to the earlier assumption about public political positions not reflecting genuine beliefs.\",\n  \"reason\": \"Turn 17 expresses skepticism that public political stances (like Obama's support for gay marriage) necessarily reflect private beliefs. Turn 35 discusses Ralph N"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. 'That' in 'that we do something that wasn't possible' refers to Nader's demands.\",\n  \"reason\": \"Claim C discusses Ralph Nader making 'unrealistic demands' that were 'not possible,' which touches on the theme of public figures advocating positions that may not align with practical realities. However, this does not explicitly verify or state the core idea"
     },
     {
       "a_turn_idx": 17,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, consistent with turn 17. The phrase 'to me, there is no issue' reflects a personal stance similar to the idea of distinguishing stated positions from private convictions.\",\n  \"reason\": \"Turn 28 expresses a personal view on same-sex marriage and draws an analogy to trivial distinctions (hair color, ear lobes), suggesting that moral or social acceptance should not hinge on arbitrary differences"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, consistent with turn 17. The phrase 'to me, there is no issue' reflects a personal stance similar to the idea of distinguishing stated positions from private convictions.\",\n  \"reason\": \"Turn 28 expresses a personal view on same-sex marriage and draws an analogy to hair color, emphasizing that the issue is not fundamentally different from trivial social distinctions. While this reflects a personal conviction"
     },
     {
       "a_turn_idx": 17,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the listener or general person, not tied to a specific prior referent. 'Mom' is a clear reference to a parent, but no direct link to the earlier discussion about political compromise or stated vs. private positions.\",\n  \"reason\": \"Claim C discusses respecting a mother's wishes while sometimes ignoring her stated preferences for her own benefit, which touches on the theme of distinguishing public statements from private intentions. However, it does so"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'you' and 'mom' refer to the listener and their mother respectively.\",\n  \"reason\": \"Claim C discusses respecting a mother by sometimes ignoring her stated preferences (e.g., giving chocolate despite her saying she doesn't want it). This touches on the general idea of distinguishing between stated positions and underlying intentions, but it does not explicitly address or verify the earlier assumption A, which concerns political or personal compromises where public statements differ from private convictions. While"
     },
     {
       "a_turn_idx": 17,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to the Japanese American congressman mentioned in turn 24, but this has no connection to the speaker's trust in their interpretation of President Obama’s views.\",\n  \"reason\": \"Claim C states that an official apology was considered very important by the speaker, which is unrelated to assumption A, which concerns the speaker's belief in their own interpretation of President Obama’s stance on gay marriage, independent of official statements. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to the Japanese American congressman mentioned in turn 24, but this has no connection to the speaker's trust in their interpretation of President Obama’s views in turn 17.\",\n  \"reason\": \"Claim C discusses the importance of an official apology to Japanese Americans during WWII, which is unrelated to the earlier assumption A about trusting one's own interpretation of President Obama’s stance on gay marriage. There is no overlap in subject"
     },
     {
       "a_turn_idx": 19,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned earlier in the context, who was a key figure in advocating for the apology and later became the first straight person to endorse same-sex marriage.\",\n  \"reason\": \"Claim C states that someone proposed supporting same-sex marriage in the early 1990s, which directly aligns with the moral significance of taking such a stance as implied in assumption A. While C does not explicitly state that supporting"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned earlier in the context, who was a key figure in advocating for the apology to Japanese Americans and later became the first straight person to endorse same-sex marriage.\",\n  \"reason\": \"Claim C states that someone proposed supporting same-sex marriage in the early 1990s, which aligns with the moral significance of taking a public stand on the issue as implied in assumption A. While C does"
     },
     {
       "a_turn_idx": 19,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in turn 26, who is described as delivering an important message about the apology and becoming the first straight person to endorse same-sex marriage. This individual's actions align with supporting same-sex marriage rights.\",\n  \"reason\": \"Claim C states that there was opposition to supporting same-sex marriage in the early 1990s, which implies that advocating for it was a significant and politically charged"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned earlier in the context (likely the Japanese American congressman), and 'they' refers to the group opposing the proposal in the early 1990s.\",\n  \"reason\": \"Claim C states that there was opposition to supporting same-sex marriage in the early 1990s, which aligns with the broader context of political hesitation and resistance discussed in turn 19. While C"
     },
     {
       "a_turn_idx": 19,
@@ -1806,7 +1806,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, the CEO of Mozilla, as established in the context.\",\n  \"reason\": \"Claim C states that Brendan Eich was forced to resign due to past donations opposing same-sex marriage. This directly supports the moral significance of taking a political stance on same-sex marriage, as implied in assumption A. While C does not explicitly state that supporting same-sex marriage is a 'morally significant' position, it exempl"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, the CEO of Mozilla, whose resignation is discussed in context.\",\n  \"reason\": \"Claim C states that Brendan Eich was forced to resign due to past donations opposing same-sex marriage. This directly supports the idea that taking a stance against same-sex marriage—specifically through political actions like donations—is a significant moral and political position, which aligns with assumption A. While C does not explicitly state that"
     },
     {
       "a_turn_idx": 19,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'gay people' and 'brown-haired people' in a comparative analogy; 'the author' in claim C is likely SPEAKER_04 based on context.\",\n  \"reason\": \"Claim C presents a metaphorical comparison between same-sex marriage and marriage within hair color groups, suggesting moral equivalence. However, it does not explicitly state or verify the earlier assumption A, which asserts that supporting same-sex marriage is a 'morally significant political position"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 28, 'he' refers to Brendan Eich; 'they' in 'they don't want to serve pizza' refers to the pizza store owners. The comparison in turn 28 equates same-sex marriage with marrying within hair color groups, which is a rhetorical device to downplay moral distinction.\",\n  \"reason\": \"Claim C (turn 28) introduces a metaphor comparing same-sex marriage to marrying within hair color groups, suggesting that both are equally"
     },
     {
       "a_turn_idx": 19,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is expressing a personal moral stance on same-sex marriage. The phrase 'gay rights' refers back to the earlier discussion of same-sex marriage rights.\",\n  \"reason\": \"Claim C explicitly equates the moral significance of gay rights with the triviality of physical traits like earlobe attachment, thereby affirming that supporting same-sex marriage is a morally significant political position—directly verifying assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is the speaker of the claim. The phrase 'gay rights' refers back to the topic of same-sex marriage rights discussed in turn 19.\",\n  \"reason\": \"Claim C explicitly equates the moral significance of same-sex marriage rights with the rights of individuals based on physical traits like earlobe attachment, thereby directly verifying the assumption in A that supporting same-sex marriage is a morally"
     },
     {
       "a_turn_idx": 19,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. 'His' in 'his political influence' also refers to Nader.\",\n  \"reason\": \"Claim C states that Nader's actions diminished his political influence and public impact. This is unrelated to assumption A, which asserts that political figures should be judged by both their voting records and public statements. While Nader is mentioned in turn 35, the claim does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. 'His' in 'his political influence and public impact' also refers to Nader.\",\n  \"reason\": \"Claim C (turn 35) states that Nader's actions diminished his political influence and public impact, which is unrelated to assumption A (turn 19), which asserts that political figures should be judged by both their voting records and public statements. While"
     },
     {
       "a_turn_idx": 19,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to a gay man mentioned in the context of sponsoring an apology bill; 'they' in 'they supported same-sex marriage' refers to the group proposing support in the early 1990s.\",\n  \"reason\": \"Claim C mentions that someone proposed supporting same-sex marriage in the early 1990s, which is a historical fact related to the broader discussion of LGBTQ+ rights. However, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to a gay man mentioned in the context of sponsoring an apology bill; 'they' in 'they supported same-sex marriage' refers to the group proposing support in the early 1990s.\",\n  \"reason\": \"Claim C mentions a proposal to support same-sex marriage in the early 1990s, which is a historical fact related to the broader discussion of LGBTQ+ rights. However, it does"
     },
     {
       "a_turn_idx": 19,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is the speaker in the conversation. No other coreference issues are present.\",\n  \"reason\": \"Claim C states a personal belief that same-sex marriage should be allowed, which aligns with the general sentiment of protecting same-sex marriage. However, it does not explicitly address the 'moral imperative' aspect of assumption A, nor does it affirm that such protection is obligatory once legally established"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 28 refers to SPEAKER_04, who is the speaker in the conversation. No other coreference issues are present.\",\n  \"reason\": \"Claim C states a personal belief that same-sex marriage should be allowed, which aligns with the general sentiment of supporting same-sex marriage. However, it does not explicitly address the moral imperative aspect of assumption A, which emphasizes a duty or ethical obligation to protect such marriages once legally established."
     },
     {
       "a_turn_idx": 19,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, the CEO of Mozilla, whose resignation is discussed in context.\",\n  \"reason\": \"Claim C mentions that Brendan Eich was forced to resign due to past donations opposing same-sex marriage, which relates to the broader ethical discussion about protecting same-sex marriage once legally established. However, C does not explicitly state or verify the moral imperative outlined in A. It instead presents a case of social/political consequence following"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Brendan Eich, the CEO of Mozilla, whose resignation is discussed in context.\",\n  \"reason\": \"Claim C mentions Brendan Eich being forced to resign due to past donations opposing same-sex marriage, which relates to the broader ethical stance on protecting same-sex marriage. However, it does not explicitly state or verify the moral imperative outlined in assumption A (turn 19), which asserts a duty to protect legally established same"
     },
     {
       "a_turn_idx": 19,
@@ -2046,7 +2046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the CEO of Mozilla' and 'the pizza store in Indiana' as examples of individuals or entities not aligned with same-sex marriage, but these are not directly linked to the Massachusetts court decision mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the idea that not everyone must adopt the same view on same-sex marriage at the same pace, which touches on tolerance for differing opinions. However, it does not explicitly state or verify the legitimacy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'everyone' and 'people who aren't on board with us' as those who haven't adopted the same view on same-sex marriage, which aligns with the idea of differing paces of acceptance mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the legitimacy of differing timelines in accepting same-sex marriage, which relates to the broader theme of respecting diverse viewpoints. However, it does not explicitly state or verify the specific claim in assumption"
     },
     {
       "a_turn_idx": 19,
@@ -2061,7 +2061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the comparison' refers to the analogy made by SPEAKER_04 between marrying within hair color groups and same-sex marriage.\",\n  \"reason\": \"Claim C discusses the validity of an analogy comparing same-sex marriage to marrying within hair color groups, which is unrelated to the legitimacy of the Massachusetts court decision mentioned in assumption A. There is no mention of the court decision, its legitimacy, or any argument supporting or verifying that it was legitimate and deserving of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the comparison between marrying within hair color groups and same-sex marriage' as a rhetorical device to illustrate equality in marriage rights; no reference to the Massachusetts court decision or its legitimacy.\",\n  \"reason\": \"Claim C discusses a metaphorical comparison about marriage rights based on hair color and bodily features, aiming to normalize same-sex marriage by analogy. However, it does not mention the Massachusetts court decision, nor does it address its legitimacy or protection. Therefore"
     },
     {
       "a_turn_idx": 20,
@@ -2076,7 +2076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. No reference to past actions, reliability, or commitment is present in claim C.\",\n  \"reason\": \"Claim C discusses Ralph Nader's unrealistic demands and loss of influence, which is unrelated to the earlier assumption A that past actions demonstrate reliability and commitment. There is no mention of past behavior, consistency, or demonstrated commitment in C. The topics are entirely different, and C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established in the context of the debate critique. No reference to past actions demonstrating reliability or commitment is present.\",\n  \"reason\": \"Claim C in turn 35 discusses Ralph Nader's unrealistic demands and loss of influence, which is unrelated to the earlier assumption A that past actions demonstrate reliability and commitment. There is no mention of reliability, commitment, or past actions supporting such traits. The topic"
     },
     {
       "a_turn_idx": 20,
@@ -2151,7 +2151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 35 refers to the speaker (SPEAKER_06), and 'Reagan' is the subject of the critique. 'Conservative Republicans' and 'two believers in the abortion' refer to individuals who held strong pro-life views but were influenced by the speaker's remark.\",\n  \"reason\": \"Claim C explicitly states that the speaker's critique of Reagan influenced two conservative Republicans who believed in abortion rights, which directly verifies the substance"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 35 refers to the speaker (SPEAKER_06), and 'a couple of conservative Republicans' refers to individuals previously mentioned in the context as being influenced by the speaker's arguments.\",\n  \"reason\": \"Claim C explicitly states that the speaker's critique of Reagan influenced some conservative Republicans who believe in abortion rights. This directly verifies the substance of assumption A, which is that the audience trusts the speaker’s claim about influencing someone else"
     },
     {
       "a_turn_idx": 22,
@@ -2166,7 +2166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in turn 37 refers to the person who criticized the governor for taking the subway to work, but this is unrelated to the audience's trust in the speaker's influence on others' views.\",\n  \"reason\": \"Claim C (turn 37) discusses the speaker becoming angry at someone for criticizing the governor's choice to take the subway, which is entirely unrelated to the earlier assumption A about the audience trusting the speaker's influence on changing someone else"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in turn 37 refers to the person who criticized the governor for taking the subway to work, but this does not relate to the audience trusting the speaker's influence on others' views.\",\n  \"reason\": \"Claim C in turn 37 discusses the speaker becoming angry at someone for criticizing the governor's choice to take the subway, which is unrelated to the earlier assumption A about the audience trusting the speaker's influence on changing someone else's views."
     },
     {
       "a_turn_idx": 23,
@@ -2256,7 +2256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in the context, who supported same-sex marriage in the early 1990s. In turn 28, SPEAKER_04 explicitly states 'I believe same-sex marriage should be allowed,' which directly verifies the core idea of A—that supporting same-sex marriage in the early 1990s was a significant act—by affirming the moral and social legitimacy of such support"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in the context, who supported same-sex marriage in the early 1990s. In turn 28, Speaker 04 explicitly states 'I believe same-sex marriage should be allowed,' which directly verifies the core idea of A: that supporting same-sex marriage at that time was a significant act.\",\n  \"reason\": \"Claim C explicitly affirms the right to same-sex marriage,"
     },
     {
       "a_turn_idx": 26,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in the context, who supported same-sex marriage in the early 1990s. In turn 28, 'Brendan Eich' is introduced as a figure whose resignation is tied to opposition to same-sex marriage, serving as a modern parallel to the early 1990s context.\",\n  \"reason\": \"Claim C explicitly states that Brendan Eich was forced to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned earlier, who supported same-sex marriage in the early 1990s. In turn 28, 'Brendan Eich' is introduced as a figure whose resignation was tied to his past opposition to same-sex marriage, directly linking to the broader theme of political/social risk in supporting LGBTQ+ rights.\",\n  \"reason\": \"Claim C explicitly states that Brendan Eich was forced to"
     },
     {
       "a_turn_idx": 26,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to the gay man mentioned earlier, who supported same-sex marriage in the early 1990s. In turn 28, 'not everyone needs to adopt the same view on same-sex marriage at the same pace' explicitly acknowledges differing rates of acceptance, which directly verifies the implication in A that supporting same-sex marriage then was a bold, socially significant act due to widespread opposition.\",\n  \"reason\": \"Claim C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to the gay man mentioned earlier, who supported same-sex marriage in the early 1990s. In turn 28, 'not everyone needs to adopt the same view on same-sex marriage at the same pace' explicitly acknowledges differing timelines for acceptance, which directly addresses the significance of taking a stand early—supporting the idea that such an action was notable and courageous at the time.\",\n  \"reason\": \""
     },
     {
       "a_turn_idx": 26,
@@ -2301,7 +2301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in the context, who supported same-sex marriage in the early 1990s. In turn 28, Speaker 04 uses a metaphor comparing same-sex marriage to marrying across hair colors, explicitly validating the moral equivalence of such unions, which directly supports the idea that supporting same-sex marriage at that time was a significant and principled act.\",\n  \"reason\": \"Claim C explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 26 refers to the gay man mentioned in the context, and 'they' in turn 27 refers to the same individual, who is the first straight person to endorse same-sex marriage. In turn 28, Speaker 04 explicitly uses a comparison between marrying within hair color groups and same-sex marriage to argue for its legitimacy.\",\n  \"reason\": \"Claim C explicitly states the comparison between same-sex marriage and marrying across hair"
     },
     {
       "a_turn_idx": 26,
@@ -2387,11 +2387,11 @@
       "claim_text": "The speaker believes viewers should not spend $100 on watching the fight.",
       "overlap_score": 2,
       "c_time": 1357.047,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses the moral and financial decision to avoid spending $100 on a boxing match due to Mayweather's history of domestic violence. Assumption A concerns the legitimacy or special insight of a gay man regarding LGBTQ+ rights. There is no semantic connection between the two claims. C does not mention LGBTQ+ rights, gay identity, or any related concept. Therefore, it neither supports nor"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; claim C is unrelated to assumption A.",
+      "reason": "Claim C discusses the moral and financial decision not to spend $100 on watching a boxing match due to Mayweather's history of domestic violence. Assumption A concerns the legitimacy or special insight of a gay man regarding LGBTQ+ rights. There is no semantic connection between the two claims. C does not state, verify, or relate to A in any way.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses the moral and financial decision not to spend $100 on watching a boxing match due to Mayweather's history of domestic violence. Assumption A concerns the legitimacy or special insight of a gay man regarding LGBTQ+ rights. There is no semantic connection between the two claims. C does not state, verify, or relate to A in any way.\"\n}\n```"
     },
     {
       "a_turn_idx": 27,
@@ -2481,7 +2481,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. No reference to Scientologists or hypothetical refusal to serve them appears in turn 35.\",\n  \"reason\": \"Claim C discusses Ralph Nader's 'unrealistic demands' and criticizes his perceived irrelevance and extremism, which is unrelated to the earlier assumption A about the moral equivalence of refusing service to Scientologists versus LGBTQ+ individuals. There is no mention of religious"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. No reference to Scientologists or hypothetical refusal to serve them appears in turn 35.\",\n  \"reason\": \"Claim C discusses Ralph Nader's unrealistic demands in a political debate, which is unrelated to the earlier assumption A about the moral equivalence of refusing service to Scientologists versus gay individuals. There is no mention of religious groups, hypothetical refusals, or the ethical"
     },
     {
       "a_turn_idx": 28,
@@ -2496,7 +2496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Mom' in C refers to the speaker's mother, distinct from any entity in A.\",\n  \"reason\": \"Claim C discusses respecting one's mother by sometimes ignoring her stated preferences, using a metaphor involving chocolate and berries. This is unrelated to the earlier assumption A, which concerns the moral equivalence of refusing service to Scientologists versus refusing service to LGBTQ+ individuals in the context of marriage rights. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in claim C refers to a general individual, not linked to any entity in assumption A.\",\n  \"reason\": \"Claim C discusses respecting one's mother by ignoring her stated preferences, which is unrelated to the hypothetical refusal to serve Scientologists discussed in assumption A. There is no overlap in subject matter, logic, or intent. The two ideas address different ethical dilemmas—one about familial respect and another about religious discrimination in service provision. Thus,"
     },
     {
       "a_turn_idx": 28,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to SPEAKER_06, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses the speaker's critique of Reagan influencing conservative Republicans on abortion rights, which is unrelated to the assumption in A that the speaker and their group have resources to distribute. There is no mention of resource distribution, allocation, or any related concept in C. The topics are entirely different—C focuses"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to SPEAKER_06, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses the speaker's critique of Reagan influencing conservative Republicans on abortion rights, which is unrelated to the assumption in A that the speaker and their group have resources to distribute. There is no mention of resource distribution, allocation, or any related concept in C. The topics are entirely different, and C"
     },
     {
       "a_turn_idx": 31,
@@ -2571,7 +2571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the subject' in turn 34 refers to the speaker (SPEAKER_04), but the claim is unrelated to the earlier assumption about legal treatment of homosexuality vs. race.\",\n  \"reason\": \"Claim C (turn 34) asks about witty remarks or 'zingers' the speaker is proud of, which is entirely unrelated to assumption A (turn 31), which concerns the legal comparability of addressing homosexuality versus race"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the subject' in turn 34 refers to the speaker (SPEAKER_04), but this does not relate to the content of assumption A.\",\n  \"reason\": \"Claim C (turn 34) asks about a 'zinger' or witty remark the speaker is proud of, which is entirely unrelated to assumption A (turn 31), which concerns the legal treatment of homosexuality compared to race. There is no mention,"
     },
     {
       "a_turn_idx": 31,
@@ -2586,7 +2586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the subject' refers to SPEAKER_06, but the claim in turn 34 is about rhetorical style (zingers), not legal treatment of homosexuality or race.\",\n  \"reason\": \"Claim C (turn 34) asks about the speaker's use of sharp wit or 'lacerating zingers,' which is entirely unrelated to assumption A (turn 31), which concerns the legal comparability of addressing homosexuality versus race."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'the subject' refers to SPEAKER_06, but the claim in turn 34 is about delivering 'lacerating zingers,' which is unrelated to the legal comparison between homosexuality and race in turn 31.\",\n  \"reason\": \"Claim C (turn 34) discusses the speaker's delivery of witty or biting remarks ('zingers'), which is entirely unrelated to the legal status of homosexuality compared to race. Assumption A concerns"
     },
     {
       "a_turn_idx": 31,
@@ -2661,7 +2661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 35 refers to SPEAKER_06, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 35) discusses the speaker's critique of Reagan and its effect on some conservative Republicans who support abortion rights. This topic is unrelated to assumption A (turn 32), which concerns personal rights overriding legal restrictions in specific contexts—particularly in business versus personal capacity. There is no mention of personal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 35 refers to the speaker (SPEAKER_06), and 'Reagan' is a proper noun referring to Ronald Reagan. No coreference resolves to the earlier assumption A.\",\n  \"reason\": \"Claim C discusses the speaker's critique of Reagan and its effect on some conservative Republicans who support abortion rights. This topic is unrelated to the earlier assumption A, which concerns personal rights overriding legal restrictions in specific contexts—particularly in business"
     },
     {
       "a_turn_idx": 32,
@@ -2676,7 +2676,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. The claim in C is about Ralph Nader making unrealistic demands during a debate, which is unrelated to the assumption A about personal rights overriding legal restrictions.\",\n  \"reason\": \"Assumption A concerns the tension between personal rights and legal obligations, particularly in business contexts. Claim C discusses Ralph Nader's perceived unrealistic demands during a debate, which introduces a completely different topic—political"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Ralph Nader, as established by context. The claim in C is about Nader making unrealistic demands during a debate, which is unrelated to the assumption A about personal rights overriding legal restrictions.\",\n  \"reason\": \"Assumption A concerns the tension between personal rights and legal obligations, particularly in business contexts. Claim C discusses Ralph Nader's perceived unrealistic demands during a debate, which is a separate issue involving political critique and"
     },
     {
       "a_turn_idx": 32,
@@ -2736,7 +2736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in turn 41 refers to the listener and speaker as part of a shared group of 'regular people', which aligns with the identification implied in assumption A. 'Us lazy bones' explicitly confirms the self-identification with the described group.\",\n  \"reason\": \"Claim C explicitly states 'us lazy bones', directly identifying the speaker (and implicitly the listener) with the group described in assumption A—those who are ordinary, passive, and react instinct"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in turn 41 refers to the listener and speaker as part of a shared group of 'regular people', which includes the self-identification as 'lazy bones'. This directly aligns with the assumption in turn 40 that the listener identifies with the speaker's perspective.\",\n  \"reason\": \"Turn 41 explicitly states 'us lazy bones', which confirms the speaker's identification with the listener as part of a common group characterized by laziness."
     },
     {
       "a_turn_idx": 41,
@@ -2751,7 +2751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; turn 47 introduces a new topic (Floyd Mayweather vs. Manny Pacquiao fight) unrelated to the earlier assumption about pre-dawn raids and courage.\",\n  \"reason\": \"Turn 47 discusses a completely different topic—whether viewers should spend $100 on a boxing match due to Mayweather's history—while turn 41 concerns the symbolic significance of pre-dawn raids as indicators of courage or commitment. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; turn 47 is spoken by SPEAKER_01, not SPEAKER_04, and refers to a different topic (Floyd Mayweather vs. Manny Pacquiao fight) unrelated to the concept of 'pre-dawn raids' or 'courage under difficulty' in turn 41.\",\n  \"reason\": \"Turn 47 introduces a completely new topic—whether to spend $100 on watching a boxing match due to"
     },
     {
       "a_turn_idx": 41,
@@ -2811,7 +2811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'a pre-dawn raid by insurgents on that city's airport' refers to 'capital manima', established in the prior turn (turn 42). 'That city' is co-referential with 'capital manima'.\",\n  \"reason\": \"Claim C explicitly states that a pre-dawn raid occurred on the city's airport, which directly verifies the event implied in assumption A. Assumption A posits a shared understanding of '"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'a pre-dawn raid by insurgents on that city's airport' refers to 'capital manima', which is established in the prior turn (turn 42) as the location of the raid.\",\n  \"reason\": \"Claim C explicitly states that a pre-dawn raid occurred on the city's airport, which directly verifies the specific instance implied in assumption A—that 'pre-dawn raid' is used as a culturally recognized trope in media and"
     },
     {
       "a_turn_idx": 41,
@@ -2826,7 +2826,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 43 refers to 'the timing of the raid—pre-dawn', which directly corresponds to the concept of 'pre-dawn raid' discussed in turn 41. The term 'pre-dawn' is consistently used across both turns.\",\n  \"reason\": \"Claim C explicitly states that the timing of the raid—pre-dawn—is significant, which directly verifies the core idea in assumption A that 'pre-dawn raid' carries"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 43 refers to 'the timing of the raid—pre-dawn', which directly corresponds to the concept of 'pre-dawn raid' discussed in turn 41. The phrase 'pre-dawn raid' is consistently used throughout both turns.\",\n  \"reason\": \"Claim C explicitly states that the timing of the raid—pre-dawn—is significant, which directly verifies the core idea in assumption A that there is a shared understanding of"
     },
     {
       "a_turn_idx": 41,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 45 refers to law enforcement agencies involved in the joint operation, consistent with the broader context of raids discussed in turn 41.\",\n  \"reason\": \"Claim C explicitly states that a 'joint pre-dawn raid' occurred to apprehend criminals in Philadelphia, which directly aligns with the idea in assumption A that 'pre-dawn raid' is a culturally recognized trope used to convey seriousness, urgency, or dramatic impact. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 45 refers to law enforcement agencies involved in the joint operation, consistent with the broader context of raids discussed in turn 41.\",\n  \"reason\": \"Claim C explicitly states that a 'joint pre-dawn raid' occurred to apprehend criminals in Philadelphia, which directly aligns with the idea in assumption A that 'pre-dawn raid' is a culturally recognized trope used to convey seriousness, shock, or dramatic intent. While C"
     },
     {
       "a_turn_idx": 41,

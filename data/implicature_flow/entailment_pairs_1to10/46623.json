@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to Speaker 05, who is discussing personal reading experiences, not the earlier assumption about Abercrombie products.\",\n  \"reason\": \"Claim C (turn 16) discusses the speaker's reading of 'Between the World and Me' and assumes the listener has read it, which is entirely unrelated to assumption A (turn 2), which concerns consistent positive experience with Abercrombie products. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the listener, but there is no connection between the assumption about Abercrombie products (A) and the claim about reading Between the World and Me (C). No coreference resolves A into C.\",\n  \"reason\": \"Claim C discusses the speaker's personal reading of a specific book, Between the World and Me, and assumes the listener has also read it. This is entirely unrelated to assumption A, which concerns"
     },
     {
       "a_turn_idx": 2,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in both A and C refers to Speaker 05, who is recounting their past teaching experience. 'My intended inspiration' in C clearly refers back to the speaker's unfulfilled expectations mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the speaker's intended inspiration was related to literature or poetry, which directly verifies the substance of assumption A—that the speaker believed they had a meaningful personal story involving inspiration through education and personal growth."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 8 refers to Speaker 05, who is the same person as the speaker in turn 6. 'Dead poet society' is a reference to the film, and 'literature or poetry' is the specific content implied by the metaphor of standing on the desk and inspiring about Shakespeare.\",\n  \"reason\": \"Claim C explicitly states that the speaker's intended inspiration was related to literature or poetry, which directly verifies the implicit assumption in A"
     },
     {
       "a_turn_idx": 6,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 31 refers to SPEAKER_05, who is the same speaker as in turn 6. No other coreference issues.\",\n  \"reason\": \"Turn 31 states a belief in the value of reciprocity and offering kindness, which relates to the broader theme of personal growth through service and connection mentioned in turn 6. However, it does not explicitly address the specific personal story of starting from ground zero in Newark or learning"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the listener or general audience, not directly linked to the speaker's personal story in turn 6.\",\n  \"reason\": \"Turn 31 expresses a belief in the value of reciprocity and kindness, which relates thematically to the broader idea of personal growth and connection mentioned in turn 6. However, it does not explicitly state or verify the specific assumption that the speaker has a meaningful personal story about service and growth"
     },
     {
       "a_turn_idx": 6,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to Senator Cory Booker, as established in the prior context where Speaker 05 is addressing him. 'I' refers to Speaker 07.\",\n  \"reason\": \"Claim C (turn 19) mentions the speaker's lack of personal experience growing up as a transgender teen in the inner city, which contrasts with the earlier assumption A (turn 6) that the speaker's background (implying a privileged"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to Senator Cory Booker, as established in the prior context where Speaker 05 is addressing him. 'I' refers to Speaker 07.\",\n  \"reason\": \"Claim C (turn 19) mentions the speaker's lack of personal experience growing up as a transgender teen in the inner city, which contrasts with the earlier assumption A (turn 6) that the speaker's background (implied to be privileged"
     },
     {
       "a_turn_idx": 7,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to the listener or audience member, and 'someone' in turn 30 refers to a person whose mood is being improved, consistent with the broader context of interpersonal impact discussed in turn 7.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by demonstrating a meaningful, non-totalizing form of impact—improving someone's mood from a 3 to a 4 or an 8 to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to the listener or recipient of the message, consistent with the broader context of interpersonal impact discussed in turn 7.\",\n  \"reason\": \"Claim C explicitly verifies the core idea in assumption A by demonstrating a meaningful distinction between superficial or partial impact (improving a mood from 3 to 4 or 8 to 9) versus attempting to fix someone's entire life. The focus on incremental, targeted improvement aligns"
     },
     {
       "a_turn_idx": 7,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the listener or general audience, not directly linked to any prior entity. No ambiguous coreference issues.\",\n  \"reason\": \"Claim C states belief in reciprocity and offering kindness as beneficial, which aligns loosely with the theme of active engagement and personal agency in interpersonal influence from assumption A. However, C does not explicitly address self-efficacy or personal agency—key components of A. While both involve proactive interpersonal behavior"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to the listener or general audience, not directly linked to any specific entity in turn 7. No ambiguous coreference issues.\",\n  \"reason\": \"Turn 31 states a belief in reciprocity and offering kindness as beneficial, which relates to interpersonal influence and personal agency. However, it does not explicitly address or verify the core idea in turn 7—that self-efficacy or personal agency matters in influencing others. While"
     },
     {
       "a_turn_idx": 7,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' and 'I' refer to the speaker and listener respectively.\",\n  \"reason\": \"Claim C (turn 33) discusses fostering deeper human connection through avoiding superficial topics like sleep deprivation and instead tuning into others' emotional states. This contrasts with assumption A (turn 9), which centers on gaining deep insights about adaptation through personal experiences in unfamiliar, challenging environments. There is no overlap in semantic content: A focuses on environmental dislocation and adaptation"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' and 'I' refer to the speaker and listener respectively.\",\n  \"reason\": \"Claim C (turn 33) discusses fostering deeper human connection through avoiding superficial topics like sleep deprivation and focusing on genuine emotional awareness. This does not address or verify the earlier assumption A (turn 9), which centers on personal experiences in unfamiliar environments revealing insights about adaptation. There is no overlap in semantic content—C is about interpersonal kindness and emotional tuning-in"
     },
     {
       "a_turn_idx": 9,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to SPEAKER_05, the listener, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C states that the listener has inspired mentorship ideas, which relates to the broader theme of personal transformation and engagement with marginalized communities discussed in assumption A. However, C does not explicitly verify or state that the listener has experienced a cultural transition comparable to the speaker’s. While the listener’s inspiration suggests"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to SPEAKER_05, the listener, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C states that the listener has inspired mentorship ideas, which relates to the broader theme of personal transformation and engagement with marginalized communities discussed in assumption A. However, C does not explicitly verify or state that the listener has experienced a cultural transition comparable to the speaker’s. While the listener’s inspiration may"
     },
     {
       "a_turn_idx": 10,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_07, consistent with the speaker in turn 10. The phrase 'I write in the book' refers to the act of writing described in the narrative.\",\n  \"reason\": \"Claim C states that the speaker wrote in a book during a moment of personal doubt about their academic background. This aligns with the substance of assumption A, which centers on the speaker trusting their own judgment despite confronting unfamiliar"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 12 refers to SPEAKER_07, consistent with the speaker in turn 10. The phrase 'I write in the book' refers to the act of writing described in the narrative.\",\n  \"reason\": \"Claim C states that the speaker wrote in a book during a moment of personal doubt about their academic background. This aligns with the substance of assumption A, which centers on the speaker trusting their own judgment about urban crime"
     },
     {
       "a_turn_idx": 10,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'her' in turn 12 refers to Ms. Virginia Jones, established in turn 11 as the tenant leader and central figure in the speaker's experience.\",\n  \"reason\": \"Claim C explicitly states an 'aha moment' about the woman (Ms. Virginia Jones), specifically realizing something previously unknown about her—namely, that she defended the speaker behind his back despite appearing hostile. This directly verifies the speaker's prior assumption in A that they trusted their"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'her' in turn 12 refers to Ms. Virginia Jones, established in turn 11 as the tenant leader and central figure in the speaker's experience.\",\n  \"reason\": \"Claim C explicitly states an 'aha moment' about the woman (Ms. Virginia Jones), specifically realizing something previously unknown about her—namely, that she defended the speaker behind his back despite appearing hostile. This directly verifies the speaker's prior assumption (A) that they trust"
     },
     {
       "a_turn_idx": 10,

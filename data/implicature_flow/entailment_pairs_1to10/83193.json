@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'The Daily Signal Podcast' in turn 32 refers to the same entity mentioned in turn 4 ('the daily signal').\",\n  \"reason\": \"Claim C (turn 32) states that Virginia Allen is a producer of The Daily Signal Podcast, which is unrelated to assumption A (turn 4), which concerns the policy of withholding the shooter's name. There is no mention of naming policies, journalistic decisions, or the shooter's identity"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'The Daily Signal Podcast' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C (turn 32) states that Virginia Allen is a producer of The Daily Signal Podcast, which is unrelated to assumption A (turn 4), which concerns the policy of withholding the shooter's name to focus on victims. There is no mention of naming policies, journalistic decisions, or the shooter in C. Thus, C does not state,"
     },
     {
       "a_turn_idx": 4,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to the Biden judicial nominee mentioned in turn 22. 'They' in 'Facebook decided that was hate speech' refers to Facebook's moderation policy.\",\n  \"reason\": \"Claim C states that Facebook removed the speaker's post on gender and competition, labeling it as censorship due to ideological disagreement rather than policy violation. This aligns with assumption A, which centers on individual agency—here, the speaker's right to express"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 23 refers to the Biden judicial nominee mentioned in turn 22. 'They' in 'Facebook decided that was hate speech' refers to Facebook's moderation policy.\",\n  \"reason\": \"Claim C states that Facebook removed the speaker's post on grounds of ideological disagreement rather than legitimate policy violation, which aligns with the substance of assumption A—that public discourse should center on individual agency over systemic factors. The speaker frames the censorship as ide"
     },
     {
       "a_turn_idx": 15,
@@ -1941,7 +1941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'attempts... that hold pensions, 401Ks of Americans' refers to 'proxy firms' mentioned earlier. 'They' in 'using that way to try and succeed in forcing capital away' refers to the proxy firms.\",\n  \"reason\": \"Claim C explicitly states that proxy firms such as BlackRock are attempting to redirect capital away from the energy industry, which directly verifies the substance of assumption A that the energy industry is a"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the ESG movement mentioned in turn 18, and 'BlackRock and other major proxy firms' are the entities performing the action of redirecting capital.\",\n  \"reason\": \"Claim C explicitly states that proxy firms like BlackRock are attempting to force capital away from the energy industry, which directly verifies the substance of assumption A in turn 18, where the speaker implies that capital has been discouraged from flowing to the energy"
     },
     {
       "a_turn_idx": 18,

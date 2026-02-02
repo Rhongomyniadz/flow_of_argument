@@ -1041,7 +1041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the state government of Kentucky, as established by context (e.g., 'we send the money down and they spend it').\",\n  \"reason\": \"Claim C states that the state government of Kentucky will decide how to allocate $6 billion in infrastructure funding, which aligns with the broader theme in assumption A about Kentucky valuing large-scale infrastructure projects. However, C does not explicitly verify the specific claim that Kentucky voters"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the state government of Kentucky, as established by the context of decision-making authority over infrastructure spending.\",\n  \"reason\": \"Claim C states that the state government of Kentucky will decide how to allocate $6 billion in infrastructure funding, which aligns with the broader theme in assumption A that Kentucky voters value large-scale infrastructure projects. However, C does not explicitly verify the specific claim that Kentucky voters 'recognize the significance of large"
     },
     {
       "a_turn_idx": 14,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to the speaker (SPEAKER_02) and the addressee (Rick Scott), based on context of Senate leadership and party dynamics.\",\n  \"reason\": \"Claim C explicitly states that there was prior agreement or alignment between the speaker and the addressees on political positions. This directly verifies the core idea in assumption A—that political alignment can be described metaphorically as 'playing on a team.' The reference to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to the speaker (SPEAKER_02) and the addressee (Rick Scott), based on context of Senate leadership and party dynamics.\",\n  \"reason\": \"Claim C explicitly states that there was prior agreement or alignment between the speaker and the addressees on political positions, which directly verifies the metaphorical assumption in A that political alignment can be described as 'playing on a team.' The reference to 'back"
     },
     {
       "a_turn_idx": 15,
@@ -1161,7 +1161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'players' in C refers to users of the game, not political actors. 'Playing on a team' in A is a metaphor for political alignment, while 'playing' in C refers to gaming activity.\",\n  \"reason\": \"Claim C discusses earning rewards through gameplay in a video game, which is entirely unrelated to the metaphorical political team alignment described in assumption A. There is no overlap in subject matter, semantics, or implied connection. The term"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'players' in C refers to users of the game, while 'team' in A refers to political alignment. No shared referents.\",\n  \"reason\": \"Claim C discusses earning free rewards in a video game, which is entirely unrelated to the metaphorical idea of political alignment as 'playing on a team.' There is no overlap in subject matter, semantics, or implied connection. The phrase 'playing' in C is literal (gameplay), whereas"
     },
     {
       "a_turn_idx": 15,
@@ -1221,7 +1221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 18 refers to the $6 billion allocation for Kentucky mentioned in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that there is a $6 billion allocation for Kentucky under the infrastructure bill, which directly verifies the substance of assumption A, which implies the existence of a toll-free bridge in Cincinnati or Northern Kentucky as a point of comparison. While A is about a toll-free bridge, C provides the financial context (the $6"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 18 refers to the $6 billion allocation for Kentucky mentioned in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that there is a $6 billion allocation for Kentucky under the infrastructure bill, which directly verifies the substance of assumption A, which implies the existence of a toll-free bridge in Cincinnati or Northern Kentucky as a point of contention. While A does not mention the $6 billion, C provides a clear, direct, and"
     },
     {
       "a_turn_idx": 17,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'someone' in claim C refers to an unspecified individual in a different context (game chips), unrelated to infrastructure pricing.\",\n  \"reason\": \"Claim C discusses distributing game chips during an event, which is entirely unrelated to the concept of fairness in infrastructure pricing. There is no overlap in subject matter, semantics, or implied connection. The context of turn 27 is about political negotiations in the House, not infrastructure equity or pricing. Therefore, it contrad"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'someone' in claim C refers to an unspecified individual in a different context (game chips), unrelated to infrastructure pricing.\",\n  \"reason\": \"Claim C discusses distributing game chips during an event, which is entirely unrelated to the concept of fairness in infrastructure pricing. There is no overlap in subject matter, semantics, or implied connection. The context of turn 27 is about political negotiations in the House, not infrastructure equity or pricing. Thus, it contrad"
     },
     {
       "a_turn_idx": 17,
@@ -1382,11 +1382,11 @@
       "claim_text": "The Wealth Break is more human than others.",
       "overlap_score": 2,
       "c_time": 934.282,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'the Wealth Break' refers to the podcast, not governance or infrastructure.",
-      "reason": "Claim C (turn 44) discusses the 'Wealth Break' as a more human approach to financial empowerment, focusing on personal journeys and community. This is unrelated to assumption A, which concerns the legitimacy of state-level decision-making on infrastructure. There is no overlap in subject matter, nor does C address or verify any aspect of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the Wealth Break' refers to the podcast, not governance or infrastructure.\",\n  \"reason\": \"Claim C (turn 44) discusses the 'Wealth Break' as a more human approach to financial empowerment, focusing on personal journeys and community. This is unrelated to assumption A, which concerns the legitimacy of state-level decision-making on infrastructure. There is no overlap in subject matter, nor does C address or verify any aspect of A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the Wealth Break' refers to the podcast, not governance or infrastructure.\",\n  \"reason\": \"Claim C (turn 44) discusses the 'Wealth Break' as a more human approach to financial empowerment, focusing on personal journeys and community. This is unrelated to assumption A, which concerns the legitimacy of state-level decision-making on infrastructure. There is no overlap in subject matter, nor does C address or verify any aspect of A. The topics"
     },
     {
       "a_turn_idx": 18,
@@ -1416,7 +1416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to the speaker (SPEAKER_02) and the addressee(s), likely including SPEAKER_09 and possibly others in the Senate. 'Guys' in 'are you guys back singing out of the same hymnal again?' refers to the political group or party members, specifically Republicans.\",\n  \"reason\": \"Claim C suggests a past alignment or agreement on political positions between the speaker and the add"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to the speaker (SPEAKER_02) and the addressee(s), likely including SPEAKER_09 and others in the Senate context. 'Guys' in 'are you guys back singing out of the same hymnal again?' refers to the political group or party members, specifically Republicans.\",\n  \"reason\": \"Claim C suggests a prior alignment or agreement on political positions between the speaker and the add"
     },
     {
       "a_turn_idx": 19,
@@ -1460,8 +1460,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No relevant coreference links; 'the claim' refers to the humorous assertion about lava-resistant water bottles.",
-      "reason": "Claim C discusses a humorous, non-literal claim about water bottles surviving molten lava, which is unrelated to the earlier assumption A about collegiality in legislative bodies reflecting genuine interpersonal relationships. There is no semantic connection between the two statements.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the claim' refers to the humorous assertion about lava-resistant water bottles.\",\n  \"reason\": \"Claim C discusses a humorous, non-literal claim about water bottles surviving molten lava, which is unrelated to the earlier assumption A about collegiality in legislative bodies reflecting genuine interpersonal relationships. There is no semantic connection between the two statements.\"\n}\n```"
+      "reason": "Claim C discusses a humorous, non-literal claim about water bottles surviving molten lava, which is unrelated to the earlier assumption A about collegiality in legislative bodies reflecting genuine interpersonal relationships. There is no overlap in semantic content, topic, or implied meaning between A and C.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the claim' refers to the humorous assertion about lava-resistant water bottles.\",\n  \"reason\": \"Claim C discusses a humorous, non-literal claim about water bottles surviving molten lava, which is unrelated to the earlier assumption A about collegiality in legislative bodies reflecting genuine interpersonal relationships. There is no overlap in semantic content, topic, or implied meaning between A and C.\"\n}\n```"
     },
     {
       "a_turn_idx": 20,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'today' in turn 38 refers to the current day in a general sense, unrelated to the political context of Mitch McConnell or vote counts in turn 25.\",\n  \"reason\": \"Claim C (turn 38) discusses breaking the monotony of daily routines and promoting a video game, which is entirely unrelated to the strategic behavior of Mitch McConnell or the assumption that he wouldn't publicly claim to have votes without possessing them. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'today' in turn 38 refers to the current day in a general sense, not tied to any entity in turn 25.\",\n  \"reason\": \"Claim C (turn 38) discusses breaking the monotony of daily routines and promoting a mobile game, which is entirely unrelated to the strategic behavior of Mitch McConnell or the assumption that a strategic person wouldn't publicly claim to have something they lack. There is no semantic connection between the"
     },
     {
       "a_turn_idx": 25,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'players' in C refers to users of Call of Duty Mobile, while 'obstructions' and 'strategic actions' in A refer to political negotiation dynamics. No shared entities or concepts.\",\n  \"reason\": \"Claim C discusses earning free rewards in a video game through gameplay, while assumption A concerns resolving political obstructions via strategic distribution of rewards. The topics, contexts, and meanings are entirely different. There is no overlap in subject matter or conceptual"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'players' refers to users of Call of Duty Mobile, and 'rewards' refers to in-game incentives.\",\n  \"reason\": \"Claim C discusses earning free rewards through gameplay in Call of Duty Mobile, which is unrelated to the earlier assumption A about resolving obstructions at political events via strategic distribution of rewards. While both involve 'rewards', the contexts are entirely different—A refers to political negotiation tactics, while C refers to gamified incentives."
     },
     {
       "a_turn_idx": 27,
@@ -1641,7 +1641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this year' in turn 48 refers to the current fiscal or calendar year, aligning with the temporal scope implied in turn 28 ('the course of the year'). 'Bipartisan efforts' and 'jumpstarting domestic chip manufacturing' are specific actions that could relate to broader strategic decisions involving national defense and international commitments.\",\n  \"reason\": \"Claim C mentions bipartisan efforts to jumpstart domestic chip manufacturing, which indirectly relates to the concern raised in assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this year' in turn 48 refers to the current fiscal or calendar year, aligning with the temporal scope implied in turn 28 ('the course of the year'). 'Bipartisan efforts' and 'jumpstarting domestic chip manufacturing' are specific actions that could relate to broader strategic decisions involving national defense and international commitments.\",\n  \"reason\": \"Claim C mentions bipartisan efforts to jumpstart domestic chip manufacturing, which indirectly relates to the strategic trade-off between"
     },
     {
       "a_turn_idx": 28,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 48 refers to the U.S. government or policymakers, consistent with the broader discussion of national strategy and defense priorities.\",\n  \"reason\": \"Claim C states that domestic chip manufacturing in the U.S. will reduce dependence on Taiwan, which relates to the broader concern raised in assumption A about strategic trade-offs between domestic defense and international commitments. However, C does not explicitly address the decision point where choices between domestic defense and international commitments become unavoidable"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 48 refers to the U.S. government or policymakers, consistent with the broader discussion of national strategy and defense. 'Taiwan' is referenced as a critical supplier of microchips, aligning with prior mention in turn 29.\",\n  \"reason\": \"Claim C states that domestic chip manufacturing in the U.S. will reduce dependence on Taiwan, which relates to the broader strategic concern about supply chain vulnerabilities raised in turn 2"
     },
     {
       "a_turn_idx": 28,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 29 refers to the U.S. and its NATO allies, as established by the context of collective action in supporting Ukraine.\",\n  \"reason\": \"Claim C explicitly states that the U.S. and its NATO allies are providing military support to Ukraine, which directly verifies the substance of assumption A that the U.S. government has a moral obligation to support Ukraine. The statement in C is clear, direct, and aligns precisely with the core"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 29 refers to the U.S. and its NATO allies, as established by the context of collective action in supporting Ukraine.\",\n  \"reason\": \"Claim C explicitly states that the U.S. and its NATO allies are providing military support to Ukraine, which directly verifies the substance of assumption A that the U.S. government has a moral obligation to support Ukraine. The statement in C is clear, direct, and aligns precisely with the implied"
     },
     {
       "a_turn_idx": 28,
@@ -1746,7 +1746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to SPEAKER_02, as established by context (SPEAKER_09 is asking about the contents of SPEAKER_02's garage).\",\n  \"reason\": \"Claim C (turn 54) discusses searching the listener's garage for documents, which is entirely unrelated to the earlier assumption A (turn 30) about the speaker's credibility or trustworthiness. While turn 53"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to SPEAKER_02, as established by context (SPEAKER_09 is asking about the contents of SPEAKER_02's garage).\",\n  \"reason\": \"Claim C (turn 54) discusses searching the listener's garage for documents, which is entirely unrelated to the earlier assumption A (turn 30) about the speaker's credibility or trustworthiness. There is no mention of"
     },
     {
       "a_turn_idx": 30,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses a state-level 'right to work' law resulting from legislative change, which is unrelated to the earlier assumption A about the speaker's credibility or trustworthiness. There is no mention, implication, or verification of the speaker's credibility in turn 57. The topic shifts entirely to tax policy and state competitiveness,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C discusses a state-level 'right to work' law resulting from legislative change, which is unrelated to assumption A about the speaker's credibility or trustworthiness. There is no mention, implication, or verification of the speaker's credibility in turn 57. The topic shifts entirely to tax policy and state competitiveness, making the"
     },
     {
       "a_turn_idx": 30,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to Russia, as established by the context of Russian control over energy and geopolitical influence.\",\n  \"reason\": \"Claim C explicitly states that allowing a Russian victory would entail significant costs, directly verifying the core substance of assumption A, which asserts that a Russian victory would have significant geopolitical consequences. The phrasing 'in terms of costs, and in terms of the unsettling effect on the democratic part of the world' expands on and confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to Russia, as established by the context of Russian control over energy and geopolitical influence.\",\n  \"reason\": \"Claim C explicitly states that allowing a Russian victory would entail significant costs, directly verifying the core substance of assumption A, which asserts that a Russian victory would have significant geopolitical consequences. The phrasing 'in terms of costs, and in terms of the unsettling effect on the democratic part of the world' expands on the implications"
     },
     {
       "a_turn_idx": 30,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 47 refers to SPEAKER_04, who is discussing helping others achieve wealth and success.\",\n  \"reason\": \"Claim C (turn 47) expresses a general belief in helping others succeed, which is unrelated to assumption A (turn 30), which concerns the accuracy and validity of the speaker's view on Russia’s capabilities. There is no overlap in subject matter, content, or implied connection. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 47 refers to SPEAKER_04, who is discussing helping others achieve wealth and success.\",\n  \"reason\": \"Claim C (turn 47) expresses a general belief in helping others succeed, which is unrelated to assumption A (turn 30), which concerns the accuracy and validity of the speaker's view on Russia’s capabilities. There is no overlap in subject matter, nor does C verify or state the"
     },
     {
       "a_turn_idx": 31,
@@ -1879,9 +1879,9 @@
       "c_time": 977.125,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'others' in claim C refers to people building wealth, not Iran or North Korea.",
-      "reason": "Claim C discusses helping others achieve financial success and personal thriving, which is unrelated to the geopolitical alignment between Iran and North Korea mentioned in assumption A. There is no overlap in subject matter, concept, or implied connection. The two statements address entirely different domains—economic empowerment versus international relations.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'others' in claim C refers to people building wealth, not Iran or North Korea.\",\n  \"reason\": \"Claim C discusses helping others achieve financial success and personal thriving, which is unrelated to the geopolitical alignment between Iran and North Korea mentioned in assumption A. There is no overlap in subject matter, concept, or implied connection. The two statements address entirely different domains—economic empowerment versus international relations.\"\n}\n```"
+      "coref_notes": "No relevant coreference; 'others' in C refers to individuals building wealth, not Iran or North Korea.",
+      "reason": "Claim C discusses helping others achieve financial success and personal thriving, which is unrelated to the geopolitical alignment between Iran and North Korea mentioned in assumption A. There is no overlap in semantic content or reference. The topic shifts from international relations to personal economic empowerment.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'others' in C refers to individuals building wealth, not Iran or North Korea.\",\n  \"reason\": \"Claim C discusses helping others achieve financial success and personal thriving, which is unrelated to the geopolitical alignment between Iran and North Korea mentioned in assumption A. There is no overlap in semantic content or reference. The topic shifts from international relations to personal economic empowerment.\"\n}\n```"
     },
     {
       "a_turn_idx": 32,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the claim' in turn 35 refers to the humorous statement about lava-resistant water bottles, which is unrelated to the assumption about background knowledge in international relations.\",\n  \"reason\": \"Turn 35 introduces a completely unrelated, humorous commercial claim about water bottles surviving molten lava, which has no connection to the assumption in turn 32 about the listener's background knowledge in international relations. There is no overlap in subject matter, intent, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the claim' in turn 35 refers to the humorous assertion about lava-resistant water bottles, which is unrelated to the assumption about background knowledge in international relations.\",\n  \"reason\": \"Turn 35 introduces a completely new, humorous commercial claim about water bottles surviving molten lava, which is unrelated to the assumption in turn 32 about the listener's background knowledge in international relations. There is no overlap in subject matter, logic, or intent"
     },
     {
       "a_turn_idx": 32,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to SPEAKER_02, as established in prior context. 'Your garage' is a possessive reference to SPEAKER_02's personal space.\",\n  \"reason\": \"Turn 54 discusses searching the listener's garage for documents, which is a tangential, metaphorical, or humorous suggestion unrelated to the assumption in turn 32 about the listener's background knowledge in international relations. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 54 refers to the listener, but the topic shifts abruptly from international relations to searching a garage for documents.\",\n  \"reason\": \"Claim C (turn 54) discusses searching the listener's garage for documents, which is entirely unrelated to the assumption in A (turn 32) that the listener has background knowledge about international relations. There is no mention, implication, or verification of the assumption about prior knowledge."
     },
     {
       "a_turn_idx": 32,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses state-level tax policy and 'right to work' laws, unrelated to the international relations background assumed in A.\",\n  \"reason\": \"Claim C discusses state-level economic policies such as 'right to work' laws and shifting from income to consumption taxation, which is entirely unrelated to the assumption in A that the listener has background knowledge about international relations. There is no mention, implication, or verification of the listener's presumed expertise in international affairs."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to states like Tennessee, Texas, and Florida; 'we' refers to Kentucky. No mention of international relations or listener background knowledge.\",\n  \"reason\": \"Claim C discusses state-level tax policy and 'right to work' laws in Kentucky, which is unrelated to the assumption in A that the listener has background knowledge about international relations. There is no overlap in subject matter, nor does C"
     },
     {
       "a_turn_idx": 32,

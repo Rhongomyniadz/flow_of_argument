@@ -5451,7 +5451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Brad' in turn 85 refers to a person mentioned earlier, but there is no prior mention of Brad in the context. The claim 'Brad's point about the press' introduces a new subject not connected to the earlier assumption A about knowing which team the speaker is referring to.\",\n  \"reason\": \"Assumption A concerns the listener's knowledge of a specific sports team (Florida State), while claim C discusses Brad's point about the press, which is unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Brad' in turn 85 refers to a person previously mentioned, but there is no prior mention of Brad in the context leading up to turn 61. The topic shifts from Florida State football to the press and political commentary, making no connection to the assumption about knowing which team is being referred to.\",\n  \"reason\": \"Turn 85 discusses Brad's point about the press, which is entirely unrelated to the assumption in turn 61 that the"
     },
     {
       "a_turn_idx": 61,
@@ -5586,7 +5586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in turn 87 refers to the press/media, not related to the speaker's credibility in judging football games.\",\n  \"reason\": \"Claim C discusses a shift in media treatment of current political figures versus past coverage, which is entirely unrelated to assumption A about the speaker's personal credibility in judging past college football games based on direct experience. There is no overlap in subject matter, nor does C verify or state any part of A. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to the press/media, not the speaker's credibility in judging football.\",\n  \"reason\": \"Claim C discusses a shift in media treatment of current political figures versus past coverage, specifically criticizing the press for being less adversarial toward the current president compared to how it treated the speaker. This topic is entirely unrelated to the earlier assumption A, which concerns the speaker's personal credibility in judging past college"
     },
     {
       "a_turn_idx": 62,
@@ -5751,7 +5751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in claim C refers to SPEAKER_08, who is discussing personal enjoyment while playing golf.\",\n  \"reason\": \"Claim C expresses that the speaker believes their current activity (playing golf at Mar-a-Lago) is fulfilling, which is unrelated to assumption A, which concerns athletic success depending on leadership and resource allocation in university athletics departments. There is no overlap in subject matter, nor does C verify or state the substance of A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_08, who is discussing personal enjoyment of golf, not athletic leadership or university athletics.\",\n  \"reason\": \"Claim C expresses that the speaker believes their current activity (playing golf) is fulfilling, which is unrelated to assumption A, which concerns athletic success depending on leadership in university athletics departments. There is no overlap in subject matter, and C does not address, verify, or even reference the idea"
     },
     {
       "a_turn_idx": 62,
@@ -5811,7 +5811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'state' in turn 63 refers to Florida State, consistent with prior context.\",\n  \"reason\": \"Claim C states that the college football landscape is highly competitive, which directly supports the underlying assumption in A that audience members recognize key figures like Andrea Wadsworth due to the intense competition and historical significance in college football. While C does not explicitly mention recognition of individuals, it provides the contextual rationale—intense competition—that makes such recognition plausible and relevant"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'state' in turn 63 refers to Florida State, as established in the prior context.\",\n  \"reason\": \"Claim C states that the college football landscape is highly competitive, which directly supports the underlying assumption in A that audience members recognize key figures like Andrea Wadsworth due to the intense competition and historical significance in college football. While C does not explicitly mention recognition of individuals or their significance, it provides the necessary context—competitive pressure—that makes the assumption plausible"
     },
     {
       "a_turn_idx": 62,
@@ -5856,7 +5856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'List chaining' in turn 66 refers to Donald Trump, as established in turn 65 ('A list chaining would start 10 wars by lunchtime') and contextually linked to the Republican realignment described in turn 64.\",\n  \"reason\": \"Claim C explicitly states opposition to using U.S. economic generosity to artificially enhance other countries' positions, which directly verifies the substance of assumption A—that the speaker identifies with a faction valuing national"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'List chaining' in turn 66 refers to Donald Trump, as established in turn 65 where 'List chaining' is used as a rhetorical substitute for Trump in a critical context. The term 'the largesse of America' refers to U.S. economic generosity.\",\n  \"reason\": \"Claim C explicitly states opposition to using U.S. economic generosity to artificially enhance other countries' positions, which directly verifies the substance of assumption A—that the speaker identifies with"
     },
     {
       "a_turn_idx": 64,
@@ -5871,7 +5871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to Congressman Matt Gaetz, who is the subject of the prior exchange. The statement 'If you don't hear from me in a few days' implies a potential cessation of communication, but does not relate to the earlier assumption A about identity with a faction of the Republican Party focused on national sovereignty and economic protectionism.\",\n  \"reason\": \"Claim C (turn 70) discusses a possible temporary absence or cessation of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 70 refers to Congressman Matt Gaetz, who is the subject of the prior exchange. The statement 'If you don't hear from me in a few days' implies a potential cessation of communication, but does not relate to the earlier assumption about identity with a faction of the Republican Party focused on national sovereignty and economic protectionism.\",\n  \"reason\": \"Claim C (turn 70) discusses a possible temporary absence or cessation of communication"
     },
     {
       "a_turn_idx": 64,
@@ -5886,7 +5886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 87 refers to the media, specifically the press mentioned in turn 85-86. 'They' is used to describe the press's favorable treatment of the current president compared to the speaker's own experience, indicating political alignment as a factor in media behavior.\",\n  \"reason\": \"Claim C states that media favoritism exists based on political alignment, which aligns with the substance of assumption A—that political loyalty is defined by"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 87 refers to the media, specifically the press mentioned in turn 85-86. 'They' is used to describe the press's favorable treatment of the current president compared to past criticism of Donald Trump.\",\n  \"reason\": \"Claim C states that media favoritism exists based on political alignment, which aligns with the substance of assumption A—political loyalty defined by ideological alignment rather than formal membership. In turn 8"
     },
     {
       "a_turn_idx": 64,
@@ -5961,7 +5961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 78 refers to President Trump, as established by context (Mar-a-Lago, golf, and prior discussion).\",\n  \"reason\": \"Claim C discusses Trump's opportunity to play golf, implying leisure time, but does not address or verify the substantive claim in assumption A—that the Republican Party underwent a fundamental transformation under Trump beyond rhetorical shifts. There is no mention of party transformation, realignment, or structural change in C. The topic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 78 refers to President Trump, as established by context (Mar-a-Lago, golf, and prior discussion).\",\n  \"reason\": \"Claim C discusses Trump's opportunity to focus on his golf game, which is unrelated to assumption A, which asserts a fundamental transformation of the Republican Party under Trump. There is no mention of party transformation, political realignment, or ideological change in C. The topic shifts entirely to personal leisure activities,"
     },
     {
       "a_turn_idx": 64,
@@ -5991,7 +5991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 91 refers to the idea of putting children in cages, which is a separate topic from the assumption about the Republican Party's transformation under Trump.\",\n  \"reason\": \"Claim C (turn 91) discusses Donald Trump's note in the context of children being placed in cages, which is unrelated to the substantive claim in assumption A (turn 64) about a fundamental transformation of the Republican Party under Trump. There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 91 refers to the idea of putting children in cages, which is a separate topic from the assumption in turn 64 about the Republican Party's transformation under Trump.\",\n  \"reason\": \"Claim C (turn 91) discusses Donald Trump's note in the context of children being placed in cages, which is unrelated to the substantive claim in assumption A (turn 64) about a fundamental transformation of the Republican Party under Trump"
     },
     {
       "a_turn_idx": 64,
@@ -6006,7 +6006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'List chaining' in turn 66 refers to Donald Trump, as established in turn 65 where Trump is described as leading a political realignment. 'The largesse of America' refers to U.S. economic generosity.\",\n  \"reason\": \"Claim C explicitly states opposition to using U.S. economic generosity to artificially enhance other countries' positions, which directly verifies the substance of assumption A—that moral legitimacy depends on opposing elite economic arrangements and globalism. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'List chaining' in turn 66 refers to Donald Trump, as established in turn 65 ('A list chaining would start 10 wars by lunchtime') and contextually linked to the political realignment discussed in turn 64.\",\n  \"reason\": \"Claim C explicitly states opposition to using U.S. economic generosity to artificially enhance other countries' positions, which directly verifies the substance of assumption A—that moral legitimacy depends on opposing elite economic arrangements and"
     },
     {
       "a_turn_idx": 64,
@@ -6081,7 +6081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, not the speaker. The claim in C is about Biden's fitness to serve, while assumption A concerns the speaker's belief in exclusive insight into their political coalition. No connection exists between the two.\",\n  \"reason\": \"Claim C expresses a negative evaluation of President Biden's performance and fitness to serve, which is unrelated to assumption A, which asserts the speaker's belief in possessing exclusive insight into their political coalition"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, not the speaker. The claim in C is about Biden's fitness to serve, while assumption A concerns the speaker's belief in exclusive insight into their political coalition. No connection exists between the two.\",\n  \"reason\": \"Claim C expresses a negative evaluation of President Biden's performance and fitness to serve, which is unrelated to assumption A, which asserts the speaker's belief in exclusive knowledge about their political coalition."
     },
     {
       "a_turn_idx": 64,
@@ -6096,7 +6096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, as established by context. 'Our country can't handle four more years of this guy' clearly refers to Biden.\",\n  \"reason\": \"Claim C expresses a strong negative judgment about Biden's leadership and asserts that the country cannot endure four more years under him. However, this does not explicitly verify or state the earlier assumption A, which concerns the speaker's belief in exclusive insight into who belongs to their political"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, as established by context. 'Our country can't handle four more years of this guy' clearly refers to Biden.\",\n  \"reason\": \"Claim C expresses a strong negative evaluation of Biden and asserts that the country cannot endure four more years under his leadership. However, this does not explicitly verify or state the earlier assumption A, which concerns the speaker's belief in possessing exclusive insight into who belongs to their political"
     },
     {
       "a_turn_idx": 64,
@@ -6111,7 +6111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 90 refers to the government or authorities responsible for building the cages, but this does not connect to the earlier assumption A about political coalitions. The claim in C concerns the intentional design of cages, while A concerns exclusive insight into political belonging.\",\n  \"reason\": \"Claim C discusses the intentional construction of cages, which is unrelated to the political coalition membership asserted in assumption A. There is no overlap in semantic content between the belief in exclusive"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 90 refers to the government or authorities, but the claim about 'cages' being intentionally constructed does not relate to the earlier assumption about political coalition exclusivity. No coreference connects the idea of 'cages' to the speaker's belief about belonging to a political coalition.\",\n  \"reason\": \"Claim C discusses the intentional design of cages for children, which is unrelated to assumption A, which concerns the speaker's belief in exclusive insight"
     },
     {
       "a_turn_idx": 64,
@@ -6126,7 +6126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, who is the subject of the claim about appearing unwell. No reference to public support for border security or anti-interventionism is present.\",\n  \"reason\": \"Claim C (turn 81) discusses President Biden's health and appearance, which is entirely unrelated to assumption A (turn 64), which concerns public support for border security and anti-interventionism within the speaker's base. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, who is the subject of the claim about appearing unwell. No reference to public support for border security or anti-interventionism is present.\",\n  \"reason\": \"Claim C discusses President Biden's health and appearance, which is unrelated to the earlier assumption A about public support for border security and anti-interventionism within the speaker's base. There is no overlap in semantic content, and C does not address"
     },
     {
       "a_turn_idx": 65,
@@ -6171,7 +6171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Jim Jordan' as a mentor and friend; 'he' in turn 69 refers to Jim Jordan.\",\n  \"reason\": \"Claim C states that Jim Jordan believes he needs to remain active in political efforts. This does not align with assumption A, which is about the speaker's belief in possessing insight into effective political communication. There is no mention of insight, strategy, or communication effectiveness in C. The two claims address entirely different topics"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Jim Jordan' as a mentor and friend; 'he' in turn 69 refers to Jim Jordan.\",\n  \"reason\": \"Claim C states that Jim Jordan believes he needs to remain active in political efforts. This does not align with assumption A, which is about the speaker's belief in possessing insight into effective political communication. There is no mention of insight, strategy, or communication effectiveness in C. The two claims address entirely different ideas"
     },
     {
       "a_turn_idx": 65,
@@ -6231,7 +6231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, as established by context (e.g., 'Sleepy Joe', 'his orders', 'President Biden').\",\n  \"reason\": \"Claim C asserts that the speaker believes President Biden is unfit to serve due to poor performance, which contradicts assumption A, which claims the speaker has insight into effective political communication. There is no alignment in content or intent—C expresses disdain and dismissal of Biden’s leadership,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden. 'He' is used to describe Biden's performance and fitness to serve.\",\n  \"reason\": \"Claim C asserts that the speaker believes President Biden is unfit to continue serving due to poor performance. This directly contradicts assumption A, which claims the speaker has insight into effective political communication—implying a belief in their own competence or effectiveness in political discourse. Claim C expresses a negative judgment about Biden’s"
     },
     {
       "a_turn_idx": 65,
@@ -6246,7 +6246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, as established by context and prior mention. 'Our country' refers to the United States, consistent with the broader political discourse.\",\n  \"reason\": \"Claim C expresses a strong negative judgment about President Biden's leadership and asserts that the country cannot endure four more years under him. However, this does not explicitly verify or state the earlier assumption A, which is that the speaker believes they possess insight into effective political"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, as established by context and prior mention. 'Our country can't handle four more years of this guy' clearly refers to Biden.\",\n  \"reason\": \"Claim C expresses a strong negative judgment about President Biden's leadership and asserts that the country cannot endure four more years under him. However, this does not explicitly verify or state the substance of assumption A, which is about possessing insight into effective political communication."
     },
     {
       "a_turn_idx": 65,
@@ -6261,7 +6261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 90 refers to the government or authorities responsible for building the cages, but this does not connect to the earlier assumption A about political communication insight. The topic shifts from political messaging strategy to physical infrastructure (cages), making the claims semantically unrelated.\",\n  \"reason\": \"Assumption A (turn 65) concerns the speaker's belief in effective political communication strategies, particularly regarding messaging to swing states like Ohio. Claim C (turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the' in turn 90 refers to 'cages', but the claim in turn 90 discusses the design of cages as intentionally constructed, while the earlier assumption A (turn 65) concerns insight into effective political communication. There is no semantic connection between the two.\",\n  \"reason\": \"Turn 65 expresses a belief in having insight into effective political communication, particularly regarding messaging strategies in Ohio. Turn 90 discusses the intentional design of"
     },
     {
       "a_turn_idx": 66,
@@ -6351,7 +6351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_08, who is distinct from SPEAKER_03 in A.\",\n  \"reason\": \"Claim C expresses a strong negative opinion about Biden and asserts the country cannot endure four more years under his leadership. This is unrelated to assumption A, which concerns the prioritization of domestic economic interests over global free trade. There is no mention of trade policy, economic interests, or the relationship between free trade"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden. No mention of 'global free trade' or 'domestic economic interests' in claim C.\",\n  \"reason\": \"Claim C expresses a strong negative opinion about President Biden and asserts that the country cannot endure four more years under his leadership. This is unrelated to the earlier assumption A, which concerns the prioritization of domestic economic interests over global free trade. There is no semantic connection between the two claims;"
     },
     {
       "a_turn_idx": 66,
@@ -6366,7 +6366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the' in 'the cages' refers to the detention facilities mentioned earlier in the conversation, specifically those associated with border enforcement. 'They' in turn 88 refers to Joe Biden, as established by prior context.\",\n  \"reason\": \"Claim C discusses the intentional design of cages used for detaining children, which is unrelated to the earlier assumption A about global free trade versus domestic economic interests. There is no overlap in subject matter, logic, or semantic content"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the' in 'the cages' refers to the detention facilities mentioned in prior turns, specifically those associated with border enforcement. 'They' in turn 88 refers to Joe Biden, as established in the context.\",\n  \"reason\": \"Claim C discusses the intentional design of cages used for detaining children, which is unrelated to the earlier assumption A about global free trade versus domestic economic interests. There is no overlap in subject matter, logic, or semantic content between"
     },
     {
       "a_turn_idx": 66,
@@ -6381,7 +6381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 68 refers to SPEAKER_08, who is the same speaker as in turn 66. The phrase 'i like what i'm doing now' indicates current engagement in an enjoyable activity.\",\n  \"reason\": \"Claim C states that the speaker enjoys their current activity, which aligns with the idea of being engaged in something satisfying. However, it does not address or verify the specific assumption in A about reflagging goods"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 68 refers to SPEAKER_08, who is the same speaker as in turn 67 and 69. The phrase 'i like what i'm doing now' indicates current engagement in an enjoyable activity.\",\n  \"reason\": \"Claim C states that the speaker enjoys their current activity, which is consistent with the idea of being engaged in something they like. However, it does not address or verify the specific assumption in A"
     },
     {
       "a_turn_idx": 66,
@@ -6396,7 +6396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 77 refers to SPEAKER_08, who is distinct from the subject of assumption A (SPEAKER_03).\",\n  \"reason\": \"Claim C (turn 77) expresses the speaker's personal satisfaction with their current activity (playing golf), which is entirely unrelated to the assumption A about reflagging goods and deceptive trade practices. There is no mention, implication, or verification of A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in turn 77 refers to SPEAKER_08, who is not the same as SPEAKER_03 in turn 66.\",\n  \"reason\": \"Turn 77 expresses personal satisfaction with current activities (golfing, being at Mar-a-Lago), which is unrelated to the assumption in turn 66 about reflagging goods and deceptive trade practices. There is no mention of trade, reflag"
     },
     {
       "a_turn_idx": 66,
@@ -6411,7 +6411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the press' refers to media coverage of the presidential office.\",\n  \"reason\": \"Claim C discusses changes in how the press treats the office of the president compared to during the speaker's presidency, focusing on media tone and behavior. Assumption A, however, concerns the legitimacy of trade practices, specifically reflagging goods from China as deceptive. There is no semantic connection between the two claims—C does not address trade, deception, or reflag"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the press' refers to media coverage of the presidential office.\",\n  \"reason\": \"Claim C discusses changes in how the press treats the office of the president compared to during the speaker's presidency, focusing on tone and treatment. Assumption A, however, concerns the legitimacy of trade practices, specifically reflagging goods from China as deceptive. There is no semantic connection between the two statements—C does not address trade, deception, or reflagging"
     },
     {
       "a_turn_idx": 66,
@@ -6501,7 +6501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, not the listener. There is no indication in claim C that the speaker believes the listener possesses relevant knowledge or perspective.\",\n  \"reason\": \"Claim C expresses the speaker's personal belief about President Biden's fitness to serve, which is unrelated to the assumption in A that the listener has relevant knowledge or perspective. There is no mention of the listener's understanding, awareness, or viewpoint in C. The two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, not the listener. There is no indication in claim C that the speaker believes the listener possesses relevant knowledge or perspective.\",\n  \"reason\": \"Claim C expresses the speaker's personal belief about President Biden's fitness to serve, which is unrelated to the assumption in A that the listener has relevant knowledge or perspective. There is no mention of the listener's understanding, viewpoint, or expertise in C. The two statements"
     },
     {
       "a_turn_idx": 67,
@@ -6516,7 +6516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, and 'this guy' refers to Biden as well. No coreference resolves to the listener or their knowledge.\",\n  \"reason\": \"Claim C expresses the speaker's belief about the country's inability to endure four more years under Biden, which is a political evaluation of leadership. Assumption A, however, concerns the speaker's belief that the listener possesses relevant knowledge or perspective—specifically, the ability to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, and 'this guy' refers to Biden as well. No coreference resolves to the listener or their knowledge.\",\n  \"reason\": \"Claim C expresses the speaker's belief about the country's inability to endure four more years under Biden, which is a political evaluation of leadership and future stability. Assumption A, however, concerns the speaker's belief that the listener possesses relevant knowledge or perspective—specifically,"
     },
     {
       "a_turn_idx": 67,
@@ -6606,7 +6606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, and 'this guy' refers to Biden as well, establishing clear coreference.\",\n  \"reason\": \"Claim C expresses strong negative sentiment toward President Biden and asserts that the country cannot endure four more years under him. However, this does not explicitly or directly verify the earlier assumption A, which concerns the speaker's personal preference about staying in the 'people's house' (Congress) versus their current role."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 81 refers to President Biden, and 'this guy' refers to Biden as well, establishing clear coreference.\",\n  \"reason\": \"Claim C expresses strong negative sentiment toward President Biden and asserts that the country cannot endure four more years under him. However, this does not explicitly or directly verify the earlier assumption A, which concerns the speaker's personal preference about staying in the 'people's house' (Congress) versus remaining in their current"
     },
     {
       "a_turn_idx": 68,
@@ -6651,7 +6651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_03, who is distinct from the subject of A (SPEAKER_08).\",\n  \"reason\": \"Claim C discusses SPEAKER_03's belief about the listener (Mr. President) representing 'the real Toronto Trump' on Twitter, which is unrelated to assumption A, which concerns SPEAKER_08's preference for staying in their current role rather than moving to the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_03, who is distinct from the subject of A (SPEAKER_08).\",\n  \"reason\": \"Claim C discusses SPEAKER_03's belief about the listener (Mr. President) representing 'the real Toronto Trump' on Twitter, which is unrelated to assumption A, where SPEAKER_08 expresses a preference for staying in their current role rather than moving to the"
     },
     {
       "a_turn_idx": 68,
@@ -6681,7 +6681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Mr. President' in turn 98 does not refer to or verify the assumption about 'the people's house' in turn 68.\",\n  \"reason\": \"Turn 98 refers to the listener as 'Mr. President', which is a distinct and unrelated title from 'the people's house'. There is no mention or implication of 'the people's house' or its metaphorical/literal political"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Mr. President' in turn 98 does not refer to the listener in turn 68; instead, it appears to be a rhetorical address to a different individual (likely Donald Trump), not the person being addressed as 'Congressman Matt Gaetz' in turn 68. There is no clear coreference between 'Mr. President' and the listener in turn 68.\",\n  \"reason\": \"Turn 68 assumes the listener understands 'the"
     },
     {
       "a_turn_idx": 68,
@@ -6722,11 +6722,11 @@
       "claim_text": "The speaker is referring to Brad's point about the press.",
       "overlap_score": 2,
       "c_time": 2281.652,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference links relevant to assumption A; 'Jim Jordan' is not mentioned in claim C.",
-      "reason": "Claim C discusses Brad's point about the press and the treatment of the presidency by the media, which is entirely unrelated to the assumption that there is a shared understanding about who Jim Jordan is. There is no mention of Jim Jordan, no reference to the prior discussion involving him, and no verification or even topical connection to assumption A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to assumption A; 'Jim Jordan' is not mentioned in claim C.\",\n  \"reason\": \"Claim C discusses Brad's point about the press and the treatment of the presidency by the media, which is entirely unrelated to the assumption that there is a shared understanding about who Jim Jordan is. There is no mention of Jim Jordan, no reference to the prior discussion involving him, and no verification or even topical connection to assumption A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Brad' in turn 85 refers to Brad Coughill mentioned earlier, but this does not connect to the assumption about Jim Jordan.\",\n  \"reason\": \"Turn 85 discusses Brad's point about the press and shifts focus to media treatment of the presidency, which is entirely unrelated to the assumption in turn 69 about a shared understanding of Jim Jordan. There is no mention of Jim Jordan, Ohio, or any reference to a mutual"
     },
     {
       "a_turn_idx": 69,

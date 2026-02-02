@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 47 refers to schools, which is consistent with the context from turns 45-46.\",\n  \"reason\": \"Claim C states that families did not have meals when schools closed, which is unrelated to the assumption A about the speaker's interest in cooking based on their interest in eating. There is no mention of cooking, personal interest, or any connection to the speaker's potential interest in cooking. The topic shifts entirely to meal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 47 refers to schools, and 'these families' refers to low-income families mentioned in turn 46.\",\n  \"reason\": \"Claim C states that families did not have meals when schools closed, which contradicts the implication in assumption A that the speaker might have interest in cooking due to an interest in eating. There is no connection between the lack of meals and the speaker's interest in cooking or eating. The claim does not verify"
     },
     {
       "a_turn_idx": 23,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 53 refers to the listener (SPEAKER_02), as established in prior turns where SPEAKER_00 is asking about the listener's experience with cooking and eating.\",\n  \"reason\": \"Turn 53 expresses interest in the listener's personal journey from eating meat and fish to becoming vegan, which relates to the broader theme of dietary habits discussed earlier. However, it does not explicitly verify or state the specific assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 53 refers to the listener (SPEAKER_02), as established in prior turns where SPEAKER_00 is asking about the listener's experience with cooking and eating.\",\n  \"reason\": \"Claim C expresses interest in the listener's personal journey from eating meat and fish to becoming vegan, which aligns with the general idea in assumption A that the listener might have interest in cooking based on their interest in eating. However,"
     },
     {
       "a_turn_idx": 23,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with A.\",\n  \"reason\": \"Claim C (turn 49) discusses asking about the number of children in a family during meal distribution, which is unrelated to the assumption in A (turn 28) about the speaker's competence with kitchen appliances. There is no mention of appliance use, cooking skills, or related capabilities in C. The topics are entirely different,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 49 refers to SPEAKER_02, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 49) discusses asking about the number of children in a family during meal distribution, which is unrelated to the assumption A (turn 28) about the speaker's competence with kitchen appliances. There is no mention of appliance use, cooking skills, or related capabilities in C. The topics are"
     },
     {
       "a_turn_idx": 28,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 57 refers to SPEAKER_02, consistent with earlier turns. No other coreference issues.\",\n  \"reason\": \"Claim C (turn 57) states that the speaker has been vegan for three days, which is unrelated to the earlier assumption A that the speaker has basic competence in using kitchen appliances. While both relate to cooking and food, C does not state, imply, or verify anything about appliance competence. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 57) states the speaker has been vegan for three days, which is unrelated to assumption A (turn 28), which concerns basic competence in using kitchen appliances. There is no mention of appliance use, cooking skills, or related capabilities in C. While both involve cooking, the focus shifts entirely to dietary choice, not technical ability. Thus,"
     },
     {
       "a_turn_idx": 28,
@@ -1326,7 +1326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'a brand new assembly member' in turn 29 refers to the same individual mentioned in turn 28's context.\",\n  \"reason\": \"Turn 29 does not address or verify the assumption that 'the pressure' refers to a physical event during cooking. Instead, it shifts focus to a humorous anecdote about a political event and an assembly member praising the speaker. The claim in turn 29 is unrelated to the physical nature of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'a brand new assembly member' in turn 29 refers to the same individual mentioned in turn 29.\",\n  \"reason\": \"Claim C states that a newly elected assembly member praised the speaker during the event, which is consistent with the narrative in turn 29. However, this claim does not address or make explicit the earlier assumption A, which concerns the phrase 'the pressure' referring to a physical event during cooking, such as a"
     },
     {
       "a_turn_idx": 28,
@@ -1457,11 +1457,11 @@
       "claim_text": "Public Investing Inc. is a member of FINRA and SIPC.",
       "overlap_score": 2,
       "c_time": 942.133,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"No coreference issues; 'Public Investing Inc.' in turn 51 refers directly to the entity mentioned in turn 31.\",\n  \"reason\": \"Claim C explicitly states that Public Investing Inc. is a member of FINRA and SIPC, which directly verifies the substance of assumption A, which asserts that the listener trusts financial institutions that are members of FINRA and SIPC. The claim confirms the membership status of the institution in question, making the assumption explicit and unambiguous"
+      "entailment_score": 9,
+      "confidence": 0.98,
+      "coref_notes": "No coreference issues; 'Public Investing Inc.' in turn 51 refers directly to the entity mentioned in turn 31.",
+      "reason": "Claim C explicitly states that Public Investing Inc. is a member of FINRA and SIPC, which directly verifies the substance of assumption A that the listener trusts financial institutions that are members of FINRA and SIPC. The claim is clear, direct, and unambiguous, matching the key elements of A without deviation.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"No coreference issues; 'Public Investing Inc.' in turn 51 refers directly to the entity mentioned in turn 31.\",\n  \"reason\": \"Claim C explicitly states that Public Investing Inc. is a member of FINRA and SIPC, which directly verifies the substance of assumption A that the listener trusts financial institutions that are members of FINRA and SIPC. The claim is clear, direct, and unambiguous, matching the key elements of A without deviation.\"\n}\n```"
     },
     {
       "a_turn_idx": 31,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 51 refers to the listener, consistent with the implied audience in turn 31. 'Clunky, outdated platform' directly references the legacy investing platform mentioned in turn 31.\",\n  \"reason\": \"Claim C explicitly states 'Leave your clunky, outdated platform behind,' which directly verifies the assumption in A that the listener values modern, efficient investment platforms over traditional ones. The language matches the contrast between old and new systems established"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your' in turn 51 refers to the listener, consistent with the assumed value in turn 31. 'Clunky, outdated platform' directly references the legacy investing platform mentioned in turn 31.\",\n  \"reason\": \"Claim C explicitly states 'Leave your clunky, outdated platform behind,' which directly verifies the assumption in A that the listener values modern, efficient investment platforms over traditional ones. The language matches the contrast between old and new systems,"
     },
     {
       "a_turn_idx": 31,
@@ -1596,7 +1596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to the populations in Egypt and North Africa, which are affected by food shortages due to disruptions in Ukrainian grain supply, as established in turn 36 and earlier.\",\n  \"reason\": \"Turn 37 explicitly raises concern about food availability in Egypt, directly building on the earlier assumption in turn 33 that the interlocutor can observe and report on material conditions like food shortages. The claim in turn 37"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to the populations in Egypt and North Africa, which are affected by food shortages due to disruptions in Ukrainian grain supply, as previously discussed.\",\n  \"reason\": \"Turn 37 explicitly raises concern about food availability in Egypt, directly linking it to the broader issue of food shortages caused by the blockade of Ukrainian grain exports—precisely the material condition (food availability) assumed in turn 33. The claim verifies the"
     },
     {
       "a_turn_idx": 33,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to the people in Egypt and North Africa, who are affected by food shortages due to the blockade of Ukrainian grain. No coreference resolves to the speaker's credibility assessment.\",\n  \"reason\": \"Turn 37 asks about future conditions in Egypt related to food availability, which is a consequence of the food shortage discussed in turn 33. However, turn 33 expresses an assumption about the credibility of firsthand testimony versus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 37 refers to the people in Egypt and North Africa, who are affected by the food shortage due to the blockade of Ukrainian grain. No coreference links to the earlier assumption A.\",\n  \"reason\": \"Turn 37 asks about future conditions in Egypt regarding food availability, which is a downstream consequence of the food shortage discussed in turn 34–35. However, it does not address or make explicit the earlier assumption A"
     },
     {
       "a_turn_idx": 33,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to 'schools, from kindergarten through high school,' which is consistent with the subject of the sentence.\",\n  \"reason\": \"Claim C states that schools are major providers of food for low-income families, which is unrelated to assumption A, which asserts that international cooperation on food security can be achieved through coordinated military and political efforts. There is no overlap in semantic content between the two statements. While both touch on food security, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 45 refers to 'kindergarten through high schools', which is consistent with the subject of the sentence. No other coreference issues.\",\n  \"reason\": \"Claim C states that schools from kindergarten through high school are major providers of food, particularly for low-income families. This is unrelated to assumption A, which claims that international cooperation on food security is possible through coordinated military and political efforts. There is no overlap in semantic content between the two"
     },
     {
       "a_turn_idx": 35,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'oil' in turn 65 refers to a dairy substitute used in vegan cheese, not related to Ukraine or food shortages.\",\n  \"reason\": \"Claim C discusses the taste of oil-based vegan cheese, which is unrelated to the assumption A about identifying with Ukraine and considering its interests as one's own. There is no overlap in semantic content, topic, or implication. The mention of food in C is about vegan cuisine and personal preference, while A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'it' in turn 65 refers to 'the diet cheese' mentioned in turn 64, but this does not connect to the earlier assumption about Ukraine.\",\n  \"reason\": \"Claim C discusses the taste of oil-based cheese substitutes in vegan pizza, which is entirely unrelated to the earlier assumption A about identifying with Ukraine and considering its interests as one's own. There is no overlap in subject matter, semantics, or implied connection. The topic"
     },
     {
       "a_turn_idx": 36,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the food shortage issue mentioned in turn 36. The claim in turn 37 ('food insecurity may lead to significant changes or consequences') is directly supported by the speaker's elaboration on instability and starvation in North Africa and globally.\",\n  \"reason\": \"Turn 37 explicitly addresses the consequences of food insecurity—instability and starvation—in regions like Egypt and North Africa, which directly verifies the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the food shortage issue mentioned in turn 36. The claim in turn 37 ('food insecurity may lead to significant changes or consequences') is directly supported by the speaker's elaboration on instability and starvation in response to the question about Egypt and North Africa.\",\n  \"reason\": \"Turn 37 explicitly addresses the consequences of food insecurity—instability and starvation—in the context of Egypt and North Africa, which"
     },
     {
       "a_turn_idx": 36,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to community college students, which aligns with the concern about food access in Egypt mentioned in turn 37. The speaker's focus on systemic hunger despite economic strength connects to the earlier assumption about reliance on consistent food access.\",\n  \"reason\": \"Claim C addresses systemic food insecurity among college students, reflecting a broader concern about reliable food access—consistent with assumption A’s focus on Egypt’s dependence on stable food supply. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to community college students, which aligns with the focus on food access in Egypt mentioned in turn 37. The concept of food insecurity among vulnerable populations is central to both A and C.\",\n  \"reason\": \"Turn 43 explicitly addresses systemic food insecurity affecting students, including those in community colleges, which reflects the broader concern about reliance on consistent food access raised in turn 37. While turn 37"
     },
     {
       "a_turn_idx": 37,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 41 refers to 'college students' mentioned earlier in the same turn. The phrase 'students in our colleges' in turn 41 is consistent with the reference to 'community college students' in turn 43.\",\n  \"reason\": \"Claim C states that some college students cannot afford sufficient food, which aligns with the concern about hunger among students raised in the context. However, it does not explicitly connect this to the global"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 41 refers to 'college students' mentioned earlier in the same turn. The phrase 'students in our colleges' in turn 41 is consistent with the reference to 'community college students' in turn 43.\",\n  \"reason\": \"Claim C states that some college students cannot afford sufficient food, which aligns with the concern about hunger among students raised in the context. However, it does not explicitly connect to the earlier assumption"
     },
     {
       "a_turn_idx": 39,
@@ -4446,7 +4446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 68 refers to 'pasta', which is the subject of turn 69. The phrase 'a great Italian meal with some wine and some bread' in turn 69 explicitly refers to the same experience described in turn 68.\",\n  \"reason\": \"Turn 69 directly and explicitly verifies the substance of turn 68 by stating that a traditional Italian meal with wine and bread brings comfort, which aligns with"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 68 refers to 'pasta', which is the subject of turn 69. The phrase 'a great Italian meal with some wine and some bread' in turn 69 explicitly refers to the same experience described in turn 68.\",\n  \"reason\": \"Turn 69 directly and explicitly verifies the assumption in turn 68 by stating that a traditional Italian meal with wine and bread brings comfort, which aligns with"
     },
     {
       "a_turn_idx": 68,

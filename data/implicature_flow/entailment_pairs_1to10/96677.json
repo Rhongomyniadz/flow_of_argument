@@ -1,0 +1,72 @@
+{
+  "episode_id": "96677",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 1,
+      "a_time": 7.677,
+      "a_idx_in_turn": 1,
+      "assumption_text": "There is a single, clear solution to complex societal problems like gun violence.",
+      "c_turn_idx": 3,
+      "claim_text": "People desire simple solutions to complex societal problems.",
+      "overlap_score": 3,
+      "c_time": 27.892,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to 'the liberal left' mentioned in turn 1, and 'this' refers to the simplistic solution of removing guns from the streets.\",\n  \"reason\": \"Claim C explicitly states that people desire simple solutions to complex societal problems, which directly verifies the substance of assumption A—that there is a single, clear solution to such problems. The speaker in turn 3 reinforces this by criticizing the liberal left for offering a simplistic fix ("
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 7.677,
+      "a_idx_in_turn": 1,
+      "assumption_text": "There is a single, clear solution to complex societal problems like gun violence.",
+      "c_turn_idx": 3,
+      "claim_text": "Simple policy measures like removing guns will not eliminate serious issues like terrorism or domestic violence.",
+      "overlap_score": 2,
+      "c_time": 27.892,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 1 refers to the 'liberal left', which is the group criticized for suggesting simplistic solutions. The claim in turn 3 directly addresses and verifies the idea that simple policy measures (like removing guns) are presented as solutions by this group, while rejecting their effectiveness.\",\n  \"reason\": \"Claim C explicitly rejects the notion that removing guns would solve complex societal problems like terrorism or domestic violence, which directly verifies the earlier assumption A that there is"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 7.677,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The speaker believes that current political discourse oversimplifies serious issues.",
+      "c_turn_idx": 3,
+      "claim_text": "Simple policy measures like removing guns will not eliminate serious issues like terrorism or domestic violence.",
+      "overlap_score": 2,
+      "c_time": 27.892,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to the 'liberal left' mentioned in turn 1, and 'this' refers to the tragic event discussed in the context.\",\n  \"reason\": \"Claim C explicitly states that simple policy measures like removing guns will not eliminate serious issues such as terrorism or domestic violence, which directly verifies the core idea in assumption A that political discourse oversimplifies serious issues by pushing quick fixes. The reasoning in C aligns with and explicitly"
+    },
+    {
+      "a_turn_idx": 2,
+      "a_time": 17.164,
+      "a_idx_in_turn": 0,
+      "assumption_text": "The existence of the Second Amendment has relevance to discussions about gun violence.",
+      "c_turn_idx": 3,
+      "claim_text": "The world has approximately seven billion people; the U.S. population is about 350 million.",
+      "overlap_score": 2,
+      "c_time": 27.892,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'this' in turn 3 refers to the broader discussion of societal complexity and gun violence.\",\n  \"reason\": \"Claim C provides demographic context (7 billion global population, 350 million in the U.S.) that supports the idea of societal complexity mentioned in A, but does not explicitly state or verify the relevance of the Second Amendment to gun violence. While C reinforces the broader argument contextually, it does not directly address or make explicit the claim"
+    }
+  ]
+}

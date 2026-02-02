@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' in turn 18 refers to the same individual introduced in turn 1.\",\n  \"reason\": \"Claim C (turn 18) discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is entirely unrelated to Assumption A (turn 1), which asserts that the audience recognizes Congressman Clyburn by name. C does not address recognition, naming, or audience awareness at all. Therefore, there is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' in turn 18 refers to the same individual introduced in turn 1.\",\n  \"reason\": \"Claim C (turn 18) discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is entirely unrelated to Assumption A (turn 1), which asserts that the audience recognizes Congressman Clyburn by name. C does not address recognition, name familiarity, or audience awareness in any way. Therefore,"
     },
     {
       "a_turn_idx": 1,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Congressman Clyburn refers to himself as 'you' in turn 18, but the pronoun 'you' is used in the context of addressing him directly by the interviewer. No ambiguous coreference exists.\",\n  \"reason\": \"Claim C discusses the possibility of Congressman Clyburn becoming Speaker of the House if Nancy Pelosi does not remain leader, which is a political speculation based on leadership dynamics. However, it does not address or verify the earlier assumption A, which is about the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Congressman Clyburn refers to himself as 'you' in turn 18, but the pronoun 'you' is used in the context of addressing him directly by the interviewer. No ambiguous coreference exists.\",\n  \"reason\": \"Claim C discusses the possibility of Congressman Clyburn becoming Speaker of the House if Nancy Pelosi does not remain leader, which is a political speculation based on leadership dynamics. However, it does not address or verify the earlier assumption A—that the audience recognizes Congressman"
     },
     {
       "a_turn_idx": 1,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Congressman Clyburn, as established in turn 1. 'Congressman Clyburn' is the subject of both turns.\",\n  \"reason\": \"Turn 18 mentions Congressman Clyburn in the context of being considered as a potential successor to Nancy Pelosi, which implies recognition of him by name in a political leadership discussion. However, this does not explicitly verify or state the assumption that the audience recognizes him by name; it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Congressman Clyburn, as established in turn 1. 'Nancy Pelosi' is a proper noun and remains consistent across turns.\",\n  \"reason\": \"Turn 18 mentions Congressman Clyburn in the context of being considered as a potential successor to Nancy Pelosi, which implies recognition of him as a prominent figure within the Democratic leadership. However, this does not explicitly verify or state the assumption that the audience recognizes Congressman Cly"
     },
     {
       "a_turn_idx": 1,
@@ -77,11 +77,11 @@
       "claim_text": "The journalist believes Congressman Clyburn might be interested in becoming Speaker of the House.",
       "overlap_score": 2,
       "c_time": 818.476,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' is used consistently.\",\n  \"reason\": \"Claim C (turn 18) discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is unrelated to assumption A (turn 1), which asserts that the audience recognizes Congressman Clyburn by name. C does not address recognition or familiarity with Clyburn, nor does it verify or imply anything about the audience's awareness of him. Therefore, there is no entail"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'Congressman Clyburn' is directly referenced in both A and C.",
+      "reason": "Claim C discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is unrelated to the assumption in A that the audience recognizes him by name. C does not address recognition, naming, or audience awareness at all. Therefore, it neither verifies nor supports A, making the relationship clearly unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is unrelated to the assumption in A that the audience recognizes him by name. C does not address recognition, naming, or audience awareness at all. Therefore, it neither verifies nor supports A, making the relationship clearly unrelated.\"\n}\n```"
     },
     {
       "a_turn_idx": 1,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_00 refers to 'Congressman James Clyburn of South Carolina' in turn 20, which resolves the coreference from 'Congressman Clyburn' in turn 1.\",\n  \"reason\": \"Turn 20 mentions Congressman Clyburn by name and title, confirming his identity, but does not explicitly verify the assumption that the audience recognizes him by name. While the statement confirms his identity publicly, it does not address or confirm the audience's prior recognition,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_00 refers to 'Congressman James Clyburn of South Carolina' in turn 20, which resolves the coreference from 'Congressman Clyburn' in turn 1.\",\n  \"reason\": \"Turn 20 mentions Congressman Clyburn by name and title, confirming his identity, but does not explicitly verify or state the assumption that the audience recognizes him by name. While the mention of his full name and title strengthens recognition, the claim does not confirm or"
     },
     {
       "a_turn_idx": 1,
@@ -107,11 +107,11 @@
       "claim_text": "Congressman Clyburn joined the conversation on 'On the Record with April Ryan'.",
       "overlap_score": 2,
       "c_time": 1027.989,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "Congressman Clyburn refers to the same individual mentioned in turn 1; 'he' in later turns refers to Congressman Clyburn.",
-      "reason": "Claim C explicitly confirms that Congressman Clyburn joined the conversation on 'On the Record with April Ryan', directly verifying the assumption in A that the audience recognizes Congressman Clyburn by name, as his presence and identity are clearly established in the context. The explicit mention of his full name and role reinforces recognition.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Congressman Clyburn refers to the same individual mentioned in turn 1; 'he' in later turns refers to Congressman Clyburn.\",\n  \"reason\": \"Claim C explicitly confirms that Congressman Clyburn joined the conversation on 'On the Record with April Ryan', directly verifying the assumption in A that the audience recognizes Congressman Clyburn by name, as his presence and identity are clearly established in the context. The explicit mention of his full name and role reinforces recognition.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Congressman Clyburn refers to the same individual mentioned in turn 1; 'he' in turn 21 refers to Congressman Clyburn.\",\n  \"reason\": \"Claim C explicitly confirms that Congressman Clyburn joined the conversation on 'On the Record with April Ryan', directly verifying the assumption in A that the audience recognizes Congressman Clyburn by name. The explicit mention of his full title and affiliation, along with the context of the show, confirms recognition and engagement, leaving no ambiguity.\""
     },
     {
       "a_turn_idx": 1,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 6 refers to Omarosa, as established in prior context (turns 4 and 5). 'CBC' refers to the Congressional Black Caucus, mentioned in turn 6 as the subject of her actions.\",\n  \"reason\": \"Claim C states that the speaker does not wish to elaborate further on the matter involving the CBC, which relates to Omarosa's past actions toward the CBC. However, this does not explicitly verify or state the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 6 refers to Omarosa, as established in prior context (turns 4 and 5). 'CBC' refers to the Congressional Black Caucus, mentioned in turn 6 as the subject of her actions.\",\n  \"reason\": \"Claim C states that the speaker does not wish to elaborate further on the matter involving the CBC. However, this does not explicitly verify or state the earlier assumption A, which is that public discourse on the matter"
     },
     {
       "a_turn_idx": 2,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 11 refers to the broader context of public discourse surrounding allegations against Donald Trump, including testimony from Michael Cohen and other revelations. 'The base of Donald Trump' refers to his supporters.\",\n  \"reason\": \"Turn 11 mentions public disbelief regarding the seriousness of the allegations against Trump, implying that public discourse is ongoing and contested. However, it does not explicitly state or verify the belief that public discourse is legitimate and ongoing—only that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 11 refers to the broader context of public discourse surrounding allegations against Donald Trump, including testimony from Michael Cohen and other revelations. 'The base of Donald Trump' refers to his supporters.\",\n  \"reason\": \"Turn 11 mentions public disbelief regarding the seriousness of the allegations against Trump, which touches on the legitimacy of public discourse. However, it does not explicitly state or verify the earlier assumption A—that public discourse on the matter is legitimate"
     },
     {
       "a_turn_idx": 2,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context of the discussion about Trump's actions and intentions.\",\n  \"reason\": \"Claim C states that Donald Trump is intentionally creating a specific political climate in the U.S., which aligns with the substance of assumption A—that public discourse on this matter is legitimate and ongoing. While C does not explicitly state that the discourse is 'ongoing' or 'legitimate,' it strongly implies that Trump"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context of the discussion about Trump's actions and intentions.\",\n  \"reason\": \"Claim C states that Donald Trump is creating a specific political climate aimed at rolling back progress made during the Obama administration, which aligns with the substance of assumption A—that public discourse on this matter is legitimate and ongoing. While C does not explicitly state that the discourse is 'ongoing,' it strongly implies that the"
     },
     {
       "a_turn_idx": 2,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) introduces a completely new topic—Congressman Clyburn potentially running for Speaker of the House—which is unrelated to Assumption A (turn 2), which concerns the legitimacy and ongoing nature of public discourse on a political issue involving Michael Cohen and campaign finance. There is no mention or implication in C that supports, verifies, or even"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is unrelated to Assumption A (turn 2), which concerns the legitimacy and ongoing nature of public discourse on a political matter. C does not state, verify, or imply anything about public discourse being legitimate or ongoing. The topics are entirely different, and"
     },
     {
       "a_turn_idx": 2,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Congressman Clyburn, as established by the prior context and direct address.\",\n  \"reason\": \"Claim C states a belief in a 'widespread desire for new leadership and fresh ideas' on Capitol Hill, which is unrelated to assumption A, which asserts a connection between political figures and payments to adult entertainment industry individuals. There is no mention of payments, adult entertainment, or financial transactions in C. The topics are sem"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Congressman Clyburn, as established by the prior context and direct address.\",\n  \"reason\": \"Claim C states a desire for 'new blood, new ideas' in leadership, which is a general sentiment about change. However, this does not explicitly or implicitly verify the specific assumption A, which concerns a connection between political figures and payments to individuals in the adult entertainment industry. There is no mention of payments, adult entertainment,"
     },
     {
       "a_turn_idx": 3,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Nancy Pelosi' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C discusses dissatisfaction among members of Congress regarding Nancy Pelosi, while assumption A concerns the evidentiary weight of federal indictments regarding guilt. These topics are entirely unrelated in semantic content. Claim C does not address, reference, or verify any aspect of A, nor does it imply or support the idea that indictments carry significant evidentiary weight. Therefore,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Nancy Pelosi' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C discusses dissatisfaction among members of Congress regarding Nancy Pelosi, while assumption A concerns the evidentiary weight of federal indictments regarding guilt. These topics are entirely unrelated in semantic content. C does not address, state, or verify any aspect of A, nor does it relate to the significance of federal indictments. Therefore, the entailment score is 1"
     },
     {
       "a_turn_idx": 4,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context. 'They' in 'they have just decided...' refers to Trump's base, aligning with prior discussion.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate that rolls back progress made under Obama, which reflects a belief in deliberate political manipulation. However, it does not explicitly state or verify the earlier assumption A—that the speaker values transparency and believes hidden information"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context. 'They' in 'they have just decided...' refers to Trump's base, aligning with prior discussion.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate that rolls back progress made under Obama, which reflects a belief in intentional manipulation of political norms. While this implies a desire to obscure accountability and control narrative—related to transparency—it does not explicitly state"
     },
     {
       "a_turn_idx": 4,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' in turn 18 refers to SPEAKER_01, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 18) asks Congressman Clyburn about his policy ideas if he becomes Speaker, which is entirely unrelated to assumption A (turn 4), which concerns the value of transparency and exposing hidden information. While both involve political accountability, C does not state, verify, or even reference the idea"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' in turn 18 refers to SPEAKER_01, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 18) asks Congressman Clyburn about his policy ideas if he becomes Speaker, which is entirely unrelated to assumption A (turn 4), which concerns valuing transparency and exposing hidden information. While turn 17 mentions open hearings and uncovering evidence—somewhat aligned with transparency—"
     },
     {
       "a_turn_idx": 4,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, consistent with prior context. 'The base of Donald Trump' refers to his supporters.\",\n  \"reason\": \"Claim C (turn 11) discusses public disbelief in the seriousness of the allegations against Trump, specifically focusing on his base's lack of belief. However, it does not address or verify the earlier assumption A, which concerns the belief that public attention to political scandals increases credibility when multiple credible sources"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, consistent with prior context. 'The base of Donald Trump' refers to his supporters.\",\n  \"reason\": \"Claim C (turn 11) discusses public disbelief in the seriousness of the allegations against Trump, specifically focusing on his base's lack of belief. However, this does not address or verify assumption A, which concerns the belief that public attention to political scandals increases credibility when multiple credible sources produce evidence"
     },
     {
       "a_turn_idx": 4,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context. 'They' in 'they have just decided...' refers to Trump's base, aligning with prior discussion.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate aligned with his base's preferences, specifically rolling back policies from the Obama administration. While this touches on the broader theme of political influence, it does not explicitly verify or state the earlier assumption A,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with prior mentions. 'They' in 'they have just decided...' refers to Trump's base, as established in turn 11.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate aligned with his base's preferences, specifically rolling back policies from the Obama administration. While this touches on the broader idea of political influence, it does not explicitly verify or state the earlier assumption"
     },
     {
       "a_turn_idx": 4,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Congressman Clyburn' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) discusses Congressman Clyburn potentially becoming Speaker of the House, which is entirely unrelated to assumption A (turn 4), which concerns the belief that public attention to political scandals increases credibility when multiple credible sources provide evidence. There is no overlap in subject matter, logic, or content between the two statements. Therefore,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'Congressman Clyburn' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) discusses Congressman Clyburn potentially becoming Speaker of the House, which is entirely unrelated to assumption A (turn 4), which concerns the belief that public attention to political scandals increases credibility when multiple credible sources provide evidence. There is no overlap in subject matter, logic, or content between the two statements. Thus,"
     },
     {
       "a_turn_idx": 4,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context of the conversation. 'They' in 'They don't believe Donald Trump' refers to the base of Donald Trump, as established in turn 11.\",\n  \"reason\": \"Claim C explicitly states that 'They don't believe Donald Trump by any means,' which directly verifies the assumption in A that the speaker trusts the authenticity of the tapes. The trust in the tapes' authenticity"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context of the conversation. 'They' in 'They don't believe Donald Trump' refers to the base of Donald Trump, as established in turn 11.\",\n  \"reason\": \"Claim C explicitly states that 'they don't believe Donald Trump by any means,' which directly verifies the assumption in A that the speaker trusts the authenticity of the tapes. The trust in the tapes' authenticity"
     },
     {
       "a_turn_idx": 4,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'the tapes' in A refers to audio/video evidence from multiple sources (Michael Cohen, Omarosa), while C discusses political leadership succession involving Nancy Pelosi and Congressman Clyburn.\",\n  \"reason\": \"Claim C (turn 18) discusses a hypothetical scenario about leadership succession in the Democratic Party, specifically regarding Nancy Pelosi and Congressman Clyburn becoming Speaker of the House. This topic is entirely unrelated to the earlier assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the relationship between A and C. 'He' in C refers to Congressman Clyburn, but this does not connect to the authenticity of tapes in A.\",\n  \"reason\": \"Claim C discusses a potential leadership transition in the Democratic Party involving Nancy Pelosi and Congressman Clyburn, which is entirely unrelated to the authenticity of tapes mentioned in assumption A. There is no mention of tapes, their authenticity, or any trust in their veracity. The topics are distinct"
     },
     {
       "a_turn_idx": 4,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; claim C discusses James Clyburn's potential candidacy for Speaker of the House, while assumption A concerns trust in the authenticity of tapes. No shared subject matter.\",\n  \"reason\": \"Claim C is entirely unrelated to assumption A. A discusses trust in the authenticity of tapes involving political figures, while C discusses James Clyburn's potential run for Speaker of the House if Nancy Pelosi does not lead the Democrats. There is no overlap in topic, content, or implied"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. The entities and topics in turn 4 (tapes' authenticity) and turn 20 (Clyburn's potential run for Speaker) are entirely distinct.\",\n  \"reason\": \"Claim C (turn 20) discusses James Clyburn's potential candidacy for Speaker of the House contingent on Nancy Pelosi's decision, which is unrelated to the earlier assumption A (turn 4) about trusting the authenticity of tapes"
     },
     {
       "a_turn_idx": 4,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context. 'They' in 'they have just decided...' refers to the Republican base, aligning with earlier discussion of Republican reticence and later openness.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a political climate aimed at rolling back policies from the Obama administration, which directly verifies the earlier assumption A that Republican reticence followed by openness reflects a strategic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context of the discussion about Trump's actions and intentions.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a political climate aimed at rolling back policies from the Obama administration, which directly verifies the earlier assumption A that Republican reticence followed by openness reflects a strategic shift—here, a deliberate effort to reshape the political landscape. The claim goes beyond mere implication by naming"
     },
     {
       "a_turn_idx": 4,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with the context. 'They' in 'they have just decided...' refers to Trump's base, as established in turn 11.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate that rolls back progress made under Obama, aligning with the broader critique of his actions. However, it does not explicitly address or verify the earlier assumption A, which concerns the relevance and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, consistent with prior mentions. 'They' in 'they have just decided...' refers to Trump's base, as established in turn 11.\",\n  \"reason\": \"Claim C states that Trump is creating a political climate to roll back progress made under Obama, which aligns with the broader theme of political manipulation and resistance to accountability. However, it does not explicitly address or verify the earlier assumption A—that"
     },
     {
       "a_turn_idx": 4,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) discusses Congressman Clyburn potentially becoming Speaker of the House, which is entirely unrelated to assumption A (turn 4), which concerns the relevance and justification of disclosing personal details like sex lives in public discourse. There is no overlap in subject matter, nor does C verify, imply, or relate to A in any"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Congressman Clyburn's potential interest in becoming Speaker of the House, while assumption A concerns the relevance of disclosing personal details like sex lives in public discourse.\",\n  \"reason\": \"Claim C is entirely unrelated to assumption A. While A asserts that personal details such as sex lives are relevant and justified in public discourse, C discusses political aspirations and leadership roles within Congress. There is no overlap in subject matter, intent, or semantic content. Therefore,"
     },
     {
       "a_turn_idx": 5,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to the president (Mr. Trump), consistent with the context of prior turns discussing his actions and motivations.\",\n  \"reason\": \"Claim C explicitly states that any presidential pardon would not stem from sympathy but from self-protection, directly verifying the core idea in assumption A—that taping (or protective behavior) implies premeditated self-protection rather than routine documentation. The reasoning in C aligns with A’s assertion that individuals"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to the president (Mr. Trump), consistent with the context of prior turns discussing Trump's actions and motivations.\",\n  \"reason\": \"Claim C explicitly states that any presidential pardon of Paul Manafort would not be driven by sympathy but by self-protection, directly verifying the core idea in assumption A—that taping (or recording) is a sign of premeditated self-protection rather than routine documentation. The reasoning in C align"
     },
     {
       "a_turn_idx": 5,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, and 'this man' in turn 5 refers to Donald Trump. However, the claim in turn 13 is about a meeting involving Donald Trump Jr. and conspiracy-linked individuals, while assumption A discusses trust in power dynamics based on mutual suspicion. There is no direct or indirect connection between the two.\",\n  \"reason\": \"Turn 13 introduces a new factual claim about a meeting on June"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, and 'this man' in turn 5 refers to Donald Trump. However, the claim in turn 13 is about a meeting involving Donald Trump Jr. and conspiracy-related individuals, which is unrelated to the assumption in turn 5 about trust in power dynamics being contingent on mutual suspicion.\",\n  \"reason\": \"Turn 5 asserts that trust in power dynamics is based on mutual suspicion among individuals in such"
     },
     {
       "a_turn_idx": 5,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 5 refers to Omarosa, and 'he' refers to Trump. In turn 6, 'the CBC' refers to the Congressional Black Caucus, and 'her' refers to Omarosa. The claim in turn 6 is about not wanting to elaborate on the CBC matter, which is unrelated to the assumption in turn 5 about Obama's strategic actions.\",\n  \"reason\": \"Turn 5 assumes that Obama's actions were strategic and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 5 refers to Omarosa, and 'he' refers to Trump. In turn 6, 'the CBC' refers to the Congressional Black Caucus, and 'her' refers to Omarosa.\",\n  \"reason\": \"Claim C states the speaker does not wish to elaborate further on the matter involving the CBC, which is tangentially related to the discussion in turn 5 about Omarosa's actions and motivations. However, C does not address"
     },
     {
       "a_turn_idx": 5,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 5 refers to Obama, while 'Congressman Clyburn' in turn 18 is a different individual.\",\n  \"reason\": \"Claim C (turn 18) discusses a hypothetical scenario involving Nancy Pelosi and Congressman Clyburn's potential rise to Speaker of the House, which is entirely unrelated to assumption A (turn 5), which concerns Obama's strategic and calculated actions. There is no overlap in subject matter, semantics"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 5 refers to Obama, while 'Congressman Clyburn' in turn 18 is a different individual.\",\n  \"reason\": \"Claim C (turn 18) discusses a hypothetical scenario involving Nancy Pelosi and Congressman Clyburn becoming Speaker of the House, which is entirely unrelated to assumption A (turn 5), which concerns Obama's strategic and calculated actions. There is no overlap in subject matter, semantics, or implied"
     },
     {
       "a_turn_idx": 5,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between assumption A and claim C. The entities and topics in turn 5 (Obama's strategic actions) and turn 20 (Clyburn's potential run for Speaker) are entirely distinct.\",\n  \"reason\": \"Claim C (turn 20) discusses James Clyburn's potential candidacy for Speaker of the House contingent on Nancy Pelosi's decision, which is unrelated to assumption A (turn 5), which concerns Obama's perceived strategic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant between A and C; 'he' in A refers to Obama, while C discusses James Clyburn and Nancy Pelosi.\",\n  \"reason\": \"Claim C (turn 20) discusses James Clyburn's potential candidacy for Speaker of the House if Nancy Pelosi does not lead the Democrats, which is entirely unrelated to assumption A (turn 5), which concerns Obama's strategic, calculated behavior versus reactive actions. There is no overlap in subject, context, or"
     },
     {
       "a_turn_idx": 7,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 11 refers to the broader political situation involving the president's actions and the perceived lack of accountability, but it does not reference or address the specific claim about forgiveness and moral condemnation from turn 7.\",\n  \"reason\": \"Claim C (turn 11) discusses public disbelief in the appropriateness of the current political situation, particularly regarding the president's conduct and potential cover-ups. This is unrelated to assumption A (turn 7"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the broader political situation involving the president's actions and perceived cover-ups, particularly regarding Manafort and the investigation. However, there is no reference to forgiveness, moral condemnation, or the specific stance on forgiving a woman (as in turn 7).\",\n  \"reason\": \"Claim C discusses public disbelief in the appropriateness of the current political situation, particularly regarding the president’s conduct and potential pardons, but does not address forgiveness"
     },
     {
       "a_turn_idx": 7,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the context of criticism toward the president's credibility and actions.\",\n  \"reason\": \"Claim C states that the speaker does not believe Donald Trump is credible, which reflects a judgment about Trump's character and trustworthiness. However, this does not explicitly verify or state the earlier assumption A, which concerns forgiveness being compatible with moral condemnation without requiring endorsement. While both statements involve moral evaluation of a"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the context of criticism toward him in turns 10–12.\",\n  \"reason\": \"Claim C states that 'they don't believe Donald Trump by any means,' which expresses skepticism about Trump's credibility. However, this does not explicitly verify or state the earlier assumption A, which is about forgiveness being consistent with moral condemnation without requiring endorsement. While both statements involve moral judgment and personal"
     },
     {
       "a_turn_idx": 7,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 14 refers to the president (Donald Trump), and 'Mueller' refers to Robert Mueller, the special counsel. 'They' in 'the Supreme Court confessed to anything they want to' is ambiguous but likely refers to the Supreme Court justices.\",\n  \"reason\": \"Claim C states that the Supreme Court does not have to comply with legal requirements, suggesting judicial discretion beyond legal obligation. However, assumption A concerns forgiveness being compatible with moral"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 14 refers to the president (Donald Trump), and 'Mueller' refers to Robert Mueller, the special counsel. 'They' in 'the Supreme Court confessed to anything they want to' is ambiguous but likely refers to the Supreme Court justices.\",\n  \"reason\": \"Claim C (turn 14) states that the Supreme Court 'confessed to anything they want to,' implying it is not bound by legal requirements or precedent."
     },
     {
       "a_turn_idx": 7,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a political succession scenario involving Nancy Pelosi and Congressman Clyburn, which is unrelated to assumption A about forgiveness and moral condemnation.\",\n  \"reason\": \"Claim C discusses a hypothetical leadership transition in the Democratic Party, specifically regarding Nancy Pelosi and Congressman Clyburn becoming Speaker of the House. Assumption A concerns the compatibility of forgiveness with moral condemnation, particularly in the context of criticizing a woman's conduct. There is no semantic connection between the two statements—"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a political succession scenario involving Nancy Pelosi and Congressman Clyburn, which is unrelated to assumption A about forgiveness and moral condemnation.\",\n  \"reason\": \"Claim C discusses a hypothetical leadership transition in the Democratic Party, specifically regarding Nancy Pelosi and Congressman Clyburn becoming Speaker of the House. Assumption A concerns the compatibility of forgiveness with moral condemnation, particularly in the context of criticizing a woman's conduct while still choosing to forgive. The topics, themes,"
     },
     {
       "a_turn_idx": 7,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses James Clyburn's potential candidacy for Speaker of the House, which is unrelated to assumption A about forgiveness and moral condemnation.\",\n  \"reason\": \"Claim C discusses James Clyburn's potential run for Speaker of the House if Nancy Pelosi does not lead the Democrats, which is entirely unrelated to assumption A, which concerns forgiveness being consistent with moral condemnation without requiring endorsement. There is no overlap in subject matter, concept, or semantic content between the two"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'he' in C refers to James Clyburn, distinct from the subject in A.\",\n  \"reason\": \"Claim C discusses James Clyburn's potential candidacy for Speaker of the House if Nancy Pelosi does not lead the Democrats, which is entirely unrelated to assumption A, which concerns forgiveness being consistent with moral condemnation without requiring endorsement. There is no overlap in topic, concept, or semantic content between A and C. Therefore"
     },
     {
       "a_turn_idx": 9,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this man' in claim C refers to Paul Manafort, as established in the prior context (turn 9). The phrase 'he' in the earlier assumption A refers to the president, consistent with the discussion of presidential pardon.\",\n  \"reason\": \"Claim C explicitly states that any presidential pardon of Manafort would not be based on sympathy but on self-protection, which directly verifies the core substance of assumption A—that such a pardon would raise concerns about conflicts of interest or"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this man' in claim C refers to Paul Manafort, as established in the prior context (turn 9). The phrase 'he' in the assumption A refers to the president, consistent with the discussion of presidential pardon.\",\n  \"reason\": \"Claim C explicitly states that any presidential pardon of Manafort would not be based on sympathy but on self-protection, which directly verifies the core substance of assumption A—that a pardon would raise concerns about conflicts of interest or undue influence"
     },
     {
       "a_turn_idx": 9,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, consistent with prior discussion. 'This effort' refers to election-related misconduct, specifically tied to the June 9th meeting and broader election issues.\",\n  \"reason\": \"Claim C mentions concerns about election-related misconduct beyond the June 9th meeting, which aligns with the general theme of potential wrongdoing in turn 10. However, turn 10 focuses on credible evidence of environmental wrongdoing and criminal"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, consistent with prior discussion. 'This effort' refers to election-related misconduct, specifically tied to the June 9th meeting and broader election issues.\",\n  \"reason\": \"Claim C mentions 'ongoing concerns about election-related misconduct beyond just the June 9th meeting,' which aligns with the broader context of alleged criminal activity involving Trump. However, it does not explicitly verify the specific claim in A—that"
     },
     {
       "a_turn_idx": 10,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, consistent with prior discussion. 'This effort' refers to election-related misconduct, specifically tied to the June 9th meeting mentioned earlier.\",\n  \"reason\": \"Claim C mentions concerns about election-related misconduct beyond the June 9th meeting, which aligns with the broader theme of government misconduct discussed in assumption A. However, C does not explicitly state or verify the public's right to know about such misconduct"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump, consistent with prior discussion. 'This effort' refers to election-related misconduct, specifically tied to the June 9th meeting mentioned earlier.\",\n  \"reason\": \"Claim C mentions ongoing concerns about election-related misconduct beyond the June 9th meeting, which aligns with the broader theme of government misconduct and the need for transparency. However, it does not explicitly state or verify the specific claim in A—that the"
     },
     {
       "a_turn_idx": 11,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the president (Donald Trump), and 'this man' refers to the same individual. The phrase 'I would not be so concerned if I didn't know the history of this country' establishes a connection to historical knowledge, but the explicit claim in turn 12 ('The speaker is deeply informed about American history') is not directly stated or verified by the content.\",\n  \"reason\": \"Claim C asserts that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the president (Donald Trump), and 'this man' refers to Trump as well. The reference to 'Andrew Johnson' is a historical analogy used to support the argument about presidential misconduct.\",\n  \"reason\": \"Claim C states that the speaker is deeply informed about American history, which is a general self-assessment of knowledge. However, this does not make explicit or verify the earlier assumption A, which is that lying under"
     },
     {
       "a_turn_idx": 11,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, consistent with the context. 'This man' in turn 12 also refers to Donald Trump, aligning with the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a specific political climate—'a climate in which we can roll the clock back on a lot of things'—which directly verifies the substance of assumption A, that the current political scrutiny"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, consistent with the context. 'This man' in turn 12 also refers to Donald Trump, aligning with the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a specific political climate—'a climate in which we can roll the clock back on a lot of things'—which directly verifies the substance of assumption A, that the current political scrutiny parallels the"
     },
     {
       "a_turn_idx": 11,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, consistent with the subject of assumption A. 'This man' in turn 12 refers to Trump, aligning with the focus on Trump's base and actions.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a specific political climate—'a climate in which we can roll the clock back on a lot of things'—which directly verifies the substance of assumption A: that the Trump"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump. 'This man' in turn 12 refers to Donald Trump, consistent with prior mentions.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is actively creating a specific political climate aimed at rolling back progress made during the Obama administration. This directly verifies the substance of assumption A, which posits that the Trump base is ideologically aligned with dismissing criticism of its leader—by endorsing a leader whose"
     },
     {
       "a_turn_idx": 11,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in C refers to Congressman Clyburn, not the Trump base or any entity related to assumption A.\",\n  \"reason\": \"Claim C discusses a hypothetical leadership transition in the Democratic Party involving Nancy Pelosi and Congressman Clyburn, which is entirely unrelated to assumption A, which concerns the ideological alignment of the Trump base in dismissing criticism of Trump. There is no overlap in subject matter, content, or implied connection."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'He' in C refers to Congressman Clyburn, not the Trump base or any entity related to assumption A.\",\n  \"reason\": \"Claim C discusses a hypothetical leadership transition in the Democratic Party involving Nancy Pelosi and Congressman Clyburn, which is entirely unrelated to assumption A, which concerns the ideological alignment of the Trump base in dismissing criticism of Trump. There is no overlap in subject matter, content, or logical connection between"
     },
     {
       "a_turn_idx": 11,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Donald Trump, as established in the context. 'This man' in turn 12 also refers to Donald Trump, confirming coreference.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a specific political climate—'a climate in which we can roll the clock back on a lot of things'—which directly verifies the substance of assumption A, that public perception of political misconduct should be consistent across parties"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Donald Trump, as established in the context. 'This man' in turn 12 also refers to Donald Trump, consistent with prior mentions.\",\n  \"reason\": \"Claim C explicitly states that Donald Trump is intentionally creating a specific political climate—'a climate in which we can roll the clock back on a lot of things'—which directly verifies the substance of assumption A, that public perception of political misconduct should be"
     },
     {
       "a_turn_idx": 11,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' in turn 18 refers to SPEAKER_01, who is the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) asks Congressman Clyburn about his policy ideas if he becomes Speaker, which is entirely unrelated to assumption A (turn 11), which concerns public perception of political misconduct and consistency across parties. There is no mention, implication, or verification of A in C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Congressman Clyburn' refers to SPEAKER_01, who is the same individual throughout.\",\n  \"reason\": \"Claim C (turn 18) asks Congressman Clyburn about his policy ideas if he becomes Speaker, which is entirely unrelated to assumption A (turn 11), which concerns public perception of political misconduct being consistent across parties. There is no mention, implication, or verification of A in C. The topics diverge completely"
     },
     {
       "a_turn_idx": 11,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Congressman Clyburn' in C refers to the same individual as 'he' in the context, but this does not connect to assumption A.\",\n  \"reason\": \"Claim C discusses Congressman Clyburn's potential interest in becoming Speaker of the House, which is entirely unrelated to assumption A, which concerns public perception of political misconduct and consistency across parties. There is no overlap in subject matter, nor does C verify,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Congressman Clyburn' in C refers to the same individual as in the context, but this does not connect to the earlier assumption about public perception of political misconduct.\",\n  \"reason\": \"Claim C discusses the possibility of Congressman Clyburn becoming Speaker of the House, which is entirely unrelated to assumption A, which concerns public perception of political misconduct and consistency across parties. There is no overlap in subject matter, nor does"
     },
     {
       "a_turn_idx": 11,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 17 refers to the process of investigating the movement of funds, particularly in the context of transparency and accountability, as discussed in prior turns.\",\n  \"reason\": \"Claim C (turn 17) focuses on transparency in determining the location of funds, which is related to broader themes of accountability and oversight present in assumption A (turn 12). However, C does not explicitly state or verify the core idea that political figures must be"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 17 refers to the process of investigating the movement of funds, as discussed in the broader context of transparency and accountability.\",\n  \"reason\": \"Claim C discusses the need for transparent processes to determine the location of funds, which relates to accountability but does not explicitly state or verify the earlier assumption A that political figures should be held accountable through legal or constitutional mechanisms. While both touch on accountability and transparency, C focuses narrowly on financial tracking rather than"
     },
     {
       "a_turn_idx": 12,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to consultants who rely on analytics; 'you' refers to political strategists who prioritize data over human experience.\",\n  \"reason\": \"Claim C states that analytics should not determine political strategy, emphasizing the importance of human interaction and lived experience over data-driven models. While this reflects a broader skepticism toward procedural or mechanistic approaches, it does not explicitly address or verify the specific claim in assumption A—that political figures should be held accountable"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to consultants who rely on analytics; 'you' refers to political strategists who prioritize data over human experience.\",\n  \"reason\": \"Claim C states that analytics should not determine political strategy, emphasizing the importance of human interaction and lived experience over data-driven models. While this reflects a broader skepticism toward procedural or mechanical decision-making, it does not explicitly address or verify the specific claim in A—that political figures must be held accountable via"
     },
     {
       "a_turn_idx": 13,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the investigative process and its outcomes discussed in assumption A, particularly the idea that the investigation's result matters regardless of indictment.\",\n  \"reason\": \"Claim C explicitly states that congressional actions should be guided by evidence, which directly verifies the core idea in assumption A—that the outcome of the investigation should matter irrespective of whether a prosecution occurs. Both emphasize that decisions must follow the facts, not political convenience, and C makes this principle explicit and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the investigative process and its outcomes, as established in the context of turn 13, particularly the idea that the investigation's outcome matters regardless of indictment.\",\n  \"reason\": \"Claim C explicitly states that congressional actions should be guided by evidence, which directly verifies the substance of assumption A—that the outcome of the investigation should matter regardless of prosecution. The emphasis on following evidence and conducting fair hearings aligns precisely with the core idea in"
     },
     {
       "a_turn_idx": 13,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Donald Trump. Turn 18 discusses Congressman Clyburn's potential role as Speaker of the House, which is unrelated to the assumption about the investigation's outcome regardless of prosecution.\",\n  \"reason\": \"Turn 18 introduces a completely different topic—Congressman Clyburn's potential leadership role in the House—without addressing or verifying the earlier assumption that the outcome of the investigation should matter regardless of prosecution. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Congressman Clyburn, who is the subject of the discussion. 'You' in turn 18 refers to Clyburn, addressing him directly.\",\n  \"reason\": \"Claim C (turn 18) asks Congressman Clyburn whether he wants to become Speaker of the House, which is entirely unrelated to assumption A (turn 13), which concerns the importance of the investigation's outcome regardless of prosecution. There is"
     },
     {
       "a_turn_idx": 13,

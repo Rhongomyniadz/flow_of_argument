@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'the murder of Sidu' in both turn 1 and turn 26; 'Killing Cole' is likely a misstatement or shorthand for the same event, as the context confirms the focus is on Sidu's murder.\",\n  \"reason\": \"Turn 26 explicitly states that the murder of Sidu is part of a 'World of Secrets,' which directly verifies the assumption in turn 1 that the killings are tied to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'the murder of Sidu' in both turn 1 and turn 26; 'Killing Cole' is likely a misstatement or shorthand for the murder of Sidu, as the context consistently ties the investigation to Sidu's death.\",\n  \"reason\": \"Turn 26 explicitly states that the murder of Sidu is part of a 'World of Secrets,' which directly verifies the assumption in turn 1 that the killings are"
     },
     {
       "a_turn_idx": 1,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Killing Cole' in turn 29 refers to the murder of Cole mentioned in turn 1, establishing direct coreference.\",\n  \"reason\": \"Claim C explicitly identifies 'Killing Cole' as a topic or episode within 'World of Secrets', which directly verifies the connection between the murder of Cole and the broader narrative context introduced in assumption A. This confirms that the event is part of a larger pattern discussed in the series, aligning with the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'World of Secrets that Killing Cole' refers to the episode or topic titled 'Killing Cole' within the 'World of Secrets' series.\",\n  \"reason\": \"Claim C explicitly identifies 'Killing Cole' as a topic or episode within 'World of Secrets', which directly verifies the assumption in A that the murder of Cole is part of a broader narrative or pattern covered in a media investigation. The connection between the murder of Cole and the larger"
     },
     {
       "a_turn_idx": 3,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"SPEAKER_04 refers to themselves as 'I'm Rodney Williams and I'm Travis Holloway' in both turn 5 and turn 30; the pronoun 'we' in turn 5 and 'everyone' in turn 30 refer to the diverse audience of the podcast.\",\n  \"reason\": \"Claim C explicitly states that 'building wealth doesn't look the same for everyone,' which directly verifies the substance of assumption A—that there is a common misconception"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"SPEAKER_04 refers to themselves as 'I'm Rodney Williams and I'm Travis Holloway' in both turn 5 and turn 30; the phrase 'building wealth doesn't look the same for everyone' is identical in both turns.\",\n  \"reason\": \"Claim C explicitly restates the core idea from assumption A—that there is no universal path to wealth-building—using nearly identical wording. The repetition confirms the explicit verification of the earlier assumption without ambiguity.\""
     },
     {
       "a_turn_idx": 5,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the idea of coping with financial hardship discussed in previous turns. 'Well Break podcast' is a likely variant spelling of 'Wealthbreak Podcast', which is the actual name mentioned earlier.\",\n  \"reason\": \"Claim C mentions a podcast called 'Well Break' that addresses the topic of wealth and coping with financial hardship, which relates to the broader theme of challenging assumptions about wealth-building. However, it does not explicitly state"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the idea of coping with financial hardship discussed in previous turns, but does not explicitly reference the misconception about a universal wealth-building path.\",\n  \"reason\": \"Claim C mentions a podcast called 'Well Break' that addresses the topic of coping with financial hardship, which is related to the broader theme of non-universal wealth-building paths. However, it does not explicitly state or verify the existence of a common misconception about a universal"
     },
     {
       "a_turn_idx": 6,
@@ -664,9 +664,9 @@
       "c_time": 484.063,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; claim C is unrelated to assumption A.",
-      "reason": "Claim C discusses investment accounts, financial disclosures, and public.com services, which are entirely unrelated to the topic of public safety risks for political figures in unsecured locations. There is no mention, implication, or verification of assumption A in claim C.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses investment accounts, financial disclosures, and public.com services, which are entirely unrelated to the topic of public safety risks for political figures in unsecured locations. There is no mention, implication, or verification of assumption A in claim C.\"\n}\n```"
+      "coref_notes": "No coreference links relevant; 'public.com' refers to a financial platform, not public safety.",
+      "reason": "Claim C discusses investment disclosures and financial services at public.com, which is entirely unrelated to the public safety concerns about political figures being unsecured in public places mentioned in assumption A. There is no overlap in semantic content, and C neither states nor verifies A. The topic shift is abrupt and irrelevant.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'public.com' refers to a financial platform, not public safety.\",\n  \"reason\": \"Claim C discusses investment disclosures and financial services at public.com, which is entirely unrelated to the public safety concerns about political figures being unsecured in public places mentioned in assumption A. There is no overlap in semantic content, and C neither states nor verifies A. The topic shift is abrupt and irrelevant.\"\n}\n```"
     },
     {
       "a_turn_idx": 10,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 20 refers to local firefighters, but this is unrelated to the assumption in turn 17 about law enforcement resources for immigration-related traffic risks.\",\n  \"reason\": \"Turn 20 discusses ongoing work related to local firefighters, which is a separate topic from the concern in turn 17 about insufficient resources for managing immigration-related traffic risks. There is no mention of immigration, traffic, or law enforcement in turn 20, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 20 refers to local firefighters, as established by the context of discussing support for first responders.\",\n  \"reason\": \"Claim C (turn 20) discusses ongoing work related to local firefighters, which is unrelated to assumption A (turn 17), which concerns the lack of resources for local law enforcement agencies to manage immigration-related traffic risks. While both touch on local public safety, C does not address or verify the specific issue of"
     },
     {
       "a_turn_idx": 17,

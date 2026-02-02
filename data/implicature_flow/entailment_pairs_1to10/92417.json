@@ -1,0 +1,42 @@
+{
+  "episode_id": "92417",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 2,
+      "a_time": 48.361,
+      "a_idx_in_turn": 3,
+      "assumption_text": "A partisan divide on economic issues like inflation reflects broader political polarization.",
+      "c_turn_idx": 6,
+      "claim_text": "A 'wall'—likely referring to economic or political isolation—is being created.",
+      "overlap_score": 2,
+      "c_time": 158.638,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 6 refers to the international coalition (e.g., U.S., Germany, Switzerland) freezing Russian assets, and 'this wall' refers to the economic sanctions and isolation measures against Russia.\",\n  \"reason\": \"Claim C mentions the creation of a 'wall' related to economic isolation, which aligns with the broader theme of political and economic division mentioned in assumption A. However, C does not explicitly state or verify the partisan divide on inflation"
+    },
+    {
+      "a_turn_idx": 7,
+      "a_time": 191.984,
+      "a_idx_in_turn": 3,
+      "assumption_text": "Bipartisan cooperation is necessary for effective policy change.",
+      "c_turn_idx": 8,
+      "claim_text": "Reducing prescription drug costs is a necessary policy goal.",
+      "overlap_score": 2,
+      "c_time": 217.685,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 8 refers to Congress and the President, consistent with the collaborative tone in turn 7. 'Prescription drug calls' is a likely misstatement for 'prescription drug costs', resolved via context.\",\n  \"reason\": \"Claim C explicitly identifies reducing prescription drug costs as a necessary policy goal. This aligns with the substance of assumption A, which asserts that bipartisan cooperation is necessary for effective policy change. While C does not explicitly mention bip"
+    }
+  ]
+}

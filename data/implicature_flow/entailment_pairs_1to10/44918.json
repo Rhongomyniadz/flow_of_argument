@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 50 refers to 'people' in general, not linked to any prior entity in turn 42.\",\n  \"reason\": \"Claim C (turn 50) discusses public perception of politicians using derogatory language, which is unrelated to assumption A (turn 42), which concerns the speaker's expectation about the addressee's residential plans in D.C. There is no overlap in semantic content or logical connection"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 50 refers to 'people' who hold negative views of politicians.\",\n  \"reason\": \"Claim C (turn 50) discusses public perception of politicians as 'scum of the earth' and the use of derogatory language, which is unrelated to assumption A (turn 42), which concerns the speaker's expectation about the addressee's residential plans in D.C. There is no overlap in semantic content"
     },
     {
       "a_turn_idx": 42,
@@ -2027,11 +2027,11 @@
       "claim_text": "The speaker does not believe that term limits alone will solve all political problems.",
       "overlap_score": 2,
       "c_time": 1535.134,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 61) discusses the speaker's stance on term limits and voter misconceptions about his re-election intentions. Assumption A (turn 43) concerns whether a politician's base location determines effective constituent service. These topics are unrelated—C addresses re-election and policy reform, while A addresses geographic residence and representation effectiveness. There is no overlap in semantic"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'I' refers to SPEAKER_02 throughout.",
+      "reason": "Claim C (turn 61) discusses the speaker's view on term limits and the misconception that he will serve only one term. This is unrelated to assumption A (turn 43), which concerns whether a politician's base location determines effective constituent service. There is no overlap in semantic content or logical connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 61) discusses the speaker's view on term limits and the misconception that he will serve only one term. This is unrelated to assumption A (turn 43), which concerns whether a politician's base location determines effective constituent service. There is no overlap in semantic content or logical connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 43,
@@ -2061,7 +2061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 46 refers to the speaker (SPEAKER_02), and 'required attendance' refers to the time spent in DC, which the speaker previously mentioned as approximately 90 nights per year.\",\n  \"reason\": \"Claim C states that the listener (the speaker) is required to be in DC for 90 units of time, which aligns with the speaker's earlier mention of being in Washington for about 90"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 46 refers to the speaker (SPEAKER_02), and '90' refers to the 90 nights per year mentioned in turn 41.\",\n  \"reason\": \"Claim C states that the listener (the speaker) is required to be in DC for 90 units of time, which aligns with the earlier mention of 90 nights a year in turn 41. However, this does"
     },
     {
       "a_turn_idx": 43,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to Club for Growth, a group mentioned earlier in the conversation. The term 'miracle' in turn 67 refers to the unexpected endorsement and financial support from Club for Growth.\",\n  \"reason\": \"Turn 67 states that the speaker views the endorsement and financial support from Club for Growth as a miracle, emphasizing its significance and timing. However, this does not explicitly or directly verify the earlier assumption in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 67 refers to Club for Growth, a group mentioned earlier in the conversation. The term 'miracle' in turn 67 refers to the unexpected endorsement and financial support from Club for Growth.\",\n  \"reason\": \"Turn 67 states that the speaker views the endorsement and financial support from Club for Growth as a miracle, emphasizing its significance and timing. However, this does not explicitly address or verify the earlier assumption in turn"
     },
     {
       "a_turn_idx": 46,
@@ -2346,7 +2346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, consistent with earlier turns. 'People' in turn 61 refers to voters and interested individuals mentioned in turn 60.\",\n  \"reason\": \"Turn 61 discusses public perception that SPEAKER_02 will serve only one term, which he clarifies is not explicitly stated by him. This contrasts with assumption A in turn 47, which claims his group has influence"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, consistent with earlier turns. 'People' in turn 61 refers to voters and interested individuals mentioned in turn 60.\",\n  \"reason\": \"Turn 61 discusses public perception that SPEAKER_02 will serve only one term, which he clarifies is not an explicit claim he has made. This indirectly relates to assumption A (turn 47), which suggests his"
     },
     {
       "a_turn_idx": 47,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, who is also the speaker in turn 47. The 'US Term Limits Amendment Organization' is a specific entity mentioned in C.\",\n  \"reason\": \"Turn 61 mentions an endorsement from the US Term Limits Amendment Organization, which is a political/institutional group. However, this does not explicitly confirm or verify the assumption in turn 47 that the speaker’s group has"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, who is also the speaker in turn 47. The organization mentioned ('US Term Limits Amendment Organization') is a specific entity, and its endorsement is presented as a fact.\",\n  \"reason\": \"Turn 61 mentions an endorsement by the US Term Limits Amendment Organization, which is a specific institutional recognition. However, this does not explicitly confirm or verify the broader claim in turn 4"
     },
     {
       "a_turn_idx": 47,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 49 refers to the political group in power, consistent with the context of Republican control of the House, Senate, and the executive office mentioned in turn 48.\",\n  \"reason\": \"Turn 49 explicitly uses the metaphor 'make hay while the sun's shining' to convey urgency in decision-making due to a temporary political window, directly supporting the assumption in turn 48 that political alignment (Republican control) influences the speed"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 49 refers to the political group mentioned in turn 48 (Republicans in the House, Senate, and executive office). The phrase 'make hay while the sun's shining' explicitly frames the current political moment as a limited window for action, which directly supports the idea that political alignment (Republican control) enables faster decision-making due to urgency.\",\n  \"reason\": \"Turn 49 explicitly uses the farming analogy to convey that the current"
     },
     {
       "a_turn_idx": 48,
@@ -2466,7 +2466,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 50 refers to SPEAKER_02, but the claim in C is about general public perception of politicians, not about the office's discretion to act quickly. The term 'scum of the earth' is used to describe a negative stereotype, not an operational assumption about speed or political motivation.\",\n  \"reason\": \"Claim C discusses public disdain toward politicians using derogatory language, which is unrelated to the assumption in A that the office"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 50 refers to SPEAKER_02, but the claim in C is about general public perception of politicians, not about the office's discretion to act quickly. The term 'scum of the earth' is used to describe a negative stereotype, not an operational assumption about speed or political motivation.\",\n  \"reason\": \"Claim C discusses public disdain for politicians using derogatory language, which is unrelated to the assumption in A that the office"
     },
     {
       "a_turn_idx": 48,
@@ -2627,11 +2627,11 @@
       "claim_text": "The speaker voted but did so without strong emotional investment.",
       "overlap_score": 2,
       "c_time": 1364.584,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "SPEAKER_01 refers to themselves; 'you' in turn 57 refers to SPEAKER_02.",
-      "reason": "Claim C states that the speaker voted without strong emotional investment, which contradicts assumption A, which asserts that strong emotional language reflects genuine public sentiment rather than exaggeration. The speaker in C explicitly denies strong emotional investment, undermining the idea that emotion indicates authenticity. Thus, C contradicts A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to themselves; 'you' in turn 57 refers to SPEAKER_02.\",\n  \"reason\": \"Claim C states that the speaker voted without strong emotional investment, which contradicts assumption A, which asserts that strong emotional language reflects genuine public sentiment rather than exaggeration. The speaker in C explicitly denies strong emotional investment, undermining the idea that emotion indicates authenticity. Thus, C contradicts A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to themselves; 'you' in turn 57 refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 57) states that the speaker voted without strong emotional investment, which directly contradicts assumption A (turn 50), which asserts that strong emotional language reflects genuine public sentiment rather than exaggeration. The speaker in C explicitly denies strong emotional investment, undermining the idea that emotion indicates authenticity. Thus, C"
     },
     {
       "a_turn_idx": 50,
@@ -2661,7 +2661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'it' in turn 80 refers to the regional business, not related to the emotional language or public sentiment in turn 50.\",\n  \"reason\": \"Claim C discusses treating a business as an investment, which is unrelated to the assumption A about emotional language reflecting genuine public sentiment. There is no overlap in topic, concept, or semantic content between A and C. The claims address entirely different domains—political sentiment versus business management—and C neither"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'it' in turn 80 refers to the regional business, not related to the emotional language or public sentiment in turn 50.\",\n  \"reason\": \"Claim C discusses treating a business as an investment rather than an actively managed operation, which is entirely unrelated to the assumption A about emotional language reflecting genuine public sentiment. There is no overlap in topic, concept, or semantic content between A and C. Therefore, the claim does not support,"
     },
     {
       "a_turn_idx": 51,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'one' in turn 53 refers to the person considering a political career, specifically Speaker_01's interlocutor. In turn 54, 'why someone would want to do something' directly refers to the same question about motivations for entering politics, maintaining the same referent.\",\n  \"reason\": \"Claim C explicitly restates the core inquiry from assumption A—asking about the motivation behind pursuing politics—while framing it as reasonable. This directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'one' in turn 53 refers to the person considering a political career, specifically Speaker_01's interlocutor. In turn 54, 'why someone would want to do something' directly refers to the same inquiry about motivations for entering politics.\",\n  \"reason\": \"Claim C explicitly restates the core inquiry from assumption A—asking about the motivation behind pursuing politics—while framing it as reasonable. This directly verifies the substance of A, which"
     },
     {
       "a_turn_idx": 53,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker does not believe term limits alone will solve all political problems, which is a general statement about policy limitations. However, this does not explicitly or directly verify the earlier assumption A, which asserts that disagreement does not preclude productive dialogue or mutual respect. While both statements relate to political engagement, C addresses a different dimension"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 61 refers to SPEAKER_02, consistent with prior turns. 'People' and 'voters' refer to constituents mentioned in the broader context.\",\n  \"reason\": \"Claim C discusses the misconception that the speaker supports serving only one term, clarifying that he only supports a constitutional amendment limiting terms to three for the House and two for the Senate. While this implies openness to serving multiple terms, it does not directly address or"
     },
     {
       "a_turn_idx": 56,
@@ -2856,7 +2856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 82 refers to SPEAKER_02 addressing their own schedule.\",\n  \"reason\": \"Claim C (turn 82) discusses scheduling efficiency and travel logistics for visiting multiple counties, emphasizing time management during congressional trips. It does not address or verify the idea that disagreement does not preclude productive dialogue or mutual respect, which is the core of assumption A (turn 56). There is no mention of disagreement,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 82 refers to SPEAKER_02 addressing their own schedule.\",\n  \"reason\": \"Claim C (turn 82) discusses scheduling efficiency and travel logistics for visiting constituents, specifically mentioning delayed arrival in Washington, D.C. This is unrelated to assumption A (turn 56), which asserts that disagreement does not preclude productive dialogue or mutual respect. There is no mention of disagreement, dialogue, or mutual respect"
     },
     {
       "a_turn_idx": 56,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 80 refers to 'the business' mentioned in turn 78 and discussed throughout the context, particularly in relation to governance and management style.\",\n  \"reason\": \"Claim C states that the business should be treated primarily as an investment rather than an actively managed operation, which aligns with the idea in assumption A that financial and business expertise should play a central role in governance. While C does not explicitly mention governance, it reflects a results"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 80 refers to 'the business' mentioned in turn 78 and discussed throughout the context, particularly in relation to governance and management style.\",\n  \"reason\": \"Claim C states that the business should be treated primarily as an investment rather than an actively managed operation, which aligns with the idea that financial and business expertise should guide governance without direct operational control. This reflects the core sentiment of assumption A—that financial and business expertise should play"
     },
     {
       "a_turn_idx": 56,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 70 refers to the group mentioned in turn 68-69, which includes individuals who support Speaker_02 and wish to contribute positively to public life.\",\n  \"reason\": \"Turn 70 explicitly states that the individuals in question are 'smart people who love our country and want to help,' which directly verifies the core idea in assumption A—that faith perspectives (implied through values like love for country and desire to help"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 70 refers to the group mentioned in turn 68, which includes individuals who support the speaker and wish to contribute positively.\",\n  \"reason\": \"Turn 70 explicitly states that the individuals in question are 'smart people who love our country and want to help,' which directly verifies the core idea in assumption A—that faith perspectives can contribute positively to public discourse if presented carefully. While A focuses on faith perspectives, C generalizes to"
     },
     {
       "a_turn_idx": 57,

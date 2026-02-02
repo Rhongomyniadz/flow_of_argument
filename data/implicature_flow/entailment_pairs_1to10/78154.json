@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'many people' in C refers to citizens mentioned in the broader context, but does not relate to the belief about free offers in A.\",\n  \"reason\": \"Claim C discusses people's reluctance to act on gun violence, which is entirely unrelated to the assumption A about taking advantage of limited-time free offers to try new products. There is no overlap in subject matter, nor does C verify or state the substance of A. The topics are distinct and unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'many people' in C refers to citizens mentioned in the broader context, but does not relate to the assumption about free offers.\",\n  \"reason\": \"Claim C discusses people's reluctance to act on gun violence, which is unrelated to assumption A about taking advantage of limited-time free offers to try new products. There is no overlap in subject matter, intent, or semantic content. C contradicts the idea of proactive behavior in a different domain, but does"
     },
     {
       "a_turn_idx": 2,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"John Yarmouth refers to the same individual mentioned in turn 3; 'the third district' is consistent across both turns, though turn 3 specifies 'U.S. House of Representatives' while turn 15 specifies 'Kentucky's third district', which is a more specific geographic identification but does not contradict the original claim.\",\n  \"reason\": \"Turn 15 explicitly confirms that John Yarmouth is a longtime congressman for Kentucky's third district, which directly verifies the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"John Yarmouth refers to the same individual mentioned in turn 3; 'the third district' is consistent across both turns, though turn 15 specifies 'Kentucky's third district' while turn 3 only says 'third district'. The additional geographic specificity strengthens the identification without contradicting the original claim.\",\n  \"reason\": \"Turn 15 explicitly confirms that John Yarmouth is a longtime congressman for the third district in Kentucky, which directly verifies the assumption in turn"
     },
     {
       "a_turn_idx": 3,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"John Yarmouth refers to the former Congressman mentioned in turn 3; Thomas Massey is a member of Congress referenced in turn 15.\",\n  \"reason\": \"Claim C states that Thomas Massey is one of many members of Congress that John Yarmouth has worked with. While this implies familiarity with other members of Congress, it does not explicitly verify or state the earlier assumption A—that the audience recognizes John Yarmouth as a public figure with political experience. Although the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"John Yarmouth refers to the former Congressman mentioned in turn 3; Thomas Massey is a member of Congress referenced in turn 15.\",\n  \"reason\": \"Claim C states that Thomas Massey is one of many members of Congress that John Yarmouth has worked with. While this implies familiarity with other members of Congress, it does not explicitly verify or state the earlier assumption A, which is that the audience recognizes John Yarmouth as a public figure with political experience"
     },
     {
       "a_turn_idx": 3,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Thomas Massey, as established in the prior context. The claim in turn 18 concerns the depiction of a 12-year-old holding a weapon in a Christmas context, which is unrelated to the earlier assumption A about returning to a show constituting a meaningful interaction with a guest.\",\n  \"reason\": \"Assumption A (turn 3) centers on the idea that reappearing on a show represents a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 18 refers to Thomas Massey, as established in prior context.\",\n  \"reason\": \"Claim C (turn 18) discusses the appropriateness of a 12-year-old being depicted holding a weapon in a Christmas context, specifically criticizing Thomas Massey's Christmas card. Assumption A (turn 3) concerns the speaker's belief that returning to the show constitutes a meaningful interaction with the guest. These"
     },
     {
       "a_turn_idx": 3,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Thomas Massey, as established in turn 18. The phrase 'that's what he did' refers to Massey's creation of the Christmas card with weapons.\",\n  \"reason\": \"Claim C states that Thomas Massey has a 'genuine... affection for guns' and is a 'huge gun rights advocate,' which aligns with the idea that he has a strong personal connection to firearms. However, this"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Thomas Massey, as established in turn 18. 'That' in 'that Christmas card' refers to the image described in turn 18 where family members are holding long rifles.\",\n  \"reason\": \"Claim C states that Thomas Massey has a 'genuine... affection for guns' and is a 'huge gun rights advocate,' which aligns with the idea that he has a strong personal connection to"
     },
     {
       "a_turn_idx": 5,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to gun owners, which aligns with the subject of personal symbols (like the F pin) discussed in assumption A. The F pin symbolizes resistance to gun culture and political accountability, and claim C extends this by proposing systemic responsibility (insurance liability), thereby explicitly verifying the meaningful weight of personal symbols in shaping policy discourse.\",\n  \"reason\": \"Claim C explicitly addresses the symbolic and political significance of personal actions related to guns—such as"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to gun owners, which aligns with the subject of personal symbols (the F pin) discussed in assumption A. The F pin symbolizes resistance to gun culture and accountability, and claim C extends this by proposing legal responsibility (insurance) for gun owners, making the symbolic weight of personal actions explicit.\",\n  \"reason\": \"Claim C explicitly addresses the accountability of gun owners, which directly builds upon the symbolic significance of the F pin—"
     },
     {
       "a_turn_idx": 6,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_05, who is the same speaker as in assumption A. The phrase 'the F pin' refers to the pin mentioned in turn 6.\",\n  \"reason\": \"Claim C explicitly states that the speaker stopped wearing the F pin after ending their service in January due to the technical impossibility of receiving an F rating from the NRA. This directly verifies the substance of assumption A, which posits that the NRA"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_05, consistent with turn 6. 'the F pin' refers to the same object described in turn 6.\",\n  \"reason\": \"Claim C explicitly states that the speaker stopped wearing the F pin after ending their service in January due to the technical impossibility of receiving an F rating from the NRA. This directly verifies the reason given in assumption A, which claims the NRA removed its ratings due to the"
     },
     {
       "a_turn_idx": 6,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to politicians or lawmakers, as established by the prior discussion about legislative inaction and political incentives.\",\n  \"reason\": \"Claim C explicitly states that 'there are lots of things we can do' to address gun violence, which directly verifies the necessity of governmental and legislative responses implied in assumption A. The context confirms that the speaker is advocating for policy action, aligning precisely with A’s core claim. The statement is clear,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to 'politicians' or 'legislators' mentioned in turn 10, and 'we' refers to lawmakers or policymakers involved in legislative action.\",\n  \"reason\": \"Claim C explicitly states that 'there are lots of things we can do' to address gun violence, which directly verifies the necessity of governmental and legislative responses implied in assumption A. While A asserts the need for such responses, C confirms this by"
     },
     {
       "a_turn_idx": 7,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to 'many people' who do not want to take action on gun violence, which aligns with the broader group mentioned in turn 7 as needing to act (i.e., governmental and legislative actors). However, 'they' does not clearly refer back to the government or legislature specifically.\",\n  \"reason\": \"Claim C states that many people do not want to take action on gun violence, which touches on a barrier to legislative"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to 'many people' who do not want to take action on gun violence, which aligns with the broader group mentioned in turn 7 as needing to act (i.e., governmental and legislative actors). However, 'they' does not clearly refer back to the government or legislature specifically.\",\n  \"reason\": \"Claim C states that many people do not want to take action on gun violence, which touches on a barrier to implementing"
     },
     {
       "a_turn_idx": 7,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'states with the most lax laws', and 'the states with the strongest gun violence prevention measures' refers to states with stricter regulations. These are clear antecedents based on context.\",\n  \"reason\": \"Claim C explicitly states that states with the most lenient gun laws have the highest levels of gun violence, which directly verifies the core substance of assumption A—that governmental and legislative responses (i.e., stronger gun laws"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the states' in claim C refers to U.S. states mentioned in the broader context of gun policy and violence, consistent with the discussion of legislative and governmental responses in assumption A.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that states with lax gun laws have the highest gun violence, which directly supports the necessity of governmental and legislative action to reduce gun violence. The causal link between weak gun laws and high violence levels reinforces the need"
     },
     {
       "a_turn_idx": 7,

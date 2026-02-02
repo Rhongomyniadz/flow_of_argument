@@ -77,11 +77,11 @@
       "claim_text": "The speaker observed Steve Bannon’s demeanor during the verdict reading and after the hearing.",
       "overlap_score": 2,
       "c_time": 154.129,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 3 refers to Steve Bannon, as established in the context.\",\n  \"reason\": \"Turn 3 (C) discusses Steve Bannon's demeanor during and after the verdict, which is observational and descriptive. However, it does not address or verify the earlier assumption A—that public figures like Steve Bannon should comply with congressional subpoenas. The claim C is unrelated in substance to A, as it focuses on behavior rather than normative compliance. Therefore,"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'he' in turn 3 refers to Steve Bannon, as established in the context.",
+      "reason": "Claim C discusses Steve Bannon's demeanor during and after the verdict, which is unrelated to the earlier assumption A that public figures like Bannon should comply with congressional subpoenas. While C provides observational details about Bannon's behavior, it does not state, verify, or make explicit the normative claim in A. Therefore, it is clearly unrelated to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 3 refers to Steve Bannon, as established in the context.\",\n  \"reason\": \"Claim C discusses Steve Bannon's demeanor during and after the verdict, which is unrelated to the earlier assumption A that public figures like Bannon should comply with congressional subpoenas. While C provides observational details about Bannon's behavior, it does not state, verify, or make explicit the normative claim in A. Therefore, it is clearly unrelated to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 2,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_25 refers to 'Steve Bannon' as the subject of the claim; 'he' in turn 3 refers to Steve Bannon.\",\n  \"reason\": \"Claim C explicitly states that Steve Bannon has not turned over any information to the House Select Committee, which directly verifies the substance of assumption A — that the public has a right to know about the findings of the January 6th Select Committee — by highlighting a key obstacle to transparency: the refusal to provide information"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_25 refers to 'Steve Bannon' as the subject of the claim; 'he' in turn 3 refers to Steve Bannon.\",\n  \"reason\": \"Claim C explicitly states that Steve Bannon has not turned over any information to the House Select Committee, which directly verifies the substance of assumption A — that the public has a right to know about the findings of the January 6th Select Committee — by confirming that critical evidence remains withheld despite legal consequences. This supports"
     },
     {
       "a_turn_idx": 2,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 22, 'public' refers to publicly available information, aligning with the broader context of the January 6th Committee's disclosures. 'Something' is a placeholder referring to the committee's findings, specifically the evidence about Trump's actions endangering Pence's life.\",\n  \"reason\": \"Claim C states that the speaker has public information, which directly supports the substance of assumption A—that the public has a right to know about the committee's findings. While C does"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 22, 'public' refers to information accessible to the general public, aligning with the earlier assumption A about the public's right to know. 'Public about' is interpreted as 'public information,' resolving the coreference.\",\n  \"reason\": \"Claim C states 'I have public information about something,' which directly supports the substance of assumption A—that the public has a right to know about the January 6th Committee's findings. While C does not explicitly name"
     },
     {
       "a_turn_idx": 2,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to Steve Bannon, while 'Kevin McCarthy' in turn 28 is a different individual. The claim in C discusses a confrontation between Kevin McCarthy and Donald Trump, which is unrelated to the public's right to know about the January 6th Committee's findings.\",\n  \"reason\": \"Claim C discusses a separate event involving Kevin McCarthy and Donald Trump, which does not address or verify the public's right to know about the committee"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_21 refers to 'House GOP leader Kevin McCarthy' as the subject of the 'tense swearing match' with Donald Trump; 'he' in turn refers to McCarthy.\",\n  \"reason\": \"Claim C (turn 28) introduces a new, specific event—Kevin McCarthy having a 'tense swearing match' with Donald Trump on January 6th—which is not mentioned or implied in assumption A (turn 2). Assumption A concerns the public"
     },
     {
       "a_turn_idx": 2,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 28 refers to Kevin McCarthy, as established by context. 'They' refers to McCarthy and other individuals on the Hill.\",\n  \"reason\": \"Claim C (turn 28) discusses Kevin McCarthy appealing to Jared Kushner for help during January 6th, which is unrelated to assumption A (turn 2), which asserts the public's right to know about the January 6th Select Committee's findings. C does not state,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to Steve Bannon, while 'Kevin McCarthy' in turn 28 is a different individual. No coreference exists between the subjects of A and C.\",\n  \"reason\": \"Claim C discusses Kevin McCarthy appealing to Jared Kushner during January 6th, which is unrelated to assumption A, which asserts the public's right to know about the January 6th Select Committee's findings. C does not state, verify, or even"
     },
     {
       "a_turn_idx": 2,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the investigation conducted by the House Select Committee, as established in the surrounding context.\",\n  \"reason\": \"Claim C explicitly states that the select committee is conducting a 'serious investigation,' which directly verifies the substance of assumption A—that the public has a right to know about the findings of the January 6th Select Committee. The seriousness of the investigation is demonstrated through actions such as issuing subpoenas, uncovering missing text messages"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The 'select committee' in claim C refers to the January 6th Select Committee mentioned in assumption A. 'It' in turn 32 refers to the investigation conducted by the committee.\",\n  \"reason\": \"Claim C explicitly states that the select committee is conducting a 'serious investigation,' which directly verifies the substance of assumption A—that the public has a right to know about the findings of the January 6th Select Committee. The seriousness of the investigation is demonstrated through actions such"
     },
     {
       "a_turn_idx": 2,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 2 refers to the U.S. Secret Service, while 'Kevin McCarthy' in turn 28 is a different individual.\",\n  \"reason\": \"Claim C (turn 28) discusses a confrontation between Kevin McCarthy and Donald Trump on January 6th, which is unrelated to assumption A (turn 2), which asserts that the U.S. Secret Service possesses digital evidence about January 6th. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 2 refers to the U.S. Secret Service, while 'Kevin McCarthy' in turn 28 is a different individual.\",\n  \"reason\": \"Claim C (turn 28) discusses a personal confrontation between Kevin McCarthy and Donald Trump on January 6th, which is unrelated to assumption A (turn 2), which asserts that the U.S. Secret Service possesses digital evidence about January 6th. There is"
     },
     {
       "a_turn_idx": 2,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to House GOP leader Kevin McCarthy and others on the Hill, as clarified by the context.\",\n  \"reason\": \"Claim C states that Kevin McCarthy appealed to Jared Kushner for help during January 6th, which is unrelated to assumption A, which asserts that the U.S. Secret Service possesses relevant digital evidence about January 6th. While both involve January 6th and the Secret Service, C introduces a completely different claim"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to Kevin McCarthy and other individuals on the Hill, as clarified by the context.\",\n  \"reason\": \"Claim C states that Kevin McCarthy appealed to Jared Kushner for help during January 6th, which is unrelated to assumption A, which asserts that the U.S. Secret Service possesses relevant digital evidence about January 6th. There is no mention of digital evidence, the Secret Service's possession of data, or any verification of"
     },
     {
       "a_turn_idx": 2,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the U.S. Secret Service, as established in the context of the investigation into missing text messages following a subpoena from the House Select Committee.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by confirming that the U.S. Secret Service possesses relevant digital evidence—specifically, metadata from 10 devices indicating text messages were sent and received on January 5th and 6th. This directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the U.S. Secret Service, as established in the prior context (turn 30). 'These key dates' refers to January 5th and 6th, consistent with the timeline in turn 2.\",\n  \"reason\": \"Claim C explicitly confirms the existence of digital evidence—specifically metadata from 10 devices—indicating text messages were sent and received on January 5th and 6"
     },
     {
       "a_turn_idx": 3,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the House Select Committee, as established by context; 'them' in turn 31 refers to the Secret Service agents.\",\n  \"reason\": \"Claim C states that the House Select Committee issued a subpoena to investigate missing text messages, which directly supports the broader context of the committee's investigative authority and actions. While assumption A (turn 3) focuses on public celebration reflecting shared democratic values, C does not explicitly mention"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the House Select Committee, as established by the context of the subpoena being issued by the committee.\",\n  \"reason\": \"Claim C states that the House Select Committee issued a subpoena to investigate missing text messages, which directly supports the broader context of the committee's investigative authority and actions. While assumption A (turn 3) focuses on public celebration reflecting shared democratic values, the act of issuing a subpoena aligns with the committee"
     },
     {
       "a_turn_idx": 3,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the House Select Committee's investigation into the January 6th events, as established in the surrounding context.\",\n  \"reason\": \"Claim C explicitly states that the Select Committee is conducting a 'serious investigation,' which directly verifies the substance of assumption A—that the Committee’s mission is essential to democratic integrity. The context confirms that the investigation involves subpoenas, witness interviews, and coordination with law enforcement, reinforcing its seriousness and constitutional"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 32 refers to the House Select Committee's investigation into the January 6th events, as established in the surrounding context.\",\n  \"reason\": \"Claim C explicitly states that the Select Committee is conducting a 'serious investigation,' which directly verifies the substance of assumption A—that the Committee’s mission is essential to democratic integrity. The context confirms that the investigation involves subpoenas, witness interviews, and coordination with law enforcement, reinforcing its seriousness and importance"
     },
     {
       "a_turn_idx": 4,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to Steve Bannon; 'the speaker' in turn 11 refers to SPEAKER_21, who is discussing Donald Trump, not Bannon.\",\n  \"reason\": \"Turn 4 asserts that Steve Bannon believes his actions are aligned with constitutional principles. Turn 11 claims that Donald Trump has criminal exposure, which is a different individual and a distinct legal claim. There is no mention of constitutional alignment or belief in the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to Steve Bannon; 'the speaker' in turn 11 refers to SPEAKER_21, who is discussing Donald Trump. There is no coreference between the speaker in turn 4 and the speaker in turn 11.\",\n  \"reason\": \"Turn 4 asserts that Steve Bannon believes his actions are aligned with constitutional principles. Turn 11 claims that Donald Trump has criminal exposure, which is a different individual"
     },
     {
       "a_turn_idx": 5,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to Steve Bannon. Turn 11 discusses Donald Trump's criminal exposure, which is unrelated to the claim about Bannon's 'bulletproof appeal'.\",\n  \"reason\": \"Turn 5 asserts that Steve Bannon's legal team described their appeal as 'bulletproof', expressing belief in the strength of the appeal. Turn 11 shifts focus entirely to Donald Trump's potential criminal liability, making no reference to Bannon, appeals, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the president' in turn 11 refers to Donald Trump, consistent with prior context.\",\n  \"reason\": \"Turn 5's assumption A is that the appeal is 'bulletproof,' implying strong legal grounds or inevitability. Turn 11 claims the president has 'criminal exposure,' which is a separate legal assessment about potential prosecution. While both relate to legal consequences, C does not state or verify the substance of A—namely,"
     },
     {
       "a_turn_idx": 6,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to President Trump, as established in the context of the discussion about his actions and statements on January 6th.\",\n  \"reason\": \"Claim C explicitly states that the missing text messages provide insight into President Trump's thinking during the events of January 6th, which directly verifies the substance of assumption A—that the integrity of digital evidence like text messages is relevant to understanding those events. The connection is clear and direct, with"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 36 refers to President Trump, as established in the context of the discussion about his actions and statements on January 6th.\",\n  \"reason\": \"Claim C explicitly states that the missing text messages provide insight into President Trump's thinking during the events of January 6th, which directly verifies the substance of assumption A—that the integrity of digital evidence like text messages is relevant to understanding those events. The connection is clear and direct, as"
     },
     {
       "a_turn_idx": 6,
@@ -681,7 +681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 28, 'he' refers to Kevin McCarthy, and 'they' refers to McCarthy and other members of Congress on the Hill. The mention of 'January 6th' aligns with the timeline in assumption A.\",\n  \"reason\": \"Claim C mentions a tense interaction between Kevin McCarthy and Donald Trump on January 6th, which is temporally and contextually related to the January 6th investigation discussed in assumption A. However, C does not address"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 28 refers to House GOP leader Kevin McCarthy and other individuals on the Hill, as clarified by the context.\",\n  \"reason\": \"Claim C mentions a tense interaction between Kevin McCarthy and Donald Trump on January 6th, which is a specific event related to the day. However, it does not address or verify the relevance of digital evidence integrity—specifically text messages—as stated in assumption A. While both involve January 6th and"
     },
     {
       "a_turn_idx": 6,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the House Select Committee, which is explicitly named and contextually consistent with the earlier assumption about the relevance of digital evidence to the January 6th investigation.\",\n  \"reason\": \"Claim C explicitly states that the House Select Committee issued a subpoena to investigate missing text messages, directly verifying the relevance of digital evidence (text messages) to the January 6th investigation mentioned in assumption A. The connection between the subpoena and the investigation into"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the House Select Committee, which is the subject of the action in both A and C. The 'missing text messages' in C directly refer to the same digital evidence mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the House Select Committee issued a subpoena to investigate the missing text messages, which directly verifies the relevance of digital evidence—specifically text messages—to the January 6th investigation, as asserted in assumption"
     },
     {
       "a_turn_idx": 6,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the text message exchange relevant to the January 6th investigation, which is the subject of assumption A. 'The one person' refers to the individual who preserved the text message exchange.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that only one individual preserved the text message exchange relevant to the investigation, confirming the relevance of digital evidence (text messages) to understanding January 6th events. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the text message exchange relevant to the January 6th investigation, which is the same subject as assumption A. 'One person' refers to the individual who preserved the text message exchange.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that only one individual preserved the text message exchange relevant to the investigation, confirming the relevance of digital evidence (text messages) to understanding January 6th events. The"
     },
     {
       "a_turn_idx": 6,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those' in claim C refers to the missing text messages mentioned in assumption A. 'They' in the context refers to the 10 Secret Service personnel whose devices showed metadata indicating text activity.\",\n  \"reason\": \"Claim C explicitly states that the content of the missing text messages is unknown, which directly verifies the relevance of digital evidence (specifically text messages) to understanding January 6th events—precisely the substance of assumption A. The claim confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those' in claim C refers to the missing text messages mentioned in assumption A. The term 'content' in C corresponds directly to the relevance of digital evidence in A.\",\n  \"reason\": \"Claim C explicitly states that the content of the missing text messages is unknown, which directly verifies the substance of assumption A—that the integrity of digital evidence like text messages is relevant to understanding January 6th. By confirming the uncertainty of the content, C underscores the importance of"
     },
     {
       "a_turn_idx": 6,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the 24 individuals of interest to the IG, and '10 of 24 people' clearly refers to the same group mentioned in turn 6 (10 personnel whose text messages were missing). The term 'no recorded text messages' directly verifies the absence of digital evidence, which aligns with the relevance of digital evidence integrity in turn 6.\",\n  \"reason\": \"Claim C explicitly confirms that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 31 refers to the 10 individuals of interest to the IG, which aligns with the 10 personnel mentioned in turn 6. 'Those missing text messages' in turn 31 refers back to the unrecorded messages on the phones of the 10 personnel discussed in turn 6.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by confirming that 10 out of 2"
     },
     {
       "a_turn_idx": 6,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the VP's' in claim C refers to Vice President Mike Pence, as established in the context of the January 6th investigation and prior discussion of Trump's actions toward Pence.\",\n  \"reason\": \"Claim C states that there were radio communications from the VP's Secret Service, which implies that the Secret Service had access to and was monitoring or transmitting information related to the VP's security. This supports the substance of assumption A—that the U.S. Secret Service has"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the VP's' refers to Vice President Mike Pence, as established by context. 'Radio communications' refers to electronic communications involving the Secret Service protecting Pence.\",\n  \"reason\": \"Claim C states that there were radio communications from the VP's Secret Service, which implies the Secret Service had access to and was involved in monitoring or transmitting communications related to the VP’s security. This supports the substance of assumption A—that the U.S. Secret Service has access to and authority"
     },
     {
       "a_turn_idx": 6,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the U.S. Secret Service personnel mentioned in assumption A. 'The service' in C refers to the U.S. Secret Service.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by confirming that the U.S. Secret Service is actively cooperating with the committee, including determining availability of personnel for follow-up inquiries—this implies both access to and authority over personnel phone data, as required by A. The statement"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the U.S. Secret Service personnel mentioned in assumption A. 'The service' in C refers to the U.S. Secret Service.\",\n  \"reason\": \"Claim C explicitly confirms that the U.S. Secret Service is cooperating with the committee and is actively determining when personnel will be available for follow-up inquiries. This directly verifies the substance of assumption A—that the U.S. Secret Service has both access to and authority over personnel phone"
     },
     {
       "a_turn_idx": 6,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the U.S. Secret Service, as established in the context. 'Secret Service agents' and 'personnel' are coreferential, referring to the same group of individuals.\",\n  \"reason\": \"Claim C explicitly confirms that the U.S. Secret Service investigated and accessed metadata from 10 agents' phones around January 6, which directly verifies the assumption in A that the Secret Service has both access to and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the U.S. Secret Service, as established in the context. 'Secret Service agents' and 'personnel' are coreferential, referring to the same group of individuals.\",\n  \"reason\": \"Claim C explicitly confirms that the U.S. Secret Service investigated and obtained metadata showing that 10 agents were texting around January 6, which directly verifies the substance of assumption A—that the U.S. Secret Service"
     },
     {
       "a_turn_idx": 6,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the U.S. Secret Service, as established in the context of the investigation into missing text messages.\",\n  \"reason\": \"Claim C explicitly states that the investigation into the missing text messages was conducted by the Secret Service after January 6, which directly verifies the substance of assumption A—that the U.S. Secret Service has both access to and authority over personnel phone data. The claim confirms the Secret Service's active role in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 30 refers to the U.S. Secret Service, as established in the context of the investigation into missing text messages.\",\n  \"reason\": \"Claim C explicitly states that the investigation into the missing text messages was conducted by the Secret Service after January 6, which directly verifies the substance of assumption A—that the U.S. Secret Service has both access to and authority over personnel phone data. The claim confirms the Secret Service's role in investigating"
     },
     {
       "a_turn_idx": 6,

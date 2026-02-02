@@ -4431,7 +4431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 37 refers to SPEAKER_14, who is the same speaker as in turn 31. The claim 'I am not involved in any politics' directly contradicts the assumption in turn 31 that the speaker trusts the listener will recognize the significance of not having made a decision yet.\",\n  \"reason\": \"Turn 31 assumes the speaker expects the listener to understand the weight of not having made a decision, implying"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 37 refers to SPEAKER_14, who is the same speaker as in turn 31. The claim 'I am not involved in any politics' in turn 37 does not address the specific assumption in turn 31 about trusting the listener to recognize the significance of not having made a decision.\",\n  \"reason\": \"Turn 31 expresses an assumption that the listener understands the importance of the speaker's undecided status"
     },
     {
       "a_turn_idx": 31,
@@ -4626,7 +4626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to President Biden, who is mentioned in turn 32 as being involved in negotiations and having experience with the debt ceiling.\",\n  \"reason\": \"Claim C states that political leaders should prioritize national interest over partisan interests, which aligns with the substance of assumption A—that political leadership has sufficient control over fiscal outcomes to prevent default. The argument in turn 33 emphasizes that leaders must 'put politics aside' and act responsibly"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to President Biden, who is mentioned in turn 32 as being involved in negotiations and having experience in the Senate.\",\n  \"reason\": \"Claim C states that political leaders should prioritize national interest over partisan interests, which aligns with the substance of assumption A—that political leadership has sufficient control over fiscal outcomes to prevent default. The argument in turn 33 emphasizes that leaders must 'put politics aside' and act responsibly for"
     },
     {
       "a_turn_idx": 32,
@@ -4746,7 +4746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'we' in turn 35 refers to the United States government or the nation collectively, consistent with the context of fiscal policy and national debt discussed in turn 33.\",\n  \"reason\": \"Claim C explicitly states that 'For the past 21 years, the country has spent more money than it has taken in,' which directly verifies the core idea in assumption A—that unsustainable debt accumulation is a critical issue that must be addressed over short-term political post"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in both A and C refers to the U.S. government or national leadership, and 'the country' in C corresponds to the collective entity implied in A's discussion of national debt and policy decisions.\",\n  \"reason\": \"Claim C explicitly states that 'for the past 21 years, the country has spent more money than it has taken in,' which directly verifies the core idea in assumption A that 'you can't sustain the runaway debt that we"
     },
     {
       "a_turn_idx": 33,
@@ -7716,7 +7716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to a political figure previously discussed in the context of immigration rhetoric, likely a conservative commentator or politician. This 'he' is not connected to the speaker in turn 67, who is expressing concern about Paul Whelan's release.\",\n  \"reason\": \"Claim C asserts that 'he' has promoted anti-immigration views, which is unrelated to assumption A, where the speaker claims their lack of awareness implies no movement occurred"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to a political figure previously discussed in the context of immigration rhetoric, likely the same individual mentioned in prior turns. However, this claim is unrelated to the assumption in turn 67, which concerns the speaker's belief about lack of movement in securing a prisoner's release.\",\n  \"reason\": \"Assumption A (turn 67) is about the speaker's personal belief regarding the absence of progress in freeing a detained individual"
     },
     {
       "a_turn_idx": 67,
@@ -7986,7 +7986,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in C refers to Tucker Carlson and Fox News, not related to Evan Gerskovich or Paul.\",\n  \"reason\": \"Claim C discusses Tucker Carlson and Fox News wanting to move past a controversial topic related to white supremacy, while assumption A concerns the pattern of prisoner swaps involving Evan Gerskovich and Paul. There is no semantic connection between the two topics. C does not mention prisoners, swaps, trials, or any aspect of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in claim C refers to Tucker Carlson and Fox News, not related to Evan Gerskovich or Paul.\",\n  \"reason\": \"Claim C discusses Tucker Carlson and Fox News wanting to move past a controversial topic related to white supremacy, while assumption A concerns the pattern of prisoner swaps involving Evan Gerskovich and Paul. There is no semantic connection between the two topics. The mention of 'subject' in C does not refer to the"
     },
     {
       "a_turn_idx": 70,
@@ -8269,9 +8269,9 @@
       "c_time": 2527.222,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; claim C is unrelated to assumption A.",
-      "reason": "Claim C discusses personalization of sleep beds, specifically comfort settings on each side of the bed, while assumption A concerns the geopolitical impact of publicly criticizing high-level officials like Lavrov. There is no semantic connection between the two statements. Claim C does not mention politics, diplomacy, international relations, or criticism of officials, making it clearly unrelated to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses personalization of sleep beds, specifically comfort settings on each side of the bed, while assumption A concerns the geopolitical impact of publicly criticizing high-level officials like Lavrov. There is no semantic connection between the two statements. Claim C does not mention politics, diplomacy, international relations, or criticism of officials, making it clearly unrelated to A.\"\n}\n```"
+      "coref_notes": "No relevant coreference links; 'users' refers to individuals using a smartbed, unrelated to the topic of criticizing officials.",
+      "reason": "Claim C discusses personalizing sleep comfort on a smartbed, which is entirely unrelated to the political act of publicly criticizing high-level officials like Lavrov. There is no overlap in subject matter, context, or semantic content between A and C. The claims are on completely different topics, making the relationship clearly unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' refers to individuals using a smartbed, unrelated to the topic of criticizing officials.\",\n  \"reason\": \"Claim C discusses personalizing sleep comfort on a smartbed, which is entirely unrelated to the political act of publicly criticizing high-level officials like Lavrov. There is no overlap in subject matter, context, or semantic content between A and C. The claims are on completely different topics, making the relationship clearly unrelated.\"\n}\n```"
     },
     {
       "a_turn_idx": 73,
@@ -8391,7 +8391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"In turn 82, 'he' refers to Tucker Carlson, as established in the surrounding context (turns 77, 80, 81, 83).\",\n  \"reason\": \"Claim C states that 'he' has consistently promoted anti-immigration views, which aligns with the broader theme of white nationalism and anti-immigrant rhetoric discussed in the context (e.g., 'immigrants will make the country poorer, dirtier, and more divided"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to Tucker Carlson, as established in the surrounding context (turns 77, 80, 81).\",\n  \"reason\": \"Claim C asserts that 'he' (Tucker Carlson) has promoted anti-immigration views, which is unrelated to assumption A, which concerns the speaker's belief that their visibility on international media provides comfort to Paul, a hostage. There is no overlap in subject matter or"
     },
     {
       "a_turn_idx": 75,
@@ -8511,7 +8511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to Tucker Carlson, as established in the prior context where Carlson is the subject of discussion regarding his statements and actions on January 6th.\",\n  \"reason\": \"Claim C explicitly states that 'he' (Tucker Carlson) has consistently promoted anti-immigration views, which directly verifies the substance of assumption A—that the speaker has reliable access to accurate information about the date of the event—by confirming a pattern of behavior ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to Tucker Carlson, as established in the prior context involving his statements and actions on January 6th and his history of promoting controversial views.\",\n  \"reason\": \"Claim C explicitly states that 'he' (Tucker Carlson) has consistently promoted anti-immigration views, which directly verifies the substance of assumption A—that the speaker has reliable access to accurate information about the date of the event—by confirming a pattern of behavior ("
     },
     {
       "a_turn_idx": 78,
@@ -8721,7 +8721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 82, 'he' refers to the individual previously discussed in turns 80 and 81, who is associated with promoting anti-immigration rhetoric and white nationalist ideas.\",\n  \"reason\": \"Claim C explicitly states that 'he' has consistently promoted anti-immigration views, which directly verifies the substance of assumption A—that the speaker views activism as coercive and authoritarian—by linking the figure in question to a pattern of aggressive, ideologically driven rhetoric. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to the political figure previously discussed in turns 78–81, who is associated with white nationalist ideas and anti-immigration rhetoric.\",\n  \"reason\": \"Claim C explicitly states that 'he' has consistently promoted anti-immigration views, which directly verifies the substance of assumption A—that the speaker views activism as coercive and authoritarian—by linking it to the broader narrative of forcing societal compliance through inflammatory anti-immigration messaging"
     },
     {
       "a_turn_idx": 80,
@@ -8781,7 +8781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'the whole idea of a rising white nationalist movement' as a 'hoax', which aligns with the broader context of suppressing dissenting views, but does not explicitly address suppression of immigration criticism by activist groups.\",\n  \"reason\": \"Claim C discusses the 'Russia hoax' being analogous to the dismissal of white nationalism, implying both are false narratives. However, it does not explicitly state or verify the assumption that dissenting opinions about immigration are"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'the whole idea of a rising white nationalist movement' as a 'hoax', which aligns with the broader context of suppressing dissenting views. However, 'Russia hoax' is used as a metaphor here, not a direct statement about suppression of immigration dissent.\",\n  \"reason\": \"Claim C discusses the 'Russia hoax' being analogous to the dismissal of white nationalism, implying both are false narratives. While this touches on the theme of narrative"
     },
     {
       "a_turn_idx": 81,
@@ -8796,7 +8796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 89 refers to the argument previously discussed about white Christian values and the exclusion of non-white, non-Christian groups, as established in prior turns.\",\n  \"reason\": \"Claim C (turn 89) discusses the idea that the nation can be multicultural only if people conform to 'white Christian values,' which indirectly reflects the notion that non-conforming groups—particularly minorities—are being marginalized. However, it does not explicitly state or verify the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 89 refers to the argument previously discussed about white Christian values and the exclusion of non-white, non-Christian groups, as established in prior turns.\",\n  \"reason\": \"Claim C states that the nation can be multicultural as long as people conform to white Christian values, which implies a hierarchy where inclusion depends on adherence to a specific identity. While this reflects a related ideological stance to assumption A—namely, that demographic shifts threaten the dominant cultural"
     },
     {
       "a_turn_idx": 81,
@@ -8811,7 +8811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 89 refers to the argument presented earlier about white Christian values defining inclusivity, which is tied to the broader narrative in turn 81 about minority political influence leading to the marginalization of white people.\",\n  \"reason\": \"Claim C states that other groups disagree with the idea that fitting into white Christian values defines inclusivity in a multicultural nation. While this challenges the underlying premise of turn 81—that minority influence threatens white dominance—it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 89 refers to the argument presented on Tucker Carlson's show about the nation being founded on white Christian values and the requirement for others to conform to those values.\",\n  \"reason\": \"Claim C states that other groups disagree with the idea that fitting into white Christian values defines inclusivity in a multicultural nation. While this challenges the underlying premise of A—that minority political influence marginalizes white people—it does not explicitly state or verify the claim in A"
     },
     {
       "a_turn_idx": 81,
@@ -8841,7 +8841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'he' in turn 86, which resolves to the same individual discussed in turn 82 (likely Tucker Carlson), based on context.\",\n  \"reason\": \"Claim C (turn 86) states that the rise of a white nationalist movement is a hoax, directly contradicting assumption A (turn 82), where the speaker describes anti-immigration rhetoric as so harmful it amounts to 'trafficking'. While both relate"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'he' in turn 86, which resolves to the subject previously discussed (likely Tucker Carlson), consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker considers the idea of a rising white nationalist movement to be a hoax, which directly contradicts assumption A, where the speaker describes anti-immigration rhetoric as so harmful it warrants the term 'trafficking'. A implies serious concern about white nationalist ideology, while C"
     },
     {
       "a_turn_idx": 83,
@@ -8856,7 +8856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'every white supremacist organization' in turn 87; this aligns with the broader reference to 'white supremacist ideology' in turn 83, though the specific claim about organizational size does not directly address endorsement of ideology.\",\n  \"reason\": \"Claim C discusses the physical size of white supremacist organizations, implying their limited scale, but does not state or verify the core assertion in A—that promoting the great replacement theory constitutes endorsement of white supremacist"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'every white supremacist organization' in turn 87, which aligns with the broader category mentioned in turn 83 ('white supremacist talking points'). The phrase 'white nationalist' in turn 83 is linked to 'white supremacist ideology' in the assumption A.\",\n  \"reason\": \"Claim C discusses the size of white supremacist organizations, indirectly referencing the same ideological category as assumption A. However, it does not explicitly state or verify"
     },
     {
       "a_turn_idx": 83,
@@ -8871,7 +8871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 85 refers to Tucker Carlson, as established in prior turns (e.g., turn 83). 'His time at Fox News' clearly refers to Carlson's tenure.\",\n  \"reason\": \"Claim C explicitly states that 'he routinely argued for' something during his tenure at Fox News, which directly verifies the implication in assumption A that Fox News executives were aware of the ideological leanings of their on-air personalities—specifically, that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 85 refers to Tucker Carlson, as established in prior turns (e.g., turn 83). 'His time at Fox News' refers to Carlson's tenure, consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that 'he routinely argued for' something during his tenure at Fox News, which directly verifies the implication in assumption A that Fox News executives were aware of the ideological leanings of their on-air personalities—"
     },
     {
       "a_turn_idx": 83,
@@ -8961,7 +8961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in prior context (e.g., turn 83). 'This is a hoax' directly refers to the dismissal of the white nationalist movement, and 'just like the Russia hope that can' is a clear reference to the 'Russia hoax' narrative.\",\n  \"reason\": \"Claim C explicitly equates the dismissal of white nationalism as a 'hoax' with the 'Russia hoax,' thereby"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in prior context (e.g., 'he routinely argued for' in turn 85). The phrase 'this is a hoax' clearly refers to the dismissal of white nationalism, and the comparison to 'the Russia hoax' is explicitly stated.\",\n  \"reason\": \"Claim C explicitly equates the denial of a rising white nationalist movement with the 'Russia hoax,' directly verifying the substance of assumption"
     },
     {
       "a_turn_idx": 84,
@@ -9006,7 +9006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (turns 83-85). The phrase 'a rising white nationalist movement' directly corresponds to the concept in assumption A.\",\n  \"reason\": \"Claim C explicitly states that 'he dismissed the whole idea of a rising white nationalist movement,' which directly verifies the substance of assumption A—that the term 'white nationalist' is controversial or potentially inflammatory. By denying the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (e.g., 'Tucker Carlson' mentioned in turn 87). The phrase 'a rising white nationalist movement' directly corresponds to the concept in assumption A.\",\n  \"reason\": \"Claim C explicitly states that 'he dismissed the whole idea of a rising white nationalist movement,' which directly verifies the substance of assumption A—that the term 'white nationalist' is controversial or"
     },
     {
       "a_turn_idx": 85,
@@ -9021,7 +9021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in prior context (e.g., turn 83). The phrase 'this is a hoax' directly refers to the dismissal of the white nationalist movement, which is equated to the 'Russia hoax'.\",\n  \"reason\": \"Claim C explicitly states that the dismissal of the white nationalist movement as a hoax is analogous to the 'Russia hoax', directly verifying the speaker's belief that such claims"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in prior context (e.g., turn 83). The phrase 'this is a hoax' directly refers to the dismissal of the white nationalist movement, which is equated with the 'Russia hoax'.\",\n  \"reason\": \"Claim C explicitly states that the dismissal of the white nationalist movement ('this is a hoax') is analogous to the 'Russia hoax', thereby directly verifying the speaker's"
     },
     {
       "a_turn_idx": 85,
@@ -9036,7 +9036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (turn 85). The phrase 'the whole idea of a rising white nationalist movement' directly corresponds to the concept mentioned in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker dismisses the idea of a rising white nationalist movement as a hoax, which directly verifies the substance of assumption A—that the speaker wants to avoid engaging with or defining 'white"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (turn 85). The phrase 'the whole idea of a rising white nationalist movement' directly corresponds to the assumption in turn 85 about avoiding discussion of 'white nationalist'.\",\n  \"reason\": \"Claim C explicitly states that the speaker dismisses the idea of a rising white nationalist movement as a hoax, which directly verifies the earlier assumption in A that the speaker"
     },
     {
       "a_turn_idx": 85,
@@ -9051,7 +9051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (turns 83-85). The phrase 'dismiss the whole idea of a rising white nationalist movement' directly corresponds to the assumption in turn 85 about avoiding engagement with the term 'white nationalist'.\",\n  \"reason\": \"Claim C explicitly states that 'he dismissed the whole idea of a rising white nationalist movement,' which directly verifies the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in the prior context (turns 83-85). The phrase 'dismiss the whole idea of a rising white nationalist movement' directly corresponds to the assumption in turn 85 about avoiding engagement with the term 'white nationalist'.\",\n  \"reason\": \"Claim C explicitly states that 'he' (Tucker Carlson) dismissed the idea of a rising white nationalist movement, which directly"
     },
     {
       "a_turn_idx": 85,
@@ -9066,7 +9066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'he' in turn 86, which resolves to Tucker Carlson based on context (SPEAKER_05's prior mention). 'This is a hoax' refers to both the 'rising white nationalist movement' and the 'Russia hoax'.\",\n  \"reason\": \"Turn 86 explicitly equates the dismissal of a 'rising white nationalist movement' as a 'hoax' with the 'Russia hoax', thereby making clear the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 86 refers to Tucker Carlson, as established in prior context (e.g., turn 83). 'This is a hoax' refers back to the dismissal of the 'rising white nationalist movement'.\",\n  \"reason\": \"Claim C explicitly equates the denial of a 'rising white nationalist movement' with the 'Russia hoax', framing both as false narratives. This directly supports assumption A by showing the speaker avoids engaging with the term '"
     },
     {
       "a_turn_idx": 87,
@@ -9081,7 +9081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'this argument' in turn 89 refers back to the argument previously discussed in turn 87, specifically the idea that Tucker Carlson promoted the notion of the nation being founded on white Christian values.\",\n  \"reason\": \"Claim C explicitly states the exact argument that was assumed in A: that Tucker Carlson's show repeatedly advanced the idea that the nation was founded on white Christian values. This directly and unambiguously verifies the substance of assumption A, making"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this argument' in turn 89 refers back to the argument previously discussed in turn 87, specifically the idea that Tucker Carlson promoted the notion of the nation being founded on white Christian values.\",\n  \"reason\": \"Claim C explicitly states the core content of assumption A by directly identifying the argument forwarded on Carlson's show as the nation being founded on white Christian values. This matches exactly the substance of A, with no ambiguity or omission. The phrasing '"
     },
     {
       "a_turn_idx": 87,
@@ -9096,7 +9096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'other groups' in claim C refers to non-white Christian groups mentioned in the broader context, particularly in relation to the debate over national identity and inclusivity.\",\n  \"reason\": \"Claim C explicitly states that 'other groups say, that's not the point at all,' directly verifying the opposition to the idea presented in assumption A—that inclusivity in a multicultural nation requires conformity to white Christian values. This directly confirms the substance of A by highlighting a clear counter-argument"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'other groups' in claim C refers to non-white Christian groups mentioned in the broader context, particularly in relation to the debate over national identity and inclusivity.\",\n  \"reason\": \"Claim C explicitly states that 'other groups say, that's not the point at all,' directly verifying the opposition to the idea presented in assumption A—that inclusivity in a multicultural nation requires conformity to white Christian values. This directly confirms the substance of A by highlighting the disagreement from those who"
     },
     {
       "a_turn_idx": 87,
@@ -9111,7 +9111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Tucker Carlson and Fox News, as established in the prior context (turn 87 and 88). The phrase 'both individuals involved' aligns with the subjects mentioned in turn 87—Carlson and Fox News.\",\n  \"reason\": \"Claim C explicitly states that the subject is one that 'they'd both like to put very much behind them,' which directly verifies the assumption in A that it is reasonable to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Tucker Carlson and Fox News, as established in the prior context (turn 87 and 88). The phrase 'both individuals involved' aligns with the subjects mentioned in turn 87—Carlson and Fox News.\",\n  \"reason\": \"Claim C explicitly states that the subject is one that 'they'd both like to put very much behind them,' which directly verifies the assumption in A that a major media figure"
     }
   ]
 }

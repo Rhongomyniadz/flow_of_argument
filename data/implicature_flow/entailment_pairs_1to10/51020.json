@@ -1941,7 +1941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 29 refers to Mitch McConnell, and 'I' refers to Speaker_01. No mention of legislation or democratic reform.\",\n  \"reason\": \"Claim C discusses Mitch McConnell and the speaker's shared interest in preventing the closure of civilian conservation corps training centers, which is unrelated to the earlier assumption A about the relevance of two pieces of legislation to democratic reform. There is no overlap in subject matter, content, or intent"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' refers to SPEAKER_01. 'Your state' in turn 29 refers to Mitch McConnell's state (Kentucky), and 'I do too' indicates SPEAKER_01's state (Oregon) also has such centers.\",\n  \"reason\": \"Claim C states that both the speaker and Mitch McConnell represent states with civilian conservation corps training centers at risk of closure. This is unrelated to Assumption A, which asserts that the speaker believes"
     },
     {
       "a_turn_idx": 11,
@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established in the context of criticism toward presidential messaging on pandemic urgency.\",\n  \"reason\": \"Claim C explicitly states that the president's messaging conveys no urgency for aggressive pandemic measures, directly verifying the assumption in A that there is a standard or reference version (i.e., the president’s stance) against which actions are being evaluated. The claim clearly identifies the president’s position as undermining the need for immediate"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established in the context of criticism toward presidential messaging on pandemic urgency.\",\n  \"reason\": \"Claim C explicitly states that the president's messaging conveys a lack of urgency regarding the pandemic, which directly verifies the underlying assumption in A that there is a standard or reference version (in this case, the president’s stance) against which other positions (like the need for aggressive action) are being evaluated. The"
     },
     {
       "a_turn_idx": 11,
@@ -1997,11 +1997,11 @@
       "claim_text": "I am wondering whether you have time for two quick questions.",
       "overlap_score": 2,
       "c_time": 2123.706,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'you' in turn 25 refers to SPEAKER_01, consistent with prior context.",
-      "reason": "Turn 25 is a procedural inquiry about time for questions and does not address or verify the substantive claim in turn 11, which concerns the speaker's authority to assess legislative equivalence. There is no mention of legislative texts, acts, or credibility in assessing them. The claim is unrelated in content and purpose.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 25 refers to SPEAKER_01, consistent with prior context.\",\n  \"reason\": \"Turn 25 is a procedural inquiry about time for questions and does not address or verify the substantive claim in turn 11, which concerns the speaker's authority to assess legislative equivalence. There is no mention of legislative texts, acts, or credibility in assessing them. The claim is unrelated in content and purpose.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 25 refers to SPEAKER_01, consistent with prior context.\",\n  \"reason\": \"Turn 25 is a procedural inquiry about time for questions and does not address or verify the assumption in turn 11, which concerns the speaker's authority to assess whether two legislative texts are the 'same act'. There is no mention of legislative texts, acts, or credibility in assessing legal equivalence. The claim is unrelated in"
     },
     {
       "a_turn_idx": 11,
@@ -2031,7 +2031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, as established in the prior context (turn 28). The phrase 'those who fund the campaigns of his caucus' clearly refers to campaign donors influencing McConnell's behavior.\",\n  \"reason\": \"Claim C explicitly states that McConnell's approach is driven by campaign funding rather than legislative cooperation, which directly verifies the substance of assumption A—that the speaker holds authority to assess legislative acts—by positioning themselves as a credible"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, as established in the prior context. 'His caucus' refers to McConnell's Republican colleagues.\",\n  \"reason\": \"Claim C explicitly states that McConnell's behavior is driven by campaign funding and power politics, which directly verifies the substance of assumption A—that the speaker holds authority to assess legislative acts—by positioning themselves as a credible evaluator of McConnell's motivations. The claim goes beyond mere inference; it directly attributes McConnell"
     },
     {
       "a_turn_idx": 13,
@@ -2046,7 +2046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 17 refers to 'testing and tracing', which were previously discussed in turn 13 as part of culturally competent outreach strategies, particularly in the context of hiring tracers with cultural attributes.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that effective public health interventions require culturally competent outreach—by affirming recognition of testing and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in turn 17 refers to 'testing and tracing', which were previously discussed in turn 13 as part of culturally competent outreach strategies, particularly in the context of hiring tracers with cultural attributes.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that effective public health interventions require culturally competent outreach strategies—by affirming recognition of testing"
     },
     {
       "a_turn_idx": 13,
@@ -2076,7 +2076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the time' in turn 27 refers to the time allocated for legislative review and debate, as implied by the prior discussion about insufficient time for bill analysis and amendment.\",\n  \"reason\": \"Claim C states 'the time has expired for voting,' which suggests that the period for deliberation and review has ended, contradicting assumption A, which asserts that democratic governance requires sufficient time for legislative review and transparency before voting. While C acknowledges the timing of a vote,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the time' in turn 27 refers to the time allocated for legislative review and debate, as implied by the prior discussion about insufficient time for bill analysis and amendment.\",\n  \"reason\": \"Claim C states 'the time has expired for voting,' which suggests that the period for proper legislative consideration has ended. However, this does not explicitly verify or state the earlier assumption A, which asserts that democratic governance requires sufficient time for legislative review and transparency before voting. While"
     },
     {
       "a_turn_idx": 13,
@@ -2091,7 +2091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 15 refers to SPEAKER_01, consistent with prior turns. 'They' in 'they're already on unemployment' refers to employees laid off by employers.\",\n  \"reason\": \"Claim C explicitly states that employers prefer to wait until business operations fully resume before bringing staff back, which directly verifies the substance of assumption A in turn 13. In turn 15, SPEAKER_01 cites employers' own statements"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to employers, as established by the context of employer concerns about restarting business and rehiring employees.\",\n  \"reason\": \"Claim C explicitly states that employers prefer to wait until business operations fully resume before bringing staff back, which directly verifies the substance of assumption A—that employers are hesitant to rehire immediately due to lack of customers and operational readiness. This is clearly supported by Speaker 01’s statement in turn 15"
     },
     {
       "a_turn_idx": 13,
@@ -2121,7 +2121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to business owners or employers, as established in turn 15's context where employers express reluctance to rehire due to lack of customers. 'Government's help' refers to financial support via programs like the PPP.\",\n  \"reason\": \"Claim C explicitly states that government support should be provided at the time of business reopening, not earlier—directly verifying the core idea in assumption A that states should not be allowed to fail financially during"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to business owners, consistent with the context of employers mentioned in turn 15. 'Government's help' refers to financial support for businesses, specifically tied to reopening.\",\n  \"reason\": \"Claim C explicitly states that government support should be provided at the time of business reopening, not earlier—directly verifying the core idea in assumption A that states should not be allowed to fail financially during a national crisis. The reasoning in turn"
     },
     {
       "a_turn_idx": 13,
@@ -2136,7 +2136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in claim C refers to 'state and local governments' mentioned in assumption A. 'These major problems' refers to the financial and public health crises discussed in turn 13.\",\n  \"reason\": \"Claim C explicitly verifies the core idea of assumption A—that states should not be allowed to fail financially during a national crisis—by stating that governors should not be expected to cover all costs of solving major problems. This directly aligns with the argument in A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in claim C refers to 'governors' as the subject of the sentence, which aligns with the discussion of state and local governments in assumption A. 'These major problems' refers to the financial and public health crises discussed in turn 13.\",\n  \"reason\": \"Claim C explicitly states that governors should not be expected to cover all costs of major problems, which directly verifies the core idea in assumption A—that states should not be allowed to"
     },
     {
       "a_turn_idx": 13,
@@ -2151,7 +2151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which was previously discussed in turn 13 as part of the broader context of pandemic response measures.\",\n  \"reason\": \"Claim C states that contact tracing is essential for people to feel safe returning to work, which aligns with the broader argument in assumption A that absentee voting expansion is essential for safe and equitable elections during pandemics. While C does not mention absentee voting, it reinforces the underlying theme of public"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which was previously discussed in turn 13 as part of the broader context of pandemic response measures.\",\n  \"reason\": \"Claim C states that contact tracing is essential for people to feel safe returning to work, which aligns with the broader argument in assumption A that absentee voting expansion is essential for safe and equitable elections during pandemics. While C does not mention absentee voting, it reinforces the underlying principle that pandemic"
     },
     {
       "a_turn_idx": 13,
@@ -2166,7 +2166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'all nations' refers to global countries, and 'we' refers to the collective international community.\",\n  \"reason\": \"Claim C discusses international cooperation on pandemics due to interconnected public health risks, which is a distinct concept from the domestic focus of assumption A—expanding absentee voting for equitable elections during pandemics. While both relate to pandemic response, C does not address or verify the specific claim about absentee voting. Therefore, it is unrelated to A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'all nations' refers to global countries, and 'we' refers to the collective international community.\",\n  \"reason\": \"Claim C discusses international cooperation on pandemics due to interconnected public health risks, which is a distinct concept from the domestic focus of assumption A—absentee voting expansion for equitable elections during pandemics. While both relate to pandemic response, C does not address or verify the substance of A. There is no mention of voting rights,"
     },
     {
       "a_turn_idx": 14,
@@ -2196,7 +2196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my colleagues' in turn 17 refers to fellow lawmakers mentioned in the context, particularly those involved in legislative discussions around pandemic response.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that state and local governments play essential roles in providing core public services critical to national wellbeing—by highlighting that key decision-makers recognize testing and tracing as indispensable public health tools"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my colleagues' in turn 17 refers to fellow legislators mentioned in the context, particularly those involved in the discussion of the HEROES Act and related policies.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that state and local governments play essential roles in providing core public services critical to national wellbeing—by highlighting that key decision-makers recognize testing and tracing"
     },
     {
       "a_turn_idx": 15,
@@ -2226,7 +2226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"He refers to Mitch McConnell; 'his caucus' refers to McConnell's Republican colleagues.\",\n  \"reason\": \"Claim C states that McConnell's behavior is driven by campaign funding and power politics, which is unrelated to assumption A, which concerns economic recovery depending on sustainable business reopenings. While both relate to policy challenges during the pandemic, C does not mention, support, or verify the substance of A. The focus shifts entirely to McConnell's political motivations and legislative conduct, not the conditions for"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"He refers to Mitch McConnell; 'his caucus' refers to McConnell's Republican colleagues.\",\n  \"reason\": \"Claim C states that McConnell's behavior is driven by campaign funding and power politics, which is unrelated to assumption A, which concerns economic recovery depending on sustainable business reopenings. While both relate to policy challenges during the pandemic, C does not state, verify, or even reference the substance of A. There is no semantic connection between the idea of campaign finance influencing McConnell and the premise"
     },
     {
       "a_turn_idx": 15,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my colleagues' in turn 17 refers to fellow legislators mentioned in the context, particularly those involved in the discussion of the HEROES Act and related policies.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that failure of state and local governments would severely undermine economic and public health outcomes—by affirming that policymakers recognize testing and tracing as essential public"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my colleagues' in turn 17 refers to fellow legislators mentioned in the context, particularly those involved in the discussion of the HEROES Act and related policies.\",\n  \"reason\": \"Claim C explicitly states that 'my colleagues understand that these are the fundamental tools, testing and tracing,' which directly verifies the substance of assumption A—that failure of state and local governments would severely undermine economic and public health outcomes—by affirming recognition among lawmakers of the critical role of testing"
     },
     {
       "a_turn_idx": 15,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the U.S. and its global responsibilities; 'this infection' refers to the pandemic, which is the central topic linking turns 15 and 31.\",\n  \"reason\": \"Turn 31 emphasizes the interconnectedness of global public health and warns that allowing the pandemic to rage internationally threatens domestic safety, aligning with the broader concern in turn 15 about state/local failure undermining public health. However,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the U.S. and its global responsibilities; 'this infection' refers to the pandemic, which is the shared risk across nations.\",\n  \"reason\": \"Claim C states that international cooperation on pandemics is essential due to interconnected public health risks, which aligns with the broader theme in turn 15 that failure of state and local governments undermines national public health and economic outcomes. However, turn 31 focuses on"
     },
     {
       "a_turn_idx": 15,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, as established in the prior context discussing his actions toward international organizations. 'This' in 'this infection' refers to the global pandemic.\",\n  \"reason\": \"Claim C states that other world leaders view the U.S. position (specifically, abandoning international cooperation on pandemic response) as self-destructive and damaging to national interest. This directly aligns with the substance of assumption A, which asserts that supporting"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 31 refers to the U.S. decision to withdraw from international cooperation on pandemic response, as discussed in turn 30. 'Other leaders' refers to global political figures mentioned in the context of criticizing the U.S. stance.\",\n  \"reason\": \"Claim C states that other world leaders view the U.S. position on pandemic cooperation as self-destructive and damaging to national interest. This directly aligns with the substance of assumption A"
     },
     {
       "a_turn_idx": 15,
@@ -2316,7 +2316,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established in the context where the speaker discusses presidential leadership and the president's perceived lack of urgency regarding pandemic response.\",\n  \"reason\": \"Claim C explicitly states that the broader tracing bill will not pass without presidential leadership, which directly verifies the substance of assumption A—that the HEROES Bill represents a comprehensive response to pandemic-related economic disruption—by highlighting that key components like large-scale contact tracing depend on high-level"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established by context in turn 17 ('the president himself is saying...'). The phrase 'broader tracing bill' refers to the proposal for 100,000 tracers across the country mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that the broader tracing bill will not pass without presidential leadership, which directly verifies the conditional assumption in A that the"
     },
     {
       "a_turn_idx": 16,
@@ -2331,7 +2331,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 17 refers to 'countries that have successfully overcome the virus', and 'this' in 'do this like the countries...' refers to implementing large-scale testing and contact tracing.\",\n  \"reason\": \"Claim C explicitly states that countries which successfully overcame the virus implemented large-scale testing and contact tracing, which directly verifies the underlying assumption in A that state-level responses require significant funding and support—implying that such efforts are beyond the financial"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'countries' in claim C refers to the nations mentioned in the context, particularly China, which is cited as having successfully overcome the virus through large-scale testing and contact tracing.\",\n  \"reason\": \"Claim C explicitly states that countries which have successfully overcome the virus implemented large-scale testing and contact tracing, directly verifying the substance of assumption A, which implies that such measures require significant financial and logistical resources beyond the capacity of governors alone. The example of China’s testing in Wu"
     },
     {
       "a_turn_idx": 16,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those' in turn 17 refers to the countries that have successfully overcome the virus, as established by the prior mention of China's actions in Wuhan.\",\n  \"reason\": \"Claim C explicitly states that countries which have successfully overcome the virus implemented large-scale testing and contact tracing. This directly verifies the substance of assumption A, which posits that the listener has relevant insight into legislative prospects for the contact tracing bill. The reference to China’s successful testing and tracing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'those' in turn 17 refers to 'countries that have successfully overcome the virus', as established by the prior mention of China's actions in Wuhan.\",\n  \"reason\": \"Claim C explicitly states that countries which have successfully overcome the virus implemented large-scale testing and contact tracing. This directly verifies the substance of assumption A, which posits that the listener has relevant insight into legislative prospects for the contact tracing bill—implied by the speaker’s reference to successful"
     },
     {
       "a_turn_idx": 16,
@@ -2376,7 +2376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established by context and prior discussion of presidential leadership.\",\n  \"reason\": \"Claim C explicitly states that the broader tracing bill will not pass without presidential leadership, which directly verifies the substance of assumption A—that the listener (implied to be a policymaker or influential figure) has relevant insight into legislative prospects for the contact tracing bill. The claim makes the conditionality of passage dependent on presidential action, thereby"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 17 refers to the president, as established by context: the speaker discusses presidential leadership and the president's perceived lack of urgency regarding the contact tracing bill.\",\n  \"reason\": \"Claim C explicitly states that the broader tracing bill will not pass without presidential leadership, which directly verifies the substance of assumption A—that the listener (implied to be a policymaker or influential figure) has relevant insight into legislative prospects for the contact tracing bill. The"
     },
     {
       "a_turn_idx": 16,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 17 refers to the speaker and their colleagues in Congress, consistent with prior context. 'Funds for contact tracing' directly addresses the legislative prospect of the contact tracing bill mentioned in turn 16.\",\n  \"reason\": \"Turn 17 explicitly states 'I think we will end up with funds for contact tracing,' which directly verifies the substance of assumption A—that the listener has relevant insight into legislative prospects for the contact tracing bill."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the legislative body or policymakers, consistent with the context of congressional action on funding. 'Funds for contact tracing' directly corresponds to the legislative prospect discussed in assumption A.\",\n  \"reason\": \"Claim C explicitly states 'I think we will end up with funds for contact tracing,' which directly verifies the substance of assumption A—that the listener has relevant insight into legislative prospects for the contact tracing bill. The statement confirms a positive expectation about"
     },
     {
       "a_turn_idx": 16,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which is the central topic introduced in turn 16 and elaborated in turn 17. The phrase 'people can feel safe going back to work and resuming their normal lives' in turn 18 directly corresponds to the implication in assumption A that the contact tracing bill is tied to enabling a return to normalcy.\",\n  \"reason\": \"Claim C explicitly states that contact tracing is necessary for people"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which is the central topic introduced in turn 16. The phrase 'people can feel safe going back to work and resuming their normal lives' in turn 18 directly reflects the rationale stated in turn 16 regarding the importance of the contact tracing bill.\",\n  \"reason\": \"Claim C explicitly states that contact tracing is necessary for people to resume normal life, which directly verifies the underlying assumption in"
     },
     {
       "a_turn_idx": 16,
@@ -2451,7 +2451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 29) asserts that McConnell's behavior is driven by campaign funding and power politics, which is unrelated to assumption A (turn 16), which concerns fiscal accountability as a core component of responsible governance. There is no mention of fiscal accountability, governance principles, or financial responsibility in C. Instead, C focuses on McConnell"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 29) asserts that McConnell's behavior is driven by campaign funding and power politics, which is unrelated to assumption A (turn 16), which concerns fiscal accountability as a core component of responsible governance. There is no mention of fiscal accountability, governance principles, or financial responsibility in C. The topics diverge entirely—"
     },
     {
       "a_turn_idx": 17,
@@ -2466,7 +2466,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to SPEAKER_02, who is being addressed directly.\",\n  \"reason\": \"Turn 18 states that SPEAKER_02 has 'one of your great areas of expertise is foreign relations,' which is a direct assertion about SPEAKER_02's expertise. However, this claim is not related to the earlier assumption A, which concerns presidential leadership's influence on legislative passage of public health initiatives. While both involve"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to SPEAKER_02, who is being addressed directly.\",\n  \"reason\": \"Claim C states that the speaker believes the interlocutor (SPEAKER_02) has significant expertise in foreign relations. This is based on the direct statement in turn 18: 'one of your great areas of expertise is foreign relations.' While this explicitly attributes expertise to SPEAKER_02, it does not relate to"
     },
     {
       "a_turn_idx": 17,
@@ -2496,7 +2496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, consistent with prior context. 'This' in 'this infection' refers to the global pandemic discussed throughout the conversation.\",\n  \"reason\": \"Claim C states that international cooperation on pandemics is essential due to interconnected public health risks, which aligns with the broader theme of global interdependence in managing the pandemic. However, it does not explicitly reference or verify the specific assumption A—that presidential leadership significantly influences legislative"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, consistent with prior context. 'This' in 'this infection' refers to the global pandemic discussed throughout the conversation.\",\n  \"reason\": \"Claim C states that international cooperation on pandemics is essential due to interconnected public health risks, which aligns with the broader theme of global interdependence in managing the pandemic. However, it does not explicitly reference or verify the specific claim in assumption A—that presidential leadership significantly influences"
     },
     {
       "a_turn_idx": 17,
@@ -2511,7 +2511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to SPEAKER_02 and their team, consistent with the prior discussion about advocacy for contact tracing.\",\n  \"reason\": \"Claim C explicitly states that 'we have been calling for contact tracing and the monies to pay for that since the very beginning of this,' which directly verifies the substance of assumption A—namely, that effective pandemic control requires widespread testing and robust contact tracing systems. The claim confirms sustained advocacy for contact tracing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to SPEAKER_02 and their team, consistent with the prior discussion about advocacy for contact tracing.\",\n  \"reason\": \"Claim C explicitly states that 'we have been calling for contact tracing and the monies to pay for that since the very beginning of this,' which directly verifies the substance of assumption A—namely, that effective pandemic control requires widespread testing and robust contact tracing systems. While A is framed as a belief about"
     },
     {
       "a_turn_idx": 17,
@@ -2556,7 +2556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the U.S. and its global responsibilities; 'this infection' refers to the pandemic discussed in turn 17.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to interconnected public health risks, which directly verifies the core idea in assumption A—that the U.S. public health infrastructure is inadequate compared to successful international models. Turn 31 emphasizes that unchecked outbreaks anywhere endanger all"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the United States and its global responsibilities; 'this infection' refers to the pandemic discussed in turn 17.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to interconnected public health risks, which directly verifies the substance of assumption A—that the U.S. public health infrastructure is inadequate compared to successful international models. Turn 31 emphasizes that unchecked outbreaks anywhere endanger all nations,"
     },
     {
       "a_turn_idx": 17,
@@ -2571,7 +2571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, consistent with prior context. 'The U.S.' and 'America' refer to the federal government under Trump's leadership.\",\n  \"reason\": \"Claim C states that European leaders are reacting strongly to the U.S. refusing to support international cooperation during a global health pandemic. This directly addresses the substance of assumption A, which asserts that the current U.S. public health infrastructure is inadequate compared to successful international models"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, consistent with prior context discussing his policies and leadership style. 'The U.S.' and 'America' refer to the same entity as discussed in turn 17.\",\n  \"reason\": \"Claim C explicitly states that the U.S. is refusing to support international cooperation during a global health pandemic, which directly verifies the substance of assumption A—that the current U.S. public health infrastructure is inadequate compared to successful"
     },
     {
       "a_turn_idx": 17,
@@ -2616,7 +2616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which is the central topic introduced in assumption A. No ambiguous references exist.\",\n  \"reason\": \"Claim C explicitly states that contact tracing is necessary for people to resume normal life, which directly verifies the core idea in assumption A—that effective contact tracing depends on timely identification and isolation to enable safe return to normal activities. The connection between tracing and resuming normal life is both logically consistent and explicitly affirmed in C,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'contact tracing', which is the central topic introduced in assumption A. The phrase 'people can feel safe going back to work and resuming their normal lives' directly corresponds to the implication in A that timely identification and isolation (via tracing) enables societal recovery.\",\n  \"reason\": \"Claim C explicitly states that contact tracing is necessary for people to resume normal life, which directly verifies the core idea in assumption A—that effective contact tracing"
     },
     {
       "a_turn_idx": 17,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Hong Kong protesters, and 'China' refers to the People's Republic of China government. 'The forces' refers to the potential military capabilities China may deploy against Hong Kong.\",\n  \"reason\": \"Claim C explicitly states that the international community perceives China’s actions as overwhelming and difficult to counterbalance, which directly reflects the substance of assumption A — that international examples, particularly China’s approach, provide credible evidence for"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Hong Kong protesters, and 'China' refers to the People's Republic of China government. 'The forces' refers to China's potential military capabilities.\",\n  \"reason\": \"Claim C explicitly states that the international community perceives China’s actions as overwhelming and difficult to counterbalance, which directly reflects the substance of assumption A — that international examples, particularly China’s approach, provide credible evidence for domestic policy solutions. In"
     },
     {
       "a_turn_idx": 17,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the collective global community, particularly nations involved in public health efforts. 'This infection' refers to the pandemic mentioned in turn 17.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to the interconnectedness of nations in public health risks. This directly verifies the core idea in assumption A—that there is a moral imperative to act decisively during a public health crisis—by emphasizing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 31 refers to the collective global community, particularly nations involved in international cooperation. 'This infection' refers to the pandemic mentioned in prior turns, especially in turn 17.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to the interconnectedness of public health risks across nations. This directly verifies the core idea in assumption A—that there is a moral imperative to act decisively during a public health"
     },
     {
       "a_turn_idx": 17,
@@ -2706,7 +2706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Hong Kong protesters, and 'China' refers to the People's Republic of China government. 'The world' in turn 19 refers to the international community.\",\n  \"reason\": \"Claim C explicitly states that the international community perceives China’s actions as overwhelming and difficult to counterbalance, which directly reflects the substance of assumption A—that the audience expects authoritative insights on international affairs, particularly regarding China. In turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Hong Kong protesters; 'China' and 'the main government of China' refer to the same entity.\",\n  \"reason\": \"Claim C explicitly states that the international community perceives China’s actions as overwhelming and difficult to counterbalance, which directly reflects the substance of assumption A—that the audience expects authoritative insights on international affairs, particularly regarding China. In turn 19, Speaker 01 emphasizes that Hong Kong"
     },
     {
       "a_turn_idx": 19,
@@ -2751,7 +2751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Chinese government; 'Hong Kong' in turn 22 refers to the same entity as in turn 19.\",\n  \"reason\": \"Claim C ('Hong Kong is part of China') directly contradicts the substance of assumption A, which asserts that international recognition and pressure can meaningfully affect China’s behavior toward Hong Kong—implying Hong Kong has a distinct political status or autonomy. Claim C reduces Hong"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 19 refers to the Chinese government; 'Hong Kong' is the subject of both A and C.\",\n  \"reason\": \"Claim C ('Hong Kong is part of China') directly contradicts the assumption in A, which asserts that international recognition and pressure can meaningfully affect China’s behavior toward Hong Kong—implying Hong Kong has a distinct political status and autonomy. By stating Hong Kong is part of China, C undermines the foundational"
     },
     {
       "a_turn_idx": 19,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to Chris Patton, the last governor of Hong Kong, as established in the context.\",\n  \"reason\": \"Claim C mentions having hosted Chris Patton, the last governor of Hong Kong, and expresses regret that he wasn't tougher on China. While this implies a recognition of China's influence over Hong Kong and the importance of international stance, it does not explicitly state or verify the assumption that international recognition and pressure can meaningfully affect China"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to Chris Patton, the last governor of Hong Kong, as established in the context.\",\n  \"reason\": \"Claim C mentions having hosted Chris Patton, the last governor of Hong Kong, and expresses regret that he was not tougher on China. While this implies a recognition of China's influence over Hong Kong and the importance of international stance, it does not explicitly state or verify the core idea in assumption A—that international recognition and pressure can"
     },
     {
       "a_turn_idx": 19,
@@ -2781,7 +2781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 30 refers to Trump, consistent with prior mentions of Trump in the conversation.\",\n  \"reason\": \"Claim C states that Trump has withdrawn from the United Nations in general, which is factually incorrect and contradicts the actual record—Trump withdrew from UNESCO and the WHO, but not the UN as a whole. Assumption A concerns the necessity of support from powerful nations like the US to deter state repression in fragile democracies. Claim C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 30 refers to Trump, consistent with prior mentions of Trump in the conversation.\",\n  \"reason\": \"Claim C states that Trump has withdrawn from the United Nations in general, which is factually incorrect and contradicts the actual record—Trump withdrew from UNESCO and the WHO, but not the UN as a whole. Assumption A concerns the necessity of support from powerful nations like the US to deter repression in fragile democracies, which is unrelated"
     },
     {
       "a_turn_idx": 19,
@@ -2796,7 +2796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the international community, particularly nations collectively facing pandemic threats. No direct coreference resolution is needed beyond interpreting 'we' as a collective entity.\",\n  \"reason\": \"Claim C emphasizes that international cooperation on pandemics is essential due to global interconnectivity in public health risks. While this aligns broadly with the theme of shared vulnerability, it does not explicitly address or verify the specific assumption in A—that support from powerful nations like the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 31 refers to President Trump, as established in the prior context. 'This' in 'this infection' refers to the global pandemic discussed throughout the exchange.\",\n  \"reason\": \"Claim C states that international cooperation on pandemics is essential due to interconnected public health risks. While this aligns with a broad theme of global interdependence in health crises, it does not explicitly address or verify the specific claim in assumption A—that support from powerful"
     },
     {
       "a_turn_idx": 19,
@@ -2811,7 +2811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'China' refers to the People's Republic of China throughout.\",\n  \"reason\": \"Claim C discusses conflicts in the South China Sea over fishing rights, oil drilling, and maritime transit, which is unrelated to Assumption A, which concerns a shared understanding among democratic nations regarding self-determination and human rights. While both topics involve China, Claim C does not state, verify, or imply anything about democratic nations' shared values on self-determination or human rights"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'China' refers to the People's Republic of China throughout.\",\n  \"reason\": \"Claim C discusses conflicts in the South China Sea regarding fishing rights, oil drilling, and maritime transit—topics unrelated to the earlier assumption A, which concerns a shared understanding among democratic nations about self-determination and human rights. While both relate to China's actions, C does not state, verify, or even imply the existence of a shared democratic consensus on values like self-d"
     },
     {
       "a_turn_idx": 19,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'he' or 'they' not present in claim C.\",\n  \"reason\": \"Claim C mentions having hosted the last governor of Hong Kong, Chris Patton, and references his regret about being too lenient toward China. While this implies a historical stance on Hong Kong's autonomy and external engagement, it does not explicitly state or verify the assumption that Hong Kong’s future depends on sustained external solidarity rather than internal resistance alone. The connection is thematic but not direct"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'he' or 'they' not present in claim C.\",\n  \"reason\": \"Claim C mentions honoring the last governor of Hong Kong, Chris Patton, and his regret about being too soft on China. This indirectly supports the idea that external pressure (like stronger stance by leaders) matters, which aligns loosely with the notion that external solidarity is crucial. However, C does not explicitly state or verify the core assumption that Hong Kong’s future depends on sustained external"
     },
     {
       "a_turn_idx": 19,
@@ -2856,7 +2856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Hong Kong' refers consistently to the territory.\",\n  \"reason\": \"Claim C ('Hong Kong is part of China') directly contradicts the substance of assumption A, which asserts that Hong Kong's future depends on external solidarity to resist Chinese overreach and maintain autonomy. While A emphasizes the importance of international support for Hong Kong's independence from China, C affirms China's sovereignty over Hong Kong, negating the premise of external solidarity as a necessary condition for"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Hong Kong' refers consistently to the territory.\",\n  \"reason\": \"Claim C ('Hong Kong is part of China') directly contradicts the substance of assumption A, which asserts that Hong Kong's future depends on external solidarity to resist Chinese overreach and maintain autonomy. C affirms China's sovereignty over Hong Kong, undermining the premise that Hong Kong's independence or autonomy is under threat and worth defending through external support. Therefore, C negates the core idea"
     },
     {
       "a_turn_idx": 19,
@@ -2871,7 +2871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 24 refers to President Trump, consistent with prior mentions in the context.\",\n  \"reason\": \"Claim C states that the president’s action reflects a broader pattern of racism and police brutality, which is unrelated to assumption A, which concerns Trump’s rare alignment with the speaker’s values regarding China’s violation of the Hong Kong treaty. While both involve criticism of Trump, the topics (Hong Kong policy vs. police response to protests) and the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 24 refers to President Trump, consistent with prior mentions in the context.\",\n  \"reason\": \"Claim C states that the president’s action reflects a broader pattern of racism and police brutality, which is unrelated to assumption A, which concerns Trump’s rare alignment with the speaker’s values regarding China’s violation of the Hong Kong treaty and the resulting geopolitical shift. While both involve criticism of Trump, the topics and substantive claims are distinct—A focuses"
     },
     {
       "a_turn_idx": 20,
@@ -2886,7 +2886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 24 refers to the President, as established by context. 'This Senate' in turn 24 refers to the U.S. Senate.\",\n  \"reason\": \"Claim C states that the speaker believes the greatest threat to the world is the South China Sea, which shifts focus from the moral justification of standing up to China (assumption A). While both involve criticism of China, C does not affirm or verify the moral justification aspect of A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 24 refers to the President, as established by context. 'It' in 'it is just saying this is absolutely to be condemned' refers to the resolution being discussed.\",\n  \"reason\": \"Claim C states that the speaker believes the greatest threat to the world is the South China Sea, which shifts focus from the moral justification of standing up to China (assumption A). While both involve criticism of China, C does not affirm or verify"
     },
     {
       "a_turn_idx": 20,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the president's action described in turn 24, which involves the use of tear gas against peaceful protesters and the symbolic act of holding up a Bible.\",\n  \"reason\": \"Claim C explicitly states that the president’s action reflects a broader pattern of racism and police brutality, which directly verifies the substance of assumption A — that public fear of presidential action reflects a legitimate political crisis. The context in turn 24 clearly identifies the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the president's action described in turn 24, which involves the use of tear gas against peaceful protesters and the symbolic act of holding up a Bible.\",\n  \"reason\": \"Claim C explicitly states that the president’s action reflects a broader pattern of racism and police brutality, which directly verifies the substance of assumption A — that public fear of presidential action reflects a legitimate political crisis. The context in turn 24 clearly identifies the"
     },
     {
       "a_turn_idx": 24,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, established in turn 28.\",\n  \"reason\": \"Claim C explicitly states that 'Mitch McConnell does not generally engage with Democrats,' which directly verifies the assumption in A that his behavior reflects a fixed, unyielding character trait—specifically, a lack of willingness to collaborate across party lines. The statement in C is clear, direct, and fully aligns with the core substance of A, leaving"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 29 refers to Mitch McConnell, as established in turn 28. The claim 'He's not generally interested in engaging with Democrats' directly specifies McConnell's behavior toward Democrats.\",\n  \"reason\": \"Claim C explicitly states that Mitch McConnell does not generally engage with Democrats, which directly verifies the assumption in A that his behavior reflects a fixed, unyielding character trait—specifically, a lack of willingness to collaborate across party lines."
     },
     {
       "a_turn_idx": 28,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to all nations collectively, which aligns with the global perspective expressed in assumption A. 'All nations' corresponds to 'coordinated international efforts' in A.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to the interconnectedness of public health risks across nations. This directly verifies the core idea in assumption A—that global health security depends on coordinated international efforts—by emphasizing shared vulnerability and mutual risk"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to all nations collectively, consistent with the global perspective established in assumption A. 'All nations' aligns with 'coordinated international efforts' in A.\",\n  \"reason\": \"Claim C explicitly states that international cooperation on pandemics is essential due to interconnected public health risks, which directly verifies the core idea in assumption A—that global health security relies on coordinated international efforts. The reasoning in C (e.g., infections spreading across borders,"
     },
     {
       "a_turn_idx": 30,

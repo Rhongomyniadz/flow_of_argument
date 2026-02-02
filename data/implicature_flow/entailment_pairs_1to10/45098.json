@@ -2226,7 +2226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'she' in turn 41, which resolves to Governor Whitmore based on context. 'She' is the subject of the claim about handling the virus.\",\n  \"reason\": \"Claim C states that the speaker believes Governor Whitmore has done an amazing job handling the virus, which reflects positive evaluation of leadership during a crisis. While this implies cooperation or effective governance, it does not explicitly state or verify the earlier assumption A—that political cooperation"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_09 refers to 'Governor Whitmore' who is likely a misstatement; context suggests 'Governor Whitmer' (correct name), and SPEAKER_05 refers to 'Governor Webner'—likely a mispronunciation or error for 'Whitmer'. Coreference resolved: 'she' in turn 41 refers to Governor Whitmer.\",\n  \"reason\": \"Claim C expresses approval of Governor Whitmer's handling of the virus"
     },
     {
       "a_turn_idx": 28,
@@ -2346,7 +2346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 43 refers to the American people and political leaders, consistent with the collective identity emphasized in turn 29. 'Attacking each other' refers to personal attacks undermining unity, directly addressing the idea of national unity as a foundation for resilience.\",\n  \"reason\": \"Claim C explicitly states that personal attacks during crises hinder national unity, which directly verifies the core substance of assumption A—that historical resilience stems from national unity. The reasoning in C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 43 refers to the American people and political leaders collectively, consistent with the national unity theme in turn 29. 'Each other' in turn 43 refers to political figures (e.g., the president and governor), reinforcing the idea of internal division undermining unity.\",\n  \"reason\": \"Claim C explicitly states that personal attacks during crises hinder national unity, which directly verifies the core substance of assumption A—that historical resilience stems from national"
     },
     {
       "a_turn_idx": 30,
@@ -2480,8 +2480,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; claim C is unrelated to assumption A.",
-      "reason": "Claim C discusses investment opportunities on a financial platform, while assumption A concerns public health outcomes through early detection and isolation during a pandemic. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses investment opportunities on a financial platform, while assumption A concerns public health outcomes through early detection and isolation during a pandemic. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A in any way.\"\n}\n```"
+      "reason": "Claim C discusses investment opportunities on a financial platform, while assumption A concerns public health outcomes and pandemic response through early detection and isolation. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses investment opportunities on a financial platform, while assumption A concerns public health outcomes and pandemic response through early detection and isolation. There is no semantic connection between the two statements, and C does not address, verify, or relate to the substance of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 31,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 40 refers to the audience or general public, not tied to specific prior entities.\",\n  \"reason\": \"Claim C discusses the necessity of extreme action to avoid being overtaken by a pandemic, using Italy as a cautionary example. While this implies a concern for human lives and the consequences of inaction, it does not explicitly state or verify the assumption that 'the value of human life does not diminish with age.' The connection"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 40 refers to the audience or policymakers generally.\",\n  \"reason\": \"Claim C discusses the necessity of extreme action to avoid being overwhelmed by a pandemic, using Italy as a cautionary example. While this aligns with the broader concern about prioritizing care regardless of age (as implied in A), it does not explicitly state or verify the specific assumption that 'the value of human life does not diminish with age.' The connection is"
     },
     {
       "a_turn_idx": 34,
@@ -2660,8 +2660,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'everyone' in turn 51 refers to individuals broadly.",
-      "reason": "Claim C (turn 51) discusses disparities in wealth-building across individuals, which is unrelated to the ethical assumption in A (turn 34) about the intrinsic value of human life regardless of age. There is no semantic connection between the two claims, and C does not address, verify, or imply anything about the value of life in relation to age.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'everyone' in turn 51 refers to individuals broadly.\",\n  \"reason\": \"Claim C (turn 51) discusses disparities in wealth-building across individuals, which is unrelated to the ethical assumption in A (turn 34) about the intrinsic value of human life regardless of age. There is no semantic connection between the two claims, and C does not address, verify, or imply anything about the value of life in relation to age.\"\n}"
+      "reason": "Claim C (turn 51) discusses disparities in wealth-building across individuals, which is unrelated to assumption A (turn 34), which asserts that the value of human life remains constant regardless of age. There is no overlap in semantic content or logical connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'everyone' in turn 51 refers to individuals broadly.\",\n  \"reason\": \"Claim C (turn 51) discusses disparities in wealth-building across individuals, which is unrelated to assumption A (turn 34), which asserts that the value of human life remains constant regardless of age. There is no overlap in semantic content or logical connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 34,
@@ -2796,7 +2796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Governor Whitmore refers to the same individual as 'Governor Webner' in turn 42; 'she' in turn 41 refers to Governor Whitmore.\",\n  \"reason\": \"Claim C expresses approval of Governor Whitmore's handling of the virus, which is unrelated to assumption A, which concerns the speaker's belief that their country's testing effort is insufficient compared to the US. There is no mention of testing, benchmarks, or comparative capacity in C. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 41 refers to Governor Whitmore, and 'her' in turn 42 refers to the same individual. 'Governor Webner' appears to be a misspelling of 'Governor Whitmore'.\",\n  \"reason\": \"Claim C expresses approval of Governor Whitmore's handling of the virus, which is unrelated to assumption A, which concerns the speaker's belief that their country's testing effort is insufficient compared to the US"
     },
     {
       "a_turn_idx": 40,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 43 refers to the collective leadership and citizens of the U.S., consistent with the broader national context established in turn 40. 'This virus' in turn 43 resolves to the shared threat mentioned in turn 40.\",\n  \"reason\": \"Claim C explicitly states that the current situation demands collective action against a shared threat ('this virus'), which directly verifies the assumption in A that there is a shared understanding of what constitutes"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 43 refers to the collective leadership and citizens of the U.S., consistent with the broader national context established in turn 40. 'This virus' in turn 43 resolves to the shared threat mentioned in turn 40.\",\n  \"reason\": \"Claim C explicitly states that the current situation demands collective action against a shared threat ('this virus'), which directly verifies the assumption in A that there is a shared understanding of 'ext"
     },
     {
       "a_turn_idx": 40,

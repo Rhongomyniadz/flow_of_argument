@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 32 refers to SPEAKER_01, but the topic shifts entirely.\",\n  \"reason\": \"Turn 32 completely changes the subject from the discussion about executive authority and congressional policymaking (A) to a personal question about favorite movies. There is no mention, reference, or verification of the earlier assumption that 'that' refers to a specific policy or practice in the executive or legislative branch. The claim is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'that' in turn 28 refers to the policy/practice of shifting policymaking power from Congress to the executive branch, which is unrelated to the topic of favorite movies in turn 32.\",\n  \"reason\": \"Turn 32 completely shifts topic to personal preferences about movies, which has no semantic connection to the earlier assumption about Congress's role in policymaking. The claim does not state, verify, or relate to the substance of assumption"
     },
     {
       "a_turn_idx": 29,
@@ -1970,8 +1970,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No relevant coreference links; 'the respondent' refers to Speaker_01, but this is unrelated to assumption A.",
-      "reason": "Claim C discusses preferences about chain vs. independent restaurants in a polling context, while assumption A concerns the legitimacy of executive orders initiated by legislators. There is no semantic or logical connection between the two. Claim C does not address, imply, or verify any aspect of A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the respondent' refers to Speaker_01, but this is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses preferences about chain vs. independent restaurants in a polling context, while assumption A concerns the legitimacy of executive orders initiated by legislators. There is no semantic or logical connection between the two. Claim C does not address, imply, or verify any aspect of A.\"\n}\n```"
+      "reason": "Claim C discusses preferences regarding chain vs. independent restaurants in a polling context, while assumption A concerns the legitimacy of executive orders initiated by legislators. There is no semantic or logical connection between the two. Claim C does not address, imply, or verify any aspect of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the respondent' refers to Speaker_01, but this is unrelated to assumption A.\",\n  \"reason\": \"Claim C discusses preferences regarding chain vs. independent restaurants in a polling context, while assumption A concerns the legitimacy of executive orders initiated by legislators. There is no semantic or logical connection between the two. Claim C does not address, imply, or verify any aspect of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 30,
@@ -2076,7 +2076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_00, who is the interviewer, not SPEAKER_01. Therefore, the claim 'I have been a movie buff my entire life' does not refer to the speaker in turn 33 (SPEAKER_01).\",\n  \"reason\": \"Turn 44 is made by SPEAKER_00, not SPEAKER_01, and expresses a personal lifelong interest"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_00, who is the interviewer, not SPEAKER_01. Therefore, the claim 'I have been a movie buff my entire life' does not refer to the speaker in turn 33 (SPEAKER_01), but to a different person.\",\n  \"reason\": \"Turn 44 states that the speaker (SPEAKER_00) has been a movie enthusiast"
     },
     {
       "a_turn_idx": 35,
@@ -2121,7 +2121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in A refers to the listener(s) in a collective sense, but C discusses the speaker's own growth, not listener behavior.\",\n  \"reason\": \"Claim C (turn 44) states the speaker's belief in personal improvement with experience, which is unrelated to assumption A, which concerns the listener's response to appeals based on shared values or collective responsibility. There is no overlap in semantic content, and C does not verify, support"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in A refers to the listeners collectively; 'I' in C refers to the speaker. No shared referents.\",\n  \"reason\": \"Claim C (turn 44) states that the speaker believes they will improve with experience, which is unrelated to assumption A (turn 36), which concerns the listener's responsiveness to appeals based on shared values or collective responsibility. There is no overlap in semantic"
     },
     {
       "a_turn_idx": 37,
@@ -2136,7 +2136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 42 refers to the interviewer addressing the guest (Congressman Stuyvers), and 'your' refers to the guest's personal preference.\",\n  \"reason\": \"Turn 42 discusses personal preference regarding chain restaurants versus local ones, but does not explicitly address or verify the claim about Jimmy Buffett being a personal preference rather than ironic or contradictory. While both involve personal taste, the topic shift from music (Jimmy Buffett) to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 42 refers to the listener/congressman, not related to 'Jimmy Buffett' in turn 37.\",\n  \"reason\": \"Turn 42 discusses personal preference regarding chain restaurants versus local ones, which is a general topic of personal taste. However, it does not address or verify the specific claim in turn 37 about Jimmy Buffett being a genuine personal preference rather than ironic or contradictory. While both involve personal"
     },
     {
       "a_turn_idx": 39,
@@ -2226,7 +2226,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to Speaker_00, who is later identified as Brian Stewart in turn 44. However, the claim in turn 44 about being called 'Stu' instead of 'Brian' is unrelated to the assumption in turn 41 about responsibility or influence over a situation causing trouble.\",\n  \"reason\": \"Turn 41 asserts that the speaker (Speaker_00) has some responsibility or influence over"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to Speaker_00, who is later identified as Brian Stewart in turn 44. However, the claim in turn 44 about being called 'Stu' instead of 'Brian' does not relate to the assumption in turn 41 about responsibility or influence over a situation causing trouble.\",\n  \"reason\": \"Turn 41 asserts that the speaker (Speaker_00) has some responsibility or influence"
     },
     {
       "a_turn_idx": 43,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to Congressman Stuyvers, as established in the prior context. 'It' in 'that is a very credible selection that is' refers to the choice of Wendy's as the favorite fast food chain.\",\n  \"reason\": \"Claim C explicitly states that 'Congressman Stuyvers' favorite fast food chain is Wendy's, which directly verifies the substance of assumption A — that Wendy's is a widely recognized chain restaurant —"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 44 refers to Congressman Stuyvers, as established in the prior context. 'It' in 'that is a very credible selection that is' refers to the choice of Wendy's as the favorite fast food chain.\",\n  \"reason\": \"Claim C explicitly states that 'Congressman Stuyvers' favorite fast food chain is Wendy's, which directly verifies the substance of assumption A — that Wendy's is a widely recognized chain restaurant —"
     }
   ]
 }

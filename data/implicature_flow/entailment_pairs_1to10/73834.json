@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'everyone' in claim C refers to the group of personnel mentioned in turn 16, specifically those who should be present in the office. 'They' in turn 16 refers to the same group.\",\n  \"reason\": \"Claim C explicitly states 'I need everybody back in the office,' which directly verifies the assumption in A that everyone who should be present has actually arrived. The phrase 'everybody' aligns with 'they're all there' in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to 'everyone' who should be present; 'he' in turn 17 refers to President Trump, whose demand for everyone to return to the office is explicitly stated.\",\n  \"reason\": \"Claim C explicitly states 'I need everybody back in the office,' which directly verifies the assumption in A that everyone who should be present has actually arrived—implying that the speaker expects all required personnel to be present and ready"
     },
     {
       "a_turn_idx": 16,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 40 refers to Doug Collins, not related to the subject of turn 18.\",\n  \"reason\": \"Turn 40 discusses a question about potential cuts to veterans' care and the VA secretary's response, which is entirely unrelated to the assumption in turn 18 about people who asked whether the speaker would ask a question having standing to judge their actions. There is no mention of judgment, standing, or the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 40 refers to Doug Collins, not related to the subject of turn 18.\",\n  \"reason\": \"Turn 40 discusses a question about potential cuts to veterans' care and the VA secretary's response, which is entirely unrelated to the earlier assumption in turn 18 about people who asked whether the speaker would ask a question having standing to judge their actions. There is no mention of judgment, standing, or"
     },
     {
       "a_turn_idx": 18,
@@ -1472,11 +1472,11 @@
       "claim_text": "The speaker believes it is common for parents to use affectionate nicknames for their children based on familial roles.",
       "overlap_score": 2,
       "c_time": 1146.567,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference links relevant; 'the speaker' in C refers to SPEAKER_11, consistent with A.",
-      "reason": "Claim C discusses parents using affectionate nicknames for children based on familial roles, which is entirely unrelated to assumption A, which concerns the buyer's knowledge of the origin of a Coke. There is no overlap in semantic content, and C does not state, imply, or verify any part of A. The topics are distinct and unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in C refers to SPEAKER_11, consistent with A.\",\n  \"reason\": \"Claim C discusses parents using affectionate nicknames for children based on familial roles, which is entirely unrelated to assumption A, which concerns the buyer's knowledge of the origin of a Coke. There is no overlap in semantic content, and C does not state, imply, or verify any part of A. The topics are distinct and unrelated.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting claim C to assumption A. 'He' in turn 46 refers to an unspecified male figure, not related to the Coke or Hunter Biden context.\",\n  \"reason\": \"Claim C discusses parents using affectionate nicknames for children based on familial roles, which is entirely unrelated to assumption A, which concerns the buyer's knowledge about the ownership of a Coke associated with Hunter Biden. There is no overlap in subject matter, logic, or implied content"
     },
     {
       "a_turn_idx": 20,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'individuals' or 'people' considering having children, but there is no connection to the concept of 'distinct initial combinations' mentioned in turn 25.\",\n  \"reason\": \"Turn 25 expresses an expectation about individuals having distinct initial combinations (likely referring to names or identifiers), while turn 34 discusses considerations about having children and potential facial benefits, with no mention of initials, combinations, or expectations"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to 'individuals' mentioned in turn 25, but the topic shifts entirely to having children and potential facial benefits, which is unrelated to the initial combination of initials discussed in turn 25.\",\n  \"reason\": \"Turn 34 discusses considerations about having children and potential facial benefits, which is completely unrelated to the assumption in turn 25 about individuals having distinct initial combinations by default. There is no mention"
     },
     {
       "a_turn_idx": 25,

@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience being addressed, consistent with the assumption that each speaker is speaking on their own behalf and not representing another person.\",\n  \"reason\": \"Claim C explicitly states 'you're listening to the Thinking Out Loud Radio Show,' which directly confirms the active engagement of the audience. This aligns with and explicitly verifies the assumption that speakers are addressing listeners directly, acting independently and not representing others. The statement leaves no ambiguity about the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience being addressed, consistent with the context of a broadcast show where speakers address listeners directly.\",\n  \"reason\": \"Claim C explicitly states 'you're listening to the Thinking Out Loud Radio Show,' which confirms that the speaker is addressing an active listener. This directly verifies the assumption in A that each speaker is speaking on their own behalf and not representing someone else, as the act of addressing 'you' implies direct, personal communication"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the speakers on the radio show, including SPEAKER_18 and others involved in the program, consistent with the collective identity established in earlier turns.\",\n  \"reason\": \"Turn 22 explicitly states that the speakers are not approaching the topic from a position of perfection or judgment, which directly addresses and clarifies the earlier assumption A that each speaker is speaking on their own behalf and not representing someone else. While A"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the speakers of the radio show, including SPEAKER_18 and others involved in the program, consistent with the collective identity established in earlier turns.\",\n  \"reason\": \"Turn 22 explicitly states that the speakers are not approaching the topic from a position of perfection or judgment, which directly addresses and clarifies the earlier assumption A that each speaker is speaking on their own behalf and not representing someone else. While A"
     },
     {
       "a_turn_idx": 0,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the speakers of the radio show, including SPEAKER_18 and others involved in the program, consistent with the collective identity established in earlier turns.\",\n  \"reason\": \"Turn 22 explicitly states that the speaker(s) are not approaching the topic from a position of judgment, which directly verifies the earlier assumption A that each speaker is speaking on their own behalf and not representing someone else. The statement emphasizes personal stance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the speakers of the radio show, including SPEAKER_18 and others involved in the broadcast, consistent with the collective identity established in earlier turns.\",\n  \"reason\": \"Turn 22 explicitly states that the speaker(s) are not approaching the topic from a position of judgment, which directly verifies the earlier assumption A that each speaker is speaking on their own behalf and not representing someone else. By affirming their personal"
     },
     {
       "a_turn_idx": 0,
@@ -77,11 +77,11 @@
       "claim_text": "The name of the radio show being broadcast is 'Thinking Out Loud Radio Show'.",
       "overlap_score": 2,
       "c_time": 75.381,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you're listening to' refers directly to the radio show mentioned in turn 2.\",\n  \"reason\": \"Claim C explicitly states that the broadcast is 'the Thinking Out Loud Radio Show,' which directly verifies the implicit assumption in A that speaking out loud is meaningful and encouraged within the context of this specific show. The phrase 'you're listening to' confirms the identity of the show, making the connection between the act of speaking out loud and the show's"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'you're listening to' refers directly to the radio show mentioned in turn 2.",
+      "reason": "Claim C explicitly states that the broadcast is 'the Thinking Out Loud Radio Show,' which directly verifies the implicit assumption in A that speaking out loud is meaningful and encouraged within the context of this specific show. The explicit naming of the show confirms its identity and reinforces the context where speaking out loud is both encouraged and meaningful.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you're listening to' refers directly to the radio show mentioned in turn 2.\",\n  \"reason\": \"Claim C explicitly states that the broadcast is 'the Thinking Out Loud Radio Show,' which directly verifies the implicit assumption in A that speaking out loud is meaningful and encouraged within the context of this specific show. The explicit naming of the show confirms its identity and reinforces the context where speaking out loud is both encouraged and meaningful.\"\n}\n```"
     },
     {
       "a_turn_idx": 2,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the host and team behind the Thinking Out Loud radio show, consistent with the context of the program introduced in earlier turns.\",\n  \"reason\": \"Turn 13 mentions the recurring segment 'Inside Vision' within the 'Thinking Out Loud radio show,' which confirms the show's structure and format. However, it does not address or verify the specific claim in turn 2 that speaking out loud is both encouraged and meaningful."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 13 refers to the host and team behind the Thinking Out Loud radio show, consistent with the context of the program introduced in earlier turns.\",\n  \"reason\": \"Turn 13 mentions the recurring 'Inside Vision' segment within the Thinking Out Loud radio show, confirming its structural presence. However, it does not address or verify the specific claim in turn 2—that speaking out loud is both encouraged and meaningful. While the segment involves speaking"
     },
     {
       "a_turn_idx": 2,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to the audience/listeners, consistent with the context of a radio broadcast. 'The Thinking Out Loud radio show' is the direct referent of the broadcast being discussed.\",\n  \"reason\": \"Turn 15 explicitly states that the current broadcast is 'the Thinking Out Loud radio show,' which directly verifies the substance of assumption A (turn 2) that speaking out loud is meaningful and encouraged in this context. The claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to the audience/listeners, consistent with the context of a radio broadcast. 'The Thinking Out Loud radio show' is the direct referent of the broadcast being discussed.\",\n  \"reason\": \"Turn 15 explicitly states that the current broadcast is 'the Thinking Out Loud radio show,' which directly verifies the substance of assumption A (turn 2) that speaking out loud is meaningful and encouraged in this context. The explicit"
     },
     {
       "a_turn_idx": 2,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of speaking out loud as an active engagement encouraged in turn 2.\",\n  \"reason\": \"Turn 16 explicitly states that the show provides 'motivation, more inspiration, and more empowerment,' which directly verifies the meaningfulness and encouragement of speaking out loud emphasized in turn 2. The connection between speaking out loud and being motivated/inspired is clear and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of speaking out loud as an active engagement encouraged in turn 2.\",\n  \"reason\": \"Claim C explicitly states that the Thinking Out Loud Radio Show provides 'motivation, more inspiration, and more empowerment,' which directly verifies the substance of assumption A—that speaking out loud is meaningful and encouraged. The show's emphasis on empowerment and inspiration aligns with the idea that"
     },
     {
       "a_turn_idx": 2,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of speaking out loud as an encouraged action in turn 2.\",\n  \"reason\": \"Turn 16 explicitly states that the Thinking Out Loud Radio Show provides 'motivation, more inspiration, and more empowerment,' which directly verifies the substantive claim in turn 2 that speaking out loud is meaningful and encouraged. The show’s purpose aligns with the encouragement of vocal"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of speaking out loud as an encouraged action in turn 2.\",\n  \"reason\": \"Claim C explicitly states that the Thinking Out Loud Radio Show provides 'inspiration,' which directly verifies the substantive element of assumption A that speaking out loud is meaningful in this context. The show's purpose—inspiring and empowering listeners—aligns with and validates the idea that vocal"
     },
     {
       "a_turn_idx": 2,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the audience addressed in turn 2 ('Speak out loud'). 'The Thinking Out Loud Radio Show' is the same entity referenced throughout.\",\n  \"reason\": \"Turn 16 explicitly states that the show provides 'empowerment,' which directly supports and verifies the earlier assumption in turn 2 that speaking out loud is meaningful and encouraged. The act of speaking out loud is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the audience addressed in turn 2 ('Speak out loud'). 'The Thinking Out Loud Radio Show' is the same entity referenced in both turns.\",\n  \"reason\": \"Turn 16 explicitly states that the show provides 'empowerment,' which directly supports the idea that speaking out loud is meaningful and encouraged, as asserted in turn 2. The connection between speaking out"
     },
     {
       "a_turn_idx": 2,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to the audience/listeners, consistent with the context of the radio show. 'The thinking out loud radio show' is the direct referent of the earlier mention in turn 2 ('The Thinking Out Loud Show').\",\n  \"reason\": \"Claim C explicitly states 'you're listening to the thinking out loud radio show,' which directly verifies the substance of assumption A that speaking out loud is encouraged and meaningful in this context."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to the audience/listeners, consistent with the context of the radio show. 'The thinking out loud radio show' is a direct reference to the program mentioned in turn 2.\",\n  \"reason\": \"Claim C explicitly states 'you're listening to the thinking out loud radio show,' which directly verifies the substance of assumption A—that speaking out loud is encouraged and meaningful in this context—by situating the listener within the active"
     },
     {
       "a_turn_idx": 2,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'the Thinking Out Loud Radio Show' refers consistently to the program introduced earlier.\",\n  \"reason\": \"Claim C provides information about the show's schedule and platforms but does not address or verify the idea that speaking out loud is encouraged and meaningful. While the show's name and theme align with the broader context of 'speaking out loud,' the specific claim in C does not explicitly state or confirm the earlier assumption about encouragement and meaning. Thus, the connection"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the Thinking Out Loud Radio Show' in turn 20 refers to the same entity mentioned in turn 2 as 'The Thinking Out Loud Show'.\",\n  \"reason\": \"Turn 20 mentions the broadcast schedule and platforms for 'The Thinking Out Loud Radio Show', which provides logistical details about the show. However, it does not explicitly state or verify the claim that speaking out loud is encouraged and meaningful in this context. While the phrase '"
     },
     {
       "a_turn_idx": 2,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 21 refers to the Thinking Out Loud Radio Show, which was previously introduced in turn 2 as the subject of the transformative potential claim.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to 'issues that matter to you,' which directly verifies the transformative potential for listeners described in assumption A. The focus on listener relevance and empowerment aligns precisely with the idea of transformative impact, making the connection clear and explicit.\""
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 21 refers to the Thinking Out Loud Radio Show, which was previously introduced in turn 2 as the subject of the transformative potential claim.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to 'issues that matter to you,' which directly verifies the transformative potential for listeners implied in assumption A. The focus on listener relevance and empowerment aligns with the idea of transformation, and the statement is clear, direct, and"
     },
     {
       "a_turn_idx": 2,
@@ -231,7 +231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the host and co-hosts of the show, consistent with the show's ongoing broadcast context.\",\n  \"reason\": \"Claim C states that the host is welcoming listeners back to the show, which aligns with the general context of continuity and audience engagement. However, it does not explicitly address or verify the transformative potential for listeners mentioned in assumption A. While the return of the show implies ongoing listener interaction, the claim lacks"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the host and co-hosts of the show; 'the Thinking Out Allow Radio Show' is the name of the program mentioned in turn 28, which matches the earlier reference to 'The Thinking Out Loud Show' in turn 2.\",\n  \"reason\": \"Turn 28 states that the host is welcoming listeners back to the show, which implies continuity and engagement with the audience. However, it does not"
     },
     {
       "a_turn_idx": 3,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in A refers to the audience of the radio show, and 'you' in C refers to the same audience.\",\n  \"reason\": \"Claim C states that the listener has arrived at a place or event, which is unrelated to assumption A, which asserts that the listener has access to a radio or audio streaming platform. There is no semantic connection between arriving at a physical location and having access to a broadcast medium. In fact, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in A refers to the audience of the radio show, and 'the listener' in C is similarly the audience. However, C does not address access to a radio or audio platform.\",\n  \"reason\": \"Claim C states that the listener has arrived at a place or event, which is unrelated to the assumption in A that the listener has access to a radio or audio streaming platform. There is no mention of radio, audio, streaming"
     },
     {
       "a_turn_idx": 3,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 3 refers to the audience/listener, and 'the Thinking Out Loud Radio Show' is the program being referenced. In turn 4, 'Mr. Show' appears to be a new segment or feature within the same show, introduced by the speaker.\",\n  \"reason\": \"Turn 4 introduces 'Mr. Show' as a featured segment, which implies continuity with the ongoing broadcast mentioned in turn 3. While turn 3 assumes"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 3 refers to the audience/listener, and 'the Thinking Out Loud Radio Show' is the program being discussed. In turn 4, 'Mr. Show' appears to be a new segment or feature within the same show, introduced by the speaker.\",\n  \"reason\": \"Turn 4 explicitly introduces 'Mr. Show' as a featured segment, which aligns with the assumption in turn 3 that the listener recognizes the significance of"
     },
     {
       "a_turn_idx": 3,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 7 refers to SPEAKER_11, who is the meteorologist introduced in turn 1. No direct reference to the show title or listener recognition is made.\",\n  \"reason\": \"Turn 7 states that the speaker learned they would be the main character of the show upon arriving at the set, which relates to the show's structure and their role. However, it does not address or verify the assumption that the listener recognizes the significance"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 7 refers to SPEAKER_11, who is the same person introduced in turn 1. 'The show' in turn 7 refers to The Thinking Out Loud Radio Show, which is the subject of turn 3.\",\n  \"reason\": \"Turn 7 states that the speaker learned they would be the main character of the show upon arriving at the set, which implies recognition of the show's identity and their role within it."
     },
     {
       "a_turn_idx": 3,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the listener, but there is no connection between asking 'Where you at?' and the assumption that the listener recognizes the significance of the show title.\",\n  \"reason\": \"Turn 3 assumes the listener recognizes the significance of the show title, but turn 19 asks about the listener's physical location, which is unrelated to recognizing the show's title significance. There is no mention of the title, its meaning, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the listener, but there is no connection between asking 'Where you at?' and the assumption that the listener recognizes the significance of the show title.\",\n  \"reason\": \"Turn 19 asks about the listener's location, which is unrelated to the assumption in turn 3 that the listener recognizes the significance of the show title. There is no mention of the title, its meaning, or any acknowledgment of its importance."
     },
     {
       "a_turn_idx": 3,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 21 refers to the speaker's own radio show, which is explicitly identified as 'the Thinking Out Loud Radio Show' in turn 20.\",\n  \"reason\": \"Turn 21 explicitly states 'our live radio show,' directly verifying the nature of the show mentioned in turn 3 ('you're listening to the Thinking Out Loud Radio Show'). The claim confirms the format (live radio show) and aligns with the assumed recognition"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 21 refers to the speaker's own radio show, which is explicitly identified as 'the Thinking Out Loud Radio Show' in turn 20.\",\n  \"reason\": \"Turn 21 explicitly states 'our live radio show,' directly verifying the claim that the speaker hosts a live radio show. This aligns with the earlier assumption in turn 3 that the listener recognizes the significance of the show title, as the speaker now confirms both"
     },
     {
       "a_turn_idx": 4,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to individuals undergoing spiritual growth, but there is no mention of 'roles' or 'introduction' in the context of turn 24. The concept of 'grace' and self-compassion during spiritual growth does not relate to the idea of 'identifying roles enhancing perceived value of the introduction'.\",\n  \"reason\": \"Turn 4 assumes that identifying roles increases the perceived value of the introduction, which is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to individuals undergoing personal spiritual growth, but this does not relate to the concept of 'identifying roles' or 'perceived value of the introduction' mentioned in turn 4.\",\n  \"reason\": \"Turn 4 asserts that identifying roles enhances the perceived value of the introduction, which is a claim about audience perception and presentation structure. Turn 24 discusses self-grace during spiritual growth, a completely different topic involving personal"
     },
     {
       "a_turn_idx": 4,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to SPEAKER_09 (Brenda Jones), and 'the city council' refers to the Detroit City Council mentioned in turn 31.\",\n  \"reason\": \"Turn 4 (A) claims that identifying roles enhances the perceived value of the introduction. Turn 33 (C) discusses the speaker's belief that an individual (Brenda Jones) saw a problem in the city council and chose to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 33 refers to SPEAKER_09 (Brenda Jones), and 'the city council' refers to the Detroit City Council mentioned in turn 31.\",\n  \"reason\": \"Turn 4 (A) claims that identifying roles enhances the perceived value of the introduction. Turn 33 (C) discusses the speaker's belief that an individual (Brenda Jones) contributed positively to improving the city council. However,"
     },
     {
       "a_turn_idx": 4,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_09, who is the same individual mentioned in turn 4.\",\n  \"reason\": \"Claim C states that the speaker believes God provided them with the ability to win, which is unrelated to assumption A, which concerns the perceived value of an introduction being enhanced by role identification. There is no overlap in semantic content between the two statements. Therefore, the claim does not support, verify, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_09, who is the same individual mentioned in turn 4.\",\n  \"reason\": \"Claim C states that the speaker believes God provided them with the ability to win, which is unrelated to assumption A, which concerns the perceived value of an introduction being enhanced by role identification. There is no overlap in subject matter, concept, or logical connection between the two statements. Therefore, the claim does"
     },
     {
       "a_turn_idx": 5,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 19 refers to the listener, consistent with turn 5.\",\n  \"reason\": \"Turn 19 asks 'Where you at?', which is a question about physical location. Turn 5 involves a request for a subjective account ('what it was like'), not related to location. There is no semantic connection between asking about location and expecting a subjective interpretation of an experience. Thus, C does not support, verify, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 19 refers to the listener, but there is no connection to the earlier assumption about interpreting 'what it was like'.\",\n  \"reason\": \"Turn 19 asks 'Where you at?', which is a question about physical location, while assumption A concerns the interpretation of 'what it was like' as a request for a subjective account. There is no mention or implication of subjective experience or interpretation in turn 19"
     },
     {
       "a_turn_idx": 5,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the listener, but there is no connection between the question 'Where you at?' and the earlier assumption A about directing the listener toward accessible music channels.\",\n  \"reason\": \"Claim C (turn 19) asks the listener's location, which is unrelated to the intent described in assumption A (turn 6), which is to guide the listener to accessible music channels via platforms like Apple iTunes, Spotify, etc."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the listener, but there is no indication that the speaker is directing the listener toward accessible music channels. The statement 'Where you at?' is a location inquiry, unrelated to music access.\",\n  \"reason\": \"Claim C (turn 19) asks about the listener's location, which is unrelated to the earlier assumption A that the speaker intends to direct the listener toward accessible music channels. There is no mention of music"
     },
     {
       "a_turn_idx": 6,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in claim C refers to the audience of the radio show, same as in assumption A.\",\n  \"reason\": \"Claim C states that the listener has arrived at a place or event, which is unrelated to assumption A, which asserts that the listener has access to digital music platforms. There is no semantic connection between arriving at a physical location/event and having access to digital music platforms. The claim does not verify, support, or even reference"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in claim C refers to the audience of the radio show, which is consistent with the context.\",\n  \"reason\": \"Claim C states that 'the listener has arrived at a place or event,' which is unrelated to assumption A, which asserts that the listener has access to digital music platforms. There is no mention of digital platforms, streaming services, or access to media in claim C. The topic shifts entirely to a live radio show and"
     },
     {
       "a_turn_idx": 7,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in claim C refers to Omarosa Newman, who is the subject of the discussion in turn 10. The term 'limited verifiable access' in C does not refer to the same context as 'a short timeframe for preparation' in A.\",\n  \"reason\": \"Claim C discusses Omarosa Newman's alleged limited access to high-level White House meetings, which relates to her position and influence within the Trump administration. However, this topic is unrelated to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'she' in turn 10 refers to Omarosa Newman, who is the subject of the discussion. 'Her' in 'her security access' also refers to Omarosa.\",\n  \"reason\": \"Claim C states that Omarosa Newman had limited verifiable access to high-level White House meetings, including the president. This touches on the idea of restricted or unconfirmed access, which relates to the notion of limited control over circumstances. However, it does not explicitly"
     },
     {
       "a_turn_idx": 7,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_11, and 'the speaker' in C refers to SPEAKER_16, who is discussing self-grace in a spiritual context.\",\n  \"reason\": \"Claim C discusses extending grace to oneself during spiritual growth, which is a distinct concept from the public use of personal life details (e.g., being single, past interviews) as mentioned in assumption A. While both touch on personal experiences"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the speaker and audience, and 'ourselves' refers to individuals undergoing personal spiritual growth. No direct reference to 'personal life details' or 'public use in media' from turn 7.\",\n  \"reason\": \"Turn 24 discusses self-grace during spiritual growth, which is a distinct concept from the public use of personal life details in media. While both involve personal experiences, the focus on self-compass"
     },
     {
       "a_turn_idx": 8,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Inside Vision' refers to a recurring segment mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the 'Inside Vision' segment appears in each episode of the Thinking Out Loud radio show. However, assumption A (turn 8) concerns the influence of public awareness campaigns, such as the radio show itself, on voter turnout. Claim C does not address voter turnout, public awareness, or any aspect of civic engagement. Instead,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Inside Vision segment' refers to a recurring feature mentioned in turn 13.\",\n  \"reason\": \"Claim C states that the 'Inside Vision' segment appears in each episode of the Thinking Out Loud radio show. However, assumption A (turn 8) concerns the impact of public awareness campaigns, such as the radio show, on voter turnout. Claim C does not address voter turnout, influence, or any aspect of public awareness related to civic"
     },
     {
       "a_turn_idx": 8,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_18 refers to 'the Thinking Out Loud radio show' in turn 15, which matches the show mentioned in turn 8. 'The current broadcast' in turn 15 refers to the ongoing episode, consistent with the context of the show described in turn 8.\",\n  \"reason\": \"Claim C (turn 15) states that the broadcast is on the 'Thinking Out Loud radio show,' which aligns with the context of the show"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the current broadcast, which is explicitly identified as the 'Thinking Out Loud Radio Show' in turn 15.\",\n  \"reason\": \"Claim C states that the current broadcast is on the 'Thinking Out Loud radio show,' which is consistent with the context. However, assumption A (turn 8) concerns the influence of such public awareness campaigns—specifically, the radio show—on voter turnout. Claim C does not address"
     },
     {
       "a_turn_idx": 8,
@@ -516,7 +516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Motivation' in C aligns with 'inspirational thoughts' and 'motivational speaker' in A.\",\n  \"reason\": \"Claim C explicitly states that the show provides motivation, which directly supports the broader idea in assumption A that public awareness campaigns like the radio show can influence voter turnout by engaging listeners emotionally and intellectually. While C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Motivation' in C aligns with 'motivational speaker' and 'inspirational thoughts' in A.\",\n  \"reason\": \"Claim C explicitly states that the show provides motivation, which is consistent with the substance of assumption A that public awareness campaigns like the radio show can influence voter turnout. While A focuses on civic impact (voter turnout"
     },
     {
       "a_turn_idx": 8,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of public engagement in turn 8.\",\n  \"reason\": \"Claim C states that the Thinking Out Loud Radio Show provides inspiration, which aligns with the substance of assumption A that public awareness campaigns like the radio show can influence voter turnout. While C does not explicitly mention voter turnout or civic duty, it affirms the show's role in delivering motivational content—direct"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of public engagement in turn 8.\",\n  \"reason\": \"Claim C states that the Thinking Out Loud Radio Show provides inspiration, which aligns with the substance of assumption A that public awareness campaigns like the radio show can influence voter turnout. While C does not explicitly mention voter turnout or civic duty, it affirms the show’s role in delivering motivational content—direct"
     },
     {
       "a_turn_idx": 8,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Empowerment' is a broader concept that aligns with the show's stated purpose of encouraging civic engagement and providing motivation, as described in turn 8.\",\n  \"reason\": \"Assumption A asserts that public awareness campaigns like the radio show can influence voter turnout, implying a role in motivating civic action. Claim C explicitly states that the show provides '"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Empowerment' is a broader concept that aligns with the show's stated purpose of encouraging civic engagement and providing motivation, as described in turn 8.\",\n  \"reason\": \"Claim C states that the show provides 'empowerment,' which is consistent with the substance of assumption A—that public awareness campaigns like the radio show can influence voter turnout."
     },
     {
       "a_turn_idx": 8,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience of the radio show, consistent with the context of turn 8 where public awareness campaigns (like the radio show) are discussed. 'The Thinking Out Loud Radio Show' is the same entity mentioned in turn 8.\",\n  \"reason\": \"Claim C states that the listener is tuned into the radio show, which aligns with the context of turn 8 discussing the show's role in public awareness. However, C"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience of the radio show, consistent with the context of turn 8 where public awareness campaigns (like the radio show) are discussed.\",\n  \"reason\": \"Claim C states that the listener is tuned into the Thinking Out Loud Radio Show, which is contextually relevant to assumption A about public awareness campaigns influencing voter turnout. However, C does not explicitly state or verify the causal claim that such campaigns influence voter behavior. It only confirms"
     },
     {
       "a_turn_idx": 8,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'my daddy Michael Nimmin' as the radio show host; 'Michael Nimmin' is a clear misstatement of 'Michael Nemez' (from turn 8), indicating a coreference error. Despite the name discrepancy, the role attribution (radio show host) is consistent.\",\n  \"reason\": \"Claim C states 'I am the radio show host,' which directly asserts the identity of the host. However, this does not address"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_01 refers to 'my daddy Michael Nimmin' as the radio show host; 'Michael Nimmin' is a clear misstatement of 'Michael Nemez' (SPEAKER_18), indicating a possible error in identification. However, the claim 'I am the radio show host' is directly contradicted by the established context where SPEAKER_18 is the confirmed host.\",\n  \"reason\": \"Claim C (turn 17)"
     },
     {
       "a_turn_idx": 8,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the Thinking Out Loud Radio Show' refers consistently to the program discussed throughout the context.\",\n  \"reason\": \"Claim C states a specific broadcast schedule (every Tuesday at 8 p.m. on Blog Talk Radio), which is a factual detail about the show's airing. However, assumption A (turn 8) is about the potential influence of public awareness campaigns like the radio show on voter turnout. While C confirms the existence and regularity of the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the Thinking Out Loud Radio Show' refers consistently to the program discussed throughout the context.\",\n  \"reason\": \"Claim C states a specific broadcast schedule (every Tuesday at 8 p.m. on Blog Talk Radio), which is a factual detail about the show's airing. However, assumption A (turn 8) is about the potential influence of public awareness campaigns like the radio show on voter turnout. While C confirms the existence and platform of the show"
     },
     {
       "a_turn_idx": 8,
@@ -621,7 +621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the Thinking Out Loud Radio Show, which is the subject of assumption A. 'Issues that matter to you' directly corresponds to the content focus mentioned in A, such as voting and civic engagement.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to issues that matter to listeners, which directly verifies the substance of assumption A—that public awareness campaigns like this radio show can influence voter turnout. The connection is strengthened"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the Thinking Out Loud Radio Show, which is the subject of assumption A. 'Issues that matter to you' directly corresponds to the focus mentioned in A, specifically voter turnout and civic engagement.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to issues that matter to listeners, which directly verifies the substance of assumption A—that public awareness campaigns like this radio show can influence voter turnout. The connection is clear:"
     },
     {
       "a_turn_idx": 8,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'my radio show' which aligns with SPEAKER_18's role as host of 'The Thinking Out Loud Radio Show' mentioned in turn 8. Coreference resolved: 'my radio show' = 'The Thinking Out Loud Radio Show'.\",\n  \"reason\": \"Claim C states 'I host a radio show,' which is consistent with the context of SPEAKER_18 being the host of the show discussed in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'my radio show' which, based on context, is the Thinking Out Loud Radio Show hosted by SPEAKER_18. The pronoun 'I' in turn 26 refers to SPEAKER_02, who is later identified as the host in turn 28.\",\n  \"reason\": \"Claim C ('I host a radio show') is related to the broader context of the show but does not explicitly verify the specific assumption"
     },
     {
       "a_turn_idx": 8,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_18 refers to 'the current episode' as a 'VIP edition of the Thinking Out Allow radio show', which is a new label not mentioned in turn 8. 'Thinking Out Loud Radio Show' is the correct name, and 'VIP edition' is not equivalent to the earlier assumption about public awareness campaigns influencing voter turnout.\",\n  \"reason\": \"Claim C introduces a new label ('VIP edition') for the show, which does not address or verify the earlier"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_18 refers to 'the Thinking Out Allow radio show' in turn 28, which matches the name of the show mentioned in turn 8. 'VIP edition' is a specific descriptor not present in assumption A.\",\n  \"reason\": \"Claim C states that the episode is a 'VIP edition' of the show, which is a new detail not implied or supported by assumption A. Assumption A concerns the influence of public awareness campaigns like the radio show"
     },
     {
       "a_turn_idx": 8,
@@ -681,7 +681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Brenda Jones, as established in the context where she is introduced as the guest and elected official since 2005.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that Brenda Jones has been an elected official since 2005, which directly confirms the assertion that elected officials have significant power to shape public policy and represent constituents—specifically by highlighting her long-standing role in public service"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to Brenda Jones, as established in the context where she is introduced as the guest and elected official since 2005.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that Brenda Jones has been an elected official since 2005, which directly confirms her role in shaping public policy and representing constituents—core elements of A. The claim is clear, direct, and unambiguous in affirm"
     },
     {
       "a_turn_idx": 8,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the Thinking Out Loud Radio Show, which is the subject of assumption A. 'Issues that matter to you' directly corresponds to 'issues that matter to you' in turn 8.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to issues that matter to listeners, which directly verifies the substance of assumption A—that listeners trust the radio show as a reliable source of political information. While A focuses on trust"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the Thinking Out Loud Radio Show, which is the subject of assumption A. 'Issues that matter to you' directly corresponds to 'issues that matter to you' in A.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to issues that matter to listeners, which directly verifies the substance of assumption A—that listeners trust the show as a reliable source of political information. While A focuses on trust in political information"
     },
     {
       "a_turn_idx": 8,
@@ -726,7 +726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience of the radio show, consistent with the context of turn 8 where listeners are addressed as the intended audience. 'The current broadcast' refers to the ongoing episode of the Thinking Out Loud Radio Show, which is explicitly named in turn 8.\",\n  \"reason\": \"Claim C explicitly states that the listener is tuned in to the 'Thinking Out Loud radio show,' which directly verifies the substance of assumption A—that listeners trust"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to the listeners of the radio show, consistent with the audience addressed in turn 8. 'The Thinking Out Loud radio show' is the full name of the program introduced in turn 8.\",\n  \"reason\": \"Turn 15 explicitly states that the listener is 'tuned in to the Thinking Out Loud radio show,' which directly verifies the substance of assumption A in turn 8—that listeners trust the radio show as"
     },
     {
       "a_turn_idx": 8,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Motivation' in C aligns with 'motivational speaker' and 'inspirational thoughts' in A.\",\n  \"reason\": \"Claim C states that the show provides motivation, which is partially supported by assumption A's emphasis on the show being a source of political information and its inclusion of 'motivational and inspirational thoughts.' However, A"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to listeners of the radio show, consistent with the audience addressed in turn 8.\",\n  \"reason\": \"Claim C states that the show provides motivation, which aligns with part of assumption A (that listeners trust the show as a reliable source of political information), but does not explicitly verify the reliability or trustworthiness of the show as a source of political information. While motivation is mentioned in turn 8 ('motiv"
     },
     {
       "a_turn_idx": 8,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the listeners of the radio show, consistent with the audience addressed in turn 8.\",\n  \"reason\": \"Claim C states that the show provides 'inspiration,' which aligns with part of assumption A, which asserts that listeners trust the show as a reliable source of political information. However, C does not address reliability or trustworthiness regarding political content, nor does it verify the specific claim about political information. While"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to listeners of the radio show, consistent with the audience addressed in assumption A. 'The Thinking Out Loud Radio Show' is the same entity in both A and C.\",\n  \"reason\": \"Claim C states that the show provides 'motivation, more inspiration, and more empowerment,' which aligns with the idea that listeners trust the show as a reliable source of political information, as it suggests the show delivers value beyond mere information—"
     },
     {
       "a_turn_idx": 8,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Empowerment' is a broader concept than 'trust as a reliable source,' but the show's mission includes providing motivation and inspiration, which aligns with empowerment.\",\n  \"reason\": \"Claim C states that the show provides 'empowerment,' which is related to the idea of listeners trusting the show as a reliable source of political information, as both"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Empowerment' is a thematic extension of 'reliable source of political information' but not identical.\",\n  \"reason\": \"Claim C states that the show provides 'empowerment,' which is related to the idea of informing listeners about political matters (A), but does not explicitly verify that listeners trust the show as a reliable source. While empowerment may"
     },
     {
       "a_turn_idx": 8,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience/listeners of the radio show, consistent with the context of turn 8 where listeners are addressed as the intended recipients of political information.\",\n  \"reason\": \"Claim C explicitly states 'You are listening to the Thinking Out Loud Radio Show,' which directly confirms the audience's engagement with the show. This aligns with assumption A, which posits that listeners trust the show as a reliable source of political information. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the audience/listeners of the radio show, consistent with the context of turn 8 where listeners are addressed as the intended recipients of political information.\",\n  \"reason\": \"Claim C explicitly states 'You are listening to the Thinking Out Loud Radio Show,' which directly confirms the audience's engagement with the show. This verifies the assumption in A that listeners trust the show as a reliable source of political information, as being actively engaged with the"
     },
     {
       "a_turn_idx": 8,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my daddy' in turn 17 refers to Michael Nemez, the host mentioned in turn 8. 'Radio show host' is explicitly stated in turn 17.\",\n  \"reason\": \"Claim C (turn 17) states 'you're listening to the thinking out loud radio show with radio show host and my daddy Michael Nimmin', which explicitly identifies the speaker as the child of the host, not the host themselves. Therefore, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my daddy' in turn 17 refers to Michael Nemez, the host mentioned in turn 8. However, the claim 'I am the radio show host' is not supported by the content; instead, the speaker identifies herself as Maya and refers to the host as 'my daddy,' implying she is not the host.\",\n  \"reason\": \"Claim C states 'I am the radio show host,' but the context shows that the speaker (Maya"
     },
     {
       "a_turn_idx": 8,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Thinking Out Loud Radio Show' refers to the same entity throughout.\",\n  \"reason\": \"Claim C states the show airs on Blog Talk Radio at 8 p.m. on Tuesdays, which is unrelated to assumption A, which concerns listeners trusting the show as a reliable source of political information. C provides no evidence or statement about listener trust, reliability, or political information credibility. Therefore, it does not support, verify, or entail A and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Thinking Out Loud Radio Show' is consistently referenced without ambiguity.\",\n  \"reason\": \"Claim C states the show airs on Blog Talk Radio at 8 p.m. every Tuesday, which is unrelated to assumption A, which concerns listeners trusting the show as a reliable source of political information. C provides no evidence or statement about listener trust, reliability, or political credibility. Therefore, it does not support, verify, or entail A and is clearly unrelated"
     },
     {
       "a_turn_idx": 8,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the radio show hosted by Speaker 18, as established in the context. 'Live radio show' aligns with the described format of the Thinking Out Loud Radio Show.\",\n  \"reason\": \"Claim C states that the speaker hosts a 'live radio show,' which is consistent with the context. However, assumption A (turn 8) asserts that listeners trust the radio show as a reliable source of political information. Claim C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to the radio show hosted by Speaker 18, as established in the context. 'Live radio show' aligns with the description of the Thinking Out Loud Radio Show.\",\n  \"reason\": \"Claim C states that the speaker hosts a 'live radio show,' which is consistent with the context. However, assumption A (turn 8) asserts that listeners trust the radio show as a reliable source of political information. Claim C does"
     },
     {
       "a_turn_idx": 8,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 26 refers to the host of the radio show, consistent with SPEAKER_18 in earlier turns. 'My radio show' refers to the Thinking Out Loud Radio Show introduced in turn 8.\",\n  \"reason\": \"Claim C ('I host a radio show') is topically related to assumption A ('Listeners trust the radio show as a reliable source of political information') because both refer to the same radio program. However, C"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 26 refers to the host of the radio show, consistent with SPEAKER_18 in earlier turns, who identifies himself as the host.\",\n  \"reason\": \"Claim C ('I host a radio show') is related to assumption A ('Listeners trust the radio show as a reliable source of political information') in that both refer to the radio show and its host. However, C does not explicitly verify or state the substance of A—"
     },
     {
       "a_turn_idx": 8,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the listeners of the radio show, consistent with the audience addressed in assumption A. 'Issues that matter to you' directly corresponds to 'reliable source of political information' as both imply relevance and value to the listener.\",\n  \"reason\": \"Claim C explicitly states that the radio show 'gives voice to issues that matter to you,' which directly verifies the substance of assumption A—that listeners trust the show as a reliable source of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to the listeners of the radio show, consistent with the audience addressed in assumption A. 'Issues that matter to you' directly corresponds to 'reliable source of political information' as both imply relevance and importance to the audience.\",\n  \"reason\": \"Claim C explicitly states that the radio show gives voice to issues that matter to the audience, which directly verifies the substance of assumption A—that listeners trust the show as a reliable source of political"
     },
     {
       "a_turn_idx": 8,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_18 refers to 'the Thinking Out Allow radio show' in turn 28, which matches the name of the show mentioned in turn 8. However, 'VIP edition' is a new label not present in assumption A.\",\n  \"reason\": \"Claim C introduces a new descriptor ('VIP edition') that is not part of assumption A, which concerns listener trust in the show as a reliable source of political information. While the show's identity is consistent,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_18 refers to 'the Thinking Out Allow radio show' in turn 28, which matches the name of the show mentioned in turn 8. However, 'VIP edition' is a new label not present in assumption A.\",\n  \"reason\": \"Assumption A (turn 8) states that listeners trust the radio show as a reliable source of political information. Claim C (turn 28) introduces 'VIP edition' as a new descriptor,"
     },
     {
       "a_turn_idx": 8,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the host (SPEAKER_18) and the audience, consistent with the show's framing.\",\n  \"reason\": \"Claim C (turn 28) states the host is welcoming listeners back to the show, which is a procedural or structural statement about the show's continuity. However, it does not address or verify the substantive assumption A (turn 8), which is that listeners trust the radio show as"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 28 refers to the host (SPEAKER_18) and the audience, consistent with the show's framing. 'The Thinking Out Allow Radio Show' is a proper noun referring to the same program mentioned in turn 8.\",\n  \"reason\": \"Claim C (turn 28) states the host is welcoming listeners back to the show, which is a procedural statement about returning to the broadcast. However, it does not"
     },
     {
       "a_turn_idx": 8,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Inside Vision segment' refers to a recurring feature mentioned in turn 13. The earlier assumption A (turn 8) concerns the radio show's role in shaping civic engagement beyond entertainment. Turn 13 discusses a segment titled 'Inside Vision' focused on a book and personal ministry, not civic engagement.\",\n  \"reason\": \"Claim C (turn 13) introduces 'Inside Vision' as a recurring segment about a book and personal ministry, which"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the' in 'the Inside Vision segment' refers to the recurring segment mentioned in turn 13, which is distinct from the earlier assumption A about the radio show's role in shaping civic engagement. No coreference links connect 'Inside Vision' to the broader civic engagement function described in turn 8.\",\n  \"reason\": \"Claim C states that the 'Inside Vision' segment appears in each episode, which is a factual claim about a specific recurring feature of the"
     },
     {
       "a_turn_idx": 8,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to the audience listening to the broadcast, and 'the Thinking Out Loud radio show' is the same program referenced in turn 8. The phrase 'you're tuned in to the Thinking Out Loud radio show' explicitly confirms the identity of the program discussed in assumption A.\",\n  \"reason\": \"Claim C (turn 15) directly and explicitly verifies the substance of assumption A (turn 8), which asserts that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to the audience listening to the broadcast, and 'the Thinking Out Loud radio show' is the same program referenced in turn 8. The phrase 'you're tuned in to the Thinking Out Loud radio show' explicitly confirms the identity of the program discussed in assumption A.\",\n  \"reason\": \"Claim C explicitly states that the current broadcast is on the Thinking Out Loud radio show, which directly verifies the program mentioned in assumption A"
     },
     {
       "a_turn_idx": 8,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Motivation' in C aligns with 'motivational and inspirational thoughts' in A.\",\n  \"reason\": \"Claim C explicitly states that the show provides 'motivation, more inspiration, and more empowerment,' which directly supports the substance of assumption A that the show shapes civic engagement beyond entertainment by offering motivational and inspirational content. While A emphasizes civic engagement"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to the 'Thinking Out Loud Radio Show' mentioned in assumption A. 'Motivation' in C aligns with 'motivational speaker' and 'inspirational thoughts' in A.\",\n  \"reason\": \"Claim C explicitly states that the show provides 'motivation, more inspiration, and more empowerment,' which directly supports the idea in assumption A that the show shapes civic engagement beyond entertainment by offering motivational and inspirational content."
     },
     {
       "a_turn_idx": 8,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 16 refers to the audience of the radio show, consistent with the context of turn 8 where the show's impact on listeners is discussed.\",\n  \"reason\": \"Turn 16 explicitly states that the show provides 'inspiration,' which aligns with the substance of assumption A in turn 8—that the show shapes civic engagement beyond entertainment. While 'inspiration' is a specific mechanism, it supports the broader claim that the show"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the show' in claim C refers to 'The Thinking Out Loud Radio Show' mentioned in assumption A. 'Inspiration' in C aligns with 'motivational and inspirational thoughts' and 'inspiration and motivation' mentioned in turn 8.\",\n  \"reason\": \"Claim C explicitly states that the show provides 'inspiration,' which directly supports the idea in assumption A that the show shapes civic engagement beyond entertainment by offering motivational and inspirational content. While A"
     },
     {
       "a_turn_idx": 8,
@@ -5496,7 +5496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in both turns refers to SPEAKER_09. 'Our Detroit police chief' refers to the police chief of Detroit, which is consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that the speaker has spoken with the Detroit police chief about human trafficking, which directly verifies the substance of assumption A—that human trafficking is a significant issue warranting prioritization. The mention of having discussions with the police chief and securing federal funding demonstrates active engagement"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in both turns refers to SPEAKER_09. 'Our Detroit police chief' refers to the police chief of Detroit, which is consistent across contexts.\",\n  \"reason\": \"Claim C explicitly states that the speaker has talked to the Detroit police chief about human trafficking, which directly verifies the substance of assumption A—namely, that human trafficking is a priority issue the speaker actively addresses. The mention of having discussions with the police chief and securing federal funding"
     },
     {
       "a_turn_idx": 55,
@@ -5931,7 +5931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in both turn 61 and turn 67 refers to the listener of the radio show. 'That dial' in turn 61 refers to the radio dial, and 'tuned into the radio show' in turn 67 implies active listening, confirming control over the dial.\",\n  \"reason\": \"Turn 67 explicitly states that the listener is currently tuned into the radio show, which directly verifies the assumption in turn 61"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in both turn 61 and turn 67 refers to the listener of the radio show. 'That dial' in turn 61 refers to the radio dial, and 'tuned into the radio show' in turn 67 confirms active engagement with the broadcast.\",\n  \"reason\": \"Turn 67 explicitly states that the listener is currently engaged with the radio show ('You're listening to...'), which directly verifies the assumption in turn"
     },
     {
       "a_turn_idx": 61,
@@ -6306,7 +6306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 68 is resolved to 'Brenda Jones' based on the speaker's self-introduction. In turn 81, 'Friends of Brenda Jones' explicitly references her by name, confirming that the speaker is referring to the same individual introduced earlier.\",\n  \"reason\": \"Turn 81 explicitly names 'Brenda Jones' and refers to her campaign as 'Friends of Brenda Jones,' which directly verifies the assumption in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in 'Friends of Brenda Jones' refers back to the speaker, Brenda Jones, established in turn 68. 'Brenda Jones' is explicitly named and identified as the candidate in turn 68, making her identity clear.\",\n  \"reason\": \"Turn 81 explicitly mentions 'Friends of Brenda Jones,' which directly references the individual introduced in turn 68. The claim assumes the audience knows who Brenda Jones is, confirming the earlier"
     },
     {
       "a_turn_idx": 68,

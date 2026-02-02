@@ -4037,11 +4037,11 @@
       "claim_text": "Louis C.K. must demonstrate that he has learned something from his actions.",
       "overlap_score": 2,
       "c_time": 1665.264,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' or 'him' not present in either A or C.\",\n  \"reason\": \"Claim C (turn 50) discusses Louis C.K.'s need to demonstrate learning from his actions, which is unrelated to assumption A (turn 49), which concerns Chuck Schumer's motivations in advancing Trump judges. There is no overlap in subject matter, logic, or content between A and C. Thus, the claim does not support, verify,"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'he' in claim C refers to Louis C.K., as established in the surrounding context.",
+      "reason": "Claim C discusses Louis C.K.'s need to demonstrate learning from his actions, which is unrelated to assumption A about Chuck Schumer's motivations being driven by personal intent rather than institutional constraints. There is no overlap in subject matter or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the earlier assumption.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Louis C.K., as established in the surrounding context.\",\n  \"reason\": \"Claim C discusses Louis C.K.'s need to demonstrate learning from his actions, which is unrelated to assumption A about Chuck Schumer's motivations being driven by personal intent rather than institutional constraints. There is no overlap in subject matter or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the earlier assumption.\"\n}"
     },
     {
       "a_turn_idx": 49,
@@ -4221,7 +4221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to John McCain, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 54) states that John McCain entered the private sector after his military service, which is a factual assertion about his post-military career. However, assumption A (turn 51) concerns the moral boundary of joking about military service, particularly combat, and implies that such jokes are inappropriate due to the gravity of military"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to John McCain, as established in the prior context. 'McCain' is the subject of both turns 51 and 54.\",\n  \"reason\": \"Claim C (turn 54) states that John McCain entered the private sector after his military service, which is a factual assertion about his post-military career. However, assumption A (turn 51) claims that jokes about military service, especially"
     },
     {
       "a_turn_idx": 51,
@@ -4326,7 +4326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 55 refers to the group participating in the 'garbage can' ritual, which includes both speakers. 'John McCain' is the referent of 'him' in the context of the symbolic act.\",\n  \"reason\": \"Claim C expresses sadness over potentially missing the final chance to symbolically throw John McCain into the garbage can, which directly reflects the earlier assumption A that leadership decisions—like arming teachers—reflect poor judgment. While"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 55 refers to the group participating in the 'garbage can' ritual, and 'John McCain' is the referent of the object being symbolically discarded. The phrase 'throw John McCain in the garbage can' from turn 54 establishes the symbolic act, which is now framed as potentially irreversible in turn 55.\",\n  \"reason\": \"Claim C explicitly states that the speaker feels they may have missed their final opportunity to"
     },
     {
       "a_turn_idx": 54,

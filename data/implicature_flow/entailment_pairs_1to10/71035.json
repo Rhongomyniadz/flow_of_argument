@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 0 refers to Congressman Brad Schneider, who is explicitly named in turn 25 as the U.S. Representative for Illinois's 10th Congressional District.\",\n  \"reason\": \"Turn 25 explicitly confirms the identity of Brad Schneider as the U.S. Representative for Illinois's 10th District, which directly supports and verifies the assumption in turn 0 that his perspective is relevant due to his role as a representative. This"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 0 refers to Congressman Brad Schneider, who is explicitly named in turn 25 as the U.S. Representative for Illinois's 10th Congressional District.\",\n  \"reason\": \"Turn 25 explicitly confirms the identity of Congressman Brad Schneider as the representative for Illinois's 10th District, which directly verifies the assumption in turn 0 that his perspective would be relevant due to his role. This eliminates ambiguity and fully substantiates"
     },
     {
       "a_turn_idx": 0,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'those people' in turn 24 refers to essential workers mentioned earlier, including grocery staff, police, and firefighters.\",\n  \"reason\": \"Claim C discusses the importance of essential workers like grocery staff, police, and firefighters to national stability during crises, which is a broader societal role. However, it does not explicitly address or verify the specific claim in assumption A—that ventilators and PPE are essential for hospital operations during public health emergencies. While both statements relate to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'those people' in turn 24 refers to essential workers mentioned earlier in the sentence, including grocery staff, police, and firefighters. There is no direct reference to 'resources like ventilators and PPE' in turn 24.\",\n  \"reason\": \"Turn 24 discusses the importance of essential workers—such as grocery staff, police, and firefighters—for national stability during crises. While this aligns topically with the broader context of crisis response and healthcare"
     },
     {
       "a_turn_idx": 1,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the loan program described in turns 12-13, not the healthcare infrastructure provisions in turn 1. No coreference links to the earlier assumption about healthcare in Illinois.\",\n  \"reason\": \"Claim C (turn 14) discusses provisions to prevent duplicate applications for small business loans, which is unrelated to the healthcare infrastructure support in Illinois mentioned in assumption A (turn 1). The content of C does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 14 refers to the loan program described in turns 12-13, not the healthcare infrastructure provisions in turn 1. No coreference links connect the claim in turn 14 to the earlier assumption about healthcare infrastructure.\",\n  \"reason\": \"Claim C (turn 14) discusses provisions to prevent duplicate applications for small business loans, which is unrelated to the healthcare infrastructure support in Illinois mentioned in assumption A (turn"
     },
     {
       "a_turn_idx": 2,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_01, who is the same speaker as in assumption A. 'This supply' in C refers to PPE supply, which is central to assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker advocated for increased attention to PPE supply during a hearing with Secretary Azar, which directly verifies the concern about PPE access mentioned in assumption A. While A includes the additional element of supply chain"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_01, who is the same speaker as in assumption A. 'This supply' in C refers to PPE supply, which is central to assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker advocated for increased attention to PPE supply during a hearing with Secretary Azar, which directly verifies the substance of assumption A—that a safe workplace depends on adequate access to PPE. While A includes"
     },
     {
       "a_turn_idx": 2,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to healthcare workers, as established in the context of turn 4, where the focus is on protecting frontline workers and ensuring their safety.\",\n  \"reason\": \"Claim C explicitly states that healthcare workers are under increasing demand due to rising cases, which directly verifies the substance of assumption A—that there is a moral obligation to prioritize healthcare workers over individual convenience. The increased demand underscores the urgency of protecting healthcare workers, reinforcing the ethical imperative outlined in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to healthcare workers, as established in the context of turn 4, where the focus is on protecting frontline workers and ensuring their safety.\",\n  \"reason\": \"Claim C explicitly states that healthcare workers are under increasing demand due to rising cases, which directly verifies the substance of assumption A—that there is a moral obligation to prioritize healthcare workers over individual convenience. The increased strain on healthcare workers' time and resources underscores the urgency of protecting them,"
     },
     {
       "a_turn_idx": 4,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to 'healthcare workers' mentioned in assumption A. 'Demand' in C refers to the increased burden on healthcare workers' time and resources, which aligns with the concern in A about protecting frontline workers.\",\n  \"reason\": \"Claim C explicitly states that healthcare workers are under increasing demand due to rising cases, which directly verifies the substance of assumption A—that audience members value the well-being of frontline healthcare workers. The increase in demand"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'their' in claim C refers to 'healthcare workers' mentioned in assumption A. 'Demand' refers to the increased pressure on healthcare workers' time and resources, which aligns with the concern in A about protecting frontline workers.\",\n  \"reason\": \"Claim C explicitly states that healthcare workers are under increasing demand due to rising cases, which directly verifies the substance of assumption A—that audience members value the well-being of frontline healthcare workers. The increase in demand implies greater"
     },
     {
       "a_turn_idx": 5,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'this' in turn 6 refers to the initial draft of the CARES Act introduced by Mitch McConnell. 'Wall Street' is used consistently to represent financial institutions and large corporations.\",\n  \"reason\": \"Claim C explicitly states that the initial draft of the bill introduced by Mitch McConnell was 'very much tilted towards Wall Street,' which directly verifies the substance of assumption A that Wall Street and Main Street represent opposing interests in economic policy. The statement is unambiguous,"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'this' in turn 6 refers to the initial draft of the CARES Act introduced by Mitch McConnell. 'Wall Street' is used consistently to represent financial institutions and large corporations.\",\n  \"reason\": \"Claim C explicitly states that the initial draft of the bill introduced by Mitch McConnell was 'very much tilted towards Wall Street,' which directly verifies the substance of assumption A that Wall Street and Main Street represent opposing interests in economic policy. The contrast between the original bias"
     },
     {
       "a_turn_idx": 5,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to policymakers and the public, consistent with the broader context of governmental decision-making. 'Experts' in C refers to medical and scientific professionals mentioned in earlier turns.\",\n  \"reason\": \"Claim C emphasizes following science-based, evidence-based policy, which aligns with the value placed on expert guidance in turn 5, where the speaker expresses concern for frontline healthcare workers and the importance of protecting them. However, C does not explicitly state or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to policymakers and the public, consistent with the broader governmental and societal context established in turn 5.\",\n  \"reason\": \"Turn 22 asserts the need to follow science-based, evidence-based policy and rely on experts, which aligns with a general principle of informed decision-making. However, it does not explicitly state or verify the specific assumption in turn 5—that beneficiaries of policy measures should be evaluated based on their societal"
     },
     {
       "a_turn_idx": 5,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'policy' in turn 22 refers to public policy measures discussed in context.\",\n  \"reason\": \"Claim C states that policy should be based on science and evidence, which is a general principle related to decision-making. Assumption A, however, specifically claims that beneficiaries of policy measures should be evaluated based on their societal role. While both involve policy evaluation, C does not mention societal roles, beneficiaries, or criteria for eligibility—key components of A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'policy' in turn 22 refers to public policy, consistent with the broader discussion of the CARES Act and governmental response.\",\n  \"reason\": \"Turn 22 states that policy should be based on science and evidence, which is a general principle related to decision-making. However, it does not explicitly address or verify the specific assumption in turn 5—that beneficiaries of policy measures should be evaluated based on their societal role. While there is a"
     },
     {
       "a_turn_idx": 5,
@@ -2091,7 +2091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the American people collectively, and 'leaders' refers to officials at all governmental levels, including the president, governors, and local representatives. 'Experts' and 'brilliant scientists' are coreferential.\",\n  \"reason\": \"Claim C explicitly lists key components of the national leadership and societal infrastructure mentioned in assumption A—specifically, brilliant scientists (experts), effective local leaders (municipal leaders), skilled"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the American people collectively, and 'leaders' refers to officials at all governmental levels, including the president, governors, and local representatives. 'Experts' and 'brilliant scientists' are linked via the context of relying on scientific evidence.\",\n  \"reason\": \"Claim C explicitly lists key components of the national response infrastructure—brilliant scientists, effective local leaders, skilled medical professionals, and essential workers—which aligns"
     },
     {
       "a_turn_idx": 23,
@@ -2106,7 +2106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to governors like Cuomo, Pritzker, and DeWine, as established in the prior context. 'It is not a partisan thing' clarifies that their actions are driven by substantive concerns rather than political alignment.\",\n  \"reason\": \"Claim C states that governors like Cuomo, Pritzker, and DeWine are acting based on state-specific concerns rather than partisanship. This directly supports Assumption A,"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 24 refers to governors like Cuomo, Pritzker, and DeWine, as established in the prior context. 'It is not a partisan thing' clarifies that their actions are driven by situational awareness rather than political alignment.\",\n  \"reason\": \"Claim C states that governors like Cuomo, Pritzker, and DeWine are acting based on state-specific concerns rather than partisanship. This directly supports Assumption A"
     },
     {
       "a_turn_idx": 26,
@@ -2121,7 +2121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to Jen White, the interviewer, based on context. 'Stay safe' and 'be safe' are direct references to the well-wishes expressed in turn 26.\",\n  \"reason\": \"Claim C explicitly states the speaker's wish for the listener's safety and well-being, which directly verifies the assumption in A that the speaker believes their well-wishes have significance. The phrasing 'Stay safe' and 'let"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to Jen White, the interviewer, based on context. 'Stay safe' and 'be safe' are direct references to the listener.\",\n  \"reason\": \"Claim C explicitly states the speaker's well-wishes ('stay safe') and reinforces them with 'let's talk again soon,' which aligns with the belief in the significance of such messages. This directly verifies the assumption in A that the speaker believes their well-wishes"
     }
   ]
 }

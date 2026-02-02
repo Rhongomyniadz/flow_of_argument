@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Congressman Seth Moulton, as established in turn 3. The term 'sane member' in turn 3 is not directly related to the claim about running against an 18-year incumbent.\",\n  \"reason\": \"Claim C (turn 25) discusses the political imprudence of challenging an 18-year incumbent within one's own party, which is unrelated to the assumption in A (turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Congressman Seth Moulton, as established in turn 3. The phrase 'an 18-year incumbent' refers to the long-serving Democratic representative Moulton faced in his first primary.\",\n  \"reason\": \"Claim C (turn 25) discusses the strategic error of running against an 18-year incumbent within one's own party, which is a specific political cautionary statement. However, assumption A"
     },
     {
       "a_turn_idx": 3,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 14 refers to Democrats, consistent with the subject of turn 5. 'They' in turn 14 refers to the American public, aligning with the 'public trust' mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly states that the American public does not trust Democrats on immigration issues, which directly supports the broader idea in assumption A that public trust in democratic institutions depends on competent governance and ethical leadership. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 14 refers to Democrats, consistent with the subject of turn 5. 'They' in turn 14 refers to the American public, aligning with the 'public trust' mentioned in turn 5.\",\n  \"reason\": \"Claim C explicitly states that the American public does not trust Democrats on immigration issues, which directly supports the core idea in assumption A that public trust in democratic institutions depends on competent governance and ethical leadership. While"
     },
     {
       "a_turn_idx": 5,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Joe Biden, as established by context (SPEAKER_04's mention of Biden as a mentor and former vice president). The phrase 'the Massachusetts Democratic establishment' refers to the party leadership in Massachusetts, consistent with turn 7.\",\n  \"reason\": \"Claim C states that the Massachusetts Democratic establishment implied the speaker should not be in the race, which reflects a concern about exclusionary party dynamics. However, it"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 25 refers to Joe Biden, as established by context (SPEAKER_04's mention of Biden as a mentor and former vice president). The phrase 'the Massachusetts Democratic establishment' refers to the party leadership in Massachusetts, consistent with turn 7.\",\n  \"reason\": \"Claim C states that the Massachusetts Democratic establishment implied the speaker should not be in the race, which reflects a concern about exclusionary party dynamics. However, this"
     },
     {
       "a_turn_idx": 7,
@@ -724,9 +724,9 @@
       "c_time": 834.154,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No relevant coreference; 'users' and 'tasker' refer to distinct roles in the TaskRabbit context.",
-      "reason": "Claim C discusses scheduling tasks via the TaskRabbit app, which is unrelated to the earlier assumption A about political identities being shaped through branding. There is no overlap in subject matter, concept, or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the assumption.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'users' and 'tasker' refer to distinct roles in the TaskRabbit context.\",\n  \"reason\": \"Claim C discusses scheduling tasks via the TaskRabbit app, which is unrelated to the earlier assumption A about political identities being shaped through branding. There is no overlap in subject matter, concept, or semantic content between A and C. Therefore, the claim does not support, verify, or relate to the assumption.\"\n}\n```"
+      "coref_notes": "No relevant coreference links; 'users' refers to general app users, 'taskbook' is a typo for 'tasker'.",
+      "reason": "Claim C discusses scheduling tasks via the TaskRabbit app, which is unrelated to the earlier assumption A about political identities being shaped by branding. There is no overlap in subject matter, concept, or semantic content. The two statements address entirely different domains: political branding vs. task-scheduling technology.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' refers to general app users, 'taskbook' is a typo for 'tasker'.\",\n  \"reason\": \"Claim C discusses scheduling tasks via the TaskRabbit app, which is unrelated to the earlier assumption A about political identities being shaped by branding. There is no overlap in subject matter, concept, or semantic content. The two statements address entirely different domains: political branding vs. task-scheduling technology.\"\n}\n```"
     },
     {
       "a_turn_idx": 8,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'users' refers to clients in the TaskRabbit context, while 'the Democratic Party' and 'brander' are from a different political branding discussion.\",\n  \"reason\": \"Claim C discusses payment, tipping, and reviewing taskers via the TaskRabbit app, which is entirely unrelated to the political branding of the Democratic Party mentioned in assumption A. There is no overlap in subject matter, concept, or implied connection. The two contexts are distinct"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'users' refers to clients in the TaskRabbit context, not political identities.\",\n  \"reason\": \"Claim C discusses payment, tipping, and reviewing taskers via the TaskRabbit app, which is entirely unrelated to the idea that political identities can be shaped through deliberate branding. There is no overlap in subject matter, concept, or semantic content between A and C. The two statements operate in completely different domains (political branding vs. platform-based service"
     },
     {
       "a_turn_idx": 8,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the Democratic Party, as established in the prior context where Speaker_04 discusses the party's role in protecting trans people.\",\n  \"reason\": \"Claim C explicitly states that the Democratic Party is the only party capable of delivering protections and rights for trans people, which directly verifies the core content of assumption A — that the Democratic Party must present a unified, credible message. The statement in C affirms the party’s commitment to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the Democratic Party, as established in the prior context where Speaker_04 discusses the party's role in protecting trans people.\",\n  \"reason\": \"Claim C explicitly states that the Democratic Party is the only party capable of delivering protections and rights for trans people, which directly verifies the substance of assumption A—that the Democratic Party must have a clear, unified message—by specifying a core component of that message: defending civil rights for"
     },
     {
       "a_turn_idx": 8,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to Trump, as established in the prior context. 'Authenticity' is directly linked to branding and personal image, which aligns with the core idea of defining a party's image and ideology.\",\n  \"reason\": \"Claim C explicitly states that authenticity is critically important in branding and personal image, which directly verifies the substance of assumption A—that branding a party involves defining its core ideology and public image. The mention of Trump"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to Trump, as established in the prior context (turn 9). The term 'authenticity' is directly linked to branding and personal image, which aligns with the broader discussion of party branding in turn 8.\",\n  \"reason\": \"Claim C explicitly states that authenticity is critically important in branding and personal image, which directly verifies the core idea in assumption A—that branding involves shaping a party’s identity and public perception"
     },
     {
       "a_turn_idx": 8,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'people like myself' in turn 24 refers to elected officials, specifically Speaker_04 and others in similar positions, as established in the context.\",\n  \"reason\": \"Claim C (turn 24) acknowledges personal responsibility among elected officials for a political mistake related to Biden's candidacy, but it does not address or verify the moral obligation to protect marginalized groups like trans people while balancing broader concerns. The earlier assumption A focuses on ethical duty toward marginalized communities"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'people like myself' in turn 24 refers to elected officials, specifically SPEAKER_04 and others in similar positions, as established in the context.\",\n  \"reason\": \"Claim C (turn 24) acknowledges personal responsibility among elected officials for a political mistake related to Biden’s candidacy, but it does not address or verify the moral obligation to protect marginalized groups like trans people while balancing broader concerns. The earlier assumption A focuses on ethical duty toward marginalized"
     },
     {
       "a_turn_idx": 9,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Trump, as established in the context. The subject of turn 22 ('someone who's really going to do things differently') refers to the same figure (Trump), based on the prior discussion.\",\n  \"reason\": \"Turn 22 discusses the perception of someone (Trump) as doing things differently, which relates to the idea of authenticity in turn 11. However, it does not explicitly address the core"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Trump, as established in the context. The phrase 'the person being discussed' in turn 22 refers to Trump, consistent with prior mentions.\",\n  \"reason\": \"Turn 22 states that the speaker believes the person being discussed (Trump) is perceived as doing things differently, which aligns with the idea in turn 11 that authenticity can exist without full honesty. However, turn 22 does"
     },
     {
       "a_turn_idx": 11,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_04, as established by the prior context where SPEAKER_04 is discussing stepping aside and being one of the first to speak out.\",\n  \"reason\": \"Claim C (turn 23) states that Biden should have stepped aside earlier due to his infirmity, which is a political judgment about leadership and timing. Assumption A (turn 11) concerns the value of authenticity"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_04, as established by the prior context where SPEAKER_04 is discussing stepping aside and being one of the first to speak out.\",\n  \"reason\": \"Claim C (turn 23) states that Biden should have stepped aside earlier, which is unrelated to assumption A (turn 11), which asserts that authenticity is valuable even if one is not fully honest. While both statements relate"
     },
     {
       "a_turn_idx": 11,
@@ -2976,7 +2976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Seth Moulton is referred to as 'Congressman Seth Moulton' in turn 62; no other coreference issues.\",\n  \"reason\": \"Claim C expresses appreciation for Seth Moulton's time and availability despite a busy schedule, which reflects a positive regard for his service and effort. However, it does not address the speaker's personal military experience or the value placed on military service after leaving after six years, as stated in assumption A. While there is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Seth Moulton is referred to as 'Congressman Seth Moulton' in turn 62; no other coreference issues.\",\n  \"reason\": \"Claim C expresses appreciation for Seth Moulton's time and effort despite his busy schedule, which reflects a positive regard for public service. However, this does not explicitly verify or state the substance of assumption A, which concerns the speaker's personal valuation of military service despite leaving after six years. While both involve respect for"
     },
     {
       "a_turn_idx": 35,
@@ -2991,7 +2991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_03 throughout.\",\n  \"reason\": \"Claim C discusses the speaker's mental health struggles stemming from their time in Iraq, while assumption A concerns the significance of their accomplishments as a Captain and desire to be commemorated publicly. There is no overlap in content or intent between the two statements. C does not address, verify, or make explicit the idea that the speaker views their Captain rank as worthy of public commemoration"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' refers to SPEAKER_03 throughout.\",\n  \"reason\": \"Claim C discusses the speaker's mental health struggles stemming from their time in Iraq, while assumption A concerns the significance of their accomplishments as a Captain and desire to be commemorated publicly. There is no overlap in content or intent between the two statements. C does not address, verify, or relate to the idea of public commemoration of military achievements. Thus, the claim is"
     },
     {
       "a_turn_idx": 35,
@@ -3066,7 +3066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'someone' in turn 36 refers to the Secretary of Defense, who is the subject of criticism throughout the conversation. In turn 59, 'leadership positions' refers to high-level political roles, such as those in Congress, which are distinct from the military leadership role discussed in turn 36.\",\n  \"reason\": \"While both A and C address the idea of leadership accountability and representation, they operate in different domains: A focuses on military leadership"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 59 refers to 'leadership positions' and 'Committee members' mentioned earlier; 'safe districts' is a key concept linking the two turns.\",\n  \"reason\": \"Turn 59 claims leadership positions should not be filled exclusively by individuals from safe districts, which relates to broader concerns about representation and connection to frontline experiences. However, it does not explicitly state or verify the specific idea in turn 36—that leadership should be"
     },
     {
       "a_turn_idx": 36,
@@ -3306,7 +3306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these guys' in turn 43 refers to the young Marines mentioned in turn 41 and 42, who spoke openly about their mental health struggles.\",\n  \"reason\": \"Claim C explicitly states that the speaker was inspired by young Marines who openly shared their mental health struggles and sought therapy, directly verifying the substance of assumption A—that public disclosure of mental health struggles is a meaningful indicator of authenticity or openness. The act of following their example by seeking therapy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 43, 'these guys' refers to the young Marines mentioned in turn 41–42, who spoke openly about their mental health struggles and sought therapy.\",\n  \"reason\": \"Claim C explicitly states that the speaker was inspired by young Marines who openly shared their mental health struggles and sought therapy, directly verifying the substance of assumption A—that public disclosure of mental health struggles is a meaningful indicator of authenticity or openness. The act of speaking out and seeking therapy is"
     },
     {
       "a_turn_idx": 38,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to their own public disclosure of mental health struggles in turn 43; 'I' and 'my disclosure' refer back to the speaker's 2019 statement mentioned in turn 38.\",\n  \"reason\": \"Claim C explicitly states that the public response to the speaker's disclosure of a mental health issue was overwhelmingly supportive, which directly verifies the implication in assumption A that publicly discussing mental health struggles signals authenticity or openness. The positive"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to their own public disclosure of mental health struggles in turn 43; 'I' and 'my disclosure' refer back to the speaker's 2019 statement mentioned in turn 38.\",\n  \"reason\": \"Claim C explicitly states that the public response to the speaker's disclosure of a mental health issue (which aligns with the disclosure mentioned in assumption A) was overwhelmingly supportive. This directly verifies the implication in A that public"
     },
     {
       "a_turn_idx": 38,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 43 refers to SPEAKER_04, who is the same speaker as in turn 38. 'This' in turn 43 refers to the act of publicly discussing mental health, which aligns with the disclosure mentioned in turn 38.\",\n  \"reason\": \"Turn 43 explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, directly verifying the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 43, 'I' refers to SPEAKER_04, who is the same speaker as in turn 38. 'This' in 'when I talked about this' refers to publicly discussing mental health, which aligns with the claim in turn 38.\",\n  \"reason\": \"Turn 43 explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, directly verifying the substance of turn 3"
     },
     {
       "a_turn_idx": 38,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to the speaker (SPEAKER_04), who is also the subject of turn 38. 'This' in 'this is... God forbid' refers to disclosing a mental health issue.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that no sitting member of Congress had previously disclosed a personal mental health issue, thereby confirming the relevance and legitimacy of such conditions in public discourse—"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to the speaker (SPEAKER_04), who is also the subject of turn 38. 'This' in 'this is... God forbid' refers to disclosing a mental health issue.\",\n  \"reason\": \"Claim C explicitly states that no sitting member of Congress had previously disclosed a personal mental health issue, which directly verifies the substance of assumption A—that mental health conditions like PTSD are relevant and legitimate topics when"
     },
     {
       "a_turn_idx": 38,
@@ -3621,7 +3621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same individual who discussed PTSD in turn 38. 'The National Mental Health Hotline' is the specific legislative action co-authored by SPEAKER_04, which directly connects to the broader theme of addressing mental health impacts on life.\",\n  \"reason\": \"Turn 44 explicitly states that the speaker co-authored the National Mental Health Hotline, a direct legislative action"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who previously discussed their personal experience with PTSD in turn 38. 'The National Mental Health Hotline' is the specific legislative action tied to their advocacy.\",\n  \"reason\": \"Turn 44 explicitly states that the speaker co-authored the National Mental Health Hotline, which directly supports and verifies the earlier assumption in turn 38 that mental health conditions like PTSD are relevant and legitimate"
     },
     {
       "a_turn_idx": 40,
@@ -3636,7 +3636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Thomas E. Newton, mentioned earlier in the same turn as a prominent example of someone punished for discussing mental health in politics.\",\n  \"reason\": \"Claim C explicitly states that no sitting member of Congress in history had previously disclosed a personal mental health issue, which directly verifies the substance of assumption A, which implies that background checks would reveal meaningful personal history—here, the absence of such disclosure until now. The claim is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Thomas E. Newton, mentioned earlier in the same turn. 'I' refers to SPEAKER_04, the speaker recounting their own experience.\",\n  \"reason\": \"Claim C explicitly states that no sitting member of Congress in history had previously disclosed a personal mental health issue, which directly verifies the substance of assumption A, which implies that background checks would reveal meaningful personal history—here, the absence of such disclosure"
     },
     {
       "a_turn_idx": 41,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these guys' in turn 43 refers to the young Marines mentioned in turn 42, who spoke openly about their mental health struggles.\",\n  \"reason\": \"Claim C explicitly states that the speaker decided to seek therapy after being inspired by young Marines who openly discussed their mental health, which directly verifies the earlier assumption A that mental health issues are valid and significant experiences worthy of acknowledgment. The causal link between witnessing others' openness and the speaker’s own action reinforces"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' as the young Marines mentioned in turn 41, who shared their mental health struggles during reunions.\",\n  \"reason\": \"Claim C explicitly states that the speaker decided to seek therapy after being inspired by young Marines who spoke openly about mental health, which directly verifies the motivation described in assumption A—acknowledging mental health issues as valid and significant. The causal link between witnessing others' openness and the personal decision to seek"
     },
     {
       "a_turn_idx": 41,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's disclosure of mental health struggles; 'I' in turn 43 refers to SPEAKER_04, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker's disclosure of having a mental health issue led to a personal commitment to advocate for mental health reform. This directly verifies the substance of assumption A—that mental health issues are valid and significant—by showing"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's disclosure of mental health issues; 'I' in turn 43 refers to SPEAKER_04, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker's disclosure of having a mental health issue led to a personal commitment to advocate for mental health reform. This directly verifies the substance of assumption A—that mental health issues are valid and significant—by showing"
     },
     {
       "a_turn_idx": 41,
@@ -3771,7 +3771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) who shared their mental health struggles, which aligns with SPEAKER_04's earlier mention of them inspiring him.\",\n  \"reason\": \"Claim C explicitly states that speaking publicly about mental health is 'fundamentally leading by example,' which directly verifies the core idea in assumption A—that mental health issues are valid and significant experiences worthy of acknowledgment—by framing public disclosure as courageous leadership that validates such experiences"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these guys' in turn 43 refers to the young Marines mentioned in turn 42, who shared their mental health struggles. 'I' in turn 43 refers to SPEAKER_04, the speaker making the claim.\",\n  \"reason\": \"Claim C explicitly states that speaking publicly about mental health is 'fundamentally leading by example,' which directly verifies the substance of assumption A—that mental health issues are valid and significant experiences worthy of acknowledgment"
     },
     {
       "a_turn_idx": 41,
@@ -3786,7 +3786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's own experience; 'I' in turn 43 refers to SPEAKER_04, resolving the coreference.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the assumption in A that mental health issues are valid and significant experiences worthy of acknowledgment. By framing their disclosure as a courageous act of leadership and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's own experience; 'I' in turn 43 refers to SPEAKER_04, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the substance of assumption A—that mental health issues are valid and significant experiences worthy of acknowledgment. By framing the disclosure as"
     },
     {
       "a_turn_idx": 41,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 43 refers to SPEAKER_04, who is the speaker of turn 41. 'My political career' clearly refers to the speaker's own career, which aligns with the context of public disclosure in politics.\",\n  \"reason\": \"Turn 43 explicitly states the fear that discussing mental health publicly would end the speaker's political career, which directly verifies the assumption in turn 41 that mental health issues are serious"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 43 refers to SPEAKER_04, who is the speaker of turn 41. 'My political career' clearly refers to the speaker's own career, which aligns with the context of public disclosure in politics.\",\n  \"reason\": \"Turn 43 explicitly states the fear that discussing mental health publicly would end the speaker's political career, which directly verifies the assumption in turn 41 that mental health issues are significant"
     },
     {
       "a_turn_idx": 41,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 44 refers to the National Mental Health Hotline, which is the service co-authored by Speaker 04 and a fellow veteran.\",\n  \"reason\": \"Claim C states that the National Mental Health Hotline is a recognized service, which aligns with the broader context of validating mental health issues and supporting access to care. While C does not explicitly restate the full substance of A (that mental health issues are valid and significant), it"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 44 refers to the National Mental Health Hotline, which is the service co-authored by Speaker 04 and a fellow veteran.\",\n  \"reason\": \"Claim C states that the National Mental Health Hotline is a recognized service, which aligns with the broader context of validating mental health issues and supporting access to care. While C does not explicitly restate the full substance of A (that mental health issues are valid and significant experiences),"
     },
     {
       "a_turn_idx": 41,
@@ -3966,7 +3966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) and 'I' (SPEAKER_04), with 'I' being the speaker who publicly acknowledged mental health issues and co-authored the 988 legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing legislation related to mental health, specifically the 988 system, which directly verifies the substance of assumption A—that publicly acknowledging mental health issues can"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) and 'I' (SPEAKER_04), with 'I' being the speaker who publicly acknowledged mental health issues and co-authored the 988 legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing the 988 mental health legislation, which directly verifies the outcome of the decision mentioned in assumption A—publicly acknowledging mental health issues despite"
     },
     {
       "a_turn_idx": 42,
@@ -3981,7 +3981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person who expressed the assumption in turn 42. 'The National Mental Health Hotline' refers to the 988 hotline mentioned in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies the action described in turn 43 (passing 988)"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person making the claim in turn 42. 'The National Mental Health Hotline' refers to 988, which was mentioned in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies a key action taken as part of the mental health crusade initiated after publicly acknowledging"
     },
     {
       "a_turn_idx": 42,
@@ -4116,7 +4116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person making the claim in turn 42. 'The National Mental Health Hotline' refers to 988, mentioned in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies the action described in turn 43 as part of the speaker's mental health crusade"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person making the claim in turn 42. 'The National Mental Health Hotline' refers to 988, mentioned in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies the action described in turn 43 (passing 988) and confirms"
     },
     {
       "a_turn_idx": 42,
@@ -4221,7 +4221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_04, who is the speaker of assumption A. 'Sitting member of Congress' is consistent across both turns.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the substance of assumption A—that mental health conditions are stigmatized in political institutions. The claim confirms the historical taboo (implied in A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) and 'I' (the speaker) as the subject of the claim; 'I' is the same person as SPEAKER_04 in turn 42.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the assumption in A that mental health conditions are stigmatized in political institutions—"
     },
     {
       "a_turn_idx": 42,
@@ -4236,7 +4236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_04, who is the speaker of assumption A. '988' refers to the National Mental Health Hotline mentioned in the context.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing legislation related to mental health, specifically the 988 system, which directly verifies the substance of assumption A—that mental health conditions are stigmatized in political institutions—by showing how"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) and 'I' (SPEAKER_04), with 'I' being the speaker who made the public disclosure and co-authored the legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing legislation related to mental health, specifically the 988 system, which directly verifies the substance of assumption A—that mental health conditions are stigmatized in political institutions—"
     },
     {
       "a_turn_idx": 42,
@@ -4251,7 +4251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person who expressed the assumption in turn 42 about stigma toward mental health in politics.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies a key action taken in response to the stigma described in assumption A. While C does not restate the stigma itself, it confirms a consequential act—publicly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person who expressed the assumption in turn 42 about stigma toward mental health in politics.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly supports and verifies the broader context of the speaker's personal experience with mental health stigma in politics (turn 42). The act of co-authoring a major mental"
     },
     {
       "a_turn_idx": 42,
@@ -4341,7 +4341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, consistent with the speaker's self-referential narrative throughout the passage.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies a key outcome of the speaker's commitment to addressing mental health openly—highlighted in assumption A. While A focuses on the belief that speaking openly about mental health drives societal progress, C provides concrete evidence"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, consistent with the speaker's self-referential statements throughout the passage.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies a key outcome of the speaker's commitment to addressing mental health openly—highlighted in assumption A. While A focuses on the belief that speaking openly about mental health advances society, C provides concrete evidence of"
     },
     {
       "a_turn_idx": 42,
@@ -4371,7 +4371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_04, who is the subject of assumption A. 'This' in turn 42 refers to the act of speaking openly about mental health, which is directly affirmed in C.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the core idea in assumption A—that speaking openly about mental health contributes to societal"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's statement about being the first sitting member of Congress to publicly discuss mental health; 'I' in turn 43 refers to SPEAKER_04, resolving coreference.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the assumption in A that speaking openly about mental health contributes to societal progress—by demonstrating"
     },
     {
       "a_turn_idx": 42,
@@ -4476,7 +4476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 55 refers to Donald Trump, as established in the surrounding context.\",\n  \"reason\": \"Claim C (turn 55) states that the speaker will push through an extreme agenda, which is a misrepresentation of the speaker's actual position. The speaker argues against Trump's extreme agenda and emphasizes the need to counter it with reasonable positions that can attract moderate Republicans. There is no indication that the speaker supports or intends to advance an extreme"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 55 refers to Donald Trump, as established in the surrounding context.\",\n  \"reason\": \"Claim C (turn 55) states that the speaker will push through an extreme agenda, which is a misrepresentation of the speaker's actual position. The speaker argues against Trump's extreme agenda and emphasizes the need to counter it with reasonable positions that can attract moderate Republicans. There is no indication that the speaker supports or intends to push through an"
     },
     {
       "a_turn_idx": 42,
@@ -4596,7 +4596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person making the claim in turn 42. 'The National Mental Health Hotline' refers to 988, which was mentioned in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly verifies the action described in turn 43 (passing 988)"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 44 refers to SPEAKER_04, who is the same person who expressed the assumption in turn 42 about historical figures' private struggles informing current mental health attitudes.\",\n  \"reason\": \"Claim C explicitly states that the speaker co-authored the National Mental Health Hotline, which directly supports the broader narrative in assumption A—using personal and historical vulnerability around mental health to drive public awareness and policy change. While C does not re"
     },
     {
       "a_turn_idx": 42,
@@ -4611,7 +4611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Speaker_04, who is also the subject of turn 44. 'The National Mental Health Hotline' in turn 44 refers to 988, which Speaker_04 co-authored.\",\n  \"reason\": \"Claim C states that the National Mental Health Hotline is a recognized service, which aligns with the broader context of advocating for mental health awareness and action. However, it does not"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Speaker_04, who is also the subject of turn 44. 'The National Mental Health Hotline' in turn 44 refers to the 988 hotline mentioned in turn 43.\",\n  \"reason\": \"Claim C states that the National Mental Health Hotline is a recognized service, which is a factual assertion about its status. However, this does not explicitly verify or state the core"
     },
     {
       "a_turn_idx": 42,
@@ -4701,7 +4701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'these guys' (young Marines) and 'I' (SPEAKER_04), with 'I' being the speaker who made the disclosure. 'That's fundamentally leading by example' directly links to the act of speaking publicly about mental health.\",\n  \"reason\": \"Claim C explicitly states that speaking publicly about mental health is 'fundamentally leading by example,' which directly verifies the core idea in assumption A—that disclosing mental health"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_04, who is the same person expressing the assumption in turn 42. 'These guys' refers to the young Marines mentioned in turn 42.\",\n  \"reason\": \"Claim C explicitly states that speaking publicly about mental health is 'fundamentally leading by example,' which directly verifies the core idea in assumption A—that disclosing mental health struggles is an act of integrity, not weakness. The context shows"
     },
     {
       "a_turn_idx": 42,
@@ -4716,7 +4716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's own experience; 'I' in turn 43 refers to SPEAKER_04, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their mental health experience, which directly verifies the substance of assumption A—that the speaker views mental health disclosure as an act of integrity rather than weakness. By framing the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to SPEAKER_04's own experience; 'I' in turn 43 refers to SPEAKER_04, who is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly states that the speaker is the first sitting member of Congress to publicly discuss their personal mental health experience, which directly verifies the substance of assumption A—that disclosing mental health struggles is an act of integrity, not weakness. By framing the disclosure"
     },
     {
       "a_turn_idx": 42,
@@ -4731,7 +4731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'I' in turn 43, which aligns with SPEAKER_04's identity as the speaker who disclosed mental health struggles and co-authored the 988 legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing the 988 mental health legislation, which directly supports the broader context of turning mental health disclosure into a public act of leadership and integrity. While C does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'I' in turn 43, which aligns with SPEAKER_04's identity as the speaker who disclosed mental health struggles and co-authored the 988 legislation.\",\n  \"reason\": \"Claim C explicitly states that the speaker played a role in advancing the 988 mental health legislation, which directly verifies the action described in turn 42—disclosing mental health struggles as an act of integrity. While turn"
     },
     {
       "a_turn_idx": 42,

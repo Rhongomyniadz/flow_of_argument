@@ -17,11 +17,11 @@
       "claim_text": "Jessica will go into polling data in Ohio shortly.",
       "overlap_score": 2,
       "c_time": 101.148,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Jessica' in turn 7, which resolves to SPEAKER_02 from earlier turns.\",\n  \"reason\": \"Claim C mentions polling data in Ohio, which indirectly relates to the credibility of 'Ohio Right to Life' as an organization influencing public opinion. However, C does not explicitly state or verify that listeners recognize 'Ohio Right to Life' as credible. The connection is weak and inferential, relying on implied influence rather than direct"
+      "entailment_score": 3,
+      "confidence": 0.85,
+      "coref_notes": "SPEAKER_01 refers to 'Jessica' in turn 7, which resolves to SPEAKER_02 from earlier turns.",
+      "reason": "Claim C mentions polling data in Ohio, which relates to public perception of the organization's stance, but does not explicitly state or verify that listeners recognize 'Ohio Right to Life' as credible. While the polling data may indirectly support credibility, the claim does not make the assumption about recognition explicit.",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_01 refers to 'Jessica' in turn 7, which resolves to SPEAKER_02 from earlier turns.\",\n  \"reason\": \"Claim C mentions polling data in Ohio, which relates to public perception of the organization's stance, but does not explicitly state or verify that listeners recognize 'Ohio Right to Life' as credible. While the polling data may indirectly support credibility, the claim does not make the assumption about recognition explicit.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the 'Pain Capable Unborn Child Protection Act' passed in Ohio, which is the same organization and legislation mentioned in turn 0 ('Ohio Right to Life').\",\n  \"reason\": \"Claim C states that the Ohio abortion law is 'still standing' and 'valid and enforceable,' which directly supports the assumption in A that listeners will recognize 'Ohio Right to Life' as a credible organization on abortion policy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the 'Pain Capable Unborn Child Protection Act' passed in Ohio, which is the same organization and legislation mentioned in turn 0 ('Ohio Right to Life').\",\n  \"reason\": \"Claim C explicitly states that the Ohio abortion law is 'still standing' and 'valid and enforceable,' which directly verifies the assumption in A that listeners will recognize 'Ohio Right to Life' as a credible organization on abortion"
     },
     {
       "a_turn_idx": 0,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the Ohio abortion law (Pain Capable Unborn Child Protection Act), which was mentioned in earlier turns.\",\n  \"reason\": \"Claim C states that the ACLU chose not to challenge the Ohio abortion law, implying its legal standing and acceptance. While this indirectly supports the credibility of Ohio Right to Life as an influential organization on abortion policy, it does not explicitly verify or state that listeners will recognize 'Ohio Right to Life"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the Ohio abortion law, specifically the Pain Capable Unborn Child Protection Act mentioned earlier.\",\n  \"reason\": \"Claim C states that the ACLU chose not to challenge the Ohio abortion law, implying its legitimacy and legal standing. However, this does not address or verify the assumption that listeners will recognize 'Ohio Right to Life' as a credible organization on abortion policy. The credibility of the organization is not discussed or substantiated"
     },
     {
       "a_turn_idx": 0,
@@ -81,7 +81,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to the ACLU, as established by context.\",\n  \"reason\": \"Claim C states that the ACLU would not challenge the Ohio abortion law because they know they would lose. This contradicts assumption A, which asserts that listeners recognize 'Ohio Right to Life' as a credible organization on abortion policy. Claim C does not address or verify the credibility of Ohio Right to Life; instead, it discusses the ACLU's strategic decision regarding legal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to the ACLU, as clarified by the context.\",\n  \"reason\": \"Claim C (turn 10) discusses the ACLU's decision not to challenge the Ohio abortion law due to expected loss, which is unrelated to the credibility of 'Ohio Right to Life' as an organization on abortion policy. While both involve abortion legislation, C does not address or verify the assumption that listeners recognize 'Ohio Right to Life' as credible"
     },
     {
       "a_turn_idx": 0,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to fetuses, as established in the prior context discussing fetal pain.\",\n  \"reason\": \"Claim C explicitly states that the idea of fetuses feeling pain by 20 weeks is 'widely accepted,' which directly verifies the substance of assumption A—that the concept of fetal pain at 20 weeks is scientifically credible. The phrasing 'widely accepted' aligns closely with the earlier assertion that it is 'pretty much"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 3 refers to 'fetuses' mentioned in turn 1. The phrase 'the idea that fetuses feel pain by 20 weeks' directly corresponds to the assumption in turn 1 about fetal pain at 20 weeks being scientifically credible.\",\n  \"reason\": \"Claim C explicitly states that the idea of fetuses feeling pain by 20 weeks is 'widely accepted,' which directly verifies the substance of assumption A—that"
     },
     {
       "a_turn_idx": 1,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the Pain Capable Unborn Child Protection Act, which was introduced and passed in Ohio in turn 1.\",\n  \"reason\": \"Claim C explicitly states that Ohio is one of 20 states where similar abortion legislation has been signed into law, directly verifying the assumption that the audience has familiarity with U.S. state-level legislation related to abortion, particularly in the context of Ohio’s specific law. The reference to the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 10 refers to the Pain Capable Unborn Child Protection Act, which was introduced in turn 1 and discussed throughout the conversation.\",\n  \"reason\": \"Claim C explicitly states that Ohio is one of 20 states where similar abortion legislation has been signed into law, directly verifying the assumption that the audience has familiarity with U.S. state-level legislation related to abortion. The mention of Ohio’s specific law being enacted and upheld aligns"
     },
     {
       "a_turn_idx": 1,
@@ -977,11 +977,11 @@
       "claim_text": "The speaker believes they have fulfilled their role by expressing this view.",
       "overlap_score": 2,
       "c_time": 441.867,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference relevant; 'the speaker' in turn 23 refers to SPEAKER_00, who is discussing legislative progress, not pain perception.",
-      "reason": "Claim C expresses belief in fulfilling a role related to legislative advocacy and communication, while assumption A concerns the biological timing of pain perception in fetuses. There is no semantic connection between the two claims. C does not mention, imply, or verify anything about pain perception or its onset before birth.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'the speaker' in turn 23 refers to SPEAKER_00, who is discussing legislative progress, not pain perception.\",\n  \"reason\": \"Claim C expresses belief in fulfilling a role related to legislative advocacy and communication, while assumption A concerns the biological timing of pain perception in fetuses. There is no semantic connection between the two claims. C does not mention, imply, or verify anything about pain perception or its onset before birth.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference relevant; 'the speaker' in turn 23 refers to SPEAKER_00, who is discussing legislative progress, not pain perception.\",\n  \"reason\": \"Claim C expresses belief in fulfilling a role related to legislative advocacy and communication, while assumption A concerns the biological timing of pain perception in fetuses. There is no semantic connection between the two claims. C does not mention pain, fetal development, or any aspect of A. Thus, the claims are unrelated"
     },
     {
       "a_turn_idx": 5,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 13 refers to the legal framework based on fetal viability established in Roe v. Wade.\",\n  \"reason\": \"Claim C discusses changes in the scientific understanding of fetal viability over the past 45 years, which indirectly relates to the assumption about fetal sensory development. However, it does not explicitly state or verify the listener's acceptance of the scientific consensus on fetal sensory development (A). While both touch on fetal development and science, C focuses"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 13 refers to the scientific understanding of fetal viability, which is related to the broader discussion of fetal development and pain perception introduced in turn 5.\",\n  \"reason\": \"Turn 13 discusses changes in the scientific understanding of fetal viability over the past 45 years, which indirectly relates to the assumption in turn 5 about fetal sensory development and pain. However, it does not explicitly state or verify the claim that the listener accepts"
     },
     {
       "a_turn_idx": 6,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to the ACLU, as established by the context and prior mention of the organization.\",\n  \"reason\": \"Claim C explicitly states that the ACLU has decided not to challenge the Ohio abortion law, which directly verifies the substance of assumption A—that the speaker has access to trustworthy data sources regarding political attitudes in Ohio. The claim about the ACLU’s decision is presented as factual and tied to the broader context of public support and legislative viability,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to the ACLU, as established by the context and prior mention of the organization.\",\n  \"reason\": \"Claim C explicitly states that the ACLU has decided not to challenge the Ohio abortion law, which directly verifies the substance of assumption A—that the speaker has access to trustworthy data about political attitudes in Ohio. The claim provides authoritative confirmation of the law's stability and public/political reception, supporting the underlying assumption about reliable data sources.\""
     },
     {
       "a_turn_idx": 8,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the legislators in Congress, specifically the Senate, as established in prior context. However, the claim in turn 23 does not address or verify the necessity of legislative consideration for the issue.\",\n  \"reason\": \"Turn 23 expresses a belief that the speaker has fulfilled their role by voicing an opinion, but it does not state or verify the earlier assumption that legislative consideration is necessary. The focus shifts to criticizing"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the legislators in Congress, specifically the Senate, as established in prior context.\",\n  \"reason\": \"Claim C states that the speaker believes they have fulfilled their role by expressing their view, which does not address or verify the earlier assumption A that legislative consideration is necessary. Instead, C shifts focus to criticizing legislative inaction and expressing personal satisfaction with advocacy efforts, without affirming or making explicit the necessity of legislative consideration. Thus"
     },
     {
       "a_turn_idx": 9,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the legislative group or organization mentioned earlier, likely including the speakers discussing the bill's progress.\",\n  \"reason\": \"Turn 22 discusses sending over 400 bills to the Senate in 2017, highlighting that many were not acted upon. While this touches on Senate procedural delays, it does not explicitly state or verify the specific requirement of a 60-vote supermajority for passage,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 22 refers to the legislative group or organization mentioned earlier, consistent with the context of sending bills to the Senate.\",\n  \"reason\": \"Turn 22 mentions sending over 400 bills to the Senate in 2017, which is related to the legislative process, but does not explicitly state or verify the requirement of a 60-vote supermajority for passage. While it implies Senate inaction, it"
     },
     {
       "a_turn_idx": 10,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to the audience addressed throughout the conversation, consistent with prior turns.\",\n  \"reason\": \"Turn 27 mentions providing an update, which aligns with the general intent of the prior discussion about legislative processes in Ohio and federal implications. However, it does not explicitly state or verify the specific assumption in turn 10—that the audience understands the distinction between federal and state legislative processes. While the context implies awareness of both levels"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to the audience addressed throughout the conversation, consistent with prior turns.\",\n  \"reason\": \"Turn 27 states that the speaker is providing an update, which aligns with the general intent of the prior discussion about legislative progress in Ohio and federal implications. However, it does not explicitly mention or verify the specific assumption in turn 10—that the audience understands the distinction between federal and state legislative processes. While the context implies"
     },
     {
       "a_turn_idx": 10,
@@ -1504,9 +1504,9 @@
       "c_time": 491.667,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'you' refers to the audience throughout.",
-      "reason": "Claim C (turn 27) expresses gratitude for the audience's attention but does not address or make explicit the earlier assumption A about the audience understanding the distinction between federal and state legislative processes. There is no mention of legislative processes, federal vs. state differences, or the specific expectations regarding audience comprehension. Thus, C is unrelated to A and does not verify or entail its substance.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' refers to the audience throughout.\",\n  \"reason\": \"Claim C (turn 27) expresses gratitude for the audience's attention but does not address or make explicit the earlier assumption A about the audience understanding the distinction between federal and state legislative processes. There is no mention of legislative processes, federal vs. state differences, or the specific expectations regarding audience comprehension. Thus, C is unrelated to A and does not verify or entail its substance.\"\n}"
+      "coref_notes": "No coreference issues; 'you' in turn 27 refers to the audience.",
+      "reason": "Turn 27 expresses gratitude for the audience's attention but does not mention, reference, or verify the expectation of understanding the distinction between federal and state legislative processes. There is no semantic connection to assumption A, which concerns expectations about audience knowledge of legislative mechanics. The statement is unrelated in content and purpose.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 27 refers to the audience.\",\n  \"reason\": \"Turn 27 expresses gratitude for the audience's attention but does not mention, reference, or verify the expectation of understanding the distinction between federal and state legislative processes. There is no semantic connection to assumption A, which concerns expectations about audience knowledge of legislative mechanics. The statement is unrelated in content and purpose.\"\n}\n```"
     },
     {
       "a_turn_idx": 10,
@@ -1686,7 +1686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'that' in turn 23 refers to the legislative inaction described in turns 21–22.\",\n  \"reason\": \"Claim C states that 'there is a problem' regarding legislative inaction, which is contextually related to the broader discussion about federal abortion legislation and procedural delays. However, it does not explicitly address or verify the specific assumption A—that there exists a clear threshold for access to certain things (e.g., abortion)."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'that' in turn 23 refers to the legislative inaction described in turns 21–22.\",\n  \"reason\": \"Claim C states that 'there is a problem' regarding legislative inaction, which is contextually related to the broader discussion of federal abortion legislation and procedural hurdles. However, it does not explicitly address or verify the specific assumption A—that there exists a clear threshold for access to certain things. While both relate to policy"
     },
     {
       "a_turn_idx": 11,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to states, as established by the context of state-level pro-life laws being enacted across multiple states.\",\n  \"reason\": \"Claim C explicitly states that states can use their existing pro-life laws to advocate for federal action, which directly verifies the substance of assumption A—that legislative changes can meaningfully reposition a state’s legal standing relative to federal precedent. The context shows that states like Ohio are leveraging their laws to build momentum for"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to states, as established by the context of state-level legislative actions discussed in turns 12–14.\",\n  \"reason\": \"Claim C explicitly states that states can use their existing pro-life laws to advocate for federal action, which directly verifies the substance of assumption A—that legislative changes can reposition a state’s legal standing relative to federal precedent. The connection is clear: by passing laws, states create a basis ("
     },
     {
       "a_turn_idx": 12,
@@ -2196,7 +2196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 15 refers to federal lawmakers, while 'the speaker' in turn 23 refers to SPEAKER_00, who is discussing legislative inaction.\",\n  \"reason\": \"Claim C states that the speaker believes they have fulfilled their role by expressing a view, which is unrelated to assumption A that federal lawmakers prioritize state initiatives when making decisions. There is no mention of state initiatives, federal prioritization, or the relationship"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 15 refers to federal lawmakers, while 'the speaker' in turn 23 refers to SPEAKER_00, who is discussing legislative inaction.\",\n  \"reason\": \"Claim C states that the speaker believes they have fulfilled their role by expressing a view, which does not address or verify the assumption in A that federal lawmakers prioritize state initiatives when making decisions. In fact, C criticizes federal inaction (e"
     },
     {
       "a_turn_idx": 15,
@@ -2256,7 +2256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the American people, but there is no clear reference to the speaker or their group's credibility in producing or participating in interviews. The claim in C focuses on the speaker's belief about fulfilling a role in advocating for legislation, not on their credibility as interview producers.\",\n  \"reason\": \"Claim C states that the speaker believes they have fulfilled their role by expressing a view, which relates to advocacy but does not explicitly or clearly"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the American people, but there is no clear reference to the speaker or their group's credibility in producing or participating in interviews. The claim in C focuses on the speaker's belief about fulfilling a role in advocating for legislation, not on their credibility as interview producers.\",\n  \"reason\": \"Claim C expresses the speaker's belief that they have fulfilled their role in advocacy, but does not explicitly state or verify the earlier assumption A"
     },
     {
       "a_turn_idx": 17,
@@ -2301,7 +2301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Congressman One' in turn 24 refers to Congressman Brad Wenstrup mentioned in turn 17, based on context and prior mention.\",\n  \"reason\": \"Claim C states that Congressman One spoke about federal legislation, which directly aligns with assumption A that federal legislation related to fetal pain and post-abortion infant survival is a matter of public interest. While C does not explicitly mention fetal pain or post-abortion infant survival, it confirms the topic of federal legislation discussed"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Congressman One' in turn 24 refers to Congressman Brad Wenstrup mentioned in turn 17, based on context and prior mention.\",\n  \"reason\": \"Claim C states that Congressman One spoke about federal legislation, which directly aligns with the substance of assumption A—that federal legislation related to fetal pain and post-abortion infant survival is a matter of public interest. While C does not explicitly name the specific bills (Pain Capable Bill, Born Alive Surv"
     },
     {
       "a_turn_idx": 17,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to the audience, consistent with the context of the conversation.\",\n  \"reason\": \"Claim C expresses appreciation for the audience's attention, which indirectly supports the idea that the audience values the speaker's updates on pro-life legislation. However, it does not explicitly verify the trust in the speaker’s framing of the legislation, which is a key component of assumption A. While there is a supportive relationship, the core element of trust in"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 27 refers to the audience, consistent with the context of the conversation.\",\n  \"reason\": \"Claim C expresses appreciation for the audience's attention, which indirectly supports the assumption that the audience values updates on pro-life legislation and engages with the speaker's content. However, C does not explicitly state or verify the trust in the speaker’s framing of the legislation, nor does it confirm the audience's interest in the topic. While the gratitude implies"
     },
     {
       "a_turn_idx": 17,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the U.S. House of Representatives, as established in turn 18 ('we pass the bill'). The 'pain capable bill' refers to the Pain Capable Unborn Child Protection Act, explicitly mentioned in turn 17.\",\n  \"reason\": \"Claim C explicitly states that there is ongoing legislative movement regarding the Pain Capable Unborn Child Protection Act at the federal level, which directly verifies the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the U.S. House of Representatives, as established in turn 18 ('we pass the bill'). The 'pain capable bill' refers to the Pain Capable Unborn Child Protection Act, mentioned in turn 17.\",\n  \"reason\": \"Claim C explicitly states that there is ongoing legislative movement regarding the Pain Capable Unborn Child Protection Act at the federal level, which directly verifies the substance of assumption A"
     },
     {
       "a_turn_idx": 17,
@@ -2436,7 +2436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 22) discusses the number of unaddressed bills in the Senate, which is unrelated to the earlier assumption A about trusting personal testimony over institutional authority in health and meaning. While both involve institutional action (legislation), C does not state, verify, or reflect the speaker's trust in personal testimony or their view on divine intervention in healing."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C discusses the number of unaddressed bills in the Senate, which is unrelated to the earlier assumption A about trusting personal testimony over institutional authority in health and meaning. While both involve institutional processes (legislation), C does not state, verify, or reflect the speaker's trust in personal testimony versus institutional authority. There is no mention of personal stories, divine intervention,"
     },
     {
       "a_turn_idx": 20,
@@ -2496,7 +2496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 23 refers to the Senate members, as contextually implied by prior mention of bills not being acted upon.\",\n  \"reason\": \"Claim C expresses the speaker's belief that they have fulfilled their role by advocating for the bill, which relates to the broader context of national-level legislative activity. However, it does not explicitly state or verify the assumption that national-level discussion indicates political significance or momentum for the bill. While the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 23 refers to the Senate members.\",\n  \"reason\": \"Claim C expresses the speaker's belief that they have fulfilled their role by advocating for the bill, which relates to their personal commitment and action. However, it does not explicitly state or verify the assumption that national-level discussion indicates political significance or momentum for the bill. While the mention of sending 400 bills to the Senate (turn 22) hints at"
     },
     {
       "a_turn_idx": 20,
@@ -2511,7 +2511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 27 refers to the audience.\",\n  \"reason\": \"Claim C (turn 27) expresses appreciation for the audience's attention, which is unrelated to assumption A (turn 20), which centers on moral/ethical concerns about unborn children and the sanctity of life from conception. There is no mention of unborn children, moral objections to abortion, or the scientific/ethical basis for protecting fetal life in C. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 27 refers to the audience.\",\n  \"reason\": \"Claim C (turn 27) expresses appreciation for the audience's attention, which is unrelated to assumption A (turn 20), which concerns the moral/ethical view of unborn children and the need for legislative action based on that belief. There is no mention of moral concerns, unborn life, or the ethical basis for the bill in C. Thus, C does"
     },
     {
       "a_turn_idx": 22,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the Senate, as established by the context of legislative inaction on bills.\",\n  \"reason\": \"Turn 23 expresses concern about the Senate's failure to act on hundreds of bills, framing it as a problem that the public should recognize. However, it does not explicitly state or verify the speaker's belief about fulfilling their role. While there is a thematic connection to accountability and civic engagement, the claim in C about"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 23 refers to the Senate, as established by context (sending bills to the Senate). 'You' in 'ask them to give you up or get along' refers to the American people.\",\n  \"reason\": \"Turn 23 expresses concern about legislative inaction (300+ unaddressed bills) and calls on the public to hold the Senate accountable, which aligns with the idea that such inaction reflects poorly on"
     },
     {
       "a_turn_idx": 24,
@@ -2541,7 +2541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speakers (SPEAKER_01), who were mentioned in turn 24 as having control over posting content on their Facebook page.\",\n  \"reason\": \"Turn 27 explicitly states that the speaker has provided an update to the audience, which directly verifies the assumption in turn 24 that the speaker controls posting content on their Facebook page—since providing an update implies they have the authority to publish information"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 27 refers to the speakers (SPEAKER_01), who are the same individuals mentioned in turn 24 as having control over posting content on their Facebook page.\",\n  \"reason\": \"Turn 27 explicitly states that the speaker has provided an update to the audience, which directly verifies the assumption in turn 24 that the speaker controls posting content on their Facebook page—since providing an update implies they have the authority"
     }
   ]
 }

@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' and 'they' are not present in the relevant claims.\",\n  \"reason\": \"Claim C (turn 46) discusses pharmaceutical pricing disparities between the U.S. and Germany, specifically regarding Ozempic, while assumption A (turn 17) concerns public perception of loyalty outweighing actual policy positions in politics. The topics are entirely unrelated—C addresses healthcare pricing and corporate profit, whereas A addresses political loyalty and party dynamics. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in claim C refers to pharmaceutical companies, which is consistent with context.\",\n  \"reason\": \"Claim C discusses pharmaceutical pricing disparities between the U.S. and Germany, specifically highlighting high U.S. prices for Ozempic compared to Germany. Assumption A, however, concerns public perception of loyalty outweighing actual policy positions in political outcomes. There is no semantic connection between the two claims—C addresses healthcare pricing and corporate profit, while A addresses"
     },
     {
       "a_turn_idx": 17,
@@ -2927,11 +2927,11 @@
       "claim_text": "The U.S. spends more on healthcare per capita than any other country.",
       "overlap_score": 2,
       "c_time": 1538.715,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; claim C discusses healthcare spending and drug pricing, unrelated to public perception of loyalty in politics.",
-      "reason": "Claim C discusses U.S. healthcare spending and pharmaceutical pricing, while assumption A concerns political loyalty and public perception in determining political outcomes. There is no overlap in subject matter, logic, or semantic content. Claim C does not address, imply, or verify any aspect of A, making the relationship clearly unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses healthcare spending and drug pricing, unrelated to public perception of loyalty in politics.\",\n  \"reason\": \"Claim C discusses U.S. healthcare spending and pharmaceutical pricing, while assumption A concerns political loyalty and public perception in determining political outcomes. There is no overlap in subject matter, logic, or semantic content. Claim C does not address, imply, or verify any aspect of A, making the relationship clearly unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; claim C discusses healthcare spending and pharmaceutical pricing, while assumption A concerns political loyalty and public perception.\",\n  \"reason\": \"Claim C discusses U.S. healthcare spending and drug pricing relative to other countries, which is entirely unrelated to the topic of political loyalty and public perception of politicians. There is no overlap in subject matter, concept, or implied relationship between the two statements. Therefore, the claim does not support, verify, or relate to assumption A in any"
     },
     {
       "a_turn_idx": 17,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'loyalty to Trump' refers back to the discussion in turn 17 about loyalty to Trump being central to political survival within the Republican Party, particularly in the context of Bob Good's endorsement of DeSantis. 'Insufficient loyalty' and 'belated loyalty' directly address the idea that loyalty is not just binary but graded, reinforcing the notion that failure to conform immediately or fully is seen as corrupting or problematic.\",\n  \"reason\": \""
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'loyalty to Trump' refers back to the discussion in turn 17 about loyalty to Trump being central to political survival within the Republican Party, particularly in the context of Bob Good's endorsement of DeSantis. 'Insufficient loyalty' and 'belated loyalty' directly correspond to the idea that loyalty is paramount and that deviation—such as supporting another candidate—is seen as a serious transgression.\",\n  \"reason\": \"Claim C explicitly verifies the"
     },
     {
       "a_turn_idx": 17,
@@ -3156,7 +3156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 27 refers to SPEAKER_20.\",\n  \"reason\": \"Claim C discusses the flawed political process around immigration policies, while assumption A concerns reciprocal loyalty in political relationships. The topics are unrelated—C focuses on policy process and public opinion on immigration, whereas A centers on loyalty dynamics within partisan politics, particularly regarding Trump and endorsements. There is no overlap in semantic content, and C neither states nor verifies A. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 27 refers to SPEAKER_20.\",\n  \"reason\": \"Claim C discusses the flaws in the political process surrounding immigration policies, while assumption A concerns the reciprocal nature of loyalty in political relationships. The topics are unrelated—C addresses procedural fairness in immigration policy, whereas A centers on loyalty dynamics within partisan politics. There is no overlap in semantic content, and C neither states nor verifies A. Thus, the entailment"
     },
     {
       "a_turn_idx": 18,
@@ -3171,7 +3171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to SPEAKER_20, distinct from SPEAKER_31 in A.\",\n  \"reason\": \"Claim C discusses the metaphor of 'hanging a lamp over the administration's immigration policies,' which is unrelated to the concept of reciprocal loyalty in political relationships expressed in assumption A. There is no overlap in semantic content, and C does not state, verify, or even reference the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to SPEAKER_20, distinct from SPEAKER_31 in A.\",\n  \"reason\": \"Claim C discusses the metaphorical use of 'hanging a lamp' over immigration policy, which is unrelated to the concept of reciprocal loyalty in political relationships expressed in assumption A. There is no overlap in semantic content, and C does not state, verify, or even reference the"
     },
     {
       "a_turn_idx": 18,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the political process' refers to immigration policy debates, distinct from the endorsement-related loyalty dynamics in turn 19.\",\n  \"reason\": \"Claim C discusses the flaws in the political process regarding immigration policy, while assumption A concerns the real-world consequences of political endorsements, particularly in the context of loyalty to Trump. These topics are unrelated in substance—C does not address endorsements, loyalty, or their consequences. Therefore, C neither supports nor verifies A and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the political process' in turn 27 refers to immigration policy processes, distinct from the endorsement loyalty dynamics in turn 19.\",\n  \"reason\": \"Claim C discusses flaws in the political process regarding immigration policies, while assumption A concerns the real-world consequences of political endorsements, particularly loyalty to Trump. These topics are unrelated in substance—C does not address endorsements, loyalty, or their consequences. Therefore, C neither supports nor verifies A and is"
     },
     {
       "a_turn_idx": 19,
@@ -3426,7 +3426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 27 refers to SPEAKER_20, who is discussing immigration policy.\",\n  \"reason\": \"Claim C asserts that Congress, not the executive branch, should handle immigration policy. This is unrelated to assumption A, which concerns the real-world consequences of political endorsements, particularly regarding loyalty to Donald Trump. There is no overlap in subject matter, nor does C verify, support, or even reference the belief in consequential political"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 27 refers to SPEAKER_20, who is discussing immigration policy and congressional authority.\",\n  \"reason\": \"Claim C asserts that Congress, not the executive branch, should handle immigration policy. This is unrelated to assumption A, which concerns the real-world consequences of political endorsements, particularly regarding loyalty to Donald Trump. There is no overlap in subject matter, logic, or semantic content between the two statements. Therefore,"
     },
     {
       "a_turn_idx": 19,
@@ -3561,7 +3561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to Bob Goode, who endorsed DeSantis, thus violating loyalty to Trump. In turn 21, 'loyalty to Trump' is explicitly stated as the sole determinant in presidential primaries.\",\n  \"reason\": \"Claim C explicitly states that the only factor determining political outcomes in presidential primaries is loyalty to Trump, which directly verifies the substance of assumption A that loyalty and aggressive tactics ('shark elbows') are relevant criteria"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 20 refers to Bob Good, as established by context. 'Shark elbows' is a metaphor for aggressive political tactics, consistent with the discussion of loyalty and endorsement decisions.\",\n  \"reason\": \"Claim C explicitly states that loyalty to Trump is the sole determinant in presidential primaries, which directly verifies the core idea in assumption A that loyalty and aggressive tactics ('shark elbows') are relevant criteria for evaluating political leadership. While A includes both loyalty"
     },
     {
       "a_turn_idx": 20,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the political process surrounding immigration policies, which is the subject of the speaker's critique.\",\n  \"reason\": \"Claim C states that the political process around immigration policies is deeply flawed, which touches on the broader theme of political decision-making under pressure. However, it does not explicitly address or verify the specific assumption A—that loyalty is a more decisive criterion than substantive issue alignment in political evaluation. While both statements relate to political judgment"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the political process surrounding immigration policies, which is the subject of the speaker's critique.\",\n  \"reason\": \"Claim C states that the political process around immigration policies is deeply flawed, which touches on the broader theme of political decision-making under pressure. However, it does not explicitly address or verify the specific assumption in A—that loyalty is a more decisive criterion than substantive issue alignment in political evaluation. While both statements relate to political"
     },
     {
       "a_turn_idx": 21,
@@ -3681,7 +3681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the executive action on immigration policy, and 'the idea of hanging a lamp' is metaphorical for highlighting the policy. No reference to loyalty or issue alignment.\",\n  \"reason\": \"Claim C asserts that immigration policy should be handled by Congress, not the executive branch, which is unrelated to assumption A about loyalty being a more decisive criterion than substantive issue alignment. There is no mention of loyalty, Trump, or the relative"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 27 refers to the executive action on immigration policy, and 'the idea of hanging a lamp' is a metaphorical reference to highlighting the policy. No mention of loyalty or issue alignment.\",\n  \"reason\": \"Claim C asserts that immigration policy should be handled by Congress, not the executive branch, which is unrelated to assumption A about loyalty being a more decisive criterion than substantive issue alignment. There is no explicit or implicit verification of A in"
     },
     {
       "a_turn_idx": 21,
@@ -3755,8 +3755,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; claim C is about U.S. healthcare spending, while assumption A concerns political loyalty vs. issue alignment.",
-      "reason": "Claim C discusses U.S. healthcare expenditure relative to other countries, which is entirely unrelated to the political evaluation criterion of loyalty versus substantive issue alignment mentioned in assumption A. There is no overlap in topic, concept, or semantic content between A and C.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about U.S. healthcare spending, while assumption A concerns political loyalty vs. issue alignment.\",\n  \"reason\": \"Claim C discusses U.S. healthcare expenditure relative to other countries, which is entirely unrelated to the political evaluation criterion of loyalty versus substantive issue alignment mentioned in assumption A. There is no overlap in topic, concept, or semantic content between A and C.\"\n}\n```"
+      "reason": "Claim C discusses U.S. healthcare expenditure relative to other countries, which is entirely unrelated to the political evaluation criterion of loyalty versus substantive issue alignment mentioned in assumption A. There is no overlap in topic, concept, or semantic content between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C is about U.S. healthcare spending, while assumption A concerns political loyalty vs. issue alignment.\",\n  \"reason\": \"Claim C discusses U.S. healthcare expenditure relative to other countries, which is entirely unrelated to the political evaluation criterion of loyalty versus substantive issue alignment mentioned in assumption A. There is no overlap in topic, concept, or semantic content between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 21,
@@ -3771,7 +3771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses drug pricing and copays, unrelated to the concept of loyalty vs. issue alignment in political evaluation.\",\n  \"reason\": \"Claim C discusses the financial burden of prescription drug costs for uninsured individuals, particularly focusing on copays and list prices. This topic is entirely unrelated to the earlier assumption A, which concerns political evaluation based on loyalty to Trump versus substantive issue alignment. There is no overlap in subject matter, semantics, or implied connection between the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses drug pricing and copays, unrelated to the concept of loyalty vs. issue alignment in political evaluation.\",\n  \"reason\": \"Claim C discusses the financial burden of prescription drug costs for uninsured individuals, particularly focusing on list prices and copays. This topic is entirely unrelated to the earlier assumption A, which concerns political evaluation based on loyalty to Trump versus substantive issue alignment. There is no overlap in subject matter, semantics, or implied connection between the"
     },
     {
       "a_turn_idx": 21,
@@ -4682,11 +4682,11 @@
       "claim_text": "The speaker is introducing a news report on Boeing's recent corporate issues.",
       "overlap_score": 2,
       "c_time": 891.192,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the speaker' refers to SPEAKER_28, consistent across turns.",
-      "reason": "Claim C states the speaker is introducing a news report on Boeing's corporate issues, which is unrelated to assumption A, which concerns public trust in news media accuracy. There is no mention of public trust, media credibility, or reporting accuracy in C. Thus, C does not support, verify, or relate to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_28, consistent across turns.\",\n  \"reason\": \"Claim C states the speaker is introducing a news report on Boeing's corporate issues, which is unrelated to assumption A, which concerns public trust in news media accuracy. There is no mention of public trust, media credibility, or reporting accuracy in C. Thus, C does not support, verify, or relate to A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_28, consistent with turn 31.\",\n  \"reason\": \"Claim C states the speaker is introducing a news report on Boeing's corporate issues, which aligns with the content of turn 31. However, assumption A (turn 30) concerns public trust in news media for reporting accurate summaries of complex events. There is no mention or implication in C of public trust, accuracy, or"
     },
     {
       "a_turn_idx": 31,
@@ -5346,7 +5346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the price difference of Ozempic between the U.S. and Germany, which is explicitly discussed in the context. 'Ozempic' is the specific drug mentioned in both A and C.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that pharmaceutical companies charge significantly more for Ozempic in the U.S. than in Germany, which directly supports the broader idea that scientifically developed products ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the price difference of Ozempic between the U.S. and Germany, which is explicitly discussed in the context. No ambiguity exists in identifying the referent.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that Ozempic is sold for $59 in Germany and nearly $1,000 in the U.S., directly supporting the idea that scientifically developed products (like Ozempic"
     },
     {
       "a_turn_idx": 40,
@@ -5361,7 +5361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the U.S.' in turn 46 refers to the United States, consistent with prior context.\",\n  \"reason\": \"Claim C states that the U.S. spends more on healthcare per capita than any other country, which is related to the broader critique of high drug prices in the U.S. However, it does not explicitly verify or state the specific assumption A—that scientifically developed products are more effective than non-scientific ones. While the context"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the U.S.' in turn 46 refers to the United States, consistent with the context of drug pricing comparisons in turn 40.\",\n  \"reason\": \"Claim C (turn 46) states that the U.S. spends more on healthcare per capita than any other country, which is related to the broader context of high drug prices in the U.S. compared to other nations. However, it does not explicitly verify or state the"
     },
     {
       "a_turn_idx": 40,
@@ -5511,7 +5511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical companies, specifically Novo Nordisk, as established in the prior context. 'The price' refers to the list price of drugs like Ozempic in the U.S. compared to other countries.\",\n  \"reason\": \"Turn 46 explicitly verifies the core claim in turn 42—that high drug prices in the U.S. are not due to legitimate market forces like R&D investment, but instead"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical companies, specifically Novo Nordisk, as established in the prior context. 'The price' and 'still charging after the rebates' refer back to the high drug prices discussed in turn 42.\",\n  \"reason\": \"Turn 46 explicitly verifies the core claim in turn 42—that high drug prices in the U.S. are not due to legitimate market forces like R&D investment,"
     },
     {
       "a_turn_idx": 42,
@@ -5556,7 +5556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Novo Nordisk, as established by the context of the interview and prior mention of the company.\",\n  \"reason\": \"Claim C explicitly states that Novo Nordisk looks forward to discussing solutions for patient access and affordability in the U.S., which directly verifies the core moral imperative in assumption A—that access to life-saving medication is a moral imperative regardless of affordability. The statement affirms a commitment to addressing affordability, aligning precisely"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Novo Nordisk, as established by the preceding context where Novo Nordisk is the subject of the statement.\",\n  \"reason\": \"Claim C explicitly states that Novo Nordisk looks forward to discussing solutions for patient access and affordability in the U.S., which directly verifies the core moral imperative in assumption A—that access to life-saving medication is a moral imperative regardless of affordability. While A frames the issue ethically, C confirms"
     },
     {
       "a_turn_idx": 43,
@@ -5571,7 +5571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical industry, specifically Novo Nordisk, as established in the prior context. 'The price' refers to the list price of drugs like Ozempic in the U.S.\",\n  \"reason\": \"Claim C states that despite rebates, drug prices remain high in the U.S., which directly supports the core idea in assumption A—that high prices are unjustified by societal benefit and instead driven by profit. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the pharmaceutical industry, specifically Novo Nordisk, as established in the prior context. 'The price' refers to the list price of drugs like Ozempic in the U.S.\",\n  \"reason\": \"Claim C states that despite rebates, drug prices remain high in the U.S., which directly supports the core idea in assumption A—that high prices are not justified by societal benefit but by profit. While C does not explicitly"
     },
     {
       "a_turn_idx": 43,
@@ -5601,7 +5601,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this system' in turn 46 refers to the pharmaceutical pricing system in the U.S., which is the subject of assumption A. 'It' in 'it's not working' also refers to the same system.\",\n  \"reason\": \"Claim C explicitly states that the pharmaceutical pricing system in the U.S. is broken, which directly verifies the core concern in assumption A—that Americans are being unfairly charged exorbitant prices for essential drugs, undermining the moral legitimacy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this system' in turn 46 refers to the pharmaceutical pricing system in the U.S., which is the subject of the earlier assumption A in turn 43.\",\n  \"reason\": \"Claim C explicitly states that 'the pricing system within the pharmaceutical area is also clearly broken,' which directly verifies the core concern in assumption A—that the U.S. pharmaceutical pricing system is unjust and exploitative. While A focuses on the moral authority to critique pricing based on personal"
     },
     {
       "a_turn_idx": 43,
@@ -5706,7 +5706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical industry, which is the subject of the discussion in turn 44. 'The price' in turn 46 refers to the U.S. drug prices discussed in the context of high costs despite rebates.\",\n  \"reason\": \"Claim C explicitly states that drug prices remain high in the U.S. even after rebates, which directly verifies the substance of assumption A—that major medical breakthroughs do not"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical industry, as established in the prior context where the discussion centers on drug pricing practices by major pharmaceutical companies.\",\n  \"reason\": \"Claim C explicitly states that despite rebates, drug prices remain high in the U.S., which directly verifies the substance of assumption A—that major medical breakthroughs do not justify high drug prices, especially when prices remain inflated even after rebates. The context confirms that the high prices persist"
     },
     {
       "a_turn_idx": 44,
@@ -5766,7 +5766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical industry, which is the subject of the discussion in turn 45. 'The system' in turn 46 refers to the current U.S. pharmaceutical pricing system discussed in turn 45.\",\n  \"reason\": \"Claim C explicitly states that despite rebates, drug prices remain high in the U.S., which directly verifies the substance of assumption A—that the current pricing system is broken and unfair."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the pharmaceutical industry, specifically Novo Nordisk, as established in the prior context. 'The price' refers to the list price of prescription drugs in the U.S., particularly Ozempic.\",\n  \"reason\": \"Claim C explicitly states that despite rebates, drug prices remain high in the U.S., which directly verifies the substance of assumption A—that the current pricing system is broken and unfair. The context confirms that"
     },
     {
       "a_turn_idx": 45,

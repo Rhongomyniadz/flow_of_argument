@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to Mike Johnson, as established in turn 4 and confirmed by context (e.g., 'not where he encloses Mike Johnson'). 'It' in 'is it going to come into the House of Representatives?' refers to serious leadership.\",\n  \"reason\": \"Claim C (turn 10) discusses uncertainty about whether the next Speaker will support border security policies, which is a new substantive claim not present in assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to Mike Johnson, as established in the prior context (turn 5). 'It' in 'is it going to come into the House of Representatives?' refers to the prospect of serious leadership.\",\n  \"reason\": \"Claim C discusses uncertainty about whether the next Speaker will support effective border security policies, which is a new policy-related concern not present in assumption A. Assumption A concerns the procedural mechanism (formal vote)"
     },
     {
       "a_turn_idx": 4,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Elon Musk, as established in prior context. The phrase 'is Elon Musk' is a direct reference to the same individual discussed in turn 12.\",\n  \"reason\": \"Turn 13 asks whether Elon Musk is a member of the Republican House, which is tangentially related to turn 12's claim about Elon Musk's influence on public discourse. However, turn 13 does not state or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to Elon Musk. In turn 13, the question 'is Elon Musk a member of the Republican House?' is posed, which does not state or verify the assumption that his involvement carries significant influence on public discourse.\",\n  \"reason\": \"Turn 13 asks whether Elon Musk is a member of the Republican House, which is a factual inquiry about political affiliation, not a statement about influence. While the context implies Musk"
     },
     {
       "a_turn_idx": 12,

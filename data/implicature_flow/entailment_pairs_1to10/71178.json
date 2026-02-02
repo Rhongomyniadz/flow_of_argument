@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 4 refers to SPEAKER_02, who is the speaker mentioned in turn 3.\",\n  \"reason\": \"Claim C states that the speaker will read scripture, which aligns with the general structure implied in assumption A about the speaker's future reference to September 14th being relevant. However, C does not explicitly confirm or verify the relevance of September 14th; it only confirms an action (reading scripture) that"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 4 refers to SPEAKER_02, who is the speaker mentioned in turn 3.\",\n  \"reason\": \"Turn 4 explicitly states that the speaker (SPEAKER_02) will read scripture, which directly supports the assumption in turn 3 that the future reference to September 14th will be understood as relevant—because the speaker is now setting up the context for that future mention by beginning with scripture, implying"
     },
     {
       "a_turn_idx": 4,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the United States' in A refers to the nation-state, while 'the United States' in C refers to the border/security context. 'He' in A refers to Roosevelt, but no such figure appears in C.\",\n  \"reason\": \"Claim C discusses border security and the ease of illegal entry into the U.S. compared to shopping malls, which is unrelated to the early United States benefiting from dynamic personal leadership. There is no mention of leadership"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses border security and mall access, unrelated to the early U.S. leadership dynamics mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the ease of entering the U.S. illegally versus entering a shopping mall, focusing on modern border policy and security. Assumption A concerns the early United States benefiting from dynamic personal leadership, particularly referencing Roosevelt’s multifaceted role. There is no semantic connection between the two claims—C neither states nor"
     },
     {
       "a_turn_idx": 11,
@@ -932,11 +932,11 @@
       "claim_text": "The price has risen over the past one month.",
       "overlap_score": 2,
       "c_time": 1056.487,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the price' refers to inflation or consumer prices mentioned in context.\",\n  \"reason\": \"Claim C states that prices have risen over the past month, which relates to inflation concerns raised in A. However, A focuses on the listener's personal control over holiday spending, while C discusses general price increases without addressing individual agency or financial decisions. Thus, C provides contextual support related to inflation but does not explicitly verify or state the assumption about personal control over spending.\""
+      "entailment_score": 3,
+      "confidence": 0.85,
+      "coref_notes": "No coreference issues; 'the price' refers to inflation or consumer prices mentioned in context.",
+      "reason": "Claim C states that prices have risen over the past month, which relates to inflation concerns raised in A. However, A focuses on personal control over holiday spending, while C discusses general price increases without addressing individual agency or financial decisions. Thus, C provides contextual support but does not explicitly verify or state the assumption about the listener's control over spending.",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the price' refers to inflation or consumer prices mentioned in context.\",\n  \"reason\": \"Claim C states that prices have risen over the past month, which relates to inflation concerns raised in A. However, A focuses on personal control over holiday spending, while C discusses general price increases without addressing individual agency or financial decisions. Thus, C provides contextual support but does not explicitly verify or state the assumption about the listener's control over spending.\"\n}\n```"
     },
     {
       "a_turn_idx": 19,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the listener' in A refers to the person being addressed about holiday spending, while C discusses 'employees' and 'quiet quitting' in a workplace context.\",\n  \"reason\": \"Claim C discusses 'quiet quitting' as a workplace phenomenon driven by burnout and prioritizing personal life over work, which is unrelated to the assumption in A that the listener has control over their holiday spending. There is no overlap in subject matter, context, or implied connection"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the listener' in A refers to the person being addressed about holiday spending, while C discusses 'quiet quitting' in a workplace context.\",\n  \"reason\": \"Claim C discusses 'quiet quitting' as a response to burnout and prioritizing personal life over work, which is unrelated to the assumption in A that the listener has control over their holiday spending. There is no overlap in subject matter or implied connection between personal financial decisions during holidays and workplace behavior"
     },
     {
       "a_turn_idx": 19,
@@ -2901,7 +2901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 47, 'people' refers to employees mentioned in earlier turns; 'they're not really doing their job' refers to employees performing minimal effort, consistent with the broader discussion of quiet quitting.\",\n  \"reason\": \"Claim C states that 'people have been doing the bare minimum to get by for eons,' which directly supports the substance of assumption A—that employee performance is influenced by deeper psychological or systemic conditions rather than just individual effort. While C does not explicitly name"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 47, 'people' refers to employees mentioned in the broader conversation; 'they're not really doing their job' refers to remote workers who are performing minimal effort.\",\n  \"reason\": \"Claim C states that 'people have been doing the bare minimum to get by for eons,' which directly supports the core idea in assumption A that employees' performance levels are influenced by deeper, systemic or psychological conditions—here, a long-standing tendency toward minimal effort. While C"
     },
     {
       "a_turn_idx": 42,
@@ -2916,7 +2916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 47, 'they' refers to remote workers mentioned in the prior context; 'their kids', 'feeding their dog', and 'working out the garden' are examples of personal distractions affecting work performance.\",\n  \"reason\": \"Claim C states that work-related delays occur due to personal distractions during remote work, which directly supports the broader assumption in A that workplace morale is low due to structural/cultural issues (specifically, the shift to remote work undermining connection and accountability"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 47, 'they' refers to remote workers mentioned in the prior context; 'their kids', 'feeding their dog', and 'working out the garden' are examples of personal distractions affecting work performance.\",\n  \"reason\": \"Claim C states that work-related delays occur due to personal distractions during remote work, which directly supports the broader idea in assumption A that workplace morale and performance are suffering due to structural/cultural shifts (like remote work) rather than individual laziness"
     },
     {
       "a_turn_idx": 42,
@@ -2976,7 +2976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to SPEAKER_10 ('I') in turn 48, as indicated by the context of the conversation and the continuity of the speaker's narrative about their career.\",\n  \"reason\": \"Turn 48 states 'years longer' and 'my entire work life that I've been fortunate to have that reality for a very long time,' which strongly supports the substance of assumption A—that the speaker's perspective as a career coach carries credibility and"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_08 refers to SPEAKER_10's career, as indicated by the context 'my entire work life' and 'I've been fortunate to have that reality for a very long time,' which aligns with SPEAKER_10's prior mention of working both in the studio and at home for 22 years.\",\n  \"reason\": \"Claim C states that the speaker has had a long career, which directly supports the substance of assumption A—that the"
     },
     {
       "a_turn_idx": 42,
@@ -3096,7 +3096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_10 refers to 'you' in turn 74, which likely refers to the audience or co-hosts, not the same group as in turn 44. No coreference links connect 'you' in turn 74 to 'people like me' or 'the rank and file' in turn 44.\",\n  \"reason\": \"Turn 74 expresses gratitude and personal fulfillment in sharing time with the audience, emphasizing positive emotional connection."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_10 refers to 'you' in turn 74, which likely refers to the audience or co-hosts, not the same group as 'people like me' in turn 44. No clear coreference linking the subject of turn 44 to turn 74.\",\n  \"reason\": \"Turn 74 expresses gratitude and personal fulfillment in sharing time with the audience, emphasizing positive emotional connection. Turn 44 claims that not understanding something"
     },
     {
       "a_turn_idx": 44,
@@ -3111,7 +3111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 71 refers to SPEAKER_10, who is also the speaker in turn 44. The phrase 'I'm not planning' refers to the lack of a formal discussion plan.\",\n  \"reason\": \"Turn 71 states that the speaker lacks a formal plan for the discussion, which touches on the theme of disengagement or lack of commitment to structured participation. However, this does not explicitly verify or state the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 71 refers to SPEAKER_10, who is also the speaker in turn 44. 'Me' in turn 44 refers to the same individual.\",\n  \"reason\": \"Turn 71 states that the speaker has no formal plan for the discussion, which touches on a lack of structured engagement. However, this does not explicitly verify or state the claim in turn 44—that the speaker's lack of engagement"
     },
     {
       "a_turn_idx": 45,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the news' refers to the release of the consumer price index data, not the concern about wage inflation.\",\n  \"reason\": \"Claim C discusses breaking news about the consumer price index release, which is a factual economic update. Assumption A concerns the listener's understanding and shared concern about wage inflation and its causes, particularly tied to remote work and artificial wage increases. While both topics relate to inflation, C does not mention wage inflation, remote work,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 54 refers to the speaker's team, and 'Howard Eiseman' is identified as the reporter who covered the CPI release. 'They broke the news' refers to the team's reporting of the CPI data.\",\n  \"reason\": \"Claim C states that the speaker's team reported the inflation data as it was being released, which is unrelated to assumption A, which concerns shared understanding of wage inflation and its causes—specifically, the"
     },
     {
       "a_turn_idx": 46,
@@ -3156,7 +3156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_10 refers to 'I' and 'me' in turn 47, which aligns with the speaker's personal experience mentioned in prior turns. The pronoun 'you' in 'I find that I work more working remotely' refers to the speaker himself, resolving coreference.\",\n  \"reason\": \"Claim C explicitly states that some individuals (specifically the speaker, as indicated by 'I') work more hours remotely than they did in the office."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_10 refers to 'I' in both turn 46 and turn 47; 'I' in turn 47 refers to the speaker's personal experience, which aligns with the broader claim about remote work patterns.\",\n  \"reason\": \"Claim C explicitly states that some individuals work more hours remotely than they did in the office, which directly verifies the observation in assumption A that institutional changes in work (like remote work) are driven by conscious societal"
     },
     {
       "a_turn_idx": 46,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in turn 56 refers to policymakers, not the speaker in turn 46.\",\n  \"reason\": \"Claim C (turn 56) discusses intentionality in economic policy, asserting that ongoing inflation is intentional because corrective actions aren't taken. This is unrelated to assumption A (turn 46), which concerns the value and permanence of remote work. There is no overlap in subject matter, nor does C address or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 56 refers to policymakers/Biden administration, not related to the concept of remote work in turn 46.\",\n  \"reason\": \"Claim C (turn 56) discusses intentional economic policy and inflation, asserting that ongoing negative outcomes imply deliberate intent. This is unrelated to assumption A (turn 46), which concerns the value and permanence of remote work as a positive development. There is no overlap in subject"
     },
     {
       "a_turn_idx": 46,
@@ -3261,7 +3261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'my district in Levy County', which is not the same as the speaker in turn 47 (SPEAKER_10). The claim in turn 77 is about a political representative's district, while turn 47 discusses a personal work arrangement. No coreference exists between the speaker in turn 47 and the speaker in turn 77.\",\n  \"reason\": \"Turn 77 states that the speaker represents"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_04 refers to 'my district in Levy County' — this is a new claim about political representation, not related to the speaker's work arrangement described in turn 47.\",\n  \"reason\": \"Turn 77 claims the speaker represents a district in Levy County, which is a factual assertion about political office and geographic jurisdiction. This is entirely unrelated to turn 47, which discusses the speaker's personal flexible work arrangement as an exceptional but unsustainable model."
     },
     {
       "a_turn_idx": 49,
@@ -3291,7 +3291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 60 refers to the current administration, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 60) discusses a failure to correct economic and policy issues despite opportunities to do so, implying systemic neglect or intentional harm. However, this does not explicitly or directly verify the earlier assumption A (turn 49), which asserts that police officers are inherently trustworthy and heroic despite systemic issues. While both statements critique"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 60 refers to the current administration, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 60) discusses a failure to correct economic and policy issues despite opportunities to do so, framing it as intentional mismanagement. However, this does not explicitly or directly verify the earlier assumption A (turn 49), which asserts that police officers are inherently trustworthy and heroic despite systemic issues. While both statements critique"
     },
     {
       "a_turn_idx": 50,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 80 refers to Nancy Pelosi, as established by the context and prior mention of her.\",\n  \"reason\": \"Claim C (turn 80) discusses Nancy Pelosi's stance on student loan forgiveness and her perceived legal authority, which is entirely unrelated to assumption A (turn 50), which concerns the speaker's belief that their personal reaction carries weight in the context. There is no overlap in subject matter, nor does C address or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'she' in turn 80 refers to Nancy Pelosi, who is explicitly named.\",\n  \"reason\": \"Claim C asserts that Nancy Pelosi believes the president lacks authority to forgive student loans and implies she will support such action despite legal constraints. Assumption A, however, concerns the speaker's belief that their personal reaction carries weight in the context. These statements are semantically unrelated—C discusses political authority and policy stance on student debt, while A addresses"
     },
     {
       "a_turn_idx": 50,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Grant Allen refers to the individual previously mentioned in turn 51; 'he' in turn 51 refers to Grant Allen, and 'I' refers to the speaker, confirming their distinction.\",\n  \"reason\": \"Turn 73 explicitly names both Preston Scott and Grant Allen as co-hosts of 'the morning show,' directly verifying the earlier assumption in turn 51 that the speaker and Grant Allen are distinct individuals. The phrasing 'Preston Scott, Grant"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Grant Allen refers to the individual previously mentioned in turn 51; 'he' in turn 51 refers to Grant Allen, and 'I' refers to the speaker, confirming their distinction.\",\n  \"reason\": \"Turn 73 explicitly names both Preston Scott and Grant Allen as co-hosts of 'the morning show,' directly verifying the earlier assumption in turn 51 that the speaker and Grant Allen are distinct individuals. The statement 'It's the morning show with Preston"
     },
     {
       "a_turn_idx": 51,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to the same speaker as in A, but the content diverges entirely.\",\n  \"reason\": \"Claim C states that 'actions imply intentionality when the action is not intentional,' which is a philosophical or logical assertion about intent and behavior. This is unrelated to assumption A, which concerns the belief that the price of food is a central issue worth revisiting. There is no overlap in semantic content, and C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 56 refers to the same speaker as in turn 52.\",\n  \"reason\": \"Claim C (turn 56) discusses intentionality in actions, asserting that actions imply intentionality when they are not intentional. This is unrelated to assumption A (turn 52), which concerns the importance of food prices as a central issue. There is no overlap in semantic content between the two statements. Claim C does"
     },
     {
       "a_turn_idx": 52,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 54 refers to the consumer price index data, which is the subject of the discussion in turn 52 regarding food price changes.\",\n  \"reason\": \"Claim C explicitly states that the consumer price index data was recently released, which directly verifies the underlying assumption in A that the price of food has experienced notable changes recently—since CPI data includes food prices and its release confirms recent inflation trends. The timing ('recently') and the focus"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 54 refers to the consumer price index data, which is the subject of the discussion in turn 52 regarding food price changes.\",\n  \"reason\": \"Claim C explicitly states that the consumer price index data was recently released, which directly verifies the underlying assumption in A that the price of food has experienced notable changes recently. The release of CPI data is a direct indicator of inflation trends, including food prices, thus confirming the substance of A"
     },
     {
       "a_turn_idx": 52,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 58 refers to the Consumer Price Index (CPI), which is explicitly mentioned in the prior context and directly connects to the price of food discussed in turn 52.\",\n  \"reason\": \"Turn 58 explicitly states that the CPI has increased despite declining gas prices, which directly verifies the substance of assumption A—that the price of food has experienced notable changes recently. The data provided (e.g., milk +17%, eggs"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 58 refers to the Consumer Price Index (CPI), which is explicitly mentioned in the prior context and directly connects to the price changes discussed in turn 52.\",\n  \"reason\": \"Claim C explicitly states that the CPI has increased despite declining gas prices, which directly verifies the substance of assumption A—that the price of food has experienced notable changes recently. The data in C (e.g., milk +17%, eggs +3"
     },
     {
       "a_turn_idx": 53,
@@ -3591,7 +3591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 71 refers to SPEAKER_10, who is the same speaker as in turn 53. The claim 'I'm not planning' directly contradicts the idea of having agency through planning mentioned in turn 53.\",\n  \"reason\": \"Turn 53 asserts that the speaker has agency in shaping household dietary choices through planning, implying intentional, structured action. Turn 71 explicitly states 'I'm not planning,'"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 71 refers to SPEAKER_10, who is the same speaker as in turn 53. 'Planning' in turn 71 refers to structured preparation or strategy.\",\n  \"reason\": \"Turn 53 asserts that the speaker believes they have agency in shaping household dietary choices through planning and strategic decision-making. Turn 71 explicitly denies having a formal plan ('I'm not planning'), which contradicts the idea of"
     },
     {
       "a_turn_idx": 53,
@@ -3606,7 +3606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_19 is referred to consistently throughout; 'she' in turn 80 refers to Nancy Pelosi.\",\n  \"reason\": \"Claim C (turn 80) discusses Nancy Pelosi's stance on student loan forgiveness and legal authority, which is entirely unrelated to assumption A (turn 53), which concerns the speaker's agency in shaping household dietary choices through planning. There is no overlap in topic, concept, or semantic content. The two statements address completely different"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_19 is referred to consistently throughout; 'she' in turn 80 refers to Nancy Pelosi.\",\n  \"reason\": \"Claim C (turn 80) discusses Nancy Pelosi's stance on student loan forgiveness and legal authority, which is entirely unrelated to assumption A (turn 53), which concerns the speaker's agency in shaping household dietary choices through planning. There is no overlap in topic, concept, or semantic content. The two statements address different domains"
     },
     {
       "a_turn_idx": 53,
@@ -3621,7 +3621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in 'He's authored this' refers to Biden, as established by the prior mention of Biden and the context of policy responsibility.\",\n  \"reason\": \"Claim C explicitly attributes responsibility for the current inflation situation to Biden, which directly verifies the substance of assumption A—that current economic conditions (inflation) significantly constrain household financial decisions—by asserting that inflation is a deliberate outcome of Biden's policies. This strengthens the causal link between macroeconomic conditions and household constraints"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 54 refers to Grant Allen, who is mentioned in turn 51 and discussed in turn 54 as having changed his eating habits. The term 'this' in 'He's authored this' refers to the inflation situation.\",\n  \"reason\": \"Claim C explicitly attributes responsibility for the current inflation situation to Biden, which directly verifies the substance of assumption A—that current economic conditions (inflation) significantly constrain household financial decisions—by"
     },
     {
       "a_turn_idx": 53,
@@ -3711,7 +3711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Biden' in A refers to the same entity as 'Biden' in C. 'Guide' in C refers to a document containing rules, not related to industrial facilities.\",\n  \"reason\": \"Claim C states the speaker lost a personal copy of a 'Biden administration rules guide,' which refers to a specific policy document (the vaccine mandate). This is unrelated to the assumption in A that Biden had control over industrial facilities. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Biden' in A refers to the same entity as 'Biden' in C. 'Guide' in C refers to a document containing rules, not related to industrial facilities.\",\n  \"reason\": \"Claim C states the speaker lost a personal copy of a 'Biden administration rules guide,' which refers to a specific policy document (the COVID-19 vaccine mandate). This is unrelated to the assumption in A that Biden had control over industrial facilities"
     },
     {
       "a_turn_idx": 55,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 60, 'they' refers to the Biden administration, consistent with the earlier discussion in turns 56–58 about intentional policy actions. 'Doing this' refers to the economic conditions described (inflation, rising prices), aligning with the assumption in turn 56.\",\n  \"reason\": \"Turn 60 explicitly states that if the actions weren't intentional, corrective measures would be taken—but they aren't. This directly verifies the core idea in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 60, 'they' refers to the Biden administration, as established in prior turns (e.g., 'Biden is really not being honest', 'Joe Biden was doing'). 'Doing this' refers to the economic policies causing inflation and destruction of manufacturing plants, as discussed in turn 56.\",\n  \"reason\": \"Turn 60 explicitly states that if the actions weren't intentional, the administration would be correcting them—directly verifying the core assumption in"
     },
     {
       "a_turn_idx": 56,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden administration, consistent with the subject of assumption A (actions by individuals/institutions). 'It' in 'if it weren't intentional' refers to the damage or economic harm described in turn 56.\",\n  \"reason\": \"Claim C explicitly states that if the damage were unintentional, corrective actions would already be taken, which directly verifies the core logic of assumption A—that actions (or lack thereof) reveal intentionality"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 61 refers to the Biden administration, consistent with the subject of turn 56.\",\n  \"reason\": \"Claim C explicitly states that if the damage (inflation, economic harm) were unintentional, corrective actions would already be taken. This directly verifies the core idea in assumption A—that actions (or lack thereof) indicate intentionality. The phrasing 'if it weren't intentional, they'd be doing something about it' mirrors"
     },
     {
       "a_turn_idx": 56,
@@ -3771,7 +3771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'individuals' in C refers to military personnel mentioned in prior context, but the claim is unrelated to A.\",\n  \"reason\": \"Claim C discusses medical disqualification and deployability of military personnel based on religious or personal beliefs regarding vaccines, which is entirely unrelated to the assumption A about expectations for appropriate responses to non-intentional outcomes. There is no overlap in semantic content, and C does not address, verify, or imply anything about expectations for"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 56 refers to policymakers or authorities, while 'individuals' in turn 68 refers to military personnel with religious exemptions. The subjects and contexts differ significantly.\",\n  \"reason\": \"Turn 56 assumes that people (authorities) would respond appropriately if non-intentional outcomes occurred, implying accountability and corrective action. Turn 68 discusses a specific policy regarding medical disqualification of military personnel based on beliefs,"
     },
     {
       "a_turn_idx": 56,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 80 refers to SPEAKER_19, who discusses Nancy Pelosi's stance on student loan forgiveness.\",\n  \"reason\": \"Claim C (turn 80) asserts that Nancy Pelosi supports student loan forgiveness despite legal constraints, which is unrelated to assumption A (turn 57), which claims that current policies are harmful to the American people. There is no overlap in subject matter, logic, or content between the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 80 refers to SPEAKER_19, who discusses Nancy Pelosi's stance on student loan forgiveness.\",\n  \"reason\": \"Claim C (turn 80) asserts that Nancy Pelosi supports student loan forgiveness despite legal constraints, which is unrelated to assumption A (turn 57), which claims that current policies are harmful to the American people. There is no overlap in subject matter, logic, or semantic content between"
     },
     {
       "a_turn_idx": 58,
@@ -5781,7 +5781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_16 in turn 83, while 'I' in C refers to SPEAKER_10 in turn 113. These are different individuals.\",\n  \"reason\": \"Claim C (turn 113) expresses that SPEAKER_10 is not stressed about the political situation, which is unrelated to assumption A (turn 83), which concerns the credibility of the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in claim C refers to SPEAKER_10.\",\n  \"reason\": \"Claim C states that the speaker feels stressed, which contradicts the explicit statement in turn 113 that the speaker is not stressed ('I'm not going to get stressed out over it'). Assumption A concerns the basis of the speaker's judgment on the Senate's actions being grounded in credible evidence or reasoning, which is not addressed or verified by C."
     },
     {
       "a_turn_idx": 83,
@@ -5792,11 +5792,11 @@
       "claim_text": "The speaker previously warned others about the risk of landslides.",
       "overlap_score": 2,
       "c_time": 5528.179,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'I' refers to SPEAKER_10 in both turns.\",\n  \"reason\": \"Claim C (turn 113) discusses warnings about political landslides and Republican performance, which is unrelated to assumption A (turn 83), which concerns the Senate's basis for judgment regarding credible evidence or reasoning. There is no overlap in subject matter, logic, or content. The two statements address entirely different topics—political strategy vs. legislative"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; 'the speaker' in A refers to SPEAKER_16, while 'I' in C refers to SPEAKER_10.",
+      "reason": "Claim C discusses a warning about political landslides, which is unrelated to assumption A about the Senate's actions being based on credible evidence or reasoning. There is no overlap in subject matter, context, or semantic content. The two statements address entirely different topics and actors.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in A refers to SPEAKER_16, while 'I' in C refers to SPEAKER_10.\",\n  \"reason\": \"Claim C discusses a warning about political landslides, which is unrelated to assumption A about the Senate's actions being based on credible evidence or reasoning. There is no overlap in subject matter, context, or semantic content. The two statements address entirely different topics and actors.\"\n}\n```"
     },
     {
       "a_turn_idx": 83,
@@ -5901,7 +5901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_10 refers to 'I' in turn 113; no coreference issues with A.\",\n  \"reason\": \"Claim C states that the speaker feels stressed, which contradicts the explicit statement in turn 113 that 'I'm not going to get stressed out over it.' This directly contradicts any implication of stress. Assumption A concerns access to reliable information about the Senate’s schedule, which is unrelated to emotional state. Therefore, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_10, who is distinct from the speaker in A (SPEAKER_16).\",\n  \"reason\": \"Claim C (turn 113) expresses that the speaker feels unstressed about the political situation, which is unrelated to assumption A (turn 83), which concerns the speaker's access to reliable information about the Senate’s schedule. There is no mention of information access"
     },
     {
       "a_turn_idx": 83,
@@ -5916,7 +5916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_10, who is distinct from the speaker in assumption A (SPEAKER_16).\",\n  \"reason\": \"Claim C discusses a warning about political landslides and Republican performance, which is unrelated to the assumption A about the Senate's access to reliable information regarding its schedule. There is no overlap in subject matter, context, or semantic content. The claims refer to different speakers"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_10, who is distinct from the speaker in A (SPEAKER_16).\",\n  \"reason\": \"Claim C discusses a warning about political landslides and Republican performance, which is unrelated to the assumption in A about the Senate's access to reliable information regarding its schedule. There is no overlap in subject matter, context, or semantic content. The two claims address entirely different topics"
     },
     {
       "a_turn_idx": 84,
@@ -6156,7 +6156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 87 refers to the speaker (Preston Scott), who is also the subject of 'the speaker' in turn 117. 'Play a role' in turn 117 aligns with 'recurring role' in turn 87, indicating continuity of involvement.\",\n  \"reason\": \"Turn 117 states the speaker believes they will play a role, which strongly entails the earlier assumption that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 87 refers to the speaker (Preston Scott), who is also the subject of 'the speaker' in turn 117. 'Play a role' in turn 117 aligns with 'recurring role' in turn 87.\",\n  \"reason\": \"Turn 117 states 'the speaker believes they will play a role,' which strongly entails the earlier assumption that the speaker has a recurring role"
     },
     {
       "a_turn_idx": 87,
@@ -6501,7 +6501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in turn 104 refers to people who give money, not the listener in turn 92.\",\n  \"reason\": \"Claim C (turn 104) discusses providing jobs instead of handouts, advocating for alternative aid practices. Assumption A (turn 92) concerns the listener's recognition of compounding interest and financial consequences of debt. The two ideas are unrelated in substance—C focuses on labor market intervention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'they' in turn 104 refers to people who give money, not the listener in turn 92.\",\n  \"reason\": \"Claim C (turn 104) discusses providing jobs instead of financial aid, suggesting alternative solutions to poverty. Assumption A (turn 92) concerns the listener's recognition of compounding interest effects, particularly in the context of debt. The two ideas are unrelated: C focuses on labor market"
     },
     {
       "a_turn_idx": 92,
@@ -6726,7 +6726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these individuals' in turn 97 refers to the people holding signs at street corners, as established in turn 95.\",\n  \"reason\": \"Claim C states that the speaker finds the behavior of certain individuals to be 'notably bold,' which aligns with the description of their aggressive approach (e.g., walking up to car windows, waving, getting in your face). However, this does not explicitly verify or state the earlier assumption A, which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these individuals' in turn 97 refers to the people holding signs at street corners, as established in turn 95.\",\n  \"reason\": \"Claim C states that the speaker finds the behavior of certain individuals to be 'notably bold,' which aligns with the description of people aggressively approaching vehicles and making demands. However, this does not explicitly verify the earlier assumption A, which concerns a shared understanding about acceptable financial behavior. While the behavior described in C"
     },
     {
       "a_turn_idx": 94,

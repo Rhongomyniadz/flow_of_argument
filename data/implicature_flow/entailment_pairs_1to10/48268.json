@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'Linda McLachlan' is a new entity not mentioned in turn 31.\",\n  \"reason\": \"Claim C (turn 57) discusses the speaker's belief that Linda McLachlan should have her own show, which is entirely unrelated to assumption A (turn 31), which concerns the speaker's trust in their own interpretation of circumstantial evidence regarding alleged wrongdoing by Joe Biden. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Linda McLachlan' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 57) expresses a belief that Linda McLachlan should have her own show, which is entirely unrelated to assumption A (turn 31), which concerns the speaker's trust in their own interpretation of circumstantial evidence regarding alleged wrongdoing by Joe Biden. There is no overlap in subject matter, logic, or content"
     },
     {
       "a_turn_idx": 31,
@@ -2147,11 +2147,11 @@
       "claim_text": "The speaker believes Linda McLachlan should have her own show.",
       "overlap_score": 2,
       "c_time": 2195.446,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Linda McLachlan' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C (turn 57) expresses a belief that Linda McLachlan should have her own show, which is unrelated to assumption A (turn 33), which concerns distrust of the lawyer's motives and preference for the speaker's interpretation over official narratives. There is no overlap in subject matter, logic, or content between the two"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'Linda McLachlan' is explicitly named and refers to the same individual throughout.",
+      "reason": "Claim C expresses a belief that Linda McLachlan should have her own show, which is unrelated to assumption A, which concerns trust in the speaker's interpretation of a lawyer's motives over official narratives. There is no overlap in semantic content or logical connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Linda McLachlan' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C expresses a belief that Linda McLachlan should have her own show, which is unrelated to assumption A, which concerns trust in the speaker's interpretation of a lawyer's motives over official narratives. There is no overlap in semantic content or logical connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 33,
@@ -2256,7 +2256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the special counsel' without specifying a subject; however, given the context, it is clear that the special counsel being discussed is the one investigating Donald Trump, consistent with the broader narrative of political scrutiny targeting Trump.\",\n  \"reason\": \"Claim C mentions 'anecdotal reports' about intense scrutiny by the special counsel investigating Donald Trump, which aligns with the general concern about political targeting of Trump. However, it does not explicitly verify or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'the special counsel' and 'he' in turn 43, which refers to the special counsel investigating Donald Trump. The pronoun 'he' is used to refer to the special counsel, consistent with prior context.\",\n  \"reason\": \"Claim C mentions 'anecdotal reports' about intense scrutiny by the special counsel investigating Donald Trump, which touches on the broader theme of political investigations. However, it does not explicitly confirm or verify"
     },
     {
       "a_turn_idx": 35,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Pure Talk' in claim C refers to the same entity introduced in assumption A, a veteran-owned company. 'Veterans' and 'the deserving vets' are coreferential, referring to the same group.\",\n  \"reason\": \"Claim C explicitly states that Pure Talk is committed to providing 1,000 high-quality American flags, handmade in Charleston, South Carolina, to veterans before patriotic holidays. This directly verifies the core substance of assumption A, which"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'Pure Talk' in claim C refers to the same entity introduced in turn 37, a veteran-owned company committed to supporting veterans by providing American-made flags.\",\n  \"reason\": \"Claim C explicitly states that Pure Talk is committed to providing 1,000 high-quality American flags, handmade in Charleston, South Carolina, to veterans before patriotic holidays. This directly verifies the core substance of assumption A, which asserts that customers trust Pure Talk’s claim about donating"
     },
     {
       "a_turn_idx": 37,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the bill' in turn 46 refers to the debt ceiling increase bill mentioned in turn 45, but it is not connected to assumption A.\",\n  \"reason\": \"Claim C (turn 46) states that 'the bill was passed by the Republican party,' which is unrelated to assumption A (turn 42), which alleges a coordinated effort by the Democratic Party and allied institutions to undermine Republican candidates. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the bill' in turn 46 refers to the debt ceiling increase bill mentioned in turn 45, but this is unrelated to assumption A.\",\n  \"reason\": \"Claim C (turn 46) states that 'the bill was passed by the Republican party,' which is not supported by the context and is factually inconsistent with the prior discussion. Turn 45 indicates that the speaker did not support the bill and would not have voted"
     },
     {
       "a_turn_idx": 42,

@@ -1341,7 +1341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Democrats' in turn 49 refers to the political party, and 'their opponent' refers to Republican political figures, consistent with context.\",\n  \"reason\": \"Claim C (turn 49) states that Democrats do not like their political opponents, which is unrelated to assumption A (turn 24), which concerns the influence of news organizations like the New York Times on public perception of political actors. While both relate to political dynamics, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Democrats' in turn 49 refers to the political party, consistent with context.\",\n  \"reason\": \"Claim C (turn 49) states that 'Democrats don't like their opponent,' which is unrelated to assumption A (turn 24), which concerns the influence of news organizations like the New York Times on public perception of political actors. There is no mention of media credibility, public perception, or the New York Times in C."
     },
     {
       "a_turn_idx": 24,
@@ -1821,7 +1821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 50 refers to 'people at act blue', which aligns with the subject of assumption A (resignations within Act Blue).\",\n  \"reason\": \"Claim C mentions that the behavior of Act Blue supporters—specifically their resignations during a period of political tension—reveals insights about their motivations. This partially supports assumption A, which posits that resignations indicate systemic problems rather than normal turnover. However, C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 50 refers to 'people at act blue', which aligns with the subject of assumption A (resignations within Act Blue).\",\n  \"reason\": \"Claim C mentions that the behavior of Act Blue supporters—specifically, their resignation during a period of political tension—reveals insights about their motivations. This touches on the idea that departures are meaningful, which relates to assumption A’s claim that resignations indicate systemic problems rather"
     },
     {
       "a_turn_idx": 29,
@@ -6891,7 +6891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 102 refers to SPEAKER_04, distinct from SPEAKER_08 in turn 95.\",\n  \"reason\": \"Turn 102 introduces a hypothetical question about donation names and straw donors, which is unrelated to the rhetorical function of the term 'narrative' discussed in turn 95. There is no mention, verification, or even reference to the concept of 'narr"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 102 refers to SPEAKER_04, distinct from SPEAKER_08 who made assumption A.\",\n  \"reason\": \"Claim C (turn 102) discusses a hypothetical donation scenario involving 'straw donors' and asks about choosing a fake donor name. This is unrelated to assumption A (turn 95), which concerns the rhetorical function of the term 'narrative' in a"
     },
     {
       "a_turn_idx": 95,
@@ -6906,7 +6906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 102 refers to SPEAKER_04, consistent with prior turns.\",\n  \"reason\": \"Turn 102 introduces a hypothetical about 'straw donor names' in the context of donating to Act Blue, which is unrelated to the rhetorical function of the term 'narrative' discussed in turn 95. There is no mention, verification, or even implicit reference to the idea that a '"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 102 refers to SPEAKER_04, consistent with prior context.\",\n  \"reason\": \"Turn 102 introduces a hypothetical about 'straw donor names' in the context of donating to Act Blue, which is unrelated to the rhetorical function of the term 'narrative' discussed in turn 95. There is no mention, verification, or even implicit reference to the idea that a '"
     },
     {
       "a_turn_idx": 96,
@@ -7187,11 +7187,11 @@
       "claim_text": "The speaker believes Democrats are prone to lying.",
       "overlap_score": 2,
       "c_time": 2042.852,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'they' in turn 110 refers to Democrats, which aligns with the broader political context.",
-      "reason": "Claim C states that Democrats are prone to lying, which contradicts the assumption in A that the listener will engage seriously with a rhetorical question. A assumes goodwill and engagement, while C expresses a negative, distrustful view of Democrats. The two positions are incompatible, making the entailment score 1.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 110 refers to Democrats, which aligns with the broader political context.\",\n  \"reason\": \"Claim C states that Democrats are prone to lying, which contradicts the assumption in A that the listener will engage seriously with a rhetorical question. A assumes goodwill and engagement, while C expresses a negative, distrustful view of Democrats. The two positions are incompatible, making the entailment score 1.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 110 refers to Democrats, consistent with context.\",\n  \"reason\": \"Claim C (turn 110) states that Democrats are prone to lying, which contradicts the assumption in A (turn 102) that the listener will engage seriously with a rhetorical question. A assumes goodwill and meaningful engagement, while C expresses a negative, distrustful view of Democrats, implying they are deceptive. This undermines the premise"
     },
     {
       "a_turn_idx": 102,
@@ -7206,7 +7206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the ruthless variety program' is a new entity not linked to prior discussion.\",\n  \"reason\": \"Claim C discusses the 'ruthless variety program' including segments on political speeches, which is unrelated to assumption A about the listener engaging seriously with a rhetorical question about straw donors. There is no overlap in semantic content or intent between A and C. C does not state, verify, or imply anything about the listener's engagement with the rhetorical question.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the ruthless variety program' is a clear referent.\",\n  \"reason\": \"Claim C discusses the content of the 'ruthless variety program' including segments on political speeches, while assumption A concerns the speaker's belief that the listener will take a rhetorical question seriously enough to respond meaningfully. These topics are unrelated. C does not address or verify any aspect of A, nor does it imply the listener's engagement with a rhetorical question. Therefore,"
     },
     {
       "a_turn_idx": 103,
@@ -7341,7 +7341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Smugglesworth' as someone who has a relevant contribution, which aligns with the idea that the audience (implied through comments) has opinions or interpretations about the smog, as mentioned in A. However, 'Smugglesworth' is not explicitly linked to the smog topic; the connection is indirect.\",\n  \"reason\": \"Claim C mentions that 'Smugglesworth has something relevant to contribute,' which suggests the"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_04 refers to 'Smugglesworth' as someone who has a relevant contribution, which aligns with the idea that the audience (implied by 'comments') has relevant opinions or interpretations about the smog, as mentioned in A. However, 'Smugglesworth' is not explicitly linked to the smog topic; the connection is indirect.\",\n  \"reason\": \"Claim C suggests that 'Smugglesworth' has something relevant to contribute,"
     },
     {
       "a_turn_idx": 107,
@@ -7461,7 +7461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 125 refers to President Trump, as established in the prior context. 'The ruthless variety program' is identified as the show being discussed, consistent with earlier references.\",\n  \"reason\": \"Claim C mentions listening to the 'ruthless variety program' and discusses analysis of political speeches, including the president's recent address. While this implies engagement with political commentary, it does not explicitly state or verify the speaker's trust in John Amb"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 125 refers to President Trump, as established in the prior context discussing his speeches and comedic timing. 'The ruthless variety program' is identified as the show where the speaker discusses political commentary.\",\n  \"reason\": \"Claim C mentions listening to the 'ruthless variety program' and references analysis of a presidential speech, indicating the program covers political speeches. However, it does not explicitly state or verify the speaker's trust in John Amb"
     },
     {
       "a_turn_idx": 110,
@@ -7596,7 +7596,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 114 refers to President Trump.\",\n  \"reason\": \"Claim C states that President Trump upholds biblical and godly principles, which is unrelated to assumption A, which asserts that the speaker views Trump's comment as both witty and substantively meaningful. While both involve positive evaluations of Trump, C introduces a new theological dimension not present in A, and does not verify or state the wit or substantive meaning of the comment."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'President Trump' in turn 114 refers to the same individual mentioned in turn 110.\",\n  \"reason\": \"Claim C states that President Trump upholds biblical and godly principles, which is unrelated to the earlier assumption A that Trump's comment was both witty and substantively meaningful. While both statements are positive toward Trump, C introduces a new theological framing not present or implied in A. There is no explicit or implicit verification of"
     },
     {
       "a_turn_idx": 110,
@@ -7641,7 +7641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in context refers to President Trump.\",\n  \"reason\": \"Claim C states that President Trump said children are perfect the way God made them, which is unrelated to assumption A, which concerns Trump's comment being both witty and substantively meaningful in the context of criticizing Social Security recipients. The content of C does not verify, support, or even relate to the specific claim in A about comedic timing and substantive critique. Therefore, the two are unrelated.\""
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in context refers to President Trump.\",\n  \"reason\": \"Claim C states that President Trump said children are perfect the way God made them, which is unrelated to assumption A, which concerns Trump's comment being both witty and substantively meaningful in the context of criticizing Social Security recipients. The content of C does not verify, support, or even relate to the specific claim in A about comedic timing and substantive critique. Therefore, the entailment score is"
     },
     {
       "a_turn_idx": 110,
@@ -13776,7 +13776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the right' in turn 232 refers to the political right, not linked to any prior entity in turn 206.\",\n  \"reason\": \"Claim C (turn 232) discusses the Republican Party moving further to the right over time, which is unrelated to assumption A (turn 206), which asserts that the US government influences Indian trade policy through executive engagement. There is no overlap in subject matter, causal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the right' in turn 232 refers to political conservatives broadly, not specifically to the US government or Indian trade policy.\",\n  \"reason\": \"Claim C (turn 232) discusses the Republican Party's ideological shift to the right over time, which is unrelated to assumption A (turn 206), which asserts that the US government influences Indian trade policy via executive engagement. There is no mention of trade policy, India,"
     },
     {
       "a_turn_idx": 206,
@@ -14031,7 +14031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 225 refers to SPEAKER_04, who is also the speaker in turn 211. The phrase 'the Commonwealth of Kentucky' refers to the same entity mentioned implicitly in turn 211 through the context of Kentucky bourbon.\",\n  \"reason\": \"Turn 225 states that the speaker has 'pretty well' knowledge of the Commonwealth of Kentucky, which relates to their familiarity with Kentucky bourbon and its cultural"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 225 refers to SPEAKER_04, who is also the speaker in turn 211. The phrase 'the Commonwealth of Kentucky' refers to the same entity mentioned implicitly in turn 211 through the context of Kentucky bourbon.\",\n  \"reason\": \"Turn 225 mentions the speaker's familiarity with Kentucky, which relates to the broader context of ownership and use of Kentucky bourbon discussed in turn 21"
     },
     {
       "a_turn_idx": 211,
@@ -14286,7 +14286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 225 refers to SPEAKER_01, as established by the prior conversation where SPEAKER_04 is addressing SPEAKER_01. The phrase 'not quite as well as you do' directly contrasts the listener's knowledge with the speaker's.\",\n  \"reason\": \"Claim C explicitly states that the listener knows the Commonwealth of Kentucky less well than the speaker, which directly contradicts assumption A, which asserts the speaker's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 225 refers to SPEAKER_01, as established by the prior conversation where SPEAKER_04 is addressing SPEAKER_01. The phrase 'not quite as well as you do' directly contrasts the listener's knowledge with the speaker's.\",\n  \"reason\": \"Claim C explicitly states that the listener knows the Commonwealth of Kentucky less well than the speaker, which directly contradicts assumption A, which asserts the speaker has"
     },
     {
       "a_turn_idx": 215,
@@ -14346,7 +14346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to rural communities, not to 'Indians'.\",\n  \"reason\": \"Claim C discusses rural communities in the U.S. and their political shift from Democratic to Republican support, particularly referencing 'yellow dog Democrats'. This topic is entirely unrelated to the earlier assumption A, which concerns the specific meaning of the term 'Indians' in reference to people from India. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'They' in C refers to rural communities, not 'Indians'.\",\n  \"reason\": \"Claim C discusses rural communities in the U.S. and their political shift to supporting Republicans, particularly under Trump, referencing 'yellow dog Democrats' as a historical label. This has no connection to the term 'Indians' or its referent as discussed in assumption A, which concerns the specific use of 'Indians"
     },
     {
       "a_turn_idx": 216,

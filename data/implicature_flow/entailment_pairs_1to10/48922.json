@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the general public, particularly those not following public health advice. 'Public health guidance' refers to recommendations from public health authorities, including the president's 15-day stay-at-home order mentioned in turn 5.\",\n  \"reason\": \"Claim C emphasizes the necessity of following public health guidance to prevent community transmission, which aligns with the broader theme of coordinated action during a crisis. However, it does not explicitly address or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the general public, and 'public health guidance' refers to recommendations from public health authorities mentioned in turn 5.\",\n  \"reason\": \"Claim C emphasizes following public health guidance to prevent community transmission, which aligns with the broader theme of coordinated action during a crisis. However, it does not explicitly address or verify the specific assumption that government intervention is necessary and effective. While the claim implies trust in public health authorities—often backed"
     },
     {
       "a_turn_idx": 2,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 8 refers to a national lockdown, as established by the prior discussion of citywide and potential nationwide restrictions.\",\n  \"reason\": \"Claim C states that a national lockdown could reduce long-term economic damage, which aligns with the core idea in assumption A that proactive policy measures (like lockdowns) reduce long-term societal costs. While C does not explicitly mention 'policy measures' or 'economic downturns,' it directly supports the causal link between"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 8 refers to a national lockdown, as established by the prior discussion of citywide and potential nationwide restrictions.\",\n  \"reason\": \"Claim C states that a national lockdown could reduce long-term economic damage, which aligns with the core idea in assumption A that proactive policy measures (like lockdowns) reduce long-term societal costs. While C does not explicitly mention 'policy measures' or 'economic downturns,' it directly addresses a specific proactive measure"
     },
     {
       "a_turn_idx": 3,
@@ -257,11 +257,11 @@
       "claim_text": "The speaker is asking Senator Young if there is additional information he believes the audience needs to know.",
       "overlap_score": 2,
       "c_time": 337.593,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the speaker' in turn 9 refers to SPEAKER_01, who is asking Senator Young a question.",
-      "reason": "Turn 9 does not mention or verify the idea that federal oversight of government spending is important and necessary. Instead, it asks if Senator Young has additional information for the audience, which is unrelated to the specific assumption about federal oversight. There is no explicit or implicit connection to the substance of assumption A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 9 refers to SPEAKER_01, who is asking Senator Young a question.\",\n  \"reason\": \"Turn 9 does not mention or verify the idea that federal oversight of government spending is important and necessary. Instead, it asks if Senator Young has additional information for the audience, which is unrelated to the specific assumption about federal oversight. There is no explicit or implicit connection to the substance of assumption A.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 9 refers to Senator Young, as established in the context. The claim in turn 9 is a question asking if Senator Young has additional information to share, which does not assert or verify the belief about federal oversight of government spending.\",\n  \"reason\": \"Turn 9 is a procedural follow-up question asking if Senator Young has anything else to add. It does not state or verify the belief expressed in turn 3—that federal oversight of government"
     },
     {
       "a_turn_idx": 3,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the president' in turn 8 refers to the same entity as 'the president' in turn 5. 'Public health authorities' is consistent across both turns.\",\n  \"reason\": \"Claim C states that the president and public health authorities are collaborating with governors and local officials, which implies coordinated leadership during a crisis. This supports the assumption in A that the public expects guidance from elected officials during a national crisis, as such collaboration reflects official leadership and communication. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 8 refers to the collective effort involving the president, public health authorities, governors, and local officials, which aligns with the broader governmental coordination implied in the expectation of guidance from elected officials.\",\n  \"reason\": \"Claim C states that the president and public health authorities are collaborating with governors and local officials, which directly supports the idea that elected officials (including the president and state-level leaders) are providing coordinated guidance during the crisis. While C"
     },
     {
       "a_turn_idx": 5,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the president' refers to the same entity mentioned in turn 5, and 'public health authorities' aligns with the implied source of guidance in the audience's valuation of federal senator input.\",\n  \"reason\": \"Claim C explicitly states that the president's advice is grounded in the judgment of public health authorities, which directly verifies the substance of assumption A—that the audience values input from federal senators on public health policies—by affirming the legitimacy and authority behind such guidance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the president' refers to the same entity mentioned in turn 5, and 'public health authorities' aligns with the implied authority behind the advice discussed in turn 5.\",\n  \"reason\": \"Claim C explicitly states that the president's advice is grounded in the judgment of public health authorities, which directly verifies the substance of assumption A—that the audience values input from federal senators on public health policies—by affirming the legitimacy and expert basis of such guidance. The"
     },
     {
       "a_turn_idx": 5,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'the sorts of direction we get from public health guidance' refers to the public health guidance mentioned in turn 5, which includes following directives such as avoiding gatherings over 10.\",\n  \"reason\": \"Claim C explicitly states that public health guidance may be updated within the next few days, which directly verifies the implicit assumption in A that people should follow official public health directives—by acknowledging the dynamic nature of those directives and reinforcing the need to adhere"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'the sorts of direction we get from public health guidance' refers to the public health guidance mentioned in turn 5, which includes following official directives.\",\n  \"reason\": \"Claim C explicitly states that public health guidance may be updated in the next few days, which directly verifies the substance of assumption A—namely, that people should follow official public health directives. The mention of potential updates reinforces the legitimacy and dynamic nature of those directives, thereby making"
     },
     {
       "a_turn_idx": 5,

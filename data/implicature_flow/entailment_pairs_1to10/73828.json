@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 4 refers to the acknowledgment of the election outcome. 'He' in turn 4 refers to McConnell.\",\n  \"reason\": \"Claim C states that McConnell directed his words about the election outcome at Biden rather than at Trump. This contradicts assumption A, which claims audiences interpret promotional slogans literally and emotionally rather than critically. There is no logical or semantic connection between the interpretation of slogans and McConnell's political messaging direction. Thus, C is unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 4 refers to the acknowledgment of the election outcome. 'He' in turn 4 refers to McConnell.\",\n  \"reason\": \"Claim C states that McConnell directed his words about the election outcome at Biden rather than at Trump. This contradicts the earlier assumption A, which claims audiences interpret promotional slogans literally and emotionally rather than critically. There is no logical or semantic connection between the two statements; C does not address audience interpretation of slogans, nor"
     },
     {
       "a_turn_idx": 1,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Embedded' as a project they worked on, which aligns with the earlier mention of the Embedded team having firsthand experience with NPR stations.\",\n  \"reason\": \"Claim C explicitly states 'this is Embedded from NPR,' directly verifying the organization and its connection to NPR. This confirms the credibility of the Embedded team's firsthand experience with NPR stations mentioned in assumption A. The statement leaves no ambiguity about the team's affiliation and implies their direct involvement,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 7 refers to the Embedded team, which is established in turn 1 as having firsthand experience with NPR stations.\",\n  \"reason\": \"Turn 7 explicitly states 'this is Embedded from NPR,' directly affirming the team's identity and institutional affiliation. This confirms the credibility of the Embedded team's firsthand experience with NPR stations mentioned in turn 1. The claim explicitly verifies the substance of assumption A by anchoring the team's authority in their"
     },
     {
       "a_turn_idx": 1,
@@ -77,11 +77,11 @@
       "claim_text": "Joe Biden has dedicated his life to public service.",
       "overlap_score": 2,
       "c_time": 183.84,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to Joe Biden, as established by the context of congratulating the President-elect.\",\n  \"reason\": \"Claim C states that Joe Biden has dedicated his life to public service, which is a general statement about personal commitment to public service. However, assumption A concerns the need for ongoing financial support for public service media like NPR to function effectively. While both involve public service, C does not address funding, sustainability, or institutional support for"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'Joe Biden' is explicitly named and refers to the same individual throughout.",
+      "reason": "Claim C states that Joe Biden has dedicated his life to public service, which is unrelated to assumption A, which asserts that public service media like NPR requires ongoing financial support. While both involve public service, C does not address funding, sustainability, or the operational needs of public media. Therefore, C neither states nor verifies the substance of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Joe Biden' is explicitly named and refers to the same individual throughout.\",\n  \"reason\": \"Claim C states that Joe Biden has dedicated his life to public service, which is unrelated to assumption A, which asserts that public service media like NPR requires ongoing financial support. While both involve public service, C does not address funding, sustainability, or the operational needs of public media. Therefore, C neither states nor verifies the substance of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 2,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to Mitch McConnell, as established by context. 'His words' in turn 4 refers to McConnell's statements about the election outcome.\",\n  \"reason\": \"Claim C explicitly states that McConnell directed his comments about the election outcome at Biden rather than at Trump, which directly verifies the substance of assumption A—that opposition to Trump is ideologically driven rather than policy-based. By shifting focus from Trump to Biden, McConnell signals a strategic political"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to Mitch McConnell, as established by context. 'His words' in turn 4 refers to McConnell's statements about the election outcome.\",\n  \"reason\": \"Claim C explicitly states that McConnell directed his comments about the election outcome at Biden rather than Trump, which directly verifies the substance of assumption A—that opposition to Trump is ideologically driven rather than policy-based. By addressing Biden instead of Trump, McConnell signals a strategic shift away from"
     },
     {
       "a_turn_idx": 2,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to President Trump, and 'the Trump administration' in turn 3 refers to the same entity. The phrase 'far more than one speech to catalog all the major wins' explicitly confirms the idea that the accomplishments are extensive and cannot be summarized in a single speech, supporting the notion that opposition to Trump is based on ideology rather than policy.\",\n  \"reason\": \"Claim C explicitly states that multiple speeches are needed to catalog the Trump"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 2 refers to President Trump, and 'the Trump administration' in turn 3 refers to the same entity. The phrase 'far more than one speech to catalog all the major wins' explicitly confirms the idea that the accomplishments are extensive and ideologically significant, supporting the view that opposition to Trump is rooted in ideology rather than policy.\",\n  \"reason\": \"Claim C explicitly states that the achievements of the Trump administration are so numerous and substantial that"
     },
     {
       "a_turn_idx": 2,
@@ -441,7 +441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the NPR team mentioned in turn 7, and 'Mitch McConnell's office' is the same entity referenced in the context of the interview request.\",\n  \"reason\": \"Claim C explicitly states that the email from McConnell's office asked what they were up to, which directly verifies the substance of assumption A—that requesting an interview with McConnell was a standard journalistic practice. The context confirms that the team had initiated outreach, and the email response"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the NPR team mentioned in turn 7, and 'Mitch McConnell's office' is the same entity referenced in the context of the interview request.\",\n  \"reason\": \"Claim C explicitly states that the email from McConnell's office asked what they were up to, which directly verifies the substance of assumption A—that requesting an interview with McConnell was a standard journalistic practice. The context confirms that the team had initiated outreach, and the email from"
     },
     {
       "a_turn_idx": 7,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in claim C refers to 'people who used to work with him' mentioned in turn 9, which aligns with the group described in assumption A.\",\n  \"reason\": \"Claim C explicitly states that some former associates now lead political organizations, which directly verifies the substance of assumption A—that there is a perceived connection between their actions and matters of public or political significance. The fact that these individuals hold influential roles in political organizations confirms the public/political significance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these' in claim C refers to 'people who used to work with him' mentioned in turn 9, which aligns with the group described in assumption A.\",\n  \"reason\": \"Claim C explicitly states that some former associates now lead political organizations, which directly verifies the substance of assumption A—that there is a perceived connection between their actions and matters of public or political significance. The fact that these individuals hold influential roles in political organizations confirms the political significance of their"
     },
     {
       "a_turn_idx": 9,
@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to McConnell, and 'his office' refers to McConnell's office. In turn 26, 'Mitch McConnell' is explicitly named and placed in his office, confirming the location and authority implied in turn 10.\",\n  \"reason\": \"Turn 26 explicitly confirms that McConnell is in his office in the Capitol building, which directly verifies the assumption in turn 10 that McConnell's office has the authority to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 10 refers to McConnell, and 'his office' in turn 10 refers to McConnell's office. In turn 26, 'Mitch McConnell' is explicitly named and placed in his office, confirming the location and identity implied in turn 10.\",\n  \"reason\": \"Turn 26 explicitly confirms that McConnell is in his office in the Capitol building, which directly verifies the assumption in turn 10 that McConnell's"
     },
     {
       "a_turn_idx": 10,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers consistently to the same individual.\",\n  \"reason\": \"Claim C (turn 26) describes McConnell's posture and demeanor during a meeting in his office, but does not address or verify the assumption that McConnell's office has the authority to arrange meetings with McConnell. The setting and formality of the meeting do not confirm or imply that the office initiated or controlled access to McConnell. Therefore, there is no explicit or implicit verification of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers to the same person throughout.\",\n  \"reason\": \"Claim C (turn 26) describes McConnell's posture and demeanor during a meeting in his office, but does not address or verify the assumption that McConnell's office has the authority to arrange meetings with McConnell. The setting implies a meeting occurred, but there is no explicit or implicit statement about the office's role in authorizing or scheduling it. Thus, C is unrelated to A"
     },
     {
       "a_turn_idx": 10,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in claim C refers to McConnell, as established in the context. 'The leader' in turn 18 is a reference to McConnell, consistent with prior mentions.\",\n  \"reason\": \"Claim C explicitly addresses McConnell's current popularity in Louisville, directly verifying the assumption in A that McConnell cares about public perception in his hometown. The mention of being heckled in Louisville and attempting to inquire about his popularity confirms concern over public image, which aligns with and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to McConnell, as established in the prior context. 'His people' in turn 14 refers to McConnell's associates, consistent with the reference to 'the leader' in turn 18.\",\n  \"reason\": \"Turn 18 explicitly addresses McConnell's current popularity in Louisville, directly verifying the assumption from turn 14 that McConnell cares about public perception in his hometown. The mention of being heckled in Louisville"
     },
     {
       "a_turn_idx": 14,
@@ -1311,7 +1311,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Mitch McConnell' as the same person as 'McConnell' mentioned in turn 14; 'his hometown' in turn 14 refers to Louisville, Kentucky.\",\n  \"reason\": \"Turn 26 describes McConnell in a formal setting in his Capitol office, which does not directly address or verify his concern for public perception in Louisville. While the context implies he is reflecting on his early political career there, the claim itself does not state"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Mitch McConnell' as the subject, which resolves to 'McConnell' in turn 14. The location 'Capitol building' is distinct from 'Louisville, Kentucky', the hometown mentioned in A.\",\n  \"reason\": \"Claim C describes McConnell in a formal setting in his Capitol office, which does not address or verify his concern for public perception in his hometown of Louisville. While the context shows McConnell discussing his early political career in Louisville"
     },
     {
       "a_turn_idx": 14,
@@ -1326,7 +1326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"McConnell refers to the same person throughout; 'he' in turn 26 refers to McConnell.\",\n  \"reason\": \"Turn 26 describes McConnell's posture and demeanor during an interview, suggesting formality and attentiveness, but does not explicitly state or verify that he cares about public perception in his hometown. While his behavior might imply concern for image, this is speculative and not directly tied to the specific claim about caring about public perception in Louisville. The connection is weak and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"McConnell refers to the same person throughout; 'he' in turn 26 refers to McConnell.\",\n  \"reason\": \"Turn 26 describes McConnell's posture and demeanor during an interview, suggesting formality and attentiveness, but does not explicitly state or verify that he cares about public perception in his hometown. While his behavior might imply concern for image, this is speculative and not directly tied to the specific assumption about caring about public perception in Louisville. The connection is weak and"
     },
     {
       "a_turn_idx": 14,
@@ -1337,11 +1337,11 @@
       "claim_text": "McConnell has his back straight.",
       "overlap_score": 2,
       "c_time": 532.691,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"McConnell refers to the same individual throughout; 'he' in turn 26 refers to McConnell.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during a formal meeting, suggesting formality and composure. While this may imply concern for image, it does not explicitly state or verify that he cares about public perception in his hometown. The connection between physical demeanor and concern for local reputation is indirect and speculative. Thus, the link is weakly topical but lacks direct"
+      "entailment_score": 3,
+      "confidence": 0.85,
+      "coref_notes": "McConnell refers to the same person throughout; 'he' in turn 26 refers to McConnell.",
+      "reason": "Claim C describes McConnell's posture and demeanor during a formal interview, suggesting careful presentation. While this may imply concern for image, it does not explicitly state or verify that he cares about public perception in his hometown. The connection to Louisville or local popularity is not directly addressed in C, making the link only weakly topical.",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"McConnell refers to the same person throughout; 'he' in turn 26 refers to McConnell.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during a formal interview, suggesting careful presentation. While this may imply concern for image, it does not explicitly state or verify that he cares about public perception in his hometown. The connection to Louisville or local popularity is not directly addressed in C, making the link only weakly topical.\"\n}\n```"
     },
     {
       "a_turn_idx": 14,
@@ -1521,7 +1521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 14 refers to McConnell, consistent with turn 26.\",\n  \"reason\": \"Turn 26 describes McConnell in a formal setting, emphasizing his composed demeanor and focus during the interview, but does not address his awareness of or strategic framing around his unpopularity in Louisville. While the setting and behavior may imply calculated presentation, there is no explicit mention of his eagerness to discuss unpopularity or self-awareness,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_08 refers to 'Mitch McConnell' as the subject of the scene, which resolves to 'McConnell' in turn 14. The setting (Capitol building office) and behavior (formal, direct eye contact) are described, but no mention is made of his unpopularity or strategic framing.\",\n  \"reason\": \"Turn 26 describes McConnell's physical presence and demeanor during an interview but does not address his awareness of or eagerness to"
     },
     {
       "a_turn_idx": 14,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers consistently to the same individual.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during an interview but does not address or verify the assumption that his eagerness to mention his unpopularity reflects self-awareness or strategic framing. While the setting and formality may imply intentionality, there is no explicit or clear connection made between his behavior and the claimed motivation regarding his unpopularity. Thus, the relation is weakly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers consistently to the same individual.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during an interview, suggesting formality and attentiveness. However, it does not address or verify the assumption that his eagerness to mention his unpopularity reflects self-awareness or strategic framing. While the setting may imply careful presentation, there is no explicit or implicit link between his physical behavior and his discussion of being unpopular. Thus, the"
     },
     {
       "a_turn_idx": 14,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers consistently to the same individual throughout.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during an interview, emphasizing formality and direct eye contact. While this may suggest strategic presentation, it does not explicitly address or verify the assumption that his eagerness to mention his unpopularity reflects self-awareness or strategic framing. The connection between physical demeanor and the psychological motivation behind discussing unpopularity is implied but not stated or verified"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'McConnell' refers consistently to the same individual throughout.\",\n  \"reason\": \"Claim C describes McConnell's posture and demeanor during an interview, emphasizing formality and direct eye contact. While this may suggest strategic presentation, it does not explicitly state or verify the assumption that his eagerness to mention his unpopularity reflects self-awareness or strategic framing. The connection between physical demeanor and psychological motivation is implied but not directly supported. Thus, the relation is weak"
     },
     {
       "a_turn_idx": 14,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the speaker(s) who have spent months researching the person, consistent with the context of turn 18 where SPEAKER_06 attempts to question the subject about his popularity.\",\n  \"reason\": \"Turn 19 explicitly questions the value of an in-person meeting after extensive research, which directly reflects and verifies the underlying assumption in turn 18 that public figures should be open to scrutiny about their popularity—im"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the speaker(s) who have spent months researching the person, consistent with the context of turn 18 where SPEAKER_06 attempts to question Mitch McConnell about his popularity.\",\n  \"reason\": \"Turn 19 explicitly questions the value of an in-person meeting after extensive research, which directly addresses and verifies the underlying assumption in turn 18 that public figures should be open to scrutiny about their popularity. The"
     },
     {
       "a_turn_idx": 18,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the speaker(s) in the conversation, specifically SPEAKER_08, who is reflecting on their own preparation process. The phrase 'reading the books' is part of a list describing extensive research into the person (Mitch McConnell), which aligns with the broader context of seeking to understand public figures.\",\n  \"reason\": \"Claim C states that the speaker read books about the person, which directly supports the idea that they"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 19 refers to the speaker(s) in the conversation, specifically SPEAKER_08, who is reflecting on their own preparation process. The phrase 'reading the books' directly corresponds to the action described in the assumption A, which involves inquiry into public figures' popularity.\",\n  \"reason\": \"Claim C states that the speaker spent months learning about a person by reading books, which aligns with the substance of assumption A—that public figures"
     },
     {
       "a_turn_idx": 18,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Mitch McConnell, as established by the context of the interview. In turn 19, 'the person' refers to Mitch McConnell, consistent with prior mentions.\",\n  \"reason\": \"Claim C states that the speaker talked to other people about the person, which aligns with part of the context in turn 19 (talking to people). However, this does not explicitly verify or state the assumption in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Mitch McConnell, as established by the context of the interview. In turn 19, 'the speaker' refers to SPEAKER_08, who is discussing preparation for the interview, including 'talking to people'.\",\n  \"reason\": \"Turn 19 mentions that the speaker spent months learning about the person by reading books, watching C-Span, and talking to people. This partially supports the idea"
     },
     {
       "a_turn_idx": 18,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 53 refers to McConnell, as established by context in turns 52–53.\",\n  \"reason\": \"Claim C discusses the difficulty of stopping a government shutdown relative to other political crises, implying that such crises are comparable in complexity. However, it does not explicitly address or verify the balance of power among government branches, which is the core of assumption A. While the discussion touches on political power dynamics (e.g., McConnell’s"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 53 refers to McConnell, as established by context in turns 52–53.\",\n  \"reason\": \"Claim C discusses the difficulty of stopping a government shutdown relative to other political crises, implying that such crises are comparable in complexity. However, it does not explicitly address or verify the balance of power among government branches, which is the core of assumption A. While the discussion involves political power dynamics (e.g., McConnell’s influence"
     },
     {
       "a_turn_idx": 23,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the Supreme Court' in both A and C refers to the same entity.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court has the final say on legal matters, which directly verifies the substance of assumption A—that the Court is capable of exercising influence beyond its formal constitutional role. The idea of having the 'final say' implies significant authority and de facto influence over other branches, aligning with the broader claim about power exceeding constitutional design. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the Supreme Court' in both A and C refers to the same entity.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court has the final say on legal matters, which directly verifies the substance of assumption A—that the Court is capable of exercising influence beyond its formal constitutional role. The idea of having the 'final say' implies significant authority and de facto influence over other branches, aligning closely with the broader power attributed in A. The ph"
     },
     {
       "a_turn_idx": 23,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the Supreme Court' in both A and C refers to the same entity.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by asserting that there was a specific time and method through which the Supreme Court acquired its final authority, directly supporting the idea that the Court exercises influence beyond its formal constitutional role. The phrasing 'when and how' in C aligns with the implied historical development of power in A, and C confirms that such"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the Supreme Court' in both A and C refers to the same entity.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by asserting that there was a specific time and method through which the Supreme Court acquired its final authority, directly supporting the idea that the Court exercises influence beyond its formal constitutional role. The phrasing 'when and how' in C aligns with the implied historical development of judicial power in A, making the connection clear"
     },
     {
       "a_turn_idx": 24,
@@ -1941,7 +1941,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C discusses McConnell's tolerance of negative political cartoons and his ability to laugh at himself, which relates to his public persona and demeanor. However, it does not explicitly state or verify the specific assumption A—that political figures like McConnell are expected to project authority through body language. While the behavior described in C may indirectly reflect confidence or composure, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C discusses McConnell's tolerance of negative political cartoons and his ability to laugh at himself, which relates to his public persona and demeanor. However, it does not explicitly state or verify the specific assumption A—that political figures like McConnell are expected to project authority through body language. While the behavior described in C (having a thick skin and laughing at criticism)"
     },
     {
       "a_turn_idx": 26,
@@ -1956,7 +1956,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 53 refers to McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C discusses McConnell's potential influence over the President, implying he has leverage or authority to constrain presidential actions. This relates to the broader idea that his words and actions carry weight, which aligns with assumption A that recorded conversations are taken seriously and may have long-term consequences. However, C does not explicitly state or verify that recorded conversations are treated seriously"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 53 refers to McConnell, as established in the prior context.\",\n  \"reason\": \"Claim C discusses McConnell's potential influence over the President, suggesting he could impose constraints, which touches on the broader theme of power and consequence. However, it does not explicitly address or verify the specific assumption in A—that recorded conversations are taken seriously and may have long-term consequences. While there is a loose thematic connection regarding accountability and influence, the core content"
     },
     {
       "a_turn_idx": 27,
@@ -2106,7 +2106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' and 'him' refer to Mitch McConnell.\",\n  \"reason\": \"Claim C states that Mitch McConnell and Donald Trump have mutual interests, which is unrelated to the earlier assumption A that McConnell's political positions are incompatible with AFL-CIO values. There is no mention of the AFL-CIO, labor values, or any alignment or conflict with union principles in C. The two claims address different aspects of McConnell's political stance—C focuses on his relationship"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 57 refers to Mitch McConnell.\",\n  \"reason\": \"Claim C states that Mitch McConnell and Donald Trump share mutual interests, which is unrelated to the earlier assumption A that McConnell's political positions are incompatible with AFL-CIO values. There is no mention of the AFL-CIO, labor values, or any alignment/incompatibility with union principles in C. The two claims address different aspects of McConnell's political stance—C focuses on"
     },
     {
       "a_turn_idx": 28,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 59 refers to McConnell, as established in the context.\",\n  \"reason\": \"Claim C (turn 59) discusses McConnell's emotional reaction to a photograph of himself and Antonin Scalia, and his subsequent communication with the interviewer. This narrative focuses on personal symbolism, legacy, and political strategy related to the Supreme Court vacancy. However, it does not address or verify the earlier assumption A (turn 29), which concerns public"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 59 refers to McConnell, as established in the context.\",\n  \"reason\": \"Claim C (turn 59) discusses McConnell's emotional reaction to a photograph and his subsequent communication with the interviewer, but it does not address or verify the earlier assumption A that public figures like McConnell have a duty to uphold commitments made during political negotiations. The content of C is unrelated in substance to A, focusing instead on personal emotion and symbolic gesture rather"
     },
     {
       "a_turn_idx": 29,
@@ -2811,7 +2811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 48 refers to SPEAKER_06, who is discussing the speaker's (SPEAKER_03) approval rating in Kentucky. The term 'the speaker' in turn 48 refers to SPEAKER_03.\",\n  \"reason\": \"Turn 48 discusses the speaker's (SPEAKER_03) lower approval rating in Kentucky compared to the president's, which is a factual claim about public perception"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 48 refers to SPEAKER_06, who is discussing the speaker's (SPEAKER_03) approval rating in Kentucky. The claim in C is about the speaker's low approval rating compared to the president's.\",\n  \"reason\": \"Turn 33 expresses positive identification with Kentucky's cultural values ('pioneer spirit and pride'), suggesting alignment with the state's identity. Turn 48 claims the speaker has a"
     },
     {
       "a_turn_idx": 33,

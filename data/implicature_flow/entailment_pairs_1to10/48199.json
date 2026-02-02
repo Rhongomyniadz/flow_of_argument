@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to the speaker (SPEAKER_02), who claims to be uniquely positioned to lead. In turn 8, 'the speaker' refers to SPEAKER_09, who conducted the interview. The two speakers are different individuals, so there is no direct link between the speaker in turn 4 and the speaker in turn 8.\",\n  \"reason\": \"Turn 8 discusses the interviewer's pursuit of answers during"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to the speaker (SPEAKER_02), and 'I' in turn 4 refers to the same individual. In turn 8, 'the speaker' refers to SPEAKER_09, who is different from SPEAKER_02.\",\n  \"reason\": \"Turn 4 asserts that the speaker sees himself as uniquely positioned to lead during critical times. Turn 8 discusses the speaker's (SPEAKER"
     },
     {
       "a_turn_idx": 5,
@@ -336,7 +336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 16, 'Jim Biden' refers to the same person as in turn 8 ('James Biden'), and 'the questioning of Jim Biden today' refers to the interview mentioned in turn 8. The claim explicitly addresses the nature of the interaction (questioning), which aligns with the assumption that Jim Biden made public statements during his appearance.\",\n  \"reason\": \"Claim C states that Jim Biden was questioned, which directly supports the idea that he made public statements during"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Jim Biden refers to James Biden; 'he' in turn 16 refers to James Biden.\",\n  \"reason\": \"Claim C states that Jim Biden was questioned about his involvement in business dealings, which directly supports the substance of assumption A—that Jim Biden made public statements during his appearance. While C does not explicitly state that the statements were made during the appearance, it confirms that he was questioned, implying public statements were made. This strongly entails A’s core meaning, though it lacks"
     },
     {
       "a_turn_idx": 8,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 16, 'the questioning of Jim Biden today' refers to Jim Biden's appearance mentioned in turn 8. 'Today' aligns with the timeline established in turn 8 ('appearance by jim biden today'), resolving the coreference between 'Jim Biden' and 'he' in prior turns.\",\n  \"reason\": \"Claim C explicitly states that the questioning of Jim Biden occurred today, directly verifying the temporal and event-based assertion in assumption A, which claims Jim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 16, 'the questioning of Jim Biden today' refers to Jim Biden's appearance mentioned in turn 8. 'Today' aligns with the timeline established in turn 8 ('appearance by jim biden today'), resolving the coreference between 'Jim Biden' and 'he' in prior turns.\",\n  \"reason\": \"Claim C explicitly states that the questioning of Jim Biden occurred today, which directly verifies the temporal and event-based content of assumption A—that Jim Biden"
     },
     {
       "a_turn_idx": 8,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'the Biden family' and 'James Biden' as being affiliated with the U.S. President, resolving 'he' in turn 19 to James Biden. 'China' and 'Chinese government' are coreferent with 'CEFC' as established in prior turns.\",\n  \"reason\": \"Turn 19 explicitly states that it is inappropriate for someone affiliated with the U.S. President to assist the Chinese government, which directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 19, 'he' refers to James Biden, and 'the Chinese government' refers to the same entity mentioned in turn 9. 'Affiliated with the U.S. President' refers to James Biden, who is the brother of Joe Biden.\",\n  \"reason\": \"Turn 19 explicitly states that it is inappropriate for someone affiliated with the U.S. President (James Biden) to assist the Chinese government, which directly verifies the assumption in turn 9"
     },
     {
       "a_turn_idx": 9,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden family members (Jim Biden and Hunter Biden), as established in the context. 'The Chinese government' in C aligns with 'the Chinese Communist Party backed entity called CEFC' in A.\",\n  \"reason\": \"Claim C explicitly states that the individuals (the Biden family) were paid by the Chinese government to promote the Biden brand, which directly verifies the assumption in A that someone familiar with Chinese business should know about"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Biden family members (Jim Biden and Hunter Biden), as established in the context. 'The Chinese government' and 'CEFC' are linked through prior statements indicating CEFC is a Chinese Communist Party-backed entity.\",\n  \"reason\": \"Claim C explicitly states that the individuals (the Biden family) were paid by the Chinese government to promote the Biden brand, which directly verifies the assumption in A that it is reasonable to expect someone"
     },
     {
       "a_turn_idx": 9,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Biden' in turn 13 refers to Joe Biden, as established in the prior context where Joe Biden is discussed in relation to the CEFC transaction and the timing of the diamond gifts during and after his vice presidency.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden received two diamonds from China, which directly verifies the implication in assumption A that Joe Biden's involvement (in receiving gifts from a Chinese entity) suggests relevance or responsibility in the transaction."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Biden' in turn 13 refers to Joe Biden, as established in the prior context where Joe Biden's role and actions are discussed. 'He' in turn 11 also refers to Joe Biden.\",\n  \"reason\": \"Claim C explicitly states that Joe Biden received two diamonds from China, which directly verifies the implication in assumption A that Joe Biden was involved in a transaction with a Chinese entity (CEFC) and thus bears relevance or responsibility. The"
     },
     {
       "a_turn_idx": 11,
@@ -1071,7 +1071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Joe Biden, consistent with the subject of assumption A. 'Joe Biden' is the central figure in both A and C.\",\n  \"reason\": \"Claim C discusses Joe Biden changing his position on a loan guarantee upon arriving in Ukraine, which relates to his political influence and actions during his vice presidency—contextually relevant to assumption A, which concerns Joe Biden’s involvement in transactions tied to CEFC. However, C does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 23 refers to Joe Biden, who is the subject of assumption A. The claim in C discusses Joe Biden changing his position on a loan guarantee after a phone call, which relates to his involvement in a transaction (Burisma), but does not directly address the CEFC transaction or the financial gain from it mentioned in A.\",\n  \"reason\": \"Claim C discusses Joe Biden's change in position on a loan guarantee following a call from his"
     },
     {
       "a_turn_idx": 11,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Hunter Biden; 'Jim Biden' in turn 13 and 'James Biden' in turn 21 refer to the same person (Jim Biden).\",\n  \"reason\": \"Claim C states that there were numerous phone calls between Hunter Biden and James Biden's business associates, which directly supports the implication in assumption A that Hunter Biden has relevant information about the diamond transactions—specifically, that he was involved in communications"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to Hunter Biden; 'Jim Biden' in turn 13 is the same person as 'James Biden' in turn 21. 'Business associates' in turn 21 refers to those involved in the CEFC and Burisma deals mentioned earlier.\",\n  \"reason\": \"Claim C states that there were numerous phone calls between Hunter Biden and James Biden's business associates, which directly supports the implication in assumption A that"
     },
     {
       "a_turn_idx": 13,
@@ -1566,7 +1566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Jim Biden, as established in prior context. 'These LLCs' refers to the business entities discussed in turns 16–17 involving Jim Biden and Hunter Biden.\",\n  \"reason\": \"Claim C states that real businesses involve tangible economic exchange, which contrasts with the implication in assumption A that political connections—not qualifications—drive business decisions. While C challenges the legitimacy of the LLCs by questioning whether they engaged in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 18 refers to Jim Biden, as established in prior context. 'These LLCs' refers to the business entities discussed in turns 16–17, particularly those linked to Jim Biden and Hunter Biden.\",\n  \"reason\": \"Claim C states that real businesses involve tangible economic exchange, which contrasts with the implication in assumption A that political connections—not qualifications—drive business decisions. While C challenges the legitimacy of the LLCs by questioning"
     },
     {
       "a_turn_idx": 14,
@@ -1836,7 +1836,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Bidens, as established in the context where the discussion centers on James and Hunter Biden's activities and their use of the 'brand' of President Joe Biden.\",\n  \"reason\": \"Claim C explicitly states that there is no evidence the Bidens provided tangible services in exchange for payments, directly verifying the substance of assumption A, which asserts that the speaker expects evidence or concrete examples of professional services when such claims are made. Claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Bidens, as established in the context where the discussion centers on James and Hunter Biden's activities and their use of the 'brand' of President Joe Biden.\",\n  \"reason\": \"Claim C explicitly states that there is no evidence the Bidens provided tangible services in exchange for payments, directly verifying the substance of assumption A, which asserts that the speaker expects evidence or concrete examples of professional services when such claims are made. C"
     },
     {
       "a_turn_idx": 18,
@@ -1851,7 +1851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C refers to 'this second Russia hoax' as a distinct narrative from the earlier discussion about the Biden family's business activities.\",\n  \"reason\": \"Claim C discusses the 'Russia hoax' narrative related to the laptop and Russian intelligence influence, which is entirely separate from assumption A, which concerns expectations for evidence regarding professional services in the Biden family's business dealings. There is no overlap in subject matter, and C does not address or verify the expectation for"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in 'the emergence of this second 'Russia hoax'' refers to the newly revealed Russian intelligence involvement in amplifying the laptop story.\",\n  \"reason\": \"Claim C (turn 44) discusses the emergence of a second 'Russia hoax' related to Russian intelligence's role in amplifying the laptop story, which is entirely unrelated to assumption A (turn 18), which concerns the expectation of evidence for claims about professional services (e"
     },
     {
       "a_turn_idx": 18,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Chinese Communist Party, as established in the context of turn 19, where the party is described as a strategic adversary and the source of funding for CEFC.\",\n  \"reason\": \"Claim C explicitly states that the Chinese Communist Party invested in CEFC, which directly verifies the substance of assumption A in turn 19—that the Chinese Communist Party is a strategic adversary involved in financial dealings through CEFC. The connection between"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Chinese Communist Party, as established in the context of turn 19, where the party is described as a strategic adversary and the source of funding for CEFC.\",\n  \"reason\": \"Claim C explicitly states that the Chinese Communist Party invested in CEFC, which directly verifies the substance of assumption A (turn 19), which asserts that the Chinese Communist Party is a strategic adversary and was involved in financial arrangements through CE"
     },
     {
       "a_turn_idx": 19,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_06 refers to 'Joe Biden' as the president of the United States; 'he' in turn 21 refers to Joe Biden, consistent with prior mentions.\",\n  \"reason\": \"Claim C explicitly states that the U.S. president may be the most corrupt and compromised in American history, which directly verifies the substance of assumption A—implying a deep entanglement with a foreign adversary (the Chinese Communist Party)—by linking the Biden family’s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Joe Biden, consistent with the subject of assumption A. 'The United States has a president' clearly refers to Joe Biden, who is the central figure in the discussion.\",\n  \"reason\": \"Claim C explicitly states that the U.S. president may be the most corrupt and compromised in American history, which directly verifies the substance of assumption A—that the Chinese Communist Party is a strategic adversary—by framing the president’s actions as being"
     },
     {
       "a_turn_idx": 19,
@@ -4026,7 +4026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 66 refers to the listener (SPEAKER_14), and 'our future' refers to the collective national future discussed in context.\",\n  \"reason\": \"Claim C (turn 66) expresses shared concern about the nation's future, which aligns with the general sentiment of skepticism toward official narratives seen in assumption A (turn 41). However, C does not explicitly verify or state the specific assumption that the listener"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 66 refers to the listener (SPEAKER_14), and 'our future' refers to the collective national future discussed in context.\",\n  \"reason\": \"Turn 66 expresses shared concern about the nation's future ('I hear in your voice, you're very troubled... and so am I'), which aligns with the general sentiment of skepticism toward official narratives seen in turn 41. However, it does not explicitly"
     },
     {
       "a_turn_idx": 41,
@@ -4146,7 +4146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 57 refers to Trump, but this does not relate to the belief in the validity of prior arguments.\",\n  \"reason\": \"Turn 57 discusses the timing of Trump announcing his VP pick, which is unrelated to the speaker's belief in the logical soundness of their prior arguments (turn 44). There is no mention, verification, or implication of the earlier assumption about argument validity. The topics shift entirely to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 57 refers to Trump, but this does not connect to the belief about prior arguments in turn 44.\",\n  \"reason\": \"Turn 57 discusses the timing of Trump announcing his VP pick, which is unrelated to the speaker's belief in the validity and logical soundness of their prior arguments (turn 44). There is no mention, verification, or implication of the earlier assumption about argument validity. The"
     },
     {
       "a_turn_idx": 44,
@@ -4401,7 +4401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'his' in turn 52 refers to the father mentioned in turn 46, establishing a coreference link between the father in the earlier assumption and the subject of the later claim.\",\n  \"reason\": \"Claim C mentions discussing the father in the context of implicating him, which relates to the earlier assumption about discussing personal struggles with veterans' healthcare. However, the connection is weak and indirect—C shifts focus to a different topic (a laptop and financial"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'his' in turn 52 refers to the father mentioned in turn 46, establishing a coreference link between the father in the earlier assumption and the subject of the later claim.\",\n  \"reason\": \"Claim C mentions discussing the father in the context of implicating him, which relates to the earlier assumption about discussing personal struggles with veterans' healthcare. However, C does not explicitly state or verify the relevance of such discussions to the broader topic. Instead,"
     },
     {
       "a_turn_idx": 46,
@@ -4626,7 +4626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 57 refers to Trump, and 'the nomination' refers to Trump's presidential nomination. No reference to evidence relevance or investigation is present.\",\n  \"reason\": \"Claim C (turn 57) discusses Trump announcing his VP pick and timing of the announcement, which is unrelated to the earlier assumption A (turn 51) that evidence is relevant to a case or investigation. There is no mention of evidence, investigation, or relevance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 57 refers to Trump, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 57) states that Trump should announce his VP pick now, which is unrelated to assumption A (turn 51), which asserts that the speaker believes evidence on a laptop is relevant to a case or investigation. There is no overlap in semantic content between the relevance of evidence and the timing of a VP announcement. The"
     },
     {
       "a_turn_idx": 51,
@@ -4656,7 +4656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Trump, and 'they' refers to the Commerce Committee. In turn 57, the speaker discusses Trump's VP pick, which is unrelated to the issue of whether the Commerce Committee has access to incriminating evidence via a laptop.\",\n  \"reason\": \"Turn 57 introduces a new topic—Trump announcing his VP pick—which is entirely unrelated to the assumption in turn 52 about the listener understanding the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 52 refers to Trump, and 'they' refers to the Commerce Committee. In turn 57, the speaker discusses Trump's VP pick, which is unrelated to the issue of whether the Commerce Committee has access to incriminating evidence via a laptop.\",\n  \"reason\": \"Turn 57 introduces a new topic—Trump announcing his VP pick—which is entirely unrelated to the assumption in turn 52 that the listener understands the"
     },
     {
       "a_turn_idx": 52,
@@ -4731,7 +4731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to the listener (SPEAKER_07), as established by the conversational context involving shared understanding of roles and references. In turn 66, 'you' refers to the same listener, indicating continuity in address.\",\n  \"reason\": \"Turn 66 acknowledges the listener's emotional state ('I hear in your voice, you're very troubled') and expresses shared concern about the nation's future. While this"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 54 refers to the listener (SPEAKER_07), as established in the prior dialogue where SPEAKER_06 addresses SPEAKER_07 directly. In turn 66, 'you' refers to the same listener, as evidenced by the empathetic tone ('I hear in your voice, you're very troubled') and the shared concern about the nation's future.\",\n  \"reason\": \"Turn 66 acknowledges"
     },
     {
       "a_turn_idx": 54,
@@ -4761,7 +4761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 66 refers to the listener (SPEAKER_14), as established in prior turns where SPEAKER_06 addresses concerns expressed by the listener. 'I' refers to SPEAKER_06.\",\n  \"reason\": \"Claim C (turn 66) states that the speaker shares the listener’s concern about the nation's future ('I hear in your voice, you're very troubled... and so am I'). This"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 66 refers to the listener (SPEAKER_14), as established in prior turns where SPEAKER_06 addresses concerns expressed by the listener. 'I' refers to SPEAKER_06.\",\n  \"reason\": \"Claim C (turn 66) states that the speaker shares the listener’s concern about the nation's future ('I hear in your voice, you're very troubled... And so am I'). This"
     },
     {
       "a_turn_idx": 56,

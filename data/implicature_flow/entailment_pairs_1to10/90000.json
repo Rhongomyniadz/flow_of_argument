@@ -1,0 +1,102 @@
+{
+  "episode_id": "90000",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 1.708,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker trusts that the audience views David Kogan as credible or authoritative.",
+      "c_turn_idx": 8,
+      "claim_text": "The speaker is thanking the listener for participating in 'Flash 60 Seconds of Secrets' with David Kogan from Alliance's.",
+      "overlap_score": 3,
+      "c_time": 119.704,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'David Kogan' in turn 8 refers to the same person introduced in turn 0. 'Alliance's' is a likely variant spelling of 'Alliances' mentioned in turn 0.\",\n  \"reason\": \"Turn 8 mentions participation in 'Flash 60 Seconds of Secrets' with David Kogan from Alliance's, which aligns with the event described in turn 0. However, it does not explicitly state or verify the audience's perception"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 1.708,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker trusts that the audience views David Kogan as credible or authoritative.",
+      "c_turn_idx": 8,
+      "claim_text": "David Kogan is affiliated with Alliance's.",
+      "overlap_score": 2,
+      "c_time": 119.704,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Alliance's' in turn 8 refers to 'Alliances' mentioned in turn 0, establishing a direct link between David Kogan and the organization.\",\n  \"reason\": \"Claim C states that David Kogan is affiliated with Alliance's, which supports the idea that he is connected to an established organization. This indirectly reinforces the assumption that the audience may view him as credible or authoritative due to institutional association. However, it does not explicitly state or verify the"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 15.177,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The speaker believes that promoting the book aligns with the event’s purpose.",
+      "c_turn_idx": 6,
+      "claim_text": "The speaker believes others should not suspect they are afraid.",
+      "overlap_score": 2,
+      "c_time": 94.548,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'I' in turn 6 refers to SPEAKER_02, who is distinct from the speaker in turn 1.\",\n  \"reason\": \"Claim C (turn 6) discusses personal coping mechanisms related to fear and maintaining composure, which is unrelated to the promotion of a book or alignment with an event's purpose. There is no mention of the book, the event, or any belief about promotional alignment. Thus, it does not support"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 15.177,
+      "a_idx_in_turn": 6,
+      "assumption_text": "The speaker believes that referring to something as 'sacred' implies emotional weight and personal importance.",
+      "c_turn_idx": 6,
+      "claim_text": "The speaker believes others should not suspect they are afraid.",
+      "overlap_score": 2,
+      "c_time": 94.548,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 6 refers to SPEAKER_02, who is the same speaker as in turn 1. 'They' in 'no one will suspect I'm afraid' refers to others.\",\n  \"reason\": \"Claim C (turn 6) discusses suppressing fear by whistling a happy tune to avoid being perceived as afraid. This does not address or verify the idea that calling something 'sacred' implies emotional weight and personal importance"
+    },
+    {
+      "a_turn_idx": 2,
+      "a_time": 43.99,
+      "a_idx_in_turn": 1,
+      "assumption_text": "The speaker believes that being associated with the Constitution grants legitimacy or authority.",
+      "c_turn_idx": 6,
+      "claim_text": "The speaker believes others should not suspect they are afraid.",
+      "overlap_score": 2,
+      "c_time": 94.548,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' in turn 6 refers to SPEAKER_02, consistent with turn 2.\",\n  \"reason\": \"Claim C (turn 6) discusses personal behavior when feeling afraid—whistling a happy tune to hide fear—and does not mention the Constitution, legitimacy, or authority. It is unrelated to assumption A, which centers on the symbolic power of possessing a Constitution signed by Senator Byrd. There is no overlap in semantic content,"
+    },
+    {
+      "a_turn_idx": 6,
+      "a_time": 94.548,
+      "a_idx_in_turn": 4,
+      "assumption_text": "The speaker values maintaining a composed public image over expressing vulnerability.",
+      "c_turn_idx": 7,
+      "claim_text": "The speaker has a specific image or impression they wish to leave behind.",
+      "overlap_score": 2,
+      "c_time": 106.256,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 7 refers to SPEAKER_01, who is the same speaker as in turn 6. The phrase 'when people think of me' directly refers to the speaker's desired public image.\",\n  \"reason\": \"Turn 7 explicitly states the speaker's desire for a particular impression to be formed in others' minds, which directly verifies the assumption in turn 6 that the speaker values maintaining a composed public image over expressing vulnerability. The"
+    }
+  ]
+}

@@ -12561,7 +12561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"C uses 'this case' to refer to the Jack Smith case, and 'Alvin Bragg case' refers to the Manhattan hush money case mentioned in turn 90. 'Jack Smith case' and 'the Bragg case' are consistent with prior mentions.\",\n  \"reason\": \"Claim C states that if the Supreme Court rules quickly in favor of Jack Smith, it is possible that the Alvin Bragg case (Manhattan hush money case) could move ahead"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 92 refers to the Jack Smith case, and 'the Alvin Bragg case' refers to the Manhattan hush money case mentioned in turn 90.\",\n  \"reason\": \"Claim C explicitly addresses the possibility that a swift Supreme Court ruling in favor of Jack Smith could result in the Bragg case being moved ahead of the Smith case, which directly verifies the underlying assumption in A that the Court's decision-making is influenced by the"
     },
     {
       "a_turn_idx": 89,
@@ -12756,7 +12756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Bragg case' in turn 91 refers to the criminal case brought by the Manhattan district attorney mentioned in turn 90. 'Former President Trump' is the subject of both claims.\",\n  \"reason\": \"Turn 91 explicitly states that the Bragg case could be the first criminal trial that former President Trump faces, which directly verifies the implication in turn 90 that the Manhattan district attorney's case is significant and potentially pivotal. The claim"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Bragg case' in turn 91 refers to the criminal case brought by the Manhattan district attorney mentioned in turn 90.\",\n  \"reason\": \"Turn 91 explicitly states that the Bragg case could be the first criminal trial that former President Trump faces, which directly verifies the implication in turn 90 that the Manhattan district attorney's case is significant and potentially imminent. The claim in C is a clear, direct confirmation of the substantive point"
     },
     {
       "a_turn_idx": 90,
@@ -12936,7 +12936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to assumption A; 'Jack Smith' in turn 91 is not referenced in turn 104.\",\n  \"reason\": \"Turn 104 discusses a completely different topic—crime scene logistics after an incident involving gunfire near Union Station—and makes no mention of Jack Smith, the legal case, or any shared understanding about referents. There is no semantic connection to assumption A, which concerns mutual recognition of who 'Jack Smith' refers to."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 104 refers to SPEAKER_21, who is discussing a crime scene at Union Station. The subject matter is entirely unrelated to 'Jack Smith' or the prior discussion about legal cases and trial scheduling.\",\n  \"reason\": \"Turn 104 discusses a local incident involving a crime scene at Union Station, asking whether there was one large scene or multiple scenes. This topic is completely unrelated to the earlier"
     },
     {
       "a_turn_idx": 91,
@@ -12951,7 +12951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a different event (current incident at Union Station) and a separate earlier shooting at 27, unrelated to the identity of 'Jack Smith' mentioned in assumption A.\",\n  \"reason\": \"Claim C addresses a completely different context involving a new crime scene and a potential connection to a prior shooting at location 27, which is unrelated to the shared understanding about 'Jack Smith' in turn 91. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a different event (current incident at Union Station) and its potential link to an earlier shooting at 27, while assumption A concerns shared understanding about 'Jack Smith'. The topics are entirely unrelated.\",\n  \"reason\": \"Claim C addresses a completely different subject—potential connection between two separate shootings—while assumption A is about mutual understanding regarding the identity of 'Jack Smith' in a legal context. There is no overlap in semantic content,"
     },
     {
       "a_turn_idx": 91,
@@ -13011,7 +13011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the legal case involving Trump's criminal charges, specifically the issue of whether the Supreme Court should intervene, as established in the surrounding context.\",\n  \"reason\": \"Claim C states that justices may consider the case important because it is an issue of first impression, which introduces a new legal principle that could set binding precedent. While this touches on a potential reason for the Supreme Court to take the case, it does not explicitly address or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Supreme Court's potential review of the case, specifically the legal issue concerning the order of proceedings and jurisdictional authority.\",\n  \"reason\": \"Claim C suggests that justices might take the case because it is an 'issue of first impression,' which relates to the novelty and broader legal significance of the matter. However, this does not explicitly state or verify the earlier assumption A, which focuses on the sequence of legal proceedings determining which case"
     },
     {
       "a_turn_idx": 91,
@@ -13026,7 +13026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Supreme Court's potential review of the Jack Smith case, as established in the surrounding context.\",\n  \"reason\": \"Claim C introduces the idea that the Supreme Court's decision may be influenced by broader legal considerations beyond what benefits President Trump. While this touches on a tangential aspect of the discussion—judicial reasoning—it does not explicitly verify or state the core content of assumption A, which is that the public and media are tracking"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Supreme Court's potential review of the Jack Smith case, as established in the surrounding context.\",\n  \"reason\": \"Claim C introduces the idea that the Supreme Court's decision may be influenced by broader legal considerations beyond what benefits President Trump. While this touches on a tangential aspect of the discussion—judicial reasoning—it does not explicitly state or verify the core assumption in A, which is that the public and media are tracking the"
     },
     {
       "a_turn_idx": 91,
@@ -13146,7 +13146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the U.S. Supreme Court, consistent with the subject of turn 92.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court may take two weeks to rule, which directly verifies the possibility mentioned in assumption A that a Supreme Court ruling could override lower-court procedural timelines. The temporal flexibility (including up to two weeks) aligns with the idea that such a ruling could alter the timeline, thus explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the U.S. Supreme Court, consistent with the subject of turn 92.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court may take two weeks to rule, which directly verifies the possibility mentioned in assumption A that a Supreme Court ruling could override lower-court procedural timelines. The temporal flexibility (including up to two weeks) aligns with the idea that a Supreme Court decision could alter the timeline, thus"
     },
     {
       "a_turn_idx": 92,
@@ -13236,7 +13236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 93 refers to the motion regarding the Supreme Court's potential intervention in the case, which aligns with the subject of turn 92.\",\n  \"reason\": \"Claim C ('We will hear from the Supreme Court at some point') directly and explicitly verifies the substance of assumption A, which posits that the possibility of Supreme Court intervention is meaningful enough to influence strategic expectations. The statement confirms that Supreme Court action is not only possible but"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 93 refers to the motion regarding the Supreme Court's potential intervention in the case, as established in the prior context.\",\n  \"reason\": \"Claim C ('We will hear from the Supreme Court at some point') directly and explicitly verifies the substance of assumption A, which posits that the possibility of Supreme Court intervention is meaningful enough to influence strategic expectations. The statement confirms that such intervention is not only possible but imminent, reinforcing the strategic significance"
     },
     {
       "a_turn_idx": 92,
@@ -13251,7 +13251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 93 refers to the Supreme Court, as established in the prior context discussing the Supreme Court's potential involvement.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court could rule tonight, which directly verifies the substance of assumption A—that the possibility of judicial intervention from the Supreme Court is meaningful enough to influence strategic expectations. The immediacy and uncertainty of the Supreme Court’s action (ruling tonight) underscores its potential impact on trial scheduling"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 93 refers to the Supreme Court, as established in the prior context discussing the Supreme Court's potential role in the case.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court could rule tonight, which directly verifies the substance of assumption A—that the possibility of judicial intervention from the Supreme Court is meaningful enough to influence strategic expectations. The immediacy and uncertainty of the Supreme Court’s action (ruling tonight) underscores its potential impact"
     },
     {
       "a_turn_idx": 92,
@@ -13266,7 +13266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 94 refers to the Supreme Court, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that there is uncertainty about when the Supreme Court will issue its decision, which directly verifies the substance of assumption A—that the possibility of judicial intervention from the Supreme Court is meaningful enough to influence strategic expectations. The uncertainty about timing is central to why such intervention could affect strategic expectations, making C a direct and explicit verification of A"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the context of judicial intervention discussed in turn 92.\",\n  \"reason\": \"Claim C explicitly states that there is uncertainty about when the Supreme Court will issue its decision, which directly verifies the core idea in assumption A—that the possibility of Supreme Court intervention is meaningful enough to influence strategic expectations. The uncertainty about timing is central to why such intervention would affect strategic planning, thus directly supporting and"
     },
     {
       "a_turn_idx": 92,
@@ -13371,7 +13371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Turn 94 explicitly states that the timing of the Supreme Court's decision is uncertain—'they can rule tonight, they can rule tomorrow, they can take a week, they can take two weeks'—which directly verifies the uncertainty implied in turn 93 about whether the Supreme Court will act and when. This confirms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Turn 94 explicitly states that the timing of the Supreme Court's decision is uncertain, which directly verifies the core idea in turn 93 that the Court has the authority to overturn or affirm the lower court ruling—specifically by emphasizing the unpredictability of when they might act. This confirms the operational reality of their authority"
     },
     {
       "a_turn_idx": 93,
@@ -13476,7 +13476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 94 refers to the Supreme Court, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that there is uncertainty about when the Supreme Court will issue its decision, which directly verifies the substance of assumption A—that the timing of the Supreme Court decision is unpredictable but possible within hours. The phrasing 'can rule tonight, they can rule tomorrow, they can take a week, they can take two weeks' in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 94 refers to the Supreme Court, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that there is uncertainty about when the Supreme Court will issue its decision, which directly verifies the substance of assumption A—that the timing of the Supreme Court decision is unpredictable but possible within hours. The phrasing 'can rule tonight, they can rule tomorrow, they can take a week, they can take two weeks' in turn"
     },
     {
       "a_turn_idx": 93,
@@ -13491,7 +13491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93. The phrase 'can rule tomorrow' directly aligns with 'they can rule tomorrow' in turn 93.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court may rule tomorrow, which directly verifies the possibility mentioned in assumption A that the timing of the Supreme Court decision is unpredictable but possible within hours. The phrasing 'may rule"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Turn 94 explicitly states that the Supreme Court may rule tomorrow, which directly verifies the substance of turn 93's claim that the timing of the Supreme Court decision is unpredictable but possible within hours. The phrase 'can rule tomorrow' in turn 94 matches the temporal openness ('any time', 'tonight',"
     },
     {
       "a_turn_idx": 93,
@@ -13506,7 +13506,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court may take a week to rule, which directly verifies the substance of assumption A—that the timing of the Supreme Court decision is unpredictable but possible within hours. The phrase 'can take a week' in C aligns with the unpredictability and possibility of a quick ruling mentioned in A, and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Turn 94 explicitly states that the Supreme Court 'can take a week' to rule, which directly verifies the unpredictability of timing mentioned in turn 93 ('any time... they can rule tonight, they can rule tomorrow'). The claim C explicitly confirms one of the possible timeframes (a week) discussed in A"
     },
     {
       "a_turn_idx": 93,
@@ -13521,7 +13521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Turn 94 explicitly states that the Supreme Court can rule 'tomorrow' or 'take a week, they can take two weeks,' which directly verifies the unpredictability of timing mentioned in turn 93 ('any time... possible within hours'). The claim explicitly confirms the possibility of a delay up to two weeks, align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 94 refers to the Supreme Court, consistent with the subject of turn 93.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court may take up to two weeks to rule, which directly verifies the unpredictability of timing mentioned in assumption A. The phrase 'they can take a week, they can take two weeks' in turn 94 confirms the possibility of a two-week delay, aligning precisely with the idea"
     },
     {
       "a_turn_idx": 93,
@@ -13581,7 +13581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the Supreme Court taking the case, which is the subject of assumption A. No other coreference issues exist.\",\n  \"reason\": \"Claim C explicitly states 'I don't know whether they'll take it or not,' directly verifying the uncertainty about the Supreme Court's action, which is the core of assumption A. Assumption A asserts unpredictability in timing—'any time'—and possibility of a quick ruling, which align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the Supreme Court taking the case, which is the same subject as in assumption A.\",\n  \"reason\": \"Claim C explicitly states uncertainty about whether the Supreme Court will take the case, which directly verifies the core idea in assumption A that the timing of the Supreme Court decision is unpredictable but possible within hours. While A emphasizes unpredictability and immediacy, C captures the same uncertainty in a focused way, confirming that the outcome—whether"
     },
     {
       "a_turn_idx": 93,
@@ -13686,7 +13686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this case' in turn 98 refers to the legal matter involving the special counsel's case, which is consistent with the context of the Supreme Court's potential involvement in turn 93.\",\n  \"reason\": \"Claim C states there is uncertainty about whether the Supreme Court will take the case, which directly aligns with the assumption in A that a Supreme Court ruling would be a definitive resolution. While C does not explicitly state that such a ruling would be definitive"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this case' in turn 98 refers to the legal case involving the special counsel and Trump, which is the same subject as the Supreme Court's potential involvement discussed in turn 93.\",\n  \"reason\": \"Claim C states there is uncertainty about whether the Supreme Court will take the case, which directly aligns with the assumption in A that a Supreme Court ruling would be a definitive resolution. While C does not explicitly state that such a ruling would be definitive"
     },
     {
       "a_turn_idx": 94,
@@ -13791,7 +13791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my wife' in turn 99 refers to the speaker (SPEAKER_21), but the content is entirely unrelated to the earlier assumption about the Supreme Court justices' strategic assessment of individual positions.\",\n  \"reason\": \"Turn 99 discusses the personal impact of a mass shooting on the speaker and his wife, framing it as becoming part of a statistic. This topic is completely unrelated to the legal strategy or judicial behavior discussed in turn 94"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my wife' in turn 99 refers to the speaker (SPEAKER_21), but the statement about being part of a statistic related to mass shootings is entirely unrelated to the earlier assumption about strategic assessment of Supreme Court justices' positions.\",\n  \"reason\": \"Claim C discusses the personal impact of a mass shooting on the speaker's wife, framing it as part of a broader national tragedy. This topic is completely unrelated to assumption A, which concerns the"
     },
     {
       "a_turn_idx": 95,
@@ -13881,7 +13881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 95 refers to the Supreme Court justices; 'the three liberal justices' in turn 96 explicitly identifies the group assumed in turn 95.\",\n  \"reason\": \"Turn 96 explicitly states 'the three liberal justices,' which directly verifies the assumption in turn 95 that there are three liberal justices on the Supreme Court. The reference to 'R. Kagan or Jackson' in turn 96 confirms the identity"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 95 refers to the three liberal justices mentioned in turn 96. 'R. Kagan or Jackson' in turn 96 clarifies the identity of the three liberal justices referenced in turn 95.\",\n  \"reason\": \"Turn 96 explicitly states that there are three liberal justices on the Supreme Court, directly verifying the implicit assumption in turn 95 that such a group exists. The mention of 'R."
     },
     {
       "a_turn_idx": 95,
@@ -14076,7 +14076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_06, who is discussing a phone number for reporting. This is unrelated to the earlier assumption A about insight into Supreme Court justices' internal dynamics.\",\n  \"reason\": \"Claim C discusses a phone number for reporting victims, witnesses, or video evidence related to a shooting incident, which is entirely unrelated to assumption A, which concerns the speaker's insight into the internal motivations and preferences of Supreme Court"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_06, who is discussing a phone number for reporting. Assumption A concerns insight into justices' internal dynamics and preferences, which is unrelated.\",\n  \"reason\": \"Claim C discusses a phone number for reporting victims, witnesses, or video evidence, which is entirely unrelated to the assumption that the speaker has insight into the internal dynamics and preferences of Supreme Court justices. There is no overlap in subject"
     },
     {
       "a_turn_idx": 96,
@@ -14091,7 +14091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the legal issue discussed in turn 96, specifically the Supreme Court's potential review of the case. 'All courts across the land' clearly refers to the nationwide applicability of the ruling, matching the idea of establishing binding precedent.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court might take the case to establish a binding precedent across all U.S. courts, which directly verifies the substance of assumption A—that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the legal issue discussed in turn 96, specifically the Supreme Court's potential review of the case. 'All courts across the land' clearly refers to the nationwide applicability of the ruling, matching the idea of establishing binding precedent.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court might take the case to establish a binding precedent across all U.S. courts, which directly verifies the substance of assumption A — that"
     },
     {
       "a_turn_idx": 96,
@@ -14196,7 +14196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'I' in turn 118 refers to SPEAKER_21, consistent with prior turns. 'We' in 'we have recovered firearms' refers to law enforcement, aligning with previous statements.\",\n  \"reason\": \"Claim C states that the speaker lacks current information about the specific weapons used, which is a factual limitation. Assumption A, however, concerns Paula’s access to information from multiple perspectives, particularly regarding judicial motivations in a legal case. There"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'I' in turn 118 refers to SPEAKER_21, consistent with prior turns. 'We' in 'we have recovered firearms' refers to law enforcement, aligning with previous statements.\",\n  \"reason\": \"Claim C states that the speaker lacks current information about the specific weapons used, which is a factual limitation. However, this does not address or verify the earlier assumption A, which concerns Paula’s access to information from multiple perspectives. There is"
     },
     {
       "a_turn_idx": 98,
@@ -14256,7 +14256,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to KCFD (Kansas City Fire Department), which is consistent with the context from turn 99 and 100. 'Victims' in C refers to individuals injured in the shooting, aligning with the earlier mention of 22 gunshot wounds in turn 99.\",\n  \"reason\": \"Claim C explicitly states that KCFD units treated 22 gunshot victims during the event, which directly verifies the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in claim C refers to KCFD (Kansas City Fire Department), which is consistent with the context from turn 99 and 100. 'Victims' in C refers to individuals injured in the shooting, aligning with the earlier mention of 22 gunshot wounds in turn 99.\",\n  \"reason\": \"Claim C explicitly states that KCFD units treated 22 gunshot victims during the event, directly verifying the substance"
     },
     {
       "a_turn_idx": 98,
@@ -14361,7 +14361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a witness' in turn 120 refers to individuals who were present during the incident, consistent with the group mentioned in turn 99 (people who were in or near Union Station). 'That may provide us if there's anybody else involved' clarifies the relevance of the witness's information.\",\n  \"reason\": \"Turn 120 explicitly asserts the existence of a witness who could provide relevant information about potential additional perpetrators, directly verifying the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'a witness' in turn 120 refers to individuals who were present during the incident, consistent with the group mentioned in turn 99 (people who witnessed the incident). 'That may provide us if there's anybody else' clarifies the relevance of the witness's information.\",\n  \"reason\": \"Turn 120 explicitly asserts the existence of a witness who could provide relevant information about potential additional perpetrators, directly verifying the substance of assumption A (that"
     },
     {
       "a_turn_idx": 99,
@@ -14556,7 +14556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to law enforcement authorities, consistent with the context of public communication during an active investigation.\",\n  \"reason\": \"Claim C explicitly states that sharing information about suspect status reassures the public that there is no ongoing threat, which directly verifies the core idea in assumption A—that public awareness of ongoing investigations (including suspect status) contributes positively to community cooperation. The claim emphasizes timely disclosure to calm the public, aligning with the notion that transparency fost"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to law enforcement authorities, consistent with the context of sharing information about suspects. 'The public' refers to the general community affected by the incident.\",\n  \"reason\": \"Claim C explicitly states that providing updates on suspect status reassures the public that there is no ongoing threat, which directly verifies the core idea in assumption A—that public awareness of ongoing investigations (including suspect status) contributes positively to community cooperation. While A focuses on cooperation,"
     },
     {
       "a_turn_idx": 99,
@@ -14661,7 +14661,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_17 refers to 'I do not have that yet' — 'that' likely refers to confirmation of another death, which is related to the status of victims mentioned in assumption A. No direct mention of witnesses or informants.\",\n  \"reason\": \"Claim C (turn 113) addresses the lack of confirmation regarding a second death, which relates to the ongoing identification of victims. However, it does not explicitly mention witnesses, informants, or the"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_17 refers to 'I do not have that yet' — 'that' refers to confirmation of another death, which is related to the status of victims mentioned in assumption A. No direct mention of witnesses or informants.\",\n  \"reason\": \"Claim C (turn 113) addresses the lack of confirmation regarding a second death, which relates to the ongoing identification of victims. However, it does not explicitly mention or verify the systematic collection of information from"
     },
     {
       "a_turn_idx": 100,
@@ -14931,7 +14931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'those' in claim C refers to 'immediately life threatening injuries' mentioned in assumption A. 'We had eight of those' directly refers back to the eight individuals with immediately life-threatening injuries stated in turn 101.\",\n  \"reason\": \"Claim C explicitly confirms the number and nature of the most serious injuries—eight individuals with immediately life-threatening injuries—directly verifying the substance of assumption A, which asserts that the distinction between 'immediately life"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'those' in claim C refers to 'immediately life threatening injuries' mentioned in assumption A. 'We had eight' in C directly matches the count and category from A.\",\n  \"reason\": \"Claim C explicitly states that there were eight individuals with immediately life-threatening injuries, which directly verifies the key content of assumption A, which asserts that the distinction between 'immediately life threatening' and 'life threatening injuries' carries meaningful clinical weight. By specifying the exact"
     },
     {
       "a_turn_idx": 101,
@@ -15036,7 +15036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the public' in claim C refers to the general audience affected by the emergency, consistent with the context of turn 102.\",\n  \"reason\": \"Claim C discusses the benefits of providing minimal information during investigative detention, which touches on public perception and trust during emergencies. However, it does not explicitly state or verify the specific expectation from turn 102—that the public expects a swift and coordinated response during emergencies involving multiple casualties. While related in theme ("
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the public' in claim C refers to the general audience affected by the emergency, consistent with the context of turn 102. 'They' in turn 124 refers to law enforcement authorities.\",\n  \"reason\": \"Claim C discusses the benefits of providing minimal information during investigative detention, which touches on public communication during emergencies. However, it does not explicitly state or verify the expectation of a swift and coordinated response among the public, as asserted in assumption"
     },
     {
       "a_turn_idx": 102,
@@ -15366,7 +15366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 125 refers to 'law enforcement professionals', which aligns with the subject of turn 106. 'The public' in turn 106 is referenced in turn 125 through 'the public' and 'calm to the public'.\",\n  \"reason\": \"Turn 125 explicitly acknowledges that law enforcement must balance withholding information during investigations with the public's need for reassurance, which directly supports"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 125 refers to law enforcement professionals, which aligns with the subject of turn 106. 'The public' in turn 106 is referenced in turn 125 through 'the public' and 'calm to the public'.\",\n  \"reason\": \"Turn 125 explicitly acknowledges that law enforcement must balance withholding information during investigations with the public's need for reassurance, which directly supports the"
     },
     {
       "a_turn_idx": 106,
@@ -17301,7 +17301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 127 refers to the police or law enforcement authorities mentioned in prior turns. 'Those folks' refers to the three detained individuals.\",\n  \"reason\": \"Claim C explicitly states that the charges against the detained individuals may not involve the actual act of shooting, which directly verifies the earlier assumption A that detention does not necessarily imply guilt or resolution of the incident. The statement clarifies that the detainees might face firearm-related charges without being confirmed as"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 127 refers to the police or law enforcement authorities mentioned in turn 123. 'Those folks' refers to the three detained individuals.\",\n  \"reason\": \"Claim C explicitly states that the charges against the detained individuals may not involve the actual act of shooting, which directly verifies the earlier assumption A that detention does not necessarily imply guilt or resolution of the incident. The statement clarifies that the detainees might be charged with firearm-related"
     },
     {
       "a_turn_idx": 123,
@@ -17312,11 +17312,11 @@
       "claim_text": "Last night’s result does not reflect what will happen in the fall election.",
       "overlap_score": 2,
       "c_time": 5039.208,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'the result' refers to the special election outcome, not related to the detention of suspects.",
-      "reason": "Claim C discusses the unpredictability of a future election based on a past special election result, while assumption A concerns the legal and evidentiary implications of detaining suspects without implying guilt. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter or logical connection.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the result' refers to the special election outcome, not related to the detention of suspects.\",\n  \"reason\": \"Claim C discusses the unpredictability of a future election based on a past special election result, while assumption A concerns the legal and evidentiary implications of detaining suspects without implying guilt. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter or logical connection.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the result' refers to the special election outcome, not related to the detention of suspects.\",\n  \"reason\": \"Claim C discusses the outcome of a special congressional election and its implications for the fall election, while assumption A concerns the legal and evidentiary status of detained suspects in a shooting incident. The topics, context, and semantic content are entirely unrelated. There is no overlap in subject matter, nor does C address or verify any part of A"
     },
     {
       "a_turn_idx": 124,
@@ -17436,7 +17436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to law enforcement professionals, consistent with the context of law enforcement actions discussed in turn 124.\",\n  \"reason\": \"Claim C states that law enforcement professionals understand the need to withhold information during investigations, which is a general statement about their awareness of procedural necessity. However, assumption A (turn 124) specifically asserts that public trust in law enforcement depends on accountability for detentions—emphasizing transparency and justification for det"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to law enforcement professionals, consistent with the context of law enforcement actions discussed in turn 124.\",\n  \"reason\": \"Claim C states that law enforcement professionals understand the need to withhold information during investigations, which is a general statement about their awareness of procedural necessity. However, assumption A specifically asserts that public trust in law enforcement depends on accountability for detentions—emphasizing transparency and justification for detentions. While C acknowledges a reason"
     },
     {
       "a_turn_idx": 125,
@@ -17511,7 +17511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim C refers to individuals involved in the Boston incident mentioned in turn 128 and 129, consistent with the prior discussion of non-targeted shootings involving multiple parties.\",\n  \"reason\": \"Claim C explicitly states that a festival in Boston last August was disrupted by gunfire between multiple individuals, which directly verifies the example provided in assumption A (turn 127) about unclear motives and lack of targeting, reinforcing the idea that such"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'people' in claim C refers to individuals involved in the Boston incident mentioned in turn 128 and 129, consistent with the prior discussion of gun violence between multiple parties.\",\n  \"reason\": \"Claim C explicitly states that a festival in Boston last August was disrupted by gunfire between multiple individuals, which directly verifies the substance of assumption A — that there is a clear distinction between investigatory detention (as seen in the current case) and formal prosecution ("
     },
     {
       "a_turn_idx": 127,
@@ -17541,7 +17541,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in turn 127 refers to the police, and 'those folks' in turn 127 refers to the detained individuals. No pronouns in turn 153 refer to entities in turn 127.\",\n  \"reason\": \"Turn 153 discusses frustration among White House officials and Democrats about the public response to a report involving the president, which is unrelated to the legal distinction between investigatory detention and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses White House officials' frustration with public response to a report, while assumption A concerns the legal distinction between investigatory detention and formal prosecution.\",\n  \"reason\": \"Claim C discusses frustration within the White House and Democrats about the public response to a report, particularly regarding the president's handling of it. Assumption A, however, is about the legal distinction between investigatory detention and formal prosecution, which is unrelated in both topic and content. There"
     },
     {
       "a_turn_idx": 128,
@@ -17781,7 +17781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 138 refers to the current political situation involving the narrow Republican majority and the Democratic victory in New York, not to the future Congress or legislative capability mentioned in assumption A.\",\n  \"reason\": \"Claim C expresses a desire to savor the current political moment, specifically the weakened Republican majority after a Democratic win in a special election. This is unrelated to assumption A, which concerns the future capability of Congress to pass meaningful legislation. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in turn 138 refers to SPEAKER_32, who is expressing personal enjoyment of the current political situation. This does not relate to the earlier assumption A about a future Congress being more capable of passing legislation.\",\n  \"reason\": \"Claim C expresses a personal, momentary enjoyment of the current political situation (a narrow Republican majority), which is unrelated to the substantive claim in A about future legislative capability. There is no mention of legislation"
     },
     {
       "a_turn_idx": 132,
@@ -17841,7 +17841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_32 refers to 'this' as the current political situation, specifically the narrow Republican majority in the House after losing a special election. This is unrelated to SPEAKER_16's earlier assumption about moral responsibility to advocate for safer communities despite political dysfunction.\",\n  \"reason\": \"Claim C expresses a personal enjoyment of the current political situation, which is a reaction to a recent electoral outcome. This does not address, verify, or relate to the moral responsibility assumed in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_32 refers to 'this' as the current political situation, specifically the narrow Republican majority in the House after losing a special election. No reference to the speaker's moral responsibility or advocacy for safer communities.\",\n  \"reason\": \"Claim C expresses a personal enjoyment of the current political situation, which is unrelated to the earlier assumption A about moral responsibility to advocate for safer communities despite political dysfunction. There is no mention of policy, safety, advocacy, or moral duty in"
     },
     {
       "a_turn_idx": 133,
@@ -17916,7 +17916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'those suburban districts' in turn 146 refers to the district mentioned in turn 137 (New York's special election district), which is described as a key battleground. 'Both parties' refers to the Democratic and Republican parties mentioned in the context.\",\n  \"reason\": \"Claim C states that both major parties view suburban districts as important to winning national elections, which is a generalization about strategic importance. However, assumption A specifically claims that political victories"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'those suburban districts' in turn 146 refers to the district mentioned in turn 137 (New York's special election district), which is described as a key battleground. 'Both parties' refers to the major political parties discussed in the context.\",\n  \"reason\": \"Claim C mentions that both major parties view suburban districts as important to winning national elections, which is a general political strategy observation. However, it does not explicitly state or verify the specific"
     },
     {
       "a_turn_idx": 137,
@@ -17931,7 +17931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the president’ in C refers to Biden, consistent with context. 'That district' in C refers to the NY district mentioned earlier, but the claim is about a political embarrassment from an interview, not about special election outcomes.\",\n  \"reason\": \"Claim C discusses a political embarrassment due to the president's interview with the special counsel, which is unrelated to the substantive content of assumption A—namely, that special election victories indicate shifts in partisan balance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the president’ in C refers to Biden, consistent with context. 'That district' in C refers to the NY district mentioned earlier, but the claim is about a political embarrassment from an interview, not about special election outcomes.\",\n  \"reason\": \"Claim C discusses a political embarrassment due to the president's interview with the special counsel, which is unrelated to the substantive content of assumption A—namely, that special election victories signal shifts in partisan balance"
     },
     {
       "a_turn_idx": 138,
@@ -17961,7 +17961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_34 refers to 'ID' as the Democratic candidate, and 'a relatively unknown GOP opponent' refers to the Republican candidate in the special election. The phrase 'the devil you know versus the devil you don't know' implies familiarity with the incumbent Republican, supporting the idea that the Republican candidate was less known.\",\n  \"reason\": \"Claim C explicitly states that the speaker (Democrat) is running against a relatively unknown Republican opponent, which directly verifies the assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_34 refers to 'ID' as the Democratic candidate, and 'a relatively unknown GOP opponent' refers to the Republican candidate in the special election. The phrase 'the devil you know versus the devil you don't know' implies familiarity with the incumbent Republican, supporting the idea that the Republican candidate was less known.\",\n  \"reason\": \"Claim C explicitly states that the speaker (Democrat) is running against a relatively unknown Republican opponent, which directly verifies the underlying"
     },
     {
       "a_turn_idx": 138,
@@ -18006,7 +18006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The events' in C refers to the presidential interview and legal investigation context, not weather-related events.\",\n  \"reason\": \"Claim C discusses concerns about the political narrative regarding the president's age and cognitive ability following a high-profile interview and legal investigation. Assumption A, however, concerns the influence of weather events on election outcomes. These topics are unrelated in subject matter and context. C does not mention, imply,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The events' in C refers to the presidential interview and legal investigation context, not weather-related events.\",\n  \"reason\": \"Claim C discusses concerns about the political narrative regarding the president's age and cognitive performance following a high-profile interview and legal investigation. Assumption A, however, concerns the influence of weather events on election outcomes. These topics are unrelated in subject matter and context. C does not mention, imply,"
     },
     {
       "a_turn_idx": 139,
@@ -18231,7 +18231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Special Counsel's report and its aftermath, as established in the context. 'The president’s memory' is a direct reference to the portrayal of the president as a 'forgetful elderly man' mentioned in turn 149.\",\n  \"reason\": \"Claim C explicitly states that the report's release and the White House's handling of it have raised significant concerns about the political narrative regarding the president’s memory—directly verifying"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Special Counsel's report and its aftermath, as established in the context. 'The president’s memory' is a direct reference to the portrayal of the president as a 'forgetful elderly man' mentioned in turn 149.\",\n  \"reason\": \"Claim C explicitly states that the report's release has raised significant concerns about the political narrative regarding the president’s memory, which directly verifies the substance of assumption A—that the report"
     },
     {
       "a_turn_idx": 149,
@@ -18246,7 +18246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the Special Counsel's report and its aftermath, as established in the context. 'The president's age' is linked to the portrayal of him as a 'forgetful elderly man' mentioned in turn 149.\",\n  \"reason\": \"Claim C explicitly states that the report's fallout has raised significant concerns about the political narrative regarding the president’s age, which directly verifies the substance of assumption A—that the report carries significant political"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the events surrounding the Special Counsel's report, which includes the president's interview and the report's portrayal of him as forgetful. 'The president's age' is a direct reference to the characterization in the report.\",\n  \"reason\": \"Claim C explicitly states that the report's aftermath has raised significant concerns about the political narrative regarding the president’s age, which directly verifies the substance of assumption A—that the report carries significant political weight"
     },
     {
       "a_turn_idx": 149,
@@ -18471,7 +18471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the events surrounding the Special Counsel's report and the president's interview, which were discussed in turn 149. 'The president' is consistently referenced throughout the context.\",\n  \"reason\": \"Claim C explicitly states that the events surrounding the report have raised significant concerns about the political narrative regarding the president’s age, which directly verifies the substance of assumption A—namely, that allies of the president trust the accuracy of insider"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the events surrounding the Special Counsel's report and the president's interview, which were discussed in turn 149. 'The president' consistently refers to the same individual throughout.\",\n  \"reason\": \"Claim C explicitly states that the events surrounding the report have raised significant concerns about the political narrative regarding the president’s age. This directly verifies the substance of assumption A, which posits that allies of the president trust the accuracy of"
     },
     {
       "a_turn_idx": 150,

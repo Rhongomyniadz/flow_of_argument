@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to the show by its full title, 'The Capitol Hill Show', which matches the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states the name of the show, 'The Capitol Hill Show', which directly supports the expectation described in assumption A—that media content on Capitol Hill promotes rationality over partisanship. While C does not explicitly mention 'rationality' or 'partisanship', it confirms the show's identity and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_00 refers to the show by its full title, 'The Capitol Hill Show', which matches the subject of assumption A.\",\n  \"reason\": \"Claim C explicitly states the name of the show, 'The Capitol Hill Show', which directly verifies the context of assumption A that audiences expect media content on Capitol Hill to promote rationality over partisanship. While C does not explicitly mention 'rationality' or 'partisanship', it confirms the show's"
     },
     {
       "a_turn_idx": 1,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, and 'the American people' refers to the general public. No reference to public service in Congress or recognition of it is present.\",\n  \"reason\": \"Claim C (turn 11) expresses the speaker's belief that the American public is outraged about government policies, particularly regarding border control, pandemic response, and foreign policy. This is unrelated to the earlier assumption A, which concerns the speaker's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 11) expresses that 'the American people are outraged' and that they should be, but it does not mention or imply anything about the value or recognition of public service in Congress. Assumption A concerns the speaker's view on the worthiness of congressional public service, while C focuses on public outrage regarding government policies, particularly"
     },
     {
       "a_turn_idx": 1,
@@ -152,11 +152,11 @@
       "claim_text": "Congressman Ralph Norman is being addressed by the speaker.",
       "overlap_score": 3,
       "c_time": 864.34,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'Congressman Ralph Norman' in turn 18 refers to Ralph Norman introduced in turn 1 as a member of the United States Congress.",
-      "reason": "Turn 18 explicitly names Ralph Norman as 'Congressman Ralph Norman', directly verifying the assumption in turn 1 that the audience recognizes him as a member of Congress. The label 'Congressman' confirms his official status, making the claim clear and unambiguous.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Congressman Ralph Norman' in turn 18 refers to Ralph Norman introduced in turn 1 as a member of the United States Congress.\",\n  \"reason\": \"Turn 18 explicitly names Ralph Norman as 'Congressman Ralph Norman', directly verifying the assumption in turn 1 that the audience recognizes him as a member of Congress. The label 'Congressman' confirms his official status, making the claim clear and unambiguous.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 18, 'Congressman Ralph Norman' refers to the same individual introduced in turn 1 as 'Ralph Norman, one of my favorite members of the United States Congress'. The title 'Congressman' explicitly confirms his status as a member of Congress.\",\n  \"reason\": \"Turn 18 explicitly names Ralph Norman as 'Congressman Ralph Norman', directly verifying the assumption in turn 1 that the audience recognizes him as a member of Congress. This is a"
     },
     {
       "a_turn_idx": 1,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Joe Biden, consistent with the context of criticism toward the current administration.\",\n  \"reason\": \"Claim C states that the speaker believes the current administration is incompetent, which is unrelated to assumption A, which concerns the belief that having a 'favorite' member of Congress implies personal familiarity or admiration. There is no overlap in semantic content between A and C; C expresses a political critique of the presidency, while A addresses personal"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 13 refers to President Biden, consistent with context.\",\n  \"reason\": \"Claim C (turn 13) asserts that the president is 'incompetent,' which is a direct evaluation of leadership capability. However, assumption A (turn 1) concerns the belief that calling someone a 'favorite' member of Congress implies personal familiarity or admiration. These two statements are semantically unrelated: one is about political admiration,"
     },
     {
       "a_turn_idx": 1,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Biden, as established in the prior context. 'They' in 'the Ukrainians showed courage' refers to Ukrainian forces.\",\n  \"reason\": \"Claim C (turn 13) discusses the messaging sent to dictators like China and Russia through President Biden's actions, particularly praising Ukrainians while engaging with adversaries. This is unrelated to assumption A, which concerns the belief that calling someone a 'favorite member of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Biden, and 'this administration' refers to the current U.S. government under Biden. 'They' in 'the Ukrainians showed courage' refers to Ukrainian forces.\",\n  \"reason\": \"Claim C (turn 13) discusses the messaging sent to dictators like China and Russia by the U.S. president praising Ukrainians while continuing to engage economically with Russia. This is unrelated to assumption A, which"
     },
     {
       "a_turn_idx": 1,
@@ -351,7 +351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Putin' and 'he' refer to the same entity throughout.\",\n  \"reason\": \"Claim C (turn 14) discusses concerns about Putin potentially expanding beyond Ukraine to target the Baltics if he succeeds in Ukraine. This is unrelated to assumption A (turn 1), which asserts that the speaker trusts their own judgment in evaluating political figures based on character traits like 'common sense'. There is no mention of personal judgment, character evaluation, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 14 refers to Putin, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 14) discusses concerns about Putin potentially expanding beyond Ukraine to target the Baltics if successful, which is unrelated to assumption A (turn 1), which asserts trust in personal judgment regarding political figures based on character traits like 'common sense'. There is no overlap in subject matter, reasoning, or content. Claim C is"
     },
     {
       "a_turn_idx": 2,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, who is distinct from Tim Constantine (SPEAKER_01). Claim C discusses the speaker's childhood interest in politics due to a sibling disagreement over TV shows.\",\n  \"reason\": \"Claim C (turn 5) discusses the speaker's early interest in politics stemming from a personal anecdote about a childhood disagreement with a sister over television programming. This is entirely unrelated to"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, who is distinct from Tim Constantine (SPEAKER_01). Claim C discusses the speaker's childhood interest in politics, unrelated to Tim's authority or invitation power.\",\n  \"reason\": \"Claim C states that the speaker became interested in politics at age eight due to a disagreement with their sister over TV programming. This is entirely unrelated to assumption A, which concerns Tim Constant"
     },
     {
       "a_turn_idx": 3,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 7 refers to the speaker (SPEAKER_02), and 'the latest version of this' refers to the ongoing debate around mask mandates in Congress and schools.\",\n  \"reason\": \"Claim C states that previous government positions on border security contradicted recent calls for action, but this is not supported by the content of turn 7. Turn 7 discusses mask mandates and vaccine policies in Congress and Washington, D.C., particularly criticizing"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 7 refers to the speaker (SPEAKER_02), and 'the latest version of this' refers to the ongoing debate around mask mandates in Congress and schools.\",\n  \"reason\": \"Claim C states that previous government positions on border security contradicted recent calls for action, but this is not supported by the content of turn 7. Turn 7 discusses mask mandates and vaccine policies in Congress and Washington, D.C., particularly focusing"
     },
     {
       "a_turn_idx": 3,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Joe Biden, consistent with prior context. 'This administration' also refers to Biden's presidency.\",\n  \"reason\": \"Claim C (turn 13) asserts that the current administration is incompetent, which is a direct evaluation of leadership capability. However, assumption A (turn 3) concerns the expectation that the State of the Union being described as 'strong' is a standard or expected part of the event—"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Joe Biden, consistent with prior context. 'This administration' also refers to Biden's presidency.\",\n  \"reason\": \"Claim C (turn 13) asserts that the current administration is incompetent, which is a direct evaluation of leadership capability. However, assumption A (turn 3) concerns the expectation that the State of the Union address includes the phrase 'the State of the Union is strong'—a rhetorical"
     },
     {
       "a_turn_idx": 3,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Biden. 'This administration' refers to Biden's administration.\",\n  \"reason\": \"Claim C discusses the message sent to dictators like China and Russia by the president praising Ukrainians while continuing to engage with Russia economically. This is unrelated to assumption A, which concerns the expectation that the State of the Union will be described as 'strong'—a rhetorical convention. There is no mention of 'the State of the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses a different topic entirely.\",\n  \"reason\": \"Claim C discusses the messaging effect of praising Ukrainians while funding Russia, arguing it sends a negative signal to dictators. Assumption A, however, concerns the expectation that the State of the Union is described as 'strong'—a rhetorical convention. There is no overlap in semantic content between the two statements. Claim C does not mention, imply, or verify anything about the 'State of"
     },
     {
       "a_turn_idx": 3,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_02, consistent with context.\",\n  \"reason\": \"Claim C states that the speaker finds the Sergeant at Arms announcement emotionally moving, which is unrelated to assumption A, which concerns evaluating the strength of the State of the Union based on the president's remarks. While both relate to the State of the Union address, C focuses on a ceremonial moment and emotional reaction, whereas A is about substantive assessment of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in C refers to SPEAKER_02, consistent with context.\",\n  \"reason\": \"Claim C states that the speaker finds the Sergeant at Arms announcement emotionally moving, which is unrelated to assumption A, which concerns evaluating the strength of the State of the Union based on the president's remarks. While both relate to the State of the Union address, C focuses on a ceremonial moment and emotional reaction, whereas A is about substantive assessment of national"
     },
     {
       "a_turn_idx": 3,
@@ -606,7 +606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to President Biden. The phrase 'the State of the Union' in turn 3 refers to the condition or health of the nation as presented in the speech, not just the event itself.\",\n  \"reason\": \"Claim C explicitly reframes the title of the speech from 'State of the Union' to 'State of Confusion,' directly challenging the notion that the State of the Union is strong. This action underscores the speaker's"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 4 refers to President Biden. The phrase 'the State of the Union' in turn 3 refers to the condition or health of the nation as presented in the speech, not just the event itself.\",\n  \"reason\": \"Claim C explicitly reframes the title of the speech from 'State of the Union' to 'State of Confusion,' directly challenging the notion that the State of the Union is strong. This aligns with assumption A"
     },
     {
       "a_turn_idx": 3,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my friend' in turn 18 refers to Congressman Ralph Norman, as established by the prior conversation and the direct address in turn 18.\",\n  \"reason\": \"Claim C states that the speaker considers Congressman Ralph Norman to be their friend, which is unrelated to assumption A, which concerns the evaluation of the strength of the State of the Union based on the president's remarks. There is no semantic connection between the personal relationship described in C and the analytical stance"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'my friend' in turn 18 refers to Congressman Ralph Norman, as established by the prior conversation and the direct address in turn 18.\",\n  \"reason\": \"Claim C (turn 18) states that the speaker considers Congressman Ralph Norman to be their friend, which is unrelated to assumption A (turn 3), which concerns the evaluation of the strength of the State of the Union based on the president's remarks. There is no semantic connection between"
     },
     {
       "a_turn_idx": 3,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, as established in the prior context (turns 4, 6, 10). 'The man' in turn 11 also refers to Biden, consistent with earlier references.\",\n  \"reason\": \"Claim C ('I do not believe a word the man says') directly and explicitly verifies the substance of assumption A, which asserts a strong moral objection to political dishonesty and perceived manipulation."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, as established in the prior context (turns 4, 6, 10). 'The man' in turn 11 also refers to Biden, consistent with earlier references.\",\n  \"reason\": \"Claim C ('I do not believe a word the man says') directly and explicitly verifies the substance of assumption A, which asserts a strong moral objection to political dishonesty and perceived manipulation."
     },
     {
       "a_turn_idx": 4,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, as established in the prior context (turns 4, 6, 10). 'The man' in turn 11 also refers to Biden, consistent with earlier references.\",\n  \"reason\": \"Claim C explicitly states, 'I do not believe a word the man says,' which directly verifies the core substance of assumption A—that the speaker holds a strong moral objection to political dishonesty"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Joe Biden, as established in the prior context (turns 4, 6, 10). 'The man' in turn 11 also refers to Biden, consistent with earlier references.\",\n  \"reason\": \"Claim C explicitly states 'I do not believe a word the man says,' which directly verifies the core substance of assumption A—that the speaker holds a strong moral objection to political dishonesty and"
     },
     {
       "a_turn_idx": 4,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to the President, as established in the context of turn 5 where Speaker_02 describes the President's actions during the State of the Union.\",\n  \"reason\": \"Claim C states that the speaker perceives the president’s actions last night as unusual and significant, which aligns with the core content of assumption A—namely, that the president's behavior (turning his back on the Republican side) deviates from norm"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to the President, as established in the context. 'Last night' refers to the State of the Union address described in turn 5.\",\n  \"reason\": \"Claim C states that the speaker perceives the president’s actions last night as unusual and significant. This aligns with the substance of assumption A, which asserts that the speaker believes they represent a more authentic version of American values than the President. The perception of the president’s"
     },
     {
       "a_turn_idx": 4,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to the President, as established in the context. 'Both sides of the aisle' refers to Republicans and Democrats.\",\n  \"reason\": \"Claim C states that both political parties traditionally show unity in support of the presidency during the State of the Union, which aligns with the substance of assumption A — that the speaker believes they represent a more authentic version of American values than the President. The speaker’s criticism of the President’s lack"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to President Biden, consistent with the context of the conversation.\",\n  \"reason\": \"Claim C states that both political parties traditionally show unity in support of the presidency during the State of the Union, which aligns with the substance of assumption A — that the speaker believes they represent a more authentic version of American values than the President. The speaker’s criticism of the President’s lack of bipartisanship and failure to acknowledge the Republican"
     },
     {
       "a_turn_idx": 4,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 7 refers to the President and the administration, as established in prior turns. 'That's the polar opposite of what you've been saying' refers to the President's past actions contradicting current rhetoric on border security.\",\n  \"reason\": \"Claim C states that previous government positions on border security contradicted recent calls for action, which aligns with the broader critique in turn 4 that the President's words are disconnected from reality and inconsistent with"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 7 refers to the President and the administration, as established in prior turns. 'That's the polar opposite of what you've been saying' refers to the President's past actions contradicting current rhetoric on border security.\",\n  \"reason\": \"Claim C states that previous government positions on border security contradicted recent calls for action, which aligns with the broader critique in turn 4 that the President's words lack authenticity and are disconnected from his"
     },
     {
       "a_turn_idx": 4,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Biden, consistent with prior context. 'The American people' in turn 11 refers to the general public, as established in earlier turns.\",\n  \"reason\": \"Claim C (turn 11) states that 'the American people don't deserve this and we ought to be outraged' and suggests they are indeed outraged. However, this does not relate to assumption A, which is about the speaker believing they"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Biden, consistent with prior context. 'The American people' in turn 11 refers to the general public, as established in earlier turns.\",\n  \"reason\": \"Claim C (turn 11) states that 'the American people don't deserve this and we ought to be outraged' and suggests they are indeed outraged. However, this does not relate to assumption A, which asserts that the speaker represents a"
     },
     {
       "a_turn_idx": 4,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Joe Biden, consistent with the subject of turn 4. 'The current administration' also refers to Biden's presidency.\",\n  \"reason\": \"Claim C states that the speaker believes the current administration is incompetent, which aligns with the core sentiment in assumption A—that the speaker views the President as disconnected from authentic American values and as ineffective, driven by ideology rather than genuine leadership. While C does not explicitly use the"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Joe Biden, consistent with the subject of turn 4. 'The current administration' also refers to Biden's presidency.\",\n  \"reason\": \"Claim C states that the speaker believes the current administration is incompetent, which aligns with the core sentiment in assumption A—that the President is disconnected from authentic American values, misleading the public, and driven by a radical political agenda. While C does not explicitly use the phrase '"
     },
     {
       "a_turn_idx": 4,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Biden, consistent with prior context. 'This administration' in turn 13 refers to Biden's presidency.\",\n  \"reason\": \"Claim C (turn 13) discusses the message sent to dictators like China and Russia by the President praising Ukrainians while continuing to engage with Russia economically. This is unrelated to assumption A (turn 4), which asserts that the speaker believes they represent a more authentic version"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to President Biden, consistent with prior context. 'This administration' refers to Biden's presidency.\",\n  \"reason\": \"Claim C (turn 13) discusses the message sent to dictators like China and Russia by the President praising Ukrainians while continuing to engage with Russia economically. This is unrelated to assumption A (turn 4), which asserts that the speaker believes they represent a more authentic version of American values than the"
     },
     {
       "a_turn_idx": 5,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to citizens or individuals concerned about their communities, particularly in the context of political engagement. 'Your school board' is a specific local institution, aligning with the broader idea of local ownership.\",\n  \"reason\": \"Claim C emphasizes taking ownership of local institutions like school boards, which relates to civic participation and grassroots engagement. However, it does not explicitly address or verify the earlier assumption A, which focuses on political unity during ceremonial"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to citizens or individuals concerned about their communities, particularly in the context of political engagement. 'Your school board' is a specific local institution, aligning with the broader idea of local ownership.\",\n  \"reason\": \"Claim C emphasizes taking ownership of local institutions like school boards, which relates to civic participation and grassroots engagement. However, it does not explicitly address or verify the earlier assumption A, which centers on political unity during ceremonial"
     },
     {
       "a_turn_idx": 5,

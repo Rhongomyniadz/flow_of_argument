@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 21 refers to Congressman John Colberson, consistent with prior context. 'NASA and the space program' in turn 21 aligns with 'NASA and space exploration' in turn 0.\",\n  \"reason\": \"Claim C explicitly states that the speaker is a 'passionate fan of NASA and the space program,' directly verifying the assumption that the audience values updates on NASA and space policy. The emotional investment and personal connection described"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 21 refers to Congressman John Colberson, consistent with prior context. 'NASA and the space program' in C aligns with 'NASA and space exploration' in A.\",\n  \"reason\": \"Claim C explicitly states that the speaker is a 'passionate fan of NASA and the space program,' directly verifying the assumption that the audience values updates on NASA and space policy. The emotional investment and personal connection described ('those astronauts have all"
     },
     {
       "a_turn_idx": 0,
@@ -362,11 +362,11 @@
       "claim_text": "Commercial crew programs at NASA received their requested budget of $1.24 billion.",
       "overlap_score": 2,
       "c_time": 309.312,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'commercial crew programs' refers to NASA's commercial crew initiatives.\",\n  \"reason\": \"Claim C discusses the funding of NASA's commercial crew programs, which is unrelated to the credibility of Congressman John Colberson as a source on the budget’s impact on space programs. There is no mention of Colberson’s credibility, expertise, or role in assessing budget impacts. Thus, C does not support, verify, or relate to assumption A, making the relationship"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'commercial crew programs' refers to a specific NASA initiative.",
+      "reason": "Claim C discusses the funding of NASA's commercial crew programs, which is unrelated to the credibility of Congressman John Colberson as a source on the budget’s impact on space programs. There is no mention of Colberson’s credibility, expertise, or role in assessing budget impacts. Thus, C does not support, verify, or relate to assumption A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'commercial crew programs' refers to a specific NASA initiative.\",\n  \"reason\": \"Claim C discusses the funding of NASA's commercial crew programs, which is unrelated to the credibility of Congressman John Colberson as a source on the budget’s impact on space programs. There is no mention of Colberson’s credibility, expertise, or role in assessing budget impacts. Thus, C does not support, verify, or relate to assumption A.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -707,11 +707,11 @@
       "claim_text": "In 2016, NASA received $1.63 billion for planetary science.",
       "overlap_score": 2,
       "c_time": 309.312,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference issues; 'NASA' and 'planetary science' are clear in context.",
-      "reason": "Claim C discusses NASA's 2016 budget allocation for planetary science, which is unrelated to the technical issue of image registration errors due to motion in planetary science imaging mentioned in assumption A. While both relate to planetary science, C does not address, state, or verify the substance of A. Therefore, the claim is clearly unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'NASA' and 'planetary science' are clear in context.\",\n  \"reason\": \"Claim C discusses NASA's 2016 budget allocation for planetary science, which is unrelated to the technical issue of image registration errors due to motion in planetary science imaging mentioned in assumption A. While both relate to planetary science, C does not address, state, or verify the substance of A. Therefore, the claim is clearly unrelated.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'NASA' and 'planetary science' are consistent across contexts.\",\n  \"reason\": \"Claim C discusses NASA's 2016 budget allocation for planetary science ($1.63 billion), which is unrelated to the technical issue of image registration errors due to motion in planetary science imaging mentioned in assumption A. While both relate to planetary science, C does not address, state, or verify the specific problem of motion-induced misalignment in image processing."
     },
     {
       "a_turn_idx": 3,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to SPEAKER_00, who is the subject of the prior discussion about image processing.\",\n  \"reason\": \"Claim C mentions that SPEAKER_00 has invested significant time in the images, which is consistent with the context of processing complex, distorted color images described in turn 3. However, C does not explicitly state or verify the specific assumption A—that composite color images are expected to align spatially without significant distortion. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in claim C refers to SPEAKER_00, who is the subject of the prior discussion about image processing.\",\n  \"reason\": \"Claim C mentions that SPEAKER_00 has invested significant time in the images, which relates to the effort involved in processing them. However, it does not explicitly address or verify the specific assumption A about spatial alignment and distortion in composite color images. While the context implies that processing challenges exist, C does not state or"
     },
     {
       "a_turn_idx": 3,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_04, who is the subject of the claim. The claim in C is about granting access to Eric Berger, unrelated to the assumption about authority in evaluating scenic quality.\",\n  \"reason\": \"Claim C discusses the speaker granting exclusive access to a journalist regarding the Europa mission, which is entirely unrelated to the earlier assumption A about having authority or credibility in evaluating scenic quality. There is no mention, implication"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_04, who is the subject of the statement. Claim C discusses access to Europa mission reports, not the evaluation of scenic quality.\",\n  \"reason\": \"Claim C (turn 23) states that the speaker granted exclusive access to Eric Berger regarding the Europa mission, which is unrelated to the earlier assumption A (turn 4) that the speaker has authority or credibility in evaluating scenic quality"
     },
     {
       "a_turn_idx": 4,

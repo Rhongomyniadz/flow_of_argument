@@ -4100,8 +4100,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference issues; 'the speaker' refers to SPEAKER_04 throughout.",
-      "reason": "Claim C discusses tax policy complexity and public misunderstanding, which is unrelated to the moral authority of the speaker to judge Primilla's actions. There is no mention of Primilla, judgment, or moral standing in C. The topics diverge entirely, making the claim irrelevant to assumption A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_04 throughout.\",\n  \"reason\": \"Claim C discusses tax policy complexity and public misunderstanding, which is unrelated to the moral authority of the speaker to judge Primilla's actions. There is no mention of Primilla, judgment, or moral standing in C. The topics diverge entirely, making the claim irrelevant to assumption A.\"\n}\n```"
+      "reason": "Claim C discusses the complexity of tax policy and public misunderstanding of it, which is unrelated to the moral authority of the speaker to judge Primilla's actions as stated in assumption A. There is no mention of Primilla, judgment, or moral authority in C. The topics are entirely different, making the claims unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_04 throughout.\",\n  \"reason\": \"Claim C discusses the complexity of tax policy and public misunderstanding of it, which is unrelated to the moral authority of the speaker to judge Primilla's actions as stated in assumption A. There is no mention of Primilla, judgment, or moral authority in C. The topics are entirely different, making the claims unrelated.\"\n}\n```"
     },
     {
       "a_turn_idx": 43,
@@ -4116,7 +4116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 56 refers to voters in Washington state, as established in the prior context.\",\n  \"reason\": \"Claim C discusses the success of initiatives in enabling various policy actions (e.g., sick days, minimum wage, gun laws, marijuana legalization), which reflects the speaker's ability to influence outcomes through democratic processes. However, this does not explicitly or clearly verify the earlier assumption A—that the speaker has moral authority to judge Primilla's actions."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 56 refers to voters in Washington state, as established in the prior context.\",\n  \"reason\": \"Claim C discusses the success of initiatives in enabling various policy actions (e.g., sick days, minimum wage, gun laws, marijuana legalization), which reflects the speaker's ability to influence outcomes through democratic processes. However, this does not explicitly or implicitly address the moral authority to judge Primilla's actions, which was the focus of assumption A"
     },
     {
       "a_turn_idx": 43,
@@ -4217,11 +4217,11 @@
       "claim_text": "Joe Wilson supports South Asians and South Asia.",
       "overlap_score": 2,
       "c_time": 1285.165,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "Joe Wilson refers to the same person mentioned in turn 45; 'he' in turn 46 refers to Joe Wilson.",
-      "reason": "Claim C explicitly states that Joe Wilson is a 'huge supporter of South Asians and South Asia,' which directly verifies the substance of assumption A—that collaboration with political opponents like Joe Wilson is credible and meaningful despite being known critics. The statement confirms his support, making the credibility of the collaboration explicit.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Joe Wilson refers to the same person mentioned in turn 45; 'he' in turn 46 refers to Joe Wilson.\",\n  \"reason\": \"Claim C explicitly states that Joe Wilson is a 'huge supporter of South Asians and South Asia,' which directly verifies the substance of assumption A—that collaboration with political opponents like Joe Wilson is credible and meaningful despite being known critics. The statement confirms his support, making the credibility of the collaboration explicit.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Joe Wilson refers to the same person mentioned in turn 45; 'he' in turn 46 refers to Joe Wilson.\",\n  \"reason\": \"Claim C explicitly states that Joe Wilson is a 'huge supporter of South Asians and South Asia,' which directly verifies the substance of assumption A—that collaboration with political opponents like Joe Wilson is credible and meaningful despite being known critics. The statement confirms both the relationship and the basis for cooperation, making the credibility of the collaboration clear and explicit"
     },
     {
       "a_turn_idx": 46,
@@ -4416,7 +4416,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Democrats' in turn 68, which aligns with the broader political actors mentioned in turn 48, including McConnell. No ambiguous pronouns; 'Democrats' is used explicitly.\",\n  \"reason\": \"Turn 48 assumes that public statements by political figures (like McConnell) reflect real policy possibilities. Turn 68 claims Democrats haven't clearly communicated their policy intentions when in power. While both touch on political messaging and policy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Democrats' in turn 68, which aligns with the broader political actors mentioned in turn 48, including McConnell and the Republican party. No ambiguous pronouns require resolution.\",\n  \"reason\": \"Turn 68 claims Democrats have failed to communicate clear policy intentions when in power, which touches on the theme of public statements reflecting policy possibilities. However, it does not explicitly verify or state the core idea from turn 48"
     },
     {
       "a_turn_idx": 49,
@@ -4566,7 +4566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 56 refers to 'people' mentioned in turn 54, who are described as having misconceptions about tax policy. 'The average person' in turn 56 aligns with the audience discussed in turn 51, particularly those affected by local policy.\",\n  \"reason\": \"Claim C states that tax policy has a complex dimension that people often misunderstand, which directly addresses the assumption in A that the listener has access to relevant"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 56 refers to 'people' in general, particularly the average person mentioned in the context of tax perception.\",\n  \"reason\": \"Claim C states that tax policy has a complex dimension that people often misunderstand, which aligns with the substance of assumption A—that the listener has access to relevant information about local policy developments. While C does not explicitly mention 'access to information,' it implies that people lack understanding of tax policy complexity, suggesting that"
     },
     {
       "a_turn_idx": 51,
@@ -4701,7 +4701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 59 refers to the state of Washington, consistent with the context of the conversation about state-level taxation and the Supreme Court's potential role.\",\n  \"reason\": \"Claim C states that the current tax structure fails to ensure equal percentage payments across income levels, which aligns with the substance of assumption A—that the Supreme Court could reconsider income tax constitutionality under certain conditions. While C does not explicitly mention the Supreme Court or legal reconsideration,"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'our' in turn 59 refers to the state of Washington, consistent with the context of the conversation about state-level taxation.\",\n  \"reason\": \"Claim C states that the current tax structure does not ensure equal percentage payment of income across individuals, which aligns with the core idea in assumption A that the Supreme Court may reconsider the constitutionality of an income tax under certain conditions—specifically, when the existing system is seen as regressive and unfair. While"
     },
     {
       "a_turn_idx": 52,

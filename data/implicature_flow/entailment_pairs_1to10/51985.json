@@ -2046,7 +2046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Congressman Michael McCall, as established in turn 32. 'Chris Alsato Show' is a clear reference to 'Chris Celsato Show' from turn 32, indicating a consistent name variation.\",\n  \"reason\": \"Turn 48 mentions Congressman McCall being on the 'Chris Alsato Show', which confirms he is a guest on the program. However, it does not address or verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Congressman Michael McCall, as established in turn 32. 'Chris Alsato Show' is a clear reference to 'Chris Celsato Show' from turn 32, indicating a consistent name variation.\",\n  \"reason\": \"Turn 48 mentions Congressman McCall being on the show, which confirms he is present and participating, but does not explicitly address or verify the claim about the book containing credible analysis of"
     },
     {
       "a_turn_idx": 32,
@@ -2061,7 +2061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Congressman Michael McCall, as established in prior turns. 'The program' refers to the Chris Celsato Show.\",\n  \"reason\": \"Claim C states that Congressman McCall is a 'good friend of the program,' which is a personal relationship assertion. Assumption A, however, is about the credibility of the book's analysis on national security threats. There is no mention or implication in C about the book's"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Congressman Michael McCall, as established in prior turns. 'Good friend of the program' is a personal relationship claim.\",\n  \"reason\": \"Claim C (turn 48) states that Congressman McCall is a 'good friend of the program,' which is a personal or relational assertion. Assumption A (turn 32) is about the credibility of McCall's book regarding national security threats. There is"
     },
     {
       "a_turn_idx": 33,
@@ -2151,7 +2151,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'them' in claim C refers to Russia, as established in the context where Russia is described as the actor behind funding leftist groups to disrupt U.S. energy production. The term 'benefits them' directly refers to Russia's advantage.\",\n  \"reason\": \"Claim C explicitly states that disrupting U.S. energy production benefits Russia, which directly verifies the substance of assumption A—that energy price manipulation by foreign actors serves Russia’s geopolitical interests. The reasoning in turn 3"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'them' in claim C refers to Russia, as established in the context where Russia is described as the actor behind funding green groups to disrupt U.S. energy production. The term 'benefits them' directly refers to Russia's advantage.\",\n  \"reason\": \"Claim C explicitly states that disrupting U.S. energy production benefits Russia, which directly verifies the substance of assumption A—that energy price manipulation by foreign actors serves Russia’s geopolitical interests. The reasoning in turn 3"
     },
     {
       "a_turn_idx": 33,
@@ -2166,7 +2166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Vladimir Putin, and 'these nations' refers to the former Soviet republics/satellite states mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that reducing dependency on Russian energy would weaken Putin's leverage over former Soviet republics, which directly verifies the substance of assumption A—that energy price manipulation by foreign actors (specifically Russia) serves Putin's geopolitical interests. The causal link between energy control and geopolitical influence is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 35 refers to Vladimir Putin, and 'these nations' refers to the former Soviet republics/satellite states mentioned earlier.\",\n  \"reason\": \"Claim C explicitly states that reducing dependency on Russian energy would weaken Putin's leverage over former Soviet republics, which directly verifies the substance of assumption A—that energy price manipulation by foreign actors serves Russia’s geopolitical interests. The connection between energy control and geopolitical influence is made clear and unambiguous,"
     },
     {
       "a_turn_idx": 33,
@@ -2177,11 +2177,11 @@
       "claim_text": "Providing energy to Eastern Europe would help remove it from Russian influence.",
       "overlap_score": 2,
       "c_time": 1389.067,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to providing energy to Eastern Europe, which aligns with the geopolitical strategy discussed in assumption A regarding undermining Russian influence through energy independence.\",\n  \"reason\": \"Claim C explicitly states that supplying energy to Eastern Europe would reduce its dependence on Russia, directly verifying the core idea in assumption A that manipulating energy prices or supply serves Russia’s geopolitical interests by maintaining control over dependent nations. The connection between energy supply and geopolitical leverage is clearly articulated and substant"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'it' in claim C refers to providing energy to Eastern Europe, which aligns with the geopolitical strategy discussed in assumption A.",
+      "reason": "Claim C explicitly states that supplying energy to Eastern Europe would reduce its dependence on Russian energy, thereby undermining Russian influence—directly verifying the core idea in assumption A that manipulating energy prices or supply serves Russia’s geopolitical interests. The connection is clear, direct, and semantically aligned with the substance of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to providing energy to Eastern Europe, which aligns with the geopolitical strategy discussed in assumption A.\",\n  \"reason\": \"Claim C explicitly states that supplying energy to Eastern Europe would reduce its dependence on Russian energy, thereby undermining Russian influence—directly verifying the core idea in assumption A that manipulating energy prices or supply serves Russia’s geopolitical interests. The connection is clear, direct, and semantically aligned with the substance of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 33,
@@ -2271,7 +2271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'leftist groups' mentioned in assumption A, and 'their' in the context refers to Putin's regime, aligning with the causal link described.\",\n  \"reason\": \"Claim C explicitly states that the funded leftist groups aim to impact energy prices or production in the United States, which directly verifies the substance of assumption A that there is a causal link between increased energy prices and financial support for Putin’s regime. The causal mechanism"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'leftist groups' mentioned in assumption A, and 'their' in C refers to the Kremlin/Russia, consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that the funded leftist groups aim to impact energy prices or production in the United States, which directly verifies the substance of assumption A that there is a causal link between increased energy prices and financial support for Putin’s regime. The causal mechanism—disrupt"
     },
     {
       "a_turn_idx": 33,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to the Kremlin, as established in the prior context where the Kremlin is identified as the source of funding for leftist groups. The term 'their benefit' refers to Putin's government and its interest in disrupting U.S. energy production.\",\n  \"reason\": \"Claim C explicitly states a 'concerted effort coming out of the Kremlin to fund leftist groups... to impact the price or production of energy in the United States,' which directly"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to the Kremlin, as established in the prior context where the Kremlin is identified as the source of funding for leftist groups. The term 'their benefit' refers to Putin's regime and its interest in disrupting U.S. energy production.\",\n  \"reason\": \"Claim C explicitly states a 'concerted effort coming out of the Kremlin to fund leftist groups... to impact the price or production of energy in the United States,' which directly"
     },
     {
       "a_turn_idx": 33,
@@ -2312,11 +2312,11 @@
       "claim_text": "Putin employs energy as a coercive threat against former Soviet republics.",
       "overlap_score": 2,
       "c_time": 1338.129,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Vladimir Putin, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that Putin uses energy as a coercive threat against former Soviet republics, which directly verifies the substance of assumption A—that there is a causal link between energy control and financial/political leverage, specifically in the context of supporting authoritarian regimes. The claim is clear, direct, and aligns precisely with the implied mechanism in A, where energy"
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "coref_notes": "The pronoun 'he' in claim C refers to Vladimir Putin, as established in the prior context.",
+      "reason": "Claim C explicitly states that Putin uses energy as a coercive threat against former Soviet republics, which directly verifies the substance of assumption A—that there is a causal link between energy control and financial/political leverage, specifically in the context of supporting authoritarian regimes. The claim is clear, direct, and unambiguous in affirming the mechanism described in A.",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Vladimir Putin, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that Putin uses energy as a coercive threat against former Soviet republics, which directly verifies the substance of assumption A—that there is a causal link between energy control and financial/political leverage, specifically in the context of supporting authoritarian regimes. The claim is clear, direct, and unambiguous in affirming the mechanism described in A.\"\n}"
     },
     {
       "a_turn_idx": 33,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'liberal extremists' in turn 40 refers to elected leaders in California who oppose federal immigration laws, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 40) states that 'liberal extremists' would be punished by being thrown in jail for supporting illegal alien felons, which is a specific legal consequence not mentioned or implied in assumption A (turn 34). Assumption A concerns geopolitical actors acting strategically via indirect means"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 34 refers to geopolitical actors (specifically Russia and its leadership), and 'liberal extremists' in turn 40 refers to elected officials in California who oppose federal immigration enforcement. These referents are distinct in both identity and context.\",\n  \"reason\": \"Claim C (turn 40) discusses punishing elected leaders in California for supporting sanctuary policies, which is unrelated to the strategic behavior of geopolitical actors to maximize national advantage through indirect"
     },
     {
       "a_turn_idx": 34,
@@ -2406,7 +2406,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the individuals under investigation, not geopolitical actors as in assumption A. 'This' in 'let's not jump to these wild conclusions' refers to allegations of treason, not strategic behavior by nations.\",\n  \"reason\": \"Claim C focuses on the need for caution in drawing conclusions about individual actions (e.g., treason) during investigations, emphasizing factual process over speculation. Assumption A, however, concerns geopolitical actors (e.g.,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 47 refers to the speaker (Congressman McColl) and the broader investigative process; 'these investigations' refers to the ongoing special counsel and house incident investigations.\",\n  \"reason\": \"Claim C (turn 47) emphasizes the need to avoid premature judgment and calls for waiting for facts before concluding whether actions constitute treason or criminal violations. This directly contradicts the assumption A (turn 34), which asserts that geopolitical actors like"
     },
     {
       "a_turn_idx": 34,
@@ -2507,11 +2507,11 @@
       "claim_text": "The proposed change would increase Medicaid funding to nearly 10% of the federal budget.",
       "overlap_score": 2,
       "c_time": 1990.458,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses Medicaid funding changes, while assumption A concerns energy disruption and Russian influence on U.S. energy stability.\",\n  \"reason\": \"Claim C discusses a proposed increase in Medicaid funding to nearly 10% of the federal budget, which is entirely unrelated to the topic of energy disruption, Russian influence on U.S. energy production, or economic stability due to dependence on Russian energy. There is no overlap in subject matter, logic, or semantic content"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference links relevant; 'it' in claim C refers to Medicaid funding, not related to energy or Russia as in assumption A.",
+      "reason": "Claim C discusses Medicaid funding increasing to nearly 10% of the federal budget, which is entirely unrelated to the assumption A about energy disruption weakening U.S. economic stability and increasing dependence on Russian energy. There is no overlap in subject matter, causal mechanism, or semantic content. The topics are distinct and unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'it' in claim C refers to Medicaid funding, not related to energy or Russia as in assumption A.\",\n  \"reason\": \"Claim C discusses Medicaid funding increasing to nearly 10% of the federal budget, which is entirely unrelated to the assumption A about energy disruption weakening U.S. economic stability and increasing dependence on Russian energy. There is no overlap in subject matter, causal mechanism, or semantic content. The topics are distinct and unrelated.\"\n}"
     },
     {
       "a_turn_idx": 34,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 53 refers to Medicaid, not energy disruption or Russian influence. No coreference links connect to the subject matter of assumption A.\",\n  \"reason\": \"Claim C discusses the financial burden of expanding Medicaid on American taxpayers, which is unrelated to the economic and energy security concerns raised in assumption A about Russian interference in U.S. energy production. There is no mention of energy disruption, Russian dependence, or economic destabilization. The topics are entirely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 53 refers to Medicaid, not energy disruption or Russian influence. No coreference links connect to the subject matter of assumption A.\",\n  \"reason\": \"Claim C discusses the financial burden of expanding Medicaid on American taxpayers, which is unrelated to the economic and energy-related consequences of Russian interference in U.S. energy production described in assumption A. There is no mention of energy disruption, Russian dependence, or economic stability tied to energy markets. The"
     },
     {
       "a_turn_idx": 34,
@@ -2556,7 +2556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to lifting the long-standing ban on crude oil exports, which was introduced in the prior context.\",\n  \"reason\": \"Claim C explicitly states that lifting the ban has a 'very good foreign policy bent,' directly verifying the foreign policy rationale implied in assumption A—that leftist groups in the U.S. are influenced by foreign actors (Russia) to undermine American energy independence, thereby benefiting Russia. By framing the lifting of the ban as a strategic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to lifting the long-standing ban on crude oil exports, which was introduced in the prior context.\",\n  \"reason\": \"Claim C explicitly states that lifting the ban has a 'very good foreign policy bent,' directly verifying the foreign policy rationale implied in assumption A—that leftist groups in the U.S. are influenced by foreign actors (Russia) to undermine American energy independence, thereby benefiting Russia. By framing the lifting of the ban as serving U"
     },
     {
       "a_turn_idx": 34,
@@ -2601,7 +2601,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to 'providing energy to Eastern Europe', which is the subject of the prior discussion about American energy exports replacing Russian supplies.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the core idea in assumption A—that American energy exports are viable and scalable enough to replace Russian supplies. The connection is clear and direct, with C reinforcing A’s strategic foreign policy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to 'providing energy to Eastern Europe', which is the subject of the prior discussion about American energy exports replacing Russian supplies.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the core idea in assumption A—that American energy exports are viable and scalable enough to replace Russian supplies. The connection is clear and direct, with C reinforcing A’s central argument through"
     },
     {
       "a_turn_idx": 35,
@@ -2616,7 +2616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to lifting the long-standing ban on crude oil exports, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that lifting the ban aligns with favorable foreign policy objectives, which directly verifies the substance of assumption A—that Trump’s policy proposal (lifting the ban) aligns with broader U.S. strategic interests in weakening Russian influence. The context confirms that this policy enables U.S. energy exports to Europe and Eastern"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the lifting of the long-standing ban on crude oil exports, which is the subject of discussion in turn 36.\",\n  \"reason\": \"Claim C explicitly states that lifting the ban aligns with favorable foreign policy objectives, which directly verifies the substance of assumption A—that Trump’s policy proposal (lifting the ban) aligns with broader U.S. strategic interests in weakening Russian influence. The context confirms that this policy enables U.S"
     },
     {
       "a_turn_idx": 35,
@@ -2631,7 +2631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to providing energy to Eastern Europe, which is the subject of the prior discussion about undermining Russian influence through energy exports.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the substance of assumption A—that Trump’s policy proposal (exporting American energy to former Soviet states) aligns with U.S. strategic interests in weakening Russian influence. The causal link between energy"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to providing energy to Eastern Europe, which is the subject of the prior discussion about undermining Russian influence through energy exports.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the substance of assumption A—that Trump’s policy of exporting American energy to former Soviet states aligns with U.S. strategic interests in weakening Russian influence. The connection between energy independence and reduced Russian"
     },
     {
       "a_turn_idx": 35,
@@ -2721,7 +2721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 38 refers to the U.S. (implied by context of energy export policy), and 'them' refers to Eastern Europe, which is the subject of the dependency on Russian energy mentioned in turn 36.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the core idea in assumption A—that energy exports enhance geopolitical influence. The connection between energy supply"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the provision of energy to Eastern Europe, which is the subject of the prior discussion in turn 36. 'Russian influence' is equivalent to 'dependence on Russian oil' and 'jackbooted thuggery of Vladimir Putin' mentioned in turn 36.\",\n  \"reason\": \"Claim C explicitly states that providing energy to Eastern Europe would help remove it from Russian influence, which directly verifies the substance of assumption A—"
     },
     {
       "a_turn_idx": 36,
@@ -2736,7 +2736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the previously mentioned potential lifting of the crude oil export ban and its implications for Texas and foreign policy, as discussed in turn 36.\",\n  \"reason\": \"Claim C explicitly states the existence of a massive discovery of oil and natural gas reserves in West Texas, which directly supports and verifies the implication in assumption A that Texas benefits disproportionately from changes to crude oil export policies. The connection is clear: a major new resource"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 38 refers to the previously mentioned potential lifting of the crude oil export ban and its implications for Texas and foreign policy, which is directly tied to the discovery of oil and gas reserves.\",\n  \"reason\": \"Claim C explicitly states the existence of a massive discovery of oil and natural gas reserves in West Texas, which directly supports and verifies the implied benefit to Texas mentioned in assumption A. The connection between the discovery and Texas benefiting from changes to"
     },
     {
       "a_turn_idx": 36,

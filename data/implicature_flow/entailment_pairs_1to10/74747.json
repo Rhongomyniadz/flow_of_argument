@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'Greg Walden' is directly referenced in both A and C.\",\n  \"reason\": \"Claim C states that Congressman Greg Walden is expected to return to Oregon after the current period, which implies an expectation of his presence or availability. However, this does not explicitly verify the specific assumption in A—that he is expected to respond if present. The connection between returning to Oregon and being expected to respond during a call is implied but not stated. Thus, the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 31 refers to Congressman Greg Walden, consistent with turn 3.\",\n  \"reason\": \"Turn 31 expresses a wish for Greg Walden to return to Oregon after a current period, which implies an expectation of his presence or availability. However, this does not explicitly verify the assumption in turn 3—that he is expected to respond if present. The later statement focuses on returning home and enjoying time, not on responsiveness"
     },
     {
       "a_turn_idx": 3,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to Congressman Greg Walden, who is the subject of the earlier assumption in turn 3. The invitation to speak is a direct and explicit confirmation of the expectation that he would respond if present.\",\n  \"reason\": \"Turn 31 explicitly states that Congressman Greg Walden has been invited to speak, which directly verifies the assumption in turn 3 that he is expected to respond if present. The invitation implies an expectation of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 31 refers to Congressman Greg Walden, as established by prior mention and context of addressing him directly.\",\n  \"reason\": \"Turn 31 explicitly states that Congressman Greg Walden has been invited to speak at the event, which directly verifies the assumption in turn 3 that he is expected to respond if present. The invitation implies an expectation of his participation and response, making the claim a clear and direct verification of the earlier assumption.\""
     },
     {
       "a_turn_idx": 3,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Greg Walden' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C states that Congressman Greg Walden will resume work in the fall, which does not explicitly verify or entail the earlier assumption A that he is expected to respond if present. The assumption A concerns immediate presence and responsiveness during a call, while C discusses future return to work, a different temporal and functional context. There is no direct link between being expected to respond and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Greg Walden' is explicitly named in both A and C.\",\n  \"reason\": \"Claim C states that Congressman Greg Walden will resume work in the fall, which does not explicitly verify or entail the earlier assumption A that he is expected to respond if present. The assumption A concerns immediate presence and responsiveness during a call, while C discusses future return to work. There is no direct link between being expected to respond and resuming work in the fall."
     },
     {
       "a_turn_idx": 4,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with earlier turns. No other coreference issues.\",\n  \"reason\": \"Claim C states that the speaker believes ballot integrity is adequately protected, which is unrelated to assumption A, which concerns the speaker's belief in their ability to reasonably assess their own risks. The topics diverge entirely—A is about personal risk assessment regarding unknown calls, while C is about systemic protection of election integrity. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in claim C refers to SPEAKER_02, consistent with earlier turns. The term 'ballot integrity' in C is distinct from the risk assessment of unknown calls discussed in A.\",\n  \"reason\": \"Claim C asserts belief in the protection of ballot integrity, which is unrelated to the earlier assumption A that the speaker can reasonably assess their own risks regarding unknown calls. There is no overlap in subject matter or logical connection; A concerns personal judgment about"
     },
     {
       "a_turn_idx": 7,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'election security' in turn 27 refers directly to the topic introduced by SPEAKER_01 without referencing prior speakers or entities.\",\n  \"reason\": \"Turn 27 introduces 'election security' as a new topic, which is only loosely related to the earlier assumption A about scams affecting personal security and medical trust. While both involve public safety concerns, there is no explicit or implicit connection between the concern over robocalls/scams and election"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'election security' in turn 27 refers directly to the topic introduced in turn 27.\",\n  \"reason\": \"Turn 27 introduces 'election security' as a new topic, but does not explicitly connect it to the earlier assumption A about audience concern over scams affecting personal security and medical trust. While both topics relate to broader societal concerns, there is no clear statement verifying or linking the audience's identification with the concern over scams to election"
     },
     {
       "a_turn_idx": 9,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 28) states that ballot integrity is 'adequately protected,' which contradicts the earlier assumption A (turn 10), where the speaker argues that consumers must accept minor inconveniences (e.g., potential false blocks) for greater protection against scams. Claim C expresses confidence in current protections, implying no need for additional sacrifices,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' refers to SPEAKER_02 throughout.\",\n  \"reason\": \"Claim C (turn 28) states that ballot integrity is 'adequately protected,' which contradicts the earlier assumption A (turn 10), where the speaker argues consumers must accept minor inconveniences (like potential false blocks) for greater protection against scams. Claim C expresses confidence in current protections, implying no need for additional sacrifices, while assumption A"
     },
     {
       "a_turn_idx": 11,
@@ -891,7 +891,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to the president. In turn 23, 'the president' is referenced in the context of the special counsel's report, but the focus is on exoneration and the investigation, not on trust in the president's judgment or role.\",\n  \"reason\": \"Turn 13 expresses trust in the president's judgment and role, suggesting confidence in his leadership. Turn 23, however, shifts focus to questioning whether"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 13 refers to the president. In turn 23, the speaker questions whether the special counsel exonerated the president, which does not address or verify the claim about trusting the president's judgment.\",\n  \"reason\": \"Turn 13 expresses trust in the president's judgment and role, suggesting confidence in his leadership. Turn 23, however, focuses on the special counsel's findings regarding the president’s potential collusion with Russia"
     },
     {
       "a_turn_idx": 14,

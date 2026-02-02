@@ -2016,7 +2016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"SPEAKER_05 refers to 'Senator Patrick Leahy' in turn 45, which resolves the coreference from 'Patrick Leahy' in turn 21. 'The book' in turn 45 refers back to 'The Road Taken' mentioned in turn 21.\",\n  \"reason\": \"Claim C explicitly confirms that 'The Road Taken' is a memoir written by Senator Patrick Leahy, directly verifying both the authorship and the nature of the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"SPEAKER_05 refers to 'Senator Patrick Leahy' in turn 45, which resolves the coreference from 'Patrick Leahy' mentioned in turn 21. 'The book' in turn 45 refers back to 'The Road Taken' introduced in turn 21.\",\n  \"reason\": \"Claim C explicitly confirms that 'The Road Taken' is a memoir written by Senator Patrick Leahy, directly verifying both the authorship and the title mentioned"
     },
     {
       "a_turn_idx": 21,
@@ -2031,7 +2031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 21 refers to Patrick Leahy, established in the same sentence. Turn 23 repeats 'This is Patrick Leahy' and reiterates the title 'The Road Taken' and its publication status, directly verifying the existence and publication of the book mentioned in A.\",\n  \"reason\": \"Claim C explicitly restates the key elements of assumption A: Patrick Leahy is identified, his memoir 'The Road Taken' is named,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 21 refers to Patrick Leahy, established in both turns 21 and 23. 'The Road Taken' is the title of his memoir, and 'it's just been published' confirms its existence as a published work.\",\n  \"reason\": \"Claim C explicitly restates that Patrick Leahy's memoir is called 'The Road Taken' and that it has been published, directly verifying the substance of assumption A. The repetition"
     },
     {
       "a_turn_idx": 21,
@@ -2042,11 +2042,11 @@
       "claim_text": "His memoir is called The Road Taken.",
       "overlap_score": 2,
       "c_time": 490.595,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "SPEAKER_05 refers to 'his memoir' in turn 23, which resolves to Patrick Leahy, as established in turn 21.",
-      "reason": "Claim C explicitly states that Patrick Leahy's memoir is called 'The Road Taken,' directly verifying the substance of assumption A, which asserts the existence of such a published book. The repetition of the title and author in the same context confirms the claim without ambiguity.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'his memoir' in turn 23, which resolves to Patrick Leahy, as established in turn 21.\",\n  \"reason\": \"Claim C explicitly states that Patrick Leahy's memoir is called 'The Road Taken,' directly verifying the substance of assumption A, which asserts the existence of such a published book. The repetition of the title and author in the same context confirms the claim without ambiguity.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'Patrick Leahy' and 'his memoir' in both turn 21 and turn 23; 'his memoir' clearly refers to the book titled 'The Road Taken'.\",\n  \"reason\": \"Claim C explicitly restates the title of the memoir, 'The Road Taken', and attributes it to Patrick Leahy, directly verifying the substance of assumption A. The repetition confirms the existence and publication status of the book without ambiguity.\""
     },
     {
       "a_turn_idx": 21,
@@ -2061,7 +2061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to Patrick Leahy, as established in turn 21. 'His memoir' in turn 21 and 'the book' in turn 23 refer to 'The Road Taken'.\",\n  \"reason\": \"Claim C explicitly confirms a specific event described in the memoir 'The Road Taken'—a meeting between Patrick Leahy and J. Edgar Hoover at the FBI building during his time as a young prosecutor."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to Patrick Leahy, as established in turn 21. 'His memoir' in turn 23 refers back to 'The Road Taken' mentioned in turn 21.\",\n  \"reason\": \"Claim C explicitly confirms a specific event described in the memoir 'The Road Taken'—a meeting between Patrick Leahy and J. Edgar Hoover at the FBI building during his time as a young prosecutor. This directly verifies"
     },
     {
       "a_turn_idx": 21,
@@ -2076,7 +2076,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'Patrick Leahy' in both turn 21 and turn 23; 'he' in turn 23 refers to Patrick Leahy.\",\n  \"reason\": \"Claim C explicitly states that when Patrick Leahy introduced himself to J. Edgar Hoover, Hoover recognized him. This directly verifies the implied event in assumption A, which asserts the existence of a published memoir by Patrick Leahy titled 'The Road Taken'. The narrative detail in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_05 refers to 'Patrick Leahy' and 'the book' in both turns 21 and 23; 'you' in turn 23 refers to Patrick Leahy, as established in turn 21.\",\n  \"reason\": \"Claim C explicitly states that when Patrick Leahy introduced himself to J. Edgar Hoover, Hoover recognized him, which directly verifies the event described in assumption A as being recounted in the memoir 'The Road Taken'."
     },
     {
       "a_turn_idx": 21,
@@ -2196,7 +2196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Merrick Garland, and 'Patrick Leahy' is the person being addressed. No reference to credibility or trustworthiness in author identification is present.\",\n  \"reason\": \"Claim C discusses whether Merrick Garland should consider national consequences in prosecutions, which is unrelated to the earlier assumption A about the speaker's credibility in identifying authors and books. There is no mention of authorship, trustworthiness, or credibility in the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to Merrick Garland, and 'Patrick Leahy' is the person being addressed. No reference to credibility or trustworthiness in author identification is present.\",\n  \"reason\": \"Claim C discusses whether Merrick Garland should consider national consequences in prosecutorial decisions, which is unrelated to the earlier assumption A about the speaker's credibility and trustworthiness in identifying authors and books. There is no mention of authorship, book identification"
     },
     {
       "a_turn_idx": 22,
@@ -2286,7 +2286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'Senator Patrick Leahy' refers to the same individual mentioned in turn 23 ('Patrick Leahy'), resolving the coreference explicitly.\",\n  \"reason\": \"Turn 40 explicitly addresses Patrick Leahy by title and name, confirming the speaker's direct reference to him. This directly verifies the assumption in turn 23 that the listener knows who Patrick Leahy is, as the speaker assumes familiarity by addressing him directly in a formal capacity. The"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'Senator Patrick Leahy' refers to the same individual mentioned in turn 23 ('Patrick Leahy'), resolving the coreference explicitly.\",\n  \"reason\": \"Turn 40 explicitly addresses Patrick Leahy by title and name, confirming the speaker's direct reference to him. This directly verifies the assumption in turn 23 that the listener knows who Patrick Leahy is, as the speaker assumes familiarity by addressing him directly in a formal capacity (Senate"
     },
     {
       "a_turn_idx": 23,
@@ -2346,7 +2346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 37, 'Patrick Leahy' is directly addressed in the rhetorical question, confirming that the speaker is referring to the same individual mentioned in turn 23. The pronoun 'you' in turn 23 refers to Patrick Leahy, and the direct address in turn 37 explicitly confirms this reference.\",\n  \"reason\": \"Turn 37 explicitly addresses Patrick Leahy directly in a rhetorical question, which clearly verifies the assumption in turn 23"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 37, 'Patrick Leahy' refers back to the person introduced in turn 23, establishing direct address. The rhetorical question 'my question for Patrick Leahy is...' explicitly identifies him as the addressee.\",\n  \"reason\": \"Turn 37 explicitly addresses Patrick Leahy directly in a rhetorical question, which confirms the assumption in turn 23 that the listener knows who Patrick Leahy is. The direct reference and address leave no ambiguity about the"
     },
     {
       "a_turn_idx": 23,
@@ -2361,7 +2361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'your former prosecutor' in turn 37 refers to Merrick Garland, who is linked to Patrick Leahy as his former subordinate based on the context.\",\n  \"reason\": \"Claim C mentions that Merrick Garland was a prosecutor under Patrick Leahy, which implies familiarity with Leahy’s career and authority. However, this does not explicitly confirm or verify the assumption in A—that the listener knows who Patrick Leahy is. While the reference to Leahy is present"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'your former prosecutor' in turn 37 refers to Merrick Garland, who is linked to Patrick Leahy as his former subordinate based on the context.\",\n  \"reason\": \"Claim C mentions Merrick Garland as a former prosecutor under Patrick Leahy, which indirectly confirms that Leahy held a position of authority over Garland. However, this does not explicitly verify or state the assumption in A—that the listener knows who Patrick Leahy is. While the reference to Leah"
     },
     {
       "a_turn_idx": 23,
@@ -2376,7 +2376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'Senator Patrick Leahy' refers to the same person mentioned in turn 23 ('Patrick Leahy'). The phrase 'when Cheney said it to you' assumes the listener (SPEAKER_03) knows who Patrick Leahy is, which aligns with the assumption in A.\",\n  \"reason\": \"Claim C explicitly references Senator Patrick Leahy in a direct personal interaction ('When Cheney said it to you'), which presupposes the listener's"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 40, 'Senator Patrick Leahy' refers to the same person mentioned in turn 23 ('Patrick Leahy'). The reference is unambiguous and consistent with prior context.\",\n  \"reason\": \"Turn 40 explicitly references Patrick Leahy by name and title ('Senate Pro Tem Patrick Leahy'), confirming the speaker's awareness of his identity. This directly verifies the assumption in turn 23 that the listener knows who Patrick Leahy is, as the speaker"
     },
     {
       "a_turn_idx": 23,
@@ -2391,7 +2391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Senator' in turn 45 refers to Patrick Leahy, as established in turn 23 and confirmed by the full name and title used in turn 45.\",\n  \"reason\": \"Claim C explicitly identifies Patrick Leahy as the author of the memoir 'The Road Taken' and confirms his identity as 'Senator from Vermont,' which directly verifies the assumption in A that the listener knows who Patrick Leahy is. The explicit mention of his title and the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'Senator' in turn 45 refers to Patrick Leahy, as established in turn 23 and confirmed by the full name and title used in turn 45.\",\n  \"reason\": \"Claim C explicitly identifies Patrick Leahy as the author of the memoir 'The Road Taken' and confirms his identity as 'Senator from Vermont,' which directly verifies the assumption in A that the listener knows who Patrick Leahy is. The explicit mention of his title and book"
     },
     {
       "a_turn_idx": 23,
@@ -2511,7 +2511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to J. Edgar Hoover, as established in the prior context. 'They' in 'they wished John Mitchell...' appears to be a misstatement; likely intended to refer to the speaker or colleagues, but does not affect the core claim about Hoover.\",\n  \"reason\": \"Claim C states that J. Edgar Hoover led the FBI, which provides background context supporting why his recognition would carry significant weight—i.e., his high"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to J. Edgar Hoover, as established in the prior context. 'They' in 'they wished John Mitchell...' appears to be a misstatement; likely intended to refer to the speaker or colleagues, but does not affect the core claim about Hoover.\",\n  \"reason\": \"Claim C states that J. Edgar Hoover led the FBI, which provides background context supporting why his recognition would carry significant weight—i.e., his powerful"
     },
     {
       "a_turn_idx": 23,
@@ -2526,7 +2526,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (turn 41 mentions 'George H.W. Bush' and the event of shooting a friend while hunting). The phrase 'I was in Texas, about a week or so later' refers to the speaker (SPEAKER_03), not the listener.\",\n  \"reason\": \"Claim C (turn 41) discusses a personal anecdote involving George"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (the mention of Bush lying in state and the hunting incident). 'I' refers to Speaker_03.\",\n  \"reason\": \"Claim C discusses a personal anecdote involving George H.W. Bush's hunting accident in Texas and the speaker's visit shortly afterward. This is entirely unrelated to Assumption A, which concerns the expectation that listeners value biographical narratives about"
     },
     {
       "a_turn_idx": 24,
@@ -2646,7 +2646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Dick Cheney, the Vice President. 'Pat' is a nickname for the speaker, SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 42) does not address or verify the assumption in A (turn 26), which concerns agreement on what constitutes 'bothering' someone. Instead, C describes a personal anecdote involving a joke between the speaker and Dick Cheney about the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 42 refers to Dick Cheney, the Vice President. 'Pat' is a nickname for the speaker, SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 42) does not address or verify the assumption in A (turn 26), which concerns agreement on what constitutes 'bothering' someone. Instead, C describes a personal anecdote involving a joke between the speaker and Dick Cheney after an injury"
     },
     {
       "a_turn_idx": 26,
@@ -2721,7 +2721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (visiting son in Texas, later attending a joint congressional meeting). The event described (accidentally shooting a friend while hunting) is unrelated to the moral corruption attributed to John Mitchell in turn 27.\",\n  \"reason\": \"Claim C discusses a personal anecdote about George H.W. Bush's hunting accident and a subsequent visit to Texas, which has no connection"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (visiting son in Texas, later attending a joint congressional meeting). The event described (accidentally shooting a friend while hunting) is unrelated to the moral corruption attributed to John Mitchell in turn 27.\",\n  \"reason\": \"Claim C discusses a personal anecdote about George H.W. Bush's hunting accident and a subsequent visit to Texas, which is entirely unrelated"
     },
     {
       "a_turn_idx": 27,
@@ -2766,7 +2766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to John Mitchell, and 'Uber' is a metaphorical reference to powerful institutional alignment; in turn 29, 'follow this party's dictates' explicitly confirms the necessity of strict alignment with party power structures, directly verifying the earlier assumption about needing alignment with powerful institutions for political survival.\",\n  \"reason\": \"Claim C explicitly states that political survival now requires strict party loyalty ('you either follow this party's dictates') rather"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 27 refers to John Mitchell, and 'Uber' is a metaphorical reference to powerful institutional alignment, not the company. In turn 29, 'you either follow this party's dictates' explicitly confirms the necessity of strict alignment with party power structures, directly verifying the earlier assumption about needing alignment with powerful institutions for political survival.\",\n  \"reason\": \"Claim C explicitly states that political survival now requires strict adherence to party loyalty, which"
     },
     {
       "a_turn_idx": 29,
@@ -2841,7 +2841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (e.g., 'when George HW Bush was lying in state'). 'We' refers to Speaker_03 and George H.W. Bush.\",\n  \"reason\": \"Claim C discusses a personal, friendly interaction between Speaker_03 and George H.W. Bush during a moment of mourning and later humor, emphasizing camaraderie and mutual respect. This does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 41 refers to George H.W. Bush, as established by context (e.g., 'when George HW Bush was lying in state'). 'We' refers to Speaker_03 and George H.W. Bush.\",\n  \"reason\": \"Claim C discusses a personal, friendly interaction between Speaker_03 and George H.W. Bush during a moment of mourning and later humor, but does not mention or imply anything about shared adversity on"
     },
     {
       "a_turn_idx": 32,

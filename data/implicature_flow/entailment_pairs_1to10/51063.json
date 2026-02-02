@@ -17,11 +17,11 @@
       "claim_text": "People believe they do not see a problem.",
       "overlap_score": 2,
       "c_time": 863.897,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 22 refers to 'people' mentioned in turn 22, which is consistent with the subject of the earlier assumption A. However, 'they' in turn 22 does not refer to 'people' in turn 1; instead, it refers to a different group discussing the Supreme Court scandal.\",\n  \"reason\": \"Claim C (turn 22) states that 'people don't give a shit' and 'I"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'people' in both A and C refers to general public, but the claims are semantically unrelated.",
+      "reason": "Assumption A concerns beliefs about kitchens having distinct functional and stylistic requirements, while claim C asserts that people do not perceive a problem with judicial corruption. These topics are entirely unrelated in content and context. Claim C neither states nor verifies any aspect of A, and there is no overlap in subject matter or implied meaning.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'people' in both A and C refers to general public, but the claims are semantically unrelated.\",\n  \"reason\": \"Assumption A concerns beliefs about kitchens having distinct functional and stylistic requirements, while claim C asserts that people do not perceive a problem with judicial corruption. These topics are entirely unrelated in content and context. Claim C neither states nor verifies any aspect of A, and there is no overlap in subject matter or implied meaning.\"\n}\n```"
     },
     {
       "a_turn_idx": 1,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 23 refers to the collective audience/listeners, not linked to any prior entity in turn 1.\",\n  \"reason\": \"Turn 1 asserts that people believe their kitchens have distinct functional and stylistic requirements. Turn 23 claims that 'we all lost our minds,' which is a metaphorical statement about societal or psychological breakdown, unrelated to kitchen design or personal preferences. There is no semantic connection between the two statements"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'we' in turn 23 refers to the collective audience/listeners, not linked to any prior entity in turn 1.\",\n  \"reason\": \"Turn 1 asserts that people believe their kitchens have distinct functional and stylistic requirements. Turn 23 claims that 'we all lost our minds,' which is a metaphorical statement about societal or psychological breakdown, unrelated to kitchen design or functionality. There is no semantic connection between the two statements."
     },
     {
       "a_turn_idx": 1,
@@ -47,11 +47,11 @@
       "claim_text": "Many people are increasingly questioning whether they have lost their minds.",
       "overlap_score": 2,
       "c_time": 926.963,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference links relevant; 'we' in C refers to a collective audience, not tied to any entity in A.",
-      "reason": "Claim C discusses widespread existential doubt about mental clarity in the face of societal chaos, while assumption A concerns functional and stylistic preferences in kitchens. The topics are entirely unrelated, with no overlap in semantic content. C neither states nor verifies A, and there is no logical or contextual connection between the two.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'we' in C refers to a collective audience, not tied to any entity in A.\",\n  \"reason\": \"Claim C discusses widespread existential doubt about mental clarity in the face of societal chaos, while assumption A concerns functional and stylistic preferences in kitchens. The topics are entirely unrelated, with no overlap in semantic content. C neither states nor verifies A, and there is no logical or contextual connection between the two.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'we' in turn 23 refers to the collective audience, not tied to any entity in turn 1.\",\n  \"reason\": \"Turn 1 asserts that people believe their kitchens have distinct functional and stylistic requirements. Turn 23 discusses a psychological or societal crisis of identity and rationality ('have we all lost our minds?'), which is unrelated in both topic and semantic content. There is no overlap in subject matter, nor does C"
     },
     {
       "a_turn_idx": 2,
@@ -66,7 +66,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in claim C refers to the group of commentators or political observers mentioned in turn 4, including the speaker (SPEAKER_04), who had previously expressed concerns about institutional decay.\",\n  \"reason\": \"Claim C explicitly states that 'a number of us have been warning about' the disintegration of norms in Congress, which directly verifies the earlier assumption that individuals, including the speaker, had previously voiced concerns about declining institutional standards—aligning precisely"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'us' in claim C refers to the group of commentators or political observers mentioned in turn 4, including the speaker (SPEAKER_04), who had previously expressed concerns about institutional decay.\",\n  \"reason\": \"Claim C explicitly states that 'a number of us have been warning about' the disintegration of norms in Congress, which directly verifies the earlier assumption that individuals, including the speaker, had previously voiced concerns about declining institutional standards—matching the substance"
     },
     {
       "a_turn_idx": 2,
@@ -81,7 +81,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the Commander in Chief (Trump), and 'the chairman of the joint chiefs' refers to the general who reported the lack of ammunition.\",\n  \"reason\": \"Claim C states that the Commander in Chief was uncertain about what the Chairman of the Joint Chiefs stated, which contradicts the narrative in turn 12 where the Commander in Chief confidently repeats the general's statement ('we have no ammunition') and claims he will never"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the Commander in Chief (Trump), and 'the chairman of the joint chiefs' refers to the military general mentioned earlier. However, the claim in C does not relate to listener trust in the speaker's judgment about what is noteworthy.\",\n  \"reason\": \"Turn 12 discusses the Commander in Chief's uncertainty about a military official's statement regarding ammunition levels, which is unrelated to the assumption in turn 2 about listeners"
     },
     {
       "a_turn_idx": 2,
@@ -96,7 +96,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_04, consistent with turn 22.\",\n  \"reason\": \"Claim C (turn 22) asks listeners to leave five-star reviews on Apple Podcasts, which is unrelated to assumption A (turn 2), which concerns listeners trusting the speaker’s judgment about what is noteworthy. There is no mention of trust, judgment, or evaluation of noteworthy content in C. Instead, C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 22 refers to SPEAKER_04, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 22) asks listeners to leave five-star reviews on Apple Podcasts, which is unrelated to assumption A (turn 2), which concerns listeners trusting the speaker’s judgment about what is noteworthy. There is no mention or implication in C of trust in the speaker’s evaluative judgment, nor does"
     },
     {
       "a_turn_idx": 3,
@@ -111,7 +111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 15 refers to SPEAKER_03, who is the same speaker as in turn 3. 'I've seen holes before' refers to prior observations of legislative dysfunction.\",\n  \"reason\": \"Turn 15 explicitly states that the speaker has previously observed problems with legislative gridlock ('I've seen holes before'), directly verifying the assumption in turn 3 that the speaker has reliable insight into the structure and entertainment value of their own"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 15 refers to SPEAKER_03, who is the same speaker as in turn 3. 'I've seen holes before' refers to prior observations of legislative gridlock, directly linking to the earlier assumption about insight into the podcast's structure and entertainment value.\",\n  \"reason\": \"Turn 15 explicitly states that the speaker has observed problems related to legislative gridlock ('I've seen holes before'), which directly verifies the earlier"
     },
     {
       "a_turn_idx": 5,
@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to Mitch McConnell; 'this' in turn 6 refers to the claim that a Supreme Court justice cannot be appointed during a presidential year, which is challenged by the example of Anthony Kennedy.\",\n  \"reason\": \"Claim C explicitly states that Anthony Kennedy was appointed during a presidential election year, which directly verifies the factual basis used in assumption A (turn 5) to argue that the Supreme Court is overstepping its role by"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to Anthony Kennedy, as established by context: Kennedy was appointed during a presidential year, which Speaker_03 uses to counter the claim that such appointments are impossible during an election year.\",\n  \"reason\": \"Claim C explicitly states that Anthony Kennedy was appointed to the Supreme Court during a presidential election year, which directly verifies the factual basis of assumption A—that the Supreme Court is making policy decisions beyond its constitutional role—by highlighting a"
     },
     {
       "a_turn_idx": 5,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the claim mentioned in turn 5 about the impossibility of confirming a Supreme Court nominee during a presidential year.\",\n  \"reason\": \"Claim C explicitly states that the idea that a Supreme Court nomination cannot proceed during a presidential year is false, which directly verifies the substance of assumption A in turn 5, where the speaker argues that the claim about not confirming justices during a presidential year is a 'big lie.' The core content—that"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the claim mentioned in turn 5 about the impossibility of a Supreme Court nomination during a presidential year.\",\n  \"reason\": \"Claim C explicitly states that the idea that a Supreme Court nomination cannot proceed during a presidential year is false, which directly verifies the substance of assumption A in turn 5, where the speaker argues that the claim about not confirming justices during a presidential year is a 'big lie.' This confirms that the Supreme"
     },
     {
       "a_turn_idx": 5,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the audience or listeners, and 'Tony Barrett' is a likely misspelling of 'Brett Kavanaugh' (contextually consistent with the discussion of Supreme Court confirmations). The phrase 'a new Supreme Court justice firm' is a garbled version of 'a new Supreme Court justice during'.\",\n  \"reason\": \"Claim C states a widely held belief about the norm against confirming a new Supreme Court justice during a presidential"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 6 refers to the audience or listeners, and 'Tony Barrett' is a likely misspelling of 'Brett Kavanaugh' (contextually implied by the mention of swearing in near an election). The phrase 'a new Supreme Court justice firm' is a garbled version of 'a new Supreme Court justice during'.\",\n  \"reason\": \"Claim C states a widely held belief about the prohibition of confirming a new Supreme Court justice during a"
     },
     {
       "a_turn_idx": 5,
@@ -171,7 +171,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Tony Barrett refers to the same individual mentioned in turn 5 as a Supreme Court justice appointed during a presidential year; 'he' in turn 5 refers to the Supreme Court justice appointed under controversial circumstances.\",\n  \"reason\": \"Claim C explicitly states that Tony Barrett was sworn in as a Supreme Court justice eight days before the presidential election, which directly verifies the substance of assumption A—that a Supreme Court making policy decisions (implied by controversial appointment timing) is acting beyond its constitutional role"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Tony Barrett refers to the same individual mentioned in turn 5 as a Supreme Court justice appointed during a presidential year; 'he' in turn 5 refers to the same person.\",\n  \"reason\": \"Claim C explicitly states that Tony Barrett was sworn in eight days before the presidential election, which directly verifies the substance of assumption A—that the Supreme Court is making policy decisions by acting beyond its constitutional role—by illustrating an instance of judicial appointment during a presidential year, undermining the norm of"
     },
     {
       "a_turn_idx": 5,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to Biden, as established by context (Biden's speech, his role as former Judiciary Committee chairman). The phrase 'the president' in turn 8 refers to Biden, consistent with prior mention.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that the Supreme Court is acting as a legislative body, which aligns with A's assertion that the Court is making policy decisions beyond its constitutional role."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 8 refers to Biden, and 'us' refers to the Judiciary Committee. 'They' in turn 9 refers to McConnell and others who misrepresented Biden's statement.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by stating that the Supreme Court is acting as a legislative body, which directly aligns with A's assertion that the Court is making policy decisions beyond its constitutional role. The context confirms that Biden emphasized consultation with"
     },
     {
       "a_turn_idx": 5,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the misrepresentation by McConnell regarding Biden's statement, which is the central event described in turn 8. 'The Supreme Court' in C refers to the same entity mentioned in A.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is acting as a legislative body, which directly verifies the core assertion in assumption A—that the Supreme Court is making policy decisions beyond its constitutional role. The causal link between McConnell's mis"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the misrepresentation by McConnell of Biden's statement, which is the cause described in turn 5. 'It' in turn 9 refers to the outcome of the misrepresentation, which leads to the Supreme Court functioning as a legislative body.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is acting as a legislative body due to the political manipulation and misrepresentation described earlier, directly verifying the core idea in assumption"
     },
     {
       "a_turn_idx": 5,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the Supreme Court's actions described in turn 5, specifically its role in making policy decisions beyond its constitutional function.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is acting as a legislative body due to congressional gridlock, which directly verifies the substance of assumption A—that a Supreme Court making policy decisions functions beyond its constitutional role. The causal link (congressional gridlock) strengthens the alignment, and the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the situation described in turn 5, where the Supreme Court is making policy decisions beyond its constitutional role. The phrase 'the Supreme Court is acting as the legislative body' directly verifies the claim in A.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is acting as the legislative body, which directly verifies the earlier assumption A that the Supreme Court is functioning beyond its constitutional role by making policy decisions. The context"
     },
     {
       "a_turn_idx": 5,
@@ -246,7 +246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Supreme Court scandal' in turn 20 refers to the broader systemic issues discussed earlier, including the Court's perceived overreach in policymaking and ethical concerns involving justices' families. 'Jenny Thomas' is a likely reference to Justice Clarence Thomas's wife, Ginni Thomas.\",\n  \"reason\": \"Claim C mentions the 'Supreme Court scandal' exposing issues related to justices' families and financial entanglements, which touches on ethical concerns but does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Supreme Court scandal' in turn 20 refers to the broader issue of judicial misconduct and corruption discussed in prior turns, particularly involving justices' families and financial entanglements. 'Jenny Thomas' is a likely reference to Justice Clarence Thomas's wife, Ginni Thomas.\",\n  \"reason\": \"Claim C mentions the 'Supreme Court scandal' exposing issues related to justices' families receiving financial benefits, which touches on themes of ethical impropriety and"
     },
     {
       "a_turn_idx": 5,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'law firms' and 'Supreme Court' are direct referents.\",\n  \"reason\": \"Claim C discusses law firms with substantial business before the Supreme Court, which is unrelated to assumption A, which asserts that the Supreme Court is overstepping its constitutional role by making policy decisions. C does not state, imply, or verify any aspect of A. The topics are distinct—C focuses on financial relationships and lobbying, while A concerns judicial overreach"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Supreme Court' in turn 5 refers to the institution itself, and 'law firms that have a lot of business before' the Supreme Court in turn 21 refers to the same entity.\",\n  \"reason\": \"Claim C discusses law firms with substantial business before the Supreme Court, which is unrelated to the substantive assertion in assumption A—that a Supreme Court making policy decisions functions beyond its constitutional role. While both touch on the Supreme Court, C"
     },
     {
       "a_turn_idx": 6,
@@ -276,7 +276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the Commander in Chief, which is the President. This is consistent with the context where Trump is discussed as having made claims about lacking ammunition upon taking office.\",\n  \"reason\": \"Turn 12 states that the Commander in Chief (the President) is uncertain about the chairman of the Joint Chiefs' statement regarding lack of ammunition. This does not address or verify the earlier assumption in turn 6, which is about consistency"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 12 refers to the Commander in Chief, which is the President. However, turn 6 does not mention or imply anything about the Commander in Chief or the President's knowledge of military readiness. The claim in turn 12 is unrelated to the assumption in turn 6 about procedural consistency and institutional legitimacy.\",\n  \"reason\": \"Turn 6 asserts that consistency in procedural rules matters for legitimacy, focusing on norm-breaking in the Senate and"
     },
     {
       "a_turn_idx": 6,
@@ -291,7 +291,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group of people discussed in the conversation, including the speaker and others involved in the political discourse. However, 'lost our minds' is a metaphorical expression criticizing irrationality or moral collapse, not related to procedural consistency or institutional legitimacy.\",\n  \"reason\": \"Turn 6 asserts that consistency in procedural rules is essential for legitimacy, a substantive institutional concern. Turn 23 expresses a rhetorical, emotional critique about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group of people discussed in the conversation, including the speaker and others involved in political discourse. However, 'lost our minds' is a metaphorical expression criticizing irrationality or moral collapse, not related to procedural consistency or institutional legitimacy.\",\n  \"reason\": \"Turn 6 asserts that consistency in procedural rules is essential for legitimacy. Turn 23 expresses a subjective, emotional judgment about collective mental state ('we've"
     },
     {
       "a_turn_idx": 6,
@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 10 refers to the speaker (SPEAKER_04), who is discussing the current state of the appointment process. The phrase 'the appointment process' in turn 10 refers to the same topic as in turn 6, specifically the politicization and manipulation of appointments.\",\n  \"reason\": \"Turn 10 states that the current appointment process is significantly different than before, which aligns with the core idea in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 10 refers to the speaker (SPEAKER_04), who is discussing the current state of the appointment process. The phrase 'the appointment process' in turn 10 refers to the same system discussed in turn 6, particularly the politicization of judicial and executive appointments.\",\n  \"reason\": \"Turn 10 explicitly states that the current appointment process is significantly different than before, which directly verifies the core idea in turn"
     },
     {
       "a_turn_idx": 7,
@@ -366,7 +366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public discussed in prior turns, but does not reference or relate to Biden's authority as chair of the Judiciary Committee mentioned in turn 8.\",\n  \"reason\": \"Claim C expresses a general sentiment about societal mental decline and loss of rationality, which is unrelated to the specific claim in A about Biden's legitimate authority derived from his role as chair of the Judiciary Committee. There is no mention of Biden"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public, not specifically the speaker or Biden. The claim in turn 23 is a general commentary on societal mental state, not a statement about Biden's authority.\",\n  \"reason\": \"Turn 23 expresses a broad, subjective observation about collective societal irrationality ('we've all lost our minds') and does not address or verify the specific claim in turn 8 about Biden's legitimate authority derived"
     },
     {
       "a_turn_idx": 8,
@@ -381,7 +381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 9 refers to Biden, as established in turn 8 where Biden is the subject of the speech being discussed.\",\n  \"reason\": \"Claim C explicitly states that Biden made a specific statement that was misrepresented, which directly verifies the substance of assumption A—that the speaker trusts the accuracy of their recollection of Biden’s statement and its context. The claim confirms both the existence of a specific statement by Biden and the deliberate mischaracterization of it,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 9 refers to Biden, as established in turn 8 where Biden is the subject of the speech being discussed.\",\n  \"reason\": \"Claim C explicitly states that Biden made a specific statement that was misrepresented, which directly verifies the assumption in A that the speaker trusts the accuracy of their recollection of Biden’s statement and its context. The speaker asserts that McConnell misrepresented Biden’s words deliberately, and they personally read from Biden’s speech to counter the"
     },
     {
       "a_turn_idx": 8,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the misrepresentation of Biden's statement by McConnell, which is the central event described in turn 8. The phrase 'right now we have, we have dogs because of that' uses figurative language ('dogs') to refer to the current composition of the Supreme Court resulting from the misrepresentation.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is currently acting as a legislative body, which directly follows from the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the misrepresentation of Biden's statement by McConnell, which is the central event described in turn 8. 'We have dogs' is a colloquialism for the current composition of the Supreme Court, which is directly tied to the political manipulation discussed.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is currently acting as a legislative body due to the political dynamics stemming from the misrepresentation of Biden's speech"
     },
     {
       "a_turn_idx": 8,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the claim about the Supreme Court acting as the legislative body, which is directly tied to the context of congressional gridlock mentioned in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is acting as the legislative body, particularly due to congressional gridlock—a direct and clear verification of the assumption in A that the audience understands the political significance of the Judiciary Committee's role in Supreme Court nominations. The context"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the situation described in turn 8, where the Judiciary Committee's role in Supreme Court nominations is central. The claim in turn 9 explicitly states the consequence of political manipulation around judicial appointments—namely, the Supreme Court stepping into legislative functions due to congressional gridlock.\",\n  \"reason\": \"Turn 9 directly and explicitly verifies the underlying assumption in turn 8—that the audience should understand the political significance of the Judiciary Committee"
     },
     {
       "a_turn_idx": 8,
@@ -426,7 +426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the composition of the Supreme Court resulting from the political manipulation described in turn 8, specifically the appointment of justices under controversial circumstances.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court is currently composed mostly of justices who support conservative policies, which directly verifies the implication in assumption A that the audience should understand the political significance of the Judiciary Committee’s role in Supreme Court nominations. The context shows that the speaker attributes the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 9 refers to the composition of the Supreme Court resulting from the political manipulation described in turn 8, specifically the appointment of justices under controversial circumstances.\",\n  \"reason\": \"Turn 9 explicitly states that the current Supreme Court is composed mostly of justices who support conservative policies, which directly verifies the implication in turn 8 that the current court's makeup is due to political maneuvering (e.g., McConnell's mischaracterization of Biden’s statement"
     },
     {
       "a_turn_idx": 8,
@@ -456,7 +456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Robert' in turn 21 refers to Chief Justice John Roberts, as established in the prior context where he is discussed as a 'huge partisan' and 'a very savvy political actor'. The phrase 'law firms that have a lot of business before' refers to the Supreme Court, consistent with the broader discussion of judicial influence and political appointments.\",\n  \"reason\": \"Claim C mentions that some law firms have substantial business before the Supreme Court, which indirectly relates to"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'Robert' in turn 21 refers to Chief Justice John Roberts, as established in the prior context where he is discussed as a 'huge partisan' and 'a very savvy political actor'. The phrase 'law firms that have a lot of business before' refers to the Supreme Court, consistent with the broader discussion of judicial influence and political appointments.\",\n  \"reason\": \"Claim C mentions that some law firms have substantial business before the Supreme Court, which tangentially relates"
     },
     {
       "a_turn_idx": 9,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the erosion of trust in the judicial process, which is implied in turn 9 as a consequence of changes in constitutional interpretation (e.g., Citizens United). The term 'erosion' aligns with the broader concern about institutional decay mentioned in turn 9.\",\n  \"reason\": \"Claim C states that the erosion of trust in the judicial process would have negative consequences, which directly reflects the substance of assumption A—that changes"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the erosion of trust in the judicial process, which is the consequence of systemic issues in the Supreme Court highlighted in turn 9, including changes in constitutional interpretation (e.g., Citizens United) and political manipulation.\",\n  \"reason\": \"Claim C explicitly states that the erosion of trust in the judicial process will have negative consequences, directly verifying the substance of assumption A, which asserts that changes in constitutional interpretation (like Citizens United"
     },
     {
       "a_turn_idx": 9,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 20, 'the Supreme Court scandal' refers to the broader issue of perceived corruption and partisanship in the Court, as discussed in prior turns. 'Jenny Thomas' is a reference to Justice Clarence Thomas, with his wife being the subject of financial scrutiny.\",\n  \"reason\": \"Claim C states that the Supreme Court scandal has exposed certain issues, specifically referencing financial improprieties involving justices' spouses—such as Clarence Thomas’s wife and Roberts’s wife—which"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 20, 'the Supreme Court scandal' refers to the broader issue of perceived corruption and partisanship in the Court, as discussed in prior turns. 'Jenny Thomas' is a clear reference to Justice Clarence Thomas, and 'the wife of Jenny Thomas' is a misstatement; the intended referent is Clarence Thomas's wife, Ginni Thomas, who is known for her lobbying activities and connections to conservative causes.\",\n  \"reason\": \"Claim C states"
     },
     {
       "a_turn_idx": 9,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to 'the judicial process', which is the subject of the earlier assumption A. 'It' is used to refer to the judicial process as the last remaining stable institution.\",\n  \"reason\": \"Claim C states that the judicial process is the 'last thing standing' for Americans, implying it is currently the only stable institution. This contrasts with assumption A, which claims that public trust in institutions is undermined when political motivations drive judicial behavior"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the judicial process, which is the subject of the earlier assumption A. 'The last thing standing' implies the judicial process is currently the only stable institution, contrasting with the idea that public trust in institutions is undermined.\",\n  \"reason\": \"Claim C states that the judicial process is the 'last remaining stable institution,' which indirectly acknowledges the erosion of trust in other institutions. However, it does not explicitly verify or state the"
     },
     {
       "a_turn_idx": 9,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the listener, and 'your wife or husband' is a personal relationship reference. There is no connection between this statement and the earlier assumption about judicial overreach into policymaking.\",\n  \"reason\": \"Claim C (turn 14) discusses withholding information from personal relationships, which is unrelated to the substantive issue of the judiciary creating policy without legislation. The content of C does not address, verify, or even reference the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the listener, and 'your wife/husband/kids/minister' are hypothetical addressees; no reference to the judiciary, policy creation, or legislation.\",\n  \"reason\": \"Claim C (turn 14) discusses withholding information about a fictional military ammunition crisis from personal relationships, which is entirely unrelated to the substantive legal principle in assumption A—that the judiciary should not create policy without legislation. There is no mention"
     },
     {
       "a_turn_idx": 9,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the audience, and 'this' refers to the claim about the military having no ammunition, which is unrelated to the earlier assumption about judicial overreach in policymaking.\",\n  \"reason\": \"Claim C (turn 14) discusses withholding information about the military lacking ammunition from children, family, and ministers, which is a separate issue from the assumption in A (turn 9) about the judiciary overstepping into"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the audience, and 'this' refers to the false claim about the military having no ammunition, as established in prior turns.\",\n  \"reason\": \"Claim C (turn 14) advises against disclosing a specific falsehood about the military's ammunition supply, which is unrelated to the earlier assumption A that the judiciary should not create substantive policy without legislation. There is no mention of judicial power, legislation, or policy-making in"
     },
     {
       "a_turn_idx": 9,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the listener, and 'your minister' is a person of religious authority; no coreference links to the judiciary or policy creation.\",\n  \"reason\": \"Claim C (turn 14) advises against disclosing a sensitive military fact to personal or religious figures, which is unrelated to the substantive claim in assumption A (turn 9) about the judiciary overstepping into policymaking without legislation. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 14 refers to the listener, and 'your minister' is a person of religious authority; no coreference links to the judiciary or policy creation.\",\n  \"reason\": \"Claim C (turn 14) advises against disclosing a sensitive military fact to personal or religious figures, focusing on secrecy and information control. This is unrelated to the earlier assumption A, which concerns the judiciary overstepping into policy-making without legislation. There is no"
     },
     {
       "a_turn_idx": 9,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the erosion of trust in the judicial process, not the military stockpile claim in turn 11. No coreference links connect turn 22 to the assumption about a high-ranking general's knowledge.\",\n  \"reason\": \"Claim C (turn 22) discusses the erosion of public trust in the judicial process due to corruption, which is unrelated to assumption A (turn 11), which concerns a high"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the erosion of trust in the judicial process, which is not related to the earlier assumption A about a high-ranking general having firsthand knowledge of military stockpiles.\",\n  \"reason\": \"Claim C discusses the erosion of public trust in the judicial process due to corruption scandals, which is unrelated to assumption A regarding a general's knowledge of military stockpiles. There is no mention of military readiness, ammunition, or a high"
     },
     {
       "a_turn_idx": 11,
@@ -696,7 +696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public, not specifically the speaker's belief about the anecdote's truthfulness. The claim in C is about collective mental state ('lost our minds'), while A concerns the truth of an anecdote depending on its source credibility.\",\n  \"reason\": \"Claim C expresses a general existential or psychological concern about societal rationality, which is unrelated to the specific epistemic condition in A—namely,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public discussed in prior turns, but the claim 'we've all lost our minds' does not address or verify the specific assumption in turn 11 about the truthfulness of an anecdote depending on its presentation from a trusted source.\",\n  \"reason\": \"Turn 11 asserts that the credibility of an anecdote (about the military lacking ammunition) depends on it being presented as coming from a"
     },
     {
       "a_turn_idx": 11,
@@ -711,7 +711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in turn 13 refers to the 500,000 military personnel mentioned earlier in the same turn. The phrase 'not one of them let it out' clearly refers to the failure of any military personnel to disclose the alleged lack of ammunition.\",\n  \"reason\": \"Claim C explicitly states that none of the 500,000 military personnel disclosed the information about the lack of ammunition. This directly verifies the implicit assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'them' in turn 13 refers to the 500,000 military personnel mentioned earlier. 'Not one of them let it out' clearly refers to their failure to disclose the alleged lack of ammunition.\",\n  \"reason\": \"Claim C explicitly states that none of the 500,000 military personnel disclosed the information about the lack of ammunition, which directly verifies the implication in assumption A that the speaker has credible access to accurate"
     },
     {
       "a_turn_idx": 11,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective group of people discussed in the broader context, including the speaker and others involved in the conversation. However, 'lost their minds' is a metaphorical expression about societal or political irrationality, not related to the specific assumption about leaking information.\",\n  \"reason\": \"Claim C expresses a general sentiment about collective mental instability in society, particularly regarding political and cultural divisions. This is unrelated to assumption A, which concerns the belief"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective group of people discussed in the broader context, including the speaker and others involved in the conversation. However, there is no direct reference to the specific assumption about leaking information or the military's lack of ammunition.\",\n  \"reason\": \"Claim C expresses a belief that people collectively have lost their minds, which is a general commentary on societal or psychological state. This does not address or verify the specific assumption in A—that if information"
     },
     {
       "a_turn_idx": 13,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in turn 22 refers to the erosion of trust in the judicial process, not the assumption about leaking information.\",\n  \"reason\": \"Claim C (turn 22) discusses the erosion of public trust in the judicial process due to scandals involving Supreme Court justices and their families, which is a separate issue from assumption A (turn 13), which concerns the failure of military personnel to leak information about a lack of ammunition. The"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'this erosion' in turn 22 refers to the erosion of trust in the judicial process, not the assumption about leaking information in turn 13.\",\n  \"reason\": \"Claim C (turn 22) discusses the erosion of public trust in the judicial process due to scandals involving Supreme Court justices and their families, which is unrelated to assumption A (turn 13), which concerns the failure of military personnel to leak information about a lack"
     },
     {
       "a_turn_idx": 14,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Clarence Thomas' is explicitly named in C, while A refers to an unnamed threat related to revealing information.\",\n  \"reason\": \"Claim C discusses ethical corruption involving Clarence Thomas and his family, particularly financial entanglements through his wife. However, this does not address or verify the earlier assumption A, which concerns a serious threat or danger associated with revealing certain information—specifically, the lack of ammunition and the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'Clarence Thomas' is explicitly named in C, while A refers to an unnamed threat related to revealing information.\",\n  \"reason\": \"Claim C discusses ethical corruption involving Clarence Thomas and his family, specifically financial entanglements and lobbying. Assumption A, however, refers to a general, unspecified threat or danger tied to revealing sensitive information—likely related to national security or political secrecy. The topics are entirely different:"
     },
     {
       "a_turn_idx": 14,
@@ -801,7 +801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the alleged ethical corruption involving Justice Alito, which is unrelated to assumption A, which concerns the danger of revealing sensitive military information. No coreference connects the two claims.\",\n  \"reason\": \"Assumption A discusses the severe risk of exposing classified military information, particularly regarding lack of ammunition and national security. Claim C introduces a completely different topic—ethical corruption involving Justice Alito and his wife’s lobbying activities. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the alleged ethical corruption involving Justice Alito, which is unrelated to assumption A, which concerns the danger of revealing sensitive information about military readiness. No coreference connects the two claims.\",\n  \"reason\": \"Claim C discusses ethical corruption related to Justice Alito, while assumption A refers to a serious threat or danger tied to disclosing classified or sensitive military information. The topics are entirely different—military secrecy vs. judicial ethics—and there"
     },
     {
       "a_turn_idx": 14,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective group of people discussed in the conversation, including the speaker. 'They' in turn 23 refers to the broader societal group mentioned in prior turns.\",\n  \"reason\": \"Claim C expresses a belief that people, including the speaker, have collectively lost their minds, which is unrelated to assumption A, which concerns the necessity of secrecy for survival. While both statements reflect concern about societal breakdown, C does not state,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective group of people discussed in the conversation, including the speaker. However, 'lost their minds' is a metaphorical expression about societal irrationality, not a direct statement about secrecy or survival.\",\n  \"reason\": \"Claim C expresses a belief that people, including the speaker, have collectively lost rational judgment, which is unrelated to the specific assumption in A—that secrecy is essential for survival. While both statements reflect concern about societal"
     },
     {
       "a_turn_idx": 14,
@@ -846,7 +846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in earlier turns, including the speaker and others involved in the political and ethical decisions mentioned in turn 14.\",\n  \"reason\": \"Turn 23 expresses a general belief that 'we' have collectively lost our minds, which touches on the broader theme of moral and institutional failure present in turn 14. However, it does not explicitly state or verify the specific claim that the speaker views"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in earlier turns, including the speaker and others involved in the political and ethical decisions mentioned in turn 14.\",\n  \"reason\": \"Turn 23 expresses a belief that 'we' have collectively lost our minds, which tangentially relates to the broader theme of moral and institutional failure present in turn 14. However, it does not explicitly state or verify the specific claim that the speaker"
     },
     {
       "a_turn_idx": 14,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the ongoing pattern of ethical lapses involving Supreme Court justices and their families, as discussed in turns 20–21.\",\n  \"reason\": \"Claim C discusses the erosion of public trust in the judicial process due to continued neglect of ethical issues involving Supreme Court justices, which is related to the broader theme of institutional distrust. However, assumption A specifically addresses legislative gridlock undermining trust in democratic institutions, not judicial processes"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the ongoing issue of perceived corruption in the judiciary, particularly involving justices and their families, as discussed in turns 20–21.\",\n  \"reason\": \"Claim C discusses the erosion of public trust in the judicial process due to continued neglect of corruption scandals, which is related to the broader theme of institutional distrust. However, assumption A specifically addresses legislative gridlock as the cause of diminished trust in democratic institutions. While"
     },
     {
       "a_turn_idx": 15,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in prior turns, including the speaker (SPEAKER_03) and others involved in the conversation about political dysfunction and institutional decay.\",\n  \"reason\": \"Turn 23 expresses a broad, rhetorical belief that 'we' have collectively lost our minds, reflecting a sense of societal and political breakdown. While this aligns topically with the frustration expressed in turn 15 about congressional grid"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in prior turns, including the speaker (SPEAKER_03) and others involved in the conversation about political dysfunction and institutional decay.\",\n  \"reason\": \"Turn 23 expresses a general belief that 'we' have collectively lost our minds, which reflects a broader sentiment of societal and political breakdown. While this aligns loosely with the idea that the speaker has insight into congressional dynamics (A"
     },
     {
       "a_turn_idx": 18,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in prior turns, including the speaker and others involved in political service. 'We' includes the speaker and those criticized for prioritizing wealth over public service.\",\n  \"reason\": \"Claim C states that 'you've all lost your minds,' which expresses a general critique of collective moral failure and irrationality. However, it does not address or verify the specific assumption A—that the speaker believes they are morally"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective group discussed in prior turns, including the speaker and others involved in political service. 'We' includes the individuals criticized in turn 18 for prioritizing wealth over public service.\",\n  \"reason\": \"Claim C states that 'you've all lost your minds,' which expresses a general critique of collective moral failure and irrationality. However, it does not address or verify the specific assumption A—that the speaker believes"
     },
     {
       "a_turn_idx": 20,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'Robert' refers to Justice Roberts, and 'his wife' refers to his spouse, who is described as recruiting for law firms with substantial business before the Supreme Court.\",\n  \"reason\": \"Claim C states that some law firms have substantial business before the Supreme Court, which directly supports the substance of assumption A—that scandals involving justices reveal systemic problems. The mention of a justice’s wife recruiting for firms with business before the Court implies potential conflicts of interest and"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'Robert' refers to Justice Roberts, and 'his wife' refers to his spouse, who is described as recruiting for law firms with substantial business before the Supreme Court. This directly connects to the idea in turn 20 that scandals reveal systemic issues, particularly through financial entanglements involving justices' families.\",\n  \"reason\": \"Claim C states that certain law firms have substantial business before the Supreme Court, which directly supports the substance of assumption A—that"
     },
     {
       "a_turn_idx": 20,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'Robert' refers to Justice Alito, as established by context (SPEAKER_03 mentions 'Robert's wife' after discussing Clarence Thomas, and later refers to 'Alito now' in the same sentence). The phrase 'corruption from Clarence Thomas and from Alito now' directly links the ethical concerns to both justices.\",\n  \"reason\": \"Claim C explicitly identifies 'serious ethical corruption' associated with Justice Alito, which directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 21, 'Robert' refers to Justice Alito, as established by context (SPEAKER_03 mentions 'Robert's wife' after discussing Clarence Thomas, and later references 'Alito now'). The phrase 'corruption from Clarence Thomas and from Alito now' directly links the ethical concerns to both justices.\",\n  \"reason\": \"Claim C explicitly identifies 'serious ethical corruption' associated with Justice Alito, which directly verifies the substance of assumption A—that"
     },
     {
       "a_turn_idx": 20,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the ongoing issue of ethical lapses and perceived corruption among high-ranking judicial officials, as discussed in turn 20 and surrounding context.\",\n  \"reason\": \"Claim C explicitly states that continued neglect of ethical issues in the judiciary will erode public trust, which directly verifies the substance of assumption A—that the public should expect transparency and ethical conduct from high-ranking judicial officials. The causal link between neglect and erosion of trust is clearly articulated"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the ongoing issue of ethical lapses and lack of transparency among high-ranking judicial officials, as discussed in turn 20 and surrounding context.\",\n  \"reason\": \"Claim C explicitly states that continued neglect of ethical issues in the judiciary will erode public trust, which directly verifies the core concern in assumption A—that the public should expect transparency and ethical conduct from high-ranking judicial officials. The causal link between neglect and erosion of trust is"
     },
     {
       "a_turn_idx": 20,
@@ -996,7 +996,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the ongoing issue of judicial ethics scandals and their narrative dismissal, as discussed in prior turns. 'The judicial process' in C corresponds to 'the trust of the American people in the judicial process' in A.\",\n  \"reason\": \"Claim C explicitly states that continued neglect will erode public trust in the judicial process, which directly verifies the substance of assumption A—that the media or public discourse inadequately addresses judicial ethics"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in 'it is going to further corrode the trust...' refers to the ongoing neglect of judicial ethics issues, as established in turn 20 and elaborated in turn 21.\",\n  \"reason\": \"Claim C explicitly states that continued neglect will erode public trust in the judicial process, which directly verifies the substance of assumption A—that the media or public discourse inadequately addresses judicial ethics, leading to a corrosive effect on public trust."
     },
     {
       "a_turn_idx": 20,
@@ -1011,7 +1011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to 'the trust of the American people in the judicial process', which is explicitly linked to the idea that the judicial process is 'the last thing standing for us'. This directly aligns with the claim in C that public trust in the judicial process is the last remaining stable institution.\",\n  \"reason\": \"Claim C explicitly states that public trust in the judicial process is the last remaining stable institution, which directly verifies the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to 'the trust of the American people in the judicial process', which is explicitly linked to the idea that the judicial process is 'the last thing standing for us'. This directly verifies the claim in assumption A that the judicial process is a critical, stable institution.\",\n  \"reason\": \"Claim C explicitly states that public trust in the judicial process is the last remaining stable institution, which directly verifies the substance of assumption A — that"
     },
     {
       "a_turn_idx": 20,
@@ -1026,7 +1026,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective audience or public discussed in turn 22, particularly those who 'don't give a shit' about judicial ethics. However, 'lost our minds' is a metaphorical expression implying irrationality or mental collapse, which contradicts the substantive concern in assumption A about inadequate media coverage of judicial ethics.\",\n  \"reason\": \"Claim C expresses a belief that people have collectively lost their minds, which is a subjective, emotional"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public discussed in turn 22, particularly those who fail to recognize the seriousness of judicial corruption. 'All' in 'you've all lost your minds' refers to the same group.\",\n  \"reason\": \"Claim C asserts that 'we' or 'you' have collectively lost our minds, which expresses a dismissive or cynical view of public perception. However, this does not make explicit the"
     },
     {
       "a_turn_idx": 21,
@@ -1041,7 +1041,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 22 refers to the ongoing ethical corruption in the judiciary discussed in turn 21, particularly involving justices' families and financial conflicts.\",\n  \"reason\": \"Claim C explicitly states that continued neglect of ethical issues in the judiciary will erode public trust in the judicial process, which directly verifies the substance of assumption A—that ethical corruption undermines public trust. The phrasing 'further corrode the trust of the American people in the judicial process"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in 'not think that at some point it is going to further corrode...' refers to the ongoing ethical corruption in the judiciary, as established in turn 21.\",\n  \"reason\": \"Claim C explicitly states that continued neglect of ethical corruption in the judiciary will erode public trust in the judicial process, which directly verifies the substance of assumption A. The phrase 'further corrode the trust of the American people in the judicial process' matches the"
     },
     {
       "a_turn_idx": 21,
@@ -1056,7 +1056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in 'which quite honestly is the last thing standing for us' refers to 'the trust of the American people in the judicial process', establishing a direct link between the claim in turn 22 and the assumption in turn 21.\",\n  \"reason\": \"Claim C explicitly states that public trust in the judicial process is the last remaining stable institution, which directly verifies the substance of assumption A—that ethical corruption in the judiciary undermines public trust. The causal"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in 'which quite honestly is the last thing standing for us' refers to 'the trust of the American people in the judicial process', which is equivalent to 'public trust in the judicial process'.\",\n  \"reason\": \"Claim C explicitly states that public trust in the judicial process is the last remaining stable institution, directly verifying the substance of assumption A, which asserts that ethical corruption in the judiciary undermines public trust. The phrasing in C confirms the critical"
     },
     {
       "a_turn_idx": 22,
@@ -1071,7 +1071,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or participants in the discussion, including the speaker. 'You' in 'you've all lost your minds' includes both the speaker and listeners.\",\n  \"reason\": \"Turn 23 expresses a belief that many people, including the speaker, have collectively lost their minds, which is a different claim than the earlier assumption in turn 22 that the speaker's work contributes meaningfully to public discourse."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or participants in the discussion, including the speaker. 'You' in 'you've all lost your minds' includes both the speaker and listeners.\",\n  \"reason\": \"Turn 23 expresses a belief that many people, including the speaker, have collectively lost their minds, which is a different claim than turn 22’s assertion that the speaker’s work contributes meaningfully to public discourse. While both"
     },
     {
       "a_turn_idx": 22,
@@ -1086,7 +1086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 23 refers to the collective audience or public discussed in turn 22, particularly those who fail to recognize institutional decay. 'The speaker' in C refers to Jennifer Horn, the host, who is distinct from SPEAKER_04 in turn 22.\",\n  \"reason\": \"Turn 23 expresses a general belief that 'we' (people collectively) have lost our minds, which reflects a sense of societal cognitive failure"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the collective audience or public discussed in turn 22, particularly those who fail to recognize institutional decay. 'The speaker' in C refers to Jennifer Horn, the host, who is distinct from SPEAKER_04 in turn 22.\",\n  \"reason\": \"Claim C expresses a general belief that people, including the speaker, have lost their minds—a broad cultural critique. However, assumption A centers on the speaker’s"
     }
   ]
 }

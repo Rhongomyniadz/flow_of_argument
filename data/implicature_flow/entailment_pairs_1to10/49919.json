@@ -1011,7 +1011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to Donald Trump, confirmed by context in turn 20 which mentions 'sitting president Donald Trump'.\",\n  \"reason\": \"Claim C discusses Vice President Kamala Harris and her role in tie-breaking votes in the Senate, which is unrelated to the assumption that Donald Trump is the current U.S. president. While both statements occur in the same conversation and involve political figures, C does not state or verify the substance of"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 11 refers to President Donald Trump, which is confirmed by the context in turn 18 where 'Donald Trump' is explicitly named. However, turn 18 does not address or verify the claim about Trump holding the presidency at the time of discussion.\",\n  \"reason\": \"Turn 18 discusses Vice President Kamala Harris's role in the Senate and mentions Donald Trump in the context of impeachment trials, but does not confirm or"
     },
     {
       "a_turn_idx": 11,
@@ -1086,7 +1086,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Democrats' in turn 23 refers to the Democratic Party in the House of Representatives, consistent with the context in turn 12 where the Democrats are identified as holding control of the House.\",\n  \"reason\": \"Turn 23 explicitly states that Democrats currently hold a small majority in the U.S. House of Representatives, which directly verifies the assumption in turn 12 that Democrats have control of the House. The reference to 'small majority' align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Democrats' in turn 23 refers to the Democratic Party in the House of Representatives, consistent with the context in turn 12 where the Democrats are described as holding control of the House.\",\n  \"reason\": \"Claim C explicitly states that Democrats currently hold a small majority in the U.S. House of Representatives, which directly verifies the substance of assumption A—that the reader understands the basic legislative structure and roles within the House, particularly the party control dynamics."
     },
     {
       "a_turn_idx": 12,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 27 refers to the Democrats, who are the current majority in the House of Representatives as established in turn 12.\",\n  \"reason\": \"Claim C mentions the House has a 'slenderest of majorities' and specifies a five-seat margin, which confirms the existence of a narrow majority. However, it does not explicitly state or verify the assumption that the reader understands basic U.S. legislative structure and roles within the House of"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 27 refers to the Democrats, who are the current majority in the House of Representatives as established in turn 12.\",\n  \"reason\": \"Claim C mentions the current majority in the House is only five seats, which implies a narrow margin of control. While this indirectly suggests that the House membership must understand basic legislative structure to function under such tight margins, it does not explicitly state or verify the assumption that the reader already understands the U"
     },
     {
       "a_turn_idx": 12,
@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"He in turn 33 refers to Joe Biden, who is the subject of the discussion in the surrounding context.\",\n  \"reason\": \"Claim C states that 'he won victories within the legislative process,' referring to Joe Biden, and specifies that these victories occurred in the House and Senate. This aligns with the substance of assumption A, which assumes the reader understands the basic legislative structure and roles within the House of Representatives. While C does not explicitly restate the full content of A"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Joe Biden, as established in the surrounding context (turns 32–33).\",\n  \"reason\": \"Claim C states that 'he won victories within the legislative process,' which aligns with the idea that Biden achieved success in passing major legislation through the House and Senate. However, it does not explicitly verify the assumption that the reader understands basic U.S. legislative structure and roles within the House of Representatives. While"
     },
     {
       "a_turn_idx": 12,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the House and the Senate' in turn 33 refers back to the legislative bodies discussed in turn 12, specifically the House of Representatives and its role in the legislative process.\",\n  \"reason\": \"Claim C explicitly states that the legislative process occurs in both the House and the Senate, which directly verifies the assumption in A that the reader understands the basic U.S. legislative structure and roles within the House of Representatives. While A focuses on the House, C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the House and the Senate' in turn 33 refers back to the legislative bodies previously discussed in turn 12, where the role of the House of Representatives was established. 'The legislative process' in turn 33 aligns with the earlier discussion of bill passage and congressional responsibilities.\",\n  \"reason\": \"Claim C explicitly states that the legislative process occurs in both the House and the Senate, which directly verifies the assumption in A that the reader understands the"
     },
     {
       "a_turn_idx": 12,
@@ -1176,7 +1176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses midterm election trends and their impact on the party in the White House, not the process of electing the Speaker.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical trend of the party in the White House losing House seats during midterm elections, which is unrelated to the mechanism of electing the Speaker of the House. Assumption A (turn 12) concerns how the Speaker is chosen—via party caucus"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses midterm election trends and their impact on the party in the White House, not the process of electing the Speaker.\",\n  \"reason\": \"Claim C (turn 25) discusses the historical trend of the party in the White House losing House seats during midterm elections, which is unrelated to the mechanism by which the Speaker of the House is elected. Assumption A (turn 12) concerns the internal party caucus decision-making process for"
     },
     {
       "a_turn_idx": 12,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to Joe Biden, as established in the surrounding context (turns 31–32).\",\n  \"reason\": \"Claim C states that Joe Biden achieved victories within the legislative process, referring to the House and Senate. While this implies activity within legislative bodies, it does not explicitly address or verify the specific assumption A—that 'lower' and 'upper' chambers refer to physical or symbolic hierarchy. Although the mention of the House"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 33 refers to Joe Biden, as established in the prior context (turns 31–32).\",\n  \"reason\": \"Turn 33 states that Biden's victories occurred 'in the legislative process,' referring to the House and Senate, which aligns with the idea of 'lower' and 'upper' chambers. However, it does not explicitly address or verify the notion of 'physical or symbolic hierarchy' within legislative"
     },
     {
       "a_turn_idx": 14,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'environmental issues' in turn 23 refers directly to a specific topic mentioned in the context.\",\n  \"reason\": \"Turn 23 states that environmental issues are relevant to voter decisions in some areas, which is topically related to turn 15’s assumption that knowing people at a law firm is relevant to some goal or purpose. However, the connection between personal networks at a law firm and environmental issues is not established, nor does turn"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'environmental issues' in turn 23 refers directly to a specific topic mentioned in the context.\",\n  \"reason\": \"Turn 23 states that environmental issues are relevant to voter decisions in some areas, which is a general claim about relevance. Turn 15 claims that knowing people at a law firm is relevant to some goal or purpose. While both statements involve relevance to a goal (political decision-making vs. professional networking), the topics ("
     },
     {
       "a_turn_idx": 15,
@@ -1247,11 +1247,11 @@
       "claim_text": "The pandemic has disrupted the speaker's perception of time.",
       "overlap_score": 2,
       "c_time": 307.739,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_10, distinct from SPEAKER_13 in A.\",\n  \"reason\": \"Claim C discusses the speaker's altered perception of time due to the pandemic, which is unrelated to the assumption in A about familiarity with employees at a law firm. There is no overlap in semantic content, and C does not address, verify, or even reference the speaker's expectations regarding workplace familiarity. The topics are"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'my concept of time' refers to Speaker_10's personal experience.",
+      "reason": "Claim C discusses the speaker's altered perception of time due to the pandemic, which is unrelated to assumption A, which concerns familiarity with employees at a law firm. There is no overlap in semantic content or implied connection between the two statements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'my concept of time' refers to Speaker_10's personal experience.\",\n  \"reason\": \"Claim C discusses the speaker's altered perception of time due to the pandemic, which is unrelated to assumption A, which concerns familiarity with employees at a law firm. There is no overlap in semantic content or implied connection between the two statements.\"\n}\n```"
     },
     {
       "a_turn_idx": 15,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 36 refers to SPEAKER_12, who is distinct from SPEAKER_13 in turn 15.\",\n  \"reason\": \"Turn 15 expresses uncertainty about knowing everyone at a law firm, indicating an assumption of familiarity with employees. Turn 36 discusses a different topic—posting about the Inflation Reduction Act—and makes no reference to familiarity with employees or any related expectations. There is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 36 refers to SPEAKER_12, who is distinct from SPEAKER_13 in turn 15.\",\n  \"reason\": \"Turn 15 expresses uncertainty about knowing everyone at a law firm, indicating an assumption of familiarity with employees. Turn 36 discusses a different topic—posting about the Inflation Reduction Act—and makes no mention of familiarity with employees or any related expectations. There is no"
     },
     {
       "a_turn_idx": 15,
@@ -1281,7 +1281,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 36 refers to a different subject (likely a political figure discussing policy), not the speaker from turn 15 who was concerned about knowing individuals at a law firm.\",\n  \"reason\": \"Turn 15 expresses uncertainty about knowing every individual at a law firm, implying relevance of personal familiarity with staff. Turn 36 discusses a speaker's belief about being given a topic to post about regarding the Inflation Reduction"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 36 refers to a different subject (likely a political figure discussing policy) than the speaker in turn 15 (who is uncertain about knowing individuals at a law firm).\",\n  \"reason\": \"Turn 15 expresses uncertainty about knowing every individual at a law firm, implying a concern about personal familiarity with staff. Turn 36 discusses a political figure being given a topic to post about regarding the Inflation"
     },
     {
       "a_turn_idx": 15,
@@ -1431,7 +1431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 33 refers to Joe Biden, but this does not relate to the assumption about introspective access.\",\n  \"reason\": \"Claim C (turn 33) states that the United States has a capitalist economy, which is unrelated to assumption A (turn 17), which concerns introspective access to one's own mental states. There is no overlap in semantic content, and C neither states nor verifies A. The topics are"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' in turn 33 refers to Joe Biden, but this does not relate to the assumption about introspective access.\",\n  \"reason\": \"Claim C (turn 33) states that the United States has a capitalist economy, which is unrelated to assumption A (turn 17), which concerns introspective access to one's own mental states. There is no semantic connection between the two claims, and C neither states nor verifies the substance of"
     },
     {
       "a_turn_idx": 17,
@@ -1446,7 +1446,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to a different speaker than in assumption A. The subject matter shifts from introspective access to mental states (A) to a political discussion about the Inflation Reduction Act (C).\",\n  \"reason\": \"Claim C discusses a political action related to the Inflation Reduction Act and the speaker's role in promoting it, which is entirely unrelated to the philosophical assumption of introspective access to one's own mental states in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to a different speaker than in assumption A. The subject matter shifts from introspective access to mental states (A) to a political commentary on the Inflation Reduction Act (C).\",\n  \"reason\": \"Claim C discusses a public figure's ability to post about the Inflation Reduction Act, which is unrelated to the epistemic claim about introspective access to one's own mental states in assumption A. There"
     },
     {
       "a_turn_idx": 17,
@@ -1547,11 +1547,11 @@
       "claim_text": "The speaker initially believed that aligning with abortion rights was strategically risky for a political party.",
       "overlap_score": 2,
       "c_time": 921.09,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 47 refers to SPEAKER_12, who expresses a personal belief about abortion rights being strategically risky.\",\n  \"reason\": \"Claim C (turn 47) states that the speaker initially believed aligning with abortion rights was strategically risky, which is unrelated to assumption A (turn 18), which concerns the political significance of saving someone from impeachment. There is no overlap in subject matter, nor does C"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference issues; 'the speaker' in turn 47 refers to SPEAKER_12, consistent with context.",
+      "reason": "Claim C discusses the strategic risk of aligning with abortion rights, which is unrelated to assumption A about saving someone from impeachment being a significant political achievement. There is no overlap in subject matter, nor does C verify or state the substance of A. The two claims address entirely different political dynamics and achievements.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 47 refers to SPEAKER_12, consistent with context.\",\n  \"reason\": \"Claim C discusses the strategic risk of aligning with abortion rights, which is unrelated to assumption A about saving someone from impeachment being a significant political achievement. There is no overlap in subject matter, nor does C verify or state the substance of A. The two claims address entirely different political dynamics and achievements.\"\n}\n```"
     },
     {
       "a_turn_idx": 18,
@@ -1566,7 +1566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 24 refers to the concentration of power or influence in the Senate, which aligns with the context of the narrow 50-50 split mentioned in turn 18.\",\n  \"reason\": \"Claim C states that power or influence is more concentrated in the Senate, which directly supports the idea in assumption A that Democratic control depends on maintaining influence despite a narrow margin. While C does not explicitly mention 'Democratic control' or '"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 24 refers to the concentration of power or influence in the Senate, which aligns with the context of the narrow 50-50 split mentioned in turn 18.\",\n  \"reason\": \"Claim C states that power or influence is more concentrated in the Senate, which directly supports the substance of assumption A—that Democratic control depends on maintaining influence despite a narrow margin. While C does not explicitly mention 'Democratic control' or '"
     },
     {
       "a_turn_idx": 18,
@@ -1626,7 +1626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 26 refers to Kamala Harris, who is explicitly named as the Vice President of the United States. The phrase 'the vice president, Kamala Harris' establishes identity.\",\n  \"reason\": \"Claim C explicitly states that Kamala Harris holds the position of Vice President of the United States, which directly supports the assumption in A that the vice president’s tie-breaking power is a meaningful factor in legislative outcomes. While C does not explicitly mention"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 26 refers to Kamala Harris, who is explicitly named as the Vice President of the United States. The reference to 'the vice president' in turn 18 is resolved to Kamala Harris via context.\",\n  \"reason\": \"Claim C explicitly states that Kamala Harris holds the position of Vice President of the United States, which confirms the identity of the individual with the tie-breaking vote mentioned in assumption A. While C does not"
     },
     {
       "a_turn_idx": 18,
@@ -1686,7 +1686,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the election' in claim C refers to the 2020 U.S. presidential election mentioned in assumption A. 'Election deniers' and 'January 6th Committee' are contextual references to events following the 2020 election.\",\n  \"reason\": \"Claim C explicitly states that events after the last presidential election have contributed to threats against American democracy, which directly verifies the substance of assumption A—that the public discourse around the 20"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the election' in turn 45 refers to the 2020 U.S. presidential election mentioned in turn 19. 'Election deniers' and 'January 6th Committee' are contextual references to events following the 2020 election.\",\n  \"reason\": \"Claim C explicitly states that events after the last presidential election have contributed to threats against American democracy, which directly verifies the substance of assumption A—that the 20"
     },
     {
       "a_turn_idx": 20,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the individual' in claim C refers to a person being assigned a topic, unrelated to the vote counting process mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the Inflation Reduction Act and a person being given a topic to post about, which is entirely unrelated to the belief about non-legal votes in the counting process stated in assumption A. There is no overlap in subject matter, context, or semantic content. Therefore, the claim does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the individual' in C refers to a general person, not linked to any prior speaker or entity in A.\",\n  \"reason\": \"Claim C discusses the Inflation Reduction Act and a person being given a topic to post about, which is unrelated to the assumption in A about non-legal votes in the election counting process. There is no overlap in subject matter, semantics, or implied content between A and C. Therefore, C does not support,"
     },
     {
       "a_turn_idx": 20,
@@ -1731,7 +1731,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the idea' in turn 23 refers to election denialism, not Trump's actions.\",\n  \"reason\": \"Claim C discusses the competitiveness of congressional seats and the concentration of contested races, which is unrelated to the political motivation behind Trump's actions. Assumption A concerns the speaker's view that Trump's actions were driven by politics rather than facts. Claim C does not address motivations, intentions, or the nature of Trump's behavior, nor does it"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' or 'they' not present in either A or C.\",\n  \"reason\": \"Claim C discusses the competitiveness of congressional seats and notes that most are safe, which is unrelated to the political motivation behind Trump's actions. Assumption A concerns the speaker's view that Trump's actions were driven by political motives rather than facts. Claim C does not address motivations, intentions, or the nature of Trump's behavior, nor does it verify or relate to"
     },
     {
       "a_turn_idx": 21,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_10, and 'local issues' refers to state-level policy concerns mentioned in turn 22, including abortion access and voting rights.\",\n  \"reason\": \"Claim C states that local economic issues influence voting outcomes, which aligns with the broader point in assumption A that state-level issues—such as abortion access and voting rights—are politically consequential. While C focuses specifically on economic issues rather than the full"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_10, and 'local issues' refers to state-level policy issues mentioned in turn 22, including abortion access and voting rights.\",\n  \"reason\": \"Claim C states that local economic issues influence voting outcomes, which aligns with the broader point in assumption A that state-level issues—such as abortion access and voting rights—are politically consequential. While C focuses specifically on economic issues rather than the full"
     },
     {
       "a_turn_idx": 22,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 47 refers to Democrats, as established in the prior context discussing Democratic strategy on abortion rights.\",\n  \"reason\": \"Claim C explicitly states that the speaker initially viewed supporting abortion rights as strategically risky for a political party, which directly verifies the earlier assumption A that abortion access is a politically consequential issue at the state level. The speaker’s personal belief about strategic risk underscores the high political stakes of abortion rights, confirming A’s assertion about its significance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 47 refers to the Democrats, as established in the prior context where Democrats are discussed in relation to abortion rights.\",\n  \"reason\": \"Claim C explicitly states that the speaker initially viewed supporting abortion rights as strategically risky for a political party, which directly verifies the earlier assumption A that abortion access is a politically consequential issue at the state level. The speaker’s personal shift in belief—from thinking it was a risky move to acknowledging it became a winning"
     },
     {
       "a_turn_idx": 22,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the party in the White House' in claim C refers to the president's party, which in turn refers to the Democratic Party, as established in the context (e.g., 'Joe Biden', 'Democrats').\",\n  \"reason\": \"Claim C states that the party in the White House typically suffers significant losses in the House during midterms, which aligns with the underlying assumption in A that audiences care about why midterm elections matter beyond party control. While C does"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the party in the White House' in claim C refers to the president's party, which in turn refers to the Democratic Party, as established in the context (e.g., 'Joe Biden', 'Democrats').\",\n  \"reason\": \"Claim C states that the party in the White House typically suffers significant losses in the House during midterms, which aligns with the broader point in assumption A that audiences care about why midterm elections matter beyond party control. While C"
     },
     {
       "a_turn_idx": 22,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these' in turn 25 refers to the midterm elections discussed in turn 22. 'The party in the White House' refers to the incumbent president's party, which in context is the Democratic Party.\",\n  \"reason\": \"Claim C states a statistical trend about midterm elections affecting the party in the White House, specifically mentioning average seat losses. While this supports the broader context of midterm elections having significant consequences, it does not explicitly address or verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'these' in turn 25 refers to the midterm elections discussed in turn 22. 'The party in the White House' refers to the incumbent president's party, which in context is the Democratic Party.\",\n  \"reason\": \"Claim C states a statistical trend about midterm elections affecting the party in the White House, which relates to the broader context of midterm significance mentioned in A. However, A focuses on audiences valuing explanations about why elections matter beyond party"
     },
     {
       "a_turn_idx": 22,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the party in the White House' in turn 25 refers to the president's party, which in context is the Democratic Party, as mentioned in turn 24.\",\n  \"reason\": \"Claim C discusses the typical loss of Senate seats by the party in the White House during midterms, which relates to broader electoral dynamics mentioned in A. However, A focuses specifically on audiences valuing explanations about why elections matter beyond party control, particularly regarding issues like democracy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the party in the White House' in claim C refers to the president's party, which in context is the Democratic Party, as mentioned in turn 24 and 25.\",\n  \"reason\": \"Claim C discusses the typical loss of Senate seats by the party in the White House during midterms, which relates to broader voter sentiment toward the president—a theme touched on in assumption A. However, A focuses specifically on audiences valuing explanations about why elections matter"
     },
     {
       "a_turn_idx": 22,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'our' in turn 52 refers to the U.S. institutions and democratic system, consistent with the broader context of national political discourse.\",\n  \"reason\": \"Claim C states that elections are about investing in institutions rather than personalities, which touches on a related theme—democracy and institutional integrity—but does not explicitly address or verify the specific assumption A that audiences value explanations about why certain elections matter beyond just party control. While both statements concern the significance of elections and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'our' in 'investing in our institutions' refers to the United States' democratic institutions, consistent with the broader context of election integrity and civic discourse.\",\n  \"reason\": \"Claim C emphasizes that elections should focus on institutions rather than personalities, which touches on a related theme to assumption A—namely, the importance of systemic and structural issues (like democracy, voting rights, institutional integrity) over partisan or personal narratives. However, C does not explicitly address or verify"
     },
     {
       "a_turn_idx": 23,
@@ -4056,7 +4056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'most of the people we're talking to', which aligns with the broader group discussed in turn 43 (supermarkets across DC showing consistent pricing). The phrase 'not talking about democracy issues or the findings of the J6 Committee' directly contrasts with the focus on systemic economic behavior implied in A.\",\n  \"reason\": \"Claim C explicitly states that the majority of people interviewed are focused on the economy rather than political or"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'most of the people we're talking to', which aligns with the group discussed in turn 43 (supermarkets and pricing behavior). The phrase 'not talking about democracy issues or the findings of the J6 Committee' contrasts with the focus on economic concerns, reinforcing the idea that economic behavior (like pricing) reflects systemic patterns rather than isolated incidents.\",\n  \"reason\": \"Claim C explicitly states that most interviewees are"
     },
     {
       "a_turn_idx": 44,
@@ -4146,7 +4146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'bankers' in turn 45 refers to a political/ideological group, while '50 senators from each party' in turn 64 refers to a structural fact about the U.S. Senate.\",\n  \"reason\": \"Claim C discusses the number of senators per party and the Senate's balance of power, which is entirely unrelated to the existence of a self-identified group called 'bankers' in a political or ideological context."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to the Democrats, and 'their bankers' refers to the group of people the Democrats identify with politically. In turn 64, 'each party' refers to the Democratic and Republican parties, but no mention is made of a self-identified group called 'bankers' in a political or ideological sense.\",\n  \"reason\": \"Turn 64 discusses the number of senators per party and the balance of power in the"
     },
     {
       "a_turn_idx": 45,
@@ -4791,7 +4791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 52 refers to SPEAKER_03, consistent with prior turns. No other coreference issues.\",\n  \"reason\": \"Claim C explicitly states that elections are about investing in institutions rather than personalities, which directly verifies the substance of assumption A — that general elections require broader appeal than primaries. This is supported by SPEAKER_03’s earlier point that Republican primary candidates who are fervent Trump supporters may struggle in general elections due to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 52 refers to SPEAKER_03, consistent with prior turns. No other coreference issues.\",\n  \"reason\": \"Claim C explicitly states that elections are about investing in institutions rather than personalities, which directly verifies the substance of assumption A—general elections require broader appeal than primaries—by emphasizing institutional stability over personality-driven politics. This aligns with SPEAKER_03’s earlier point that Republican primary candidates overly aligned with Trump may"
     },
     {
       "a_turn_idx": 50,
@@ -4821,7 +4821,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No significant coreference issues; 'he' or 'him' not used in turn 69.\",\n  \"reason\": \"Claim C asserts that fame leads to electoral success, citing Donald Trump as proof. This contradicts assumption A, which argues that loyalty to Trump reduces electability in national contests. While both relate to Trump's political influence, C promotes fame (and Trump's example) as beneficial, whereas A suggests Trump loyalty is a liability. Thus, C directly contradicts"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'he' or 'him' not present in claim C.\",\n  \"reason\": \"Claim C asserts that fame leads to electoral success, citing Donald Trump as proof. This directly contradicts assumption A, which argues that loyalty to Trump reduces electability in a national contest. While both involve Trump and electoral outcomes, C promotes fame (and Trump’s name recognition) as advantageous, whereas A claims Trump loyalty is a liability. Thus, C undermines A rather than"
     },
     {
       "a_turn_idx": 50,
@@ -4851,7 +4851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the state of the country, as established by the preceding discussion about political division and tension.\",\n  \"reason\": \"Turn 51 explicitly states that 'the current state of the country appears highly divided,' which directly verifies the substance of assumption A—that the current state of candidate strength in key states reflects future electoral success—by framing the broader national context as deeply polarized. While A focuses on candidate strength as a predictor"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the current state of the country, as established by the preceding discussion about political division, tension, and unpredictability.\",\n  \"reason\": \"Claim C explicitly states that 'the current state of the country appears highly divided,' which directly verifies the substance of assumption A—that the current state of candidate strength in key states reflects future electoral success—by framing the broader national context as deeply polarized. While A focuses on candidate strength"
     },
     {
       "a_turn_idx": 50,
@@ -4866,7 +4866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the current state of the country, which is the subject of both turns 50 and 51. 'The country' in turn 51 is equivalent to the broader political and social context discussed in turn 50.\",\n  \"reason\": \"Turn 51 explicitly states that 'the current state of the country feels tense,' which aligns with the substance of assumption A in turn 50—that"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the current state of the country, which is the subject of both turns 50 and 51. 'The country' in turn 51 is equivalent to the broader political and electoral context discussed in turn 50.\",\n  \"reason\": \"Turn 51 explicitly states that 'the current state of the country feels tense,' which aligns with the substance of assumption A in turn 50—that"
     },
     {
       "a_turn_idx": 50,
@@ -4881,7 +4881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the current state of the country, as discussed in the broader context of political tension and unpredictability.\",\n  \"reason\": \"Claim C (turn 51) states that 'the current state of the country seems unpredictable,' which aligns with the substance of assumption A (turn 50), which suggests that the current state of candidate strength in key states reflects future electoral success. While A focuses on candidate strength as"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 51 refers to the current state of the country, as discussed in the broader context of political tension and unpredictability.\",\n  \"reason\": \"Claim C states that 'the current state of the country seems unpredictable,' which aligns with the substance of assumption A—that the current state of candidate strength in key states reflects future electoral success. While C does not explicitly mention candidate strength or electoral success, it captures the broader sentiment of instability and uncertainty"
     },
     {
       "a_turn_idx": 50,
@@ -4896,7 +4896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 59 refers to the hypothetical scenario of a Republican House, which is the subject of discussion in the prior exchange.\",\n  \"reason\": \"Claim C states that the current state of affairs represents normal functioning of government, which aligns partially with assumption A—that the current state of candidate strength in key states reflects future electoral success. However, C shifts focus to institutional continuity ('business as usual') rather than directly verifying the predictive link between current candidate"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 59 refers to the hypothetical scenario of a Republican House, which is the subject of discussion in the prior exchange.\",\n  \"reason\": \"Claim C states that a Republican House would result in 'business as usual,' implying continuity and stability in governance. This aligns partially with assumption A, which suggests that current candidate strength in key states reflects future electoral success. However, C does not explicitly address or verify the idea that current candidate performance predicts"
     },
     {
       "a_turn_idx": 50,
@@ -4971,7 +4971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; claim C discusses John Fetterman's appearance and attire, while assumption A concerns political irritability and institutional stability.\",\n  \"reason\": \"Claim C states that John Fetterman does not wear typical attire for a U.S. politician, which is unrelated to assumption A, which asserts that political irritability does not necessarily indicate institutional failure. There is no overlap in semantic content or logical connection between the two statements. Therefore, the entailment score is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 65 refers to John Fetterman.\",\n  \"reason\": \"Claim C (turn 65) discusses John Fetterman's non-traditional appearance and attire, which is unrelated to assumption A (turn 52), which concerns political irritability and institutional resilience. There is no semantic connection between the idea that political irritability does not imply institutional failure and the observation that a politician wears non-typical clothing"
     },
     {
       "a_turn_idx": 52,
@@ -5001,7 +5001,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 54 refers to the January 6th Committee.\",\n  \"reason\": \"Claim C explicitly states that the January 6th Committee used data and evidence to present and document their case, which directly verifies the substance of assumption A—that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact—by affirming the Committee’s factual, evidence-based approach. This supports the idea that the Committee’s work is substantive and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in turn 54 refers to the January 6th Committee.\",\n  \"reason\": \"Claim C explicitly states that the January 6th Committee used data and evidence to present and document their case, which directly verifies the substance of assumption A—that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact. While A focuses on Neil’s insight, C provides strong evidence supporting the idea that the Committee’s factual, evidence-based approach"
     },
     {
       "a_turn_idx": 53,
@@ -5016,7 +5016,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the January 6th Committee' in both A and C; 'they' in C refers to the Committee, consistent with A.\",\n  \"reason\": \"Claim C states that the January 6th Committee performed a Herculean task, which directly supports the assumption in A that Chairman Neil has relevant insight into the Committee's electoral impact. While C does not explicitly mention 'Chairman Neil' or 'public perceptions,' it affirms"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the January 6th Committee' in both A and C; 'they' in C refers to the Committee, consistent with A.\",\n  \"reason\": \"Claim C states that the January 6th Committee performed a Herculean task, which directly supports the assumption in A that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact. While C does not explicitly mention public perception or Chairman Neil’s views, it aff"
     },
     {
       "a_turn_idx": 53,
@@ -5031,7 +5031,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the January 6th Committee' in both turn 53 and turn 54; 'they' in turn 54 refers to the Committee.\",\n  \"reason\": \"Claim C explicitly states that the January 6th Committee conducted itself in a manner superior to expectations, which directly verifies the substance of assumption A—that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact—by providing a clear, authoritative evaluation"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the January 6th Committee' in both turn 53 and turn 54; 'they' in turn 54 refers to the Committee.\",\n  \"reason\": \"Claim C explicitly states that the January 6th Committee conducted itself in a manner superior to expectations, which directly verifies the substance of assumption A—that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact—by affirming the Committee’s effective"
     },
     {
       "a_turn_idx": 53,
@@ -5046,7 +5046,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to 'some parts of the country' mentioned earlier, indicating specific geographic regions where reception of the January 6th Committee's message is limited.\",\n  \"reason\": \"Claim C explicitly states that there are regions in the U.S. where audiences are not receptive to the message from the January 6th Committee, which directly verifies the assumption in A that Chairman Neil possesses relevant insight into public perceptions of the Committee’s electoral impact"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 55 refers to 'some parts of the country' mentioned earlier in the same sentence, indicating specific geographic regions where reception of the January 6th Committee's message is poor.\",\n  \"reason\": \"Claim C explicitly states that there are regions in the U.S. where audiences are not receptive to the message from the January 6th Committee, which directly verifies the substance of assumption A—that Chairman Neil possesses relevant insight into public perceptions of"
     },
     {
       "a_turn_idx": 54,
@@ -5061,7 +5061,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to Herschel Walker, the Republican candidate in Georgia. 'The other candidate' refers to Raphael Warnock, the Democratic incumbent.\",\n  \"reason\": \"Claim C (turn 82) states that the other candidate (Warnock) is a skilled speaker who delivers sermon-like discourse. This does not address or verify the earlier assumption A, which concerns the speaker's value of institutional integrity and procedural fairness in public discourse"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 82 refers to Herschel Walker, the Republican candidate in Georgia, as established in turn 80.\",\n  \"reason\": \"Claim C (turn 82) states that the other candidate (Raphael Warnock) is a skilled speaker who delivers sermon-like discourse. This does not address or verify the earlier assumption A (turn 54), which concerns the speaker's value of institutional integrity and procedural fairness in public discourse"
     },
     {
       "a_turn_idx": 54,
@@ -5091,7 +5091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to John Federman, who suffered a stroke, as established in turn 70.\",\n  \"reason\": \"Claim C discusses a political challenge involving a candidate with health issues related to strokes and heart conditions, while assumption A concerns public expectations regarding partisan conflict and impartiality in political inquiries. There is no overlap in subject matter or semantic content. Claim C does not address, verify, or relate to the idea that audiences expect partisan conflict"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to John Federman, the Pennsylvania Lieutenant Governor mentioned in turn 70, who suffered a stroke.\",\n  \"reason\": \"Claim C discusses John Federman's health challenges post-stroke, particularly his difficulty communicating due to hearing loss, and his upcoming political challenge against a medical expert specializing in strokes and heart conditions. This is entirely unrelated to assumption A, which concerns public expectations of partisan conflict versus impartiality in high-stakes political"
     },
     {
       "a_turn_idx": 54,
@@ -5106,7 +5106,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Arizona' refers directly to the state and is unambiguous.\",\n  \"reason\": \"Claim C (turn 83) states that Arizona is a significant political race worth monitoring during the midterm elections. This does not address or verify the earlier assumption A (turn 54), which concerns audience expectations regarding partisan conflict versus impartiality in high-stakes political inquiries. There is no mention of impartiality, partisan conflict, or audience expectations in C."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Arizona' refers directly to the state and is unambiguous.\",\n  \"reason\": \"Claim C (turn 83) states that Arizona is a significant political race worth monitoring during the midterm elections. This does not address or verify the earlier assumption A (turn 54), which concerns audience expectations regarding partisan conflict versus impartiality in high-stakes political inquiries. There is no overlap in semantic content between the expectation of impartiality in fact-based investigations"
     },
     {
       "a_turn_idx": 54,
@@ -5121,7 +5121,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to the January 6th Committee; 'he said, she said, they said' refers to the anticipated personal attacks and hearsay, which is contrasted with the Committee's factual approach.\",\n  \"reason\": \"Claim C explicitly states 'there's a hangover effect,' which directly addresses the lingering impact of past political rhetoric and behavior—specifically, the persistence of election denialism despite evidence, as implied in assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to critics of the January 6th Committee; 'he said, she said, they said' refers to personal attacks and hearsay. The term 'hangover effect' in turn 56 refers to lingering effects of past political rhetoric, particularly election denialism, which aligns with the idea that serious political inquiries should avoid such tactics.\",\n  \"reason\": \"Claim C explicitly states 'there's a hangover effect"
     },
     {
       "a_turn_idx": 54,
@@ -5132,11 +5132,11 @@
       "claim_text": "There are 50 senators from each major political party.",
       "overlap_score": 2,
       "c_time": 1477.04,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'each party' refers to the two major political parties (Democrats and Republicans).\",\n  \"reason\": \"Claim C states a factual assertion about the current composition of the U.S. Senate, specifically that there are 50 senators from each major party. This is unrelated to Assumption A, which concerns the normative expectation that political inquiries should avoid personal attacks and hearsay. There is no overlap in semantic content between the two statements. Claim C"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'each party' refers to the two major political parties (Democrats and Republicans).",
+      "reason": "Claim C states a factual distribution of senators (50 per party), which is unrelated to assumption A, which concerns the normative expectation that political inquiries should avoid personal attacks and hearsay. There is no overlap in semantic content between the two statements. Claim C does not address, imply, or verify any aspect of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'each party' refers to the two major political parties (Democrats and Republicans).\",\n  \"reason\": \"Claim C states a factual distribution of senators (50 per party), which is unrelated to assumption A, which concerns the normative expectation that political inquiries should avoid personal attacks and hearsay. There is no overlap in semantic content between the two statements. Claim C does not address, imply, or verify any aspect of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 54,
@@ -5166,7 +5166,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to the January 6th Committee; 'the message conveyed on January 6th' in turn 55 refers to the findings and presentation of the Committee.\",\n  \"reason\": \"Claim C explicitly states that there are regions in the U.S. where audiences are not receptive to the message from the January 6th Committee, which directly verifies the assumption in A that the public perceives the Committee's work as exceptional"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 54 refers to the January 6th Committee. The term 'audiences' in turn 55 refers to segments of the U.S. population, particularly in specific regions.\",\n  \"reason\": \"Claim C explicitly states that there are regions in the U.S. where audiences are not receptive to the message from the January 6th Committee, which directly verifies the assumption in A that the public perceives the Committee's work as"
     },
     {
       "a_turn_idx": 54,
@@ -5181,7 +5181,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Dr. Oz' and 'Fetterman' are proper names and clearly refer to specific individuals.\",\n  \"reason\": \"Claim C (turn 69) discusses the framing of a political matchup between Dr. Oz and Fetterman as an ideological clash, which is unrelated to assumption A (turn 54), which concerns the credibility of political narratives being enhanced by consistency between process and outcome. There is no mention of process-outcome consistency"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Dr. Oz' and 'Fetterman' are proper names and unambiguous.\",\n  \"reason\": \"Claim C (turn 69) discusses the framing of a political matchup between Dr. Oz and Fetterman as an ideological clash, which is unrelated to assumption A (turn 54), which asserts that credibility in political narratives is enhanced by consistency between process and outcome. There is no mention of process-outcome consistency, evidence-based"
     },
     {
       "a_turn_idx": 55,
@@ -5196,7 +5196,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'They' in claim C refers to Republicans, as established in the prior context where Republicans are discussed in relation to the New Hampshire candidate's shift in stance.\",\n  \"reason\": \"Claim C explicitly states that after conceding, Republicans stopped contesting the election outcome and instead focused on a different narrative—specifically, acknowledging Joe Biden as president. This directly verifies the substance of assumption A, which posits that public perceptions of election legitimacy influence electoral outcomes. The shift"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Republicans, as established in the prior context where Republicans are discussed in relation to the New Hampshire candidate's shift in stance.\",\n  \"reason\": \"Claim C explicitly states that after conceding, Republicans stopped contesting the election outcome and instead focused on stating that Joe Biden is president, which directly verifies the substance of assumption A—that public perceptions of election legitimacy influence electoral outcomes. The shift from denying to accepting the outcome reflects a change in"
     },
     {
       "a_turn_idx": 55,
@@ -5241,7 +5241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Donald Trump' and 'he' are unambiguous.\",\n  \"reason\": \"Claim C asserts that fame leads to electoral success, citing Donald Trump as proof. This is unrelated to Assumption A, which claims that Democratic electoral success depends on rejecting election denialism. C does not mention election denialism, nor does it address the political strategy or ideological stance required for Democratic success. The two statements operate on entirely different topics—celebrity influence vs"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Donald Trump' and 'he' are unambiguous.\",\n  \"reason\": \"Claim C asserts that fame leads to electoral success, citing Donald Trump as proof. This is unrelated to Assumption A, which claims that Democratic electoral success depends on rejecting election denialism. C does not mention election denialism, nor does it address the political strategy or voter receptiveness to factual accountability. The two statements operate on entirely different topics—celebrity influence vs"
     },
     {
       "a_turn_idx": 56,
@@ -5271,7 +5271,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to John Federman, who suffered a stroke, as established in turn 70.\",\n  \"reason\": \"Claim C discusses a political figure (John Federman) facing a medical expert in a campaign context, focusing on his health limitations post-stroke. However, this does not address or verify the earlier assumption A, which concerns audiences' expectations of honesty and coherence from political figures. There is no mention of audience expectations, honesty"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in claim C refers to John Federman, who suffered a stroke, as established in turn 70.\",\n  \"reason\": \"Claim C discusses the medical challenges faced by John Federman due to a stroke, particularly his difficulty communicating with the electorate. This does not address or verify the earlier assumption A, which concerns audiences' expectations of honesty and coherence from political figures during campaigns. While Federman's condition may indirectly affect his ability to meet such expectations"
     },
     {
       "a_turn_idx": 56,
@@ -5286,7 +5286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Arizona' refers to the state and is used consistently.\",\n  \"reason\": \"Claim C (turn 83) states that Arizona is a significant political race worth monitoring, which is unrelated to assumption A (turn 56), which concerns audiences' expectations of honesty and coherence from political figures. There is no mention of honesty, coherence, or audience expectations in C. The topics are entirely distinct—C discusses electoral competitiveness and media attention, while A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'Arizona' refers directly to the state mentioned in turn 83.\",\n  \"reason\": \"Claim C (turn 83) states that Arizona is a significant political race worth monitoring, which is unrelated to assumption A (turn 56), which concerns audiences' expectations of honesty and coherence from political figures. There is no mention of audience expectations, honesty, or coherence in C. The topics are entirely distinct—C discusses electoral significance in a specific"
     },
     {
       "a_turn_idx": 57,
@@ -5346,7 +5346,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 61 refers to Chairman Neil (SPEAKER_10), and 'Chairman' in turn 61 refers to the same individual mentioned in turn 57.\",\n  \"reason\": \"Turn 61 asks the Chairman to provide specific numerical predictions about the election outcomes, which implies a level of engagement with his expertise. However, this does not explicitly state or verify the belief expressed in turn 57—that the Chairman"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 61 refers to Chairman Neil (SPEAKER_10), and 'Chairman' in turn 61 refers to the same individual mentioned in turn 57.\",\n  \"reason\": \"Claim C (turn 61) asks the Chairman to provide specific numerical predictions about the election outcomes, which implies a recognition of his expertise and relevance in making such assessments. However, it does not explicitly state or verify the belief that"
     },
     {
       "a_turn_idx": 57,
@@ -5361,7 +5361,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Snokey refers to a reality TV star mentioned in the context; 'he' in turn 74 is likely referring to John Fetterman, though the pronoun is ambiguous. The term 'Snokey' is not linked to the Chairman or any geopolitical assessment.\",\n  \"reason\": \"Claim C discusses the relevance of 'Snokey' (a reality TV star) to campaign strategies in Pennsylvania, particularly in contrast to Dr. Oz. This is unrelated to assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Snokey refers to a reality TV star mentioned in turn 74; 'he' in turn 74 refers to John Fetterman, not the Chairman. The term 'Chairman' in assumption A refers to SPEAKER_03 based on prior context.\",\n  \"reason\": \"Claim C discusses the relevance of 'Snokey' to campaign strategies in Pennsylvania, particularly in the context of John Fetterman's campaign against Dr. Oz. This is unrelated"
     },
     {
       "a_turn_idx": 57,
@@ -5376,7 +5376,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 58 refers to SPEAKER_03, who is the same speaker throughout the exchange. The phrase 'I played a role in it' directly refers to the speaker's personal contribution to the success of the Good Friday Agreement.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes they personally contributed to the success of the Good Friday Agreement, which directly verifies the substance of assumption A. Although A focuses on the relevance and value"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 58 refers to SPEAKER_03, who is the same speaker throughout the exchange. The phrase 'I played a role in it' directly refers to the speaker's personal contribution to the success of the Good Friday Agreement.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes they personally contributed to the success of the Good Friday Agreement, which directly verifies the substance of assumption A. Although A discusses the relevance of the Chairman"
     },
     {
       "a_turn_idx": 57,
@@ -5391,7 +5391,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 73 refers to the candidate who had a stroke and is running for office, not the Chairman mentioned in turn 57. The claim in C is about personal experience with recovery from a stroke and trustworthiness of one's course, while A concerns the relevance of the Chairman’s perspective on geopolitics.\",\n  \"reason\": \"Claim C discusses the speaker's personal experience with recovery from a stroke and trust in their own campaign ('our"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 73 refers to the candidate who had a stroke and is running against Dr. Oz. The phrase 'our last course' is ambiguous but likely refers to the candidate's past actions or policies, not the Chairman's perspective.\",\n  \"reason\": \"Claim C (turn 73) discusses the speaker's belief in the trustworthiness of their own experience with 'our last course,' which is unrelated to the Chairman’s perspective on geopolitical"
     },
     {
       "a_turn_idx": 57,
@@ -5451,7 +5451,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; claim C discusses John Fetterman's appearance and attire, while assumption A concerns Republican control of the House and its implications for policy. No shared subject matter.\",\n  \"reason\": \"Claim C discusses John Fetterman's non-traditional appearance and attire, which is entirely unrelated to the political assumption in A about Republican control of the House implying policy change. There is no overlap in topic, content, or logical connection. Therefore, the claim neither"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; claim C discusses John Fetterman's appearance and attire, while assumption A concerns Republican control of the House and its impact on policy. No shared subject matter.\",\n  \"reason\": \"Claim C discusses John Fetterman's non-traditional appearance and attire, which is entirely unrelated to the political assumption in A about Republican control of the House implying policy changes. There is no overlap in topic, content, or logical connection. Therefore, the claim neither"
     },
     {
       "a_turn_idx": 59,
@@ -5496,7 +5496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Snokey refers to a reality TV star mentioned in turn 74; 'he' in turn 74 refers to Dr. Oz, not the speaker of turn 59.\",\n  \"reason\": \"Claim C (turn 74) discusses the relevance of 'Snokey' to campaign strategies in a specific election context, particularly in Pennsylvania. This topic is entirely unrelated to assumption A (turn 59), which concerns the impact of Republican control of the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 74 refers to Dr. Oz, and 'Snokey' is a person mentioned in the context of campaign strategy. However, the claim in turn 74 does not address or relate to the assumption in turn 59 about Republican control of the House and policy changes.\",\n  \"reason\": \"Turn 59 expresses the belief that Republican control of the House does not necessarily lead to major policy changes, emphasizing bipartis"
     },
     {
       "a_turn_idx": 59,
@@ -5511,7 +5511,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"In turn 64, 'each party' refers to the two major political parties (Democrats and Republicans), which aligns with the context of the Senate composition discussed in turn 64. The term 'senators' is used to refer to members of the Senate, consistent with the prior discussion.\",\n  \"reason\": \"Claim C states that there are 50 senators from each major party, which implies a balanced Senate with a potential tiebreaker. This supports the idea that"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'there' in turn 64 refers to the Senate, and 'each party' refers to the Democratic and Republican parties. No other coreference issues.\",\n  \"reason\": \"Claim C states that there are 50 senators from each major party, which implies a balanced Senate, but does not address the stability of the political environment or the absence of systemic upheaval following a Republican House win. While this information is related to the broader political landscape, it does"
     },
     {
       "a_turn_idx": 59,
@@ -5556,7 +5556,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 66 refers to Dr. Mehmet Oz, as established in turn 66 and confirmed by context in turn 65.\",\n  \"reason\": \"Claim C (turn 66) describes Dr. Oz's appearance as resembling a 'standard issue politician,' which is unrelated to the earlier assumption A (turn 60) about bipartisanship being a valuable and necessary standard for legitimacy. There is no mention of bip"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'his' in turn 66 refers to Dr. Mehmet Oz, as established in turn 66 and confirmed by context in turns 65–68.\",\n  \"reason\": \"Claim C (turn 66) describes Dr. Oz's appearance as resembling a 'standard issue politician,' which is unrelated to the earlier assumption A (turn 60) about bipartisanship being a necessary standard for legitimacy. There is no mention of"
     },
     {
       "a_turn_idx": 60,
@@ -5571,7 +5571,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the winning side' refers to the party that wins the majority in the House, as contextually tied to the discussion of House and Senate outcomes.\",\n  \"reason\": \"Claim C discusses the margin of victory in the upcoming election, stating the winning side will likely win by slightly more than a handful of seats. This does not address or verify the earlier assumption A, which asserts that a bipartisan committee is more effective and trustworthy than a partisan one. While"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the winning side' refers to the party that wins the majority in the House, which is unrelated to the bipartisan nature of the committee mentioned in A.\",\n  \"reason\": \"Claim C discusses the expected margin of victory in a congressional election, specifically that the winning side will win by slightly more than a handful of seats. This is unrelated to the substantive claim in A, which asserts that a bipartisan committee is more effective and trustworthy than a partisan one."
     },
     {
       "a_turn_idx": 60,
@@ -5586,7 +5586,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the Senate' and 'the House of Representatives' are clear referents.\",\n  \"reason\": \"Claim C discusses the competitiveness of the Senate versus the House, suggesting the Senate is a 'toss-up'—a point related to uncertainty and balance. However, assumption A asserts that a bipartisan committee is more effective and trustworthy than a partisan one. While C touches on political dynamics and partisanship indirectly, it does not state or verify the claim"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the Senate' and 'the House of Representatives' are clear referents.\",\n  \"reason\": \"Claim C states that the Senate is more of a toss-up than the House, which implies greater uncertainty in Senate outcomes. However, this does not explicitly verify or state the earlier assumption A, which asserts that a bipartisan committee is more effective and trustworthy than a partisan one. While turn 60 mentions the bipartisan nature of the committee, turn 6"
     },
     {
       "a_turn_idx": 61,
@@ -5601,7 +5601,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_10, who is distinct from SPEAKER_03 (Chairman) in assumption A.\",\n  \"reason\": \"Claim C expresses a subjective opinion about the Georgia Senate race being 'unbelievable,' which is unrelated to assumption A, which concerns the Chairman's perceived authority to make specific numerical predictions. There is no mention of numerical commitments, predictive authority, or the Chairman’s role in"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 79 refers to Dr. Oz, not the Chairman (SPEAKER_03). The claim in C concerns the Georgia Senate race and Dr. Oz's connection to it, not the Chairman's authority to make numerical predictions.\",\n  \"reason\": \"Claim C discusses the Georgia Senate race and Dr. Oz's personal controversies, which is unrelated to the Chairman's authority to commit to specific numerical predictions. There is no mention of predictions"
     },
     {
       "a_turn_idx": 61,
@@ -5616,7 +5616,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the winning side' refers to the political party expected to win control of the House or Senate, consistent with the context of numerical estimates in a political prediction.\",\n  \"reason\": \"Claim C explicitly states that the winning side will likely win by 'slightly more than a handful of seats,' which directly supports and clarifies the assumption in A that numerical estimates are being used to convey credibility or value. The statement provides a specific quantitative judgment (a small margin of victory"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the winning side' refers to the political party that wins the majority in the House of Representatives, as established in the prior context of discussing House and Senate outcomes.\",\n  \"reason\": \"Claim C explicitly states that the winning side will likely win by 'slightly more than a handful of seats,' which directly supports and verifies the substance of assumption A—that numerical estimates (in this case, a specific margin) are being used to convey credibility and precision. The statement is"
     },
     {
       "a_turn_idx": 61,
@@ -5631,7 +5631,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_10 refers to 'the Senate' and 'the House of Representatives' without pronouns; no coreference resolution needed.\",\n  \"reason\": \"Claim C states that the Senate is more of a toss-up than the House, which contrasts with assumption A that numerical estimates are more credible than qualitative assessments. While C provides a qualitative comparison (toss-up), it does not address or verify the value or credibility of numerical vs. qualitative assessments. There is no explicit"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_10 refers to 'the Senate' and 'the House of Representatives' without coreference resolution needed; 'that's more of a toss-up' refers to the Senate relative to the House.\",\n  \"reason\": \"Claim C states that the Senate is more of a toss-up than the House, which contrasts with assumption A's assertion that numerical estimates are more credible than qualitative assessments. While C provides a qualitative comparison (toss-up), it does not address or"
     },
     {
       "a_turn_idx": 61,
@@ -5672,11 +5672,11 @@
       "claim_text": "The speaker has observed the current weather conditions in the location they are referring to.",
       "overlap_score": 2,
       "c_time": 2019.651,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'the speaker' in claim C refers to SPEAKER_12, who is discussing personal travel and weather in Arizona, not the estimation of contested seats.\",\n  \"reason\": \"Claim C discusses observing weather conditions in Arizona, which is unrelated to the assumption in A about having reliable data or reasoning to estimate contested seats. There is no overlap in subject matter, and C does not address, verify, or even reference the speaker's basis for estimating the number"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No relevant coreference; 'the speaker' in claim C refers to SPEAKER_12, who is discussing personal travel and weather in Arizona, not the estimation of contested seats.",
+      "reason": "Claim C discusses observing weather conditions in Arizona, which is unrelated to the assumption in A about having reliable data or reasoning to estimate contested seats. There is no overlap in subject matter, logic, or content. The claims are clearly unrelated and do not verify or support A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'the speaker' in claim C refers to SPEAKER_12, who is discussing personal travel and weather in Arizona, not the estimation of contested seats.\",\n  \"reason\": \"Claim C discusses observing weather conditions in Arizona, which is unrelated to the assumption in A about having reliable data or reasoning to estimate contested seats. There is no overlap in subject matter, logic, or content. The claims are clearly unrelated and do not verify or support A.\"\n}"
     },
     {
       "a_turn_idx": 63,
@@ -5691,7 +5691,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 83 refers to the Arizona Senate race, which is contextually linked to the broader discussion of competitive midterm races introduced in turn 63.\",\n  \"reason\": \"Turn 83 explicitly identifies Arizona as a significant political race worth monitoring during the midterm elections, which aligns with the general expectation in turn 63 that political figures like Chairman Neal engage with media during elections. While turn 63 focuses on the expectation of engagement"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 83 refers to the Arizona Senate race mentioned in the prior context, which is consistent with the broader discussion of competitive midterm races.\",\n  \"reason\": \"Claim C explicitly identifies Arizona as a significant political race worth monitoring during the midterm elections, which directly supports the general expectation in assumption A that political figures engage with media during elections—particularly in high-stakes races. While C does not mention Chairman Neal specifically, it reinforces the broader norm of"
     },
     {
       "a_turn_idx": 63,
@@ -5706,7 +5706,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"He in turn 72 refers to John Fetterman, the Democratic candidate in Pennsylvania's Senate race, who suffered a stroke. 'Fully capable medical expert specializing in strokes and heart conditions' refers to Dr. Oz, who is the opponent in the race.\",\n  \"reason\": \"Turn 72 mentions that John Fetterman must face a fully capable medical expert (Dr. Oz) with expertise in strokes and heart conditions during his political challenge. This relates to the broader"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"He in turn 72 refers to John Fetterman, the Democratic candidate in Pennsylvania's Senate race, who suffered a stroke. 'Fully capable medical expert specializing in strokes and heart conditions' refers to Dr. Oz, who is the opponent in the race.\",\n  \"reason\": \"Claim C mentions that John Fetterman must face a medical expert (Dr. Oz) with expertise in strokes and heart conditions during his political challenge. This relates to the broader context of political engagement"
     },
     {
       "a_turn_idx": 63,
@@ -5721,7 +5721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 83 refers to the significance of competitive midterm races, specifically highlighting Arizona as a key race to monitor, consistent with the broader context of high-stakes midterm elections mentioned in turn 63.\",\n  \"reason\": \"Turn 83 explicitly identifies Arizona as a significant political race worth monitoring during the midterm elections, which directly verifies the substance of assumption A—that midterm elections represent a high-stakes period where public appearances and key races carry strategic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 83 refers to the significance of competitive midterm races, specifically referencing Georgia and Pennsylvania mentioned earlier; 'Arizona' is introduced as another such race, aligning with the broader theme of high-stakes, closely watched contests.\",\n  \"reason\": \"Claim C explicitly identifies Arizona as a significant political race worth monitoring during the midterm elections, which directly verifies the substance of assumption A—that midterm elections involve high-stakes public appearances with strategic weight. By"
     },
     {
       "a_turn_idx": 64,
@@ -5766,7 +5766,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 74 refers to John Fetterman, as established in prior context. 'Snokey' is a reference to a reality TV star used in Fetterman's campaign strategy.\",\n  \"reason\": \"Claim C states that the speaker believes Snokey is relevant to campaign strategies, which aligns with the mention of Fetterman using Snokey in his campaign messaging. However, C does not explicitly verify or state the substance of assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 74 refers to John Fetterman, and 'Snokey' is a reference to a reality TV star used in Fetterman's campaign strategy. 'She' in turn 74 refers to Snokey.\",\n  \"reason\": \"Claim C states that the speaker believes Snokey is relevant to campaign strategies, which is a new topic not connected to assumption A. Assumption A concerns the dramatic narrative of the Pennsylvania Senate race"
     },
     {
       "a_turn_idx": 64,

@@ -3876,7 +3876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in A refers to SPEAKER_01, while 'I' in C refers to SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 49) discusses a personal property feature (a courtyard area in the front) and is spoken by SPEAKER_03, while assumption A (turn 39) concerns SPEAKER_01's access to reliable information about a project's timeline and delay"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'the speaker' in A refers to SPEAKER_01, while 'I' in C refers to SPEAKER_03.\",\n  \"reason\": \"Claim C (turn 49) discusses a personal property feature (a courtyard area in the front) and is spoken by SPEAKER_03, while assumption A (turn 39) concerns access to reliable information about a project's timeline and delay caused by the President's actions"
     },
     {
       "a_turn_idx": 40,
@@ -4007,11 +4007,11 @@
       "claim_text": "The speaker has a courtyard area in the front.",
       "overlap_score": 2,
       "c_time": 1164.019,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in A refers to SPEAKER_03, who is also the subject of C.\",\n  \"reason\": \"Claim C states that the speaker has a courtyard area in the front, which is unrelated to the assumption that the speaker has influence over the group’s mood and behavior. There is no mention of emotional influence, group dynamics, or behavioral impact in C. Thus, C does not support, verify, or even relate to the"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_03, consistent with prior turns.",
+      "reason": "Claim C states that the speaker has a courtyard area in the front, which is unrelated to assumption A, which concerns the speaker's influence over the group’s mood and behavior. There is no mention of mood, behavior, or influence in C. The two statements address entirely different topics—physical space versus interpersonal influence.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_03, consistent with prior turns.\",\n  \"reason\": \"Claim C states that the speaker has a courtyard area in the front, which is unrelated to assumption A, which concerns the speaker's influence over the group’s mood and behavior. There is no mention of mood, behavior, or influence in C. The two statements address entirely different topics—physical space versus interpersonal influence.\"\n}\n```"
     },
     {
       "a_turn_idx": 43,
@@ -4176,7 +4176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the listener' in A refers to SPEAKER_03, who is mentioned in C but not in relation to outdoor activity.\",\n  \"reason\": \"Claim C discusses financial market performance and pet adoption trends during lockdowns, which is unrelated to the assumption in A about the listener's outdoor exposure during sunny weather. There is no mention of weather, outdoor activity, or vitamin D in C. The topics are entirely different, and C does not address"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the sun finally came out' in turn 48 refers to recent sunny weather, and turn 57 discusses unrelated topics (financial markets, pets, music).\",\n  \"reason\": \"Turn 57 discusses financial market performance and pet adoption trends during the pandemic, which is entirely unrelated to the assumption in turn 48 about the listener's outdoor activity during sunny weather. There is no mention of weather, being outside, or vitamin D"
     },
     {
       "a_turn_idx": 52,
@@ -4326,7 +4326,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'the show' in turn 60 refers to the current podcast or program being discussed.\",\n  \"reason\": \"Claim C (turn 60) urges listeners to leave a review if they like the show, which is a call to action related to audience engagement. However, it does not address or verify the emotional safety and warmth associated with Mr. Rogers' show mentioned in assumption A (turn 58). While both turn 58 and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the listener' in C refers to the audience of the show.\",\n  \"reason\": \"Claim C (turn 60) urges listeners to leave a review if they like the show, which is a call-to-action unrelated to the emotional safety and warmth associated with Mr. Rogers' show mentioned in assumption A (turn 58). While both A and C relate to audience engagement with media, C does not state, verify, or imply anything about"
     },
     {
       "a_turn_idx": 58,
@@ -4341,7 +4341,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'your friends' in turn 60 refers to the listener and their social circle, but there is no direct reference to emotional safety or warmth from Mr. Rogers' show.\",\n  \"reason\": \"Claim C asks the listener to financially support the show by giving a quarter, which is a call to action related to audience engagement. However, it does not address or verify the assumption that the listener values emotional safety and warmth associated with Mr. Rogers' show. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'your friends' in turn 60 refers to the listener and their social circle, but there is no direct reference to emotional safety or warmth from Mr. Rogers' show.\",\n  \"reason\": \"Claim C requests financial support via a quarter, which is a call to action related to show engagement. However, it does not address or verify the emotional safety and warmth associated with Mr. Rogers' show mentioned in assumption A. While the mention of Mr. Rogers'"
     },
     {
       "a_turn_idx": 58,
@@ -4356,7 +4356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your friends' in turn 60 refers to the listener, as established by the prior conversational context where the speaker addresses the audience directly.\",\n  \"reason\": \"Claim C explicitly urges the listener to share the show with their friends, which aligns with the idea that the listener values emotionally safe and warm content—such as Mr. Rogers’ show—since promoting the show implies appreciation for its positive qualities. While C does not directly mention emotional safety or warmth"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your friends' in turn 60 refers to the listener, as established by the conversational context where the speaker addresses the audience directly.\",\n  \"reason\": \"Claim C urges the listener to share the show with their friends, implying that the listener values the show enough to recommend it. This aligns with assumption A, which posits that the listener values emotional safety and warmth—qualities often associated with Mr. Rogers' show. While C does not explicitly mention"
     }
   ]
 }

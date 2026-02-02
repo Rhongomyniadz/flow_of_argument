@@ -1131,7 +1131,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Chair' in turn 11 refers to the presiding officer of the Senate, consistent with the context of procedural rulings. 'Senator Schumer' is a specific individual mentioned in the motion.\",\n  \"reason\": \"Claim C discusses a ruling by the Chair on a motion raised by Senator Schumer, which relates to procedural tactics during the Senate session. However, it does not explicitly state or verify that Senator Lee has relevant knowledge about the morning event. While the broader"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Chair' in turn 11 refers to the presiding officer of the Senate, consistent with the context of procedural rulings. 'Senator Schumer' is a specific individual mentioned in the motion.\",\n  \"reason\": \"Claim C discusses a ruling by the Chair on a motion raised by Senator Schumer, which is procedural in nature. However, it does not address or verify the substance of assumption A, which concerns Senator Lee’s relevant knowledge about the morning event. There"
     },
     {
       "a_turn_idx": 6,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the Senate' and 'the process' in turn 10, which is not equivalent to the earlier assumption A about the speaker's personal experience observing Senate procedures over nearly a decade.\",\n  \"reason\": \"Claim C (turn 10) asks about the current state of the Senate process regarding the confirmation of Judge Barrett, which is a question about present procedural status, not a statement about the speaker's past experience. It does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the Senate' and 'the process' in turn 10, which is not equivalent to the earlier assumption A about the speaker's personal experience observing Senate procedures over nearly a decade.\",\n  \"reason\": \"Claim C (turn 10) asks about the current state of the Senate process regarding the confirmation of Judge Barrett, which is a question about present events, not a statement verifying the speaker's credible experience over nearly a decade as"
     },
     {
       "a_turn_idx": 7,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the Senate' and 'the process' in turn 10, which is consistent with the broader context of Senate proceedings described in turn 7. However, the claim in turn 10 does not address or verify the specific assumption about the speaker's personal testimony carrying weight.\",\n  \"reason\": \"Turn 10 asks about current events in the Senate regarding the confirmation process, which is a general inquiry about procedural status. It does"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the Senate' and 'the process' in turn 10, which is not equivalent to the personal testimony of SPEAKER_05 in turn 7. No coreference resolves C to A.\",\n  \"reason\": \"Claim C (turn 10) asks about current events in the Senate regarding the confirmation process, which is a general inquiry about procedural status. Assumption A (turn 7) concerns the weight of the"
     },
     {
       "a_turn_idx": 8,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_05 (the senator), and 'him' in 'I understood him to have meant' refers to the same senator.\",\n  \"reason\": \"Turn 15 expresses that the speaker (SPEAKER_03) personally understood the senator's intent behind the tweet, but does not explicitly state or verify the earlier assumption A, which is about the appropriateness of asking for updates on legislative"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_05 (the senator), and 'him' refers to SPEAKER_05 as well. The claim in C is about the speaker's personal understanding of the senator's tweet, not about the appropriateness of asking for legislative updates.\",\n  \"reason\": \"Claim C states that the speaker personally understood the senator's tweet, which is unrelated to assumption A, which concerns the appropriateness of"
     },
     {
       "a_turn_idx": 10,
@@ -1491,7 +1491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to SPEAKER_05, the senator being interviewed.\",\n  \"reason\": \"Claim C (turn 17) asks whether the listener was surprised by the magnitude of the response to their tweet. This is unrelated to assumption A (turn 10), which concerns the speaker's trust in the listener’s ability to provide accurate and timely information. There is no overlap in semantic content between the two statements. The topic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to SPEAKER_05, the senator being interviewed.\",\n  \"reason\": \"Claim C (turn 17) asks whether the listener was surprised by the magnitude of the response to their tweet. This is unrelated to assumption A (turn 10), which concerns the speaker's trust that the listener can provide accurate and timely information. There is no mention of trust, accuracy, timeliness, or information provision in"
     },
     {
       "a_turn_idx": 11,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'you' in turn 17, which resolves to SPEAKER_05 (the senator).\",\n  \"reason\": \"Claim C (turn 17) asks whether the speaker was surprised by the size of the response to their tweet. This is unrelated to assumption A, which concerns the credibility or weight of the speaker's prediction in the listener's eyes. C does not state, verify, or even address the listener's perception"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 17 refers to SPEAKER_05 (the senator), and 'the response' refers to the backlash mentioned in turn 15.\",\n  \"reason\": \"Claim C (turn 17) asks whether the speaker was surprised by the size of the response, which is unrelated to assumption A (turn 14). Assumption A concerns the credibility or weight of the speaker's prediction with the listener, while claim C focuses"
     },
     {
       "a_turn_idx": 21,

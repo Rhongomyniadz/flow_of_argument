@@ -155,8 +155,8 @@
       "entailment_score": 3,
       "confidence": 0.9,
       "coref_notes": "No coreference issues; 'Tammy Baldwin' refers to the same person throughout.",
-      "reason": "Claim C states that Tammy Baldwin is a U.S. Senator from Wisconsin, which is consistent with the context but does not address or verify the specific assumption about her expertise in budgetary matters due to her committee roles. While it confirms her position, it does not make the earlier assumption explicit or substantiate the claim about her relevant expertise.",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'Tammy Baldwin' refers to the same person throughout.\",\n  \"reason\": \"Claim C states that Tammy Baldwin is a U.S. Senator from Wisconsin, which is consistent with the context but does not address or verify the specific assumption about her expertise in budgetary matters due to her committee roles. While it confirms her position, it does not make the earlier assumption explicit or substantiate the claim about her relevant expertise.\"\n}\n```"
+      "reason": "Claim C states that Tammy Baldwin is a U.S. Senator from Wisconsin, which is consistent with the context but does not address or verify the specific assumption A about her expertise in budgetary matters due to her committee roles. While the claim is factually aligned with the broader context, it fails to make the substantive claim about her expertise explicit.",
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"No coreference issues; 'Tammy Baldwin' refers to the same person throughout.\",\n  \"reason\": \"Claim C states that Tammy Baldwin is a U.S. Senator from Wisconsin, which is consistent with the context but does not address or verify the specific assumption A about her expertise in budgetary matters due to her committee roles. While the claim is factually aligned with the broader context, it fails to make the substantive claim about her expertise explicit.\"\n}\n```"
     },
     {
       "a_turn_idx": 0,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The term 'Open Mike' in turn 25 refers to the program introduced in turn 0, establishing continuity of identity.\",\n  \"reason\": \"Claim C states 'This is the Open Mike program,' which identifies the show but does not address or verify the assumption that audiences trust information from official programs like AgriPulse Open Mike. While it confirms the program's name, it lacks any statement about audience trust, credibility, or reception—key aspects of assumption A. Thus"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 25 refers to 'AgriPulse Open Mike', which is established in the initial context as an official program.\",\n  \"reason\": \"Claim C states 'This is the Open Mike program,' which identifies the show but does not explicitly affirm or verify the audience's trust in information presented by official programs like AgriPulse Open Mike. While it reinforces the program's identity, it does not address the assumption about audience trust. Thus"
     },
     {
       "a_turn_idx": 0,
@@ -651,7 +651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the current farm bill, as established by the prior context discussing the adequacy of the existing farm bill in supporting farmers.\",\n  \"reason\": \"Claim C (turn 9) acknowledges that there are alternative government actions beyond reopening the current farm bill, which implies that the current farm bill may not be sufficient. This indirectly supports assumption A (turn 5), which asserts that the existing farm bill should provide adequate support. While"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 9 refers to the current farm bill, as established in the prior context. 'They' in turn 10 refers to Canadian authorities and their provincial policies.\",\n  \"reason\": \"Claim C (turn 9) acknowledges that there are alternative government actions beyond reopening the current farm bill, which implies recognition that the existing farm bill may not be sufficient. This aligns with the core concern in assumption A—that the current farm bill may not"
     },
     {
       "a_turn_idx": 5,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that Colin Peterson expressed frustration with the dairy program of the Farm Bill, which directly verifies the substance of assumption A—that the effectiveness of the farm bill can be judged by its impact on farmer profitability—by highlighting a key stakeholder's critique of a specific component (dairy program) that is failing to protect farmers. The claim is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 5 refers to Colin Peterson, as established in turn 7. 'It' in turn 5 refers to the farm bill, specifically its effectiveness.\",\n  \"reason\": \"Claim C explicitly states that Colin Peterson expressed frustration with the dairy program of the Farm Bill, which directly verifies the substance of assumption A — that the effectiveness of the farm bill can be judged by its impact on farmer profitability. The mention of Peterson’s frustration with the dairy"
     },
     {
       "a_turn_idx": 5,
@@ -786,7 +786,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that if the farm economy worsens, Colin Peterson would support discussing a new farm bill earlier than planned. This directly verifies the substance of assumption A, which posits that the effectiveness of the farm bill should be judged by its impact on farmer profitability—here, reflected through the conditionality of policy response based on worsening economic conditions for"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, as established in the prior context.\",\n  \"reason\": \"Claim C explicitly states that if the farm economy worsens, Colin Peterson would support discussing a new farm bill earlier than planned. This directly verifies the substance of assumption A, which posits that the effectiveness of the farm bill should be judged by its impact on farmer profitability—here, reflected in the concern over worsening conditions and the call for timely policy response"
     },
     {
       "a_turn_idx": 5,
@@ -876,7 +876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, the ranking member of the House Agriculture Committee. In turn 8, 'Colin Peterson' is explicitly referenced and directly agreed with.\",\n  \"reason\": \"Claim C explicitly states agreement with Colin Peterson regarding the importance of the current conversation on dairy policy, which directly verifies the substance of assumption A—that Colin Peterson has legitimate influence on farm policy decisions due to his position. The speaker not only agrees with Peterson’s"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, the ranking member of the House Agriculture Committee. In turn 8, 'I agree with Colin Peterson' directly confirms alignment with his position.\",\n  \"reason\": \"Claim C explicitly states agreement with Colin Peterson regarding the importance of the current conversation on dairy policy, which directly verifies the substance of assumption A—that Colin Peterson has legitimate influence on farm policy decisions due to his position. The agreement is not merely implied;"
     },
     {
       "a_turn_idx": 7,
@@ -981,7 +981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the dairy industry and stakeholders mentioned in the context, including producers, processors, and the speaker's own efforts. 'It' in the context of 'updating the dairy program' refers to the dairy margin program discussed in turn 7.\",\n  \"reason\": \"Claim C explicitly states that there is ongoing discussion within the dairy industry about updating the dairy program, which directly verifies the substance of assumption A—that changes to the dairy program could"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 8 refers to the dairy industry and stakeholders in Wisconsin, consistent with the context of ongoing discussions involving producers, processors, and policymakers.\",\n  \"reason\": \"Claim C explicitly states that there is ongoing discussion within the dairy industry about updating the dairy program, which directly verifies the substance of assumption A—that changes to the dairy program could improve outcomes for farmers. The context confirms that such discussions are grounded in real-world challenges and are actively shaping policy considerations"
     },
     {
       "a_turn_idx": 7,
@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 10 refers to the speaker and their Senate colleagues; 'dairy farmers' and 'farmers' refer to the same group mentioned in turn 7.\",\n  \"reason\": \"Claim C states that the situation is especially severe for dairy farmers in Wisconsin and New York, which aligns with the concern expressed in assumption A about the dairy program's failure to protect farmers. However, C does not explicitly state or verify the belief that changes"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 10 refers to the speaker (SPEAKER_00) and the broader group of stakeholders involved in supporting dairy farmers, including Wisconsin and New York producers. 'Our dairy farmers' and 'farmers in Wisconsin and some other states' refer to the same group mentioned in turn 7.\",\n  \"reason\": \"Claim C mentions that the situation is especially severe for dairy farmers in Wisconsin and New York, which aligns with the"
     },
     {
       "a_turn_idx": 7,
@@ -1116,7 +1116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to the OMB, as established in turn 10 where the speaker mentions leading a Senate effort to call on the OMB.\",\n  \"reason\": \"Claim C (turn 11) explicitly asks for specific actions the OMB could take regarding the dairy industry, which directly verifies the earlier assumption A (turn 7) that changes to the dairy program could improve outcomes for farmers. The request for OMB action"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 11 refers to the OMB, as established in turn 10 where the speaker mentions leading a Senate effort to call on the OMB.\",\n  \"reason\": \"Claim C explicitly asks for specific actions the OMB could take regarding the dairy industry, which directly verifies the earlier assumption A that changes to the dairy program could improve outcomes for farmers. The request for OMB action implies a belief that targeted interventions—such as leveraging existing"
     },
     {
       "a_turn_idx": 7,
@@ -1206,7 +1206,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'our farmers' in turn 8 refers to dairy farmers in Wisconsin, consistent with the context of the dairy program's impact on state producers mentioned in turn 7.\",\n  \"reason\": \"Claim C explicitly states that the current dairy margin program is not effectively protecting dairy farmers, which directly verifies the substance of assumption A—that the existing dairy program may be inadequate or ineffective without modification. The language in C is clear, unambiguous, and matches the core concern raised"
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'our farmers' in turn 8 refers to dairy farmers in Wisconsin, consistent with the context of turn 7 which discusses the dairy program's impact on state producers.\",\n  \"reason\": \"Claim C explicitly states that the current dairy margin program is not effectively protecting dairy farmers, which directly verifies the substance of assumption A—that the existing dairy program may be inadequate or ineffective without modification. The language in C is clear, unambiguous, and matches the core concern raised"
     },
     {
       "a_turn_idx": 7,
@@ -1296,7 +1296,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to the cotton industry mentioned in turn 14, and 'we' refers to the speaker (SPEAKER_00) and their state, Wisconsin. 'That' in 'that's why we're not being prescriptive' refers to the idea of tailoring short-term solutions to regional challenges.\",\n  \"reason\": \"Claim C states that there are unique factors that may be effective specifically for the dairy industry,"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 16 refers to the cotton industry mentioned in turn 14, and 'we' refers to the speaker (SPEAKER_00) and their state, Wisconsin.\",\n  \"reason\": \"Claim C states that there are unique factors that may be effective specifically for the dairy industry, which aligns with the substance of assumption A—that the existing dairy program may be inadequate or ineffective without modification. While C does not explicitly state that"
     },
     {
       "a_turn_idx": 7,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 7 refers to Colin Peterson, the ranking member of the House Agriculture Committee. In turn 8, 'Colin Peterson' is explicitly named and his position regarding early reconsideration of the dairy program is directly stated.\",\n  \"reason\": \"Turn 8 explicitly states that Colin Peterson has suggested going back to the drawing board and passing a new farm bill early, which directly verifies the assumption in turn 7 that public officials like Colin Peterson act"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Colin Peterson refers to the ranking member of the House Agriculture Committee; 'he' in turn 8 refers to Colin Peterson.\",\n  \"reason\": \"Claim C explicitly states that Colin Peterson supports revisiting the dairy program design early in the reauthorization process, which directly verifies the substance of assumption A—that public officials like Colin Peterson act based on feedback from constituents and stakeholders. The statement in C aligns precisely with the earlier implication in A, confirming that Peterson’s position is informed by"
     },
     {
       "a_turn_idx": 7,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to Canada's new pricing policies, as established in turn 10. 'Existing agreements' refers to bilateral trade agreements such as NAFTA mentioned in turn 10.\",\n  \"reason\": \"Claim C explicitly states that new pricing policies in Canada must comply with existing bilateral trade agreements, which directly verifies the substance of assumption A—that unilateral trade policies by provincial governments (like Ontario's) can negatively affect cross-border agricultural markets."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to Canada's new pricing policies, as established in turn 10. 'Existing agreements' refers to bilateral trade agreements such as NAFTA mentioned in turn 10.\",\n  \"reason\": \"Claim C explicitly states that new pricing policies in Canada must comply with existing bilateral trade agreements, which directly verifies the substance of assumption A—that unilateral provincial trade policies (like Ontario's dairy pricing change) can negatively affect cross-border agricultural markets"
     },
     {
       "a_turn_idx": 10,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the U.S.-Canada trade agreements mentioned in turn 10. 'Our dairy producers' in turn 18 refers to the U.S. dairy farmers affected by Canadian pricing changes discussed in turn 10.\",\n  \"reason\": \"Turn 18 explicitly states the speaker's commitment to upholding existing trade agreements to protect U.S. dairy producers, directly verifying the substance of assumption A in turn 1"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 18 refers to the U.S.-Canada trade agreements mentioned in turn 10. 'Our dairy producers' refers to U.S. dairy farmers, specifically those in Wisconsin and other states affected by Canadian pricing changes.\",\n  \"reason\": \"Turn 18 explicitly states the speaker's commitment to upholding existing trade agreements to protect U.S. dairy producers, directly verifying the substance of assumption A in turn 10, which asserts"
     },
     {
       "a_turn_idx": 10,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to the Office of Management and Budget (OMB), as established in prior context. However, the claim in turn 15 discusses OMB's actions regarding the cotton industry, not the dairy industry.\",\n  \"reason\": \"Claim C states that the OMB has issued responses related to the cotton industry, which is unrelated to the dairy industry mentioned in assumption A. While both involve OMB and agricultural sectors, the shift from"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 15 refers to the Office of Management and Budget (OMB), but the claim about OMB's actions in the cotton industry is irrelevant to the assumption about OMB's authority over the dairy industry. No connection is made between the cotton industry response and the dairy industry's situation.\",\n  \"reason\": \"Claim C discusses OMB's actions in the cotton industry, which is unrelated to the dairy industry and does not verify or state the authority"
     },
     {
       "a_turn_idx": 11,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 17 refers to the trade agreements mentioned in prior turns, specifically NAFTA and others, which are discussed in the context of resolving disputes with Canada.\",\n  \"reason\": \"Claim C states that trade agreements can provide mechanisms to resolve disputes through a higher authority on fair trade, which directly supports the idea that existing trade frameworks—like those involving Canada—can be used to challenge unfair practices such as Ontario’s dairy pricing changes. This aligns with"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 17 refers to trade agreements, which are discussed in the context of resolving disputes through a higher authority.\",\n  \"reason\": \"Claim C states that trade agreements can provide mechanisms to resolve disputes through a higher authority on fair trade, which directly supports the idea that such agreements—like those involving the OMB or international bodies—can influence or impact industries such as dairy through policy enforcement. This aligns with assumption A, which posits that"
     },
     {
       "a_turn_idx": 11,
@@ -2241,7 +2241,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 20 refers to the speaker and local stakeholders, including farmers and federal agencies, as established in the context. No other coreference issues.\",\n  \"reason\": \"Claim C states a general advocacy for cooperative approaches over conflict in addressing local environmental issues, which is unrelated to assumption A—the cotton industry's economic and social value and the concern over its potential collapse. While both involve agricultural concerns and policy responses, C does not address cotton, its"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 20 refers to SPEAKER_00, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 20) discusses advocating for cooperative approaches to local environmental issues, particularly regarding water quality and farmer-led innovation. However, this does not address or make explicit the earlier assumption A, which concerns the cotton industry's economic and social value and the fear of irreversible collapse. The topics—cotton industry"
     },
     {
       "a_turn_idx": 14,
@@ -2421,7 +2421,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 17 refers to the 'higher court of fair trade' mentioned in the same sentence. In turn 18, 'existing agreements' refers to the bilateral trade agreements (e.g., NAFTA) previously mentioned, which are the mechanisms through which compliance is assessed.\",\n  \"reason\": \"Claim C explicitly states that new pricing policies in Canada must comply with existing bilateral trade agreements, which directly verifies the substance of assumption A—that a 'higher"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 17 refers to the 'higher court of fair trade' mentioned in the same sentence. In turn 18, 'existing agreements' refers to the bilateral trade agreements (e.g., NAFTA) previously referenced, and 'comply and comport with' directly addresses the requirement for adherence to such agreements.\",\n  \"reason\": \"Claim C explicitly states that new pricing policies in Canada must comply with existing bilateral trade agreements, which directly verifies the"
     },
     {
       "a_turn_idx": 17,

@@ -306,7 +306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 20 refers to SPEAKER_00.\",\n  \"reason\": \"Claim C (turn 20) discusses the speaker's belief in the saying 'God closes one door, but opens another,' which is a personal philosophical belief about opportunity and life transitions. Assumption A (turn 5) concerns whether the listener knew Queen Elizabeth personally. There is no semantic connection between the two statements—C does not address,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'I' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 20) discusses the speaker's belief in the saying 'God closes one door, but opens another,' which is a personal philosophical reflection on life transitions and opportunities. Assumption A (turn 5) concerns whether the listener knew Queen Elizabeth personally. There is no semantic connection between the two statements—C does not address, imply, or verify anything"
     },
     {
       "a_turn_idx": 5,
@@ -437,11 +437,11 @@
       "claim_text": "The speaker expresses missing someone.",
       "overlap_score": 2,
       "c_time": 139.98,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "The pronoun 'him' in turn 7 refers to the speaker's father, mentioned in turn 6.",
-      "reason": "Claim C explicitly states 'we miss him,' which directly verifies the emotional connection to a deceased loved one—specifically the speaker's father—as implied in assumption A. The expression of missing someone aligns with valuing emotional connection and shared memories as meaningful ways to honor a legacy, confirming the core substance of A with clarity and directness.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 7 refers to the speaker's father, mentioned in turn 6.\",\n  \"reason\": \"Claim C explicitly states 'we miss him,' which directly verifies the emotional connection to a deceased loved one—specifically the speaker's father—as implied in assumption A. The expression of missing someone aligns with valuing emotional connection and shared memories as meaningful ways to honor a legacy, confirming the core substance of A with clarity and directness.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 7 refers to the speaker's father, as established in turn 6 ('your father was very special').\",\n  \"reason\": \"Claim C explicitly states 'we miss him,' which directly verifies the emotional connection to a deceased loved one—specifically the speaker's father. This aligns with assumption A, which posits that the speaker values emotional connection and shared memories as meaningful ways to honor someone's legacy. The expression of missing someone"
     },
     {
       "a_turn_idx": 5,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, consistent with prior turns. The phrase 'this topic' in turn 13 refers to the discussion about James Langevin and his background, which was introduced in turn 6.\",\n  \"reason\": \"Turn 13 acknowledges the possibility that the listener may not wish to discuss a particular topic—specifically, the personal history involving James Langevin and his past, including the accident mentioned"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_00, the listener, who was previously discussed in turn 6. The phrase 'this topic' in turn 13 refers to the mention of 'young James Langevin' from turn 6.\",\n  \"reason\": \"Turn 13 acknowledges the possibility that the listener may not wish to discuss a particular topic—specifically, the reference to 'young James Langevin' introduced in turn"
     },
     {
       "a_turn_idx": 6,
@@ -906,7 +906,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_00, and 'my daughter' refers to SPEAKER_02's daughter. No coreference links connect to the assumption in turn 13.\",\n  \"reason\": \"Claim C discusses SPEAKER_02's daughter advising him to stop due to concerns about mental instability, which is unrelated to the assumption in A that SPEAKER_00 experienced a traumatic accident in youth. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 23 refers to SPEAKER_00, and 'my daughter' refers to SPEAKER_02's daughter. No coreference links connect to the assumption in turn 13.\",\n  \"reason\": \"Claim C (turn 23) discusses SPEAKER_02's daughter advising him to stop due to concerns about mental instability, which is unrelated to the assumption in turn 13 that SPEAKER_00"
     },
     {
       "a_turn_idx": 13,
@@ -1191,7 +1191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 41 refers to SPEAKER_00, the speaker who experienced the accident mentioned in turn 15. 'The State of Rhode Island' is the entity being served, consistent with the speaker's long-standing connection to the state.\",\n  \"reason\": \"Claim C states that the speaker has served the State of Rhode Island, which aligns with the broader idea in assumption A that the speaker's work has lasting significance beyond the immediate"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 41 refers to SPEAKER_00, the speaker who shared his personal journey in turns 14–17. 'The State of Rhode Island' is the entity being served, consistent with the speaker's background and pride in the state mentioned in turn 39.\",\n  \"reason\": \"Claim C states that the speaker has served the State of Rhode Island, which aligns with the broader theme of enduring impact and meaningful"
     },
     {
       "a_turn_idx": 15,
@@ -1521,7 +1521,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'these' in turn 45 refers to the legislative achievements mentioned in turn 44.\",\n  \"reason\": \"Claim C discusses legislative achievements addressing both short-term and long-term needs, which aligns topically with assumption A about life trajectories unfolding organically without long-term planning. However, C does not explicitly verify or state the core idea of A—namely, that personal paths develop spontaneously rather than through deliberate planning. While C implies that policy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'these' in turn 45 refers to the legislative achievements mentioned in turn 44.\",\n  \"reason\": \"Claim C discusses legislative achievements addressing both short-term and long-term needs, which aligns topically with assumption A about life trajectories unfolding organically without long-term planning. However, C does not explicitly verify or state the core idea of A—namely, that personal paths develop spontaneously rather than through deliberate planning. While C implies that outcomes"
     },
     {
       "a_turn_idx": 21,
@@ -1581,7 +1581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the broader political community and the nation, aligning with the speaker's prior emphasis on bipartisanship and collaboration.\",\n  \"reason\": \"Claim C explicitly expresses hope for a reduction in political polarization, which directly supports and verifies the earlier assumption A that bipartisanship is a desirable political standard. The speaker's concern about division and desire to return to 'regular order' and 'bring everybody together' confirms their"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 24 refers to the broader political community and the nation, aligning with the speaker's prior emphasis on bipartisanship and collaboration.\",\n  \"reason\": \"Claim C explicitly expresses hope for a reduction in political polarization, which directly supports and verifies the earlier assumption A that bipartisanship is a desirable political standard. The speaker's concern about division and desire to return to 'regular order' and 'bring everybody together' clearly aff"
     },
     {
       "a_turn_idx": 21,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 40) states that the speaker finds the topic interesting or valuable, but it does not address or verify the specific assumption A (turn 24), which concerns the moral value and necessity of unity for societal stability. The discussion in turn 40 focuses on legislative achievements and personal pride in policy work, not on unity, moral values,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' refers to SPEAKER_00 throughout.\",\n  \"reason\": \"Claim C (turn 40) states that the speaker finds the topic interesting or valuable, but it does not address or verify the specific assumption A (turn 24), which concerns the moral value and necessity of unity for societal stability. The discussion in turn 40 focuses on legislative achievements and personal pride in policy work, not on unity, moral value,"
     },
     {
       "a_turn_idx": 24,

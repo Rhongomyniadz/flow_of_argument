@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'women' in claim C refers to female individuals making personal decisions about their bodies, consistent with the broader context of bodily autonomy discussed in turn 23.\",\n  \"reason\": \"Claim C discusses trust in women's judgment regarding their own well-being, which is thematically related to the idea of trusting individual judgment in personal decisions. However, assumption A concerns trust in a speaker's judgment on financial products, which is a different domain (financial vs. personal health/body"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'women' in turn 23 refers to female individuals making personal health and reproductive decisions, consistent with the broader context of bodily autonomy and decision-making.\",\n  \"reason\": \"Turn 23 discusses trust in women's judgment regarding their own well-being, particularly in the context of reproductive choices. While this touches on a related theme—trust in personal judgment—it does not explicitly address financial products or the speaker's credibility in that domain. Assumption A concerns trust in"
     },
     {
       "a_turn_idx": 0,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your investment account' in turn 28 refers to the user's account on public.com, which is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly references public.com and its features, including the ability to 'zoom' back to 1999, which metaphorically reinforces the idea of modernization and innovation compared to outdated platforms. This directly supports the notion that public.com represents innovation and reliability in digital investing, as stated"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'your investment account' in turn 28 refers to the user's account on public.com, which is the subject of the earlier assumption A.\",\n  \"reason\": \"Claim C explicitly references public.com and its investment account features, stating users can 'zoom' back to 1999—a metaphorical expression implying access to historical data or legacy systems. This supports the idea that public.com offers modern, innovative tools that contrast with outdated platforms, thereby reinforcing the"
     },
     {
       "a_turn_idx": 0,
@@ -201,7 +201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 15 refers to SPEAKER_07, who is discussing reproductive rights, not finance or personal health.\",\n  \"reason\": \"Claim C (turn 15) discusses the speaker's goal to restore Roe v. Wade protections through legislation, which is entirely unrelated to assumption A (turn 0), which asserts expertise in finance and personal health. There is no overlap in subject matter, and no part of C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the speaker' in C refers to SPEAKER_07, while 'the speaker' in A refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 15) discusses reproductive rights and legislative efforts to restore Roe v. Wade, which is unrelated to the earlier assumption A that the speaker has expertise in finance and personal health. There is no overlap in subject matter, and no"
     },
     {
       "a_turn_idx": 1,
@@ -261,7 +261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 5 refers to Vice President Kamala Harris, as established in turn 4. The speaker expresses enthusiasm about talking to her, but this does not relate to the earlier assumption A about valuing access to comprehensive, detailed information about home.\",\n  \"reason\": \"Claim C (turn 5) expresses enthusiasm about discussing Vice President Kamala Harris's work, which is unrelated to assumption A (turn 2), which concerns the value of detailed"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 5 refers to Vice President Kamala Harris, as established in turn 4. The speaker expresses enthusiasm about talking to her, but this does not relate to the earlier assumption A about valuing access to comprehensive, detailed information about home.\",\n  \"reason\": \"Claim C (turn 5) expresses enthusiasm about discussing Vice President Kamala Harris's work, which is unrelated to the earlier assumption A about valuing detailed information regarding homes. There"
     },
     {
       "a_turn_idx": 2,
@@ -452,11 +452,11 @@
       "claim_text": "I am vice president.",
       "overlap_score": 2,
       "c_time": 1215.449,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "In turn 32, 'me as vice president' resolves to 'Vice President Kamala Harris' mentioned in turn 4, establishing direct identity.",
-      "reason": "Claim C explicitly states 'me as vice president,' directly verifying the role of the speaker as Vice President, which is central to assumption A—that a high-profile interview with the Vice President signals credibility and legitimacy. The statement confirms the speaker's identity and position, thereby explicitly validating the premise underlying A.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 32, 'me as vice president' resolves to 'Vice President Kamala Harris' mentioned in turn 4, establishing direct identity.\",\n  \"reason\": \"Claim C explicitly states 'me as vice president,' directly verifying the role of the speaker as Vice President, which is central to assumption A—that a high-profile interview with the Vice President signals credibility and legitimacy. The statement confirms the speaker's identity and position, thereby explicitly validating the premise underlying A.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 32, 'me as vice president' refers to SPEAKER_02, who is the Vice President, resolving the coreference explicitly.\",\n  \"reason\": \"Claim C ('I am vice president') directly and explicitly verifies the role of the speaker in turn 4, where the context establishes that the interviewee is Vice President Kamala Harris. This confirms the credibility and legitimacy of the reporting outlet through her high-profile position, which is the core of assumption A"
     },
     {
       "a_turn_idx": 4,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_07, but the claim about reproductive freedoms does not address or verify the assumption about the Vice President's time being valuable and scarce.\",\n  \"reason\": \"Claim C discusses the strategic emphasis on reproductive freedoms in the political campaign, particularly in relation to the Vice President's upcoming tour. However, it does not mention or imply anything about the scarcity or value of the Vice President's time, nor does it"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_07, but the claim in C does not address or relate to the assumption in A about the Vice President's time being valuable and scarce.\",\n  \"reason\": \"Claim C discusses the goal of highlighting reproductive freedoms and the harm caused by abortion laws, which is unrelated to the assumption in A about the scarcity and value of the Vice President's time. There is no mention of time constraints, urgency,"
     },
     {
       "a_turn_idx": 4,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 24 refers to the issue of reproductive rights discussed in prior turns, particularly the protection of abortion rights as a fundamental freedom.\",\n  \"reason\": \"Claim C states that the issue is foundational, which aligns with the idea that the topic is of high importance. However, it does not explicitly address the scarcity or value of the Vice President's time, which is the core of assumption A. While the claim emphasizes the significance of the issue"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 24 refers to the issue of reproductive rights discussed in prior turns, particularly the protection of abortion rights as a fundamental freedom.\",\n  \"reason\": \"Claim C states that the speaker views the issue as 'foundational,' which aligns with the idea that the topic is of high importance. However, it does not explicitly address the scarcity or value of the Vice President's time mentioned in assumption A. While the claim emphasizes the significance of the"
     },
     {
       "a_turn_idx": 4,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to Vice President Kamala Harris, consistent with the context of the interview. The claim 'the immigration system is broken' is presented as a shared belief ('just about everyone...agrees'), but does not explicitly reference the value or scarcity of the VP's time.\",\n  \"reason\": \"While claim C discusses the widespread agreement that the immigration system is broken—a topic raised in the interview—it does not address or verify the earlier"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to Vice President Kamala Harris, consistent with the context of the interview. The claim 'the immigration system is broken' is presented as a shared belief ('just about everyone, and you have said as well'), but does not explicitly reference the value or scarcity of the VP's time.\",\n  \"reason\": \"Claim C discusses widespread agreement that the immigration system is broken, which is a policy assertion, but does not address or"
     },
     {
       "a_turn_idx": 4,
@@ -591,7 +591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 32, 'me as vice president' refers to SPEAKER_02, who is the same speaker as in turn 4. The phrase 'me as vice president' explicitly confirms the speaker's role as Vice President, directly verifying the assumption in turn 4 that the Vice President is a high-value, busy individual whose time is scarce.\",\n  \"reason\": \"Turn 32 explicitly states 'me as vice president,' which directly confirms the speaker's identity"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 32, 'me as vice president' refers to SPEAKER_02, who is the same speaker as in turn 4. The pronoun 'me' resolves to the speaker, confirming their role as Vice President.\",\n  \"reason\": \"Claim C explicitly states 'me as vice president,' directly verifying the speaker's identity and role, which underpins assumption A—that the Vice President is a high-value, scarce individual whose time is worth prioritizing. This"
     },
     {
       "a_turn_idx": 4,
@@ -636,7 +636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Vice President Kamala Harris, consistent with prior context. 'The speaker' in turn 18 refers to SPEAKER_02, the journalist conducting the interview.\",\n  \"reason\": \"Claim C (turn 18) asks about realistic actions within the current political context, which reflects a pragmatic concern about political feasibility. However, it does not explicitly state or verify the earlier assumption A—that the speaker sees themselves"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to Vice President Kamala Harris, consistent with prior context. 'The speaker' in turn 18 refers to SPEAKER_02, who is the journalist conducting the interview.\",\n  \"reason\": \"Claim C (turn 18) asks about realistic actions within the current political context, which reflects a pragmatic concern about political feasibility. However, it does not explicitly state or verify the earlier assumption A—that the speaker"
     },
     {
       "a_turn_idx": 5,
@@ -741,7 +741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_07, but the claim in C does not relate to the trust in reciprocal enthusiasm expressed in A. Instead, C discusses political messaging about reproductive rights.\",\n  \"reason\": \"Turn 13 claims that the speaker believes highlighting reproductive freedoms will emphasize the harms of abortion, which is unrelated to the assumption in turn 5 that the speaker trusts their enthusiasm will be reciprocated. There is no overlap"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 13 refers to SPEAKER_07, but the claim in C does not relate to the trust in reciprocal enthusiasm expressed in A. There is no mention of trust, enthusiasm, or reciprocity in C.\",\n  \"reason\": \"Turn 13 discusses the political strategy of highlighting harms of abortion laws, which is unrelated to the emotional assumption in turn 5 about mutual enthusiasm. The content of C does not state, verify,"
     },
     {
       "a_turn_idx": 5,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in C refers to SPEAKER_07, consistent with earlier turns.\",\n  \"reason\": \"Claim C (turn 18) discusses pragmatic actions within the current political context, specifically regarding abortion rights and policy implementation. Assumption A (turn 8) concerns the speaker’s prior knowledge of what needs correction. These are semantically unrelated: A is about awareness of factual inaccuracies, while C is about strategic action under political"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'you' in turn 18, which likely refers to SPEAKER_07 based on context; 'the current political context' refers to the post-Dobbs legal landscape involving abortion rights.\",\n  \"reason\": \"Turn 8 (A) asserts that the speaker has prior knowledge of what needs correction—specifically, a factual error about height. Turn 18 (C) shifts focus entirely to a new topic: pragmatic"
     },
     {
       "a_turn_idx": 8,
@@ -831,7 +831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to 'Wikipedia' as the source of the height information, resolving the coreference to the entity mentioned in the context.\",\n  \"reason\": \"Claim C explicitly states that there is a Wikipedia page associated with the speaker, which directly verifies the existence of a shared reference point (i.e., 'that' referring to the height claim) discussed in assumption A. The mention of 'they say I'm five one on my"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 10 refers to 'Wikipedia' as the source of the height information, resolving the coreference to the entity mentioned in the context.\",\n  \"reason\": \"Claim C explicitly states that there is a Wikipedia page associated with the speaker, which directly verifies the existence of a shared reference point ('that') discussed in assumption A. The mention of 'five one on my Wikipedia page' confirms that both parties are referring to a specific, publicly"
     },
     {
       "a_turn_idx": 8,
@@ -861,7 +861,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 18 refers to SPEAKER_07, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 18) discusses pragmatic actions within the political context regarding reproductive rights, specifically addressing the Supreme Court's composition and feasible steps under current conditions. This is unrelated to assumption A (turn 8), which concerns a shared understanding about the referent of 'that' in a prior conversation about height."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 18 refers to SPEAKER_07, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 18) discusses pragmatic actions within the political context regarding abortion rights, while assumption A (turn 8) concerns a shared understanding about the referent of 'that'. These topics are unrelated—A deals with mutual reference clarity, whereas C addresses policy feasibility. There is no overlap in semantic content"
     },
     {
       "a_turn_idx": 8,
@@ -921,7 +921,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the claim; 'that' in turn 8 refers to a prior statement about height, while turn 31 discusses a future plan to reference an event from three years ago.\",\n  \"reason\": \"Turn 31 makes no mention of a shared understanding about what 'that' refers to. Instead, it discusses a future intention to reference a past event. The topic and content are entirely unrelated to the assumption of mutual referential understanding in turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to assumption A; 'that' in turn 8 refers to height information discussed earlier, while turn 31 discusses a future reference to an event three years prior.\",\n  \"reason\": \"Turn 31 makes no mention of shared understanding about referents like 'that' from turn 8. Instead, it shifts focus to a future plan to reference a past event unrelated to the prior discussion of height. There is no explicit or implicit verification of the"
     },
     {
       "a_turn_idx": 8,
@@ -936,7 +936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to the topic of reproductive freedom, which is linked to the broader concern about correcting misinformation or policy outcomes mentioned in turn 8.\",\n  \"reason\": \"Claim C discusses how election outcomes will determine reproductive freedom, implying that corrective action (via elections) leads to better outcomes. This aligns with assumption A’s idea that correcting an issue leads to a better outcome. However, C does not explicitly state or verify the specific"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to the correction of misinformation about height (turn 8), though the broader context shifts focus to reproductive rights. However, the core idea of correcting a misperception leading to a consequential outcome is preserved.\",\n  \"reason\": \"While turn 26 discusses a different issue (reproductive freedom) than turn 8 (height misrepresentation), it explicitly states that electoral outcomes—driven by correcting misinformation and voter engagement"
     },
     {
       "a_turn_idx": 8,
@@ -951,7 +951,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'you' in turn 18, which likely refers to SPEAKER_07 based on prior context; 'the speaker' in claim C refers to SPEAKER_07.\",\n  \"reason\": \"Claim C (turn 18) asks about realistic actions in the current political context, specifically regarding abortion rights and policy implementation. This is unrelated to assumption A (turn 8), which asserts that the speaker's judgment on what"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to SPEAKER_07, and 'the speaker' in assumption A refers to SPEAKER_02. No coreference resolves the two speakers into one entity.\",\n  \"reason\": \"Claim C (turn 18) discusses pragmatic limitations in the political context regarding reproductive rights and asks what realistic actions can be taken, especially given the unlikelihood of changing the Supreme Court's composition. This is unrelated to assumption A"
     },
     {
       "a_turn_idx": 12,
@@ -966,7 +966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 24 refers to the issue of reproductive freedoms and bodily autonomy discussed throughout the prior turns, particularly the idea that access to abortion is a fundamental right.\",\n  \"reason\": \"Turn 24 explicitly states that the speaker views the issue as foundational, directly verifying the substance of assumption A—that the topic is important enough to warrant continued effort despite difficulty. The phrase 'foundational issue' aligns precisely with the belief in importance and sustained commitment"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 24 refers to the issue of reproductive freedoms and bodily autonomy discussed throughout the prior turns, particularly by SPEAKER_07 in turn 23.\",\n  \"reason\": \"Turn 24 explicitly states that the speaker views the issue as foundational, which directly verifies the substance of assumption A—that the topic is important enough to warrant continued effort despite difficulty. The term 'foundational' aligns with the idea of significance and enduring importance"
     },
     {
       "a_turn_idx": 12,
@@ -1056,7 +1056,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Turn 39 states that the situation involves 'barbarism,' which aligns with the description of extreme violence and atrocities committed by Hamas. However, this claim does not explicitly address or verify the earlier assumption A, which concerns the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Turn 39 states that the speaker believes the situation involves 'barbarism,' which aligns with the description of extreme violence and atrocities committed by Hamas. However, this claim does not explicitly address or verify the earlier assumption A, which"
     },
     {
       "a_turn_idx": 12,
@@ -1146,7 +1146,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the immigration reform issue, which is the subject of the discussion. No other coreference issues are present.\",\n  \"reason\": \"Claim C states that immigration reform is being used for political gamesmanship, which is a general assertion about politicization. Assumption A claims that reproductive freedoms are being used as a political strategy to highlight abortion-related harms. While both statements involve the idea of using a social issue for political purposes,"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'it' in turn 32 refers to the immigration reform issue, which is the subject of the discussion. No other coreference issues are present.\",\n  \"reason\": \"Claim C states that immigration reform is being used for 'political gamesmanship,' which is a general assertion about politicization. Assumption A claims that reproductive freedoms are being used as a political strategy to highlight abortion-related harms. While both statements involve the idea of using a social issue for political purposes"
     },
     {
       "a_turn_idx": 13,
@@ -1161,7 +1161,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to Senate Republicans, who are described as wanting to use the immigration issue politically rather than solving it. This does not relate to the earlier assumption A about reproductive freedoms being used as a political strategy.\",\n  \"reason\": \"Claim C discusses the use of immigration reform as a political tool in the context of foreign military aid, which is entirely different from assumption A, which concerns reproductive freedoms being leveraged to highlight abortion-related harms."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to Senate Republicans, who are described as wanting to use the immigration issue for political gain. This does not relate to the earlier assumption A, which concerns reproductive freedoms being used as a political strategy to highlight abortion-related harms.\",\n  \"reason\": \"Claim C discusses the use of immigration reform as a political tool in the context of foreign military aid, while assumption A refers to reproductive freedoms being leveraged politically to emphasize harms from abortion"
     },
     {
       "a_turn_idx": 13,
@@ -1221,7 +1221,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 21 refers to women seeking late-term abortions, and 'these horror stories' refers to exaggerated or misleading narratives about late-term abortion procedures.\",\n  \"reason\": \"Claim C discusses 'horror stories' about late-term abortions, which addresses public misconceptions and disinformation. However, it does not explicitly state or verify the claim in A—that highlighting reproductive freedoms is an effective way to communicate moral concerns about abortion. While both relate to abortion"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 21 refers to women seeking late-term abortions, and 'these horror stories' refers to exaggerated or misleading narratives about late-term abortion procedures.\",\n  \"reason\": \"Claim C discusses 'horror stories' about late-term abortions, which relates to public perception and misinformation surrounding abortion, but does not explicitly affirm or verify the claim in A that highlighting reproductive freedoms is an effective way to communicate moral concerns about abortion. While both statements touch on abortion"
     },
     {
       "a_turn_idx": 13,
@@ -1236,7 +1236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'public education' and 'abortion laws' without direct pronoun resolution, but context implies discussion of misinformation and public understanding related to abortion policies.\",\n  \"reason\": \"Claim C discusses insufficient or misleading public education about abortion laws, which relates to the broader theme of communication and awareness. However, it does not explicitly state or verify the specific claim in A—that highlighting reproductive freedoms is an effective way to communicate moral concerns about abortion. While both"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'public education' and 'abortion laws' as topics needing clarification; 'you' in turn 22 refers to the audience or general public being educated.\",\n  \"reason\": \"Claim C states that public education about abortion laws has been insufficient or misleading, which relates to the broader concern about communication and understanding of abortion issues. However, it does not explicitly state or verify the specific claim in A—that highlighting reproductive freedoms is an effective way"
     },
     {
       "a_turn_idx": 13,
@@ -1251,7 +1251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to reproductive freedom advocacy and the consequences of abortion restrictions, as established in turn 13. 'Women have reproductive freedom' directly corresponds to the 'reproductive freedoms' mentioned in turn 13.\",\n  \"reason\": \"Claim C explicitly states that the outcome of the election will determine whether women have reproductive freedom, which directly verifies the assumption in A that the audience understands the connection between reproductive freedom advocacy and criticism of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to reproductive freedom advocacy and the criticism of abortion laws, as established in turn 13. 'Women have reproductive freedom' directly corresponds to the 'reproductive freedoms' mentioned in turn 13.\",\n  \"reason\": \"Claim C explicitly states that the outcome of the election will determine whether women have reproductive freedom, which directly verifies the assumption in A that the audience understands the connection between reproductive freedom advocacy and criticism of"
     },
     {
       "a_turn_idx": 13,
@@ -1266,7 +1266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the issue of reproductive freedom, which is the central topic introduced in turn 13. 'We' in turn 26 refers to the advocates of reproductive freedom, consistent with the group mentioned in turn 13.\",\n  \"reason\": \"Turn 26 explicitly states that restoring reproductive freedom requires federal action to establish a uniform legal framework, which directly verifies the assumption in turn 13 that the audience understands"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_07, who is the speaker addressing the issue of reproductive freedom. The phrase 'this issue' refers to the advocacy for reproductive freedom and the need to restore Roe v. Wade protections.\",\n  \"reason\": \"Claim C explicitly states that the federal government has the authority to restore a uniform legal framework for reproductive freedom, which directly verifies the substance of assumption A—that the audience understands the connection between reproductive freedom"
     },
     {
       "a_turn_idx": 13,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'the day that decision came down' refers to the Dobbs decision, which overturned Roe v. Wade. 'It' in 'it was the law of the land' refers to Roe v. Wade.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court overturned Roe v. Wade in the Dobbs decision, which directly verifies the substance of assumption A—that the overturning of Roe v. Wade is a widely recognized legal event."
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'the day that decision came down' refers to the Supreme Court's decision in Dobbs, which overturned Roe v. Wade. 'That' is used to refer back to the event described in turn 17.\",\n  \"reason\": \"Claim C explicitly states that the Supreme Court overturned Roe v. Wade in the Dobbs decision, which directly verifies the substance of assumption A—that the overturning of Roe v. Wade is a widely recognized legal"
     },
     {
       "a_turn_idx": 14,
@@ -1431,7 +1431,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_02, as established in the prior context. 'My goal' refers to SPEAKER_07's stated objective.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes President Joe Biden would sign a restored Roe v. Wade bill if passed by Congress. This directly verifies the substance of assumption A, which posits that the audience understands the significance of Roe v. Wade. The explicit"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to SPEAKER_02, as established in the context. 'My goal' refers to SPEAKER_07's stated objective.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes President Joe Biden would sign a restored Roe v. Wade bill if passed by Congress. This directly verifies the substance of assumption A, which posits that the audience understands the significance of Roe v. Wade. The explicit mention"
     },
     {
       "a_turn_idx": 14,
@@ -1536,7 +1536,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the speaker and their allies, consistent with the broader political effort mentioned in turn 14. 'Roe v. Wade protections' directly refers to the legal rights previously established by Roe v. Wade, which were overturned.\",\n  \"reason\": \"Claim C explicitly states the goal of building political support to pass a bill restoring Roe v. Wade protections, which directly verifies the substance of assumption A—that changes in law after Roe v"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'my' in claim C refers to SPEAKER_07, who is the speaker in turn 15. 'We' in 'we will build up the support' refers to the speaker and their allies, consistent with the context.\",\n  \"reason\": \"Claim C explicitly states the speaker's goal is to build political support to pass a bill restoring Roe v. Wade protections, which directly verifies the substance of assumption A—that changes in law after Roe v."
     },
     {
       "a_turn_idx": 14,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to President Joe Biden, as established by the context of the speaker discussing Biden's potential action on a restored Roe v. Wade bill.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes President Joe Biden would sign a restored Roe v. Wade bill if passed by Congress. This directly verifies the substance of assumption A, which asserts that changes in law after Roe v. Wade are relevant and noteworthy. The claim centers"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to President Joe Biden, as established by the context of the speaker discussing Biden's potential action on a restored Roe v. Wade bill.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes President Joe Biden would sign a restored Roe v. Wade bill if passed by Congress. This directly verifies the substance of assumption A, which asserts that changes in law after Roe v. Wade are relevant and noteworthy. The claim centers"
     },
     {
       "a_turn_idx": 14,
@@ -1611,7 +1611,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 23 refers to the broader issue of reproductive freedom discussed throughout the prior turns, particularly the right to make personal decisions about one's own body in the context of abortion.\",\n  \"reason\": \"Claim C explicitly states that the issue is about 'the freedom to make decision about your own body,' which directly verifies the core substance of assumption A—that reproductive freedom is a central issue worth organizing a national tour around. While A frames the issue in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the broader issue of reproductive freedom discussed in turn 15, particularly the right to make decisions about one's body in the context of abortion.\",\n  \"reason\": \"Claim C explicitly states that the issue is about 'the freedom to make decision about your own body,' which directly verifies the core substance of assumption A—that reproductive freedom is a central issue worth organizing a national tour around. While A frames the issue in terms of organizing"
     },
     {
       "a_turn_idx": 15,
@@ -1626,7 +1626,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to reproductive freedom, which is the central theme of assumption A. 'Women have reproductive freedom' directly corresponds to the core idea in A.\",\n  \"reason\": \"Claim C explicitly states that the outcome of the election will determine whether women have reproductive freedom, which directly verifies the substance of assumption A—that reproductive freedom is a central issue worth organizing a national tour around. The connection between electoral outcomes and reproductive rights is clearly articulated"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this issue' in turn 26 refers to reproductive freedom, which is the central theme of assumption A. 'Women have reproductive freedom' directly corresponds to the core idea in A that reproductive freedom is a central issue worth organizing around.\",\n  \"reason\": \"Claim C explicitly states that the outcome of the election will determine whether women have reproductive freedom, which directly verifies the substance of assumption A—that reproductive freedom is a central issue worth organizing a national tour around. The"
     },
     {
       "a_turn_idx": 15,
@@ -1656,7 +1656,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the issue of reproductive freedom, which is the central theme established in turn 15. 'The federal level' in turn 26 clearly refers to the federal government's role in restoring legal protections, aligning with the goal mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that the federal government has the power to restore a uniform legal framework for reproductive freedom, which directly verifies the substance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the issue of reproductive freedom, which is the central theme established in turn 15. 'The federal level' in turn 26 clearly refers to the federal government's role in restoring legal protections, directly linking to the goal mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that the federal government has the power to restore a uniform legal framework for reproductive freedom, which directly verifies the substance"
     },
     {
       "a_turn_idx": 15,
@@ -1701,7 +1701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_02 refers to the Vice President; 'you' in turn 18 refers to SPEAKER_07, the Vice President.\",\n  \"reason\": \"Claim C questions the feasibility of realistic actions in the current political context, particularly regarding legislative change. While it acknowledges the goal mentioned in A (passing a federal law to restore Roe), it shifts focus to practical limitations and alternative measures rather than affirming or verifying the assumption that political mobilization leads to legislative"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'you' in turn 18 refers to SPEAKER_07, the Vice President, based on context. 'They' in turn 19 refers to the administration and relevant institutions.\",\n  \"reason\": \"Claim C (turn 18) raises a pragmatic question about realistic actions in the current political context, particularly regarding legislative change after the Dobbs decision. While it references the earlier goal mentioned in A (passing a federal law to restore Roe),"
     },
     {
       "a_turn_idx": 15,
@@ -1716,7 +1716,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 26 refers to 'elected leaders' mentioned earlier, specifically those at the state level. 'This issue' refers to reinstating reproductive protections.\",\n  \"reason\": \"Claim C states that elected leaders at the state level can pass laws to reinstate reproductive protections, which aligns with the general direction of assumption A (Congress passing laws to restore Roe v. Wade). However, C shifts focus from the federal level (Congress) to"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'leaders' in claim C refers to 'elected leaders' mentioned earlier, and 'the protections of freedom' refers to the reproductive rights previously discussed, including those under Roe v. Wade.\",\n  \"reason\": \"Claim C states that state-level elected leaders can pass laws to reinstate reproductive protections, which aligns with the general direction of assumption A (Congress passing laws to restore Roe v. Wade). However, C shifts focus from the federal level (Congress)"
     },
     {
       "a_turn_idx": 15,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Roe' and 'the Dodge decision' (likely a misstatement of 'Dobbs decision'), and 'this' in turn refers to the legal framework surrounding abortion rights.\",\n  \"reason\": \"Claim C states that Roe v. Wade included restrictions on third-trimester abortions, which is factually accurate but does not address or make explicit the earlier assumption A—that Congress has the power to pass laws restoring Roe v. Wade protections"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Roe' and 'the Dodge decision' (likely a misstatement of 'Dobbs decision'), and 'this' in turn refers to the legal framework surrounding abortion rights.\",\n  \"reason\": \"Claim C states that Roe v. Wade included restrictions on third-trimester abortions, which is factually accurate but does not address or make explicit the earlier assumption A—that Congress has the power to pass laws restoring Roe v. Wade protections."
     },
     {
       "a_turn_idx": 15,
@@ -1776,7 +1776,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Roe' and 'the decision' in turn 22, which resolves to the Roe v. Wade decision mentioned in turn 15. 'You educate the public' refers to the speaker's effort to inform, aligning with the goal of building support for legislation.\",\n  \"reason\": \"Claim C discusses public education about abortion laws and implies that misinformation exists, particularly regarding late-term abortions. While this touches on the broader context"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Roe' and 'the decision' in turn 22, which resolves to the Roe v. Wade decision mentioned in turn 15. 'You educate the public' refers to the speaker's effort to inform the public about abortion laws.\",\n  \"reason\": \"Claim C discusses public education about abortion laws and implies that information has been inadequate or misleading, particularly regarding third-trimester restrictions and misconceptions about late-term abortions."
     },
     {
       "a_turn_idx": 15,
@@ -1791,7 +1791,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the issue of reproductive freedom and the need for a consistent legal framework across states, which aligns with the earlier assumption about Congress restoring Roe v. Wade protections.\",\n  \"reason\": \"Claim C explicitly states that the federal government has the power to restore a uniform legal framework for reproductive freedom, which directly verifies the substance of assumption A—that Congress can pass laws restoring Roe v. Wade protections. While A focuses on Congress and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the restoration of reproductive freedom protections, which aligns with the earlier assumption in turn 15 about Congress passing laws to restore Roe v. Wade protections.\",\n  \"reason\": \"Claim C explicitly states that the federal government has the power to restore a uniform legal framework for reproductive freedom, which directly verifies the core substance of assumption A—that Congress can pass laws to restore Roe v. Wade protections. The phrasing 'f"
     },
     {
       "a_turn_idx": 15,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to Katie, and 'we' in turn 18 refers to the speaker and Katie, indicating a shared understanding between them.\",\n  \"reason\": \"Claim C explicitly states the right of an individual to make decisions about their own body, which directly verifies the substance of assumption A—that there is a shared understanding between the speaker and Katie about reproductive rights. The claim is not only consistent with A but explicitly affirms a foundational"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 15 refers to Katie, and 'we' in turn 18 refers to the speaker and Katie, indicating a shared understanding.\",\n  \"reason\": \"Claim C explicitly states the right of an individual to make decisions about their own body, which directly verifies the substance of assumption A—that there is a shared understanding between the speaker and Katie about reproductive rights. The context shows mutual alignment on values, especially regarding bodily autonomy, and C explicitly"
     },
     {
       "a_turn_idx": 15,
@@ -1896,7 +1896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Katie, as established in the prior dialogue. 'This issue' refers to reproductive rights, consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that elections are meaningful mechanisms for changing policy on reproductive rights, directly verifying the underlying assumption in A that there is a shared understanding between the speaker and Katie about reproductive rights. The claim reinforces the idea that collective political action—specifically voting—can restore reproductive freedoms"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Katie, as established in the prior dialogue. 'This issue' refers to reproductive rights, consistent with the context.\",\n  \"reason\": \"Claim C explicitly states that elections are meaningful mechanisms for changing policy on reproductive rights, directly verifying the underlying assumption in A that there is a shared understanding between the speaker and Katie about reproductive rights. The claim reinforces the idea that collective political action—specifically voting—can restore reproductive rights"
     },
     {
       "a_turn_idx": 15,
@@ -1911,7 +1911,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Katie, consistent with prior references in the conversation. 'This issue' refers to reproductive rights, which aligns with the shared understanding mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that a national standard for reproductive rights is needed due to state-level variation, which directly verifies the underlying assumption in A that there is a shared understanding between the speaker and Katie about reproductive rights. The mention of state"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to Katie, consistent with prior references in the conversation. 'This issue' refers to reproductive rights, which aligns with the shared understanding mentioned in turn 15.\",\n  \"reason\": \"Claim C explicitly states that a national standard for reproductive rights is needed due to state-level variation, which directly verifies the underlying assumption in A that there is a shared understanding between the speaker and Katie about reproductive rights. The context shows both"
     },
     {
       "a_turn_idx": 15,
@@ -2901,7 +2901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'the law of the land' as Roe v. Wade, and 'state by state' laws reflect geographic inconsistency post-Dobbs decision.\",\n  \"reason\": \"Claim C discusses geographic inconsistency in abortion protections after Dobbs, which relates to the broader context of legal variation but does not explicitly address or verify the specific assumption A—that the public should be aware of trimester-based restrictions in Roe v. Wade. While both touch on Roe and"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_02, and 'this issue' refers to the broader debate on abortion rights and access.\",\n  \"reason\": \"Claim C discusses the inconsistency of legal protections across states post-Dobbs, which relates to the broader context of abortion law but does not explicitly address or verify the specific assumption in A—that the public should be aware of legal nuances like trimester-based restrictions in Roe v. Wade. While"
     },
     {
       "a_turn_idx": 22,
@@ -2912,11 +2912,11 @@
       "claim_text": "The U.S. Congress should address issues like Ukraine and Israel without conditioning one upon the other.",
       "overlap_score": 2,
       "c_time": 1397.301,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'they' in turn 37 refers to world leaders, not related to the public or legal nuances in turn 22.\",\n  \"reason\": \"Claim C discusses U.S. congressional policy on foreign aid to Ukraine and Israel, emphasizing non-conditionality between the two issues. Assumption A concerns public awareness of legal restrictions in Roe v. Wade, particularly trimester-based limits. There is no overlap in topic, concept, or semantic content between"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No coreference resolution needed; 'the U.S. Congress' and 'we' refer to the same entity in context.",
+      "reason": "Claim C discusses congressional action on Ukraine and Israel without conditional linkage, while assumption A concerns public awareness of legal restrictions in Roe v. Wade. The topics, focus, and content are entirely unrelated. There is no overlap in semantic content, and C does not state, imply, or verify any aspect of A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the U.S. Congress' and 'we' refer to the same entity in context.\",\n  \"reason\": \"Claim C discusses congressional action on Ukraine and Israel without conditional linkage, while assumption A concerns public awareness of legal restrictions in Roe v. Wade. The topics, focus, and content are entirely unrelated. There is no overlap in semantic content, and C does not state, imply, or verify any aspect of A.\"\n}\n```"
     },
     {
       "a_turn_idx": 22,
@@ -2931,7 +2931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the United States' refers to the nation, not individuals.\",\n  \"reason\": \"Claim C discusses U.S. principles regarding post-conflict situations in Gaza, particularly around a two-state solution, Palestinian self-determination, and security. Assumption A concerns public awareness of legal nuances in Roe v. Wade, specifically trimester-based abortion restrictions. The topics are entirely unrelated—A is about reproductive rights and legal precedent in the U.S., while C"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the United States' refers to the nation, not a person or entity linked to prior claims.\",\n  \"reason\": \"Claim C discusses U.S. principles regarding post-conflict situations in Gaza, specifically emphasizing consistent positions on a two-state solution, Palestinian self-determination, and Israeli security. Assumption A, however, concerns public awareness of legal nuances in Roe v. Wade, particularly trimester-based abortion restrictions. These topics are entirely unrelated in subject"
     },
     {
       "a_turn_idx": 22,
@@ -2946,7 +2946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_02, and 'this issue' refers to the broader debate on reproductive rights following the Dobbs decision.\",\n  \"reason\": \"Claim C discusses the inconsistency of legal protections across states post-Dobbs, which relates to the broader context of policy change and legal landscape. However, it does not explicitly address or verify the specific assumption A—that knowledge of pre-Dobbs legal context strengthens arguments about current"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'this issue' in turn 26, which resolves to the broader topic of reproductive rights and legal protections post-Dobbs, but does not explicitly reference or verify the specific claim about pre-Dobbs legal context.\",\n  \"reason\": \"Claim C discusses the inconsistency of legal protections across states post-Dobbs and emphasizes the role of elections in shaping future policy. While this relates to the broader theme of legal change and public understanding,"
     },
     {
       "a_turn_idx": 22,
@@ -2961,7 +2961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'people' in turn 49 refers to the general public, not linked to any prior entity in turn 22.\",\n  \"reason\": \"Claim C (turn 49) discusses public opinion on current economic conditions and government accomplishments, while assumption A (turn 22) concerns the relevance of pre-Dobbs legal context to understanding current policy debates. There is no semantic connection between the two: C does not mention, reference,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'public opinion polls' refers to survey data on economic sentiment.\",\n  \"reason\": \"Claim C discusses public opinion polls reflecting feelings about current economic conditions, while assumption A concerns the relevance of pre-Dobbs legal context to understanding current policy debates. The two topics are unrelated—A focuses on historical legal precedent in reproductive rights, whereas C addresses economic policy perception. There is no overlap in subject matter, logic, or content. Thus, C does not"
     },
     {
       "a_turn_idx": 22,
@@ -2976,7 +2976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the national discourse around abortion, as established in turn 22. 'Dobbs decision' is the subject of both claims.\",\n  \"reason\": \"Claim C states that after the Dobbs decision, states enacted varying laws regarding reproductive rights. This directly reflects the shift in national discourse described in assumption A, which asserts that the Dobbs decision made abortion a national issue where it previously was not debated. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the national discourse around abortion, as established in turn 22. 'Dobbs decision' is the subject of both claims.\",\n  \"reason\": \"Claim C explicitly states that after the Dobbs decision, states enacted varying laws regarding reproductive rights, which directly verifies the implication in assumption A that the Dobbs decision significantly altered the national discourse around abortion. The shift from a unified legal standard to state-level variation underscores"
     },
     {
       "a_turn_idx": 22,
@@ -2991,7 +2991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 30 refers to SPEAKER_02, but does not connect to the earlier assumption about Supreme Court rulings.\",\n  \"reason\": \"Claim C (turn 30) discusses immigration policy and the need for reform, which is entirely unrelated to assumption A (turn 22), which concerns shared understanding about the significance of Supreme Court rulings. There is no mention of abortion, Roe v. Wade, public education,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to SPEAKER_02, consistent with prior turns.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration crisis and the need for reform, but does not mention or verify the assumption A (turn 22), which concerns a shared understanding about the significance of Supreme Court rulings. The topics are entirely unrelated, and there is no overlap in semantic content. Therefore, the claim"
     },
     {
       "a_turn_idx": 22,
@@ -3021,7 +3021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 31 refers to SPEAKER_02, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 31) discusses referencing an event from three years ago related to immigration reform efforts post-inauguration. Assumption A (turn 22) concerns a shared understanding about the significance of Supreme Court rulings. These topics are unrelated—C does not mention, imply, or verify anything about"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 31 refers to SPEAKER_02, consistent with prior context.\",\n  \"reason\": \"Claim C (turn 31) discusses referencing an event from three years ago related to immigration reform efforts post-inauguration, which is unrelated to assumption A (turn 22), which concerns a shared understanding about the significance of Supreme Court rulings. There is no mention of Supreme Court rulings, public understanding of"
     },
     {
       "a_turn_idx": 22,
@@ -3036,7 +3036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 43 refers to the position on the day-after scenario and Palestinian rights, not to the shared understanding of Supreme Court rulings mentioned in turn 22.\",\n  \"reason\": \"Turn 43 discusses disagreements between the US and Israel regarding post-war Gaza policy and aid conditions, which is unrelated to the earlier assumption about shared understanding of Supreme Court rulings. While both involve political agreement/disagreement, the topics are distinct—constitutional law vs"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 43 refers to the position on the day-after scenario and the principles regarding Palestinian rights and Israeli security, not to the shared understanding of Supreme Court rulings.\",\n  \"reason\": \"Turn 43 discusses disagreements between the US and Israel on policy positions related to Gaza and the two-state solution, which is unrelated to the earlier assumption A about shared understanding of Supreme Court rulings. While both involve agreement/disagreement, the topics are entirely different"
     },
     {
       "a_turn_idx": 22,
@@ -3051,7 +3051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'people' in turn 49 refers to the general public, but the topic shifts entirely from education about historical legal frameworks to public opinion on current economic conditions.\",\n  \"reason\": \"Claim C (turn 49) discusses public opinion on current economic policies and achievements, while assumption A (turn 22) concerns educating the public about historical legal frameworks—specifically, pre-Dodge abortion laws and the context of Roe v. Wade."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'you' in turn 49 refers to the audience or political opponents, not linked to prior speakers or concepts in turn 22.\",\n  \"reason\": \"Claim C (turn 49) discusses public opinion on economic conditions and government accomplishments, while assumption A (turn 22) focuses on educating the public about historical legal frameworks—specifically abortion rights and the legacy of Roe v. Wade. There is no overlap in subject matter,"
     },
     {
       "a_turn_idx": 23,
@@ -3066,7 +3066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_02, and 'this issue' refers to reproductive rights as discussed in prior turns.\",\n  \"reason\": \"Claim C states that states have enacted varying laws after the Dobbs decision, which reflects a consequence of the shift in reproductive rights policy. However, it does not explicitly address or verify the assumption that public figures like President Biden represent shared values related to gender equality and reproductive rights. While the context"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 26 refers to SPEAKER_02, and 'this issue' refers to reproductive rights as discussed in prior turns.\",\n  \"reason\": \"Claim C states that states have enacted varying laws after the Dobbs decision, which is contextually relevant to the discussion of reproductive rights. However, it does not explicitly address or verify the specific assumption in A—that public figures like President Biden represent shared values related to gender equality and reproductive rights."
     },
     {
       "a_turn_idx": 23,
@@ -3081,7 +3081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 26 refers to the issue of reproductive rights and bodily autonomy discussed in turn 23, particularly the idea that public figures like President Biden support women's freedom to make decisions about their bodies.\",\n  \"reason\": \"Claim C states that elections are meaningful mechanisms for changing policy on reproductive rights, which directly supports the underlying assumption in A that public figures like President Biden represent shared values around gender equality and reproductive rights. While C does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in claim C refers to the issue of reproductive rights, which is the central topic introduced in assumption A. 'Elections' and 'elected leaders' in C are linked to the role of public figures like President Biden mentioned in A.\",\n  \"reason\": \"Claim C states that elections are meaningful mechanisms for changing policy on reproductive rights, which directly supports the idea in A that public figures like President Biden represent shared values related to reproductive rights. While C"
     },
     {
       "a_turn_idx": 23,
@@ -3126,7 +3126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 23 refers to President Biden. In turn 37, 'the president' and 'President Biden' refer to the same individual.\",\n  \"reason\": \"Claim C mentions meeting President Biden in the Oval Office, which confirms his role as a public figure and leader. However, it does not explicitly address or verify the specific assumption that Biden represents shared values related to gender equality and reproductive rights. While the context implies alignment with progressive values"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 23 refers to President Biden. In turn 37, 'the president' and 'President Biden' refer to the same individual.\",\n  \"reason\": \"Claim C mentions meeting President Biden in the Oval Office, which confirms his identity and presence as a public figure. However, it does not explicitly address or verify the specific assumption in A—that Biden represents shared values related to gender equality and reproductive rights. While the mention of Biden lends"
     },
     {
       "a_turn_idx": 23,
@@ -3141,7 +3141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to President Biden, as established by the context of meeting with world leaders and being in the Oval Office.\",\n  \"reason\": \"Claim C states that President Biden receives calls from world leaders for perspective, advice, or support, which reflects international recognition of his leadership. However, this does not explicitly verify or state the core content of assumption A, which is that public figures like Biden represent shared values related to gender equality and reproductive"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 37 refers to President Biden, as established by context (e.g., 'I've been in the Oval Office with the president, with President Biden').\",\n  \"reason\": \"Claim C states that President Biden receives calls from world leaders for perspective, advice, or support. While this reflects a form of global recognition of his leadership, it does not explicitly address or verify the specific assumption in A—that public figures like Biden represent shared values"
     },
     {
       "a_turn_idx": 23,
@@ -3184,9 +3184,9 @@
       "c_time": 1131.525,
       "entailment_score": 1,
       "confidence": 0.95,
-      "coref_notes": "No relevant coreference links; 'the immigration system' refers to a distinct topic from the national founding principles mentioned in A.",
-      "reason": "Claim C discusses the belief that the immigration system is broken, which is unrelated to the assumption A that invoking national founding principles carries persuasive weight. There is no overlap in subject matter, and C does not state, verify, or imply anything about foundational principles or their rhetorical power. Thus, the claim is clearly unrelated to A.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the immigration system' refers to a distinct topic from the national founding principles mentioned in A.\",\n  \"reason\": \"Claim C discusses the belief that the immigration system is broken, which is unrelated to the assumption A that invoking national founding principles carries persuasive weight. There is no overlap in subject matter, and C does not state, verify, or imply anything about foundational principles or their rhetorical power. Thus, the claim is clearly unrelated to A.\"\n}\n```"
+      "coref_notes": "No relevant coreference issues; 'the immigration system' refers to a distinct topic from the national founding principles mentioned in A.",
+      "reason": "Claim C discusses the belief that the immigration system is broken, which is unrelated to assumption A, which concerns the persuasive power of invoking national founding principles. There is no overlap in semantic content or logical connection between the two claims. Therefore, C does not support, verify, or relate to A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference issues; 'the immigration system' refers to a distinct topic from the national founding principles mentioned in A.\",\n  \"reason\": \"Claim C discusses the belief that the immigration system is broken, which is unrelated to assumption A, which concerns the persuasive power of invoking national founding principles. There is no overlap in semantic content or logical connection between the two claims. Therefore, C does not support, verify, or relate to A.\"\n}\n```"
     },
     {
       "a_turn_idx": 24,
@@ -3201,7 +3201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Claim C states that the speaker believes 'barbarism' applies to the situation, which refers to the atrocities committed by Hamas. However, assumption A concerns the persuasive power of invoking national founding principles, particularly regarding reproductive rights and individual freedoms."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Claim C states that the speaker believes 'barbarism' applies to the situation, which refers to the atrocities committed by Hamas. However, assumption A concerns the belief that invoking national founding principles carries persuasive weight—a completely different concept. There is"
     },
     {
       "a_turn_idx": 24,
@@ -3216,7 +3216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to SPEAKER_02, but the claim is about immigration, not foundational issues.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 24), which concerns foundational issues related to reproductive rights and bodily autonomy. There is no overlap in topic, content, or implied agreement. The statement in C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to SPEAKER_02, who is the listener in the prior exchange.\",\n  \"reason\": \"Claim C (turn 30) asserts that the listener agrees the immigration system is broken, which is unrelated to assumption A (turn 24), which concerns agreement on foundational issues related to reproductive rights and bodily autonomy. The topics, context, and substantive claims are entirely distinct. There is no overlap"
     },
     {
       "a_turn_idx": 24,
@@ -3231,7 +3231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 30 refers to the listener, but does not connect to the historical context assumption in turn 24.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 24), which concerns the listener's understanding of the historical context of founding principles related to bodily autonomy and freedom. There is no overlap in topic, concept, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 30 refers to the listener, but does not connect to the assumption in turn 24.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 24), which concerns the listener's understanding of the historical context of founding principles related to bodily autonomy and freedom. There is no overlap in topic, concept, or implied connection"
     },
     {
       "a_turn_idx": 24,
@@ -3246,7 +3246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to 'some Republicans' as the subject of the claim about exploiting the immigration crisis politically.\",\n  \"reason\": \"Claim C states that some Republicans view the immigration crisis as a political opportunity for the November election, which is a specific example of political motivation related to an upcoming election. However, assumption A is broader, referring to the listener’s interest in or concern about political motivation in general, particularly regarding reproductive rights and freedom."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 33 refers to 'some Republicans' as the subject of political opportunism.\",\n  \"reason\": \"Claim C states that some Republicans view the immigration crisis as a political opportunity for the November election, which is a specific example of political motivation related to an upcoming election. However, assumption A is broader, referring to the listener's interest in or concern about political motivation in general, particularly regarding reproductive rights and freedom. While C touches on political"
     },
     {
       "a_turn_idx": 24,
@@ -3261,7 +3261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference issues; 'one of the priorities' refers to Speaker_07's stated focus on post-conflict planning.\",\n  \"reason\": \"Claim C mentions 'thinking about the day after' and prioritizing a two-state solution, which reflects long-term strategic concern. However, it does not explicitly address or verify the earlier assumption A—that the listener has interest in or concern about political motivation. While both involve political engagement, C focuses on foreign policy and post-war planning rather"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'one of the priorities' refers to Speaker_07's stated focus on post-conflict planning.\",\n  \"reason\": \"Claim C mentions 'thinking about the day after' and prioritizing a two-state solution, which reflects long-term strategic concern. However, it does not explicitly address or verify the earlier assumption A—that the listener has interest in or concern about political motivation. While both involve political engagement, C focuses on foreign policy and post-war planning"
     },
     {
       "a_turn_idx": 25,
@@ -3276,7 +3276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference; 'the speaker' in turn 30 refers to SPEAKER_00, while 'the speaker' in turn 25 refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 30) discusses the belief that the immigration system is broken, which is entirely unrelated to assumption A (turn 25), which concerns the influence of referenda on voting behavior. There is no overlap in topic, content, or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to SPEAKER_00, and 'the immigration system' is the subject of discussion. No coreference links relevant to assumption A.\",\n  \"reason\": \"Claim C (turn 30) discusses the belief that the immigration system is broken, which is entirely unrelated to assumption A (turn 25), which concerns the influence of referenda on voting behavior. There is no overlap in topic, concept, or"
     },
     {
       "a_turn_idx": 25,
@@ -3306,7 +3306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_07, as established by prior context. 'They' in 'they're not going to turn out' refers to young voters and people of color, consistent with earlier discussion.\",\n  \"reason\": \"Claim C (turn 55) discusses the speaker's perceived credibility as a messenger to reconnect voters—specifically young voters and people of color—to Joe Biden. However, this does not address or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_07, and 'people' refers to young voters and voters of color mentioned earlier. However, the claim in turn 55 does not address the influence of referenda on voting behavior.\",\n  \"reason\": \"Turn 55 discusses the speaker's credibility as a messenger to reconnect certain voters to Joe Biden, particularly young voters and people of color. This topic is unrelated to the earlier assumption in"
     },
     {
       "a_turn_idx": 25,
@@ -3321,7 +3321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to SPEAKER_02, but the claim in turn 30 about the immigration system being broken is unrelated to the earlier assumption A about the term 'referenda'. No coreference resolves the claim to the prior assumption.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 25), which concerns the listener's understanding"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 30 refers to SPEAKER_02, but the earlier assumption A (turn 25) concerns the listener's understanding of the term 'referenda'. There is no mention of 'referenda' or related concepts in turn 30.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken and calls for reform, which is entirely unrelated to assumption A (turn 25),"
     },
     {
       "a_turn_idx": 26,
@@ -3336,7 +3336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 55 refers to SPEAKER_02, who is also the speaker in turn 26. 'Dobbs decision' is the same event referenced in both turns.\",\n  \"reason\": \"Claim C states that the speaker has traveled to various states since the Dobbs decision, which implies engagement with the political and social consequences of that decision. This aligns with assumption A, which asserts that the Dobbs decision weakened constitutional protections"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 55 refers to SPEAKER_02, who is also the speaker in turn 26. 'The Dobbs decision' is the same event referenced in both turns.\",\n  \"reason\": \"Claim C states that the speaker has traveled to various states since the Dobbs decision, which implies engagement with the political and social consequences of that decision. This aligns with assumption A, which asserts that the Dobbs decision weakened constitutional protections"
     },
     {
       "a_turn_idx": 26,
@@ -3351,7 +3351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Gen Z, which is consistent with the context in turn 55. 'Their height of their reproductive years' clearly refers to the period when Gen Z individuals are most likely to exercise reproductive rights.\",\n  \"reason\": \"Claim C explicitly states that Gen Z witnessed the Supreme Court revoke a fundamental right during their peak reproductive years, which directly verifies the substance of assumption A—that reproductive freedom is a fundamental right worth protecting through democratic processes"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to Gen Z, which is consistent with the context in turn 55 where Gen Z is discussed as the target audience of the speaker's outreach.\",\n  \"reason\": \"Claim C explicitly states that Gen Z witnessed the Supreme Court revoke a fundamental right during their peak reproductive years, which directly verifies the substance of assumption A—that reproductive freedom is a fundamental right worth protecting through democratic processes. The phrase 'a fundamental right' in C align"
     },
     {
       "a_turn_idx": 26,
@@ -3365,8 +3365,8 @@
       "entailment_score": 1,
       "confidence": 0.95,
       "coref_notes": "No coreference resolution needed; 'the immigration system' refers to a distinct topic from the earlier assumption about electoral outcomes and bodily autonomy.",
-      "reason": "Claim C discusses the broken nature of the immigration system, which is entirely unrelated to Assumption A, which concerns the moral and societal importance of electoral outcomes regarding bodily autonomy. There is no overlap in subject matter, nor does C verify or state the substance of A. The topics are distinct and unrelated.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the immigration system' refers to a distinct topic from the earlier assumption about electoral outcomes and bodily autonomy.\",\n  \"reason\": \"Claim C discusses the broken nature of the immigration system, which is entirely unrelated to Assumption A, which concerns the moral and societal importance of electoral outcomes regarding bodily autonomy. There is no overlap in subject matter, nor does C verify or state the substance of A. The topics are distinct and unrelated.\"\n}\n```"
+      "reason": "Claim C discusses the broken nature of the immigration system and calls for reform, which is entirely unrelated to Assumption A, which concerns the moral and societal importance of electoral outcomes regarding bodily autonomy. There is no overlap in subject matter, nor does C verify or state the substance of A. The topics are distinct and unrelated.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the immigration system' refers to a distinct topic from the earlier assumption about electoral outcomes and bodily autonomy.\",\n  \"reason\": \"Claim C discusses the broken nature of the immigration system and calls for reform, which is entirely unrelated to Assumption A, which concerns the moral and societal importance of electoral outcomes regarding bodily autonomy. There is no overlap in subject matter, nor does C verify or state the substance of A. The topics are distinct and unrelated.\"\n}"
     },
     {
       "a_turn_idx": 26,
@@ -3381,7 +3381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Claim C states that 'barbarism' applies to the situation, which is a moral judgment on the violence committed by Hamas. However, assumption A concerns the moral and societal consequences of electoral outcomes regarding bodily autonomy. While both involve moral evaluations"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'It' in turn 39 refers to the events described in turn 38, specifically the actions of Hamas on October 7th, including the use of rape as a weapon of war.\",\n  \"reason\": \"Claim C states that 'barbarism' applies to the situation being discussed, which refers to the atrocities committed by Hamas on October 7th. However, this does not relate to assumption A, which concerns the moral and societal consequences of"
     },
     {
       "a_turn_idx": 26,
@@ -3411,7 +3411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 27 refers to the listener, but the claim is unrelated to the assumption about reproductive rights.\",\n  \"reason\": \"Claim C states that there exists a service providing daily news breakdowns (Wake Up Call newsletter), which is unrelated to assumption A, which concerns a shared understanding about the stakes of reproductive rights. There is no mention of reproductive rights, elections, or shared understanding in C. The topics are entirely distinct, and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 27 refers to the listener, but the claim is unrelated to the assumption about reproductive rights.\",\n  \"reason\": \"Claim C states that there exists a service providing daily news breakdowns (Wake Up Call newsletter), which is unrelated to assumption A about a shared understanding regarding the stakes of reproductive rights. There is no mention of reproductive rights, elections, or shared understanding in C. The topics are entirely distinct, and C does"
     },
     {
       "a_turn_idx": 26,
@@ -3441,7 +3441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to SPEAKER_02, but the claim is about immigration, not reproductive rights.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 26), which concerns reproductive rights and a shared understanding about their electoral stakes. There is no overlap in topic, concept, or implied agreement. The claims are on completely"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 30 refers to SPEAKER_02, but the claim is about immigration, not reproductive rights.\",\n  \"reason\": \"Claim C (turn 30) discusses the immigration system being broken, which is entirely unrelated to assumption A (turn 26), which concerns reproductive rights and a shared understanding about their stakes. There is no overlap in topic, concept, or implied agreement. The claims are on completely different"
     },
     {
       "a_turn_idx": 26,
@@ -3456,7 +3456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 31 refers to the listener (SPEAKER_00), not the speaker of assumption A (SPEAKER_07).\",\n  \"reason\": \"Claim C (turn 31) discusses referencing an event from three years ago related to immigration policy, while assumption A (turn 26) concerns a shared understanding about the stakes of reproductive rights. The topics are entirely different, and there is no"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'the speaker' in turn 31 refers to SPEAKER_02, who is discussing immigration policy.\",\n  \"reason\": \"Claim C (turn 31) discusses referencing an event from three years ago related to immigration reform, while assumption A (turn 26) concerns a shared understanding about the stakes of reproductive rights. The topics are entirely different, and there is no mention or implication of reproductive rights, electoral impact on reproductive freedoms"
     },
     {
       "a_turn_idx": 26,
@@ -3471,7 +3471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in claim C refers to the broader geopolitical disagreement between the US and Israel regarding post-war Gaza and the two-state solution.\",\n  \"reason\": \"Claim C mentions 'disagreements' between parties involved, which touches on the theme of differing views on the future of Gaza and the two-state solution. However, it does not address the specific assumption A—that there is a shared understanding about the stakes of reproductive rights. The topics are entirely unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'this' in claim C refers to the broader geopolitical disagreement between the US and Israel regarding post-war Gaza and the two-state solution.\",\n  \"reason\": \"Claim C mentions 'disagreements' between parties involved, which touches on the theme of differing positions on key issues like Gaza's status and the two-state solution. However, it does not address or verify the specific assumption A—that there is a shared understanding about the stakes of reproductive rights. The"
     },
     {
       "a_turn_idx": 26,
@@ -3486,7 +3486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 53 refers to the listener in a promotional context, not related to the political discussion in turn 26.\",\n  \"reason\": \"Claim C (turn 53) discusses cashback rewards from a credit card offer and is entirely unrelated to the assumption about shared understanding on reproductive rights. There is no mention of elections, reproductive rights, or any related political stakes. The context shifts abruptly to consumer promotions, making the"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'you' in turn 53 refers to the listener in a promotional context, not related to the political discussion in turn 26.\",\n  \"reason\": \"Claim C (turn 53) discusses a promotional offer for Discover card cashback and is entirely unrelated to the assumption A about shared understanding on reproductive rights. There is no mention of elections, reproductive rights, or any related political or social stakes. The context shifts abruptly to consumer advertising"
     },
     {
       "a_turn_idx": 27,
@@ -3501,7 +3501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_07, while assumption A concerns SPEAKER_02's perceived authority. The two speakers are distinct, and C does not address or verify A.\",\n  \"reason\": \"Claim C (turn 45) states that the speaker (SPEAKER_07) does not believe the interlocutor (SPEAKER_02) adequately addressed the question. This is unrelated"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_07, who is distinct from the speaker in assumption A (SPEAKER_02).\",\n  \"reason\": \"Claim C states that the speaker (SPEAKER_07) does not believe the interlocutor (SPEAKER_02) has adequately addressed their question. This is unrelated to assumption A, which concerns the speaker's authority or credibility in recommending a"
     },
     {
       "a_turn_idx": 27,
@@ -3516,7 +3516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'our' in turn 49 refers to the political group led by the speaker, which includes the speaker and their administration. 'We' in turn 49 is consistent with the collective authority implied in turn 27.\",\n  \"reason\": \"Turn 49 claims 'historic accomplishments in terms of the economy,' which touches on the theme of credibility and authority in policy-making. However, it does not explicitly address the speaker's personal authority or credibility in"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'our' in turn 49 refers to the political group led by the speaker, consistent with the broader context of policy achievements attributed to the administration.\",\n  \"reason\": \"Claim C states that 'we have historic accomplishments in terms of the economy,' which touches on the general idea of credibility or authority in policy-making. However, it does not explicitly address the specific assumption A—that the speaker has authority or credibility in recommending a media product. The claim focuses on economic"
     },
     {
       "a_turn_idx": 27,
@@ -3531,7 +3531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker mentioned in turn 27. The claim 'the speaker has performed well among young voters' directly addresses the credibility and influence of the speaker in a specific demographic.\",\n  \"reason\": \"Turn 55 explicitly states that the speaker performs well among young voters, which directly supports the assumption in turn 27 that the speaker has authority or credibility in recommending media"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker mentioned in turn 27. The claim 'the speaker has performed well among young voters' directly verifies the assumption that the speaker has credibility or authority in recommending media products, particularly in influencing voter behavior.\",\n  \"reason\": \"Turn 55 explicitly states that the speaker performs well among young voters, which directly supports the assumption in turn 27 that the"
     },
     {
       "a_turn_idx": 27,
@@ -3546,7 +3546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. The claim 'the speaker has performed well among Black voters' is a new assertion about the speaker's electoral appeal, not a direct statement or verification of the earlier assumption about authority or credibility in recommending media.\",\n  \"reason\": \"Turn 55 introduces a new claim about the speaker's performance among specific demographic groups (Black voters"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. The claim in turn 55 focuses on performance among Black voters, while turn 27 concerns the speaker's authority or credibility in recommending media products.\",\n  \"reason\": \"Turn 55 discusses the speaker's popularity among Black voters, which relates to perceived credibility or influence within a demographic. However, it does not address"
     },
     {
       "a_turn_idx": 27,
@@ -3561,7 +3561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. The claim in turn 55 is about performance among Latino voters, which is unrelated to the assumption in turn 27 about having authority or credibility in recommending media products.\",\n  \"reason\": \"Turn 55 discusses political performance among Latino voters, which is entirely unrelated to the assumption in turn 27 about the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. The claim in turn 55 is about performance among Latino voters, which is unrelated to the assumption in turn 27 about having authority or credibility in recommending media products.\",\n  \"reason\": \"Turn 55 discusses the speaker's electoral appeal among Latino voters, which is a political performance metric. Turn 27 concerns"
     },
     {
       "a_turn_idx": 27,
@@ -3576,7 +3576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. 'Gen Z students' is a clear reference to the demographic mentioned in the context of voter engagement.\",\n  \"reason\": \"Turn 55 explicitly states that the speaker has engaged with over 15,000 Gen Z students through a college tour, demonstrating direct, large-scale interaction with a key demographic. This establishes"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_02, who is the same speaker as in turn 27. The phrase 'the speaker' in claim C clearly refers to SPEAKER_02.\",\n  \"reason\": \"Claim C explicitly states that the speaker (SPEAKER_02) has conducted a college tour and met with over 15,000 Gen Z students, which directly verifies the assumption in A that"
     },
     {
       "a_turn_idx": 27,
@@ -3621,7 +3621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the statement about Discover's credit card being widely accepted and offering automatic cash-back rewards, as established in turn 28.\",\n  \"reason\": \"Claim C explicitly states that the February 2024 Nielsen report supports the claim about Discover.com's credit card, which directly verifies the substance of assumption A—namely, that using a credit card with automatic cash-back rewards is a desirable financial behavior. The mention of the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the statement about Discover's credit card being widely accepted and offering automatic cash back, which is the central claim in turn 28.\",\n  \"reason\": \"Claim C explicitly states that the February 2024 Nielsen report supports the claim about Discover.com's credit card, directly verifying the factual basis of the promotional assertion made in turn 28 regarding widespread acceptance and automatic cash-back rewards. The connection is clear, direct"
     },
     {
       "a_turn_idx": 28,
@@ -3636,7 +3636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the service' refers to Discover credit card as established in prior context.\",\n  \"reason\": \"Claim C ('The service automatically earns cash back') does not address or verify the earlier assumption A, which is about the desirability of using a credit card with automatic cash-back rewards as a financial behavior. While C confirms a feature of the card (automatic cash back), it does not assert or imply that this behavior is desirable, nor does it engage with"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the service' in claim C refers to Discover credit card, as established in prior context.\",\n  \"reason\": \"Claim C ('The service automatically earns cash back') does not address or verify the earlier assumption A ('Using a credit card with automatic cash-back rewards is a desirable financial behavior'). While C states a feature of the credit card (automatic cash back), it does not assert or imply that this behavior is desirable, nor does it evaluate its des"
     },
     {
       "a_turn_idx": 28,
@@ -3666,7 +3666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the interlocutor' refers to the person asking the question (SPEAKER_07), and 'you' in claim C refers to SPEAKER_02.\",\n  \"reason\": \"Claim C (turn 45) states that the speaker (SPEAKER_07) does not believe the interlocutor (SPEAKER_02) has adequately addressed the question about conditioning aid on Israel's actions. This is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the interlocutor' refers to the person being spoken to (SPEAKER_02), and 'their question' refers to the prior inquiry about conditional aid.\",\n  \"reason\": \"Claim C (turn 45) states that the speaker does not believe the interlocutor has adequately addressed their question, which is unrelated to assumption A (turn 28). Assumption A concerns the audience's familiarity with personal finance terminology, while"
     },
     {
       "a_turn_idx": 28,
@@ -3681,7 +3681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 49 refers to the political figure previously discussed, but this does not relate to the assumption about personal finance familiarity.\",\n  \"reason\": \"Claim C (turn 49) discusses economic policy achievements and public perception of those accomplishments, but it does not address or verify the assumption that the audience has familiarity with personal finance terminology and concepts. The topic shifts entirely to macroeconomic policy and voter engagement, with no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in turn 49 refers to the political figure previously discussed, but this does not relate to the assumption about personal finance terminology.\",\n  \"reason\": \"Claim C (turn 49) discusses economic policy accomplishments and public perception of government actions, but it does not address or verify the assumption that the audience has familiarity with personal finance terminology. The topic shifts entirely to macroeconomic achievements and public opinion, with no mention of financial literacy"
     },
     {
       "a_turn_idx": 28,
@@ -3696,7 +3696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 55 refers to the speaker (SPEAKER_07), but this does not relate to the assumption about personal finance knowledge in turn 28.\",\n  \"reason\": \"Turn 55 discusses the speaker's performance among young voters and political engagement, which is entirely unrelated to the assumption in turn 28 about audience familiarity with personal finance terminology. There is no mention of financial literacy, investing, or related"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Speaker_02, while assumption A concerns Speaker_01's presumed audience knowledge.\",\n  \"reason\": \"Claim C (turn 55) discusses the speaker's performance among young voters and political outreach, which is unrelated to assumption A about the audience's familiarity with personal finance terminology. There is no mention of financial literacy, terminology, or assumptions about audience knowledge in C. The topics and focus are"
     },
     {
       "a_turn_idx": 28,
@@ -3711,7 +3711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Speaker_02, who is discussing voter demographics. Assumption A concerns familiarity with personal finance terms, which is unrelated to voter demographics.\",\n  \"reason\": \"Claim C discusses the speaker's performance among specific demographic groups (young voters, Black and Latino voters), while assumption A concerns prior knowledge of personal finance terminology. There is no overlap in subject matter, and C does not mention, imply, or verify"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to Speaker_02, who is discussing voter demographics. Assumption A concerns familiarity with personal finance terms, which is unrelated to voter demographics.\",\n  \"reason\": \"Claim C discusses the speaker's performance among specific demographic groups (young voters, Black and Latino voters), while assumption A pertains to assumed familiarity with personal finance terminology. There is no overlap in subject matter, and C does not mention, imply,"
     },
     {
       "a_turn_idx": 28,
@@ -3741,7 +3741,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Gen Z' in turn 55 refers to the same demographic mentioned in turn 28.\",\n  \"reason\": \"Turn 55 discusses meeting Gen Z students through a college tour, which does not address or verify the assumption that the audience has familiarity with personal finance terminology and concepts. The topics are entirely unrelated—turn 28 concerns financial literacy and investment platforms, while turn 55 focuses on political engagement and youth outreach. There"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Gen Z' in turn 55 refers to the same demographic mentioned in turn 28.\",\n  \"reason\": \"Turn 55 discusses meeting Gen Z students during a college tour, which does not address or verify the assumption in turn 28 that the audience has familiarity with personal finance terminology. The topics and assumptions are unrelated—turn 28 concerns financial literacy, while turn 55 focuses on political engagement with a younger demographic"
     },
     {
       "a_turn_idx": 28,
@@ -3756,7 +3756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the speaker' in claim C refers to SPEAKER_02, consistent with context.\",\n  \"reason\": \"Claim C discusses the speaker's travel to purple, red, and blue states post-Dobbs decision, which is unrelated to assumption A about audience familiarity with personal finance terminology. There is no mention of financial literacy, investment terms, or related concepts in C. Thus, C does not address, verify, or relate to A in any"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'you' in turn 55 refers to SPEAKER_02, who is discussing travel to various states.\",\n  \"reason\": \"Turn 55 discusses traveling to purple, red, and blue states to engage with voters, which is unrelated to the assumption in turn 28 about audience familiarity with personal finance terminology. There is no mention of financial literacy, investment terms, or related concepts. Thus, the claim does not support, verify"
     },
     {
       "a_turn_idx": 29,
@@ -3769,9 +3769,9 @@
       "c_time": 2028.74,
       "entailment_score": 10,
       "confidence": 0.98,
-      "coref_notes": "The pronoun 'Anabe' in turn 54 refers to the sofa product introduced in turn 29, establishing clear identity.",
-      "reason": "Claim C explicitly states that Anabe's slipcovers are pet-friendly and stain-resistant, which directly verifies the core content of assumption A—pet owners prioritize such materials. The statement matches the substance of A exactly, with no ambiguity or omission.",
-      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'Anabe' in turn 54 refers to the sofa product introduced in turn 29, establishing clear identity.\",\n  \"reason\": \"Claim C explicitly states that Anabe's slipcovers are pet-friendly and stain-resistant, which directly verifies the core content of assumption A—pet owners prioritize such materials. The statement matches the substance of A exactly, with no ambiguity or omission.\"\n}\n```"
+      "coref_notes": "The pronoun 'Anabe' in turn 54 refers to the sofa product introduced in turn 29, establishing clear coreference.",
+      "reason": "Claim C explicitly states that Anabe's slipcovers are pet-friendly and stain-resistant, which directly verifies the core content of assumption A from turn 29 that pet owners prioritize such materials. The statement in C is not only consistent with A but explicitly confirms its key elements without ambiguity.",
+      "raw": "```json\n{\n  \"entailment_score\": 10,\n  \"confidence\": 0.98,\n  \"coref_notes\": \"The pronoun 'Anabe' in turn 54 refers to the sofa product introduced in turn 29, establishing clear coreference.\",\n  \"reason\": \"Claim C explicitly states that Anabe's slipcovers are pet-friendly and stain-resistant, which directly verifies the core content of assumption A from turn 29 that pet owners prioritize such materials. The statement in C is not only consistent with A but explicitly confirms its key elements without ambiguity.\"\n}\n```"
     },
     {
       "a_turn_idx": 30,
@@ -3801,7 +3801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in claim C refers to the immigration system, which is the subject of assumption A. 'The situation' in C refers to the state of the immigration system as described in A.\",\n  \"reason\": \"Claim C explicitly states that 'the system has broken,' directly verifying the core assertion in assumption A that the immigration system is broken. The phrase 'the situation requires systemic change because the current system has broken down' clearly and unambiguously confirms the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the situation' in turn 33 refers to the immigration system discussed in turn 30. 'It' in 'the system has broken' refers to the immigration system.\",\n  \"reason\": \"Turn 33 explicitly states that 'the system has broken,' which directly verifies the core claim in turn 30 that the immigration system is broken. The phrase 'the situation requires systemic change because the current system has broken down' clearly and unambigu"
     },
     {
       "a_turn_idx": 30,
@@ -3816,7 +3816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"SPEAKER_07 refers to 'some Republicans' as the subject of their claim; 'they' in turn refers to these same Republicans.\",\n  \"reason\": \"Claim C states that some Republicans view the immigration crisis as a political opportunity for the November election, which introduces a new idea—political exploitation—that is not present in assumption A. Assumption A is about shared belief that the system is broken, while C shifts focus to Republican motives. Although both relate to immigration policy"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"SPEAKER_07 refers to 'some Republicans' as the subject of their claim; 'they' in turn refers to these same Republicans.\",\n  \"reason\": \"Claim C states that some Republicans view the immigration crisis as a political opportunity for the November election. This introduces a new idea—Republicans exploiting the issue politically—which is not present in assumption A. Assumption A asserts that the listener (SPEAKER_00) shares the speaker’s view that the immigration system is"
     },
     {
       "a_turn_idx": 30,
@@ -3831,7 +3831,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 34 refers to the speaker (SPEAKER_07) and their team, consistent with prior references to collective action on immigration reform. 'The immigration system' in turn 34 directly refers to the same entity discussed in turn 30.\",\n  \"reason\": \"Turn 34 explicitly states 'address the immigration system,' which directly verifies the core claim in turn 30 that 'our immigration system is broken'"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 34 refers to the speaker (SPEAKER_07) and their team, consistent with prior references to leadership and policy efforts in turns 32–33. 'The immigration system' is the same entity referenced in turn 30.\",\n  \"reason\": \"Turn 34 explicitly states 'address the immigration system,' which directly verifies the core claim in turn 30 that 'our immigration system is broken'"
     },
     {
       "a_turn_idx": 30,
@@ -3846,7 +3846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to SPEAKER_00, the listener who previously expressed agreement with the idea that the immigration system is broken (turn 30).\",\n  \"reason\": \"Turn 59 expresses curiosity about the listener's opinion on immigration, which is related to the topic discussed in turn 30. However, it does not explicitly state or verify the assumption that the listener shares the speaker's view that the immigration system is"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 59 refers to SPEAKER_00, the listener in the conversation, who previously expressed agreement with the idea that the immigration system is broken (turn 30).\",\n  \"reason\": \"Turn 59 expresses curiosity about the listener's opinion on immigration, which is related to the topic discussed in turn 30. However, it does not explicitly state or verify the assumption that the listener shares the speaker's view that"
     },
     {
       "a_turn_idx": 30,
@@ -6846,7 +6846,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 72 refers to SPEAKER_07, consistent with prior turns. The phrase 'those who continue to support Trump' is coreferential with 'his supporters' mentioned in turn 72.\",\n  \"reason\": \"Claim C states that the speaker does not judge Trump supporters despite legal challenges, which is unrelated to assumption A, which asserts that effective communication must reach people not aligned with the speaker’s views. While both involve political"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'I' in turn 72 refers to SPEAKER_07, consistent with prior turns. The phrase 'I don't judge that' refers to supporters of Trump despite legal challenges.\",\n  \"reason\": \"Claim C (turn 72) states that the speaker does not judge Trump supporters despite their continued support amid legal challenges. This is unrelated to assumption A (turn 66), which asserts that effective communication must reach people not aligned with the speaker"
     },
     {
       "a_turn_idx": 66,
@@ -6966,7 +6966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your' in turn 80 refers to the listener, not related to the subject of turn 69.\",\n  \"reason\": \"Turn 80 discusses health and the importance of the gut, which is entirely unrelated to the political complexity and non-binary nature of political choices discussed in turn 69. There is no overlap in semantic content, and the claim does not address, verify, or even reference the idea that political choices involve more"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'your' in turn 80 refers to the listener, not related to the subject of turn 69.\",\n  \"reason\": \"Turn 80 discusses personal health and the importance of the gut, which is entirely unrelated to the political complexity and non-binary nature of political choices discussed in turn 69. There is no overlap in semantic content, and the claim does not address, verify, or even reference the idea that political choices involve"
     },
     {
       "a_turn_idx": 69,
@@ -7116,7 +7116,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 72 refers to 'many of his supporters' mentioned earlier in the same turn, and 'someone' refers to Donald Trump, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that true leadership is measured by uplifting others rather than defeating them, which directly verifies the core idea in assumption A—that voters value leaders who respect the rule of law and promote unity over division. This aligns with the speaker’s assertion that most"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'the majority of Americans' mentioned in turn 72, and 'someone' in the original assumption A refers to the hypothetical respondents to the question about leadership values.\",\n  \"reason\": \"Claim C explicitly states that true leadership is measured by uplifting others rather than defeating them, which directly verifies the core idea in assumption A—that people should respond to questions about leadership in good faith by valuing constructive, non-destructive leadership."
     },
     {
       "a_turn_idx": 71,
@@ -7236,7 +7236,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the audience, and 'reach out' implies a method of contact. In turn 77, 'all my social media channels' explicitly provides one such method, directly verifying the assumption that the audience can access a way to contact the speaker.\",\n  \"reason\": \"Turn 77 explicitly states that the speaker has multiple social media channels, which directly fulfills the implied method of outreach mentioned in turn 75"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the audience, and 'reach out' implies a method of contact. In turn 77, 'all my social media channels' explicitly provides one such method, directly verifying the assumption that accessible outreach methods exist.\",\n  \"reason\": \"Turn 77 explicitly states that the speaker has multiple social media channels, which directly confirms the assumption in turn 75 that the audience can reach out via available methods. This"
     },
     {
       "a_turn_idx": 75,
@@ -7251,7 +7251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the audience/listeners, and 'reach out' implies a method of communication. In turn 77, 'the iHeartRadio app' is explicitly named as a platform for accessing podcasts, which directly supports the assumption that there is a method (a digital platform) available for audience engagement.\",\n  \"reason\": \"Turn 77 explicitly identifies the iHeartRadio app as a platform where listeners can access podcasts,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to the audience/listeners, and 'reach out' implies a method of contact. In turn 77, 'the iHeartRadio app' is presented as a specific platform for accessing podcasts, which directly supports the assumption that there is a method (a digital platform) available for audience engagement.\",\n  \"reason\": \"Turn 77 explicitly names the iHeartRadio app as a platform for accessing podcasts, which directly"
     },
     {
       "a_turn_idx": 75,

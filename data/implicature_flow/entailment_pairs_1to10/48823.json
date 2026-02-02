@@ -1101,7 +1101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Steven Lynch, as established by the context of reconnecting with him and discussing his input. In turn 41, 'congressmen Steven Lynch' explicitly identifies him by title and name, confirming his identity and role.\",\n  \"reason\": \"Turn 41 explicitly names Steven Lynch as a Congressman and confirms his active participation in the conversation, directly verifying the assumption in turn 19 that he is capable of"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 19 refers to Steven Lynch, as established by the context of reconnecting with him and discussing his input. In turn 41, 'congressmen Steven Lynch' explicitly identifies him by title and name, confirming his identity and role.\",\n  \"reason\": \"Turn 41 explicitly names Steven Lynch as a Congressman and references his participation in the conversation, directly verifying the assumption in turn 19 that he is capable of returning"
     },
     {
       "a_turn_idx": 19,
@@ -1682,11 +1682,11 @@
       "claim_text": "Users can fund their account at Public.com in five minutes or less.",
       "overlap_score": 2,
       "c_time": 1152.128,
-      "entailment_score": 0,
-      "confidence": 0.0,
-      "coref_notes": "",
-      "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' refers to individuals using Public.com, which is unrelated to the public health system mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses the ease of funding an investment account at Public.com, which is entirely unrelated to the public health system's capacity to distribute and administer a drug. There is no overlap in subject matter, context, or semantic content between assumption A and claim C. Therefore, the claim does not support, verify, or"
+      "entailment_score": 1,
+      "confidence": 0.95,
+      "coref_notes": "No relevant coreference links; 'users' refers to individuals using Public.com, unrelated to the public health system mentioned in A.",
+      "reason": "Claim C discusses the speed of funding an investment account at Public.com, which is entirely unrelated to the public health system's capacity to distribute a drug. There is no overlap in subject matter, context, or semantic content between A and C. Therefore, the claim does not support, relate to, or verify assumption A.",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No relevant coreference links; 'users' refers to individuals using Public.com, unrelated to the public health system mentioned in A.\",\n  \"reason\": \"Claim C discusses the speed of funding an investment account at Public.com, which is entirely unrelated to the public health system's capacity to distribute a drug. There is no overlap in subject matter, context, or semantic content between A and C. Therefore, the claim does not support, relate to, or verify assumption A.\"\n}\n```"
     },
     {
       "a_turn_idx": 34,
@@ -1761,7 +1761,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 38 refers to public health authorities and society collectively, consistent with the broader societal concern expressed in turn 35.\",\n  \"reason\": \"Turn 38 explicitly states the need to 'get a grasp on this' and emphasizes the necessity of testing, PPE, and a vaccine—directly addressing the condition of 'perceived control over transmission risk' mentioned in turn 35. The claim clearly verifies the substance of the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 38 refers to public health authorities and society collectively, consistent with the broader societal concern expressed in turn 35 about people's confidence in resuming activities.\",\n  \"reason\": \"Turn 38 explicitly states the need to 'get a grasp on this' and emphasizes the necessity of testing, PPE, and a vaccine—key elements that enable perceived control over transmission risk. This directly verifies the core idea in turn 35"
     },
     {
       "a_turn_idx": 35,
@@ -1866,7 +1866,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No significant coreference issues; 'the future course of events' refers to the ongoing pandemic trajectory discussed previously.\",\n  \"reason\": \"Claim C states that the future course is uncertain and will unfold over time, which aligns with the general sentiment of caution and lack of optimism expressed in A. However, A specifically asserts that future waves will affect multiple urban centers—a concrete prediction—while C is a vague statement about uncertainty without explicitly confirming or verifying the specific geographic spread mentioned in A."
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"No coreference resolution needed; 'the future course of events' refers to the ongoing pandemic trajectory discussed in turn 37.\",\n  \"reason\": \"Claim C states that the future course is uncertain and will unfold over time, which aligns with the general idea in assumption A that future outbreaks will affect multiple urban centers. However, C does not explicitly verify the specific prediction about multiple cities being affected, nor does it mention the pattern of repeated waves. While C is consistent with A"
     },
     {
       "a_turn_idx": 39,

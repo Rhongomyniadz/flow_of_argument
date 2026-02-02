@@ -1,0 +1,42 @@
+{
+  "episode_id": "94414",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.311,
+      "a_idx_in_turn": 7,
+      "assumption_text": "Conservative women can serve as credible voices on environmental issues.",
+      "c_turn_idx": 2,
+      "claim_text": "Halland is expected to face difficult questioning regarding her past record on environmental issues.",
+      "overlap_score": 2,
+      "c_time": 259.966,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 2 refers to Deb Halland, as established in the prior sentence. 'Howland' and 'Halend' are likely typos for 'Halland'.\",\n  \"reason\": \"Claim C states that Halland is expected to face difficult questioning regarding her past record on environmental issues. This directly supports the substance of assumption A, which posits that conservative women can be credible voices on environmental issues. While C does not explicitly state that"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 127.794,
+      "a_idx_in_turn": 2,
+      "assumption_text": "The speaker’s mother is a trustworthy model of virtue and civic responsibility.",
+      "c_turn_idx": 2,
+      "claim_text": "The U.S. reentry into the Paris Climate Accords is considered by the speaker to be primarily virtue signaling.",
+      "overlap_score": 2,
+      "c_time": 259.966,
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 2 refers to Senator Marsha Blackburn, as established in the prior context.\",\n  \"reason\": \"Claim C states that the U.S. reentry into the Paris Climate Accords is 'basically virtue signaling,' which expresses a critical political opinion. However, this does not make explicit or verify the earlier assumption A, which is about the speaker's mother being a trustworthy model of virtue and civic responsibility. There is no direct or indirect connection"
+    }
+  ]
+}

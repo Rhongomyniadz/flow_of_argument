@@ -126,7 +126,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Susan' as the person who suggested telling the oral history of San Francisco; 'she' in turn refers to Susan, and 'we' includes the co-hosts, including Susan.\",\n  \"reason\": \"Claim C explicitly states that Susan suggested telling the oral history of San Francisco, which directly verifies the underlying assumption in A that audience members may have varying levels of familiarity with San Francisco’s history—implying the podcast aims to serve"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_07 refers to 'Susan' as the person who suggested telling the oral history of San Francisco; 'she' in turn refers to Susan. 'We're both natives to San Francisco' confirms shared local identity.\",\n  \"reason\": \"Claim C explicitly states that Susan proposed telling the oral history of San Francisco, directly verifying the assumption that audience members may have varying levels of familiarity with San Francisco’s history—because the podcast was created precisely to preserve and share localized"
     },
     {
       "a_turn_idx": 0,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in turn 12 refers to San Francisco, but the claim 'mass exodus of people from San Francisco' contradicts the assumption that audience members may have varying levels of familiarity with San Francisco’s history. The latter implies ongoing presence and connection to the city, while the former suggests widespread departure, undermining the premise of diverse familiarity.\",\n  \"reason\": \"Claim C asserts a mass exodus from San Francisco, which undermines the very idea that listeners—"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'there' in turn 12 refers to San Francisco, but the claim 'mass exodus of people from San Francisco' contradicts the assumption that audience members may have varying levels of familiarity with San Francisco’s history. The latter implies ongoing presence and connection to the city, while the former suggests widespread departure, undermining the premise of diverse familiarity.\",\n  \"reason\": \"Claim C asserts a mass exodus from San Francisco, which undermines the very idea that listeners might"
     },
     {
       "a_turn_idx": 0,
@@ -242,11 +242,11 @@
       "claim_text": "The Afro-American community played a significant role in advancing the Civil Rights Act.",
       "overlap_score": 3,
       "c_time": 572.617,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'the Afro-American community' in C refers to a different group than 'luck' in A. No shared referents.",
-      "reason": "Claim C discusses the Afro-American community's role in advancing the Civil Rights Act, while assumption A attributes success to luck in making a connection. The topics, subjects, and causal mechanisms are entirely different. There is no overlap in semantic content, and C does not address or verify A in any way.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Afro-American community' in C refers to a different group than 'luck' in A. No shared referents.\",\n  \"reason\": \"Claim C discusses the Afro-American community's role in advancing the Civil Rights Act, while assumption A attributes success to luck in making a connection. The topics, subjects, and causal mechanisms are entirely different. There is no overlap in semantic content, and C does not address or verify A in any way.\"\n}"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Afro-American community' in C refers to a different group than 'luck' in A. No shared referents.\",\n  \"reason\": \"Claim C discusses the Afro-American community's role in advancing the Civil Rights Act, while assumption A concerns luck playing a role in securing an opportunity. The topics, subjects, and semantic content are entirely unrelated. There is no overlap in meaning, and C does not address, verify, or even reference the idea"
     },
     {
       "a_turn_idx": 1,
@@ -471,7 +471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 2 refers to Megan Mitchell, and 'he' in turn 12 refers to no specific person; 'San Francisco' is consistent across both turns.\",\n  \"reason\": \"Claim C (turn 12) states that there is a 'mass exodus of people from San Francisco,' which contradicts the implication of assumption A (turn 2) that being born and raised in San Francisco implies shared cultural understanding. The idea of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 2 refers to Megan Mitchell, and 'he' in turn 12 refers to no specific person; 'San Francisco' is consistent across both turns.\",\n  \"reason\": \"Turn 12 claims there is a 'mass exodus of people from San Francisco,' which contradicts the implication of shared cultural understanding based on being born and raised in the city. If people are leaving en masse, it undermines the continuity of shared culture."
     },
     {
       "a_turn_idx": 2,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Art Agnes' is a proper name and clearly refers to a person. 'He' in turn 32 refers to Art Agnes.\",\n  \"reason\": \"Claim C states that Art Agnes was the mayor of San Francisco, which is unrelated to assumption A, which concerns the implication of being born and raised in San Francisco for shared cultural understanding. There is no mention of birthplace, upbringing, or cultural understanding in C. The topic"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'Art Agnes' is a proper name and clearly refers to a person. 'He' in turn 32 refers to Art Agnes.\",\n  \"reason\": \"Claim C states that Art Agnes was the mayor of San Francisco, which is unrelated to assumption A, which concerns the implication of being born and raised in San Francisco for shared cultural understanding. There is no mention of birthplace, upbringing, or cultural understanding in C. The two"
     },
     {
       "a_turn_idx": 2,
@@ -531,7 +531,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the co-hosts of Beyond the Fog Radio, including the speaker in turn 3 (SPEAKER_08). No direct reference to KALW or credibility is made in turn 9.\",\n  \"reason\": \"Turn 9 introduces the co-hosts of Beyond the Fog Radio but does not mention or verify the assumption that being featured on KALW indicates credibility or validation. While the context shows prior discussion"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 9 refers to the co-hosts of Beyond the Fog Radio, including the speaker in turn 3 (SPEAKER_08). No direct reference to KALW or credibility is made in turn 9.\",\n  \"reason\": \"Turn 9 introduces the co-hosts of Beyond the Fog Radio but does not mention or verify the assumption that being featured on KALW indicates credibility or validation. While the context shows the podcast"
     },
     {
       "a_turn_idx": 3,
@@ -561,7 +561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the live broadcast' refers to the current event described in turn 8.\",\n  \"reason\": \"Claim C states that the live broadcast is being streamed from the KALW event space, which is a factual detail about the location and format of the event. However, this does not address or verify assumption A, which concerns the strategic promotion implied by playing episodes prior to the live event. There is no mention of pre-event episode playback or its purpose"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the live broadcast' refers to the current event described in turn 8.\",\n  \"reason\": \"Claim C states that the live broadcast is being streamed from the KALW event space, which is a factual detail about the location and format of the event. However, this does not address or verify the earlier assumption A, which is that playing episodes prior to the live event suggests strategic promotion. There is no mention of promotional strategy, pre-event playback"
     },
     {
       "a_turn_idx": 3,
@@ -576,7 +576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'they' in C refers to discriminatory actors, not related to the subject of A.\",\n  \"reason\": \"Claim C discusses post-Civil Rights Act legal changes regarding immigration and discrimination against Chinese individuals, while assumption A concerns strategic promotion via pre-event podcast playback. The topics are entirely unrelated—C addresses historical legal rights and civil rights legislation, whereas A involves media strategy and brand alignment. There is no overlap in semantic content, and C neither states nor"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'they' in C refers to discriminatory actors, not related to the subject of A.\",\n  \"reason\": \"Claim C discusses post-Civil Rights Act legal changes regarding immigration and discrimination against Chinese individuals, while assumption A concerns strategic promotion via pre-event podcast playback. The topics are entirely unrelated—C addresses historical legal rights and civil rights legislation, whereas A involves media strategy and brand alignment. There is no overlap in semantic content, and C neither states nor verifies"
     },
     {
       "a_turn_idx": 3,
@@ -666,7 +666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 3 refers to Meghan Mitchell. The claim in turn 22 refers to a friendship with Tim Johnson, which is unrelated to Meghan or her perceived insight into branding and strategic partnerships.\",\n  \"reason\": \"Turn 22 discusses a new friendship with Tim Johnson, which does not address or verify the assumption in turn 3 that Meghan has insight into branding and strategic partnerships. There is no mention of Meghan, her role, or any evaluation"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'she' in turn 3 refers to Meghan Mitchell. The claim in turn 22 refers to a friendship with Tim Johnson, which is unrelated to Meghan or her perceived insight into branding and strategic partnerships.\",\n  \"reason\": \"Turn 22 discusses a new friendship with Tim Johnson, which does not address or verify the assumption in turn 3 that Meghan has insight into branding and strategic partnerships. There is no mention of Meghan, her role, or any related"
     },
     {
       "a_turn_idx": 3,
@@ -681,7 +681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Jay refers to the same person mentioned in turn 10 as the individual who contacted the speaker through a networking group; 'he' in turn 10 refers to Jay.\",\n  \"reason\": \"Turn 10 mentions that Jay contacted the speaker through a networking group, which is relevant to the broader context of media exposure and connection-building. However, it does not explicitly address or verify the assumption that the audience expects or values recognition through media exposure. While the narrative implies some"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Jay refers to the same person mentioned in turn 10 as the individual who contacted the speaker via a networking group; 'he' in turn 10 refers to Jay.\",\n  \"reason\": \"Turn 10 mentions that Jay contacted the speaker through a networking group, which provides contextual detail about how the collaboration began. However, it does not explicitly state or verify the assumption in turn 3—that the audience expects or values recognition through media exposure. While the media exposure ("
     },
     {
       "a_turn_idx": 3,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'we' in turn 5 refers to the speaker (SPEAKER_04) and their co-hosts (Michaela and Jay), who are later named in turn 9 as Michaela Joy O'Shea and J.E.\",\n  \"reason\": \"Turn 9 introduces the co-hosts of the podcast, including Michaela and Jay, which confirms the identities mentioned in turn 5. However, it does not address or verify the speaker's emotional"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'I' in turn 5 refers to SPEAKER_04, who is also the speaker in turn 9. The mention of 'my voice and Michaela and Jay' in turn 5 identifies the speaker and co-hosts, which aligns with the introduction of 'Susan Brown, Michaela Joy O'Shea, and J.E.' in turn 9.\",\n  \"reason\": \"Turn 9 introduces the co-hosts of the podcast, including Michael"
     },
     {
       "a_turn_idx": 5,
@@ -3876,7 +3876,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to the Middle School kids mentioned in turn 37, who are creating the new podcast segment 'PIRTA'.\",\n  \"reason\": \"Claim C (turn 38) mentions 'keep your ear out for PIRTA', indicating an expectation that the listener will pay attention to this new segment. However, it does not explicitly address or verify the earlier assumption A, which is about the listener trusting the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 38 refers to the Middle School kids mentioned in turn 37, who are creating the new segment 'PIRTA'.\",\n  \"reason\": \"Claim C mentions 'keep your ear out for PIRTA', indicating an expectation that the listener will pay attention to this new segment. However, this does not explicitly verify or state the earlier assumption A, which is about the listener trusting the speaker’s judgment in selecting interviewees."
     },
     {
       "a_turn_idx": 32,
@@ -3966,7 +3966,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'we' in turn 41 refers to the podcast hosts (SPEAKER_07 and co-hosts), and 'downtown San Francisco' is a specific location within the city mentioned in assumption A.\",\n  \"reason\": \"Claim C states the recording is happening live in downtown San Francisco, which provides contextual support for the idea that the city's environment and identity are central to the podcast's mission. However, it does not explicitly state or verify the core"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'we' in turn 41 refers to the podcast hosts (SPEAKER_07 and co-hosts), and 'downtown San Francisco' is the location of the live recording.\",\n  \"reason\": \"Turn 41 states the recording is happening live in downtown San Francisco, which provides contextual setting but does not explicitly state or verify the claim that authentic self-expression and personal freedom are core values of San Francisco’s identity. While the location may imply such"
     },
     {
       "a_turn_idx": 34,
@@ -3981,7 +3981,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in turn 41 refers to the hosts of Beyond the Fog Radio, who are the speakers in the conversation. 'The people who have helped shaped it' refers to the diverse individuals mentioned in turn 34, such as musicians, restaurant workers, and everyday people.\",\n  \"reason\": \"Claim C states that the podcast tells the 'oral untold history of the San Francisco Bay Area from and by the people who have helped shaped it.' This"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'we' in claim C refers to the podcast hosts (SPEAKER_07 and co-hosts), consistent with the context of the podcast Beyond the Fog Radio.\",\n  \"reason\": \"Claim C states that the podcast tells the 'oral, untold history of the San Francisco Bay Area from and by the people who have helped shaped it.' This aligns with the core idea in assumption A—that San Francisco values authentic self-expression and personal freedom—by emphasizing"
     },
     {
       "a_turn_idx": 34,
@@ -4491,7 +4491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'Peer Talk', which was introduced in turn 38 as the new name for the restructured version of Beyond the Fog. This establishes continuity between the evolving nature of the podcast and its current form.\",\n  \"reason\": \"Claim C states that 'Beyond the Fog Radio contains the content referred to as 'that'', which resolves to 'Peer Talk'—the new iteration of the podcast introduced in turn 38. This"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to 'Peer Talk', which was introduced in turn 38 as the new name for the evolving format of Beyond the Fog. 'Beyond the Fog Radio' is the platform hosting the content.\",\n  \"reason\": \"Claim C states that the podcast Beyond the Fog Radio contains the content referred to as 'that', which resolves to 'Peer Talk'—the new, youth-driven format introduced in turn 38. This confirms that"
     },
     {
       "a_turn_idx": 36,
@@ -4641,7 +4641,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'you three' in turn 39, which resolves to Susan Brown, Michaela Joyochet, and Jay Yi—co-hosts of Beyond the Fog Radio mentioned in turn 38. 'The next episode' refers to the upcoming live recording described in turn 38.\",\n  \"reason\": \"Claim C explicitly states that the next episode of Beyond the Fog Radio will involve a live recording with the three co-hosts,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 39 refers to the three co-hosts mentioned in turn 39 (Susan Brown, Michaela Joyochet, and Jay Yi), who are the hosts of Beyond the Fog Radio. 'That' in 'find that at Beyond the Fog Radio' refers to the upcoming episode featuring the live recording.\",\n  \"reason\": \"Claim C explicitly states that the next episode of Beyond the Fog Radio will include a live recording involving the three"
     },
     {
       "a_turn_idx": 36,
@@ -4746,7 +4746,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'I' in C refers to Speaker_15, who is not connected to the youth-led podcast initiative described in A.\",\n  \"reason\": \"Claim C (turn 63) discusses the speaker's personal life event—marrying young and moving due to her husband's military service—while assumption A (turn 37) concerns audience trust in content created by young people reflecting authentic learning. There is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'I' in C refers to Speaker_15, distinct from the youth involved in the podcast project described in A.\",\n  \"reason\": \"Claim C (turn 63) discusses the speaker's personal experience of marrying young and moving due to her husband's military service. This is unrelated to assumption A, which concerns audience trust in content created by young people reflecting genuine learning experiences. There is no overlap in"
     },
     {
       "a_turn_idx": 37,

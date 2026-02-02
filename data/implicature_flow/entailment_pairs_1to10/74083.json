@@ -8736,7 +8736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to Speaker 06, and 'Jim Jordan' in turn 54 is the same person referenced in turn 52. 'My orcas' in turn 52 is a misstatement (likely a slip for 'my orca' or a joke), but context shows it's not central to the claim. The appreciation expressed in turn 54 ('Jim, thanks a million for all your time')"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to Speaker 06, and 'Jim Jordan' in turn 54 is the same person referenced in turn 52. 'My orcas' in turn 52 is a misstatement (likely a slip for 'my orca' or a reference to a nickname), but context shows it's meant to refer to Jim Jordan.\",\n  \"reason\": \"Turn 54 explicitly expresses gratitude toward Jim Jordan"
     },
     {
       "a_turn_idx": 52,
@@ -8751,7 +8751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_00, the speaker who made the earlier assumption A. 'My orchestra' in turn 53 is a clear misstatement (likely a mishearing of 'my office') and does not affect the interpretation of turn 55.\",\n  \"reason\": \"Claim C (turn 55) expresses appreciation for the speaker's work, which is unrelated to assumption A, which concerns the listener"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 55 refers to SPEAKER_00, the speaker who made the earlier assumption A. 'My orchestra' in turn 53 is a clear misstatement (likely a mishearing of 'my orcas' from turn 52), but does not affect the interpretation of turn 55.\",\n  \"reason\": \"Claim C (turn 55) expresses appreciation for the speaker's work, which is unrelated to"
     },
     {
       "a_turn_idx": 53,
@@ -8777,11 +8777,11 @@
       "claim_text": "We appreciate Jim Jordan coming on.",
       "overlap_score": 2,
       "c_time": 2290.216,
-      "entailment_score": 9,
-      "confidence": 0.95,
-      "coref_notes": "Jim Jordan is referred to as 'he' in turn 58, which resolves to the same individual mentioned in turn 54.",
-      "reason": "Turn 58 explicitly acknowledges Jim Jordan's presence and participation ('We appreciate Jim Jordan coming on'), confirming that he is recognized and known to the audience. This directly verifies the assumption in turn 54 that the audience recognizes who Jim Jordan is without further explanation.",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Jim Jordan is referred to as 'he' in turn 58, which resolves to the same individual mentioned in turn 54.\",\n  \"reason\": \"Turn 58 explicitly acknowledges Jim Jordan's presence and participation ('We appreciate Jim Jordan coming on'), confirming that he is recognized and known to the audience. This directly verifies the assumption in turn 54 that the audience recognizes who Jim Jordan is without further explanation.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Jim Jordan is referred to as 'he' in turn 58, which resolves to the same individual mentioned in turn 54.\",\n  \"reason\": \"Turn 58 explicitly acknowledges Jim Jordan's presence and participation ('We appreciate Jim Jordan coming on'), confirming that he is recognized and known to the audience. This directly verifies the assumption in turn 54 that the audience recognizes who Jim Jordan is without further explanation. The reference is unambiguous and confirms the prior assumption.\""
     },
     {
       "a_turn_idx": 54,
@@ -8871,7 +8871,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the shelter' refers to the animal shelter in Thousand Oaks, California, mentioned in turn 61.\",\n  \"reason\": \"Claim C states that the shelter believes it has the right to choose whom it works with based on ideological alignment (specifically, gun control views). This is unrelated to Assumption A, which is that the speaker believes the listener's work has public value. There is no overlap in subject matter, nor does C verify or"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the shelter' refers to the animal shelter in Thousand Oaks, California, mentioned in turn 61.\",\n  \"reason\": \"Claim C states that the shelter believes it has the right to choose whom it works with based on ideological alignment (gun control stance). This is unrelated to assumption A, which is that the speaker believes the listener's work has public value. There is no overlap in subject matter, nor does C verify or relate to the belief"
     },
     {
       "a_turn_idx": 58,
@@ -8886,7 +8886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'individuals' in claim C refers to potential pet adopters, which is unrelated to the health status of individuals mentioned in assumption A.\",\n  \"reason\": \"Claim C discusses a policy banning NRA supporters and opponents of gun background checks from adopting pets, which is entirely unrelated to the medical or health-related assertion in assumption A that COVID-19 is not a serious threat to healthy individuals. There is no overlap in subject matter, and C does not"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant; 'he' in turn 58 refers to SPEAKER_00, but claim C discusses a different individual (NRA supporter) and policy unrelated to health status.\",\n  \"reason\": \"Claim C discusses a policy banning NRA supporters and opponents of gun background checks from adopting pets, which is unrelated to the assumption in A that COVID-19 is not a serious threat to healthy individuals. There is no mention of health, illness, or risk"
     },
     {
       "a_turn_idx": 59,
@@ -8901,7 +8901,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; all pronouns and references are clear in context.\",\n  \"reason\": \"Claim C explicitly states that the shelter has added the question 'Where do you stand on gun control?' to the adoption interview process, which directly verifies the substance of assumption A — that the speaker believes they have sufficient control over the cleaning process. However, upon closer inspection, assumption A appears to be mislabeled or misplaced in the context. The actual assumption A ('I keep on trying"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No significant coreference issues; 'they' in turn 61 refers to the animal shelter, and 'we' refers to the shelter's staff.\",\n  \"reason\": \"Claim C explicitly states that the shelter has added the question 'Where do you stand on gun control?' to the adoption interview process, which directly verifies the substance of assumption A — that the shelter has implemented a policy requiring applicants to address gun control views during adoption. This is a direct and unambiguous confirmation of"
     },
     {
       "a_turn_idx": 61,

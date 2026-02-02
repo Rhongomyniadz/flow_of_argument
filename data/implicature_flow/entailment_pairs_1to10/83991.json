@@ -3936,7 +3936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to Speaker Johnson, as established in the surrounding context (turns 49–50). This is distinct from the speaker in turn 38 (SPEAKER_03), who is discussing legislative efforts related to Iran and the Treasury Department.\",\n  \"reason\": \"Claim C states that the speaker (Johnson) has been seen publicly with Trump, which is unrelated to assumption A, which asserts that SPEAKER_"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to Speaker Johnson, as established in the surrounding context (turns 49–50). This is distinct from the speaker in turn 38, who is SPEAKER_03.\",\n  \"reason\": \"Claim C states that the speaker (Johnson) has been seen publicly with Trump, which does not address or verify the earlier assumption A that the speaker (SPEAKER_03) has sufficient authority and"
     },
     {
       "a_turn_idx": 38,
@@ -4011,7 +4011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 51 refers to the audience/listeners, not to any specific entity mentioned in turn 38. No coreference resolves to the Senate or the House's consideration of precedent.\",\n  \"reason\": \"Turn 51 discusses the existence of political opponents across various governmental levels, including the Senate and House, but does not address or verify the specific assumption in turn 38—that the Senate will treat the House's actions as relevant precedent"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'you' in turn 51 refers to the audience/listeners, not to any specific entity mentioned in turn 38. No coreference resolves to elements in assumption A.\",\n  \"reason\": \"Claim C discusses the existence of political opponents across various governmental levels, including the Senate, but does not explicitly or implicitly address the Senate's consideration of the House's actions as precedent. While both statements involve the Senate and political dynamics, C lacks any reference to legislative"
     },
     {
       "a_turn_idx": 39,
@@ -4176,7 +4176,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to the listener(s), and 'I think you think like I do' indicates a belief about the listener's views. However, this does not relate to the earlier assumption about the Treasury Department's political alignment versus policy judgment.\",\n  \"reason\": \"Claim C expresses a belief that the listener shares the speaker's ideological views, particularly regarding political pragmatism and disagreement with Democratic tactics. This is unrelated to Assumption A,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 52 refers to the listener(s), and 'I think you think like I do' indicates a belief about the listener's views. However, this does not relate to the earlier assumption about the Treasury Department's political alignment.\",\n  \"reason\": \"Claim C expresses a belief that the listener shares the speaker's views on political philosophy and pragmatism, particularly regarding ideological purity and compromise. This is unrelated to Assumption A, which concerns"
     },
     {
       "a_turn_idx": 39,
@@ -4191,7 +4191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'Mike' as Mike Johnson, the Speaker of the House; 'the Biden administration' and 'chucks humor the biden ministration' refer to the same entity.\",\n  \"reason\": \"Claim C (turn 56) discusses the necessity of a leader who can negotiate, withhold actions, and follow through—emphasizing credibility and leverage in political dealings. However, it does not address or verify the specific assumption A (turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 56 refers to Mike Johnson, the Speaker of the House, as established in the prior context.\",\n  \"reason\": \"Claim C (turn 56) discusses the necessity of a leader who can negotiate, withhold actions, and follow through on commitments—focusing on political leadership and strategic leverage. However, this does not address or verify assumption A, which concerns the Treasury Department’s actions being driven by political alignment rather than policy judgment"
     },
     {
       "a_turn_idx": 39,
@@ -4251,7 +4251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 55 refers to the speaker (SPEAKER_03), and 'the Trump organization' refers to the group associated with former President Trump, consistent with prior context.\",\n  \"reason\": \"Claim C states that the speaker has heard reports about the issue from individuals within the Trump organization, which relates to the broader theme of political resistance and insider knowledge discussed in turn 40. However, it does not explicitly verify or state the"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 55 refers to the individual mentioned in the Trump organization, likely referring to Donald Trump based on context.\",\n  \"reason\": \"Claim C states that the speaker has heard reports about the issue from individuals within the Trump organization, which relates to the broader context of political resistance and internal dynamics discussed in turn 40. However, C does not explicitly verify or state the specific assumption in A—that the speaker trusts information obtained post-rescission"
     },
     {
       "a_turn_idx": 40,
@@ -4266,7 +4266,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'regulators and diplomats' mentioned in turn 42, which aligns with the 'deep state' and unelected officials discussed in the context. 'They' in turn 43 refers to the same group.\",\n  \"reason\": \"Claim C explicitly states that un-elected individuals manipulate the political system, which directly verifies the substance of assumption A—that the current political system allows for repeated legislative attempts—by implying that bureaucratic"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'career people' or 'regulators and diplomats' mentioned in turn 42, which aligns with the 'deep state' referenced earlier. 'They' collectively represent un-elected individuals manipulating the political system.\",\n  \"reason\": \"Claim C explicitly states that un-elected individuals (i.e., career bureaucrats, regulators, diplomats) manipulate the political system, which directly verifies the substance of assumption A—that the current political"
     },
     {
       "a_turn_idx": 40,
@@ -4491,7 +4491,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Speaker Johnson refers to the same individual mentioned in turn 54; 'he' in 'he has to negotiate' refers to Speaker Johnson.\",\n  \"reason\": \"Claim C states that Speaker Johnson cannot unilaterally impose decisions due to institutional constraints, which aligns with the core idea in assumption A that institutional figures (like regulators and diplomats) are untrustworthy because they operate beyond direct democratic accountability and are constrained by bureaucratic systems. While C does not explicitly mention 'regulators"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Speaker Johnson refers to the same individual mentioned in turn 54; 'he' in 'he has to negotiate' refers to Speaker Johnson.\",\n  \"reason\": \"Claim C states that Speaker Johnson cannot unilaterally impose decisions due to institutional constraints, which aligns with the core idea in assumption A that institutional figures like regulators and diplomats are untrustworthy due to perceived overreach and power beyond democratic accountability. While C does not explicitly name 'regulators and diplomats' or use"
     },
     {
       "a_turn_idx": 43,
@@ -4566,7 +4566,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 49 refers to Trump, as established by context (e.g., 'Trump has been out there with the speaker').\",\n  \"reason\": \"Claim C (turn 49) states that the speaker has been seen publicly with Trump, which is tangentially related to assumption A (turn 44) that Trump’s actions in office had major consequences. However, C does not explicitly state or verify the substance of A—nam"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 49 refers to Trump, as established by context (e.g., 'Trump has been out there with the speaker').\",\n  \"reason\": \"Claim C (turn 49) states that the speaker has been seen publicly with Trump, which is unrelated to assumption A (turn 44), which asserts that Trump’s actions in office had major consequences. While both involve Trump, C provides no information about the consequences of his actions"
     },
     {
       "a_turn_idx": 44,
@@ -4581,7 +4581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 49 refers to SPEAKER_04, who is the same speaker as in turn 44. 'Trump' in turn 49 refers to Donald Trump, consistent with turn 44.\",\n  \"reason\": \"Turn 49 mentions involvement with Trump in a political context ('I was talking to a big Republican supporter... and I was talking to him about what he was going to do coming up in these'), suggesting"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'I' in turn 49 refers to SPEAKER_04, who is the same speaker as in turn 44. 'Trump' and 'the speaker' in turn 49 refer to the same individuals mentioned in turn 44.\",\n  \"reason\": \"Turn 49 mentions involvement with Trump in political activities, which implies direct engagement with his political efforts. However, it does not explicitly state or verify the belief that Trump’s actions"
     },
     {
       "a_turn_idx": 44,
@@ -4671,7 +4671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 58 refers to the listener(s), consistent with the audience addressed throughout the conversation. 'This election' refers to the upcoming U.S. election, which aligns with the political context established in turn 44.\",\n  \"reason\": \"Turn 58 asserts that the speaker believes the listener understands the urgency of focusing on the election, which directly connects to the earlier assumption in turn 44 that Trump’s actions in office had"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 58 refers to the listener(s), consistent with the audience addressed throughout the conversation. 'This election' refers to the upcoming U.S. election, which aligns with the political context established in turn 44.\",\n  \"reason\": \"Turn 58 asserts that the speaker believes the listener understands the urgency of focusing on the election, which implicitly confirms the belief that electoral outcomes have significant consequences—directly supporting the substance of assumption"
     },
     {
       "a_turn_idx": 44,

@@ -21,7 +21,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, not the person involved in the scam mentioned in turn 0. The scam figure (Lincoln P) is distinct from Rand Paul, and the claim about 'excellent' refers to Rand Paul's performance, not the moral evaluation of the scam.\",\n  \"reason\": \"Claim C expresses admiration for Senator Rand Paul's performance, which is unrelated to the moral judgment of the scam described in assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The subject of assumption A (Lincoln P/scam) is not the same as Rand Paul, who is discussed in turn 15.\",\n  \"reason\": \"Claim C states that the speaker believes Senator Rand Paul is 'terrific,' which is unrelated to the moral evaluation of the scam involving Lincoln P. There is no mention of the scam, its"
     },
     {
       "a_turn_idx": 0,
@@ -36,7 +36,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the Lincoln Project scam mentioned earlier, as established by the context of the conversation. 'They' in turn 27 refers to the Lincoln Project.\",\n  \"reason\": \"Claim C states that the speaker has reliable information about the Cuomo situation, which is linked to the Lincoln Project scam discussed earlier. However, it does not explicitly state or verify the moral judgment that the scam was wrong or deserved exposure. While"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the Lincoln Project scandal discussed earlier, linking it to the broader context of the grift and exposure.\",\n  \"reason\": \"Claim C states the speaker has reliable information about the 'Cuomo stuff,' which is contextually tied to the Lincoln Project scam mentioned in assumption A. However, C does not explicitly state or verify the moral judgment that the scam was wrong or deserved exposure. It only confirms access to information"
     },
     {
       "a_turn_idx": 2,
@@ -51,7 +51,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The Griffin project is not mentioned in the context of turn 15.\",\n  \"reason\": \"Claim C expresses belief that Senator Rand Paul is excellent, which is unrelated to assumption A about the feasibility and completion of the Griffin project. There is no mention of the Griffin project, its progress, or any related beliefs in turn 15. The topics and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The Griffin project is not mentioned in the context of turn 15.\",\n  \"reason\": \"Turn 15 expresses belief that Senator Rand Paul is excellent ('he's terrific'), which is unrelated to the feasibility or completion of the Griffin project mentioned in assumption A (turn 2). There is no mention of the Griffin project, its progress, or any"
     },
     {
       "a_turn_idx": 2,
@@ -141,7 +141,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'he' in C refers to Senator Rand Paul, not related to 'owners', 'press', or 'ship' metaphors in A.\",\n  \"reason\": \"Claim C expresses a positive evaluation of Senator Rand Paul's performance, stating he is 'terrific' and will be enjoyed by everyone. This is unrelated to assumption A, which concerns the audience's understanding of metaphorical references to 'owners', 'press"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C; 'the person being discussed' in C refers to Senator Rand Paul, while A concerns the audience's understanding of metaphorical terms ('owners', 'press', 'ship').\",\n  \"reason\": \"Claim C expresses a positive evaluation of Senator Rand Paul's performance, stating he is 'terrific' and will be enjoyed by everyone. This is unrelated to assumption A, which concerns the audience's comprehension of metaphorical language"
     },
     {
       "a_turn_idx": 3,
@@ -156,7 +156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Cuomo stuff' refers to the topic discussed, but does not relate to 'owners', 'press', or 'ship' metaphors.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation, which is unrelated to the metaphorical understanding of 'owners', 'press', and 'ship' as referenced in assumption A. There is no mention of metaphorical interpretation, audience comprehension, or the specific terms from turn 3."
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the topic of the Lincoln Project and its financial misconduct, not the metaphorical references to 'owners', 'press', and 'ship' in turn 3.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation and the Lincoln Project's financial mismanagement, which is unrelated to the assumption in A that the audience understands metaphors involving 'owners', 'press', and 'ship'. There"
     },
     {
       "a_turn_idx": 3,
@@ -186,7 +186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, not the person discussed in turn 4 (likely related to the Lincoln Project or its collapse). No connection exists between the evaluation of Rand Paul as 'terrific' and the assumption in turn 4 about leaving during decline being understandable.\",\n  \"reason\": \"Claim C expresses admiration for Senator Rand Paul, stating he is 'terrific' and provides a thorough explanation ('soup to nuts'). This is"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the person being discussed' in C refers to Lincoln Project based on context, but this does not relate to the idea of leaving during decline.\",\n  \"reason\": \"Claim C expresses that the speaker believes the person (Lincoln Project) is excellent, which is unrelated to the earlier assumption A that leaving during decline is understandable or justified. There is no mention of departure, decline, or justification in C. The two statements address different ideas—evaluation of"
     },
     {
       "a_turn_idx": 4,
@@ -216,7 +216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Cuomo stuff' refers to a specific topic discussed earlier, but it is not linked to the earlier assumption A about others taking money.\",\n  \"reason\": \"Claim C (turn 26) discusses obtaining reliable information about the Cuomo situation, which is unrelated to assumption A (turn 5), which concerns the belief that others intend or are able to take the speaker's money. There is no overlap in semantic content or logical connection between the two"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the Cuomo stuff' refers to a specific topic discussed earlier, but it is not linked to the earlier assumption A about others taking money.\",\n  \"reason\": \"Claim C (turn 26) discusses obtaining reliable information about the Cuomo situation, which is unrelated to assumption A (turn 5), which concerns the belief that others intend or are able to take the speaker's money. There is no overlap in semantic content between the two statements. The"
     },
     {
       "a_turn_idx": 5,
@@ -242,11 +242,11 @@
       "claim_text": "The speaker believes the person being discussed is excellent.",
       "overlap_score": 2,
       "c_time": 165.049,
-      "entailment_score": 1,
-      "confidence": 0.95,
-      "coref_notes": "No coreference resolution needed; 'he' in turn 15 refers to Senator Rand Paul, not the subject of assumption A.",
-      "reason": "Claim C expresses belief that Senator Rand Paul is 'terrific,' which is unrelated to assumption A, which concerns the belief that others intend or are able to take the speaker's money. There is no overlap in semantic content or referent. The two statements address entirely different subjects and ideas.",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 15 refers to Senator Rand Paul, not the subject of assumption A.\",\n  \"reason\": \"Claim C expresses belief that Senator Rand Paul is 'terrific,' which is unrelated to assumption A, which concerns the belief that others intend or are able to take the speaker's money. There is no overlap in semantic content or referent. The two statements address entirely different subjects and ideas.\"\n}\n```"
+      "entailment_score": 0,
+      "confidence": 0.0,
+      "coref_notes": "",
+      "reason": "parse_failed",
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'the person being discussed' refers to Senator Rand Paul, as established in turn 13. The claim in turn 15 is about Rand Paul's performance, not about taking money.\",\n  \"reason\": \"Claim C expresses that the speaker believes Senator Rand Paul is 'terrific' and that 'everybody will enjoy' his segment, which is a positive evaluation of his performance. Assumption A, however, concerns the belief that others intend"
     },
     {
       "a_turn_idx": 5,
@@ -321,7 +321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The subject of assumption A is the speaker's belief about their own opinion on political outcomes, not a judgment about another person's competence.\",\n  \"reason\": \"Claim C expresses a positive evaluation of Senator Rand Paul ('he's terrific'), which is unrelated to the speaker's belief in the reliability of their own political opinion (assumption A). There is no mention"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The subject of assumption A (turn 6) is the speaker's belief about their own opinion on political outcomes, not a judgment about another person's competence.\",\n  \"reason\": \"Claim C expresses a positive evaluation of Senator Rand Paul ('he's terrific'), which is unrelated to the speaker's belief in the reliability of their own political opinions (assumption A"
     },
     {
       "a_turn_idx": 6,
@@ -396,7 +396,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The claim in turn 15 ('he's terrific') expresses a positive evaluation of Rand Paul, not a belief about the necessity of radical measures under progressive leadership.\",\n  \"reason\": \"Turn 15 expresses admiration for Senator Rand Paul's performance, specifically calling him 'terrific.' This is unrelated to the earlier assumption in turn 7, which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13. The claim in turn 15 ('he's terrific') is about Rand Paul's performance, not about progressive leadership or the necessity of radical measures.\",\n  \"reason\": \"Turn 15 expresses admiration for Senator Rand Paul's performance during a discussion on impeachment, which is unrelated to the idea that radical or sweeping measures may be necessary under progressive leadership. There"
     },
     {
       "a_turn_idx": 7,
@@ -411,7 +411,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the allegations or information about Andrew Cuomo, which is unrelated to the earlier assumption A about progressive leadership requiring radical measures.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation, which is a separate topic from the earlier assumption A regarding the necessity of radical measures under progressive leadership. There is no semantic connection between the two claims; C does not state, imply, or verify any aspect of A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the topic of the Lincoln Project's financial misconduct and media manipulation discussed earlier, but does not connect to the assumption about progressive leadership requiring radical measures.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation and the Lincoln Project's financial behavior, which is unrelated to the earlier assumption A about progressive leadership necessitating sweeping measures. There is no mention of policy direction, leadership strategy, or radical action"
     },
     {
       "a_turn_idx": 7,
@@ -486,7 +486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13.\",\n  \"reason\": \"Claim C (turn 15) expresses that the speaker believes Senator Rand Paul is 'terrific,' which is a positive evaluation of his performance or character. However, this does not relate to or verify assumption A (turn 8), which concerns the legislative environment allowing easier passage of legislation. There is no mention of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference resolution needed; 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13.\",\n  \"reason\": \"Claim C (turn 15) expresses that the speaker believes Senator Rand Paul is 'terrific,' which is a positive evaluation of his performance or character. However, this does not relate to or verify the earlier assumption A (turn 8), which concerns the legislative environment allowing easier passage of legislation due to the absence"
     },
     {
       "a_turn_idx": 8,
@@ -501,7 +501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is unrelated to the legislative environment or filibuster mentioned in turn 8.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation, which is entirely unrelated to the assumption in A about the ease of passing legislation due to the absence of filibuster threats. There is no overlap in subject matter, context, or implied content. The two statements address different topics and do"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is unrelated to the legislative environment or filibuster mentioned in turn 8.\",\n  \"reason\": \"Claim C discusses obtaining reliable information about the Cuomo situation, which is entirely unrelated to the assumption in A about the ease of passing legislation due to the absence of filibuster threats. There is no overlap in subject matter, and C does not address or verify any aspect of A. The two"
     },
     {
       "a_turn_idx": 8,
@@ -546,7 +546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the specific situation discussed earlier, likely involving allegations or revelations related to Andrew Cuomo, which is consistent with the broader context of political accountability and insider knowledge.\",\n  \"reason\": \"Claim C states that the speaker believes they have obtained reliable information about the Cuomo situation, which aligns with the substance of assumption A—that the speaker has insight into future outcomes. While C does not explicitly state belief in foresight or prediction"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the content about the Cuomo situation, which is the subject of the speaker's belief in turn 26. The speaker's belief in having reliable information about the Cuomo situation is tied to prior knowledge and sources, implying insight into a future outcome (i.e., the unfolding of events related to Cuomo).\",\n  \"reason\": \"Turn 26 states the speaker believes they have reliable information about the Cuomo situation, which"
     },
     {
       "a_turn_idx": 9,
@@ -756,7 +756,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13 where he is introduced as the guest.\",\n  \"reason\": \"Turn 15 explicitly states 'He's terrific,' which directly verifies the positive evaluation of the guest (Senator Rand Paul) implied in turn 13's assertion that the emergency pod was necessary due to the high-profile nature of the guest. The claim 'the person being discussed is excellent' is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 15 refers to Senator Rand Paul, as established in turn 13 where he is introduced as the guest.\",\n  \"reason\": \"Turn 15 explicitly states 'He's terrific,' which directly verifies the positive evaluation of the guest (Senator Rand Paul) implied in turn 13's assertion that the guest is 'tremendous' and that the emergency pod was necessary due to urgency. The claim 'the person being"
     },
     {
       "a_turn_idx": 13,
@@ -771,7 +771,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic of discussion. 'The Cuomo stuff' is linked to the broader context of investigative reporting and public disclosure, as discussed in prior turns.\",\n  \"reason\": \"Turn 26 expresses belief in the reliability of information about the Cuomo situation, but does not address or verify the earlier assumption A, which concerns the justification of editorial decisions via dramatic/urgent framing. While both"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic of discussion. 'The Cuomo stuff' is linked to the broader context of investigative reporting and public disclosure, as mentioned in prior turns.\",\n  \"reason\": \"Turn 26 expresses belief in the reliability of information about the Cuomo situation, but does not explicitly address or verify the assumption in turn 13—that dramatic or urgent framing justifies editorial choices like hosting high"
     },
     {
       "a_turn_idx": 13,
@@ -816,7 +816,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to SPEAKER_07, who is the primary host and decision-maker in the conversation, consistent with the role implied in assumption A.\",\n  \"reason\": \"Claim C states that the speaker intends to summarize recent developments for the audience, which aligns with the substance of assumption A—that the audience trusts the speaker’s judgment in structuring segments. While C does not explicitly state trust or judgment, it demonstrates the speaker acting in"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the audience' in claim C refers to the listeners of the program, consistent with the implied audience in assumption A. 'The speaker' in C refers to SPEAKER_07, who is also the central figure in A.\",\n  \"reason\": \"Claim C states that the speaker intends to summarize recent developments for the audience, which aligns with the idea that the audience trusts the speaker’s judgment in structuring segments. While C does not explicitly state trust in"
     },
     {
       "a_turn_idx": 13,
@@ -1191,7 +1191,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the topic discussed in prior turns, but there is no clear link between this and the earlier assumption A about Grammy nomination. The speaker in turn 17 expresses anticipation of a Grammy nomination; turn 26 discusses reliable information about the Cuomo situation, which is unrelated.\",\n  \"reason\": \"Claim C discusses the speaker's belief in having reliable information about the Cuomo situation, which is entirely unrelated to assumption A"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the topic discussed in prior turns, but there is no clear link between this and the earlier assumption A about Grammy nomination. The two topics (Grammy nomination vs. Cuomo situation) are unrelated.\",\n  \"reason\": \"Claim C discusses the speaker's belief about having reliable information regarding the Cuomo situation, which is entirely unrelated to assumption A, which expresses confidence in a Grammy nomination. There is no overlap in subject"
     },
     {
       "a_turn_idx": 17,
@@ -1356,7 +1356,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic discussed in turn 20. 'The Cuomo stuff' is linked to the claim about Andrew Cuomo's actions and the associated controversy.\",\n  \"reason\": \"Turn 26 expresses belief in the reliability of information about the Cuomo situation, but does not explicitly state or verify the assumption that the listener believes they deserve recognition comparable to public figures like Andrew Cuomo. While both"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic discussed in turn 20. 'The Cuomo stuff' is linked to the claim about Andrew Cuomo's actions and the associated controversy.\",\n  \"reason\": \"Turn 26 expresses belief in the reliability of information about the Cuomo situation, but does not address or verify the specific assumption in turn 20—that the listener believes they deserve recognition comparable to public figures like"
     },
     {
       "a_turn_idx": 20,
@@ -1371,7 +1371,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic of discussion in turn 20. 'The Cuomo stuff' is linked to the claim about Andrew Cuomo's actions and the validity of the comparison made in turn 20.\",\n  \"reason\": \"Claim C expresses belief in the reliability of information about the Cuomo situation, which indirectly supports the idea that the comparison between Cuomo and the speaker's group is grounded in factual"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the 'Cuomo stuff', which is the topic of discussion in turn 20. 'The Cuomo stuff' is linked to the earlier claim about Andrew Cuomo's actions and the validity of comparing him to the speaker's group.\",\n  \"reason\": \"Turn 26 expresses strong belief in the accuracy of the information about Cuomo ('It's a hundred percent right that the Cuomo stuff'), indicating confidence in the truth of"
     },
     {
       "a_turn_idx": 21,
@@ -1401,7 +1401,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the Cuomo situation mentioned in turn 21, specifically the revelation about data manipulation related to nursing home deaths.\",\n  \"reason\": \"Turn 26 explicitly affirms belief in the reliability of the information about the Cuomo situation, directly verifying the assumption in turn 21 that the revelation is significant and warrants surprise. The phrase 'It's a hundred percent right that the Cuomo stuff' confirms strong conviction in the truth"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the revelation about Cuomo's data manipulation mentioned in turn 21. 'The Cuomo stuff' is a clear coreference to the event described in turn 21.\",\n  \"reason\": \"Turn 26 explicitly affirms belief in the reliability of the information about the Cuomo situation, directly verifying the assumption in turn 21 that the revelation is significant and warrants surprise. The phrase 'It's a hundred percent"
     },
     {
       "a_turn_idx": 21,
@@ -1461,7 +1461,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the claim about the Cuomo situation being true, and 'the Cuomo stuff' refers to the allegation of data manipulation reported by the second-in-command mentioned in turn 21.\",\n  \"reason\": \"Turn 26 explicitly affirms belief in the reliability of the information about the Cuomo situation, directly verifying the assumption in turn 21 that the speaker trusts the credibility of the source (second-in-command) enough to"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the claim about the Cuomo situation being true, and 'the Cuomo stuff' refers back to the allegation of data manipulation reported by the second-in-command in turn 21.\",\n  \"reason\": \"Turn 26 explicitly affirms belief in the reliability of the information about the Cuomo situation ('It's a hundred percent right that the Cuomo stuff'), directly verifying the trust in the credibility of the source (second-in-command"
     },
     {
       "a_turn_idx": 22,
@@ -1476,7 +1476,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the claim about the Cuomo situation, specifically the allegation of hidden or manipulated mortality data.\",\n  \"reason\": \"Claim C states that the speaker believes they have obtained reliable information about the Cuomo situation, which relates to the broader context of transparency and data manipulation mentioned in assumption A. However, C does not explicitly state or verify the moral obligation of public officials to be transparent—this is a normative claim absent in C."
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'that' in turn 26 refers to the claim about the Cuomo situation, specifically the allegation of hidden or manipulated mortality data.\",\n  \"reason\": \"Claim C states that the speaker believes they have obtained reliable information about the Cuomo situation, which relates to the broader context of transparency and data manipulation discussed in assumption A. However, C does not explicitly state or verify the moral obligation of public officials to be transparent—this is a normative claim absent in C."
     },
     {
       "a_turn_idx": 22,
@@ -1551,7 +1551,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the claim about data manipulation by Cuomo's aides, as established in turn 22.\",\n  \"reason\": \"Claim C explicitly affirms belief in the reliability of the information about Cuomo's data manipulation, directly verifying the assumption in A that the speaker trusts the claim without independent verification. The phrase 'a hundred percent right' confirms strong confidence in the truth of the claim, align"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the claim about data manipulation by Cuomo's aides, as established in turn 22.\",\n  \"reason\": \"Claim C explicitly affirms belief in the reliability of the information about Cuomo's data manipulation, directly verifying the assumption in A that the speaker trusts the claim without needing independent verification. The phrase 'a hundred percent right' confirms strong confidence in the truth of the claim,"
     },
     {
       "a_turn_idx": 22,
@@ -1671,7 +1671,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the Cuomo stuff' in turn 26 refers to the previously discussed topic of data manipulation related to nursing home deaths under Cuomo, as established in turns 21–22. 'It' in 'It's a hundred percent right' refers to the accuracy of the speaker's prior claims.\",\n  \"reason\": \"Claim C expresses strong belief in the reliability of the information about the Cuomo situation, which aligns with the substance of assumption A—that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 26 refers to the Cuomo situation, as established in the prior context. 'The speaker' in turn 26 refers to SPEAKER_07.\",\n  \"reason\": \"Turn 26 expresses belief in the reliability of the information about the Cuomo situation, which aligns with the core idea in assumption A that the speaker believes their past statements were accurate and credible. While C does not explicitly state 'I believed my past claims"
     },
     {
       "a_turn_idx": 23,
@@ -1881,7 +1881,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the reliability of the information about the Cuomo situation, which aligns with the earlier assumption about trusting one's memory as a basis for making claims.\",\n  \"reason\": \"Claim C explicitly affirms confidence in the accuracy of the information regarding the Cuomo situation, directly verifying the substance of assumption A, which rests on the speaker's trust in their own memory of past events as a reliable"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the reliability of the information about the Cuomo situation, which aligns with the speaker's trust in their own memory and prior knowledge.\",\n  \"reason\": \"Claim C explicitly asserts confidence ('a hundred percent right') in the accuracy of the information regarding the Cuomo situation, which directly verifies the assumption in A that the speaker trusts their memory of past events as reliable enough to support a claim"
     },
     {
       "a_turn_idx": 25,
@@ -1926,7 +1926,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the accuracy of the prior prediction about the Lincoln Project's internal conflict, which is tied to the credibility of past claims. 'The Cuomo stuff' is a reference to the specific content discussed in the context of the Lincoln Project's downfall.\",\n  \"reason\": \"Claim C explicitly affirms the correctness of the Cuomo-related information, implying confidence in its reliability. This directly verifies the substance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in 'It's a hundred percent right that the Cuomo stuff' refers to the accuracy of the prior prediction about the Lincoln Project's internal conflict, which is tied to the credibility of the speaker's past claims.\",\n  \"reason\": \"Claim C explicitly affirms the correctness of the Cuomo-related information, implying confidence in its reliability. This directly verifies the substance of assumption A—that the speaker believes their past predictions have credibility and are worth referencing—by asserting that"
     },
     {
       "a_turn_idx": 25,
@@ -4971,7 +4971,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Lincoln Project' in turn 46, which corresponds to the entity mentioned in turn 39. 'They' in turn 46 refers to the Lincoln Project and its associates.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project engaged in 'scummy, dirty, unethical, dishonest, and scamming behavior,' which directly verifies the substance of assumption A—that the Lincoln Project is a politically aligned entity operating within"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'Lincoln Project' in turn 46, which aligns with the entity discussed in turn 39. 'They' in turn 46 refers to the Lincoln Project and its associates.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project engaged in 'scummy, dirty, unethical, dishonest, and scamming behavior,' which directly verifies the substance of assumption A—that the Lincoln Project is a politically aligned entity operating"
     },
     {
       "a_turn_idx": 39,
@@ -5136,7 +5136,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Kurt Bardella is referred to without pronouns; 'the Lincoln Project' is the subject of the claim in both A and C.\",\n  \"reason\": \"Claim C states that Kurt Bardella listed the Lincoln Project as a senior advisory position in his Twitter bio, which is tangentially related to the idea of institutional alignment between the Lincoln Project and MSNBC. However, it does not explicitly verify or state the core substance of A—that the Lincoln Project is the political arm of MSNBC or"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"Kurt Bardella is referred to without pronouns; 'the Lincoln Project' is the subject of both A and C.\",\n  \"reason\": \"Claim C states that Kurt Bardella listed the Lincoln Project as a senior advisory position in his Twitter bio, which is tangentially related to the idea of institutional alignment between the Lincoln Project and MSNBC. However, it does not directly verify or state the substance of A, which asserts a meaningful institutional alignment between the Lincoln Project and MSNBC. The"
     },
     {
       "a_turn_idx": 39,
@@ -5286,7 +5286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the media, specifically progressive media outlets like MSNBC, as established in the context. 'These people' and 'these scumbags' refer back to the former conservative operatives (e.g., Steve Schmidt, Nicole Wallace) and the Lincoln Project figures accused of misconduct.\",\n  \"reason\": \"Claim C explicitly states that the media prioritized defeating Donald Trump over exposing misconduct by certain individuals, which directly verifies the assumption in A that former"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'the media' and 'these people' as those involved in the Lincoln Project and their associates, which aligns with the former conservative operatives mentioned in turn 40. 'They' in turn 49 refers to the media, consistent with the MSNBC-hosted operatives in turn 40.\",\n  \"reason\": \"Claim C explicitly states that the media prioritized defeating Donald Trump over exposing misconduct by individuals—directly verifying the assumption"
     },
     {
       "a_turn_idx": 40,
@@ -5301,7 +5301,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the White House communication staff, specifically TJ Ducklow and his team, who bypassed Politico and redirected the story to People Magazine.\",\n  \"reason\": \"Claim C discusses a strategic reframing of a potential conflict of interest story into a 'wonderful love story' by redirecting it to a less critical outlet (People Magazine). While this illustrates a pattern of manipulating media narratives to avoid scrutiny, it does not directly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the White House communication staff, specifically TJ Ducklow and his team, who bypassed Politico and redirected the story to People Magazine.\",\n  \"reason\": \"Claim C discusses a strategic reframing of a potential conflict of interest story into a 'wonderful love story' by redirecting it to a less critical outlet (People Magazine). While this illustrates a pattern of manipulating media narratives to avoid scrutiny, it does not explicitly"
     },
     {
       "a_turn_idx": 40,
@@ -5436,7 +5436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 46, 'Greenwald' refers to Glenn Greenwald, a journalist mentioned in the broader context. The claim 'everything scummy, dirty, unethical, dishonest, and scamming about Lincoln Project was completely known and obvious...' aligns with the idea that the Lincoln Project's actions were part of a coordinated effort (as implied in A), though it doesn't explicitly mention MSNBC or strategic influence. However, the reference to 'journalists and others in liberal politics'"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 46, 'Greenwald' refers to Glenn Greenwald, a journalist mentioned in the broader context. The claim 'everything scummy, dirty, unethical, dishonest, and scamming about Lincoln Project was completely known and obvious...' aligns with the idea that the Lincoln Project's actions were part of a coordinated effort, supporting the notion of a deliberate strategy. However, it does not explicitly mention MSNBC or the hiring of operatives by MSNBC, which are central to assumption A"
     },
     {
       "a_turn_idx": 40,
@@ -5721,7 +5721,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republican commentators in their cubicles, not the subject of assumption A. The phrase 'flying back to Indiana' is a metaphorical or hypothetical statement about career consequences, not related to public bios or symbolic significance.\",\n  \"reason\": \"Claim C discusses a hypothetical scenario about Republican commentators' careers if they acted similarly to Ducklow, focusing on political retaliation and personal consequences. This is unrelated to the symbolic or reputational"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republican commentators in their cubicles, not the subject of assumption A. The phrase 'flying back to Indiana' is a metaphorical expression about career consequences, not related to public bios or symbolic significance.\",\n  \"reason\": \"Claim C discusses Republican commentators' potential career repercussions if they adopt a certain approach, using 'flying back to Indiana' as a figurative expression. This has no connection to the symbolic or"
     },
     {
       "a_turn_idx": 42,
@@ -5736,7 +5736,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to the Lincoln Project, as established by the prior context involving Kurt Bardella's appointment.\",\n  \"reason\": \"Claim C explicitly states that 'they announced him coming on to Lincoln project live on morning Joe,' which directly verifies the assumption in A that the audience understands who Kurt Bardella and the Lincoln Project are. The specificity of the announcement being made 'live on Morning Joe' confirms both the identity of the organization (Lin"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_03 refers to 'him' in turn 43 as Kurt Bardella, who was mentioned in turn 42. 'They' in 'They announced him coming on to Lincoln project' refers to the Lincoln Project or its leadership.\",\n  \"reason\": \"Turn 43 explicitly confirms that the Lincoln Project publicly announced Kurt Bardella's appointment during a live broadcast on Morning Joe. This directly verifies the assumption in turn 42 that the audience would"
     },
     {
       "a_turn_idx": 42,
@@ -5751,7 +5751,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 43 refers to Kurt Bardella, as established in turn 42. 'They' in turn 43 refers to the Lincoln Project, consistent with prior context.\",\n  \"reason\": \"Claim C explicitly states that the person announced (Kurt Bardella) is associated with the Lincoln Project, directly verifying the assumption in A that the audience understands who Kurt Bardella and the Lincoln Project are. The statement 'They announced him coming"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 43 refers to Kurt Bardella, as established in turn 42. 'They' in turn 43 refers to the Lincoln Project, consistent with prior context.\",\n  \"reason\": \"Turn 43 explicitly states that Kurt Bardella was announced as joining the Lincoln Project during a live broadcast on Morning Joe. This directly verifies the assumption in turn 42 that the audience understands who Kurt Bardella and the Lincoln Project are"
     },
     {
       "a_turn_idx": 42,
@@ -5781,7 +5781,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to MSNBC and the Lincoln Project, consistent with the shared ecosystem mentioned in assumption A. 'Super pack' is a colloquial reference to the Lincoln Project, and 'one hand washed the other' confirms mutual collaboration.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project collaborated to profit from viewership ('grift their viewers out of dollars and for ratings'), which directly verifies the assumed relationship between the two entities"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to MSNBC and the Lincoln Project, as established in the prior context where both entities are discussed together. 'Super pack' is a colloquial reference to the Lincoln Project, consistent with prior usage.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project collaborated to profit from viewership ('grift their viewers out of dollars and for ratings'), which directly verifies the assumed relationship between the two groups implied in assumption A"
     },
     {
       "a_turn_idx": 42,
@@ -5796,7 +5796,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, as established in the prior context. 'Jennifer Horne' is a co-founder of The Lincoln Project, implied by the reference to 'co-founders DMs'.\",\n  \"reason\": \"Turn 45 explicitly verifies the assumption in turn 42 by confirming that the audience is expected to understand the identity of Kurt Bardella and the Lincoln Project—specifically, by referencing internal communications ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, as established in the prior context where the group is discussed as a collective entity involved in releasing the DMs.\",\n  \"reason\": \"Claim C explicitly verifies the substance of assumption A by confirming that The Lincoln Project (a group previously referenced in turn 42) publicly shared leaked DMs from Jennifer Horne. This action implies that the audience must already recognize both the Lincoln Project and its members ("
     },
     {
       "a_turn_idx": 42,
@@ -5811,7 +5811,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, which is consistent with the subject of turn 42. 'DMs' refers to private messages, specifically those of Jennifer Horne and another co-founder, as mentioned in the context.\",\n  \"reason\": \"Turn 45 mentions that The Lincoln Project tweeted out leaked DMs and then deleted them, which relates to the broader narrative about the group's actions and transparency. However, it does"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, which is consistent with the subject of turn 42. 'DMs' refers to messages from Jennifer Horne, previously mentioned in context.\",\n  \"reason\": \"Turn 45 mentions that The Lincoln Project tweeted out leaked DMs and then deleted them, which relates to the broader narrative about the group's actions. However, it does not explicitly address or verify the assumption in turn 4"
     },
     {
       "a_turn_idx": 42,
@@ -5826,7 +5826,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Greenwald refers to the Lincoln Project, which is the subject of the prior discussion; 'he' in turn 46 refers to Greenwald, whose tweet is being cited.\",\n  \"reason\": \"Claim C explicitly verifies the assumption in A by stating that the unethical and scamming nature of the Lincoln Project was widely known and obvious—directly confirming that the audience should understand the group’s identity and reputation. The reference to Greenwald’s tweet reinforces public awareness of the Lincoln Project"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Greenwald refers to the Lincoln Project; 'he' in turn 46 refers to the individual previously discussed (likely Kurt Bardella or another figure associated with the Lincoln Project).\",\n  \"reason\": \"Claim C explicitly states that the unethical and scamming nature of the Lincoln Project was widely known and obvious for 18 months, directly verifying the assumption in A that the audience understands who Kurt Bardella and the Lincoln Project are—implying shared knowledge of their identity and"
     },
     {
       "a_turn_idx": 42,
@@ -5841,7 +5841,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the Lincoln Project, as established by the prior discussion about its collaboration with MSNBC and its controversial hiring practices.\",\n  \"reason\": \"Claim C explicitly labels the Lincoln Project's behavior as 'scummy, dirty, unethical, dishonest, and scamming,' which directly verifies the substance of assumption A—that the audience understands who Kurt Bardella and the Lincoln Project are—by reinforcing the negative perception of the group. The claim builds"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to the Lincoln Project, as established by the prior discussion in turns 44–45. 'This' in the tweet summary refers to the behavior described in the leaked DMs and the broader pattern of misconduct.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project engaged in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A — that the audience"
     },
     {
       "a_turn_idx": 42,
@@ -5856,7 +5856,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 46 refers to the behavior of the Lincoln Project described in prior turns, particularly the collusion with MSNBC and the ethical misconduct revealed through leaked DMs.\",\n  \"reason\": \"Claim C explicitly states that the unethical and scam-like behavior of the Lincoln Project was 'completely known and obvious over the last 18 months,' which directly verifies the assumption in A that the audience understands who Kurt Bardella and the Lincoln Project are—imply"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Lincoln Project, consistent with the context where the Lincoln Project is discussed as a group involved in the alleged scam. 'Lincoln Project' is the subject of both A and C.\",\n  \"reason\": \"Claim C explicitly states that the 'scummy, dirty, unethical, dishonest, and scamming' behavior of the Lincoln Project was 'completely known and obvious over the last 18 months,' which directly verifies the"
     },
     {
       "a_turn_idx": 42,
@@ -5886,7 +5886,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Kurt Bardella, as established in turn 42 where Bardella is mentioned in connection with the Lincoln Project. The phrase 'his abusive behavior' clearly refers to Bardella's conduct.\",\n  \"reason\": \"Claim C explicitly states that allegations have emerged—reported by the Associated Press and New York Times—that the Lincoln Project knew about abusive behavior by an individual (Kurt Bardella) and potentially allowed it to occur"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to Kurt Bardella, as established in turn 42 where Bardella is mentioned in connection with the Lincoln Project. The phrase 'his abusive behavior' clearly refers to Bardella's conduct.\",\n  \"reason\": \"Claim C explicitly states that allegations have emerged—reported by major outlets—that abusive behavior may have occurred at the Lincoln Project, and that the organization knew about it while potentially subjecting employees to it. This directly"
     },
     {
       "a_turn_idx": 42,
@@ -5916,7 +5916,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the leadership of the Lincoln Project, as established by the context of prior discussion about organizational responsibility and knowledge of misconduct.\",\n  \"reason\": \"Claim C states that leadership at the Lincoln Project was aware of abusive behavior and potentially allowed employees to be subjected to it, which directly addresses the assumption in A that the audience understands the connection between Kurt Bardella and the Lincoln Project. While C does not explicitly name Bardella, it confirms the"
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the leadership of the Lincoln Project, as established by the context of prior discussion about organizational responsibility and knowledge of misconduct.\",\n  \"reason\": \"Claim C states that leadership at the Lincoln Project may have been aware of abusive behavior and allowed employees to be subjected to it, which aligns with the assumption in A that the audience knows who Kurt Bardella and the Lincoln Project are—implying familiarity with the organization’s internal dynamics."
     },
     {
       "a_turn_idx": 42,
@@ -5931,7 +5931,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 58 refers to the speaker(s) in the conversation, particularly the individuals associated with the White House or political communications team mentioned in the prior discussion. 'This' in 'this is what's happened here' refers to the act of creating a hostile journalist by deflecting negative inquiries.\",\n  \"reason\": \"Claim C (turn 58) discusses a journalist being turned into a permanent enemy due to attempts to reframe negative stories,"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 58 refers to the speaker or their team, not to the audience understanding Kurt Bardella or the Lincoln Project. The claim in C is about a journalist seeking negative information, which is unrelated to the assumption in A about audience familiarity with specific individuals.\",\n  \"reason\": \"Turn 58 discusses a journalist being created as an enemy due to a strategic media move, focusing on the consequences of handling negative press. This is entirely unrelated to"
     },
     {
       "a_turn_idx": 42,
@@ -5946,7 +5946,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republicans in the audience, but there is no mention of Kurt Bardella or the Lincoln Project. The claim in turn 68 is unrelated to the assumption in turn 42.\",\n  \"reason\": \"Turn 42 assumes the audience knows who Kurt Bardella and the Lincoln Project are. Turn 68 discusses Republicans in cubicles and their potential career consequences, which is entirely unrelated to the identity or recognition"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republicans in the audience, but there is no mention of Kurt Bardella or the Lincoln Project in this context. The claim does not address or verify the assumption about audience familiarity with these figures.\",\n  \"reason\": \"Turn 68 discusses Republicans in cubicles and their potential career consequences, which is unrelated to the assumption in turn 42 about audience understanding of Kurt Bardella and the Lincoln Project. There is no"
     },
     {
       "a_turn_idx": 43,
@@ -5961,7 +5961,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 44 refers to the announcement of Kurt Bardella joining the Lincoln Project, as established in turn 43.\",\n  \"reason\": \"Turn 44 explicitly states that the announcement was made live on national cable television, directly verifying the substance of assumption A, which claims that announcements made live on national television are likely to be accurate. While the speaker later dismisses the event as 'bullshit' and a 'scam,' the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'it' in turn 44 refers to the announcement of Kurt Bardella joining the Lincoln Project, as established in turn 43.\",\n  \"reason\": \"Claim C explicitly states that the event was broadcast live on national cable television, which directly verifies the substance of assumption A—that announcements made live on national television are likely to be accurate—by confirming the public, televised nature of the announcement. While A implies a belief in accuracy, C confirms the medium and"
     },
     {
       "a_turn_idx": 43,
@@ -5976,7 +5976,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this behavior' in turn 46 refers to the actions described in turns 43–45, particularly the Lincoln Project's public announcement of hiring and the release of private messages, which imply the organization's known and controversial nature.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project's unethical and scam-like behavior was 'completely known and obvious over the last 18 months,' which directly verifies the substance of assumption A—that the Lincoln"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to 'the Lincoln Project', as established in the prior context where the Lincoln Project is discussed as an entity involved in controversial actions.\",\n  \"reason\": \"Claim C explicitly states that the behavior of the Lincoln Project was 'completely known and obvious over the last 18 months,' which directly verifies the substance of assumption A—that the Lincoln Project is a known or recognized initiative. The claim goes beyond mere recognition by asserting widespread"
     },
     {
       "a_turn_idx": 43,
@@ -5991,7 +5991,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established by the prior mention in turn 43 and the context of shared media activity.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project are part of the same media ecosystem, which directly verifies the substance of assumption A — that the Lincoln Project is a known or recognized initiative within a broader media network. The phrasing 'one hand washed the other' and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established in the prior context where both entities are discussed together.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project are part of the same media ecosystem, which directly verifies the substance of assumption A — that the Lincoln Project is a known or recognized initiative — by placing it within a broader, identifiable network of media actors. The phrasing 'one hand washed the other"
     },
     {
       "a_turn_idx": 43,
@@ -6006,7 +6006,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established by the prior mention of 'MSNBC and the Lincoln Project' in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project collaborate to profit from viewership, which directly verifies the substance of assumption A—that the Lincoln Project is a known or recognized initiative—by placing it within a broader ecosystem of mutual benefit and coordinated activity. The phrase '"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established by the prior mention of 'MSNBC and the Lincoln Project' in the same sentence.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project collaborate to profit from viewership, directly verifying the substance of assumption A, which asserts that the Lincoln Project is a known or recognized initiative. While A is more general, C confirms its existence and public visibility through high"
     },
     {
       "a_turn_idx": 43,
@@ -6021,7 +6021,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'The Lincoln Project', as established by the prior mention of the organization in turn 42 and the context of hiring announcements. 'Their' in turn 45 refers to The Lincoln Project, consistent with the subject of the discussion.\",\n  \"reason\": \"Claim C explicitly states that The Lincoln Project tweeted out leaked DMs from Jennifer Horne, which directly verifies the substance of assumption A — that The Lincoln Project"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'The Lincoln Project', as established by the prior mention of the organization in turn 42 and the context of hiring announcements. 'Their' in turn 45 refers back to 'The Lincoln Project'.\",\n  \"reason\": \"Claim C explicitly states that The Lincoln Project tweeted out leaked DMs from Jennifer Horne, which directly verifies the substance of assumption A — that The Lincoln Project is a known or recognized"
     },
     {
       "a_turn_idx": 43,
@@ -6036,7 +6036,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to 'The Lincoln Project', as established in the prior context where the organization is discussed as the entity that tweeted and then deleted the DMs.\",\n  \"reason\": \"Claim C explicitly states that 'The Lincoln Project tweeted out [the DMs] and then deleted' them, which directly verifies the substance of assumption A — that The Lincoln Project is a known or recognized initiative — by demonstrating its public actions (tweeting and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to 'The Lincoln Project', as established in turn 43 where 'Lincoln project' is introduced as an entity.\",\n  \"reason\": \"Claim C explicitly states that 'The Lincoln Project' deleted the tweet containing the DMs, which directly verifies the action implied in assumption A (that the Lincoln Project is a known initiative) by demonstrating its active involvement in public communication and subsequent retraction. This confirms the existence and"
     },
     {
       "a_turn_idx": 43,
@@ -6051,7 +6051,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Greenwald refers to 'the Lincoln Project' as a known entity; no ambiguous pronouns; the reference is direct and consistent with the prior assumption.\",\n  \"reason\": \"Claim C explicitly mentions 'the Lincoln Project' and positions it as a known subject of criticism, aligning with assumption A that it is a recognized initiative. While C does not restate 'known or recognized' verbatim, it confirms the project's public visibility and widespread awareness through Greenwald's tweet, which"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"Greenwald refers to 'the Lincoln Project' as a known entity; no ambiguous pronouns; the reference is direct and consistent with the prior assumption.\",\n  \"reason\": \"Claim C explicitly mentions 'the Lincoln Project' and attributes knowledge of its unethical behavior to Greenwald, reinforcing the idea that the Lincoln Project is a recognized entity with established reputation. While C does not restate the exact phrasing of A ('known or recognized initiative'), it strongly entails the core meaning by treating the"
     },
     {
       "a_turn_idx": 43,
@@ -6066,7 +6066,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to 'The Lincoln Project' as established in the prior context.\",\n  \"reason\": \"Claim C explicitly labels The Lincoln Project as engaging in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A—that The Lincoln Project is a known or recognized initiative—by affirming its reputation for such conduct. While A focuses on recognition, C confirms that the project is widely perceived ("
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to 'The Lincoln Project' as established in prior context.\",\n  \"reason\": \"Claim C explicitly labels The Lincoln Project as engaging in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A—that The Lincoln Project is a known or recognized initiative—by affirming its reputation for such conduct. While A focuses on recognition, C confirms that the project is widely perceived (and"
     },
     {
       "a_turn_idx": 43,
@@ -6081,7 +6081,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to individuals within the Lincoln Project, as established in the context where the Lincoln Project is discussed as an organization with internal members and leadership.\",\n  \"reason\": \"Claim C explicitly states that individuals within the Lincoln Project knew about abusive behavior, which directly verifies the substance of assumption A—that the Lincoln Project is a known or recognized initiative. The reference to specific media outlets (AP, NYT) and the detailed nature of the allegations confirm that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to individuals within the Lincoln Project, as established in the context where the Lincoln Project is discussed as an organization with internal members and leadership.\",\n  \"reason\": \"Claim C explicitly states that individuals within the Lincoln Project knew about abusive behavior, which directly verifies the assumption in A that the Lincoln Project is a known or recognized initiative. While A focuses on recognition, C builds on that by asserting specific knowledge within the organization, thereby confirming its existence"
     },
     {
       "a_turn_idx": 43,
@@ -6096,7 +6096,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Lincoln Project, as established in the context where the Lincoln Project is discussed as an organization with internal dynamics and alleged misconduct.\",\n  \"reason\": \"Claim C states there is evidence suggesting abusive behavior may have occurred at the Lincoln Project, which directly addresses the organization's existence and reputation. Assumption A asserts that the Lincoln Project is a known or recognized initiative. While C does not explicitly state 'the Lincoln Project is known,' it"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Lincoln Project, as established by context (turn 48: 'they might have employees that while they knew about his behavior...'). 'His behavior' refers to the abusive behavior mentioned earlier.\",\n  \"reason\": \"Claim C states that there is evidence suggesting abusive behavior may have occurred at the Lincoln Project, which directly addresses the organization's existence and conduct. While A asserts that the Lincoln Project is a known or recognized initiative"
     },
     {
       "a_turn_idx": 43,
@@ -6111,7 +6111,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, as established by context (e.g., 'the allegations now that have come out... claim that not only did they know about his abusive behavior').\",\n  \"reason\": \"Claim C explicitly states that current criticism of the Lincoln Project is insufficient, which directly verifies the assumption in A that the Lincoln Project is a known or recognized initiative—because such criticism would only be meaningful if the organization were widely recognized"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, as established by context (e.g., 'the allegations now that have come out... claim that not only did they know about his abusive behavior').\",\n  \"reason\": \"Claim C (turn 48) asserts that current criticism of the Lincoln Project is insufficient, implying that the organization is widely recognized as problematic. This aligns with assumption A (turn 43), which posits that"
     },
     {
       "a_turn_idx": 43,
@@ -6156,7 +6156,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established by the prior mention of 'MSNBC and the Lincoln Project' in the same sentence. 'One hand washed the other' is a metaphorical expression indicating mutual benefit or collaboration.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project are part of the same ecosystem to 'grift their viewers out of dollars and for ratings,' which directly verifies the assumption in"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 44 refers to MSNBC and the Lincoln Project, as established by the prior mention of 'MSNBC and the Lincoln Project' and the context of shared collaboration.\",\n  \"reason\": \"Claim C explicitly states that MSNBC and the Lincoln Project are part of the same ecosystem to 'grift their viewers out of dollars and for ratings,' which directly verifies the assumption in A that the speaker expects the listener to understand 'Lincoln Project' as a"
     },
     {
       "a_turn_idx": 43,
@@ -6186,7 +6186,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'The Lincoln Project', as established by the context of announcing someone joining the group. In turn 45, 'The Lincoln Project' is explicitly mentioned as the entity that tweeted out and then deleted the DMs.\",\n  \"reason\": \"Turn 45 explicitly confirms that 'The Lincoln Project' tweeted out the DMs and subsequently deleted the tweet, which directly verifies the assumption in turn 43 that the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'The Lincoln Project', which is explicitly named in turn 45 as the entity that deleted the tweet.\",\n  \"reason\": \"Turn 45 explicitly confirms that 'The Lincoln Project' tweeted out the DMs and then deleted the tweet, directly verifying the assumption in turn 43 that the listener should understand 'Lincoln Project' as a specific entity involved in the action. The claim is clear, direct"
     },
     {
       "a_turn_idx": 43,
@@ -6201,7 +6201,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 46 refers to Greenwald, as established by context; 'the Lincoln Project' is consistently used as a proper noun referring to the political group introduced earlier.\",\n  \"reason\": \"Claim C states that Greenwald tweeted about the Lincoln Project, which implies recognition of the Lincoln Project as a distinct, identifiable entity—directly supporting assumption A that the speaker expects the listener to understand 'Lincoln project' as a specific entity. While C"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"In turn 46, 'Greenwald' refers to the same person mentioned in the broader context as a commentator who made a public statement about the Lincoln Project. The pronoun 'he' in the prior context is not used, so no coreference resolution needed beyond identifying Greenwald as an external figure citing the Lincoln Project.\",\n  \"reason\": \"Claim C states that Greenwald tweeted about the Lincoln Project, explicitly referencing its unethical and scam-like nature, which aligns with the"
     },
     {
       "a_turn_idx": 43,
@@ -6216,7 +6216,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 46 refers to 'The Lincoln Project', as established by the prior discussion and context.\",\n  \"reason\": \"Claim C explicitly labels 'The Lincoln Project' as engaging in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A—that the speaker expects the listener to understand 'Lincoln Project' as a specific entity involved in deceptive or fraudulent actions. The claim goes beyond mere implication and"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 43 refers to 'The Lincoln Project', established by prior context involving the announcement of a hire and the group's media presence.\",\n  \"reason\": \"Claim C explicitly labels 'The Lincoln Project' as engaging in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A — that the speaker expects the listener to understand 'Lincoln Project' as a specific entity involved in deceptive or unethical"
     },
     {
       "a_turn_idx": 43,
@@ -6231,7 +6231,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this behavior' in turn 46 refers to the actions described in turns 44–45, particularly the Lincoln Project's handling of leaked DMs and its role in a perceived scam, which aligns with the assumption in turn 43 that 'Lincoln Project' is a specific, identifiable entity.\",\n  \"reason\": \"Claim C explicitly states that the unethical and scam-like behavior of the Lincoln Project was 'completely known and obvious over the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this behavior' in turn 46 refers to the actions described in turns 44–45, particularly the Lincoln Project's handling of leaked DMs and its role in promoting controversial figures, which aligns with the expectation in turn 43 that 'Lincoln Project' is understood as a specific, identifiable entity.\",\n  \"reason\": \"Claim C explicitly states that the unethical behavior of the Lincoln Project was 'completely known and obvious over the last"
     },
     {
       "a_turn_idx": 43,
@@ -6246,7 +6246,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to individuals within the Lincoln Project, as established in the prior context where the Lincoln Project is discussed as an organization with leadership and internal dynamics.\",\n  \"reason\": \"Claim C explicitly states that individuals within the Lincoln Project knew about abusive behavior, which directly verifies the assumption in A that the speaker expects the listener to understand 'Lincoln Project' as a specific entity with identifiable members and internal knowledge. The claim goes beyond mere reference"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to 'individuals within the Lincoln Project', which aligns with the entity 'Lincoln Project' established in turn 43.\",\n  \"reason\": \"Turn 48 explicitly verifies the assumption in turn 43 by confirming that the Lincoln Project is understood as a specific organization with internal members who were aware of abusive behavior. This directly supports the expectation in A that the listener understands 'Lincoln Project' as a"
     },
     {
       "a_turn_idx": 43,
@@ -6261,7 +6261,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, as established by context (e.g., 'the Lincoln Project' is the subject of discussion throughout turns 43–48). 'His abusive behavior' refers to a co-founder mentioned earlier in the conversation.\",\n  \"reason\": \"Turn 48 explicitly states that allegations have emerged claiming abusive behavior may have occurred at the Lincoln Project, and that the organization may have knowingly allowed such behavior toward"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to 'the Lincoln Project', as established by context. 'His abusive behavior' refers to a male individual previously mentioned in the conversation (likely a co-founder), consistent with prior discussion.\",\n  \"reason\": \"Claim C explicitly states that allegations have emerged—reported by major outlets—that the Lincoln Project may have knowingly allowed abusive behavior to occur within its organization. This directly verifies the assumption in A that the speaker treats 'Lincoln"
     },
     {
       "a_turn_idx": 43,
@@ -6276,7 +6276,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, as established by context (e.g., 'the allegations now that have come out... claim that not only did they know about his abusive behavior').\",\n  \"reason\": \"Claim C (turn 48) expresses that current criticism of the Lincoln Project is insufficient, which aligns with the idea that the group is widely recognized as problematic. However, it does not explicitly state or verify the assumption"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, as established by context (e.g., 'the allegations now that have come out... claim that not only did they know about his abusive behavior').\",\n  \"reason\": \"Turn 48 expresses that current criticism of the Lincoln Project is insufficient, which reflects a belief that the organization is deeply problematic. However, it does not explicitly state or verify the earlier assumption in turn 43—that the"
     },
     {
       "a_turn_idx": 43,
@@ -6306,7 +6306,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to 'young and inexperienced communication staff', which is consistent with the context. No coreference resolves to the earlier assumption about media collusion.\",\n  \"reason\": \"Claim C discusses a tendency among inexperienced communication staff to redirect damaging journalistic inquiries to favorable outlets, which is unrelated to the earlier assumption A that mainstream media outlets are colluding to deceive the public. While both involve media behavior and potential deception, C does not state, verify"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to young and inexperienced communication staff, specifically TJ Ducklow and his team. 'That inquiry' refers to the investigation by Tara Palmeri into the conflict of interest.\",\n  \"reason\": \"Claim C (turn 57) discusses a tendency among inexperienced communication staff to avoid handling potentially damaging journalist requests by redirecting them to sympathetic outlets to reframe the narrative positively. This is unrelated to assumption A (turn 44"
     },
     {
       "a_turn_idx": 44,
@@ -6321,7 +6321,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the White House communication staff, specifically TJ Ducklow and his team, who bypassed the original investigative journalist (Tara Palmeri) and instead pitched the story to People Magazine.\",\n  \"reason\": \"Claim C (turn 57) explicitly describes a strategy where communication staff avoid a negative narrative by redirecting it to a media outlet that promotes a favorable, positive framing—specifically, reframing a serious ethical"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the White House communication staff, specifically TJ Ducklow and his team, who bypassed the original investigative journalist (Tara Palmeri) and instead pitched the story to People Magazine.\",\n  \"reason\": \"Claim C (turn 57) describes a deliberate strategy by inexperienced communication staff to reframe a potentially damaging story by redirecting it to a media outlet known for favorable narratives (People Magazine), thereby avoiding accountability."
     },
     {
       "a_turn_idx": 45,
@@ -6336,7 +6336,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 51 refers to the unauthorized disclosure of private messages (DMs) by The Lincoln Project, as established in turn 45.\",\n  \"reason\": \"Claim C explicitly states that the behavior (unauthorized release of private messages) constitutes 'gross misconduct,' which directly verifies the earlier assumption A that such disclosure is a serious ethical breach. The context confirms that the behavior in question—leaking Jennifer Horne's DMs without consent—is"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this' in turn 51 refers to the unauthorized disclosure of private messages (DMs) by The Lincoln Project, as established in turn 45. 'These scumbags' refers to the individuals involved in the leak and the organization's actions.\",\n  \"reason\": \"Claim C explicitly states that the behavior described—unauthorized release of private messages by The Lincoln Project—constitutes 'gross misconduct.' This directly verifies the earlier assumption A that such"
     },
     {
       "a_turn_idx": 45,
@@ -6351,7 +6351,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the unauthorized disclosure of private messages (DMs) involving Jennifer Horne and the Lincoln Project, as established in turn 45.\",\n  \"reason\": \"Claim C explicitly states that the conduct described—unauthorized release of private messages—constitutes the 'worst possible ethical failure,' which directly verifies the earlier assumption A that such disclosure is a serious ethical breach. The language in C is stronger and more emphatic than"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'that' in claim C refers to the unauthorized disclosure of private messages (DMs) mentioned in turn 45, specifically the leaking of Jennifer Horne's DMs by The Lincoln Project.\",\n  \"reason\": \"Claim C explicitly states that the conduct described—unauthorized disclosure of private messages—constitutes the 'worst possible ethical failure,' which directly verifies the earlier assumption A that such disclosure is a serious ethical breach. The language in C is stronger"
     },
     {
       "a_turn_idx": 45,
@@ -6366,7 +6366,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 62 refers to SPEAKER_07, who is discussing the Vanity Fair article.\",\n  \"reason\": \"Claim C states that the speaker believes the Vanity Fair article provides important contextual background, which is unrelated to assumption A, which concerns the ethical breach of unauthorized disclosure of private messages. There is no mention of leaked DMs, consent, or ethical violations in C. The topics diverge entirely—C focuses on media"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference issues; 'the speaker' in turn 62 refers to SPEAKER_07, who is discussing the Vanity Fair article.\",\n  \"reason\": \"Claim C states that the speaker believes the Vanity Fair article provides important contextual background, which is unrelated to assumption A, which concerns the ethical breach of unauthorized disclosure of private messages. There is no mention of leaked DMs, consent, or ethical violations in C. The topic shifts entirely to a different article and its"
     },
     {
       "a_turn_idx": 45,
@@ -6381,7 +6381,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to TJ Ducklow, as established in the context. 'Their relationship' refers to the relationship between Ducklow and the reporter.\",\n  \"reason\": \"Claim C (turn 65) states that the speaker maintains a 'collegial and adversarial relationship with reporters,' which is unrelated to assumption A (turn 45), which concerns the ethical breach of unauthorized disclosure of private messages. While both involve interactions with"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to TJ Ducklow, as established in the context. 'Their relationship' refers to the dynamic between Ducklow and the reporter.\",\n  \"reason\": \"Claim C (turn 65) states that the speaker maintains a 'collegial and adversarial relationship with reporters,' which is unrelated to assumption A (turn 45), which concerns the ethical breach of unauthorized disclosure of private messages. While both involve reporters,"
     },
     {
       "a_turn_idx": 45,
@@ -6426,7 +6426,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'this tweet from Greenwald' in turn 46, which directly references the content of the earlier assumption A regarding the Lincoln Project's hypocrisy and unethical behavior. 'Greenwald' is the subject of the tweet being discussed, and the claim in C explicitly verifies the substance of A by stating that Greenwald publicly acknowledged the Lincoln Project's scummy and unethical nature, aligning with SPEAKER_03's assertion of a 'complete scam"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"SPEAKER_02 refers to 'this tweet from Greenwald' in turn 46, where 'Greenwald' is the subject of the quoted statement. The claim in C explicitly references Greenwald's tweet, which contains the full substance of the earlier assumption A.\",\n  \"reason\": \"Turn 45 expresses the assumption that The Lincoln Project's actions—specifically, leaking and then deleting Jennifer Horne's DMs—are hypocritical or inconsistent. Turn 4"
     },
     {
       "a_turn_idx": 45,
@@ -6441,7 +6441,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, which is the subject of claim C in turn 46.\",\n  \"reason\": \"Claim C explicitly states that The Lincoln Project has engaged in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A in turn 45, where the speaker asserts that The Lincoln Project’s actions are inconsistent or hypocritical due to the deletion of leaked DMs"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 45 refers to The Lincoln Project, which is the subject of claim C in turn 46.\",\n  \"reason\": \"Claim C explicitly states that The Lincoln Project has engaged in scummy, dirty, unethical, dishonest, and scamming behavior, which directly verifies the substance of assumption A in turn 45, where the speaker asserts that The Lincoln Project’s actions—specifically, leaking and deleting DMs without consent—are part"
     },
     {
       "a_turn_idx": 45,
@@ -6456,7 +6456,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this behavior' in claim C refers to the Lincoln Project's actions described in turn 45, particularly the leaking and subsequent deletion of Jennifer Horne's DMs, which Speaker 03 frames as hypocritical and part of a larger scam.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project's behavior—specifically its unethical and scam-like actions—was 'completely known and obvious over the last 18 months,' directly verifying the"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'this behavior' in claim C refers to the Lincoln Project's actions described in turn 45, particularly the leaking and subsequent deletion of Jennifer Horne's DMs, which Speaker 03 frames as hypocritical and part of a larger scam.\",\n  \"reason\": \"Claim C explicitly states that the Lincoln Project's behavior—specifically its questionable actions involving the leaked DMs—was 'completely known and obvious over the last 18 months,' directly"
     },
     {
       "a_turn_idx": 45,
@@ -6471,7 +6471,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'some individuals within the Lincoln Project,' which aligns with the group discussed in assumption A. 'His abusive behavior' refers to the co-founder mentioned in turn 45.\",\n  \"reason\": \"Claim C explicitly states that individuals within the Lincoln Project knew about abusive behavior and potentially allowed it to continue, which directly supports the idea of hypocrisy or inconsistency in their actions—central to assumption A. While A focuses on the deletion"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to 'some individuals within the Lincoln Project,' which aligns with the subject of the earlier assumption A regarding The Lincoln Project's actions.\",\n  \"reason\": \"Claim C explicitly states that individuals within the Lincoln Project knew about abusive behavior and potentially allowed it to continue, which directly supports the idea of inconsistency or hypocrisy in their actions—central to assumption A. While A focuses on the deletion of leaked DMs as evidence of hypocrisy, C"
     },
     {
       "a_turn_idx": 45,
@@ -6486,7 +6486,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in 'this guy' refers to the co-founder mentioned in turn 45, specifically Jennifer Horne's alleged abuser, whose identity is implied through context.\",\n  \"reason\": \"Claim C states that allegations suggest abusive behavior may have occurred at the Lincoln Project, which directly connects to the earlier assumption A that the Lincoln Project's actions—specifically the leaking and subsequent deletion of private DMs—are hypocritical or inconsistent. The substance of A centers"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 48 refers to the co-founder mentioned in turn 45, specifically Jennifer Horne's alleged abuser, whose identity is implied through context.\",\n  \"reason\": \"Claim C states that there are allegations—supported by reports from major outlets—that the Lincoln Project knew about abusive behavior and possibly allowed it to occur within the organization. This directly addresses the inconsistency or hypocrisy implied in assumption A, which centers on the Lincoln Project's public release"
     },
     {
       "a_turn_idx": 45,
@@ -6501,7 +6501,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 48 refers to the Lincoln Project, consistent with the context in turn 45 where the speaker criticizes the group's actions.\",\n  \"reason\": \"Claim C states that current criticism of the Lincoln Project is insufficient, which aligns with the broader sentiment in assumption A that the group's actions—such as leaking and deleting DMs—are hypocritical or inconsistent. However, C does not explicitly mention the specific inconsistency highlighted in A ("
+      "raw": "```json\n{\n  \"entailment_score\": 5,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Lincoln Project, consistent with the context in turn 45 where the speaker criticizes the organization's actions.\",\n  \"reason\": \"Claim C states that current criticism of the Lincoln Project is insufficient, which aligns with the broader critique in assumption A that the group's actions—such as leaking and deleting DMs—are hypocritical. However, C does not explicitly mention the inconsistency or hypocrisy related to the deletion after posting,"
     },
     {
       "a_turn_idx": 45,
@@ -6516,7 +6516,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the leadership of The Lincoln Project, as established in the context of prior discussion about their actions and knowledge.\",\n  \"reason\": \"Claim C states that Lincoln Project leadership may have been aware of abusive behavior and allowed employees to be subjected to it, which directly supports the assumption in A that their actions—specifically, leaking and then deleting private messages—are hypocritical or inconsistent. While A focuses on the inconsistency of publicizing private messages"
+      "raw": "```json\n{\n  \"entailment_score\": 7,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to the Lincoln Project leadership, as established in the context of leadership awareness of abusive behavior.\",\n  \"reason\": \"Claim C states that Lincoln Project leadership may have been aware of abusive behavior and allowed employees to be subjected to it, which directly supports the assumption in A that the organization's actions—specifically, leaking and then deleting private messages—are hypocritical or inconsistent. While A focuses on the inconsistency of publicizing private messages after deleting"
     },
     {
       "a_turn_idx": 45,
@@ -6546,7 +6546,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.9,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to TJ Ducklow, as established in the context. 'Their relationship' refers to the dynamic between Ducklow and the reporter.\",\n  \"reason\": \"Claim C (turn 65) discusses the nature of relationships between public figures and reporters, emphasizing a desire for a 'collegial and adversarial' relationship. However, it does not explicitly state or verify the assumption in A (turn 45), which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to Ducklow, as established by context (turn 64). 'Their relationship' refers to the dynamic between Ducklow and the reporter.\",\n  \"reason\": \"Claim C (turn 65) discusses the nature of relationships between public figures and reporters, emphasizing a desired collegial and adversarial dynamic. However, it does not explicitly state or verify the assumption in A (turn 45), which concerns public"
     },
     {
       "a_turn_idx": 46,
@@ -6561,7 +6561,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 66 refers to Ducklow, and 'my girlfriend' refers to the woman involved in the reported relationship. 'This guy' refers to Paul Mary.\",\n  \"reason\": \"Claim C (turn 66) asserts a motive rooted in personal vendetta and romantic jealousy between two individuals (Ducklow and Paul Mary) aimed at harming the speaker. This is entirely unrelated to Assumption A (turn 46), which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 66 refers to TJ Ducklow, as established by context (turn 64). 'This guy' refers to Ducklow, and 'my girlfriend' refers to the woman involved in the reported relationship.\",\n  \"reason\": \"Claim C (turn 66) asserts a motive involving personal vendetta and malicious intent between two individuals (Ducklow and the reporter) regarding a romantic relationship. This is unrelated to assumption A ("
     },
     {
       "a_turn_idx": 46,
@@ -6576,7 +6576,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to journalists/media, consistent with the subject of assumption A (public admissions of wrongdoing by journalists/organizations). 'These people' refers to the individuals involved in the Lincoln Project scandal, aligning with the context of A.\",\n  \"reason\": \"Claim C explicitly states that the media prioritized defeating Donald Trump over exposing wrongdoing, which directly verifies the core idea in assumption A—that public admissions of wrongdoing are driven by strategic interests (here,"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in claim C refers to journalists/media, which aligns with the subject of assumption A (public admissions of wrongdoing by journalists/organizations). 'These people' refers to the individuals involved in the Lincoln Project scandal.\",\n  \"reason\": \"Claim C explicitly states that the media prioritized defeating Donald Trump over exposing wrongdoing, which directly verifies the core idea in assumption A—that public admissions of wrongdoing are driven by strategic interests (here, political victory) rather than truth"
     },
     {
       "a_turn_idx": 46,
@@ -6591,7 +6591,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to the White House communication staff, specifically TJ Ducklow and his team, as established in the context. 'This' in 'this is a wonderful love story' refers to the reframing of the conflict-of-interest story.\",\n  \"reason\": \"Claim C explicitly states that the White House communication staff intentionally diverted a negative ethical story to People Magazine to reframe it as a 'wonderful love story,' which directly verifies"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'they' in turn 57 refers to White House communication staff, specifically TJ Ducklow and his team, who are described as attempting to reframe a negative story. 'This' in 'this is a wonderful love story' refers to the narrative pushed by People Magazine.\",\n  \"reason\": \"Claim C explicitly states that the White House communication staff intentionally diverted a negative ethical story to People Magazine to reframe it as a 'wonderful love story,' which"
     },
     {
       "a_turn_idx": 46,
@@ -6606,7 +6606,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 66 refers to TJ Ducklow, as established in the context of the conversation about his conduct and media coverage.\",\n  \"reason\": \"Claim C explicitly states that the motivation behind the media coverage is malicious rather than journalistic, which directly verifies the core idea in assumption A—that public admissions of wrongdoing (here, media scrutiny) are driven by strategic or ulterior motives (malice, personal vendettas) rather than genuine truth-seeking or"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 66 refers to the reporter covering the Biden transition, and 'he' refers to TJ Ducklow. The claim centers on the motive behind the media coverage, attributing it to personal vendettas rather than journalistic integrity.\",\n  \"reason\": \"Claim C explicitly states that the motivation for the media coverage is malicious (i.e., personal revenge or sabotage) rather than genuine journalistic interest. This directly verifies the core idea in assumption A—that"
     },
     {
       "a_turn_idx": 47,
@@ -6621,7 +6621,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 55 refers to the story about the relationship between Alexi McCammon and TJ Ducklow, which is presented as a 'fun' and harmless 'power couple' story in People Magazine.\",\n  \"reason\": \"Claim C mentions that the People Magazine story portrays the relationship as a 'fun' and harmless 'power couple' story, which aligns with the general tone described in the context. However, assumption A (turn 4"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'this' in turn 55 refers to the story about McCammon and Ducklow being portrayed as a 'fun' power couple in People Magazine.\",\n  \"reason\": \"Claim C mentions the 'official narrative' in People Magazine portraying the relationship as a 'fun' and harmless 'power couple' story, which aligns with the description in turn 55. However, assumption A (turn 47) refers to the listener having previously shared a"
     },
     {
       "a_turn_idx": 47,
@@ -6636,7 +6636,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to SPEAKER_05, who is the speaker of turns 73–74. 'This entire process' refers to the impeachment proceedings described in those turns.\",\n  \"reason\": \"Claim C (turn 75) states that SPEAKER_07 believes SPEAKER_05 has made a 'powerful case against the constitutionality of this entire process,' which is unrelated to assumption A (turn"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to SPEAKER_05, who is the speaker of turns 73–74. The claim in turn 75 is about the constitutionality of the impeachment process, not about a narrative or story shared by the listener.\",\n  \"reason\": \"Turn 47 assumes that the listener has shared a story or narrative that the speaker is responding to. However, turn 75 does not reference any such"
     },
     {
       "a_turn_idx": 47,
@@ -6651,7 +6651,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these scumbags' in turn 51 refers to the individuals involved in the alleged misconduct described in prior turns, particularly the co-founders of the Lincoln Project mentioned in turn 47.\",\n  \"reason\": \"Turn 51 explicitly states that the speaker believes the behavior described—specifically, the alleged abusive conduct and organizational complicity—is gross misconduct, directly verifying the substance of assumption A, which asserts the speaker's belief in the validity and significance"
+      "raw": "```json\n{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'these scumbags' in turn 51 refers to the individuals involved in the alleged misconduct described in prior turns, particularly the co-founders and leaders of the Lincoln Project mentioned in turns 45–49.\",\n  \"reason\": \"Claim C explicitly states that the speaker believes the behavior described (abusive conduct, potential criminal activity, and organizational complicity) constitutes gross misconduct. This directly verifies the substance of assumption A, which asserts that the speaker"
     },
     {
       "a_turn_idx": 47,
@@ -6666,7 +6666,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 62 refers to the Lincoln Project, as established by prior context involving allegations against its leadership.\",\n  \"reason\": \"Claim C states that the speaker believes the Vanity Fair article provides important contextual background, which reflects a belief in the value and relevance of a particular narrative. However, this does not explicitly verify or state the core content of assumption A—that the speaker believes their own perspective on the story is valid and meaningful. While both involve val"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'they' in turn 62 refers to Vanity Fair, as the speaker is discussing the article's content. 'He' in the quoted passage refers to Ducklow.\",\n  \"reason\": \"Turn 62 states that the speaker believes the Vanity Fair article provides 'really good context,' indicating its perceived value and relevance. However, this does not explicitly verify or state the earlier assumption in turn 47—that the speaker believes their own perspective on the story is"
     },
     {
       "a_turn_idx": 47,
@@ -6681,7 +6681,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to TJ Ducklow, as established in prior context. 'They' in turn 65 refers to the media, consistent with earlier discussion.\",\n  \"reason\": \"Turn 65 states the speaker's belief in maintaining both a collegial and adversarial relationship with reporters, which is a general stance on media interaction. However, this does not explicitly verify or state the specific assumption in turn 47—that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 65 refers to TJ Ducklow, as established in prior context. 'They' in turn 65 refers to the media, consistent with earlier discussion.\",\n  \"reason\": \"Claim C (turn 65) discusses the speaker's view on relationships with reporters—specifically, that they maintain both a collegial and adversarial relationship. This contrasts with assumption A (turn 47), which asserts the speaker's belief in"
     },
     {
       "a_turn_idx": 47,
@@ -6696,7 +6696,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republican commentators or individuals in similar positions, not the speaker. 'I'll be flying back to Indiana' is a hypothetical statement about others, not an assertion of personal belief about the validity of their own perspective.\",\n  \"reason\": \"Claim C (turn 68) does not address or verify the speaker's belief in the validity or meaningfulness of their own perspective on the story. Instead, it makes a speculative"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 68 refers to Republican commentators or individuals in similar positions, not the speaker's own perspective. 'I'll be flying back to Indiana' is a hypothetical statement about others, not an assertion about the validity of the speaker's own viewpoint.\",\n  \"reason\": \"Claim C (turn 68) does not address or verify the speaker's belief in the validity or meaningfulness of their own perspective on the story. Instead, it shifts"
     },
     {
       "a_turn_idx": 47,
@@ -6711,7 +6711,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to SPEAKER_05, and 'the process' refers to the impeachment proceedings described in turns 73–74.\",\n  \"reason\": \"Claim C (turn 75) states that SPEAKER_07 believes SPEAKER_05 has made a strong case against the constitutionality of the impeachment process. This is unrelated to assumption A (turn 47), which concerns SPEAKER_0"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'you' in turn 75 refers to SPEAKER_05, and 'the process' refers to the impeachment proceedings described in turns 73–74.\",\n  \"reason\": \"Claim C (turn 75) states that SPEAKER_07 believes SPEAKER_05 has made a strong case against the constitutionality of the impeachment process. This is unrelated to assumption A (turn 47), which concerns the validity and meaningful"
     },
     {
       "a_turn_idx": 47,
@@ -6726,7 +6726,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to the comparison between A and C. 'The speaker' in C refers to SPEAKER_05, distinct from SPEAKER_02 in A.\",\n  \"reason\": \"Claim C (turn 76) discusses the impartiality of a judicial proceeding due to the absence of the chief justice and the presence of a partisan judge. This is entirely unrelated to assumption A (turn 47), which concerns the speaker's belief in the validity and"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'the speaker' in claim C refers to SPEAKER_05, who is discussing the impartiality of the proceeding due to the absence of the chief justice. This is unrelated to assumption A, which concerns SPEAKER_02's belief in the validity of their perspective on the Lincoln Project scandal.\",\n  \"reason\": \"Claim C discusses the impartiality of a legal proceeding due to the absence of the chief justice and the presence of a partisan judge, which is"
     },
     {
       "a_turn_idx": 47,
@@ -6801,7 +6801,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' is a direct statement about Kathleen, though gender is misattributed (Kathleen is female), which may reflect a slip but does not alter the core meaning.\",\n  \"reason\": \"Claim C (turn 76) states that the speaker does not harbor ill feelings toward Kathleen, a partisan Democrat"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' is a direct statement about Kathleen, correcting a potential misinterpretation of personal animosity.\",\n  \"reason\": \"Claim C (turn 76) explicitly states that the speaker does not harbor ill feelings toward Kathleen, a partisan Democrat, despite her role in a biased proceeding. This directly contradicts the"
     },
     {
       "a_turn_idx": 48,
@@ -6936,7 +6936,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the presiding officer, identified as Kathleen, a partisan Democrat. 'He' is used incorrectly here due to gender mismatch; the correct referent is Kathleen, a female partisan Democrat.\",\n  \"reason\": \"Claim C states that the presiding officer is a partisan Democrat named Kathleen, which introduces a partisan bias in the procedural authority. While this supports the broader theme of partisanship undermining fairness, it does not explicitly"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the presiding officer, identified as Kathleen, a partisan Democrat.\",\n  \"reason\": \"Claim C states that the presiding officer is a partisan Democrat named Kathleen, which introduces partisanship in a procedural role. However, it does not explicitly address the media's decision-making process or its influence by partisan motivations over the past 18 months, as claimed in assumption A. While both involve partisanship, C"
     },
     {
       "a_turn_idx": 49,
@@ -7011,7 +7011,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'him' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'He' in 'I don't hold any ill will against him' is a misreference; the correct antecedent is Kathleen, a female, indicating a coreference error. However, the intended meaning is clear: the speaker expresses lack of personal animosity toward Kathleen despite her partisanship.\",\n  \"reason\": \"Claim C states that the speaker"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'He' in 'I don't hold any ill will against him' is a misreference; the correct antecedent is Kathleen, a female, so 'he' is a gender mismatch, but contextually indicates the person in charge (Kathleen).\",\n  \"reason\": \"Claim C states that the speaker does not hold ill feelings toward Kathleen"
     },
     {
       "a_turn_idx": 50,
@@ -7101,7 +7101,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy sitting in as the judge' refers to the partisan Democrat (Kathleen), who is distinct from the chief justice.\",\n  \"reason\": \"Claim C (turn 76) discusses the absence of the chief justice and the resulting lack of impartiality due to a partisan Democrat presiding over the proceeding. This is unrelated to assumption A (turn 50), which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy sitting in as the judge' refers to the partisan Democrat (Kathleen), who is distinct from the chief justice.\",\n  \"reason\": \"Claim C (turn 76) discusses the absence of the chief justice and the resulting lack of impartiality due to a partisan Democrat presiding, which is unrelated to assumption A (turn 50). Assumption A concerns media"
     },
     {
       "a_turn_idx": 50,
@@ -7251,7 +7251,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy in the chair' refers to the partisan Democrat judge, Kathleen. These referents are distinct from the speaker in turn 52.\",\n  \"reason\": \"Turn 52 expresses the belief that the speaker has moral authority to issue warnings, particularly regarding ethical failures in media and politics. Turn 76 discusses the lack of impartiality due to the absence of the chief justice"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy in the chair' refers to the partisan Democrat judge, Kathleen. These referents are distinct from the speaker in turn 52.\",\n  \"reason\": \"Claim C discusses the lack of impartiality due to the absence of the chief justice and the presence of a partisan judge, which is unrelated to the moral authority claimed in assumption A. There is no mention of issuing warnings,"
     },
     {
       "a_turn_idx": 52,
@@ -7581,7 +7581,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' clarifies the speaker's personal attitude toward Kathleen, but does not address the broader claim about journalists being inherently adversarial.\",\n  \"reason\": \"Claim C discusses the speaker's personal lack of ill will toward a specific journalist (Kathleen), which is unrelated to the assumption in A that journalists are inherently"
+      "raw": "```json\n{\n  \"entailment_score\": 3,\n  \"confidence\": 0.85,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' refers to Kathleen, despite her partisanship.\",\n  \"reason\": \"Claim C states that the speaker does not harbor ill feelings toward Kathleen despite her partisanship, which is unrelated to assumption A, which concerns the speaker's view of journalists as inherently adversarial and hostile. While both involve perceptions of"
     },
     {
       "a_turn_idx": 58,
@@ -7701,7 +7701,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy in the chair' refers to the partisan Democrat judge, Kathleen. These referents are distinct from the speaker in turn 58.\",\n  \"reason\": \"Turn 58 expresses the belief that the speaker's narrative is being misrepresented by the press, particularly in the context of media framing of a political story. Turn 76 discusses the perceived lack of impartiality in a"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy in the chair' refers to the partisan Democrat judge, Kathleen. These referents are distinct from the speaker in turn 58.\",\n  \"reason\": \"Turn 58 expresses the belief that the speaker's narrative is being misrepresented by the press, particularly in the context of media framing and political bias. Turn 76 discusses the impartiality of a judicial proceeding due to"
     },
     {
       "a_turn_idx": 58,
@@ -7851,7 +7851,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting A and C; 'Team Ducklow' in A refers to a group associated with TJ Ducklow, while C discusses the absence of the chief justice and partisan bias in a separate proceeding.\",\n  \"reason\": \"Claim C discusses the impartiality of a judicial proceeding due to the absence of the chief justice and the presence of a partisan judge, which is entirely unrelated to the assumption in A that the speaker's perspective on the journal is shared by '"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"No coreference links relevant to connecting A and C; 'Team Ducklow' refers to a group associated with TJ Ducklow, while C discusses the absence of the chief justice and partisan bias in a separate proceeding.\",\n  \"reason\": \"Claim C discusses the impartiality of a judicial proceeding due to the absence of the chief justice and the presence of a partisan judge, which is entirely unrelated to assumption A, which concerns shared belief among 'Team Ducklow' about the 'journal threat"
     },
     {
       "a_turn_idx": 59,
@@ -7896,7 +7896,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. However, this claim is about personal feelings toward Kathleen, not about the Trump administration's tolerance of criticism.\",\n  \"reason\": \"Claim C (turn 76) discusses the speaker's personal lack of ill will toward Kathleen, a partisan Democrat, based on prior collaboration on civil liberties. This is unrelated to assumption A (turn 60), which concerns"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'him' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. However, the claim in C is about not holding ill feelings toward Kathleen, which is unrelated to the assumption A about the Trump administration's tolerance for criticism.\",\n  \"reason\": \"Assumption A concerns the Trump administration's intolerance of criticism from its members toward reporters, while claim C discusses personal feelings toward a partisan Democrat (Kathleen) during a legislative proceeding"
     },
     {
       "a_turn_idx": 60,
@@ -8091,7 +8091,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' refers to Kathleen, despite her partisanship.\",\n  \"reason\": \"Claim C (turn 76) states that the speaker does not hold ill feelings toward Kathleen, a partisan Democrat, despite her bias. This is unrelated to assumption A (turn 60), which concerns the implausibility"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to Kathleen, the partisan Democrat who presided over the session. 'I don't hold any ill will against him' is a statement about personal feelings toward Kathleen, not about the plausibility of a Trump administration official being truthful or self-critical.\",\n  \"reason\": \"Claim C discusses the speaker's lack of personal animosity toward a partisan Democrat (Kathleen), which is unrelated to the assumption in A about"
     },
     {
       "a_turn_idx": 61,
@@ -8286,7 +8286,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the chief justice, and 'the guy sitting in as the judge' refers to the partisan Democrat (Kathleen), who is not the same person as the chief justice. The claim in C focuses on the absence of the chief justice and the resulting lack of impartiality due to a partisan judge.\",\n  \"reason\": \"Claim C asserts that the absence of the chief justice undermines the impartiality of the proceeding, which"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as the presiding officer, not the chief justice. The chief justice is mentioned as absent due to refusing to preside, which is central to claim C.\",\n  \"reason\": \"Claim C asserts that the absence of the chief justice undermines the impartiality of the proceeding, which is a direct statement about the procedural flaw in the impeachment trial. However, assumption A (turn 69) concerns"
     },
     {
       "a_turn_idx": 69,
@@ -8436,7 +8436,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as the presiding officer, not the speaker of turn 72. No coreference links connect the speaker in turn 72 to the subject of turn 76.\",\n  \"reason\": \"Turn 72 expresses the belief that maintaining a light tone aids effective communication. Turn 76 discusses the impartiality of the proceeding due to the absence of the chief justice and the presence of"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as the presiding officer, not the speaker of turn 72. No coreference links connect the speaker in turn 72 to the subject of turn 76.\",\n  \"reason\": \"Claim C (turn 76) discusses the impartiality of the proceeding due to the absence of the chief justice and the presence of a partisan presiding officer. This topic is entirely unrelated to"
     },
     {
       "a_turn_idx": 72,
@@ -8496,7 +8496,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as the presiding officer, not the interviewee (Senator Paul). The claim in C concerns the impartiality of the proceeding due to the absence of the chief justice and the presence of a partisan judge. This is unrelated to the earlier assumption A, which is about the interviewee valuing recognition for political impact.\",\n  \"reason\": \"Claim C discusses procedural impartiality and the role of the chief"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as the presiding officer, not the interviewee (Senator Paul). The claim in C concerns the impartiality of the proceeding due to the absence of the chief justice and the presence of a partisan judge, while A concerns the interviewee's value in being recognized for political impact.\",\n  \"reason\": \"Claim C discusses procedural impartiality and the role of the presiding officer in the impeachment process,"
     },
     {
       "a_turn_idx": 72,
@@ -8646,7 +8646,7 @@
       "confidence": 0.0,
       "coref_notes": "",
       "reason": "parse_failed",
-      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the presiding officer (Kathleen), a partisan Democrat, and 'the chief justice' refers to the absent Supreme Court Chief Justice.\",\n  \"reason\": \"Claim C states that the absence of the chief justice undermines the impartiality of the proceeding, which is a new legal and procedural concern not present in assumption A. Assumption A concerns proportionality in assigning responsibility for collective outcomes, particularly regarding political speech and violent"
+      "raw": "```json\n{\n  \"entailment_score\": 1,\n  \"confidence\": 0.95,\n  \"coref_notes\": \"The pronoun 'he' in turn 76 refers to the partisan Democrat serving as presiding officer, not the speaker of turn 73. The chief justice is referenced as absent, but this is unrelated to the principle of proportionality in assigning responsibility.\",\n  \"reason\": \"Turn 73 expresses a belief in proportionality in holding leaders accountable for collective outcomes—specifically rejecting the idea that political speech alone justifies blaming a leader for violent acts by supporters. Turn"
     },
     {
       "a_turn_idx": 73,
