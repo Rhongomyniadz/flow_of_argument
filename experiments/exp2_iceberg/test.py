@@ -17,10 +17,6 @@ from tqdm import tqdm
 from statsmodels.tsa.stattools import grangercausalitytests
 
 
-# =============================================================================
-# LOGGING / PLOTTING CONFIG
-# =============================================================================
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
@@ -45,17 +41,12 @@ plt.rcParams.update(
 )
 
 
-# =============================================================================
-# FEATURE EXTRACTION & ICEBERG METRIC COMPUTATION
-# =============================================================================
-
 def compute_iceberg_ratio(
     explicit_cnt: int,
     implicit_cnt: int,
     duration_sec: float,
     metric_type: str = "prop",
 ) -> Tuple[float, float]:
-    """Compute normalized iceberg ratio using specified metric formulation."""
     total = explicit_cnt + implicit_cnt
 
     if metric_type == "prop":
@@ -79,7 +70,6 @@ def compute_iceberg_ratio(
 
 
 def extract_turn_features(turn: Dict) -> Optional[Dict]:
-    """Extract analyzable features from dialogue turn for iceberg analysis."""
     if turn.get("turn_type_label") != "Substantive":
         return None
 
@@ -105,6 +95,10 @@ def extract_turn_features(turn: Dict) -> Optional[Dict]:
     if exp_cnt + imp_cnt < 1:
         return None
 
+    speaker_id = turn.get("speaker_id") or turn.get("speaker")
+    if not speaker_id or not isinstance(speaker_id, str):
+        return None
+
     return {
         "turn_idx": turn.get("turn_idx"),
         "startTime": turn.get("startTime"),
@@ -112,6 +106,7 @@ def extract_turn_features(turn: Dict) -> Optional[Dict]:
         "explicit_cnt": exp_cnt,
         "implicit_cnt": imp_cnt,
         "duration": float(duration),
+        "speaker_id": speaker_id,
     }
 
 
@@ -120,7 +115,6 @@ def process_episode_turns(
     metric_type: str = "prop",
     min_turns: int = 30,
 ) -> Optional[pd.DataFrame]:
-    """Process dialogue turns into analyzable time-series dataframe."""
     features: List[Dict[str, Any]] = []
     for turn in turns:
         feat = extract_turn_features(turn)
@@ -140,7 +134,6 @@ def process_episode_turns(
 
     df = pd.DataFrame(features)
 
-    # Temporal ordering
     if df["startTime"].notna().any():
         df = df.sort_values("startTime").reset_index(drop=True)
         df["t_local"] = df["startTime"]
@@ -148,45 +141,15 @@ def process_episode_turns(
         df = df.sort_values("turn_idx").reset_index(drop=True)
         df["t_local"] = df["turn_idx"].astype(float)
 
-    # QC
+    if df["speaker_id"].nunique() < 2:
+        return None
+
     if df["stance_5pt"].nunique() < 3 or df["iceberg_norm"].nunique() < 5:
         return None
 
     df["d_stance"] = df["stance_5pt"].diff()
     return df
 
-def _base_align_stance_iceberg(stance_vals: np.ndarray, ice_vals: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """Apply the base +1 shift: stance_t vs iceberg_{t+1}."""
-    n = min(len(stance_vals), len(ice_vals))
-    stance_vals = stance_vals[:n]
-    ice_vals = ice_vals[:n]
-    if n < 3:
-        return np.array([]), np.array([])
-    return stance_vals[:-1], ice_vals[1:]
-
-
-def _slice_by_offset(x: np.ndarray, y: np.ndarray, offset: int) -> Tuple[np.ndarray, np.ndarray]:
-    """Return aligned slices for a given offset on already base-aligned arrays."""
-    if len(x) == 0 or len(y) == 0:
-        return np.array([]), np.array([])
-    n = min(len(x), len(y))
-    x = x[:n]
-    y = y[:n]
-
-    if offset >= 0:
-        if n <= offset + 2:
-            return np.array([]), np.array([])
-        return x[: n - offset], y[offset:]
-    else:
-        k = -offset
-        if n <= k + 2:
-            return np.array([]), np.array([])
-        return x[k:], y[: n - k]
-
-
-# =============================================================================
-# PEARSON LAGGED CORRELATION (WITH BASE ALIGNMENT)
-# =============================================================================
 
 def _pearson_correlation(x: np.ndarray, y: np.ndarray, min_n: int = 10) -> Optional[float]:
     mask = np.isfinite(x) & np.isfinite(y)
@@ -204,68 +167,95 @@ def _pearson_correlation(x: np.ndarray, y: np.ndarray, min_n: int = 10) -> Optio
     return float(numerator / denominator)
 
 
-def analyze_temporal_causality_pearson(
+def analyze_cross_speaker_pearson(
     df: pd.DataFrame,
     max_shift: int = 25,
     ice_smooth: int = 3,
     stance_smooth: int = 3,
 ) -> Dict[str, Any]:
-    """
-    offset 0 = stance_t aligned with iceberg_{t+1}
-    """
-    ice_series = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
-    stance_series = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
-
-    ice_vals = ice_series.to_numpy(dtype=float)
-    stance_vals = stance_series.to_numpy(dtype=float)
-
-    stance_base, ice_base = _base_align_stance_iceberg(stance_vals, ice_vals)
-    if len(stance_base) < (max_shift * 2 + 15):
-        return {"best_shift": None, "best_corr": None, "profile": {}, "causal_direction": None}
-
+    df = df.copy()
+    df["iceberg_smooth"] = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
+    df["stance_smooth"] = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
+    
+    speakers = df["speaker_id"].unique()
+    if len(speakers) < 2:
+        return {
+            "best_shift": None, "best_corr": None, "profile": {}, 
+            "causal_direction": None, "n_valid_pairs": 0
+        }
+    
+    offset_to_corrs: Dict[int, List[float]] = {k: [] for k in range(-max_shift, max_shift + 1)}
+    
+    for X in speakers:
+        for Y in speakers:
+            if X == Y:
+                continue
+            
+            for offset in range(-max_shift, max_shift + 1):
+                pairs = []
+                for idx in range(len(df)):
+                    if df.loc[idx, "speaker_id"] != X:
+                        continue
+                    target_idx = idx + offset
+                    if target_idx < 0 or target_idx >= len(df):
+                        continue
+                    if df.loc[target_idx, "speaker_id"] != Y:
+                        continue
+                    
+                    s_val = df.loc[idx, "stance_smooth"]
+                    i_val = df.loc[target_idx, "iceberg_smooth"]
+                    if np.isfinite(s_val) and np.isfinite(i_val):
+                        pairs.append((s_val, i_val))
+                
+                if len(pairs) >= 12:
+                    s_vals = np.array([p[0] for p in pairs])
+                    i_vals = np.array([p[1] for p in pairs])
+                    r = _pearson_correlation(s_vals, i_vals, min_n=12)
+                    if r is not None:
+                        offset_to_corrs[offset].append(r)
+    
     profile: Dict[int, Optional[float]] = {}
+    total_pairs = 0
     for offset in range(-max_shift, max_shift + 1):
-        x, y = _slice_by_offset(stance_base, ice_base, offset)
-        r = _pearson_correlation(x, y, min_n=12)
-        profile[offset] = r
-
-    valid = [(o, r) for o, r in profile.items() if r is not None]
+        corrs = offset_to_corrs[offset]
+        total_pairs += len(corrs)
+        if corrs:
+            profile[offset] = float(np.mean(corrs))
+        else:
+            profile[offset] = None
+    
+    valid = [(o, r) for o, r in profile.items() if r is not None and np.isfinite(r)]
     if not valid:
-        return {"best_shift": None, "best_corr": None, "profile": profile, "causal_direction": None}
-
-    # Original behavior: choose strongest negative correlation
+        return {
+            "best_shift": None, "best_corr": None, "profile": profile,
+            "causal_direction": None, "n_valid_pairs": total_pairs
+        }
+    
     best_shift, best_corr = min(valid, key=lambda t: t[1])
-
+    
     if best_shift > 0:
         causal_direction = "H1_support"
     elif best_shift < 0:
         causal_direction = "H2_support"
     else:
         causal_direction = "synchronous"
-
+    
     return {
         "best_shift": int(best_shift),
         "best_corr": float(best_corr),
         "profile": profile,
         "causal_direction": causal_direction,
+        "n_valid_pairs": int(total_pairs),
     }
 
 
-# =============================================================================
-# GRANGER CAUSALITY ON THE SAME OFFSET GRID (WITH BASE ALIGNMENT)
-# =============================================================================
-
 def _granger_best_pvalue(x: np.ndarray, y: np.ndarray, max_lag: int) -> Optional[float]:
-    """
-    Return the best (minimum) SSR F-test p-value over lags 1..max_lag
-    for H0: x does NOT Granger-cause y.
-    """
     mask = np.isfinite(x) & np.isfinite(y)
     x, y = x[mask], y[mask]
     if len(x) < max(30, 3 * max_lag + 10):
         return None
 
-    data = np.column_stack([y, x])  # statsmodels expects [y, x]
+    data = np.column_stack([y, x])
 
     try:
         with warnings.catch_warnings():
@@ -285,61 +275,94 @@ def _granger_best_pvalue(x: np.ndarray, y: np.ndarray, max_lag: int) -> Optional
         return None
 
 
-def analyze_temporal_causality_granger(
+def analyze_cross_speaker_granger(
     df: pd.DataFrame,
     max_shift: int = 25,
     granger_lag: Optional[int] = None,
     ice_smooth: int = 3,
     stance_smooth: int = 3,
 ) -> Dict[str, Any]:
-    """
-    Granger evidence (-log10 p) computed on the SAME offset grid as Pearson,
-
-    For each offset k, we form aligned slices (x_k, y_k) and test whether x_k
-    Granger-causes y_k using lags 1..granger_lag, returning a single evidence
-    score for that offset: -log10(min_p_over_lags).
-    """
     if granger_lag is None:
-        granger_lag = max(1, min(5, max_shift))  # keep runtime manageable
-
-    ice_series = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
-    stance_series = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
-
-    ice_vals = ice_series.to_numpy(dtype=float)
-    stance_vals = stance_series.to_numpy(dtype=float)
-
-    stance_base, ice_base = _base_align_stance_iceberg(stance_vals, ice_vals)
-    if len(stance_base) < max(35, 3 * granger_lag + 15):
-        return {"best_shift": None, "best_corr": None, "profile": {}, "causal_direction": None, "best_p": None}
-
+        granger_lag = max(1, min(5, max_shift))
+    
+    df = df.copy()
+    df["iceberg_smooth"] = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
+    df["stance_smooth"] = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
+    
+    speakers = df["speaker_id"].unique()
+    if len(speakers) < 2:
+        return {
+            "best_shift": None, "best_corr": None, "profile": {}, 
+            "causal_direction": None, "best_p": None, "granger_lag": granger_lag,
+            "n_valid_pairs": 0
+        }
+    
+    offset_to_scores: Dict[int, List[float]] = {k: [] for k in range(-max_shift, max_shift + 1)}
+    offset_to_ps: Dict[int, List[float]] = {k: [] for k in range(-max_shift, max_shift + 1)}
+    
+    for X in speakers:
+        for Y in speakers:
+            if X == Y:
+                continue
+            
+            for offset in range(-max_shift, max_shift + 1):
+                x_vals, y_vals = [], []
+                for idx in range(len(df)):
+                    if df.loc[idx, "speaker_id"] != X:
+                        continue
+                    target_idx = idx + offset
+                    if target_idx < 0 or target_idx >= len(df):
+                        continue
+                    if df.loc[target_idx, "speaker_id"] != Y:
+                        continue
+                    
+                    x_val = df.loc[idx, "stance_smooth"]
+                    y_val = df.loc[target_idx, "iceberg_smooth"]
+                    if np.isfinite(x_val) and np.isfinite(y_val):
+                        x_vals.append(x_val)
+                        y_vals.append(y_val)
+                
+                if len(x_vals) >= max(30, 3 * granger_lag + 10):
+                    x_arr = np.array(x_vals)
+                    y_arr = np.array(y_vals)
+                    p = _granger_best_pvalue(x_arr, y_arr, max_lag=granger_lag)
+                    if p is not None and 0 < p <= 1:
+                        score = -math.log10(p)
+                        offset_to_scores[offset].append(score)
+                        offset_to_ps[offset].append(p)
+    
     profile: Dict[int, Optional[float]] = {}
     p_profile: Dict[int, Optional[float]] = {}
-
+    total_pairs = 0
     for offset in range(-max_shift, max_shift + 1):
-        x, y = _slice_by_offset(stance_base, ice_base, offset)
-        p = _granger_best_pvalue(x, y, max_lag=granger_lag)
-        p_profile[offset] = p
-        if p is None:
-            profile[offset] = None
+        scores = offset_to_scores[offset]
+        ps = offset_to_ps[offset]
+        total_pairs += len(scores)
+        if scores:
+            profile[offset] = float(np.mean(scores))
+            p_profile[offset] = float(np.mean(ps))
         else:
-            profile[offset] = float(-math.log10(p))
-
+            profile[offset] = None
+            p_profile[offset] = None
+    
     valid = [(o, sc) for o, sc in profile.items() if sc is not None and np.isfinite(sc)]
     if not valid:
-        return {"best_shift": None, "best_corr": None, "profile": profile, "causal_direction": None, "best_p": None}
-
-    # Best evidence = max(-log10 p)
+        return {
+            "best_shift": None, "best_corr": None, "profile": profile,
+            "causal_direction": None, "best_p": None, "granger_lag": granger_lag,
+            "n_valid_pairs": total_pairs
+        }
+    
     best_shift, best_score = max(valid, key=lambda t: t[1])
     best_p = p_profile.get(best_shift)
-
-    # Interpret direction by offset sign (same as Pearson plot semantics)
+    
     if best_shift > 0:
         causal_direction = "H1_support"
     elif best_shift < 0:
         causal_direction = "H2_support"
     else:
         causal_direction = "synchronous"
-
+    
     return {
         "best_shift": int(best_shift),
         "best_corr": float(best_score),
@@ -347,12 +370,9 @@ def analyze_temporal_causality_granger(
         "profile": profile,
         "causal_direction": causal_direction,
         "granger_lag": int(granger_lag),
+        "n_valid_pairs": int(total_pairs),
     }
 
-
-# =============================================================================
-# PLOTTING: OVERLAY PEARSON + GRANGER (DIFFERENT COLORS, NO CI)
-# =============================================================================
 
 def plot_offset_pearson_and_granger(
     offset_to_pearson: Dict[int, List[float]],
@@ -384,50 +404,40 @@ def plot_offset_pearson_and_granger(
     pearson_arr = np.array(pearson_mean, dtype=float)
     granger_arr = np.array(granger_mean, dtype=float)
 
-    fig, ax1 = plt.subplots(figsize=(14, 8))
+    fig, ax = plt.subplots(figsize=(14, 8))
 
-    pearson_color = "tab:blue"
-    granger_color = "tab:orange"
-
-    l1, = ax1.plot(xs_arr, pearson_arr, marker="o", label="Pearson r", color=pearson_color)
-    ax1.axhline(0, linestyle="--", linewidth=1, alpha=0.6, color="gray")
-    ax1.axvline(0, linestyle=":", linewidth=1, alpha=0.6, color="gray")
-    ax1.set_xlabel(
+    ax.plot(xs_arr, pearson_arr, marker="o", linestyle="-", linewidth=2, 
+            markersize=6, color="tab:blue", label="Pearson r (cross-speaker)")
+    ax.plot(xs_arr, granger_arr, marker="s", linestyle="-", linewidth=2, 
+            markersize=6, color="tab:orange", label="Granger evidence (-log10 p)")
+    ax.axhline(0, linestyle="--", linewidth=1, alpha=0.6, color="gray")
+    ax.axvline(0, linestyle=":", linewidth=1, alpha=0.6, color="gray")
+    ax.set_xlabel(
         "Offset (turns)\n"
-        "Negative: iceberg leads stance; Positive: stance leads iceberg"
+        "Negative: other speaker's stance preceded current speaker's iceberg (H2)\n"
+        "Positive: current speaker's stance preceded other speaker's iceberg (H1)"
     )
-    ax1.set_ylabel("Mean Pearson r")
-    ax1.grid(True, alpha=0.25)
-
-    ax2 = ax1.twinx()
-    l2, = ax2.plot(
-        xs_arr, granger_arr, marker="s", label="Granger evidence (-log10 p)", color=granger_color
-    )
-    ax2.set_ylabel("Mean Granger evidence (-log10 p)")
-
-    ax1.set_title(f"Pearson vs Granger by Offset ({metric_type})\nStance vs Iceberg")
-
-    ax1.legend([l1, l2], [l1.get_label(), l2.get_label()], loc="best")
+    ax.set_ylabel("Correlation / Evidence Score")
+    ax.set_title(f"Cross-Speaker Analysis: Stance vs Iceberg ({metric_type})\n"
+                 "Correlating Speaker X's stance with Speaker Y's iceberg (X ≠ Y)")
+    ax.legend(loc="best")
+    ax.grid(True, alpha=0.25)
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved overlay plot to {output_path}")
+    logger.info(f"Saved cross-speaker overlay plot to {output_path}")
 
-
-# =============================================================================
-# MAIN
-# =============================================================================
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Gricean Repair Mechanism Analysis: Pearson + Granger on same offset grid"
+        description="Cross-speaker Gricean Repair Mechanism Analysis"
     )
     parser.add_argument("--data_dir", type=str, required=True)
     parser.add_argument("--metric", type=str, default="prop", choices=["prop", "ratio", "log_ratio"])
     parser.add_argument("--min_turns", type=int, default=30)
-    parser.add_argument("--max_shift", type=int, default=25, help="offset range [-max_shift, +max_shift]")
-    parser.add_argument("--granger_lag", type=int, default=5, help="max lag used inside Granger test (kept small for speed)")
+    parser.add_argument("--max_shift", type=int, default=25)
+    parser.add_argument("--granger_lag", type=int, default=5)
     parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg/results")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
@@ -439,7 +449,7 @@ def main():
 
     start_time = datetime.now()
     logger.info("=" * 80)
-    logger.info("GRICEAN REPAIR MECHANISM ANALYSIS")
+    logger.info("CROSS-SPEAKER GRICEAN REPAIR MECHANISM ANALYSIS")
     logger.info("=" * 80)
     logger.info(f"Data directory     : {args.data_dir}")
     logger.info(f"Iceberg metric     : {args.metric}")
@@ -469,8 +479,8 @@ def main():
                 failures.append((path.stem, "quality_control_failed"))
                 continue
 
-            pearson_res = analyze_temporal_causality_pearson(df, max_shift=args.max_shift)
-            granger_res = analyze_temporal_causality_granger(
+            pearson_res = analyze_cross_speaker_pearson(df, max_shift=args.max_shift)
+            granger_res = analyze_cross_speaker_granger(
                 df, max_shift=args.max_shift, granger_lag=args.granger_lag
             )
 
@@ -490,14 +500,17 @@ def main():
                 {
                     "episode_id": path.stem,
                     "n_turns": int(len(df)),
+                    "n_speakers": int(df["speaker_id"].nunique()),
                     "pearson_best_shift": pearson_res.get("best_shift"),
                     "pearson_best_r": pearson_res.get("best_corr"),
                     "pearson_direction": pearson_res.get("causal_direction"),
+                    "pearson_n_pairs": pearson_res.get("n_valid_pairs", 0),
                     "granger_best_shift": granger_res.get("best_shift"),
                     "granger_best_score_neglog10p": granger_res.get("best_corr"),
                     "granger_best_p": granger_res.get("best_p"),
                     "granger_direction": granger_res.get("causal_direction"),
                     "granger_lag": granger_res.get("granger_lag"),
+                    "granger_n_pairs": granger_res.get("n_valid_pairs", 0),
                     "mean_iceberg": float(df["iceberg_norm"].mean()),
                     "mean_stance": float(df["stance_5pt"].mean()),
                 }
@@ -516,7 +529,7 @@ def main():
     logger.info(f"  Failed (QC/filtering)  : {n_fail} episodes")
 
     df_agg = pd.DataFrame(results)
-    df_agg.to_csv(output_path / f"episode_results_pearson_granger_{args.metric}.csv", index=False)
+    df_agg.to_csv(output_path / f"episode_results_cross_speaker_{args.metric}.csv", index=False)
 
     pearson_df = pd.DataFrame.from_dict(offset_to_pearson, orient="index").T
     pearson_df.columns.name = "offset"
@@ -529,7 +542,7 @@ def main():
     plot_offset_pearson_and_granger(
         offset_to_pearson=offset_to_pearson,
         offset_to_granger=offset_to_granger,
-        output_path=output_path / f"pearson_vs_granger_overlay_{args.metric}.png",
+        output_path=output_path / f"cross_speaker_pearson_vs_granger_{args.metric}.png",
         metric_type=args.metric,
     )
 
@@ -563,21 +576,21 @@ def main():
             "score_definition": "score = -log10(min p over lags 1..granger_lag from ssr_ftest)",
         },
         "artifacts": {
-            "episode_csv": str(output_path / f"episode_results_pearson_granger_{args.metric}.csv"),
+            "episode_csv": str(output_path / f"episode_results_cross_speaker_{args.metric}.csv"),
             "raw_pearson_csv": str(output_path / f"raw_pearson_by_offset_{args.metric}.csv"),
             "raw_granger_csv": str(output_path / f"raw_granger_by_offset_{args.metric}.csv"),
-            "overlay_plot": str(output_path / f"pearson_vs_granger_overlay_{args.metric}.png"),
+            "overlay_plot": str(output_path / f"cross_speaker_pearson_vs_granger_{args.metric}.png"),
         },
     }
 
-    with open(output_path / f"run_summary_pearson_granger_{args.metric}.json", "w", encoding="utf-8") as f:
+    with open(output_path / f"run_summary_cross_speaker_{args.metric}.json", "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
     if failures:
-        with open(output_path / f"failures_pearson_granger_{args.metric}.json", "w", encoding="utf-8") as f:
+        with open(output_path / f"failures_cross_speaker_{args.metric}.json", "w", encoding="utf-8") as f:
             json.dump([{"episode_id": eid, "reason": reason} for eid, reason in failures], f, indent=2)
 
-    logger.info(f"Saved run summary JSON to {output_path / f'run_summary_pearson_granger_{args.metric}.json'}")
+    logger.info(f"Saved run summary JSON to {output_path / f'run_summary_cross_speaker_{args.metric}.json'}")
 
 
 if __name__ == "__main__":

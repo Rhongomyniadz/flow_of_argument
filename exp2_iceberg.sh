@@ -9,4 +9,4 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 
-python experiments/exp2_iceberg/exp2_iceberg.py --k 512 --smooth 5 --max_lag 3
+python experiments/exp2_iceberg/test.py --data_dir "data/stance_labeled/512"
