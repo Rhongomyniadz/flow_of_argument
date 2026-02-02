@@ -8,5 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-
+python3 -m venv venv
+source venv/bin/activate
+pip install statsmodels pandas numpy scipy 
 python experiments/exp2_iceberg/test.py --data_dir "data/stance_labeled/512"
