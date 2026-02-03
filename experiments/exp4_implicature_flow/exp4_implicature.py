@@ -1,419 +1,353 @@
-import os, json, glob, argparse, re
-from typing import List, Dict, Any, Tuple, Optional
+import json
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
+from pathlib import Path
+from collections import defaultdict
 from tqdm import tqdm
+import warnings
+warnings.filterwarnings('ignore')
 
-# ---- vLLM wrapper (your interface) ----
-from vllm import LLM, SamplingParams
+def robust_get(d, key, default=None):
+    """Robustly extract values from dict, handling key spacing variants"""
+    if not isinstance(d, dict):
+        return default
+    variants = [key, key.strip(), f"{key} ", f" {key}"]
+    for k in variants:
+        if k in d:
+            return d[k]
+    return default
 
-class LLMInterface:
-    def __init__(
-        self,
-        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
-        gpu_memory_utilization: float = 0.9,
-        tensor_parallel_size: int = 2,
-        temperature: float = 0.0,
-        top_p: float = 1.0,
-        min_p: float = 0.0,
-        top_k: int = 0,
-        repetition_penalty: float = 1.05,
-        download_dir: str = "/shared/4/models",
-        max_tokens: int = 2000,
-    ):
-        self.llm = LLM(
-            model=model_name,
-            gpu_memory_utilization=gpu_memory_utilization,
-            download_dir=download_dir,
-            tensor_parallel_size=tensor_parallel_size,
-        )
-        self.params = SamplingParams(
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            min_p=min_p,
-            top_k=top_k,
-            repetition_penalty=repetition_penalty,
-        )
-
-    def generate_batch(self, prompts: List[str]) -> List[str]:
-        out = self.llm.generate(prompts, self.params)
-        return [o.outputs[0].text.strip() for o in out]
-
-
-# ----------------- utilities -----------------
-
-def ensure_dir(p: str) -> None:
-    os.makedirs(p, exist_ok=True)
-
-def load_json(path: str) -> Any:
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-def save_json(path: str, obj: Any) -> None:
-    ensure_dir(os.path.dirname(path))
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
-
-def extract_turn_text(turn: Dict[str, Any]) -> str:
-    key = turn.get("chosen_text_key")
-    if isinstance(key, str) and key in turn and isinstance(turn[key], str):
-        return turn[key]
-    for cand in ("transcript", "turn_text", "text"):
-        if cand in turn and isinstance(turn[cand], str):
-            return turn[cand]
-    return ""
-
-def turn_start_time(turn: Dict[str, Any]) -> Optional[float]:
-    st = turn.get("startTime")
-    if isinstance(st, (int, float)):
-        return float(st)
-    return None
-
-def normalize_text(s: str) -> str:
-    s = s.lower()
-    s = re.sub(r"[^a-z0-9\s]", " ", s)
-    s = re.sub(r"\s+", " ", s).strip()
-    return s
-
-STOP = set("""
-a an the and or but if then else to of in on for from with without by as is are was were be been being
-this that these those it its i you he she they we them him her my your our their
-""".split())
-
-def keywords(s: str) -> set:
-    toks = normalize_text(s).split()
-    return set(t for t in toks if len(t) >= 3 and t not in STOP)
-
-def overlap_score(a_kw: set, c_kw: set) -> int:
-    return len(a_kw & c_kw)
-
-def safe_json_extract(text: str) -> Optional[Dict[str, Any]]:
+def analyze_single_episode(json_path):
     """
-    Try to parse the first JSON object in the model output.
+    Corrected analysis: 
+    Step 1: Collect ALL unique assumptions (no entailment filtering)
+    Step 2: Identify accommodated assumptions (entailment_score >= 7)
+    Step 3: Calculate true conversion rate = accommodated / total_assumptions
     """
-    if not text:
-        return None
-    # find a {...} block
-    m = re.search(r"\{.*\}", text, flags=re.DOTALL)
-    if not m:
-        return None
-    blob = m.group(0)
     try:
-        return json.loads(blob)
-    except Exception:
-        return None
-
-def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
-    lo = max(0, idx - w)
-    hi = min(len(turns), idx + w + 1)
-    lines = []
-    for k in range(lo, hi):
-        spk = turns[k].get("speaker_id") or turns[k].get("speaker") or "SPEAKER"
-        txt = extract_turn_text(turns[k]).replace("\n", " ").strip()
-        if not txt:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except Exception as e:
+        return None, f"JSON parsing error: {str(e)[:100]}"
+    
+    episode_id = robust_get(data, 'episode_id', 'unknown').strip()
+    pairs = robust_get(data, 'pairs', [])
+    
+    if not pairs:
+        return None, "No valid pairs"
+    
+    # === STEP 1: Collect ALL unique assumptions (critical fix!) ===
+    all_assumptions = {}  # key: (a_turn, a_idx) -> {a_time, a_turn, text}
+    for pair in pairs:
+        a_turn = robust_get(pair, 'a_turn_idx', -1)
+        a_idx = robust_get(pair, 'a_idx_in_turn', -1)
+        a_time = robust_get(pair, 'a_time', None)
+        text = robust_get(pair, 'assumption_text', '')
+        
+        if a_turn == -1 or a_idx == -1:
             continue
-        lines.append(f"[{k}] {spk}: {txt}")
-    return "\n".join(lines) if lines else "[NO CONTEXT]"
-
-
-# ----------------- LLM judge prompt -----------------
-
-def build_entailment_prompt(
-    assumption_text: str,
-    claim_text: str,
-    a_turn_idx: int,
-    c_turn_idx: int,
-    a_context: str,
-    c_context: str,
-) -> str:
-    return f"""You are evaluating "Accommodation" in conversation.
-
-Goal:
-Decide whether the FUTURE explicit claim C (turn {c_turn_idx}) makes the earlier assumption A (turn {a_turn_idx}) explicit.
-
-Important:
-- Resolve coreference using the provided context (e.g., he/they/it).
-- We care about whether C explicitly states the substance of A (or a logically equivalent statement).
-- Output must be strict JSON only.
-
-Labels:
-- "entailed" = C explicitly verifies/states A (or logically entails A).
-- "not_entailed" = C does not make A explicit.
-- "uncertain" = ambiguous due to missing context.
-
-Earlier assumption A (turn {a_turn_idx}):
-{assumption_text}
-
-Context around A:
-{a_context}
-
-Future explicit claim C (turn {c_turn_idx}):
-{claim_text}
-
-Context around C:
-{c_context}
-
-Return JSON with exactly these keys:
-{{
-  "label": "entailed" | "not_entailed" | "uncertain",
-  "confidence": 0.0-1.0,
-  "coref_notes": "briefly explain key coreference links, if any",
-  "reason": "brief justification focusing on semantics"
-}}
-"""
-
-
-# ----------------- main experiment -----------------
-
-def run_episode(
-    episode_path: str,
-    llm: LLMInterface,
-    out_path: str,
-    max_future_turns: int,
-    max_claims_per_assumption: int,
-    min_overlap: int,
-    context_w: int,
-    batch_size: int,
-) -> Dict[str, Any]:
-    turns = load_json(episode_path)
-    if not isinstance(turns, list):
-        raise ValueError(f"Expected list in {episode_path}")
-
-    # Pre-index all explicit claims by turn
-    claims_by_turn: List[List[Dict[str, Any]]] = []
-    for t in turns:
-        cps = t.get("explicit_propositions", []) or []
-        # keep only text
-        out = []
-        for c in cps:
-            if isinstance(c, dict) and isinstance(c.get("text"), str):
-                out.append(c)
-        claims_by_turn.append(out)
-
-    results = []
-    prompts = []
-    meta = []  # aligns with prompts
-
-    # Build candidate pairs (A, C) with pruning
-    for i, t in enumerate(turns):
-        assumptions = t.get("assumptions", []) or []
-        if not assumptions:
+            
+        key = (a_turn, a_idx)
+        if key not in all_assumptions:
+            all_assumptions[key] = {
+                'a_time': a_time,
+                'a_turn': a_turn,
+                'text': text
+            }
+    
+    if not all_assumptions:
+        return None, "No valid assumptions"
+    
+    # === STEP 2: Identify accommodated assumptions (entailment_score >= 7) ===
+    accommodated = {}  # key: (a_turn, a_idx) -> {earliest_c_time, c_turn}
+    for pair in pairs:
+        a_turn = robust_get(pair, 'a_turn_idx', -1)
+        a_idx = robust_get(pair, 'a_idx_in_turn', -1)
+        c_time = robust_get(pair, 'c_time', float('inf'))
+        c_turn = robust_get(pair, 'c_turn_idx', None)
+        entailment = robust_get(pair, 'entailment_score', 0)
+        
+        if a_turn == -1 or a_idx == -1 or entailment < 7:
             continue
-
-        a_time = turn_start_time(t)
-        a_ctx = context_window(turns, i, context_w)
-
-        for a_idx_in_turn, a in enumerate(assumptions):
-            if not (isinstance(a, dict) and isinstance(a.get("text"), str)):
-                continue
-            a_text = a["text"].strip()
-            if not a_text:
-                continue
-
-            a_kw = keywords(a_text)
-
-            # Gather future claim candidates
-            cand: List[Tuple[int, str, int]] = []  # (turn_j, claim_text, score)
-            j_end = min(len(turns), i + 1 + max_future_turns) if max_future_turns > 0 else len(turns)
-
-            for j in range(i + 1, j_end):
-                for c in claims_by_turn[j]:
-                    c_text = c.get("text", "").strip()
-                    if not c_text:
-                        continue
-                    score = overlap_score(a_kw, keywords(c_text))
-                    if score >= min_overlap:
-                        cand.append((j, c_text, score))
-
-            # Keep top-M by overlap score
-            cand.sort(key=lambda x: x[2], reverse=True)
-            cand = cand[:max_claims_per_assumption]
-
-            # Create prompts for each candidate
-            for (j, c_text, score) in cand:
-                c_ctx = context_window(turns, j, context_w)
-                prompts.append(build_entailment_prompt(
-                    assumption_text=a_text,
-                    claim_text=c_text,
-                    a_turn_idx=i,
-                    c_turn_idx=j,
-                    a_context=a_ctx,
-                    c_context=c_ctx,
-                ))
-                meta.append({
-                    "a_turn_idx": i,
-                    "a_time": a_time,
-                    "a_idx_in_turn": a_idx_in_turn,
-                    "assumption_text": a_text,
-                    "c_turn_idx": j,
-                    "claim_text": c_text,
-                    "overlap_score": score,
-                    "c_time": turn_start_time(turns[j]),
-                })
-
-    # Batch LLM judging
-    judged = []
-    for s in range(0, len(prompts), batch_size):
-        batch_prompts = prompts[s:s+batch_size]
-        outs = llm.generate_batch(batch_prompts)
-        judged.extend(outs)
-
-    # Aggregate: for each assumption, find earliest entailed claim
-    # Key assumptions by (a_turn_idx, a_idx_in_turn, assumption_text)
-    by_assumption: Dict[Tuple[int,int,str], List[Dict[str, Any]]] = {}
-
-    for m, out in zip(meta, judged):
-        parsed = safe_json_extract(out)
-        if parsed is None:
-            parsed = {"label": "uncertain", "confidence": 0.0, "coref_notes": "", "reason": "parse_failed"}
-
-        rec = {**m, **parsed, "raw": out}
-        key = (m["a_turn_idx"], m["a_idx_in_turn"], m["assumption_text"])
-        by_assumption.setdefault(key, []).append(rec)
-
-    accommodated = 0
+            
+        key = (a_turn, a_idx)
+        if key in all_assumptions:  # Ensure it's a known assumption
+            # Record earliest claim time
+            if key not in accommodated or c_time < accommodated[key]['c_time']:
+                accommodated[key] = {
+                    'c_time': c_time,
+                    'c_turn': c_turn
+                }
+    
+    # === STEP 3: Calculate true metrics ===
+    total = len(all_assumptions)
+    num_acc = len(accommodated)
+    dark_matter = total - num_acc
+    conversion_rate = (num_acc / total * 100) if total > 0 else 0
+    
+    # Calculate lags (only for accommodated assumptions)
     lags = []
-    detailed = []
+    flow_matrix = defaultdict(lambda: defaultdict(list))
+    
+    for key, acc_info in accommodated.items():
+        a_info = all_assumptions[key]
+        a_time = a_info['a_time']
+        c_time = acc_info['c_time']
+        
+        if a_time is not None and c_time < float('inf'):
+            lag = c_time - a_time
+            if lag >= 0:  # Valid lag
+                lags.append(lag)
+                
+                # Build flow matrix for Sankey
+                src_turn = a_info['a_turn']
+                tgt_turn = acc_info['c_turn']
+                if src_turn is not None and tgt_turn is not None:
+                    flow_matrix[src_turn][tgt_turn].append(lag)
+    
+    return {
+        'episode_id': episode_id,
+        'total_assumptions': total,
+        'accommodated_assumptions': num_acc,
+        'dark_matter_count': dark_matter,
+        'conversion_rate': conversion_rate,
+        'lags': lags,
+        'flow_matrix': flow_matrix
+    }, None
 
-    for key, recs in by_assumption.items():
-        # sort by claim turn index (earliest future first)
-        recs.sort(key=lambda r: r["c_turn_idx"])
-        first_entail = next((r for r in recs if r.get("label") == "entailed"), None)
-
-        a_turn_idx, a_idx_in_turn, a_text = key
-        a_time = recs[0].get("a_time")
-
-        if first_entail is None:
-            detailed.append({
-                "assumption_key": {"a_turn_idx": a_turn_idx, "a_idx_in_turn": a_idx_in_turn},
-                "assumption_text": a_text,
-                "status": "dark_matter",
-                "accommodated_by": None,
-                "lag_seconds": None,
-                "candidates_judged": recs,
+def generate_sankey(metrics, output_dir):
+    """Generate Sankey diagram (silent mode)"""
+    flow = metrics['flow_matrix']
+    if not flow:
+        return None
+    
+    # Extract all involved turns
+    all_turns = sorted(set(
+        [src for src in flow.keys()] + 
+        [tgt for tgts in flow.values() for tgt in tgts.keys()]
+    ))
+    if len(all_turns) < 2:
+        return None
+    
+    node_idx = {turn: i for i, turn in enumerate(all_turns)}
+    node_labels = [f"Turn {turn}" for turn in all_turns]
+    
+    # Build links
+    links = []
+    for src_turn, targets in flow.items():
+        for tgt_turn, lags in targets.items():
+            src_idx = node_idx[src_turn]
+            tgt_idx = node_idx[tgt_turn]
+            flow_volume = len(lags)
+            avg_lag = np.mean(lags) if lags else 0
+            
+            links.append({
+                'source': src_idx,
+                'target': tgt_idx,
+                'value': flow_volume,
+                'avg_lag': avg_lag
             })
-            continue
-
-        accommodated += 1
-        c_time = first_entail.get("c_time")
-        lag = None
-        if isinstance(a_time, (int, float)) and isinstance(c_time, (int, float)):
-            lag = float(c_time) - float(a_time)
-            if lag < 0:
-                lag = None
-
-        if lag is not None:
-            lags.append(lag)
-
-        detailed.append({
-            "assumption_key": {"a_turn_idx": a_turn_idx, "a_idx_in_turn": a_idx_in_turn},
-            "assumption_text": a_text,
-            "status": "accommodated",
-            "accommodated_by": {
-                "c_turn_idx": first_entail["c_turn_idx"],
-                "claim_text": first_entail["claim_text"],
-                "confidence": first_entail.get("confidence", None),
-                "coref_notes": first_entail.get("coref_notes", ""),
-                "reason": first_entail.get("reason", ""),
-            },
-            "lag_seconds": lag,
-            "candidates_judged": recs,
-        })
-
-    total_assumptions = len(by_assumption)
-    conversion_rate = (accommodated / total_assumptions) if total_assumptions > 0 else None
-    mean_lag = float(sum(lags) / len(lags)) if lags else None
-
-    episode_summary = {
-        "episode_id": os.path.splitext(os.path.basename(episode_path))[0],
-        "total_assumptions": total_assumptions,
-        "accommodated": accommodated,
-        "conversion_rate": conversion_rate,
-        "mean_lag_seconds": mean_lag,
-        "n_lags_measured": len(lags),
-        "params": {
-            "max_future_turns": max_future_turns,
-            "max_claims_per_assumption": max_claims_per_assumption,
-            "min_overlap": min_overlap,
-            "context_w": context_w,
-        },
-    }
-
-    save_json(out_path, {"summary": episode_summary, "assumptions": detailed})
-    return episode_summary
-
-
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--in_dir", type=str, default="data/stance_labeled")
-    ap.add_argument("--k", type=int, required=True, help="which stance_labeled/{k} folder to read")
-    ap.add_argument("--out_dir", type=str, default="data/implicature_flow/entailment_judged")
-    ap.add_argument("--glob", type=str, default="*.json")
-
-    # Candidate control
-    ap.add_argument("--max_future_turns", type=int, default=200,
-                    help="limit search horizon; 0 means all future turns")
-    ap.add_argument("--max_claims_per_assumption", type=int, default=16,
-                    help="top-M future claims (after pruning) to judge per assumption")
-    ap.add_argument("--min_overlap", type=int, default=2,
-                    help="minimum keyword overlap between A and C to be considered a candidate")
-    ap.add_argument("--context_w", type=int, default=2,
-                    help="context window size (turns before/after) to help coref")
-
-    # vLLM / batching
-    ap.add_argument("--batch_size", type=int, default=64)
-    ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
-    ap.add_argument("--tensor_parallel_size", type=int, default=2)
-    ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
-    ap.add_argument("--max_tokens", type=int, default=128)
-
-    args = ap.parse_args()
-
-    llm = LLMInterface(
-        model_name=args.model_name,
-        tensor_parallel_size=args.tensor_parallel_size,
-        gpu_memory_utilization=args.gpu_memory_utilization,
-        max_tokens=args.max_tokens,
-        temperature=0.0,
-    )
-
-    in_k_dir = os.path.join(args.in_dir, str(args.k))
-    paths = sorted(glob.glob(os.path.join(in_k_dir, args.glob)))
-    ensure_dir(args.out_dir)
-
-    all_summaries = []
-    for ep_path in tqdm(paths, desc="Episodes", unit="ep"):
-        episode_id = os.path.splitext(os.path.basename(ep_path))[0]
-        out_path = os.path.join(args.out_dir, f"{episode_id}.json")
-
-        summary = run_episode(
-            episode_path=ep_path,
-            llm=llm,
-            out_path=out_path,
-            max_future_turns=args.max_future_turns,
-            max_claims_per_assumption=args.max_claims_per_assumption,
-            min_overlap=args.min_overlap,
-            context_w=args.context_w,
-            batch_size=args.batch_size,
+    
+    if not links:
+        return None
+    
+    # Create Sankey diagram
+    fig = go.Figure(data=[go.Sankey(
+        node=dict(
+            pad=15,
+            thickness=20,
+            line=dict(color="black", width=0.5),
+            label=node_labels,
+            color="lightblue"
+        ),
+        link=dict(
+            source=[link['source'] for link in links],
+            target=[link['target'] for link in links],
+            value=[link['value'] for link in links],
+            label=[f"{link['value']} assump.<br>avg {link['avg_lag']:.1f}s" for link in links],
+            color="rgba(44, 160, 44, 0.7)"
         )
-        all_summaries.append(summary)
+    )])
+    
+    fig.update_layout(
+        title_text=f"Implicature Flow: Episode {metrics['episode_id']}<br>"
+                   f"<sup>Conversion Rate: {metrics['conversion_rate']:.1f}% | "
+                   f"Mean Lag: {np.mean(metrics['lags']) if metrics['lags'] else 0:.1f}s</sup>",
+        font_size=11,
+        height=500
+    )
+    
+    path = output_dir / f"sankey_{metrics['episode_id']}.html"
+    fig.write_html(path, include_plotlyjs='cdn')
+    return path
 
-    # pooled summary
-    pooled = {
-        "k": args.k,
-        "n_episodes": len(all_summaries),
-        "total_assumptions": sum(s.get("total_assumptions", 0) for s in all_summaries),
-        "accommodated": sum(s.get("accommodated", 0) for s in all_summaries),
+def batch_analyze(input_dir, output_dir, top_n_sankey=10):
+    """
+    Batch analysis of implicature flow
+    Critical fix: Denominator = ALL unique assumptions, Numerator = assumptions with high-confidence entailment
+    """
+    input_path = Path(input_dir)
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    # Find JSON files
+    json_files = sorted(input_path.glob("*.json"))
+    if not json_files:
+        print(f"❌ No JSON files found in directory: '{input_dir}'")
+        return None
+    
+    print(f"\n🚀 Starting analysis of {len(json_files):,} dialogue episodes...\n")
+    
+    # === PHASE 1: Analyze all episodes ===
+    all_metrics = []
+    errors = []
+    
+    for json_file in tqdm(json_files, desc="Analysis Progress", unit="file"):
+        metrics, err = analyze_single_episode(json_file)
+        if metrics:
+            all_metrics.append(metrics)
+        else:
+            errors.append((json_file.name, err))
+    
+    # === PHASE 2: Global metrics calculation ===
+    total_assump = sum(m['total_assumptions'] for m in all_metrics)
+    total_acc = sum(m['accommodated_assumptions'] for m in all_metrics)
+    dark_matter = total_assump - total_acc
+    global_conv = (total_acc / total_assump * 100) if total_assump > 0 else 0
+    dark_ratio = (dark_matter / total_assump * 100) if total_assump > 0 else 0
+    
+    # Aggregate all lags
+    all_lags = [lag for m in all_metrics for lag in m['lags']]
+    lag_stats = {
+        'mean': float(np.mean(all_lags)) if all_lags else 0.0,
+        'median': float(np.median(all_lags)) if all_lags else 0.0,
+        'min': float(np.min(all_lags)) if all_lags else 0.0,
+        'max': float(np.max(all_lags)) if all_lags else 0.0,
+        'std': float(np.std(all_lags)) if all_lags else 0.0
     }
-    if pooled["total_assumptions"] > 0:
-        pooled["conversion_rate"] = pooled["accommodated"] / pooled["total_assumptions"]
+    
+    # === PHASE 3: Generate report ===
+    report = {
+        'analysis_timestamp': pd.Timestamp.now().isoformat(),
+        'input_directory': str(input_dir),
+        'total_episodes_analyzed': len(all_metrics),
+        'total_files_processed': len(json_files),
+        'episodes_skipped': len(errors),
+        'skipped_details': errors[:10],  # Record first 10 errors only
+        'global_metrics': {
+            'total_assumptions': total_assump,
+            'total_accommodated': total_acc,
+            'dark_matter_count': dark_matter,
+            'conversion_rate_percent': round(global_conv, 2),
+            'dark_matter_ratio_percent': round(dark_ratio, 2),
+            'lag_distribution_seconds': lag_stats
+        },
+        'per_episode_metrics': [
+            {
+                'episode_id': m['episode_id'],
+                'total_assumptions': m['total_assumptions'],
+                'accommodated': m['accommodated_assumptions'],
+                'dark_matter': m['dark_matter_count'],
+                'conversion_rate': round(m['conversion_rate'], 2),
+                'mean_lag': round(np.mean(m['lags']) if m['lags'] else 0, 2),
+                'num_lags': len(m['lags'])
+            }
+            for m in all_metrics
+        ]
+    }
+    
+    # Save report
+    report_path = output_path / "implicature_flow_global_report.json"
+    with open(report_path, 'w', encoding='utf-8') as f:
+        json.dump(report, f, indent=2, ensure_ascii=False)
+    
+    # === PHASE 4: Visualizations ===
+    df = pd.DataFrame(report['per_episode_metrics'])
+    
+    # Conversion rate distribution
+    if not df.empty:
+        fig1 = px.histogram(
+            df, x='conversion_rate', nbins=25,
+            title='Conversion Rate Distribution Across Episodes',
+            labels={'conversion_rate': 'Conversion Rate (%)'},
+            color_discrete_sequence=['#2E86AB']
+        )
+        fig1.add_vline(x=global_conv, line_dash="dash", line_color="red",
+                       annotation_text=f"Global Avg: {global_conv:.1f}%", 
+                       annotation_position="top right")
+        fig1.write_html(output_path / "conversion_rate_distribution.html", include_plotlyjs='cdn')
+    
+    # Lag distribution
+    if all_lags:
+        fig2 = px.histogram(
+            x=all_lags, nbins=40,
+            title=f'Time-to-Surface Distribution (All Episodes)<br><sup>Mean: {lag_stats["mean"]:.1f}s | Median: {lag_stats["median"]:.1f}s</sup>',
+            labels={'x': 'Lag (seconds)', 'y': 'Count'},
+            color_discrete_sequence=['#A23B72']
+        )
+        fig2.write_html(output_path / "lag_distribution.html", include_plotlyjs='cdn')
+    
+    # Top-N Sankey diagrams (sorted by conversion rate)
+    if all_metrics:
+        print(f"\n🎨 Generating Sankey diagrams for top-{top_n_sankey} episodes by conversion rate...")
+        top_episodes = sorted(
+            [m for m in all_metrics if m['flow_matrix']], 
+            key=lambda m: m['conversion_rate'], 
+            reverse=True
+        )[:top_n_sankey]
+        
+        sankey_paths = []
+        for metrics in tqdm(top_episodes, desc="Sankey Generation", unit="diagram", leave=False):
+            path = generate_sankey(metrics, output_path)
+            if path:
+                sankey_paths.append(path.name)
     else:
-        pooled["conversion_rate"] = None
+        sankey_paths = []
+    
+    # === PHASE 5: Concise summary output ===
+    print("\n" + "="*70)
+    print("✅ IMPLICATURE FLOW ANALYSIS COMPLETE")
+    print("="*70)
+    print(f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}")
+    print(f"✓ Total assumptions: {total_assump:,}")
+    print(f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)")
+    print(f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)")
+    print(f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)")
+    print("="*70)
+    
+    # Insight message
+    if dark_ratio > 40:
+        insight = "⚠️  High Dark Matter ratio → Dialogue contains many unverified implicit premises, potentially impacting collaboration quality"
+    elif dark_ratio < 20:
+        insight = "✓  Low Dark Matter ratio → Participants actively explicitize implicit premises, indicating strong collaboration"
+    else:
+        insight = "→  Moderate Dark Matter ratio → Consistent with natural dialogue patterns where some implicit premises remain unverified"
+    
+    print(f"\n💡 Insight: {insight}")
+    print(f"\n📁 Output directory: {output_path.absolute()}")
+    print(f"   • Global report: implicature_flow_global_report.json")
+    print(f"   • Conversion rate distribution: conversion_rate_distribution.html")
+    print(f"   • Lag distribution: lag_distribution.html")
+    if sankey_paths:
+        print(f"   • Sankey diagrams: {len(sankey_paths)} (top-{top_n_sankey} episodes)")
+        for p in sankey_paths[:3]:
+            print(f"       → {p}")
+        if len(sankey_paths) > 3:
+            print(f"       → ... and {len(sankey_paths)-3} more")
+    print("\n" + "="*70)
+    
+    return report
 
-    save_json(os.path.join(args.out_dir, f"_POOLED_summary_k{args.k}.json"), {
-        "pooled": pooled,
-        "per_episode": all_summaries
-    })
-
-
+# ==================== EXECUTION ENTRY POINT ====================
 if __name__ == "__main__":
-    main()
+    INPUT_DIR = "data/implicature_flow/entailment_pairs_1to10"
+    OUTPUT_DIR = "experiments/exp4_implicature_flow/results"
+    
+    if not Path(INPUT_DIR).exists():
+        print(f"❌ Input directory does not exist: {INPUT_DIR}")
+        print("💡 Please verify the path or modify the INPUT_DIR variable")
+        print(f"   Suggested check: {Path('.').absolute() / INPUT_DIR}")
+    else:
+        batch_analyze(INPUT_DIR, OUTPUT_DIR, top_n_sankey=10)

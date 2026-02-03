@@ -169,7 +169,7 @@ def _pearson_correlation(x: np.ndarray, y: np.ndarray, min_n: int = 10) -> Optio
 
 def analyze_cross_speaker_pearson(
     df: pd.DataFrame,
-    max_shift: int = 25,
+    max_shift: int = 15,
     ice_smooth: int = 3,
     stance_smooth: int = 3,
 ) -> Dict[str, Any]:
@@ -277,7 +277,7 @@ def _granger_best_pvalue(x: np.ndarray, y: np.ndarray, max_lag: int) -> Optional
 
 def analyze_cross_speaker_granger(
     df: pd.DataFrame,
-    max_shift: int = 25,
+    max_shift: int = 15,
     granger_lag: Optional[int] = None,
     ice_smooth: int = 3,
     stance_smooth: int = 3,
@@ -436,8 +436,8 @@ def main():
     parser.add_argument("--data_dir", type=str, required=True)
     parser.add_argument("--metric", type=str, default="prop", choices=["prop", "ratio", "log_ratio"])
     parser.add_argument("--min_turns", type=int, default=30)
-    parser.add_argument("--max_shift", type=int, default=25)
-    parser.add_argument("--granger_lag", type=int, default=5)
+    parser.add_argument("--max_shift", type=int, default=15)
+    parser.add_argument("--granger_lag", type=int, default=3)
     parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg/results")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
