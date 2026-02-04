@@ -38,7 +38,7 @@ def analyze_single_episode(json_path):
     if not pairs:
         return None, "No valid pairs"
     
-    # === STEP 1: Collect ALL unique assumptions (critical fix!) ===
+    # === STEP 1: Collect ALL unique assumptions ===
     all_assumptions = {}  # key: (a_turn, a_idx) -> {a_time, a_turn, text}
     for pair in pairs:
         a_turn = robust_get(pair, 'a_turn_idx', -1)
@@ -183,10 +183,10 @@ def generate_sankey(metrics, output_dir):
     fig.write_html(path, include_plotlyjs='cdn')
     return path
 
-def batch_analyze(input_dir, output_dir, top_n_sankey=10):
+def batch_analyze(input_dir, output_dir, sankey_limit=50):
     """
     Batch analysis of implicature flow
-    Critical fix: Denominator = ALL unique assumptions, Numerator = assumptions with high-confidence entailment
+    UPDATED: Generates Sankeys for the first 50 episodes (sorted by ID).
     """
     input_path = Path(input_dir)
     output_path = Path(output_dir)
@@ -235,7 +235,7 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
         'total_episodes_analyzed': len(all_metrics),
         'total_files_processed': len(json_files),
         'episodes_skipped': len(errors),
-        'skipped_details': errors[:10],  # Record first 10 errors only
+        'skipped_details': errors[:10],
         'global_metrics': {
             'total_assumptions': total_assump,
             'total_accommodated': total_acc,
@@ -266,7 +266,6 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
     # === PHASE 4: Visualizations ===
     df = pd.DataFrame(report['per_episode_metrics'])
     
-    # Conversion rate distribution
     if not df.empty:
         fig1 = px.histogram(
             df, x='conversion_rate', nbins=25,
@@ -279,7 +278,6 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
                        annotation_position="top right")
         fig1.write_html(output_path / "conversion_rate_distribution.html", include_plotlyjs='cdn')
     
-    # Lag distribution
     if all_lags:
         fig2 = px.histogram(
             x=all_lags, nbins=40,
@@ -289,77 +287,55 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
         )
         fig2.write_html(output_path / "lag_distribution.html", include_plotlyjs='cdn')
     
-    # Top-N Sankey diagrams (sorted by conversion rate)
     sankey_paths = []
     if all_metrics:
-        print(f"\n🎨 Generating Sankey diagrams for top-{top_n_sankey} episodes by conversion rate...")
-        top_episodes = sorted(
-            [m for m in all_metrics if m['flow_matrix']], 
-            key=lambda m: m['conversion_rate'], 
-            reverse=True
-        )[:top_n_sankey]
+        print(f"\n🎨 Generating Sankey diagrams for first {sankey_limit} episodes (sorted by ID)...")
         
-        for metrics in tqdm(top_episodes, desc="Sankey Generation", unit="diagram", leave=False):
+        # Filter for episodes that actually have flow data
+        valid_episodes = [m for m in all_metrics if m['flow_matrix']]
+        
+        # Sort by episode_id to ensure deterministic order (1, 2, 10...)
+        sorted_episodes = sorted(valid_episodes, key=lambda m: str(m['episode_id']))
+        
+        # Take the first N
+        target_episodes = sorted_episodes[:sankey_limit]
+        
+        for metrics in tqdm(target_episodes, desc="Sankey Generation", unit="diagram", leave=False):
             path = generate_sankey(metrics, output_path)
             if path:
                 sankey_paths.append(path.name)
     
-    # === PHASE 5: Concise summary output & Saving to MD ===
-    
-    # Determine insight message
+    # === PHASE 5: Summary Output ===
     if dark_ratio > 40:
         insight = "⚠️  High Dark Matter ratio → Dialogue contains many unverified implicit premises, potentially impacting collaboration quality"
     elif dark_ratio < 20:
         insight = "✓  Low Dark Matter ratio → Participants actively explicitize implicit premises, indicating strong collaboration"
     else:
         insight = "→  Moderate Dark Matter ratio → Consistent with natural dialogue patterns where some implicit premises remain unverified"
-
-    # Construct the summary text lines
-    summary_lines = [
-        "="*70,
-        "✅ IMPLICATURE FLOW ANALYSIS COMPLETE",
-        "="*70,
-        f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}",
-        f"✓ Total assumptions: {total_assump:,}",
-        f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)",
-        f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)",
-        f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)",
-        "="*70,
-        f"\n💡 Insight: {insight}",
-        f"\n📁 Output directory: {output_path.absolute()}",
-        f"  • Global report: implicature_flow_global_report.json",
-        f"  • Conversion rate distribution: conversion_rate_distribution.html",
-        f"  • Lag distribution: lag_distribution.html"
-    ]
-
-    # Add Sankey info to summary
+    
+    print("\n" + "="*70)
+    print("✅ IMPLICATURE FLOW ANALYSIS COMPLETE")
+    print("="*70)
+    print(f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}")
+    print(f"✓ Total assumptions: {total_assump:,}")
+    print(f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)")
+    print(f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)")
+    print(f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)")
+    print("="*70)
+    print(f"\n💡 Insight: {insight}")
+    print(f"\n📁 Output directory: {output_path.absolute()}")
+    print(f"  • Global report: implicature_flow_global_report.json")
+    print(f"  • Conversion rate distribution: conversion_rate_distribution.html")
+    print(f"  • Lag distribution: lag_distribution.html")
+    
     if sankey_paths:
-        summary_lines.append(f"  • Sankey diagrams: {len(sankey_paths)} (top-{top_n_sankey} episodes)")
+        print(f"  • Sankey diagrams: {len(sankey_paths)} generated (Limit: first {sankey_limit} IDs)")
         for p in sankey_paths[:3]:
-            summary_lines.append(f"      → {p}")
+            print(f"      → {p}")
         if len(sankey_paths) > 3:
-            summary_lines.append(f"      → ... and {len(sankey_paths)-3} more")
+            print(f"      → ... and {len(sankey_paths)-3} more")
+    print("\n" + "="*70)
     
-    summary_lines.append("\n" + "="*70)
-
-    # Join lines into a single string
-    full_summary_text = "\n".join(summary_lines)
-    
-    # 1. Print to Terminal
-    print("\n" + full_summary_text)
-    
-    # 2. Save to MD file
-    md_path = output_path / "analysis_summary.md"
-    try:
-        with open(md_path, 'w', encoding='utf-8') as f:
-            f.write(f"# Analysis Summary\n\nGenerated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            f.write("```text\n")
-            f.write(full_summary_text)
-            f.write("\n```")
-        print(f"📄 Summary log saved to: {md_path.name}")
-    except Exception as e:
-        print(f"❌ Failed to save summary log: {e}")
-
     return report
 
 # ==================== EXECUTION ENTRY POINT ====================
@@ -372,4 +348,5 @@ if __name__ == "__main__":
         print("💡 Please verify the path or modify the INPUT_DIR variable")
         print(f"   Suggested check: {Path('.').absolute() / INPUT_DIR}")
     else:
-        batch_analyze(INPUT_DIR, OUTPUT_DIR, top_n_sankey=10)
+        # Changed: requesting 50 sankeys
+        batch_analyze(INPUT_DIR, OUTPUT_DIR, sankey_limit=50)
