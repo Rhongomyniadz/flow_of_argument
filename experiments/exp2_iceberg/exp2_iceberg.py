@@ -1,26 +1,19 @@
 import argparse
-import contextlib
-import io
 import json
 import logging
 import math
-import warnings
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 from tqdm import tqdm
 
-from statsmodels.tsa.stattools import grangercausalitytests
-
-
-# =============================================================================
-# LOGGING / PLOTTING CONFIG
-# =============================================================================
-
+# ============================================================================
+# Logging & Global Plot Settings
+# ============================================================================
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
@@ -28,557 +21,329 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-plt.rcParams.update(
-    {
-        "font.size": 10,
-        "axes.titlesize": 11,
-        "axes.labelsize": 10,
-        "xtick.labelsize": 9,
-        "ytick.labelsize": 9,
-        "legend.fontsize": 9,
-        "figure.titlesize": 12,
-        "font.family": "sans-serif",
-        "font.sans-serif": ["Arial", "DejaVu Sans"],
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
-    }
-)
+# Standard ACL-compliant plotting parameters
+PLOT_PARAMS = {
+    "font.size": 10,
+    "axes.titlesize": 12,
+    "axes.labelsize": 11,
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Arial", "DejaVu Sans"],
+    "pdf.fonttype": 42,
+    "ps.fonttype": 42,
+    "legend.fontsize": 9,
+}
+plt.rcParams.update(PLOT_PARAMS)
 
 
-# =============================================================================
-# FEATURE EXTRACTION & ICEBERG METRIC COMPUTATION
-# =============================================================================
+# ============================================================================
+# Statistical Utilities (Fisher-Z)
+# ============================================================================
+def fisher_z_transform(r: float) -> float:
+    """Applies the Fisher Z-transformation to a Pearson correlation coefficient."""
+    eps = 1e-10
+    # Clip r to avoid math domain errors
+    r = max(min(r, 1 - eps), -1 + eps)
+    return 0.5 * math.log((1 + r) / (1 - r))
 
-def compute_iceberg_ratio(
-    explicit_cnt: int,
-    implicit_cnt: int,
-    duration_sec: float,
-    metric_type: str = "prop",
-) -> Tuple[float, float]:
-    """Compute normalized iceberg ratio using specified metric formulation."""
-    total = explicit_cnt + implicit_cnt
 
+def inverse_fisher_z(z: float) -> float:
+    """Applies the inverse Fisher Z-transformation."""
+    return (math.exp(2 * z) - 1) / (math.exp(2 * z) + 1)
+
+
+def aggregate_correlations_fisher_z(
+    corrs: List[float], 
+    confidence_level: float = 0.95
+) -> Tuple[float, Optional[float], Optional[float], int]:
+    """
+    Aggregates a list of correlation coefficients using the Fisher Z-transform.
+    Returns: (r_aggregated, ci_lower, ci_upper, n_valid)
+    """
+    valid_corrs = [r for r in corrs if np.isfinite(r)]
+    n_valid = len(valid_corrs)
+    
+    if n_valid == 0:
+        return float("nan"), None, None, 0
+    
+    z_values = [fisher_z_transform(r) for r in valid_corrs]
+    z_mean = np.mean(z_values)
+    z_std = np.std(z_values, ddof=1) if n_valid > 1 else 0.0
+    
+    r_aggregated = inverse_fisher_z(z_mean)
+    
+    ci_lower, ci_upper = None, None
+    if n_valid > 1 and confidence_level > 0:
+        z_crit = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+        z_se = z_std / math.sqrt(n_valid)
+        ci_lower = inverse_fisher_z(z_mean - z_crit * z_se)
+        ci_upper = inverse_fisher_z(z_mean + z_crit * z_se)
+    
+    return float(r_aggregated), ci_lower, ci_upper, n_valid
+
+
+def safe_pearson_correlation(x: np.ndarray, y: np.ndarray, min_n: int = 12) -> Optional[float]:
+    """Calculates Pearson correlation with safety checks for NaN and variance."""
+    mask = np.isfinite(x) & np.isfinite(y)
+    x_clean, y_clean = x[mask], y[mask]
+    
+    if len(x_clean) < min_n:
+        return None
+    if np.std(x_clean) < 1e-8 or np.std(y_clean) < 1e-8:
+        return None
+        
+    return float(np.corrcoef(x_clean, y_clean)[0, 1])
+
+
+# ============================================================================
+# Data Processing
+# ============================================================================
+def compute_iceberg_ratio(explicit: int, implicit: int, duration: float, metric_type: str) -> float:
+    """Computes the normalized 'Iceberg' ratio."""
+    total = explicit + implicit
+    duration = max(duration, 0.1)
+    
+    if total == 0:
+        return 0.0
+        
     if metric_type == "prop":
-        iceberg_raw = explicit_cnt / total if total > 0 else 0.0
-        iceberg_norm = iceberg_raw / max(duration_sec, 0.1)
-
-    elif metric_type == "ratio":
-        eps = 1e-6
-        iceberg_raw = explicit_cnt / (implicit_cnt + eps)
-        iceberg_norm = iceberg_raw / max(duration_sec, 0.1)
-
-    elif metric_type == "log_ratio":
-        alpha = 0.5
-        iceberg_raw = math.log(explicit_cnt + alpha) - math.log(implicit_cnt + alpha)
-        iceberg_norm = iceberg_raw / max(duration_sec, 0.1)
-
+        return (explicit / total) / duration
     else:
-        raise ValueError(f"Unsupported metric_type: {metric_type}")
-
-    return float(iceberg_norm), float(iceberg_raw)
+        return (explicit / (implicit + 1e-6)) / duration
 
 
-def extract_turn_features(turn: Dict) -> Optional[Dict]:
-    """Extract analyzable features from dialogue turn for iceberg analysis."""
-    if turn.get("turn_type_label") != "Substantive":
-        return None
-
-    stance = turn.get("stance_5pt")
-    if stance is None or not (1 <= stance <= 5):
-        return None
-
-    duration = turn.get("duration")
-    if not (isinstance(duration, (int, float)) and duration > 0.5):
-        st, et = turn.get("startTime"), turn.get("endTime")
-        if not (
-            isinstance(st, (int, float))
-            and isinstance(et, (int, float))
-            and et > st + 0.5
-        ):
-            return None
-        duration = float(et - st)
-
-    explicit = turn.get("explicit_propositions", []) or []
-    implicit = turn.get("assumptions", []) or []
-    exp_cnt, imp_cnt = len(explicit), len(implicit)
-
-    if exp_cnt + imp_cnt < 1:
-        return None
-
-    return {
-        "turn_idx": turn.get("turn_idx"),
-        "startTime": turn.get("startTime"),
-        "stance_5pt": float(stance),
-        "explicit_cnt": exp_cnt,
-        "implicit_cnt": imp_cnt,
-        "duration": float(duration),
-    }
-
-
-def process_episode_turns(
-    turns: List[Dict],
-    metric_type: str = "prop",
-    min_turns: int = 30,
-) -> Optional[pd.DataFrame]:
-    """Process dialogue turns into analyzable time-series dataframe."""
-    features: List[Dict[str, Any]] = []
-    for turn in turns:
-        feat = extract_turn_features(turn)
-        if feat:
-            iceberg_norm, iceberg_raw = compute_iceberg_ratio(
-                feat["explicit_cnt"],
-                feat["implicit_cnt"],
-                feat["duration"],
-                metric_type=metric_type,
-            )
-            feat["iceberg_norm"] = iceberg_norm
-            feat["iceberg_raw"] = iceberg_raw
-            features.append(feat)
-
+def preprocess_episode(data: List[Dict], metric_type: str, min_turns: int) -> Optional[pd.DataFrame]:
+    """Parses raw JSON turn data into a structured DataFrame."""
+    features = []
+    
+    for turn in data:
+        if turn.get("turn_type_label") != "Substantive":
+            continue
+            
+        stance = turn.get("stance_5pt")
+        if stance is None:
+            continue
+        
+        start_time = turn.get("startTime", 0)
+        end_time = turn.get("endTime", 0.1)
+        duration = max(float(end_time - start_time), 0.1)
+        
+        explicit_count = len(turn.get("explicit_propositions", []) or [])
+        implicit_count = len(turn.get("assumptions", []) or [])
+        
+        iceberg_val = compute_iceberg_ratio(explicit_count, implicit_count, duration, metric_type)
+        
+        features.append({
+            "speaker_id": turn.get("speaker_id"),
+            "stance_5pt": float(stance),
+            "iceberg_norm": iceberg_val,
+            "startTime": start_time
+        })
+        
     if len(features) < min_turns:
         return None
-
-    df = pd.DataFrame(features)
-
-    # Temporal ordering
-    if df["startTime"].notna().any():
-        df = df.sort_values("startTime").reset_index(drop=True)
-        df["t_local"] = df["startTime"]
-    else:
-        df = df.sort_values("turn_idx").reset_index(drop=True)
-        df["t_local"] = df["turn_idx"].astype(float)
-
-    # QC
-    if df["stance_5pt"].nunique() < 3 or df["iceberg_norm"].nunique() < 5:
-        return None
-
-    df["d_stance"] = df["stance_5pt"].diff()
-    return df
-
-def _base_align_stance_iceberg(stance_vals: np.ndarray, ice_vals: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """Apply the base +1 shift: stance_t vs iceberg_{t+1}."""
-    n = min(len(stance_vals), len(ice_vals))
-    stance_vals = stance_vals[:n]
-    ice_vals = ice_vals[:n]
-    if n < 3:
-        return np.array([]), np.array([])
-    return stance_vals[:-1], ice_vals[1:]
+        
+    return pd.DataFrame(features).sort_values("startTime").reset_index(drop=True)
 
 
-def _slice_by_offset(x: np.ndarray, y: np.ndarray, offset: int) -> Tuple[np.ndarray, np.ndarray]:
-    """Return aligned slices for a given offset on already base-aligned arrays."""
-    if len(x) == 0 or len(y) == 0:
-        return np.array([]), np.array([])
-    n = min(len(x), len(y))
-    x = x[:n]
-    y = y[:n]
-
-    if offset >= 0:
-        if n <= offset + 2:
-            return np.array([]), np.array([])
-        return x[: n - offset], y[offset:]
-    else:
-        k = -offset
-        if n <= k + 2:
-            return np.array([]), np.array([])
-        return x[k:], y[: n - k]
-
-
-# =============================================================================
-# PEARSON LAGGED CORRELATION (WITH BASE ALIGNMENT)
-# =============================================================================
-
-def _pearson_correlation(x: np.ndarray, y: np.ndarray, min_n: int = 10) -> Optional[float]:
-    mask = np.isfinite(x) & np.isfinite(y)
-    x, y = x[mask], y[mask]
-
-    if len(x) < min_n or np.std(x) < 1e-8 or np.std(y) < 1e-8:
-        return None
-
-    x_centered = x - np.mean(x)
-    y_centered = y - np.mean(y)
-    numerator = np.sum(x_centered * y_centered)
-    denominator = np.sqrt(np.sum(x_centered ** 2) * np.sum(y_centered ** 2))
-    if denominator == 0:
-        return None
-    return float(numerator / denominator)
-
-
-def analyze_temporal_causality_pearson(
-    df: pd.DataFrame,
-    max_shift: int = 25,
-    ice_smooth: int = 3,
-    stance_smooth: int = 3,
-) -> Dict[str, Any]:
+# ============================================================================
+# Core Analysis Logic
+# ============================================================================
+def analyze_dyadic_interaction(
+    df: pd.DataFrame, 
+    max_shift: int,
+    smooth_window: int,
+    min_corr_samples: int
+) -> Dict[int, Optional[float]]:
     """
-    offset 0 = stance_t aligned with iceberg_{t+1}
+    Calculates cross-correlation between speakers at various time shifts.
     """
-    ice_series = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
-    stance_series = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
+    df = df.copy()
+    # Apply smoothing
+    df["iceberg_smooth"] = df["iceberg_norm"].rolling(smooth_window, center=True, min_periods=1).mean()
+    df["stance_smooth"] = df["stance_5pt"].rolling(smooth_window, center=True, min_periods=1).mean()
+    
+    speakers = sorted(df["speaker_id"].unique())
+    if len(speakers) != 2:
+        return {}
+        
+    spk_a, spk_b = speakers[0], speakers[1]
+    profile = {}
+    
+    # Calculate correlations for shifts [-max_shift, +max_shift]
+    for shift in range(-max_shift, max_shift + 1):
+        
+        # 1. Forward: Speaker A Stance -> Speaker B Iceberg
+        fwd_pairs = []
+        for idx in range(len(df)):
+            target_idx = idx + shift
+            if 0 <= target_idx < len(df):
+                curr = df.iloc[idx]
+                target = df.iloc[target_idx]
+                if curr["speaker_id"] == spk_a and target["speaker_id"] == spk_b:
+                    fwd_pairs.append((curr["stance_smooth"], target["iceberg_smooth"]))
+        
+        # 2. Backward: Speaker B Stance -> Speaker A Iceberg
+        bwd_pairs = []
+        for idx in range(len(df)):
+            target_idx = idx + shift
+            if 0 <= target_idx < len(df):
+                curr = df.iloc[idx]
+                target = df.iloc[target_idx]
+                if curr["speaker_id"] == spk_b and target["speaker_id"] == spk_a:
+                    bwd_pairs.append((curr["stance_smooth"], target["iceberg_smooth"]))
 
-    ice_vals = ice_series.to_numpy(dtype=float)
-    stance_vals = stance_series.to_numpy(dtype=float)
-
-    stance_base, ice_base = _base_align_stance_iceberg(stance_vals, ice_vals)
-    if len(stance_base) < (max_shift * 2 + 15):
-        return {"best_shift": None, "best_corr": None, "profile": {}, "causal_direction": None}
-
-    profile: Dict[int, Optional[float]] = {}
-    for offset in range(-max_shift, max_shift + 1):
-        x, y = _slice_by_offset(stance_base, ice_base, offset)
-        r = _pearson_correlation(x, y, min_n=12)
-        profile[offset] = r
-
-    valid = [(o, r) for o, r in profile.items() if r is not None]
-    if not valid:
-        return {"best_shift": None, "best_corr": None, "profile": profile, "causal_direction": None}
-
-    # Original behavior: choose strongest negative correlation
-    best_shift, best_corr = min(valid, key=lambda t: t[1])
-
-    if best_shift > 0:
-        causal_direction = "H1_support"
-    elif best_shift < 0:
-        causal_direction = "H2_support"
-    else:
-        causal_direction = "synchronous"
-
-    return {
-        "best_shift": int(best_shift),
-        "best_corr": float(best_corr),
-        "profile": profile,
-        "causal_direction": causal_direction,
-    }
-
-
-# =============================================================================
-# GRANGER CAUSALITY ON THE SAME OFFSET GRID (WITH BASE ALIGNMENT)
-# =============================================================================
-
-def _granger_best_pvalue(x: np.ndarray, y: np.ndarray, max_lag: int) -> Optional[float]:
-    """
-    Return the best (minimum) SSR F-test p-value over lags 1..max_lag
-    for H0: x does NOT Granger-cause y.
-    """
-    mask = np.isfinite(x) & np.isfinite(y)
-    x, y = x[mask], y[mask]
-    if len(x) < max(30, 3 * max_lag + 10):
-        return None
-
-    data = np.column_stack([y, x])  # statsmodels expects [y, x]
-
-    try:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", FutureWarning)
-            with contextlib.redirect_stdout(io.StringIO()):
-                res = grangercausalitytests(data, maxlag=max_lag, verbose=False)
-
-        pvals = []
-        for lag in range(1, max_lag + 1):
-            p = res[lag][0]["ssr_ftest"][1]
-            if p is not None and np.isfinite(p) and 0 < p <= 1:
-                pvals.append(float(p))
-        if not pvals:
-            return None
-        return min(pvals)
-    except Exception:
-        return None
-
-
-def analyze_temporal_causality_granger(
-    df: pd.DataFrame,
-    max_shift: int = 25,
-    granger_lag: Optional[int] = None,
-    ice_smooth: int = 3,
-    stance_smooth: int = 3,
-) -> Dict[str, Any]:
-    """
-    Granger evidence (-log10 p) computed on the SAME offset grid as Pearson,
-
-    For each offset k, we form aligned slices (x_k, y_k) and test whether x_k
-    Granger-causes y_k using lags 1..granger_lag, returning a single evidence
-    score for that offset: -log10(min_p_over_lags).
-    """
-    if granger_lag is None:
-        granger_lag = max(1, min(5, max_shift))  # keep runtime manageable
-
-    ice_series = df["iceberg_norm"].rolling(ice_smooth, center=True, min_periods=1).mean()
-    stance_series = df["stance_5pt"].rolling(stance_smooth, center=True, min_periods=1).mean()
-
-    ice_vals = ice_series.to_numpy(dtype=float)
-    stance_vals = stance_series.to_numpy(dtype=float)
-
-    stance_base, ice_base = _base_align_stance_iceberg(stance_vals, ice_vals)
-    if len(stance_base) < max(35, 3 * granger_lag + 15):
-        return {"best_shift": None, "best_corr": None, "profile": {}, "causal_direction": None, "best_p": None}
-
-    profile: Dict[int, Optional[float]] = {}
-    p_profile: Dict[int, Optional[float]] = {}
-
-    for offset in range(-max_shift, max_shift + 1):
-        x, y = _slice_by_offset(stance_base, ice_base, offset)
-        p = _granger_best_pvalue(x, y, max_lag=granger_lag)
-        p_profile[offset] = p
-        if p is None:
-            profile[offset] = None
+        r_fwd = safe_pearson_correlation(
+            np.array([p[0] for p in fwd_pairs]), np.array([p[1] for p in fwd_pairs]), min_n=min_corr_samples
+        )
+        r_bwd = safe_pearson_correlation(
+            np.array([p[0] for p in bwd_pairs]), np.array([p[1] for p in bwd_pairs]), min_n=min_corr_samples
+        )
+        
+        # Fisher-Z Averaging
+        if r_fwd is not None and r_bwd is not None:
+            z_avg = (fisher_z_transform(r_fwd) + fisher_z_transform(r_bwd)) / 2
+            profile[shift] = inverse_fisher_z(z_avg)
+        elif r_fwd is not None:
+            profile[shift] = r_fwd
+        elif r_bwd is not None:
+            profile[shift] = r_bwd
         else:
-            profile[offset] = float(-math.log10(p))
-
-    valid = [(o, sc) for o, sc in profile.items() if sc is not None and np.isfinite(sc)]
-    if not valid:
-        return {"best_shift": None, "best_corr": None, "profile": profile, "causal_direction": None, "best_p": None}
-
-    # Best evidence = max(-log10 p)
-    best_shift, best_score = max(valid, key=lambda t: t[1])
-    best_p = p_profile.get(best_shift)
-
-    # Interpret direction by offset sign (same as Pearson plot semantics)
-    if best_shift > 0:
-        causal_direction = "H1_support"
-    elif best_shift < 0:
-        causal_direction = "H2_support"
-    else:
-        causal_direction = "synchronous"
-
-    return {
-        "best_shift": int(best_shift),
-        "best_corr": float(best_score),
-        "best_p": float(best_p) if best_p is not None else None,
-        "profile": profile,
-        "causal_direction": causal_direction,
-        "granger_lag": int(granger_lag),
-    }
+            profile[shift] = None
+            
+    return profile
 
 
-# =============================================================================
-# PLOTTING: OVERLAY PEARSON + GRANGER (DIFFERENT COLORS, NO CI)
-# =============================================================================
-
-def plot_offset_pearson_and_granger(
-    offset_to_pearson: Dict[int, List[float]],
-    offset_to_granger: Dict[int, List[float]],
+# ============================================================================
+# Visualization
+# ============================================================================
+def plot_integrated_results(
+    offset_data: Dict[int, List[float]],
     output_path: Path,
-    metric_type: str,
+    metric_name: str,
+    confidence_level: float = 0.95,
+    plot_dpi: int = 300
 ) -> None:
-    offsets = sorted(set(offset_to_pearson.keys()) | set(offset_to_granger.keys()))
-    xs: List[int] = []
-    pearson_mean: List[float] = []
-    granger_mean: List[float] = []
+    """Generates a publication-quality plot of the aggregated cross-correlations."""
+    offsets = sorted(offset_data.keys())
+    x_axis = np.array(offsets)
+    
+    means, ci_lows, ci_highs = [], [], []
+    
+    for shift in offsets:
+        r, low, high, _ = aggregate_correlations_fisher_z(offset_data[shift], confidence_level)
+        means.append(r)
+        ci_lows.append(low if low is not None else np.nan)
+        ci_highs.append(high if high is not None else np.nan)
 
-    for o in offsets:
-        pr = [v for v in offset_to_pearson.get(o, []) if v is not None and np.isfinite(v)]
-        gr = [v for v in offset_to_granger.get(o, []) if v is not None and np.isfinite(v)]
-
-        if len(pr) == 0 and len(gr) == 0:
-            continue
-
-        xs.append(int(o))
-        pearson_mean.append(float(np.mean(pr)) if len(pr) else float("nan"))
-        granger_mean.append(float(np.mean(gr)) if len(gr) else float("nan"))
-
-    if len(xs) == 0:
-        logger.error("No values to plot for Pearson+Granger overlay.")
-        return
-
-    xs_arr = np.array(xs, dtype=int)
-    pearson_arr = np.array(pearson_mean, dtype=float)
-    granger_arr = np.array(granger_mean, dtype=float)
-
-    fig, ax1 = plt.subplots(figsize=(14, 8))
-
-    pearson_color = "tab:blue"
-    granger_color = "tab:orange"
-
-    l1, = ax1.plot(xs_arr, pearson_arr, marker="o", label="Pearson r", color=pearson_color)
-    ax1.axhline(0, linestyle="--", linewidth=1, alpha=0.6, color="gray")
-    ax1.axvline(0, linestyle=":", linewidth=1, alpha=0.6, color="gray")
-    ax1.set_xlabel(
-        "Offset (turns)\n"
-        "Negative: iceberg leads stance; Positive: stance leads iceberg"
-    )
-    ax1.set_ylabel("Mean Pearson r")
-    ax1.grid(True, alpha=0.25)
-
-    ax2 = ax1.twinx()
-    l2, = ax2.plot(
-        xs_arr, granger_arr, marker="s", label="Granger evidence (-log10 p)", color=granger_color
-    )
-    ax2.set_ylabel("Mean Granger evidence (-log10 p)")
-
-    ax1.set_title(f"Pearson vs Granger by Offset ({metric_type})\nStance vs Iceberg")
-
-    ax1.legend([l1, l2], [l1.get_label(), l2.get_label()], loc="best")
-
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    ax.plot(x_axis, means, marker='o', markersize=5, linestyle='-', 
+            linewidth=2, color='#1f77b4', label='Integrated Correlation')
+    
+    valid_mask = np.isfinite(ci_lows) & np.isfinite(ci_highs)
+    if np.any(valid_mask):
+        ax.fill_between(
+            x_axis[valid_mask], 
+            np.array(ci_lows)[valid_mask], 
+            np.array(ci_highs)[valid_mask], 
+            color='#1f77b4', alpha=0.2, 
+            label=f'{int(confidence_level*100)}% Confidence Interval'
+        )
+    
+    ax.axhline(0, color='black', linewidth=1, alpha=0.6)
+    ax.axvline(0, color='gray', linestyle='--', linewidth=1, alpha=0.6)
+    
+    ax.set_xlabel("Lag (Turns)\n(-) Other's Stance precedes Self Iceberg | (+) Self Stance precedes Other's Iceberg")
+    ax.set_ylabel("Pearson Correlation (Fisher-Z Aggregated)")
+    ax.set_title(f"Cross-Speaker Influence: Stance vs. Iceberg ({metric_name})")
+    ax.legend(loc='best')
+    ax.grid(True, linestyle=':', alpha=0.4)
+    
     plt.tight_layout()
-    plt.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-    logger.info(f"Saved overlay plot to {output_path}")
+    plt.savefig(output_path, dpi=plot_dpi)
+    plt.close()
+    logger.info(f"Generated plot at {output_path}")
 
 
-# =============================================================================
-# MAIN
-# =============================================================================
-
+# ============================================================================
+# Main Execution
+# ============================================================================
 def main():
-    parser = argparse.ArgumentParser(
-        description="Gricean Repair Mechanism Analysis: Pearson + Granger on same offset grid"
-    )
-    parser.add_argument("--data_dir", type=str, required=True)
-    parser.add_argument("--metric", type=str, default="prop", choices=["prop", "ratio", "log_ratio"])
-    parser.add_argument("--min_turns", type=int, default=30)
-    parser.add_argument("--max_shift", type=int, default=25, help="offset range [-max_shift, +max_shift]")
-    parser.add_argument("--granger_lag", type=int, default=5, help="max lag used inside Granger test (kept small for speed)")
-    parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg/results")
-    parser.add_argument("--seed", type=int, default=42)
+    parser = argparse.ArgumentParser(description="Run Stance-Iceberg Cross-Correlation Analysis")
+    
+    # Input/Output
+    parser.add_argument("--data_dir", type=str, required=True, help="Path to folder containing episode JSONs")
+    parser.add_argument("--output_dir", type=str, default="experiments/exp2_iceberg/results", help="Directory to save outputs")
+    
+    # Analysis Parameters
+    parser.add_argument("--metric", type=str, default="prop", choices=["prop", "ratio"], help="Iceberg metric type")
+    parser.add_argument("--max_shift", type=int, default=15, help="Maximum turn shift/lag for cross-correlation")
+    parser.add_argument("--smooth_window", type=int, default=3, help="Smoothing window size for time series")
+    parser.add_argument("--min_turns", type=int, default=30, help="Minimum turns required to process an episode")
+    parser.add_argument("--min_corr_samples", type=int, default=12, help="Minimum samples required for Pearson correlation")
+    parser.add_argument("--confidence_level", type=float, default=0.95, help="Confidence level for CI calculation")
+    
     args = parser.parse_args()
 
-    np.random.seed(args.seed)
+    # Setup
+    data_path = Path(args.data_dir)
+    out_path = Path(args.output_dir)
+    out_path.mkdir(parents=True, exist_ok=True)
+    
+    episode_files = list(data_path.glob("*.json"))
+    logger.info(f"Found {len(episode_files)} episode files in {data_path}")
 
-    output_path = Path(args.output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    start_time = datetime.now()
-    logger.info("=" * 80)
-    logger.info("GRICEAN REPAIR MECHANISM ANALYSIS")
-    logger.info("=" * 80)
-    logger.info(f"Data directory     : {args.data_dir}")
-    logger.info(f"Iceberg metric     : {args.metric}")
-    logger.info(f"Offset range       : [-{args.max_shift}, +{args.max_shift}]")
-    logger.info(f"Granger max lag    : {args.granger_lag}")
-    logger.info(f"Min turns/episode  : {args.min_turns}")
-    logger.info(f"Output directory   : {args.output_dir}")
-    logger.info(f"Start time         : {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
-    logger.info("=" * 80)
-
-    episode_paths = sorted(Path(args.data_dir).glob("*.json"))
-    logger.info(f"Found {len(episode_paths)} JSON files")
-
-    offset_to_pearson: Dict[int, List[float]] = {o: [] for o in range(-args.max_shift, args.max_shift + 1)}
-    offset_to_granger: Dict[int, List[float]] = {o: [] for o in range(-args.max_shift, args.max_shift + 1)}
-
-    results: List[Dict[str, Any]] = []
-    failures: List[Tuple[str, str]] = []
-
-    for path in tqdm(episode_paths, desc="Processing episodes"):
+    # Aggregators
+    offset_correlations = {shift: [] for shift in range(-args.max_shift, args.max_shift + 1)}
+    episode_records = []
+    
+    # Processing Loop
+    for file_path in tqdm(episode_files, desc="Processing Episodes"):
         try:
-            with open(path, "r", encoding="utf-8") as f:
-                turns = json.load(f)
-
-            df = process_episode_turns(turns, metric_type=args.metric, min_turns=args.min_turns)
-            if df is None or len(df) < args.min_turns:
-                failures.append((path.stem, "quality_control_failed"))
-                continue
-
-            pearson_res = analyze_temporal_causality_pearson(df, max_shift=args.max_shift)
-            granger_res = analyze_temporal_causality_granger(
-                df, max_shift=args.max_shift, granger_lag=args.granger_lag
-            )
-
-            p_prof = pearson_res.get("profile", {})
-            g_prof = granger_res.get("profile", {})
-
-            for o in range(-args.max_shift, args.max_shift + 1):
-                pv = p_prof.get(o)
-                if pv is not None and np.isfinite(pv):
-                    offset_to_pearson[o].append(float(pv))
-
-                gv = g_prof.get(o)
-                if gv is not None and np.isfinite(gv):
-                    offset_to_granger[o].append(float(gv))
-
-            results.append(
-                {
-                    "episode_id": path.stem,
-                    "n_turns": int(len(df)),
-                    "pearson_best_shift": pearson_res.get("best_shift"),
-                    "pearson_best_r": pearson_res.get("best_corr"),
-                    "pearson_direction": pearson_res.get("causal_direction"),
-                    "granger_best_shift": granger_res.get("best_shift"),
-                    "granger_best_score_neglog10p": granger_res.get("best_corr"),
-                    "granger_best_p": granger_res.get("best_p"),
-                    "granger_direction": granger_res.get("causal_direction"),
-                    "granger_lag": granger_res.get("granger_lag"),
-                    "mean_iceberg": float(df["iceberg_norm"].mean()),
-                    "mean_stance": float(df["stance_5pt"].mean()),
-                }
-            )
-
+            with open(file_path, "r", encoding="utf-8") as f:
+                raw_data = json.load(f)
+                
+            df_episode = preprocess_episode(raw_data, args.metric, args.min_turns)
+            
+            if df_episode is not None:
+                # Run Analysis
+                corr_profile = analyze_dyadic_interaction(
+                    df_episode, 
+                    max_shift=args.max_shift,
+                    smooth_window=args.smooth_window,
+                    min_corr_samples=args.min_corr_samples
+                )
+                
+                # Store Results
+                record = {"episode_id": file_path.stem}
+                has_data = False
+                for shift, r_val in corr_profile.items():
+                    record[f"shift_{shift}"] = r_val
+                    if r_val is not None:
+                        offset_correlations[shift].append(r_val)
+                        has_data = True
+                
+                if has_data:
+                    episode_records.append(record)
+                    
         except Exception as e:
-            failures.append((path.stem, f"exception: {str(e)[:120]}"))
-            continue
+            logger.error(f"Failed to process {file_path.name}: {e}")
 
-    n_total = len(episode_paths)
-    n_success = len(results)
-    n_fail = len(failures)
-
-    logger.info("\nProcessing complete:")
-    logger.info(f"  Successfully processed : {n_success} / {n_total} episodes ({(n_success / max(n_total, 1)) * 100:.1f}%)")
-    logger.info(f"  Failed (QC/filtering)  : {n_fail} episodes")
-
-    df_agg = pd.DataFrame(results)
-    df_agg.to_csv(output_path / f"episode_results_pearson_granger_{args.metric}.csv", index=False)
-
-    pearson_df = pd.DataFrame.from_dict(offset_to_pearson, orient="index").T
-    pearson_df.columns.name = "offset"
-    pearson_df.to_csv(output_path / f"raw_pearson_by_offset_{args.metric}.csv", index=False)
-
-    granger_df = pd.DataFrame.from_dict(offset_to_granger, orient="index").T
-    granger_df.columns.name = "offset"
-    granger_df.to_csv(output_path / f"raw_granger_by_offset_{args.metric}.csv", index=False)
-
-    plot_offset_pearson_and_granger(
-        offset_to_pearson=offset_to_pearson,
-        offset_to_granger=offset_to_granger,
-        output_path=output_path / f"pearson_vs_granger_overlay_{args.metric}.png",
-        metric_type=args.metric,
-    )
-
-    pct_p_h1 = float((df_agg["pearson_direction"] == "H1_support").mean() * 100) if len(df_agg) else None
-    pct_p_h2 = float((df_agg["pearson_direction"] == "H2_support").mean() * 100) if len(df_agg) else None
-    pct_g_h1 = float((df_agg["granger_direction"] == "H1_support").mean() * 100) if len(df_agg) else None
-    pct_g_h2 = float((df_agg["granger_direction"] == "H2_support").mean() * 100) if len(df_agg) else None
-
-    summary = {
-        "timestamp": start_time.isoformat(),
-        "data_dir": args.data_dir,
-        "metric": args.metric,
-        "min_turns": args.min_turns,
-        "max_shift": args.max_shift,
-        "granger_lag": args.granger_lag,
-        "n_files": int(n_total),
-        "n_success": int(n_success),
-        "n_failed": int(n_fail),
-        "pearson": {
-            "mean_best_shift": float(df_agg["pearson_best_shift"].mean()) if len(df_agg) else None,
-            "mean_best_r": float(df_agg["pearson_best_r"].mean()) if len(df_agg) else None,
-            "pct_H1_support": pct_p_h1,
-            "pct_H2_support": pct_p_h2,
-        },
-        "granger": {
-            "mean_best_shift": float(df_agg["granger_best_shift"].mean()) if len(df_agg) else None,
-            "mean_best_score_neglog10p": float(df_agg["granger_best_score_neglog10p"].mean()) if len(df_agg) else None,
-            "mean_best_p": float(df_agg["granger_best_p"].mean()) if len(df_agg) else None,
-            "pct_H1_support": pct_g_h1,
-            "pct_H2_support": pct_g_h2,
-            "score_definition": "score = -log10(min p over lags 1..granger_lag from ssr_ftest)",
-        },
-        "artifacts": {
-            "episode_csv": str(output_path / f"episode_results_pearson_granger_{args.metric}.csv"),
-            "raw_pearson_csv": str(output_path / f"raw_pearson_by_offset_{args.metric}.csv"),
-            "raw_granger_csv": str(output_path / f"raw_granger_by_offset_{args.metric}.csv"),
-            "overlay_plot": str(output_path / f"pearson_vs_granger_overlay_{args.metric}.png"),
-        },
-    }
-
-    with open(output_path / f"run_summary_pearson_granger_{args.metric}.json", "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
-
-    if failures:
-        with open(output_path / f"failures_pearson_granger_{args.metric}.json", "w", encoding="utf-8") as f:
-            json.dump([{"episode_id": eid, "reason": reason} for eid, reason in failures], f, indent=2)
-
-    logger.info(f"Saved run summary JSON to {output_path / f'run_summary_pearson_granger_{args.metric}.json'}")
-
+    # Save & Plot
+    if episode_records:
+        df_results = pd.DataFrame(episode_records)
+        csv_path = out_path / f"episode_correlations_{args.metric}.csv"
+        df_results.to_csv(csv_path, index=False)
+        logger.info(f"Saved detailed results to {csv_path}")
+        
+        plot_integrated_results(
+            offset_correlations, 
+            out_path / f"integrated_analysis_{args.metric}.pdf",
+            args.metric,
+            confidence_level=args.confidence_level
+        )
+    else:
+        logger.warning("No valid episodes found for analysis.")
 
 if __name__ == "__main__":
     main()

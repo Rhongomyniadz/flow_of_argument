@@ -290,6 +290,7 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
         fig2.write_html(output_path / "lag_distribution.html", include_plotlyjs='cdn')
     
     # Top-N Sankey diagrams (sorted by conversion rate)
+    sankey_paths = []
     if all_metrics:
         print(f"\n🎨 Generating Sankey diagrams for top-{top_n_sankey} episodes by conversion rate...")
         top_episodes = sorted(
@@ -298,46 +299,67 @@ def batch_analyze(input_dir, output_dir, top_n_sankey=10):
             reverse=True
         )[:top_n_sankey]
         
-        sankey_paths = []
         for metrics in tqdm(top_episodes, desc="Sankey Generation", unit="diagram", leave=False):
             path = generate_sankey(metrics, output_path)
             if path:
                 sankey_paths.append(path.name)
-    else:
-        sankey_paths = []
     
-    # === PHASE 5: Concise summary output ===
-    print("\n" + "="*70)
-    print("✅ IMPLICATURE FLOW ANALYSIS COMPLETE")
-    print("="*70)
-    print(f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}")
-    print(f"✓ Total assumptions: {total_assump:,}")
-    print(f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)")
-    print(f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)")
-    print(f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)")
-    print("="*70)
+    # === PHASE 5: Concise summary output & Saving to MD ===
     
-    # Insight message
+    # Determine insight message
     if dark_ratio > 40:
         insight = "⚠️  High Dark Matter ratio → Dialogue contains many unverified implicit premises, potentially impacting collaboration quality"
     elif dark_ratio < 20:
         insight = "✓  Low Dark Matter ratio → Participants actively explicitize implicit premises, indicating strong collaboration"
     else:
         insight = "→  Moderate Dark Matter ratio → Consistent with natural dialogue patterns where some implicit premises remain unverified"
-    
-    print(f"\n💡 Insight: {insight}")
-    print(f"\n📁 Output directory: {output_path.absolute()}")
-    print(f"   • Global report: implicature_flow_global_report.json")
-    print(f"   • Conversion rate distribution: conversion_rate_distribution.html")
-    print(f"   • Lag distribution: lag_distribution.html")
+
+    # Construct the summary text lines
+    summary_lines = [
+        "="*70,
+        "✅ IMPLICATURE FLOW ANALYSIS COMPLETE",
+        "="*70,
+        f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}",
+        f"✓ Total assumptions: {total_assump:,}",
+        f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)",
+        f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)",
+        f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)",
+        "="*70,
+        f"\n💡 Insight: {insight}",
+        f"\n📁 Output directory: {output_path.absolute()}",
+        f"  • Global report: implicature_flow_global_report.json",
+        f"  • Conversion rate distribution: conversion_rate_distribution.html",
+        f"  • Lag distribution: lag_distribution.html"
+    ]
+
+    # Add Sankey info to summary
     if sankey_paths:
-        print(f"   • Sankey diagrams: {len(sankey_paths)} (top-{top_n_sankey} episodes)")
+        summary_lines.append(f"  • Sankey diagrams: {len(sankey_paths)} (top-{top_n_sankey} episodes)")
         for p in sankey_paths[:3]:
-            print(f"       → {p}")
+            summary_lines.append(f"      → {p}")
         if len(sankey_paths) > 3:
-            print(f"       → ... and {len(sankey_paths)-3} more")
-    print("\n" + "="*70)
+            summary_lines.append(f"      → ... and {len(sankey_paths)-3} more")
     
+    summary_lines.append("\n" + "="*70)
+
+    # Join lines into a single string
+    full_summary_text = "\n".join(summary_lines)
+    
+    # 1. Print to Terminal
+    print("\n" + full_summary_text)
+    
+    # 2. Save to MD file
+    md_path = output_path / "analysis_summary.md"
+    try:
+        with open(md_path, 'w', encoding='utf-8') as f:
+            f.write(f"# Analysis Summary\n\nGenerated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write("```text\n")
+            f.write(full_summary_text)
+            f.write("\n```")
+        print(f"📄 Summary log saved to: {md_path.name}")
+    except Exception as e:
+        print(f"❌ Failed to save summary log: {e}")
+
     return report
 
 # ==================== EXECUTION ENTRY POINT ====================
