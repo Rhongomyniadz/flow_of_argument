@@ -17,7 +17,7 @@ class LLMInterface:
         top_k: int = 0,
         repetition_penalty: float = 1.05,
         download_dir: str = "/shared/4/models",
-        max_tokens: int = 1000,
+        default_max_tokens: int = 256, # 默认设小一点，提高速度
     ):
         self.llm = LLM(
             model=model_name,
@@ -25,17 +25,27 @@ class LLMInterface:
             download_dir=download_dir,
             tensor_parallel_size=tensor_parallel_size,
         )
-        self.params = SamplingParams(
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            min_p=min_p,
-            top_k=top_k,
-            repetition_penalty=repetition_penalty,
-        )
+        # 保存基础配置，但max_tokens现在可以在generate时动态调整
+        self.base_params_config = {
+            "temperature": temperature,
+            "top_p": top_p,
+            "min_p": min_p,
+            "top_k": top_k,
+            "repetition_penalty": repetition_penalty,
+        }
+        self.default_max_tokens = default_max_tokens
 
-    def generate_batch(self, prompts: List[str]) -> List[str]:
-        out = self.llm.generate(prompts, self.params)
+    def generate_batch(self, prompts: List[str], max_tokens: Optional[int] = None) -> List[str]:
+        # 如果未指定，使用默认值
+        tokens_to_gen = max_tokens if max_tokens is not None else self.default_max_tokens
+        
+        # 每次生成创建一个新的 SamplingParams 对象
+        params = SamplingParams(
+            max_tokens=tokens_to_gen,
+            **self.base_params_config
+        )
+        
+        out = self.llm.generate(prompts, params)
         return [o.outputs[0].text.strip() for o in out]
 
 
@@ -96,11 +106,11 @@ def overlap_score(a_kw: set, c_kw: set) -> int:
 def safe_json_extract(text: str) -> Optional[Dict[str, Any]]:
     """
     Extract and parse the first balanced JSON object found in `text`.
-    More robust than a greedy regex when the model emits extra braces or prose.
     """
     if not text:
         return None
 
+    # 尝试找到第一个 {
     start = text.find("{")
     if start == -1:
         return None
@@ -135,19 +145,6 @@ def safe_json_extract(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
-    lo = max(0, idx - w)
-    hi = min(len(turns), idx + w + 1)
-    lines = []
-    for k in range(lo, hi):
-        spk = turns[k].get("speaker_id") or turns[k].get("speaker") or "SPEAKER"
-        txt = extract_turn_text(turns[k]).replace("\n", " ").strip()
-        if not txt:
-            continue
-        lines.append(f"[{k}] {spk}: {txt}")
-    return "\n".join(lines) if lines else "[NO CONTEXT]"
-
-
 def build_entailment_prompt(
     assumption_text: str,
     claim_text: str,
@@ -156,25 +153,10 @@ def build_entailment_prompt(
     a_context: str,
     c_context: str,
 ) -> str:
-    return f"""You are evaluating conversational accommodation.
+    return f"""You are an expert annotator evaluating conversational accommodation.
 
 Goal:
 Rate how strongly the FUTURE explicit claim C (turn {c_turn_idx}) makes the earlier assumption A (turn {a_turn_idx}) explicit.
-
-Important:
-- Resolve coreference using the provided context (e.g., he/they/it).
-- Judge whether C states or clearly verifies the substance of A.
-- Use a 1-10 scale (see below).
-- Output MUST be strict JSON only.
-- Output MUST contain ONLY the keys listed below. No extra keys, no prose.
-
-Entailment Scale (1-10):
-1 = clearly unrelated or contradicts A
-3 = weak topical relation only
-5 = partially supports A but missing key content
-7 = strongly entails A (core meaning stated)
-9 = directly and explicitly verifies A
-10 = explicit verification with no ambiguity
 
 Earlier assumption A (turn {a_turn_idx}):
 {assumption_text}
@@ -188,11 +170,32 @@ Future explicit claim C (turn {c_turn_idx}):
 Context around C:
 {c_context}
 
-Return JSON with EXACTLY these keys:
+Instructions:
+1. Resolve coreference using context.
+2. Determine if C verifies the substance of A.
+3. Use the Entailment Scale (1-10).
+
+Entailment Scale:
+1 = Clearly unrelated or contradicts A
+3 = Weak topical relation only
+5 = Partially supports A but missing key content
+7 = Strongly entails A (core meaning stated)
+9 = Directly and explicitly verifies A
+10 = Explicit verification with no ambiguity
+
+OUTPUT FORMAT RULES (STRICT):
+- Return ONLY a raw JSON object. Do not use Markdown code blocks (no ```json).
+- The JSON must contain EXACTLY two keys: "entailment_score" and "confidence".
+- **DO NOT** include "reasoning", "explanation", "thoughts", or any other keys.
+- **DO NOT** output any text before or after the JSON.
+
+Example Output:
 {{
-  "entailment_score": 1-10,
-  "confidence": 0.0-1.0
+  "entailment_score": 7,
+  "confidence": 0.9
 }}
+
+Your Output:
 """
 
 
@@ -205,6 +208,7 @@ def run_episode_labeling(
     min_overlap: int,
     context_w: int,
     batch_size: int,
+    retry_max_tokens: int = 2000, # 重试时使用的更大 token 限制
 ) -> Dict[str, Any]:
     turns = load_json(episode_path)
     if not isinstance(turns, list):
@@ -275,31 +279,85 @@ def run_episode_labeling(
                     "c_time": turn_start_time(turns[j]),
                 })
 
-    # Run model in batches
-    judged: List[str] = []
+    # =========================================================================
+    # REVISED BATCH GENERATION WITH RETRY LOGIC
+    # =========================================================================
+    
+    # 1. Initialize result storage
+    final_outputs = [""] * len(prompts)
+    
+    # 2. First Pass: Standard Generation
     for s in range(0, len(prompts), batch_size):
-        outs = llm.generate_batch(prompts[s:s + batch_size])
-        judged.extend(outs)
+        end = min(s + batch_size, len(prompts))
+        batch_prompts = prompts[s:end]
+        # 使用默认 max_tokens (例如 128 或 256)
+        batch_outs = llm.generate_batch(batch_prompts)
+        for idx, out_txt in enumerate(batch_outs):
+            final_outputs[s + idx] = out_txt
+
+    # 3. Validation & Identification of Failures
+    failed_indices = []
+    parsed_results = []
+    
+    for idx, out_txt in enumerate(final_outputs):
+        parsed = safe_json_extract(out_txt)
+        parsed_results.append(parsed)
+        # 如果解析失败（None）或者解析出的JSON缺少关键字段
+        if parsed is None or "entailment_score" not in parsed:
+            failed_indices.append(idx)
+
+    # 4. Retry Pass: Process failures with higher max_tokens
+    if failed_indices:
+        print(f"Episode {os.path.basename(episode_path)}: Retrying {len(failed_indices)}/{len(prompts)} items...")
+        
+        # 收集需要重试的 Prompt
+        retry_prompts = [prompts[i] for i in failed_indices]
+        
+        # 分批重试，使用更大的 max_tokens
+        retry_outputs_list = []
+        for s in range(0, len(retry_prompts), batch_size):
+            end = min(s + batch_size, len(retry_prompts))
+            batch_p = retry_prompts[s:end]
+            # 关键：传入更大的 max_tokens
+            batch_o = llm.generate_batch(batch_p, max_tokens=retry_max_tokens)
+            retry_outputs_list.extend(batch_o)
+            
+        # 5. Merge Retry Results
+        for i, original_idx in enumerate(failed_indices):
+            new_text = retry_outputs_list[i]
+            final_outputs[original_idx] = new_text # Update raw text
+            
+            # 再次尝试解析
+            new_parsed = safe_json_extract(new_text)
+            parsed_results[original_idx] = new_parsed # Update parsed object
+
+    # =========================================================================
 
     # Record scored candidate pairs
     pairs: List[Dict[str, Any]] = []
-    for m, out in zip(meta, judged):
-        parsed = safe_json_extract(out)
-        if parsed is None or "entailment_score" not in parsed:
+    for m, parsed, raw_txt in zip(meta, parsed_results, final_outputs):
+        
+        if parsed is None:
             parsed = {
                 "entailment_score": 0,
                 "confidence": 0.0,
             }
+        
+        clean_parsed = {
+            "entailment_score": parsed.get("entailment_score", 0),
+            "confidence": parsed.get("confidence", 0.0)
+        }
 
+        # Normalize types
         try:
-            score = int(parsed.get("entailment_score", 0))
-        except Exception:
+            score = int(clean_parsed["entailment_score"])
+        except:
             score = 0
         score = max(0, min(10, score))
 
         try:
-            conf = float(parsed.get("confidence", 0.0))
-        except Exception:
+            conf = float(clean_parsed["confidence"])
+        except:
             conf = 0.0
         conf = max(0.0, min(1.0, conf))
 
@@ -307,7 +365,7 @@ def run_episode_labeling(
             **m,
             "entailment_score": score,
             "confidence": conf,
-            "raw": out,
+            "raw": raw_txt, # 保留 raw text 用于 debug，即使是废话
         })
 
     episode_id = os.path.splitext(os.path.basename(episode_path))[0]
@@ -324,12 +382,25 @@ def run_episode_labeling(
     }
     save_json(out_path, out_obj)
 
-    # small metadata return
     return {
         "episode_id": episode_id,
         "n_pairs": len(pairs),
+        "n_retries": len(failed_indices),
         "out_path": out_path,
     }
+
+
+def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
+    lo = max(0, idx - w)
+    hi = min(len(turns), idx + w + 1)
+    lines = []
+    for k in range(lo, hi):
+        spk = turns[k].get("speaker_id") or turns[k].get("speaker") or "SPEAKER"
+        txt = extract_turn_text(turns[k]).replace("\n", " ").strip()
+        if not txt:
+            continue
+        lines.append(f"[{k}] {spk}: {txt}")
+    return "\n".join(lines) if lines else "[NO CONTEXT]"
 
 
 def main():
@@ -339,7 +410,7 @@ def main():
     ap.add_argument("--glob", type=str, default="*.json")
     ap.add_argument("--out_dir", type=str, default="data/implicature_flow/entailment_pairs_1to10")
 
-    ap.add_argument("--max_future_turns", type=int, default=30, help="0 = all future")
+    ap.add_argument("--max_future_turns", type=int, default=30)
     ap.add_argument("--max_claims_per_assumption", type=int, default=15)
     ap.add_argument("--min_overlap", type=int, default=2)
     ap.add_argument("--context_w", type=int, default=2)
@@ -348,7 +419,8 @@ def main():
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=2)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
-    ap.add_argument("--max_tokens", type=int, default=128)
+    ap.add_argument("--max_tokens", type=int, default=500) 
+    ap.add_argument("--retry_max_tokens", type=int, default=5000) 
 
     args = ap.parse_args()
 
@@ -356,7 +428,7 @@ def main():
         model_name=args.model_name,
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
-        max_tokens=args.max_tokens,
+        default_max_tokens=args.max_tokens,
         temperature=0.0,
     )
 
@@ -377,6 +449,7 @@ def main():
             min_overlap=args.min_overlap,
             context_w=args.context_w,
             batch_size=args.batch_size,
+            retry_max_tokens=args.retry_max_tokens, # Pass retry limit
         ))
 
     save_json(os.path.join(args.out_dir, f"_LABELING_META_k{args.k}.json"), {

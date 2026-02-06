@@ -8,5 +8,4 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-export VLLM_USE_V1=0
 python data_processing/entailment_labeler.py --k 512
