@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=pipeline
-#SBATCH --output=slurm-%j.out
+#SBATCH --output=_log/assumption_pipeline.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1
