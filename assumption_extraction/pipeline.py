@@ -20,7 +20,7 @@ DEFAULT_EPISODES_JSONL = Path(
 DEFAULT_TURNS_DIR = Path(
     "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
 )
-DEFAULT_OUT_ROOT = Path("results/political")
+DEFAULT_OUT_ROOT = Path("data/political")
 
 # =========================================================
 # Logging
@@ -113,8 +113,6 @@ def build_turns_index(turns_dir: Path) -> Dict[int, Path]:
 
 # =========================================================
 # Robust JSON reading for turns files
-#   - Try JSONL (1 JSON per line) first
-#   - If that yields nothing, fall back to JSONDecoder.raw_decode scan
 # =========================================================
 def iter_json_objects_jsonl(path: Path) -> Iterator[Any]:
     with open_text(path) as f:
@@ -193,16 +191,13 @@ def iter_turn_records(path: Path) -> Iterator[Dict[str, Any]]:
 
 
 # =========================================================
-# Turn extraction: known keys first, else auto-pick best string field
+# Turn extraction
 # =========================================================
 @dataclass
 class ExtractedTurn:
     turn_idx: int
     text: str
     speaker_id: Any
-    speaker_name: Optional[str]
-    speaker_role: Optional[str]
-    chosen_text_key: str
 
 
 def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]]:
@@ -229,21 +224,17 @@ def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
 
 
 def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[ExtractedTurn]:
-    chosen_key = ""
     txt = None
 
     if isinstance(turn.get("turn_text"), str):
         txt = turn["turn_text"].strip()
-        chosen_key = "turn_text"
     elif isinstance(turn.get("turnText"), str):
         txt = turn["turnText"].strip()
-        chosen_key = "turnText"
 
     if not txt:
-        txt2, k2 = _best_text_field(turn)
+        txt2, _ = _best_text_field(turn)
         if txt2:
             txt = txt2
-            chosen_key = k2 or ""
 
     if not txt:
         return None
@@ -254,36 +245,65 @@ def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[ExtractedTurn]
     if isinstance(spk, list) and spk:
         spk = spk[0]
 
-    name = turn.get("inferred_speaker_name")
-    if name is None:
-        name = turn.get("inferredSpeakerName")
-    name = name.strip() if isinstance(name, str) else None
-
-    role = turn.get("inferred_speaker_role")
-    if role is None:
-        role = turn.get("inferredSpeakerRole")
-    role = role.strip() if isinstance(role, str) else None
-
-    return ExtractedTurn(
-        turn_idx=turn_idx,
-        text=txt,
-        speaker_id=spk,
-        speaker_name=name,
-        speaker_role=role,
-        chosen_text_key=chosen_key,
-    )
+    return ExtractedTurn(turn_idx=turn_idx, text=txt, speaker_id=spk)
 
 
-def load_episode_turns(turns_path: Path, min_words: int) -> List[ExtractedTurn]:
+def load_episode_turns_raw(turns_path: Path) -> List[ExtractedTurn]:
     out: List[ExtractedTurn] = []
     for i, t in enumerate(iter_turn_records(turns_path)):
         et = extract_turn(t, turn_idx=i)
         if et is None:
             continue
-        if count_words(et.text) < min_words:
-            continue
         out.append(et)
     return out
+
+
+# =========================================================
+# Merge + filter helpers (NO dataclass for merged)
+# =========================================================
+def merge_consecutive_by_speaker_renumber(turns: List[ExtractedTurn]) -> List[Dict[str, Any]]:
+    """
+    Merge adjacent turns with identical speaker_id.
+    - concatenate using a single space
+    - renumber turn_idx to 0..N-1 after merging
+    Returns list of dicts: {"turn_idx": int, "turn_text": str, "speaker_id": Any}
+    """
+    if not turns:
+        return []
+
+    merged: List[Dict[str, Any]] = []
+
+    curr_spk = turns[0].speaker_id
+    curr_parts = [turns[0].text]
+
+    for t in turns[1:]:
+        if t.speaker_id == curr_spk:
+            curr_parts.append(t.text)
+        else:
+            merged_text = " ".join(p.strip() for p in curr_parts if p and p.strip()).strip()
+            merged.append({"speaker_id": curr_spk, "turn_text": merged_text})
+            curr_spk = t.speaker_id
+            curr_parts = [t.text]
+
+    # flush last
+    merged_text = " ".join(p.strip() for p in curr_parts if p and p.strip()).strip()
+    merged.append({"speaker_id": curr_spk, "turn_text": merged_text})
+
+    # renumber
+    for i, m in enumerate(merged):
+        m["turn_idx"] = i
+
+    return merged
+
+
+def filter_min_words_after_merge(merged: List[Dict[str, Any]], min_words: int) -> List[Dict[str, Any]]:
+    """
+    Filter by min_words AFTER merging, and renumber turn_idx again to be contiguous.
+    """
+    kept = [m for m in merged if count_words(m.get("turn_text", "")) >= min_words]
+    for i, m in enumerate(kept):
+        m["turn_idx"] = i
+    return kept
 
 
 # =========================================================
@@ -488,8 +508,12 @@ def main():
     ap.add_argument("--min_words", type=int, default=10)
     ap.add_argument("--seed", type=int, default=42)
 
-    # optional safety cap; default = no cap
-    ap.add_argument("--max_turns_per_episode", type=int, default=0, help="0 means no cap; else max turns to process per episode.")
+    ap.add_argument(
+        "--max_turns_per_episode",
+        type=int,
+        default=0,
+        help="0 means no cap; else max merged turns to process per episode.",
+    )
 
     ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
     ap.add_argument("--batch_size", type=int, default=16)
@@ -552,16 +576,25 @@ def main():
             break
 
         turns_path = turns_index[eid]
-        turns = load_episode_turns(turns_path, min_words=args.min_words)
-        if not turns:
+        raw_turns = load_episode_turns_raw(turns_path)
+        if not raw_turns:
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(turns) > args.max_turns_per_episode:
-            # Keep chronological: take first K (you can change to random sample if you prefer)
-            turns = turns[: args.max_turns_per_episode]
+        # 1) merge consecutive same-speaker turns and renumber
+        merged = merge_consecutive_by_speaker_renumber(raw_turns)
 
-        prompts = [PROMPT.format(turn_text=t.text) for t in turns]
+        # 2) filter min_words AFTER merge (and renumber again)
+        merged = filter_min_words_after_merge(merged, min_words=args.min_words)
+        if not merged:
+            manifest["episodes_skipped_no_turns"] += 1
+            continue
+
+        # 3) cap AFTER merge/filter (cap counts actual LLM calls)
+        if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
+            merged = merged[: args.max_turns_per_episode]
+
+        prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
 
         outputs: List[str] = []
         for start in range(0, len(prompts), args.batch_size):
@@ -571,17 +604,14 @@ def main():
         raw_rows = []
         parsed_ok = 0
 
-        for t, raw_out in zip(turns, outputs):
+        for m, raw_out in zip(merged, outputs):
             norm = parse_and_normalize_llm(raw_out)
             base = {
                 "episode_id": eid,
                 "turn_file": str(turns_path),
-                "turn_idx": t.turn_idx,
-                "turn_text": t.text,
-                "speaker_id": t.speaker_id,
-                "inferred_speaker_name": t.speaker_name,
-                "inferred_speaker_role": t.speaker_role,
-                "chosen_text_key": t.chosen_text_key,
+                "turn_idx": m["turn_idx"],       # renumbered after merge/filter
+                "turn_text": m["turn_text"],     # merged text
+                "speaker_id": m["speaker_id"],
             }
             if norm is not None:
                 parsed_ok += 1
@@ -589,9 +619,9 @@ def main():
             else:
                 parsed_rows.append(base)
 
-            raw_rows.append({"turn_idx": t.turn_idx, "turn_text": t.text, "raw_output": raw_out})
+            raw_rows.append({"turn_idx": m["turn_idx"], "turn_text": m["turn_text"], "raw_output": raw_out})
 
-        out_parsed = parsed_dir / f"{eid}.json"          # <- filename is id
+        out_parsed = parsed_dir / f"{eid}.json"
         out_raw = raw_dir / f"{eid}_raw.json"
         with open(out_parsed, "w", encoding="utf-8") as f:
             json.dump(parsed_rows, f, indent=2, ensure_ascii=False)
@@ -607,7 +637,6 @@ def main():
                 "parsed_ok": parsed_ok,
                 "parsed_path": str(out_parsed),
                 "raw_path": str(out_raw),
-                # these are just for convenience/debug
                 "title_ep": meta.get("title_ep"),
                 "pubDate_ep": meta.get("pubDate_ep"),
                 "rssKey": meta.get("rssKey"),

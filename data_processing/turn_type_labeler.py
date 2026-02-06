@@ -168,7 +168,7 @@ def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_dir", type=str, default="results/political/parsed")
-    ap.add_argument("--output_dir", type=str, default="data/labeled")
+    ap.add_argument("--output_dir", type=str, default="turn_type_data/labeled")
     ap.add_argument("--batch_size", type=int, default=32)
     ap.add_argument("--max_turn_chars", type=int, default=3000)
     args = ap.parse_args()
