@@ -420,7 +420,7 @@ def main():
     ap.add_argument("--tensor_parallel_size", type=int, default=2)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     ap.add_argument("--max_tokens", type=int, default=500) 
-    ap.add_argument("--retry_max_tokens", type=int, default=5000) 
+    ap.add_argument("--retry_max_tokens", type=int, default=4000) 
 
     args = ap.parse_args()
 
