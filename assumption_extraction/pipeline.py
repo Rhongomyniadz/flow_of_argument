@@ -4,7 +4,6 @@ import json
 import logging
 import random
 import re
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
@@ -191,15 +190,8 @@ def iter_turn_records(path: Path) -> Iterator[Dict[str, Any]]:
 
 
 # =========================================================
-# Turn extraction
+# Turn extraction (NO dataclass; return dict)
 # =========================================================
-@dataclass
-class ExtractedTurn:
-    turn_idx: int
-    text: str
-    speaker_id: Any
-
-
 def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]]:
     best = None  # (score, key, text)
     for k, v in turn.items():
@@ -223,7 +215,7 @@ def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
     return best[2], best[1]
 
 
-def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[ExtractedTurn]:
+def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[Dict[str, Any]]:
     txt = None
 
     if isinstance(turn.get("turn_text"), str):
@@ -245,11 +237,16 @@ def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[ExtractedTurn]
     if isinstance(spk, list) and spk:
         spk = spk[0]
 
-    return ExtractedTurn(turn_idx=turn_idx, text=txt, speaker_id=spk)
+    return {
+        "turn_idx": turn_idx,
+        "text": txt,
+        "speaker_id": spk,
+        "meta": dict(turn),  # keep all original metadata (mfcc/F0/F1/times/etc.)
+    }
 
 
-def load_episode_turns_raw(turns_path: Path) -> List[ExtractedTurn]:
-    out: List[ExtractedTurn] = []
+def load_episode_turns_raw(turns_path: Path) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
     for i, t in enumerate(iter_turn_records(turns_path)):
         et = extract_turn(t, turn_idx=i)
         if et is None:
@@ -259,37 +256,134 @@ def load_episode_turns_raw(turns_path: Path) -> List[ExtractedTurn]:
 
 
 # =========================================================
-# Merge + filter helpers (NO dataclass for merged)
+# Merge + filter helpers (keep/aggregate metadata)
 # =========================================================
-def merge_consecutive_by_speaker_renumber(turns: List[ExtractedTurn]) -> List[Dict[str, Any]]:
+def _is_number(x: Any) -> bool:
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def _weighted_mean(pairs: List[Tuple[float, float]]) -> Optional[float]:
+    num = 0.0
+    den = 0.0
+    for v, w in pairs:
+        if w <= 0:
+            continue
+        num += v * w
+        den += w
+    if den == 0.0:
+        return None
+    return num / den
+
+
+def merge_consecutive_by_speaker_renumber(turns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Merge adjacent turns with identical speaker_id.
     - concatenate using a single space
+    - aggregate metadata:
+        * startTime = first
+        * endTime   = last
+        * duration  = end-start if both present
+        * numeric features (mfcc/F0/F1 etc.) = weighted mean (weights by per-turn duration, fallback wordCount, fallback transcript word count)
+        * transcript = merged text
+        * wordCount  = recomputed from merged text
     - renumber turn_idx to 0..N-1 after merging
-    Returns list of dicts: {"turn_idx": int, "turn_text": str, "speaker_id": Any}
+    Returns list of dicts:
+      {
+        "turn_idx": int,
+        "turn_text": str,
+        "speaker_id": Any,
+        "meta": Dict[str, Any]
+      }
     """
     if not turns:
         return []
 
     merged: List[Dict[str, Any]] = []
 
-    curr_spk = turns[0].speaker_id
-    curr_parts = [turns[0].text]
+    curr_spk = turns[0].get("speaker_id")
+    curr_parts = [turns[0].get("text", "")]
+    curr_metas = [turns[0].get("meta", {})]
+
+    def flush_group(spk: Any, parts: List[str], metas: List[Dict[str, Any]]) -> Dict[str, Any]:
+        merged_text = " ".join(p.strip() for p in parts if isinstance(p, str) and p.strip()).strip()
+
+        # start/end (take first/last available)
+        start = None
+        end = None
+        for m in metas:
+            if start is None and _is_number(m.get("startTime")):
+                start = float(m["startTime"])
+                break
+        for m in reversed(metas):
+            if end is None and _is_number(m.get("endTime")):
+                end = float(m["endTime"])
+                break
+
+        duration = None
+        if start is not None and end is not None and end >= start:
+            duration = end - start
+
+        # weights per original turn
+        weights: List[float] = []
+        for m in metas:
+            w = None
+            if _is_number(m.get("duration")):
+                w = float(m["duration"])
+            elif _is_number(m.get("wordCount")):
+                w = float(m["wordCount"])
+            else:
+                w = float(count_words(m.get("transcript") or m.get("turn_text") or m.get("turnText") or ""))
+            weights.append(max(w, 0.0))
+
+        # numeric keys across metas
+        numeric_keys = set()
+        for m in metas:
+            if not isinstance(m, dict):
+                continue
+            for k, v in m.items():
+                if _is_number(v):
+                    numeric_keys.add(k)
+
+        agg_meta: Dict[str, Any] = {}
+        for k in numeric_keys:
+            pairs: List[Tuple[float, float]] = []
+            for m, w in zip(metas, weights):
+                v = m.get(k) if isinstance(m, dict) else None
+                if _is_number(v):
+                    pairs.append((float(v), w))
+            mean = _weighted_mean(pairs)
+            if mean is not None:
+                agg_meta[k] = mean
+
+        # override/ensure key metadata
+        agg_meta["speaker"] = spk
+        agg_meta["speaker_id"] = spk
+        if start is not None:
+            agg_meta["startTime"] = start
+        if end is not None:
+            agg_meta["endTime"] = end
+        if duration is not None:
+            agg_meta["duration"] = duration
+
+        # transcript + wordCount from merged
+        agg_meta["transcript"] = merged_text
+        agg_meta["wordCount"] = count_words(merged_text)
+
+        return {"speaker_id": spk, "turn_text": merged_text, "meta": agg_meta}
 
     for t in turns[1:]:
-        if t.speaker_id == curr_spk:
-            curr_parts.append(t.text)
+        spk = t.get("speaker_id")
+        if spk == curr_spk:
+            curr_parts.append(t.get("text", ""))
+            curr_metas.append(t.get("meta", {}))
         else:
-            merged_text = " ".join(p.strip() for p in curr_parts if p and p.strip()).strip()
-            merged.append({"speaker_id": curr_spk, "turn_text": merged_text})
-            curr_spk = t.speaker_id
-            curr_parts = [t.text]
+            merged.append(flush_group(curr_spk, curr_parts, curr_metas))
+            curr_spk = spk
+            curr_parts = [t.get("text", "")]
+            curr_metas = [t.get("meta", {})]
 
-    # flush last
-    merged_text = " ".join(p.strip() for p in curr_parts if p and p.strip()).strip()
-    merged.append({"speaker_id": curr_spk, "turn_text": merged_text})
+    merged.append(flush_group(curr_spk, curr_parts, curr_metas))
 
-    # renumber
     for i, m in enumerate(merged):
         m["turn_idx"] = i
 
@@ -606,18 +700,31 @@ def main():
 
         for m, raw_out in zip(merged, outputs):
             norm = parse_and_normalize_llm(raw_out)
-            base = {
-                "episode_id": eid,
-                "turn_file": str(turns_path),
-                "turn_idx": m["turn_idx"],       # renumbered after merge/filter
-                "turn_text": m["turn_text"],     # merged text
-                "speaker_id": m["speaker_id"],
-            }
+
+            meta = m.get("meta", {}) if isinstance(m.get("meta"), dict) else {}
+
+            # ---- put metadata BEFORE explicit/assumption ----
+            row: Dict[str, Any] = {}
+            row["episode_id"] = eid
+            row["turn_file"] = str(turns_path)
+            row["turn_idx"] = m["turn_idx"]  # renumbered after merge/filter
+            row["speaker_id"] = m["speaker_id"]
+
+            # flatten aggregated meta to top-level (mfcc/F0/F1/transcript/times/etc.)
+            for k, v in meta.items():
+                if k in row:
+                    continue
+                row[k] = v
+
+            # keep merged text
+            row["turn_text"] = m["turn_text"]
+
+            # finally add LLM results
             if norm is not None:
                 parsed_ok += 1
-                parsed_rows.append({**base, **norm})
-            else:
-                parsed_rows.append(base)
+                row.update(norm)
+
+            parsed_rows.append(row)
 
             raw_rows.append({"turn_idx": m["turn_idx"], "turn_text": m["turn_text"], "raw_output": raw_out})
 
@@ -628,7 +735,7 @@ def main():
         with open(out_raw, "w", encoding="utf-8") as f:
             json.dump(raw_rows, f, indent=2, ensure_ascii=False)
 
-        meta = ep_meta.get(eid, {})
+        meta_ep = ep_meta.get(eid, {})
         manifest["episodes_written"].append(
             {
                 "episode_id": eid,
@@ -637,11 +744,11 @@ def main():
                 "parsed_ok": parsed_ok,
                 "parsed_path": str(out_parsed),
                 "raw_path": str(out_raw),
-                "title_ep": meta.get("title_ep"),
-                "pubDate_ep": meta.get("pubDate_ep"),
-                "rssKey": meta.get("rssKey"),
-                "guid_ep": meta.get("guid_ep"),
-                "key": meta.get("key"),
+                "title_ep": meta_ep.get("title_ep"),
+                "pubDate_ep": meta_ep.get("pubDate_ep"),
+                "rssKey": meta_ep.get("rssKey"),
+                "guid_ep": meta_ep.get("guid_ep"),
+                "key": meta_ep.get("key"),
             }
         )
 
