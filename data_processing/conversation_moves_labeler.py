@@ -217,7 +217,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_dir", type=str, default="data/turn_type_labeled")
     ap.add_argument("--output_dir", type=str, default="data/conversation_labeled")
-    ap.add_argument("--batch_size", type=int, default=32)
+    ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--max_turn_chars", type=int, default=3000)
     args = ap.parse_args()
 
