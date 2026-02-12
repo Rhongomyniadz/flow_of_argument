@@ -268,15 +268,21 @@ def run_episode_labeling(
                     a_context=a_ctx,
                     c_context=c_ctx,
                 ))
+                a_speaker_id = t.get("speaker_id") or t.get("speaker") or "UNKNOWN"
+                c_speaker_id = turns[j].get("speaker_id") or turns[j].get("speaker") or "UNKNOWN"
+
                 meta.append({
                     "a_turn_idx": i,
                     "a_time": a_time,
                     "a_idx_in_turn": a_idx_in_turn,
+                    "a_speaker_id": a_speaker_id,
                     "assumption_text": a_text,
                     "c_turn_idx": j,
-                    "claim_text": c_text,
-                    "overlap_score": score,
                     "c_time": turn_start_time(turns[j]),
+                    "c_speaker_id": c_speaker_id,
+                    "claim_text": c_text,
+                    "same_speaker": (a_speaker_id == c_speaker_id),
+                    "overlap_score": score,
                 })
 
     # =========================================================================

@@ -237,7 +237,7 @@ def main():
     parser.add_argument(
         "--min_granger_samples",
         type=int,
-        default=20,
+        default=10,
         help="Minimum matched samples required to run Granger test (per direction, per offset)",
     )
 
