@@ -9,6 +9,7 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
+
 def robust_get(d, key, default=None):
     """Robustly extract values from dict, handling key spacing variants"""
     if not isinstance(d, dict):
@@ -19,36 +20,91 @@ def robust_get(d, key, default=None):
             return d[k]
     return default
 
+
+def safe_int(x, default=None):
+    """Convert x to int robustly (handles str/np.int/float)."""
+    try:
+        if x is None:
+            return default
+        if isinstance(x, bool):
+            return default
+        if isinstance(x, (int, np.integer)):
+            return int(x)
+        if isinstance(x, float):
+            if np.isfinite(x):
+                return int(x)
+            return default
+        if isinstance(x, str):
+            s = x.strip()
+            if s == "":
+                return default
+            # allow "2" or "2.0"
+            return int(float(s)) if "." in s else int(s)
+        return default
+    except Exception:
+        return default
+
+
 def analyze_single_episode(json_path):
     """
-    Corrected analysis: 
     Step 1: Collect ALL unique assumptions (no entailment filtering)
     Step 2: Identify accommodated assumptions (entailment_score >= 7)
-    Step 3: Calculate true conversion rate = accommodated / total_assumptions
+    Step 3: Calculate conversion rate = accommodated / total_assumptions
+
+    UPDATE:
+    - all_turns: include full min..max range so turns with no flow still appear
+    - cast all indices to int to avoid link dropping
     """
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
     except Exception as e:
         return None, f"JSON parsing error: {str(e)[:100]}"
-    
-    episode_id = robust_get(data, 'episode_id', 'unknown').strip()
+
+    episode_id = robust_get(data, 'episode_id', 'unknown')
+    if isinstance(episode_id, str):
+        episode_id = episode_id.strip()
+
     pairs = robust_get(data, 'pairs', [])
-    
     if not pairs:
         return None, "No valid pairs"
-    
-    # === STEP 1: Collect ALL unique assumptions ===
-    all_assumptions = {}  # key: (a_turn, a_idx) -> {a_time, a_turn, text}
+
+    # ---- Collect full turn range (min..max) from a_turn and c_turn ----
+    turn_idxs = set()
     for pair in pairs:
-        a_turn = robust_get(pair, 'a_turn_idx', -1)
-        a_idx = robust_get(pair, 'a_idx_in_turn', -1)
+        at = safe_int(robust_get(pair, 'a_turn_idx', None), None)
+        ct = safe_int(robust_get(pair, 'c_turn_idx', None), None)
+        if at is not None and at != -1:
+            turn_idxs.add(at)
+        if ct is not None and ct != -1:
+            turn_idxs.add(ct)
+
+    # Try to get N from episode metadata if available (most robust)
+    N = safe_int(robust_get(data, 'num_turns', None), None)
+
+    # Some datasets store full turns list
+    if N is None:
+        turns_list = robust_get(data, 'turns', None)
+        if isinstance(turns_list, list) and len(turns_list) > 0:
+            N = len(turns_list)
+
+    # Fallback: infer from maximum index observed in pairs
+    if N is None:
+        N = max(turn_idxs) if turn_idxs else 0
+
+    # Force 1..N (even if some turns never appear in pairs)
+    all_turns_full = list(range(1, N + 1)) if N >= 1 else []
+    # === STEP 1: Collect ALL unique assumptions ===
+    all_assumptions = {}  # key: (a_turn, a_idx)
+    for pair in pairs:
+        a_turn = safe_int(robust_get(pair, 'a_turn_idx', -1), -1)
+        a_idx = safe_int(robust_get(pair, 'a_idx_in_turn', -1), -1)
         a_time = robust_get(pair, 'a_time', None)
         text = robust_get(pair, 'assumption_text', '')
-        
+
         if a_turn == -1 or a_idx == -1:
             continue
-            
+
         key = (a_turn, a_idx)
         if key not in all_assumptions:
             all_assumptions[key] = {
@@ -56,57 +112,54 @@ def analyze_single_episode(json_path):
                 'a_turn': a_turn,
                 'text': text
             }
-    
+
     if not all_assumptions:
         return None, "No valid assumptions"
-    
+
     # === STEP 2: Identify accommodated assumptions (entailment_score >= 7) ===
-    accommodated = {}  # key: (a_turn, a_idx) -> {earliest_c_time, c_turn}
+    accommodated = {}  # key: (a_turn, a_idx) -> earliest c_time + c_turn
     for pair in pairs:
-        a_turn = robust_get(pair, 'a_turn_idx', -1)
-        a_idx = robust_get(pair, 'a_idx_in_turn', -1)
+        a_turn = safe_int(robust_get(pair, 'a_turn_idx', -1), -1)
+        a_idx = safe_int(robust_get(pair, 'a_idx_in_turn', -1), -1)
+        c_turn = safe_int(robust_get(pair, 'c_turn_idx', None), None)
         c_time = robust_get(pair, 'c_time', float('inf'))
-        c_turn = robust_get(pair, 'c_turn_idx', None)
         entailment = robust_get(pair, 'entailment_score', 0)
-        
+
         if a_turn == -1 or a_idx == -1 or entailment < 7:
             continue
-            
+
         key = (a_turn, a_idx)
-        if key in all_assumptions:  # Ensure it's a known assumption
-            # Record earliest claim time
+        if key in all_assumptions:
             if key not in accommodated or c_time < accommodated[key]['c_time']:
                 accommodated[key] = {
                     'c_time': c_time,
                     'c_turn': c_turn
                 }
-    
-    # === STEP 3: Calculate true metrics ===
+
+    # === STEP 3: Metrics ===
     total = len(all_assumptions)
     num_acc = len(accommodated)
     dark_matter = total - num_acc
     conversion_rate = (num_acc / total * 100) if total > 0 else 0
-    
-    # Calculate lags (only for accommodated assumptions)
+
     lags = []
     flow_matrix = defaultdict(lambda: defaultdict(list))
-    
+
     for key, acc_info in accommodated.items():
         a_info = all_assumptions[key]
         a_time = a_info['a_time']
         c_time = acc_info['c_time']
-        
+
         if a_time is not None and c_time < float('inf'):
             lag = c_time - a_time
-            if lag >= 0:  # Valid lag
+            if lag >= 0:
                 lags.append(lag)
-                
-                # Build flow matrix for Sankey
+
                 src_turn = a_info['a_turn']
                 tgt_turn = acc_info['c_turn']
                 if src_turn is not None and tgt_turn is not None:
                     flow_matrix[src_turn][tgt_turn].append(lag)
-    
+
     return {
         'episode_id': episode_id,
         'total_assumptions': total,
@@ -114,111 +167,216 @@ def analyze_single_episode(json_path):
         'dark_matter_count': dark_matter,
         'conversion_rate': conversion_rate,
         'lags': lags,
-        'flow_matrix': flow_matrix
+        'flow_matrix': flow_matrix,
+        'all_turns': all_turns_full
     }, None
 
+
+def hsla_color(i, n, alpha=0.65):
+    """Deterministic distinct colors using HSL wheel."""
+    if n <= 0:
+        return f"hsla(0,60%,45%,{alpha})"
+    h = int((360.0 * i) / n) % 360
+    return f"hsla({h},60%,45%,{alpha})"
+
+
 def generate_sankey(metrics, output_dir):
-    """Generate Sankey diagram (silent mode)"""
-    flow = metrics['flow_matrix']
-    if not flow:
+    """
+    Bipartite Sankey with:
+    - strict ordering (1..N) on both sides
+    - equal node heights (via invisible balancing links)
+    - link colors determined by source node (A Turn i)
+    """
+    flow = metrics.get('flow_matrix', None)
+    all_turns = metrics.get('all_turns', None)
+    if not all_turns:
         return None
-    
-    # Extract all involved turns
-    all_turns = sorted(set(
-        [src for src in flow.keys()] + 
-        [tgt for tgts in flow.values() for tgt in tgts.keys()]
-    ))
-    if len(all_turns) < 2:
+
+    # enforce sorted 1..N
+    all_turns = sorted(all_turns)
+    n = len(all_turns)
+    if n == 0:
         return None
-    
-    node_idx = {turn: i for i, turn in enumerate(all_turns)}
-    node_labels = [f"Turn {turn}" for turn in all_turns]
-    
-    # Build links
-    links = []
-    for src_turn, targets in flow.items():
-        for tgt_turn, lags in targets.items():
-            src_idx = node_idx[src_turn]
-            tgt_idx = node_idx[tgt_turn]
-            flow_volume = len(lags)
-            avg_lag = np.mean(lags) if lags else 0
-            
-            links.append({
-                'source': src_idx,
-                'target': tgt_idx,
-                'value': flow_volume,
-                'avg_lag': avg_lag
-            })
-    
-    if not links:
-        return None
-    
-    # Create Sankey diagram
+
+    # ---------- nodes ----------
+    left_labels  = [f"A Turn {t}" for t in all_turns]
+    right_labels = [f"C Turn {t}" for t in all_turns]
+    node_labels  = left_labels + right_labels
+
+    left_idx  = {t: i for i, t in enumerate(all_turns)}
+    right_idx = {t: i + n for i, t in enumerate(all_turns)}
+
+    # fixed two columns
+    node_x = [0.01] * n + [0.99] * n
+
+    # fixed y order (top -> bottom) exactly 1..N
+    # use centers, evenly spaced; leave a tiny margin
+    margin = 0.02
+    if n == 1:
+        ys = [0.5]
+    else:
+        ys = [margin + (1 - 2 * margin) * (i / (n - 1)) for i in range(n)]
+    node_y = ys + ys
+
+    # ---------- colors ----------
+    def hsla_color(i, n, alpha=0.70):
+        h = int((360.0 * i) / max(n, 1)) % 360
+        return f"hsla({h},60%,45%,{alpha})"
+
+    src_colors = {t: hsla_color(i, n, alpha=0.70) for i, t in enumerate(all_turns)}
+    node_colors = ([hsla_color(i, n, alpha=0.25) for i in range(n)] + ["rgba(200,200,200,0.55)"] * n)
+
+    # ---------- build REAL links ----------
+    link_source, link_target, link_value, link_label, link_color = [], [], [], [], []
+
+    # compute out/in totals for balancing
+    out_tot = {t: 0.0 for t in all_turns}
+    in_tot  = {t: 0.0 for t in all_turns}
+
+    if flow:
+        for src_turn, targets in flow.items():
+            # robust cast
+            try:
+                src_turn = int(src_turn)
+            except Exception:
+                continue
+            if src_turn not in left_idx:
+                continue
+
+            for tgt_turn, lags in targets.items():
+                try:
+                    tgt_turn = int(tgt_turn)
+                except Exception:
+                    continue
+                if tgt_turn not in right_idx:
+                    continue
+
+                v = float(len(lags))
+                if v <= 0:
+                    continue
+
+                avg_lag = float(np.mean(lags)) if lags else 0.0
+
+                link_source.append(left_idx[src_turn])
+                link_target.append(right_idx[tgt_turn])
+                link_value.append(v)
+                link_label.append(f"{int(v)} assump.<br>avg {avg_lag:.1f}s")
+                link_color.append(src_colors[src_turn])
+
+                out_tot[src_turn] += v
+                in_tot[tgt_turn]  += v
+
+    # ---------- BALANCING LINKS (invisible) to force equal node heights ----------
+    # Goal: every A node has total out = T, every C node has total in = T
+    # Choose minimal T so we only add extra when needed
+    T = max(max(out_tot.values()), max(in_tot.values()), 1.0)
+
+    # deficits
+    defA = [(t, T - out_tot[t]) for t in all_turns]
+    defC = [(t, T - in_tot[t])  for t in all_turns]
+
+    # only keep positive deficits
+    defA = [(t, d) for t, d in defA if d > 1e-9]
+    defC = [(t, d) for t, d in defC if d > 1e-9]
+
+    # greedy matching deficits: send invisible flow from A deficits to C deficits
+    i = j = 0
+    while i < len(defA) and j < len(defC):
+        a_t, a_d = defA[i]
+        c_t, c_d = defC[j]
+        x = min(a_d, c_d)
+
+        # invisible link (no label, transparent)
+        link_source.append(left_idx[a_t])
+        link_target.append(right_idx[c_t])
+        link_value.append(x)
+        link_label.append("")
+        link_color.append("rgba(0,0,0,0)")
+
+        a_d -= x
+        c_d -= x
+
+        if a_d <= 1e-9:
+            i += 1
+        else:
+            defA[i] = (a_t, a_d)
+
+        if c_d <= 1e-9:
+            j += 1
+        else:
+            defC[j] = (c_t, c_d)
+
+    # If there are absolutely no links (rare), still draw a tiny invisible diagonal
+    if len(link_value) == 0:
+        for t in all_turns:
+            link_source.append(left_idx[t])
+            link_target.append(right_idx[t])
+            link_value.append(1.0)
+            link_label.append("")
+            link_color.append("rgba(0,0,0,0)")
+
+    # ---------- plot ----------
     fig = go.Figure(data=[go.Sankey(
+        arrangement="fixed",   # ✅ DO NOT reorder nodes
         node=dict(
-            pad=15,
-            thickness=20,
+            pad=10,
+            thickness=16,
             line=dict(color="black", width=0.5),
             label=node_labels,
-            color="lightblue"
+            x=node_x,
+            y=node_y,
+            color=node_colors
         ),
         link=dict(
-            source=[link['source'] for link in links],
-            target=[link['target'] for link in links],
-            value=[link['value'] for link in links],
-            label=[f"{link['value']} assump.<br>avg {link['avg_lag']:.1f}s" for link in links],
-            color="rgba(44, 160, 44, 0.7)"
+            source=link_source,
+            target=link_target,
+            value=link_value,
+            label=link_label,
+            color=link_color
         )
     )])
-    
+
     fig.update_layout(
-        title_text=f"Implicature Flow: Episode {metrics['episode_id']}<br>"
+        title_text=f"Implicature Flow (Bipartite): Episode {metrics['episode_id']}<br>"
                    f"<sup>Conversion Rate: {metrics['conversion_rate']:.1f}% | "
                    f"Mean Lag: {np.mean(metrics['lags']) if metrics['lags'] else 0:.1f}s</sup>",
         font_size=11,
-        height=500
+        height=max(600, 22 * n + 240)
     )
-    
+
     path = output_dir / f"sankey_{metrics['episode_id']}.html"
     fig.write_html(path, include_plotlyjs='cdn')
     return path
 
+
 def batch_analyze(input_dir, output_dir, sankey_limit=50):
-    """
-    Batch analysis of implicature flow
-    UPDATED: Generates Sankeys for the first 50 episodes (sorted by ID).
-    """
     input_path = Path(input_dir)
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
-    # Find JSON files
+
     json_files = sorted(input_path.glob("*.json"))
     if not json_files:
         print(f"❌ No JSON files found in directory: '{input_dir}'")
         return None
-    
+
     print(f"\n🚀 Starting analysis of {len(json_files):,} dialogue episodes...\n")
-    
-    # === PHASE 1: Analyze all episodes ===
+
     all_metrics = []
     errors = []
-    
+
     for json_file in tqdm(json_files, desc="Analysis Progress", unit="file"):
         metrics, err = analyze_single_episode(json_file)
         if metrics:
             all_metrics.append(metrics)
         else:
             errors.append((json_file.name, err))
-    
-    # === PHASE 2: Global metrics calculation ===
+
     total_assump = sum(m['total_assumptions'] for m in all_metrics)
     total_acc = sum(m['accommodated_assumptions'] for m in all_metrics)
     dark_matter = total_assump - total_acc
     global_conv = (total_acc / total_assump * 100) if total_assump > 0 else 0
     dark_ratio = (dark_matter / total_assump * 100) if total_assump > 0 else 0
-    
-    # Aggregate all lags
+
     all_lags = [lag for m in all_metrics for lag in m['lags']]
     lag_stats = {
         'mean': float(np.mean(all_lags)) if all_lags else 0.0,
@@ -227,8 +385,7 @@ def batch_analyze(input_dir, output_dir, sankey_limit=50):
         'max': float(np.max(all_lags)) if all_lags else 0.0,
         'std': float(np.std(all_lags)) if all_lags else 0.0
     }
-    
-    # === PHASE 3: Generate report ===
+
     report = {
         'analysis_timestamp': pd.Timestamp.now().isoformat(),
         'input_directory': str(input_dir),
@@ -257,96 +414,87 @@ def batch_analyze(input_dir, output_dir, sankey_limit=50):
             for m in all_metrics
         ]
     }
-    
-    # Save report
+
     report_path = output_path / "implicature_flow_global_report.json"
     with open(report_path, 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
-    
-    # === PHASE 4: Visualizations ===
+
     df = pd.DataFrame(report['per_episode_metrics'])
-    
+
     if not df.empty:
         fig1 = px.histogram(
             df, x='conversion_rate', nbins=25,
             title='Conversion Rate Distribution Across Episodes',
-            labels={'conversion_rate': 'Conversion Rate (%)'},
-            color_discrete_sequence=['#2E86AB']
+            labels={'conversion_rate': 'Conversion Rate (%)'}
         )
-        fig1.add_vline(x=global_conv, line_dash="dash", line_color="red",
-                       annotation_text=f"Global Avg: {global_conv:.1f}%", 
-                       annotation_position="top right")
+        fig1.add_vline(
+            x=global_conv, line_dash="dash", line_color="red",
+            annotation_text=f"Global Avg: {global_conv:.1f}%",
+            annotation_position="top right"
+        )
         fig1.write_html(output_path / "conversion_rate_distribution.html", include_plotlyjs='cdn')
-    
+
     if all_lags:
         fig2 = px.histogram(
             x=all_lags, nbins=40,
             title=f'Time-to-Surface Distribution (All Episodes)<br><sup>Mean: {lag_stats["mean"]:.1f}s | Median: {lag_stats["median"]:.1f}s</sup>',
-            labels={'x': 'Lag (seconds)', 'y': 'Count'},
-            color_discrete_sequence=['#A23B72']
+            labels={'x': 'Lag (seconds)', 'y': 'Count'}
         )
         fig2.write_html(output_path / "lag_distribution.html", include_plotlyjs='cdn')
-    
+
     sankey_paths = []
     if all_metrics:
         print(f"\n🎨 Generating Sankey diagrams for first {sankey_limit} episodes (sorted by ID)...")
-        
-        # Filter for episodes that actually have flow data
-        valid_episodes = [m for m in all_metrics if m['flow_matrix']]
-        
-        # Sort by episode_id to ensure deterministic order (1, 2, 10...)
-        sorted_episodes = sorted(valid_episodes, key=lambda m: str(m['episode_id']))
-        
-        # Take the first N
+
+        # allow episodes even if flow empty, still can draw (ghost links will show columns)
+        sorted_episodes = sorted(all_metrics, key=lambda m: str(m['episode_id']))
         target_episodes = sorted_episodes[:sankey_limit]
-        
+
         for metrics in tqdm(target_episodes, desc="Sankey Generation", unit="diagram", leave=False):
             path = generate_sankey(metrics, output_path)
             if path:
                 sankey_paths.append(path.name)
-    
-    # === PHASE 5: Summary Output ===
+
     if dark_ratio > 40:
         insight = "⚠️  High Dark Matter ratio → Dialogue contains many unverified implicit premises, potentially impacting collaboration quality"
     elif dark_ratio < 20:
         insight = "✓  Low Dark Matter ratio → Participants actively explicitize implicit premises, indicating strong collaboration"
     else:
         insight = "→  Moderate Dark Matter ratio → Consistent with natural dialogue patterns where some implicit premises remain unverified"
-    
-    print("\n" + "="*70)
+
+    print("\n" + "=" * 70)
     print("✅ IMPLICATURE FLOW ANALYSIS COMPLETE")
-    print("="*70)
+    print("=" * 70)
     print(f"✓ Valid episodes:    {len(all_metrics):,} / {len(json_files):,}")
     print(f"✓ Total assumptions: {total_assump:,}")
     print(f"✓ Accommodated:      {total_acc:,} ({global_conv:.1f}%)")
     print(f"✓ Dark Matter:       {dark_matter:,} ({dark_ratio:.1f}%)")
     print(f"✓ Mean lag:          {lag_stats['mean']:.2f} seconds (median: {lag_stats['median']:.2f}s)")
-    print("="*70)
+    print("=" * 70)
     print(f"\n💡 Insight: {insight}")
     print(f"\n📁 Output directory: {output_path.absolute()}")
     print(f"  • Global report: implicature_flow_global_report.json")
     print(f"  • Conversion rate distribution: conversion_rate_distribution.html")
     print(f"  • Lag distribution: lag_distribution.html")
-    
+
     if sankey_paths:
         print(f"  • Sankey diagrams: {len(sankey_paths)} generated (Limit: first {sankey_limit} IDs)")
         for p in sankey_paths[:3]:
             print(f"      → {p}")
         if len(sankey_paths) > 3:
-            print(f"      → ... and {len(sankey_paths)-3} more")
-    print("\n" + "="*70)
-    
+            print(f"      → ... and {len(sankey_paths) - 3} more")
+    print("\n" + "=" * 70)
+
     return report
 
-# ==================== EXECUTION ENTRY POINT ====================
+
 if __name__ == "__main__":
     INPUT_DIR = "data/implicature_flow/entailment_pairs_1to10"
     OUTPUT_DIR = "experiments/exp4_implicature_flow/results"
-    
+
     if not Path(INPUT_DIR).exists():
         print(f"❌ Input directory does not exist: {INPUT_DIR}")
         print("💡 Please verify the path or modify the INPUT_DIR variable")
         print(f"   Suggested check: {Path('.').absolute() / INPUT_DIR}")
     else:
-        # Changed: requesting 50 sankeys
         batch_analyze(INPUT_DIR, OUTPUT_DIR, sankey_limit=50)
