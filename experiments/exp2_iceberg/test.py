@@ -22,7 +22,7 @@ warnings.filterwarnings(
 )
 
 # ============================================================================
-# Logging (keep INFO so you can still see tqdm; we won't print Granger internals)
+# Logging
 # ============================================================================
 logging.basicConfig(
     level=logging.INFO,
@@ -90,9 +90,10 @@ def preprocess_episode(data: List[dict], metric_type: str, min_turns: int) -> Op
 # ============================================================================
 # Granger Utilities
 # ============================================================================
-def safe_granger_f_stat(y: np.ndarray, x: np.ndarray, lag: int, min_n: int) -> Optional[float]:
+def safe_granger_p_value(y: np.ndarray, x: np.ndarray, lag: int, min_n: int) -> Optional[float]:
     """
-    Returns the SSR-based Granger F-statistic for testing whether x Granger-causes y.
+    Returns the p-value from the SSR-based Granger F-test.
+    Lower p-value indicates stronger evidence of Granger causality.
     Silences all statsmodels stdout while running the test.
     """
     mask = np.isfinite(y) & np.isfinite(x)
@@ -106,14 +107,16 @@ def safe_granger_f_stat(y: np.ndarray, x: np.ndarray, lag: int, min_n: int) -> O
     data = np.column_stack([y, x])
 
     try:
-        # 🔇 Silence internal statsmodels printing
+        # Silence internal statsmodels printing
         with contextlib.redirect_stdout(io.StringIO()):
             res = grangercausalitytests(data, maxlag=lag, verbose=False)
 
-        f_stat, p_val, _, _ = res[lag][0]["ssr_ftest"]
-        if not np.isfinite(f_stat):
+        # Extract p-value from the ssr_ftest tuple: (f_stat, p_val, df_denom, df_num)
+        _, p_val, _, _ = res[lag][0]["ssr_ftest"]
+        
+        if not np.isfinite(p_val):
             return None
-        return float(f_stat)
+        return float(p_val)
     except Exception:
         return None
 
@@ -129,22 +132,16 @@ def analyze_dyadic_granger_longform(
 ) -> List[dict]:
     """
     For each offset in [-max_shift, +max_shift], build matched (stance -> other iceberg) sequences
-    for each direction (A->B and B->A), then compute Granger F-stat score.
+    for each direction (A->B and B->A), then compute Granger p-value.
 
-    Output rows: {episode, speaker_id, offset, granger_score}
+    Output rows: {episode, speaker_id, offset, granger_p_value}
       - speaker_id = the source speaker whose stance is tested as causing the other's iceberg
-      - granger_score = SSR F-statistic (higher -> stronger evidence, generally)
-
-    If odd_offsets_only=True, only evaluates odd offsets (and skips 0). This is correct when you have
-    merged consecutive same-speaker turns and the sequence alternates A,B,A,B,... so cross-speaker
-    relations occur only at odd offsets.
+      - granger_p_value = p-value from the F-test (lower means more significant)
     """
     df = df.copy()
 
-    # smoothing
-    df["iceberg_smooth"] = df["iceberg_norm"].rolling(smooth_window, center=True, min_periods=1).mean()
-    df["stance_smooth"] = df["stance_5pt"].rolling(smooth_window, center=True, min_periods=1).mean()
-
+    df["iceberg_smooth"] = df["iceberg_norm"]
+    df["stance_smooth"] = df["stance_5pt"]
     speakers = sorted(df["speaker_id"].unique())
     if len(speakers) != 2:
         return []
@@ -178,24 +175,26 @@ def analyze_dyadic_granger_longform(
                 b_stance_seq.append(float(curr["stance_smooth"]))
                 a_iceberg_seq.append(float(target["iceberg_smooth"]))
 
-        score_a_to_b = safe_granger_f_stat(
+        # Compute p-value for A -> B
+        p_val_a_to_b = safe_granger_p_value(
             y=np.array(b_iceberg_seq),
             x=np.array(a_stance_seq),
             lag=granger_lag,
             min_n=min_granger_samples,
         )
         rows.append(
-            {"episode": episode_id, "speaker_id": spk_a, "offset": shift, "granger_score": score_a_to_b}
+            {"episode": episode_id, "speaker_id": spk_a, "offset": shift, "granger_p_value": p_val_a_to_b}
         )
 
-        score_b_to_a = safe_granger_f_stat(
+        # Compute p-value for B -> A
+        p_val_b_to_a = safe_granger_p_value(
             y=np.array(a_iceberg_seq),
             x=np.array(b_stance_seq),
             lag=granger_lag,
             min_n=min_granger_samples,
         )
         rows.append(
-            {"episode": episode_id, "speaker_id": spk_b, "offset": shift, "granger_score": score_b_to_a}
+            {"episode": episode_id, "speaker_id": spk_b, "offset": shift, "granger_p_value": p_val_b_to_a}
         )
 
     if odd_offsets_only:
@@ -206,10 +205,7 @@ def analyze_dyadic_granger_longform(
     else:
         # Evaluate all offsets in the full grid
         for shift in range(-max_shift, max_shift + 1):
-            if shift == 0:
-                process_shift(shift)  # still allowed
-            else:
-                process_shift(shift)
+            process_shift(shift)
 
     return rows
 
@@ -233,11 +229,11 @@ def main():
     parser.add_argument("--min_turns", type=int, default=30, help="Minimum substantive turns required per episode")
 
     # Granger-specific
-    parser.add_argument("--granger_lag", type=int, default=1, help="Lag (in steps) used in Granger test")
+    parser.add_argument("--granger_lag", type=int, default=2, help="Lag (in steps) used in Granger test")
     parser.add_argument(
         "--min_granger_samples",
         type=int,
-        default=10,
+        default=20,
         help="Minimum matched samples required to run Granger test (per direction, per offset)",
     )
 
@@ -288,7 +284,8 @@ def main():
         return
 
     df_long = pd.DataFrame(all_rows)
-    df_long = df_long[["episode", "speaker_id", "offset", "granger_score"]]
+    # Update column selection to reflect new output
+    df_long = df_long[["episode", "speaker_id", "offset", "granger_p_value"]]
 
     out_csv = out_path / f"granger_longform_{args.metric}.csv"
     df_long.to_csv(out_csv, index=False)
