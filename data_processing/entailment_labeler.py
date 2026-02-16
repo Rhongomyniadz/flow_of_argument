@@ -17,7 +17,7 @@ class LLMInterface:
         top_k: int = 0,
         repetition_penalty: float = 1.05,
         download_dir: str = "/shared/4/models",
-        default_max_tokens: int = 256, # 默认设小一点，提高速度
+        default_max_tokens: int = 256,  # 默认设小一点，提高速度
     ):
         self.llm = LLM(
             model=model_name,
@@ -38,13 +38,13 @@ class LLMInterface:
     def generate_batch(self, prompts: List[str], max_tokens: Optional[int] = None) -> List[str]:
         # 如果未指定，使用默认值
         tokens_to_gen = max_tokens if max_tokens is not None else self.default_max_tokens
-        
+
         # 每次生成创建一个新的 SamplingParams 对象
         params = SamplingParams(
             max_tokens=tokens_to_gen,
             **self.base_params_config
         )
-        
+
         out = self.llm.generate(prompts, params)
         return [o.outputs[0].text.strip() for o in out]
 
@@ -199,6 +199,19 @@ Your Output:
 """
 
 
+def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
+    lo = max(0, idx - w)
+    hi = min(len(turns), idx + w + 1)
+    lines = []
+    for k in range(lo, hi):
+        spk = turns[k].get("speaker_id") or turns[k].get("speaker") or "SPEAKER"
+        txt = extract_turn_text(turns[k]).replace("\n", " ").strip()
+        if not txt:
+            continue
+        lines.append(f"[{k}] {spk}: {txt}")
+    return "\n".join(lines) if lines else "[NO CONTEXT]"
+
+
 def run_episode_labeling(
     episode_path: str,
     llm: LLMInterface,
@@ -208,7 +221,7 @@ def run_episode_labeling(
     min_overlap: int,
     context_w: int,
     batch_size: int,
-    retry_max_tokens: int = 2000, # 重试时使用的更大 token 限制
+    retry_max_tokens: int = 2000,  # 重试时使用的更大 token 限制
 ) -> Dict[str, Any]:
     turns = load_json(episode_path)
     if not isinstance(turns, list):
@@ -268,30 +281,52 @@ def run_episode_labeling(
                     a_context=a_ctx,
                     c_context=c_ctx,
                 ))
-                a_speaker_id = t.get("speaker_id") or t.get("speaker") or "UNKNOWN"
-                c_speaker_id = turns[j].get("speaker_id") or turns[j].get("speaker") or "UNKNOWN"
+
+                # ============================
+                # ✅ 关键更新：在每个 pair 中保留 a_turn / c_turn 的 speaker_id
+                # ============================
+                a_turn_speaker_id = t.get("speaker_id", None)
+                c_turn_speaker_id = turns[j].get("speaker_id", None)
+
+                # 仍然保留 fallback（方便 downstream 使用/对齐旧字段）
+                a_speaker_id = a_turn_speaker_id or t.get("speaker") or "UNKNOWN"
+                c_speaker_id = c_turn_speaker_id or turns[j].get("speaker") or "UNKNOWN"
+
+                # same_speaker：优先用 speaker_id 比较；缺失时退回 fallback
+                if a_turn_speaker_id is not None and c_turn_speaker_id is not None:
+                    same_speaker = (a_turn_speaker_id == c_turn_speaker_id)
+                else:
+                    same_speaker = (a_speaker_id == c_speaker_id)
 
                 meta.append({
                     "a_turn_idx": i,
                     "a_time": a_time,
                     "a_idx_in_turn": a_idx_in_turn,
+
+                    # ✅ 新增：严格保留 turn 内 speaker_id
+                    "a_turn_speaker_id": a_turn_speaker_id,
+                    "c_turn_speaker_id": c_turn_speaker_id,
+
+                    # （保留旧字段，兼容原有逻辑/下游代码）
                     "a_speaker_id": a_speaker_id,
                     "assumption_text": a_text,
+
                     "c_turn_idx": j,
                     "c_time": turn_start_time(turns[j]),
                     "c_speaker_id": c_speaker_id,
                     "claim_text": c_text,
-                    "same_speaker": (a_speaker_id == c_speaker_id),
+
+                    "same_speaker": same_speaker,
                     "overlap_score": score,
                 })
 
     # =========================================================================
     # REVISED BATCH GENERATION WITH RETRY LOGIC
     # =========================================================================
-    
+
     # 1. Initialize result storage
     final_outputs = [""] * len(prompts)
-    
+
     # 2. First Pass: Standard Generation
     for s in range(0, len(prompts), batch_size):
         end = min(s + batch_size, len(prompts))
@@ -304,7 +339,7 @@ def run_episode_labeling(
     # 3. Validation & Identification of Failures
     failed_indices = []
     parsed_results = []
-    
+
     for idx, out_txt in enumerate(final_outputs):
         parsed = safe_json_extract(out_txt)
         parsed_results.append(parsed)
@@ -315,10 +350,10 @@ def run_episode_labeling(
     # 4. Retry Pass: Process failures with higher max_tokens
     if failed_indices:
         print(f"Episode {os.path.basename(episode_path)}: Retrying {len(failed_indices)}/{len(prompts)} items...")
-        
+
         # 收集需要重试的 Prompt
         retry_prompts = [prompts[i] for i in failed_indices]
-        
+
         # 分批重试，使用更大的 max_tokens
         retry_outputs_list = []
         for s in range(0, len(retry_prompts), batch_size):
@@ -327,28 +362,28 @@ def run_episode_labeling(
             # 关键：传入更大的 max_tokens
             batch_o = llm.generate_batch(batch_p, max_tokens=retry_max_tokens)
             retry_outputs_list.extend(batch_o)
-            
+
         # 5. Merge Retry Results
         for i, original_idx in enumerate(failed_indices):
             new_text = retry_outputs_list[i]
-            final_outputs[original_idx] = new_text # Update raw text
-            
+            final_outputs[original_idx] = new_text  # Update raw text
+
             # 再次尝试解析
             new_parsed = safe_json_extract(new_text)
-            parsed_results[original_idx] = new_parsed # Update parsed object
+            parsed_results[original_idx] = new_parsed  # Update parsed object
 
     # =========================================================================
 
     # Record scored candidate pairs
     pairs: List[Dict[str, Any]] = []
     for m, parsed, raw_txt in zip(meta, parsed_results, final_outputs):
-        
+
         if parsed is None:
             parsed = {
                 "entailment_score": 0,
                 "confidence": 0.0,
             }
-        
+
         clean_parsed = {
             "entailment_score": parsed.get("entailment_score", 0),
             "confidence": parsed.get("confidence", 0.0)
@@ -371,7 +406,7 @@ def run_episode_labeling(
             **m,
             "entailment_score": score,
             "confidence": conf,
-            "raw": raw_txt, # 保留 raw text 用于 debug，即使是废话
+            "raw": raw_txt,  # 保留 raw text 用于 debug，即使是废话
         })
 
     episode_id = os.path.splitext(os.path.basename(episode_path))[0]
@@ -396,19 +431,6 @@ def run_episode_labeling(
     }
 
 
-def context_window(turns: List[Dict[str, Any]], idx: int, w: int) -> str:
-    lo = max(0, idx - w)
-    hi = min(len(turns), idx + w + 1)
-    lines = []
-    for k in range(lo, hi):
-        spk = turns[k].get("speaker_id") or turns[k].get("speaker") or "SPEAKER"
-        txt = extract_turn_text(turns[k]).replace("\n", " ").strip()
-        if not txt:
-            continue
-        lines.append(f"[{k}] {spk}: {txt}")
-    return "\n".join(lines) if lines else "[NO CONTEXT]"
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--in_dir", type=str, default="data/stance_labeled")
@@ -425,8 +447,8 @@ def main():
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=2)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
-    ap.add_argument("--max_tokens", type=int, default=500) 
-    ap.add_argument("--retry_max_tokens", type=int, default=4000) 
+    ap.add_argument("--max_tokens", type=int, default=500)
+    ap.add_argument("--retry_max_tokens", type=int, default=4000)
 
     args = ap.parse_args()
 
@@ -455,7 +477,7 @@ def main():
             min_overlap=args.min_overlap,
             context_w=args.context_w,
             batch_size=args.batch_size,
-            retry_max_tokens=args.retry_max_tokens, # Pass retry limit
+            retry_max_tokens=args.retry_max_tokens,  # Pass retry limit
         ))
 
     save_json(os.path.join(args.out_dir, f"_LABELING_META_k{args.k}.json"), {
