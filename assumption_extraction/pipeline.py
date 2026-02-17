@@ -629,7 +629,6 @@ def main():
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
 
     ap.add_argument("--num_episodes", type=int, default=5000)
-    # [REMOVED] --min_words argument - no longer used
 
     ap.add_argument(
         "--max_turns_per_episode",
