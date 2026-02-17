@@ -390,14 +390,44 @@ def merge_consecutive_by_speaker_renumber(turns: List[Dict[str, Any]]) -> List[D
     return merged
 
 
-def filter_min_words_after_merge(merged: List[Dict[str, Any]], min_words: int) -> List[Dict[str, Any]]:
+# =========================================================
+# [NEW] Enforce strict speaker alternation (ABAB pattern)
+# =========================================================
+def enforce_speaker_alternation(turns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Filter by min_words AFTER merging, and renumber turn_idx again to be contiguous.
+    Filter turns to enforce strict speaker alternation (ABAB pattern).
+    
+    Rules:
+    - Keep the first turn unconditionally
+    - Then only keep turns where speaker_id differs from the last kept turn
+    - If all turns have the same speaker_id, keep all of them (monologue case)
+    - Renumber turn_idx to be contiguous 0..N-1 after filtering
     """
-    kept = [m for m in merged if count_words(m.get("turn_text", "")) >= min_words]
-    for i, m in enumerate(kept):
+    if not turns:
+        return []
+    
+    # Edge case: if all turns are from the same speaker, keep all (monologue)
+    unique_speakers = {t.get("speaker_id") for t in turns}
+    if len(unique_speakers) <= 1:
+        for i, m in enumerate(turns):
+            m["turn_idx"] = i
+        return turns
+    
+    result: List[Dict[str, Any]] = [turns[0]]
+    last_speaker = turns[0].get("speaker_id")
+    
+    for t in turns[1:]:
+        spk = t.get("speaker_id")
+        # Only keep if speaker differs from last kept turn
+        if spk != last_speaker:
+            result.append(t)
+            last_speaker = spk
+    
+    # Renumber turn_idx to be contiguous 0..N-1
+    for i, m in enumerate(result):
         m["turn_idx"] = i
-    return kept
+    
+    return result
 
 
 # =========================================================
@@ -598,9 +628,8 @@ def main():
     ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
 
-    ap.add_argument("--num_episodes", type=int, default=50)
-    ap.add_argument("--min_words", type=int, default=10)
-    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--num_episodes", type=int, default=5000)
+    # [REMOVED] --min_words argument - no longer used
 
     ap.add_argument(
         "--max_turns_per_episode",
@@ -610,9 +639,9 @@ def main():
     )
 
     ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
-    ap.add_argument("--batch_size", type=int, default=16)
+    ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
-    ap.add_argument("--tensor_parallel_size", type=int, default=1)
+    ap.add_argument("--tensor_parallel_size", type=int, default=2)
 
     args = ap.parse_args()
 
@@ -655,7 +684,7 @@ def main():
         "episodes_jsonl": str(episodes_jsonl),
         "turns_dir": str(turns_dir),
         "num_episodes_target": args.num_episodes,
-        "min_words": args.min_words,
+        # [REMOVED] "min_words" field - no longer used
         "max_turns_per_episode": args.max_turns_per_episode,
         "seed": args.seed,
         "model_name": args.model_name,
@@ -678,15 +707,17 @@ def main():
         # 1) merge consecutive same-speaker turns and renumber
         merged = merge_consecutive_by_speaker_renumber(raw_turns)
 
-        # 2) filter min_words AFTER merge (and renumber again)
-        merged = filter_min_words_after_merge(merged, min_words=args.min_words)
-        if not merged:
+        # 2) [NEW] enforce ABAB speaker alternation AFTER merge
+        merged = enforce_speaker_alternation(merged)
+        if not merged:  # edge case: all turns removed by alternation filter
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        # 3) cap AFTER merge/filter (cap counts actual LLM calls)
+        # 3) cap AFTER merge/alternation (cap counts actual LLM calls)
         if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
             merged = merged[: args.max_turns_per_episode]
+
+        log.debug(f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after merge+alternation")
 
         prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
 
@@ -707,7 +738,7 @@ def main():
             row: Dict[str, Any] = {}
             row["episode_id"] = eid
             row["turn_file"] = str(turns_path)
-            row["turn_idx"] = m["turn_idx"]  # renumbered after merge/filter
+            row["turn_idx"] = m["turn_idx"]  # renumbered after merge/alternation
             row["speaker_id"] = m["speaker_id"]
 
             # flatten aggregated meta to top-level (mfcc/F0/F1/transcript/times/etc.)

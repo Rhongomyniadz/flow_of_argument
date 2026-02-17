@@ -8,4 +8,4 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python assumption_extraction/pipeline.py --tensor_parallel_size 2 --batch_size 32 --num_episodes 5000
+python assumption_extraction/pipeline.py
