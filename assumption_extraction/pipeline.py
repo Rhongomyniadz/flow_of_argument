@@ -629,6 +629,7 @@ def main():
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
 
     ap.add_argument("--num_episodes", type=int, default=5000)
+    ap.add_argument("--seed", type=int, default=42)
 
     ap.add_argument(
         "--max_turns_per_episode",
