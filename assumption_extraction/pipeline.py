@@ -742,7 +742,7 @@ def main():
     ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
     ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
-    ap.add_argument("--tensor_parallel_size", type=int, default=2)
+    ap.add_argument("--tensor_parallel_size", type=int, default=4)
 
     args = ap.parse_args()
 
