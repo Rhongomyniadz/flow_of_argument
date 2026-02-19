@@ -659,6 +659,12 @@ def main():
 
     ap.add_argument("--num_episodes", type=int, default=5000)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument(
+        "--min_words_per_turn",
+        type=int,
+        default=10,
+        help="Drop merged turns shorter than this many words. Set 0 to disable.",
+    )
 
     ap.add_argument(
         "--max_turns_per_episode",
@@ -713,7 +719,7 @@ def main():
         "episodes_jsonl": str(episodes_jsonl),
         "turns_dir": str(turns_dir),
         "num_episodes_target": args.num_episodes,
-        # [REMOVED] "min_words" field - no longer used
+        "min_words_per_turn": args.min_words_per_turn,
         "max_turns_per_episode": args.max_turns_per_episode,
         "seed": args.seed,
         "model_name": args.model_name,
@@ -736,17 +742,23 @@ def main():
         # 1) merge consecutive same-speaker turns and renumber
         merged = merge_consecutive_by_speaker_renumber(raw_turns)
 
-        # 2) [NEW] enforce ABAB speaker alternation AFTER merge
+        # 2) remove very short merged turns (often ASR fragments like "yeah", "uh", cutoffs)
+        if args.min_words_per_turn and args.min_words_per_turn > 0:
+            merged = [m for m in merged if count_words(m.get("turn_text", "")) >= args.min_words_per_turn]
+
+        # 3) enforce ABAB speaker alternation AFTER merge/length filter
         merged = enforce_speaker_alternation(merged)
         if not merged:  # edge case: all turns removed by alternation filter
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        # 3) cap AFTER merge/alternation (cap counts actual LLM calls)
+        # 4) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
         if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
             merged = merged[: args.max_turns_per_episode]
 
-        log.debug(f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after merge+alternation")
+        log.debug(
+            f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after merge+min_words+alternation"
+        )
 
         prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
 
