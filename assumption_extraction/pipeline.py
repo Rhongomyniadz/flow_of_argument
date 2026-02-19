@@ -28,6 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger("political-by-episode")
 
 _WORD_RE = re.compile(r"\w+")
+_SPEAKER_TOKEN_RE = re.compile(r"SPEAKER_\d+")
 
 
 def count_words(text: str) -> int:
@@ -215,6 +216,35 @@ def _best_text_field(turn: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
     return best[2], best[1]
 
 
+def normalize_speaker_id(spk: Any) -> Any:
+    """
+    Normalize speaker id into a single speaker token when possible.
+
+    Examples:
+    - "SPEAKER_00,SPEAKER_01" -> "SPEAKER_00"
+    - ["SPEAKER_02", "SPEAKER_01"] -> "SPEAKER_02"
+    """
+    if spk is None:
+        return None
+
+    if isinstance(spk, list) and spk:
+        return normalize_speaker_id(spk[0])
+
+    if isinstance(spk, str):
+        s = spk.strip()
+        if not s:
+            return None
+        tokens = _SPEAKER_TOKEN_RE.findall(s)
+        if tokens:
+            return tokens[0]
+        if "," in s:
+            first = s.split(",", 1)[0].strip()
+            return first or None
+        return s
+
+    return spk
+
+
 def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[Dict[str, Any]]:
     txt = None
 
@@ -234,8 +264,7 @@ def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[Dict[str, Any]
     spk = turn.get("speaker_id", None)
     if spk is None:
         spk = turn.get("speaker", None)
-    if isinstance(spk, list) and spk:
-        spk = spk[0]
+    spk = normalize_speaker_id(spk)
 
     return {
         "turn_idx": turn_idx,
