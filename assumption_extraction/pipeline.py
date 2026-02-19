@@ -245,6 +245,31 @@ def normalize_speaker_id(spk: Any) -> Any:
     return spk
 
 
+def speaker_token_count(spk: Any) -> int:
+    """
+    Count how many speaker tokens are present in the raw speaker field.
+    Used to detect noisy rows like "SPEAKER_01,SPEAKER_00".
+    """
+    if spk is None:
+        return 0
+    if isinstance(spk, list):
+        cnt = 0
+        for x in spk:
+            cnt += speaker_token_count(x)
+        return cnt
+    if isinstance(spk, str):
+        s = spk.strip()
+        if not s:
+            return 0
+        tokens = _SPEAKER_TOKEN_RE.findall(s)
+        if tokens:
+            return len(tokens)
+        if "," in s:
+            return len([p for p in s.split(",") if p.strip()])
+        return 1
+    return 1
+
+
 def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[Dict[str, Any]]:
     txt = None
 
@@ -261,15 +286,16 @@ def extract_turn(turn: Dict[str, Any], turn_idx: int) -> Optional[Dict[str, Any]
     if not txt:
         return None
 
-    spk = turn.get("speaker_id", None)
-    if spk is None:
-        spk = turn.get("speaker", None)
-    spk = normalize_speaker_id(spk)
+    raw_spk = turn.get("speaker_id", None)
+    if raw_spk is None:
+        raw_spk = turn.get("speaker", None)
+    spk = normalize_speaker_id(raw_spk)
 
     return {
         "turn_idx": turn_idx,
         "text": txt,
         "speaker_id": spk,
+        "has_multi_speaker": speaker_token_count(raw_spk) > 1,
         "meta": dict(turn),  # keep all original metadata (mfcc/F0/F1/times/etc.)
     }
 
@@ -287,6 +313,40 @@ def load_episode_turns_raw(turns_path: Path) -> List[Dict[str, Any]]:
 # =========================================================
 # Merge + filter helpers (keep/aggregate metadata)
 # =========================================================
+def merge_multi_speaker_turns_into_previous(turns: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    For rows flagged as multi-speaker, merge them into the previous turn.
+    This handles diarization artifacts such as "SPEAKER_01,SPEAKER_00".
+    """
+    if not turns:
+        return []
+
+    out: List[Dict[str, Any]] = []
+    for t in turns:
+        if t.get("has_multi_speaker") and out:
+            prev = out[-1]
+            prev_text = prev.get("text", "")
+            cur_text = t.get("text", "")
+            if prev_text and cur_text:
+                prev["text"] = f"{prev_text} {cur_text}".strip()
+            elif cur_text:
+                prev["text"] = cur_text
+
+            prev_meta = prev.get("meta")
+            cur_meta = t.get("meta")
+            if isinstance(prev_meta, dict) and isinstance(cur_meta, dict):
+                for k, v in cur_meta.items():
+                    if k in prev_meta:
+                        continue
+                    prev_meta[k] = v
+            continue
+        out.append(t)
+
+    for i, t in enumerate(out):
+        t["turn_idx"] = i
+    return out
+
+
 def _is_number(x: Any) -> bool:
     return isinstance(x, (int, float)) and not isinstance(x, bool)
 
@@ -662,8 +722,8 @@ def main():
     ap.add_argument(
         "--min_words_per_turn",
         type=int,
-        default=10,
-        help="Drop merged turns shorter than this many words. Set 0 to disable.",
+        default=0,
+        help="Drop merged turns shorter than this many words. Default 0 keeps all turns.",
     )
 
     ap.add_argument(
@@ -739,25 +799,28 @@ def main():
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        # 1) merge consecutive same-speaker turns and renumber
-        merged = merge_consecutive_by_speaker_renumber(raw_turns)
+        # 1) merge turns with multi-speaker labels into the previous turn
+        cleaned_turns = merge_multi_speaker_turns_into_previous(raw_turns)
 
-        # 2) remove very short merged turns (often ASR fragments like "yeah", "uh", cutoffs)
+        # 2) merge consecutive same-speaker turns and renumber
+        merged = merge_consecutive_by_speaker_renumber(cleaned_turns)
+
+        # 3) optional short-turn filter (disabled by default)
         if args.min_words_per_turn and args.min_words_per_turn > 0:
             merged = [m for m in merged if count_words(m.get("turn_text", "")) >= args.min_words_per_turn]
 
-        # 3) enforce ABAB speaker alternation AFTER merge/length filter
+        # 4) enforce ABAB speaker alternation AFTER merge/length filter
         merged = enforce_speaker_alternation(merged)
         if not merged:  # edge case: all turns removed by alternation filter
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        # 4) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
+        # 5) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
         if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
             merged = merged[: args.max_turns_per_episode]
 
         log.debug(
-            f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after merge+min_words+alternation"
+            f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after multi-speaker-merge+speaker-merge+min_words+alternation"
         )
 
         prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
