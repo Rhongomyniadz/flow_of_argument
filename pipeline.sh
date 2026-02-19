@@ -8,4 +8,4 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python assumption_extraction/pipeline.py  --num_episodes 50
+python assumption_extraction/pipeline.py  --num_episodes 50 --output_root "test/"
