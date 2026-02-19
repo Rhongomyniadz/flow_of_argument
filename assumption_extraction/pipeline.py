@@ -732,6 +732,12 @@ def main():
         default=0,
         help="0 means no cap; else max merged turns to process per episode.",
     )
+    ap.add_argument(
+        "--required_num_speakers",
+        type=int,
+        default=2,
+        help="Keep only episodes with exactly this many speakers after cleaning. Set 0 to disable.",
+    )
 
     ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
     ap.add_argument("--batch_size", type=int, default=64)
@@ -781,11 +787,13 @@ def main():
         "num_episodes_target": args.num_episodes,
         "min_words_per_turn": args.min_words_per_turn,
         "max_turns_per_episode": args.max_turns_per_episode,
+        "required_num_speakers": args.required_num_speakers,
         "seed": args.seed,
         "model_name": args.model_name,
         "tensor_parallel_size": args.tensor_parallel_size,
         "episodes_written": [],
         "episodes_skipped_no_turns": 0,
+        "episodes_skipped_speaker_count_mismatch": 0,
     }
 
     written = 0
@@ -802,20 +810,31 @@ def main():
         # 1) merge turns with multi-speaker labels into the previous turn
         cleaned_turns = merge_multi_speaker_turns_into_previous(raw_turns)
 
-        # 2) merge consecutive same-speaker turns and renumber
+        # 2) keep only episodes with requested number of speakers (default: 2)
+        if args.required_num_speakers and args.required_num_speakers > 0:
+            unique_speakers = {
+                t.get("speaker_id")
+                for t in cleaned_turns
+                if t.get("speaker_id") is not None
+            }
+            if len(unique_speakers) != args.required_num_speakers:
+                manifest["episodes_skipped_speaker_count_mismatch"] += 1
+                continue
+
+        # 3) merge consecutive same-speaker turns and renumber
         merged = merge_consecutive_by_speaker_renumber(cleaned_turns)
 
-        # 3) optional short-turn filter (disabled by default)
+        # 4) optional short-turn filter (disabled by default)
         if args.min_words_per_turn and args.min_words_per_turn > 0:
             merged = [m for m in merged if count_words(m.get("turn_text", "")) >= args.min_words_per_turn]
 
-        # 4) enforce ABAB speaker alternation AFTER merge/length filter
+        # 5) enforce ABAB speaker alternation AFTER merge/length filter
         merged = enforce_speaker_alternation(merged)
         if not merged:  # edge case: all turns removed by alternation filter
             manifest["episodes_skipped_no_turns"] += 1
             continue
 
-        # 5) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
+        # 6) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
         if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
             merged = merged[: args.max_turns_per_episode]
 
