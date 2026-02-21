@@ -1,0 +1,48 @@
+{
+  "episode_id": "84824",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.455,
+      "a_idx_in_turn": 0,
+      "a_turn_speaker_id": "SPEAKER_00",
+      "c_turn_speaker_id": "SPEAKER_01",
+      "a_speaker_id": "SPEAKER_00",
+      "assumption_text": "The audience values congressional leadership on food security issues.",
+      "c_turn_idx": 1,
+      "c_time": 40.117,
+      "c_speaker_id": "SPEAKER_01",
+      "claim_text": "The US should increase, not decrease, its investment in global food security and nutrition programs.",
+      "same_speaker": false,
+      "overlap_score": 2,
+      "entailment_score": 10,
+      "confidence": 0.95,
+      "raw": "{\n  \"entailment_score\": 10,\n  \"confidence\": 0.95\n}"
+    },
+    {
+      "a_turn_idx": 0,
+      "a_time": 0.455,
+      "a_idx_in_turn": 0,
+      "a_turn_speaker_id": "SPEAKER_00",
+      "c_turn_speaker_id": "SPEAKER_01",
+      "a_speaker_id": "SPEAKER_00",
+      "assumption_text": "The audience values congressional leadership on food security issues.",
+      "c_turn_idx": 1,
+      "c_time": 40.117,
+      "c_speaker_id": "SPEAKER_01",
+      "claim_text": "Clearing additional land for agriculture increases pressure on food security and nutrition.",
+      "same_speaker": false,
+      "overlap_score": 2,
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "raw": "{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95\n}"
+    }
+  ]
+}

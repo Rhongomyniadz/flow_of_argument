@@ -1,0 +1,66 @@
+{
+  "episode_id": "82909",
+  "params": {
+    "max_future_turns": 30,
+    "max_claims_per_assumption": 15,
+    "min_overlap": 2,
+    "context_w": 2,
+    "batch_size": 64
+  },
+  "pairs": [
+    {
+      "a_turn_idx": 0,
+      "a_time": 1.707,
+      "a_idx_in_turn": 0,
+      "a_turn_speaker_id": "SPEAKER_00",
+      "c_turn_speaker_id": "SPEAKER_00",
+      "a_speaker_id": "SPEAKER_00",
+      "assumption_text": "The audience trusts Hugh Hewitt as a credible source of political commentary.",
+      "c_turn_idx": 4,
+      "c_time": 47.884,
+      "c_speaker_id": "SPEAKER_00",
+      "claim_text": "The speaker identifies as Hugh Hewitt.",
+      "same_speaker": true,
+      "overlap_score": 2,
+      "entailment_score": 1,
+      "confidence": 0.8,
+      "raw": "{\n  \"entailment_score\": 1,\n  \"confidence\": 0.8\n}"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 22.259,
+      "a_idx_in_turn": 1,
+      "a_turn_speaker_id": "SPEAKER_01",
+      "c_turn_speaker_id": "SPEAKER_00",
+      "a_speaker_id": "SPEAKER_01",
+      "assumption_text": "Support for Israel is a key factor in Democratic electoral performance.",
+      "c_turn_idx": 4,
+      "c_time": 47.884,
+      "c_speaker_id": "SPEAKER_00",
+      "claim_text": "This is full-throated support for Israel.",
+      "same_speaker": false,
+      "overlap_score": 2,
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "raw": "{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95\n}"
+    },
+    {
+      "a_turn_idx": 1,
+      "a_time": 22.259,
+      "a_idx_in_turn": 1,
+      "a_turn_speaker_id": "SPEAKER_01",
+      "c_turn_speaker_id": "SPEAKER_00",
+      "a_speaker_id": "SPEAKER_01",
+      "assumption_text": "Support for Israel is a key factor in Democratic electoral performance.",
+      "c_turn_idx": 4,
+      "c_time": 47.884,
+      "c_speaker_id": "SPEAKER_00",
+      "claim_text": "Full-throated support for Israel should cause friends of Israel and America to switch to supporting Trump in the upcoming election.",
+      "same_speaker": false,
+      "overlap_score": 2,
+      "entailment_score": 9,
+      "confidence": 0.95,
+      "raw": "{\n  \"entailment_score\": 9,\n  \"confidence\": 0.95\n}"
+    }
+  ]
+}
