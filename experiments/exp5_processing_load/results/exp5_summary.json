@@ -1,0 +1,42 @@
+{
+  "input_dir": "data/conversation_moves_labeled",
+  "output_dir": "experiments/exp5_processing_load/results",
+  "num_episodes": 2308,
+  "num_turn_rows": 69493,
+  "silence_gap_threshold_sec": 5.0,
+  "silence_gap_quantile": 0.95,
+  "min_silence_gap_sec": 5.0,
+  "latency_correlation": {
+    "n": 64065,
+    "pearson_r": 0.024538894813548123,
+    "pearson_p_approx": 5.22621057541528e-10,
+    "spearman_rho": 0.014249626187797388,
+    "spearman_p_approx": 0.0003098867928921223
+  },
+  "gap_bimodality_diagnostics": {
+    "n": 67099,
+    "skewness": 13.618874207198516,
+    "kurtosis_pearson": 403.9112082371675,
+    "bimodality_coefficient": 0.4616701167698319,
+    "gmm_bic_1": 198577.45682778693,
+    "gmm_bic_2": 143714.79266582706,
+    "gmm_prefers_2_components": true
+  },
+  "response_type_counts": {
+    "Silence/Abandonment": 6285,
+    "Clarification": 15011,
+    "Substantive": 44909,
+    "Backchannel": 3288
+  },
+  "tqdm_available": true,
+  "tqdm_enabled": false,
+  "seaborn_plotting_enabled": true,
+  "seaborn_plotting_error": null,
+  "png_outputs": [
+    "exp5_turn_gap_distribution.png",
+    "exp5_probability_curves.png",
+    "exp5_backchannel_vs_clarification_curves.png",
+    "exp5_latency_vs_load.png",
+    "exp5_load_ridge_by_response_type.png"
+  ]
+}
