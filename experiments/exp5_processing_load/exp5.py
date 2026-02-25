@@ -14,9 +14,6 @@ from tqdm.auto import tqdm
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
 
-GAP_PLOT_XMAX_SEC = 10.0
-LATENCY_PLOT_XMAX_LOAD = 50.0
-
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -365,109 +362,25 @@ def spearman_corr(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
     return pearson_corr(rx, ry)
 
 
-def gaussian_pdf(x: np.ndarray, mu: float, var: float) -> np.ndarray:
-    var = max(var, 1e-9)
-    coef = 1.0 / math.sqrt(2.0 * math.pi * var)
-    return coef * np.exp(-0.5 * ((x - mu) ** 2) / var)
+def correlation_stats(x: np.ndarray, y: np.ndarray) -> Dict[str, Optional[float]]:
+    if len(x) < 3 or len(y) < 3:
+        return {
+            "n": int(min(len(x), len(y))),
+            "pearson_r": None,
+            "pearson_p_approx": None,
+            "spearman_rho": None,
+            "spearman_p_approx": None,
+        }
 
-
-def fit_gmm2_1d(x: np.ndarray, max_iter: int = 300) -> Tuple[Dict, float]:
-    x = np.asarray(x, dtype=float)
-    n = len(x)
-
-    mu1, mu2 = np.percentile(x, [30, 70])
-    var = float(np.var(x)) + 1e-6
-    var1, var2 = var, var
-    pi = 0.5
-
-    prev_ll = -1e100
-
-    for _ in range(max_iter):
-        p1 = pi * gaussian_pdf(x, mu1, var1)
-        p2 = (1.0 - pi) * gaussian_pdf(x, mu2, var2)
-        total = p1 + p2 + 1e-12
-
-        r1 = p1 / total
-        r2 = 1.0 - r1
-
-        n1 = float(np.sum(r1))
-        n2 = float(np.sum(r2))
-
-        pi = min(max(n1 / n, 1e-4), 1.0 - 1e-4)
-        mu1 = float(np.sum(r1 * x) / max(n1, 1e-12))
-        mu2 = float(np.sum(r2 * x) / max(n2, 1e-12))
-        var1 = float(np.sum(r1 * (x - mu1) ** 2) / max(n1, 1e-12))
-        var2 = float(np.sum(r2 * (x - mu2) ** 2) / max(n2, 1e-12))
-        var1 = max(var1, 1e-8)
-        var2 = max(var2, 1e-8)
-
-        ll = float(np.sum(np.log(total)))
-        if abs(ll - prev_ll) < 1e-8:
-            break
-        prev_ll = ll
-
+    pear_r, pear_p = pearson_corr(x, y)
+    spr_r, spr_p = spearman_corr(x, y)
     return {
-        "pi": pi,
-        "mu1": mu1,
-        "mu2": mu2,
-        "var1": var1,
-        "var2": var2,
-    }, prev_ll
-
-
-def single_gaussian_loglik(x: np.ndarray) -> Tuple[Dict, float]:
-    mu = float(np.mean(x))
-    var = float(np.var(x)) + 1e-8
-    ll = float(np.sum(np.log(gaussian_pdf(x, mu, var) + 1e-12)))
-    return {"mu": mu, "var": var}, ll
-
-
-def bimodality_diagnostics(values: np.ndarray) -> Dict[str, Optional[float]]:
-    arr = values[np.isfinite(values)]
-    arr = arr[arr >= 0]
-
-    out: Dict[str, Optional[float]] = {
-        "n": int(len(arr)),
-        "skewness": None,
-        "kurtosis_pearson": None,
-        "bimodality_coefficient": None,
-        "gmm_bic_1": None,
-        "gmm_bic_2": None,
-        "gmm_prefers_2_components": None,
+        "n": int(len(x)),
+        "pearson_r": finite_or_none(pear_r),
+        "pearson_p_approx": finite_or_none(pear_p),
+        "spearman_rho": finite_or_none(spr_r),
+        "spearman_p_approx": finite_or_none(spr_p),
     }
-
-    if len(arr) < 10:
-        return out
-
-    mu = float(np.mean(arr))
-    sd = float(np.std(arr))
-    if sd <= 1e-12:
-        return out
-
-    z = (arr - mu) / sd
-    sk = float(np.mean(z ** 3))
-    ku = float(np.mean(z ** 4))
-    bc = float((sk * sk + 1.0) / ku) if ku > 0 else None
-
-    out["skewness"] = sk
-    out["kurtosis_pearson"] = ku
-    out["bimodality_coefficient"] = bc
-
-    try:
-        _, ll1 = single_gaussian_loglik(arr)
-        _, ll2 = fit_gmm2_1d(arr)
-        n = len(arr)
-        p1 = 2  # mu,var
-        p2 = 5  # pi,mu1,mu2,var1,var2
-        bic1 = -2.0 * ll1 + p1 * math.log(n)
-        bic2 = -2.0 * ll2 + p2 * math.log(n)
-        out["gmm_bic_1"] = float(bic1)
-        out["gmm_bic_2"] = float(bic2)
-        out["gmm_prefers_2_components"] = bool(bic2 < bic1)
-    except Exception:
-        pass
-
-    return out
 
 
 def kde_1d(samples: np.ndarray, grid: np.ndarray) -> np.ndarray:
@@ -541,42 +454,6 @@ def collect_load_by_response(rows: List[Dict], min_n: int = 5) -> Dict[str, np.n
     return load_by_cls
 
 
-def save_gap_distribution_png(nonneg_gaps: np.ndarray, silence_gap_threshold: float, out_path: Path) -> bool:
-    if len(nonneg_gaps) == 0:
-        return False
-    try:
-        plt.figure(figsize=(10, 6))
-        sns.histplot(
-            nonneg_gaps,
-            bins=80,
-            stat="density",
-            kde=True,
-            color="#4C78A8",
-            alpha=0.7,
-        )
-        med = float(np.median(nonneg_gaps))
-        plt.axvline(med, color="#F58518", linewidth=2, label=f"Median={med:.2f}s")
-        plt.axvline(
-            silence_gap_threshold,
-            color="#E45756",
-            linestyle="--",
-            linewidth=2,
-            label=f"Silence threshold={silence_gap_threshold:.2f}s",
-        )
-        plt.title("Turn-to-Turn Pause Distribution (endTime -> next startTime)")
-        plt.xlabel("Gap seconds")
-        plt.ylabel("Density")
-        plt.xlim(0, GAP_PLOT_XMAX_SEC)
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(out_path, dpi=200)
-        plt.close()
-        return True
-    except Exception:
-        plt.close()
-        return False
-
-
 def save_probability_curves_png(curve_rows: List[Dict], out_path: Path) -> bool:
     if not curve_rows:
         return False
@@ -630,29 +507,36 @@ def save_backchannel_vs_clarification_png(curve_rows: List[Dict], out_path: Path
         return False
 
 
-def save_latency_png(corr_pairs: List[Dict], out_path: Path) -> bool:
-    if not corr_pairs:
+def save_response_time_correlation_png(
+    response_latency: np.ndarray,
+    y: np.ndarray,
+    out_path: Path,
+    title: str,
+    ylabel: str,
+) -> bool:
+    if len(response_latency) < 3 or len(y) < 3:
         return False
     try:
-        x_corr = np.array([float(r["implicature_load"]) for r in corr_pairs], dtype=float)
-        y_corr = np.array([float(r["gap_to_next_sec"]) for r in corr_pairs], dtype=float)
-
-        if len(x_corr) > 30000:
-            idx = np.random.choice(len(x_corr), size=30000, replace=False)
-            x_plot = x_corr[idx]
-            y_plot = y_corr[idx]
+        if len(response_latency) > 30000:
+            idx = np.random.choice(len(response_latency), size=30000, replace=False)
+            x_plot = response_latency[idx]
+            y_plot = y[idx]
         else:
-            x_plot = x_corr
-            y_plot = y_corr
+            x_plot = response_latency
+            y_plot = y
 
         plt.figure(figsize=(10, 6))
         sns.scatterplot(x=x_plot, y=y_plot, s=10, alpha=0.18, linewidth=0, color="#4C78A8")
-        sns.regplot(x=x_corr, y=y_corr, scatter=False, ci=None, line_kws={"color": "#E45756", "linewidth": 2.2})
-
-        plt.title("Latency Analysis: Load vs Response Time")
-        plt.xlabel("Implicature Load L")
-        plt.ylabel("Response latency (seconds)")
-        plt.xlim(0, LATENCY_PLOT_XMAX_LOAD)
+        sns.regplot(
+            x=response_latency,
+            y=y,
+            scatter=False,
+            ci=None,
+            line_kws={"color": "#E45756", "linewidth": 2.2},
+        )
+        plt.title(title)
+        plt.xlabel("Response latency (seconds)")
+        plt.ylabel(ylabel)
         plt.tight_layout()
         plt.savefig(out_path, dpi=200)
         plt.close()
@@ -840,8 +724,24 @@ def main() -> None:
                     }
                 )
 
-    # Correlations: load vs latency
-    corr_pairs = [
+    # Correlations with response latency (gap_to_next_sec)
+    assumption_corr_pairs = [
+        r
+        for r in rows
+        if isinstance(r.get("assumption_count_in_turn"), (int, float))
+        and isinstance(r.get("gap_to_next_sec"), (int, float))
+        and math.isfinite(float(r["assumption_count_in_turn"]))
+        and math.isfinite(float(r["gap_to_next_sec"]))
+        and float(r["gap_to_next_sec"]) >= 0
+    ]
+    assumption_x = np.array([float(r["assumption_count_in_turn"]) for r in assumption_corr_pairs], dtype=float)
+    assumption_y = np.array([float(r["gap_to_next_sec"]) for r in assumption_corr_pairs], dtype=float)
+    assumption_count_latency_corr = correlation_stats(
+        assumption_x,
+        assumption_y,
+    )
+
+    load_corr_pairs = [
         r
         for r in rows
         if isinstance(r.get("implicature_load"), (int, float))
@@ -850,29 +750,12 @@ def main() -> None:
         and math.isfinite(float(r["gap_to_next_sec"]))
         and float(r["gap_to_next_sec"]) >= 0
     ]
-
-    if len(corr_pairs) >= 3:
-        x_corr = np.array([float(r["implicature_load"]) for r in corr_pairs], dtype=float)
-        y_corr = np.array([float(r["gap_to_next_sec"]) for r in corr_pairs], dtype=float)
-        pear_r, pear_p = pearson_corr(x_corr, y_corr)
-        spr_r, spr_p = spearman_corr(x_corr, y_corr)
-        latency_stats = {
-            "n": len(corr_pairs),
-            "pearson_r": finite_or_none(pear_r),
-            "pearson_p_approx": finite_or_none(pear_p),
-            "spearman_rho": finite_or_none(spr_r),
-            "spearman_p_approx": finite_or_none(spr_p),
-        }
-    else:
-        latency_stats = {
-            "n": len(corr_pairs),
-            "pearson_r": None,
-            "pearson_p_approx": None,
-            "spearman_rho": None,
-            "spearman_p_approx": None,
-        }
-
-    bimodal_stats = bimodality_diagnostics(nonneg_gaps)
+    load_x = np.array([float(r["implicature_load"]) for r in load_corr_pairs], dtype=float)
+    load_y = np.array([float(r["gap_to_next_sec"]) for r in load_corr_pairs], dtype=float)
+    implicature_load_latency_corr = correlation_stats(
+        load_x,
+        load_y,
+    )
 
     # Save CSV tables
     feature_fields = [
@@ -902,13 +785,6 @@ def main() -> None:
     write_csv(output_dir / "exp5_response_type_counts.csv", count_rows, ["response_type", "count"])
 
     png_outputs: List[str] = []
-    if save_gap_distribution_png(
-        nonneg_gaps,
-        silence_gap_threshold,
-        output_dir / "exp5_turn_gap_distribution.png",
-    ):
-        png_outputs.append("exp5_turn_gap_distribution.png")
-
     if curve_rows and save_probability_curves_png(
         curve_rows,
         output_dir / "exp5_probability_curves.png",
@@ -921,11 +797,23 @@ def main() -> None:
     ):
         png_outputs.append("exp5_backchannel_vs_clarification_curves.png")
 
-    if corr_pairs and save_latency_png(
-        corr_pairs,
-        output_dir / "exp5_latency_vs_load.png",
+    if save_response_time_correlation_png(
+        response_latency=assumption_y,
+        y=assumption_x,
+        out_path=output_dir / "exp5_assumption_count_vs_response_time.png",
+        title="Assumption Count by Response Time",
+        ylabel="Assumption count in turn",
     ):
-        png_outputs.append("exp5_latency_vs_load.png")
+        png_outputs.append("exp5_assumption_count_vs_response_time.png")
+
+    if save_response_time_correlation_png(
+        response_latency=load_y,
+        y=load_x,
+        out_path=output_dir / "exp5_implicature_load_vs_response_time.png",
+        title="Implicature Load by Response Time",
+        ylabel="Implicature Load L",
+    ):
+        png_outputs.append("exp5_implicature_load_vs_response_time.png")
 
     load_by_cls = collect_load_by_response(rows, min_n=5)
     if save_ridge_png(
@@ -942,8 +830,8 @@ def main() -> None:
         "silence_gap_threshold_sec": silence_gap_threshold,
         "silence_gap_quantile": args.silence_gap_quantile,
         "min_silence_gap_sec": args.min_silence_gap,
-        "latency_correlation": latency_stats,
-        "gap_bimodality_diagnostics": bimodal_stats,
+        "assumption_count_vs_response_time_correlation": assumption_count_latency_corr,
+        "implicature_load_vs_response_time_correlation": implicature_load_latency_corr,
         "response_type_counts": {k: int(v) for k, v in response_counts.items()},
         "tqdm_enabled": show_progress,
         "png_outputs": png_outputs,
