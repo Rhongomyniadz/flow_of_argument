@@ -14,6 +14,9 @@ from tqdm.auto import tqdm
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
 
+GAP_PLOT_XMAX_SEC = 10.0
+LATENCY_PLOT_XMAX_LOAD = 50.0
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -563,6 +566,7 @@ def save_gap_distribution_png(nonneg_gaps: np.ndarray, silence_gap_threshold: fl
         plt.title("Turn-to-Turn Pause Distribution (endTime -> next startTime)")
         plt.xlabel("Gap seconds")
         plt.ylabel("Density")
+        plt.xlim(0, GAP_PLOT_XMAX_SEC)
         plt.legend()
         plt.tight_layout()
         plt.savefig(out_path, dpi=200)
@@ -648,6 +652,7 @@ def save_latency_png(corr_pairs: List[Dict], out_path: Path) -> bool:
         plt.title("Latency Analysis: Load vs Response Time")
         plt.xlabel("Implicature Load L")
         plt.ylabel("Response latency (seconds)")
+        plt.xlim(0, LATENCY_PLOT_XMAX_LOAD)
         plt.tight_layout()
         plt.savefig(out_path, dpi=200)
         plt.close()
