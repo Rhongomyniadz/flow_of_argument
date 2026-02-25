@@ -1,0 +1,108 @@
+{
+  "input_csv": "experiments/exp5_processing_load/results/exp5_turn_level_features.csv",
+  "output_dir": "experiments/exp5_processing_load/results/high_load_tail",
+  "threshold": 25.0,
+  "n_total_rows": 69493,
+  "n_finite_load_rows": 66262,
+  "n_high_rows": 788,
+  "high_share": 0.011892185566387974,
+  "load_quantiles": {
+    "0.9": 11.911977500000003,
+    "0.95": 15.432984999999992,
+    "0.975": 19.656161666666677,
+    "0.99": 26.589467,
+    "0.995": 33.28081849999971,
+    "0.999": 68.07332250000051
+  },
+  "response_mix": {
+    "non_tail_load_lte_threshold": {
+      "Backchannel": {
+        "count": 3057,
+        "proportion": 0.046690289275132114
+      },
+      "Substantive": {
+        "count": 42333,
+        "proportion": 0.6465619940739835
+      },
+      "Clarification": {
+        "count": 14258,
+        "proportion": 0.21776583071142744
+      },
+      "Silence/Abandonment": {
+        "count": 5826,
+        "proportion": 0.08898188593945688
+      }
+    },
+    "tail_load_gt_threshold": {
+      "Backchannel": {
+        "count": 21,
+        "proportion": 0.0266497461928934
+      },
+      "Substantive": {
+        "count": 342,
+        "proportion": 0.434010152284264
+      },
+      "Clarification": {
+        "count": 309,
+        "proportion": 0.39213197969543145
+      },
+      "Silence/Abandonment": {
+        "count": 116,
+        "proportion": 0.14720812182741116
+      }
+    }
+  },
+  "latency_stats_seconds": {
+    "non_tail": {
+      "n": 63332,
+      "mean": 0.984689446093602,
+      "median": 0.7409999999999997,
+      "p90": 1.8610000000001037,
+      "p99": 4.563690000000088
+    },
+    "tail": {
+      "n": 733,
+      "mean": 1.2630832196452846,
+      "median": 0.8799999999999955,
+      "p90": 2.1170000000000084,
+      "p99": 7.391919999999981
+    }
+  },
+  "duration_stats_seconds": {
+    "non_tail": {
+      "n": 65474,
+      "mean": 42.28803784708434,
+      "median": 27.256500000000074,
+      "p90": 102.07710000000007,
+      "p99": 199.30589999999978
+    },
+    "tail": {
+      "n": 788,
+      "mean": 374.11063451776647,
+      "median": 290.241,
+      "p90": 590.3664000000003,
+      "p99": 2093.92522
+    }
+  },
+  "high_load_new_assumption_count_distribution": {
+    "3": 18,
+    "4": 39,
+    "5": 62,
+    "6": 11,
+    "7": 2,
+    "8": 11,
+    "9": 21,
+    "10": 624
+  },
+  "diagnostic_notes": [
+    "High-load turns are load > 25. They account for 1.19% of finite-load turns.",
+    "In the high-load tail, new_assumption_count=10 dominates. This suggests the tail is mainly driven by long duration, not tiny denominators.",
+    "Median duration in high-load turns is about 10.65x of non-tail turns."
+  ],
+  "outputs": [
+    "exp5_high_load_tail_dashboard.png",
+    "exp5_high_load_rows.csv",
+    "exp5_load_bin_latency_summary.csv",
+    "exp5_high_load_tail_summary.json"
+  ]
+}
