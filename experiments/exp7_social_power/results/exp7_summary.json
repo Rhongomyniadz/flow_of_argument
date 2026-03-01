@@ -1,0 +1,49 @@
+{
+  "experiment": "exp7_social_power",
+  "input_dir": "data/conversation_moves_labeled",
+  "output_dir": "experiments/exp7_social_power/results",
+  "n_violation_rows": 9367,
+  "n_conversations": 2033,
+  "short_answer_max_words": 6,
+  "model_formula_proxy": "P(policed_next) ~ violation_type * speaker_role + (1|episode_id)",
+  "operationalization": {
+    "Quantity": [
+      "Stonewalling / Non-Response",
+      "Answer with <= 6 words immediately after a question"
+    ],
+    "Relation": [
+      "Topic Shift"
+    ],
+    "Manner": [
+      "Disrupted turn type",
+      "Self-Correction move"
+    ],
+    "PolicedNext": [
+      "N+1 is a different speaker",
+      "N+1 move is a clarification request or correction / challenge"
+    ]
+  },
+  "role_turn_counts": {
+    "guest": 34124,
+    "host": 35369
+  },
+  "observed_policing_rate": {
+    "guest": 0.21925589321215563,
+    "host": 0.09972630858706807,
+    "guest_minus_host": 0.11952958462508756
+  },
+  "model_weighted_guest_minus_host_gap": 0.0845299064100373,
+  "status_shield_supported": true,
+  "interaction_effects": {
+    "role_host_x_relation": -0.37619616761824753,
+    "role_host_x_quantity": -0.14533234126549915
+  },
+  "interaction_effect_magnitude": 0.37619616761824753,
+  "model_fit": {
+    "method": "statsmodels_vb",
+    "converged": true,
+    "iterations": 141,
+    "log_likelihood": -3636.5085467734602,
+    "objective": 4641.146837342949
+  }
+}
