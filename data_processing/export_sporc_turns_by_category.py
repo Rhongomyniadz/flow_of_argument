@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 from sporc import SPORCDataset
+from tqdm import tqdm
 
 
 DEFAULT_CATEGORIES = ["sports", "commentary", "news", "religion", "business"]
@@ -170,29 +171,37 @@ def main() -> None:
             log.error("Failed to search episodes for category=%s: %s", category, e)
             continue
 
+        total_episodes = None
+        try:
+            total_episodes = len(episodes)  # type: ignore[arg-type]
+        except Exception:
+            pass
+
         written_in_category = 0
-        for episode in episodes:
-            if args.limit_per_category > 0 and written_in_category >= args.limit_per_category:
-                break
+        with tqdm(episodes, total=total_episodes, desc=f"{category}", unit="episode") as pbar:
+            for episode in pbar:
+                if args.limit_per_category > 0 and written_in_category >= args.limit_per_category:
+                    break
 
-            try:
-                turns = episode.get_all_turns()
-            except Exception as e:
-                log.warning("Skip episode in category=%s due to turn loading error: %s", category, e)
-                continue
+                try:
+                    turns = episode.get_all_turns()
+                except Exception as e:
+                    log.warning("Skip episode in category=%s due to turn loading error: %s", category, e)
+                    continue
 
-            if not turns:
-                continue
+                if not turns:
+                    continue
 
-            turns_payload: List[Dict[str, Any]] = [extract_raw_dict(t) for t in turns]
+                turns_payload: List[Dict[str, Any]] = [extract_raw_dict(t) for t in turns]
 
-            base_name = slugify_filename(get_episode_id_or_name(episode))
-            out_path = unique_output_path(out_dir, base_name)
-            with out_path.open("w", encoding="utf-8") as f:
-                json.dump(turns_payload, f, ensure_ascii=False, indent=2)
+                base_name = slugify_filename(get_episode_id_or_name(episode))
+                out_path = unique_output_path(out_dir, base_name)
+                with out_path.open("w", encoding="utf-8") as f:
+                    json.dump(turns_payload, f, ensure_ascii=False, indent=2)
 
-            written_in_category += 1
-            total_written += 1
+                written_in_category += 1
+                total_written += 1
+                pbar.set_postfix(written=written_in_category)
 
         log.info("Finished category=%s, episodes_written=%d", category, written_in_category)
 
