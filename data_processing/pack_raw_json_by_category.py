@@ -3,7 +3,7 @@ import gzip
 import json
 import logging
 from pathlib import Path
-from typing import Any, Iterable, Iterator, List, Optional, TextIO
+from typing import Any, Iterator, List, Optional, TextIO
 
 
 DEFAULT_CATEGORIES = ["business", "commentary", "news", "religion", "sports"]
@@ -39,10 +39,17 @@ def open_output(path: Path, gzip_output: bool) -> TextIO:
     return path.open(mode="w", encoding="utf-8")
 
 
+def build_output_path(out_root: Path, category: str, gzip_output: bool) -> Path:
+    category_out_dir = out_root / category
+    category_out_dir.mkdir(parents=True, exist_ok=True)
+    file_name = "jsonl.gz" if gzip_output else "jsonl"
+    return category_out_dir / file_name
+
+
 def dump_category(
     category: str,
     category_dir: Path,
-    out_dir: Path,
+    out_root: Path,
     gzip_output: bool,
     log: logging.Logger,
 ) -> tuple[int, int, int]:
@@ -51,8 +58,7 @@ def dump_category(
         log.warning("No JSON files found for category=%s in %s", category, category_dir)
         return 0, 0, 0
 
-    suffix = ".jsonl.gz" if gzip_output else ".jsonl"
-    out_path = out_dir / f"{category}{suffix}"
+    out_path = build_output_path(out_root=out_root, category=category, gzip_output=gzip_output)
 
     files_seen = 0
     files_failed = 0
@@ -89,7 +95,12 @@ def main() -> None:
         description="Bundle raw/category/*.json files into one JSONL (or JSONL.GZ) per category."
     )
     parser.add_argument("--raw-root", type=str, default="raw", help="Root directory containing category subfolders.")
-    parser.add_argument("--out-dir", type=str, default=None, help="Output directory for bundled files.")
+    parser.add_argument(
+        "--out-dir",
+        type=str,
+        default="data",
+        help="Output root directory (writes to <out-dir>/<category>/jsonl.gz by default).",
+    )
     parser.add_argument(
         "--categories",
         nargs="+",
@@ -114,7 +125,7 @@ def main() -> None:
     if not raw_root.exists() or not raw_root.is_dir():
         raise FileNotFoundError(f"raw root does not exist or is not a directory: {raw_root}")
 
-    out_dir = Path(args.out_dir) if args.out_dir else raw_root
+    out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     categories = iter_category_names(raw_root, None if args.auto_categories else args.categories)
@@ -137,7 +148,7 @@ def main() -> None:
         files_seen, files_failed, records_written = dump_category(
             category=category,
             category_dir=category_dir,
-            out_dir=out_dir,
+            out_root=out_dir,
             gzip_output=gzip_output,
             log=log,
         )
