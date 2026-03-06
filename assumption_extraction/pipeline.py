@@ -11,21 +11,17 @@ from tqdm import tqdm
 from vllm import LLM, SamplingParams
 
 # =========================================================
-# Defaults (YOUR political interview data)
+# Defaults (category-based raw episode JSON files)
 # =========================================================
-DEFAULT_EPISODES_JSONL = Path(
-    "/shared/3/projects/podcastPoliticians/polAppearanceData/polEpsDataCleaned_Interviews_withDBIds.jsonl"
-)
-DEFAULT_TURNS_DIR = Path(
-    "/shared/3/projects/podcasts/transcriptionQueue/turns/pol_appearance_episodes_interviews"
-)
-DEFAULT_OUT_ROOT = Path("data/political")
+DEFAULT_RAW_ROOT = Path("raw")
+DEFAULT_OUT_ROOT = Path("data")
+DEFAULT_CATEGORIES = ["business", "commentary", "news", "religion", "sports"]
 
 # =========================================================
 # Logging
 # =========================================================
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("political-by-episode")
+log = logging.getLogger("assumption-by-category")
 
 _WORD_RE = re.compile(r"\w+")
 _SPEAKER_TOKEN_RE = re.compile(r"SPEAKER_\d+")
@@ -308,6 +304,43 @@ def load_episode_turns_raw(turns_path: Path) -> List[Dict[str, Any]]:
             continue
         out.append(et)
     return out
+
+
+def discover_category_dirs(raw_root: Path, categories: Optional[List[str]], auto_categories: bool) -> List[str]:
+    if auto_categories:
+        return sorted([p.name for p in raw_root.iterdir() if p.is_dir()])
+    if categories:
+        return categories
+    return DEFAULT_CATEGORIES
+
+
+def discover_episode_files(raw_root: Path, category: str) -> List[Path]:
+    cat_dir = raw_root / category
+    if not cat_dir.exists() or not cat_dir.is_dir():
+        return []
+    return sorted([p for p in cat_dir.rglob("*.json") if p.is_file()])
+
+
+def infer_episode_id(turns_path: Path, raw_turns: List[Dict[str, Any]]) -> str:
+    for t in raw_turns:
+        meta = t.get("meta")
+        if not isinstance(meta, dict):
+            continue
+        for key in ("episode_id", "episodeId", "id"):
+            val = meta.get(key)
+            if val is None:
+                continue
+            s = str(val).strip()
+            if s:
+                return s
+    return turns_path.stem
+
+
+def sanitize_filename_stem(value: Any) -> str:
+    s = str(value).strip()
+    s = re.sub(r"[^\w.\-]+", "_", s)
+    s = s.strip("._")
+    return s or "unknown_episode"
 
 
 # =========================================================
@@ -709,15 +742,27 @@ class LLMInterface:
 
 
 # =========================================================
-# Main: sample N episodes; write one json per episode id
+# Main: process raw/{category} episodes; write to data/{category}
 # =========================================================
 def main():
-    ap = argparse.ArgumentParser(description="Sample N episodes; run Prompt; save one JSON per episode id.")
-    ap.add_argument("--episodes_jsonl", type=str, default=str(DEFAULT_EPISODES_JSONL))
-    ap.add_argument("--turns_dir", type=str, default=str(DEFAULT_TURNS_DIR))
+    ap = argparse.ArgumentParser(
+        description="Process raw/{category}/*.json episodes; run Prompt; save outputs to data/{category}."
+    )
+    ap.add_argument("--raw_root", type=str, default=str(DEFAULT_RAW_ROOT))
     ap.add_argument("--output_root", type=str, default=str(DEFAULT_OUT_ROOT))
+    ap.add_argument("--categories", nargs="+", default=DEFAULT_CATEGORIES)
+    ap.add_argument(
+        "--auto_categories",
+        action="store_true",
+        help="Discover all category folders under --raw_root. Overrides --categories.",
+    )
 
-    ap.add_argument("--num_episodes", type=int, default=5000)
+    ap.add_argument(
+        "--num_episodes",
+        type=int,
+        default=0,
+        help="Per category: number of episodes to write. 0 means all.",
+    )
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument(
         "--min_words_per_turn",
@@ -725,7 +770,6 @@ def main():
         default=0,
         help="Drop merged turns shorter than this many words. Default 0 keeps all turns.",
     )
-
     ap.add_argument(
         "--max_turns_per_episode",
         type=int,
@@ -735,185 +779,193 @@ def main():
     ap.add_argument(
         "--required_num_speakers",
         type=int,
-        default=2,
+        default=0,
         help="Keep only episodes with exactly this many speakers after cleaning. Set 0 to disable.",
     )
-
-    ap.add_argument("--episodes_to_try", type=int, default=20000, help="Max eligible episodes to consider while filling num_episodes.")
+    ap.add_argument(
+        "--episodes_to_try",
+        type=int,
+        default=0,
+        help="Per category candidate cap before filtering. 0 means all files in that category.",
+    )
     ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=4)
 
     args = ap.parse_args()
 
-    episodes_jsonl = Path(args.episodes_jsonl)
-    turns_dir = Path(args.turns_dir)
-    out_root = Path(args.output_root)
+    raw_root = Path(args.raw_root)
+    out_base = Path(args.output_root)
 
-    if not episodes_jsonl.exists():
-        raise FileNotFoundError(f"Episodes JSONL not found: {episodes_jsonl}")
-    if not turns_dir.exists():
-        raise FileNotFoundError(f"Turns dir not found: {turns_dir}")
+    if not raw_root.exists() or not raw_root.is_dir():
+        raise FileNotFoundError(f"Raw root not found or not a directory: {raw_root}")
+    out_base.mkdir(parents=True, exist_ok=True)
 
-    log.info("Loading episode ids from %s", episodes_jsonl)
-    ep_meta = load_episode_id_and_meta(episodes_jsonl)
-    ep_ids = list(ep_meta.keys())
-    log.info("Episode ids loaded: %d", len(ep_ids))
-
-    log.info("Building turns index from %s", turns_dir)
-    turns_index = build_turns_index(turns_dir)
-    log.info("Indexed turns files: %d", len(turns_index))
-
-    eligible = [eid for eid in ep_ids if eid in turns_index]
-    log.info("Episode ids with turns files present: %d", len(eligible))
-    if not eligible:
-        log.error("No eligible episode ids (id not found as a turns filename).")
+    categories = discover_category_dirs(raw_root, args.categories, args.auto_categories)
+    if not categories:
+        log.error("No categories to process under raw_root=%s", raw_root)
         return
-
-    rng = random.Random(args.seed)
-    rng.shuffle(eligible)
-    eligible = eligible[: min(len(eligible), args.episodes_to_try)]
-
-    parsed_dir = out_root / "parsed"
-    raw_dir = out_root / "raw"
-    parsed_dir.mkdir(parents=True, exist_ok=True)
-    raw_dir.mkdir(parents=True, exist_ok=True)
+    log.info("Categories to process: %s", ", ".join(categories))
 
     llm = LLMInterface(model_name=args.model_name, tensor_parallel_size=args.tensor_parallel_size)
+    rng = random.Random(args.seed)
 
-    manifest = {
-        "episodes_jsonl": str(episodes_jsonl),
-        "turns_dir": str(turns_dir),
-        "num_episodes_target": args.num_episodes,
+    global_manifest: Dict[str, Any] = {
+        "raw_root": str(raw_root),
+        "output_root": str(out_base),
+        "categories": categories,
+        "num_episodes_per_category": args.num_episodes,
+        "episodes_to_try_per_category": args.episodes_to_try,
         "min_words_per_turn": args.min_words_per_turn,
         "max_turns_per_episode": args.max_turns_per_episode,
         "required_num_speakers": args.required_num_speakers,
         "seed": args.seed,
         "model_name": args.model_name,
         "tensor_parallel_size": args.tensor_parallel_size,
-        "episodes_written": [],
-        "episodes_skipped_no_turns": 0,
-        "episodes_skipped_speaker_count_mismatch": 0,
+        "category_manifests": {},
     }
 
-    written = 0
-    for eid in tqdm(eligible, desc="Episodes processed"):
-        if written >= args.num_episodes:
-            break
-
-        turns_path = turns_index[eid]
-        raw_turns = load_episode_turns_raw(turns_path)
-        if not raw_turns:
-            manifest["episodes_skipped_no_turns"] += 1
+    for category in categories:
+        episode_files = discover_episode_files(raw_root, category)
+        if not episode_files:
+            log.warning("No episode JSON files found for category=%s", category)
             continue
 
-        # 1) merge turns with multi-speaker labels into the previous turn
-        cleaned_turns = merge_multi_speaker_turns_into_previous(raw_turns)
+        rng.shuffle(episode_files)
+        if args.episodes_to_try and args.episodes_to_try > 0:
+            episode_files = episode_files[: min(len(episode_files), args.episodes_to_try)]
 
-        # 2) keep only episodes with requested number of speakers (default: 2)
-        if args.required_num_speakers and args.required_num_speakers > 0:
-            unique_speakers = {
-                t.get("speaker_id")
-                for t in cleaned_turns
-                if t.get("speaker_id") is not None
-            }
-            if len(unique_speakers) != args.required_num_speakers:
-                manifest["episodes_skipped_speaker_count_mismatch"] += 1
+        out_root = out_base / category
+        parsed_dir = out_root / "parsed"
+        raw_dir = out_root / "raw"
+        parsed_dir.mkdir(parents=True, exist_ok=True)
+        raw_dir.mkdir(parents=True, exist_ok=True)
+
+        manifest: Dict[str, Any] = {
+            "category": category,
+            "raw_category_dir": str(raw_root / category),
+            "num_episodes_target": args.num_episodes,
+            "episodes_to_try": args.episodes_to_try,
+            "min_words_per_turn": args.min_words_per_turn,
+            "max_turns_per_episode": args.max_turns_per_episode,
+            "required_num_speakers": args.required_num_speakers,
+            "seed": args.seed,
+            "model_name": args.model_name,
+            "tensor_parallel_size": args.tensor_parallel_size,
+            "episodes_written": [],
+            "episodes_skipped_no_turns": 0,
+            "episodes_skipped_speaker_count_mismatch": 0,
+        }
+
+        written = 0
+        for turns_path in tqdm(episode_files, desc=f"{category}: Episodes processed"):
+            if args.num_episodes and args.num_episodes > 0 and written >= args.num_episodes:
+                break
+
+            raw_turns = load_episode_turns_raw(turns_path)
+            if not raw_turns:
+                manifest["episodes_skipped_no_turns"] += 1
                 continue
 
-        # 3) merge consecutive same-speaker turns and renumber
-        merged = merge_consecutive_by_speaker_renumber(cleaned_turns)
+            cleaned_turns = merge_multi_speaker_turns_into_previous(raw_turns)
 
-        # 4) optional short-turn filter (disabled by default)
-        if args.min_words_per_turn and args.min_words_per_turn > 0:
-            merged = [m for m in merged if count_words(m.get("turn_text", "")) >= args.min_words_per_turn]
-
-        # 5) enforce ABAB speaker alternation AFTER merge/length filter
-        merged = enforce_speaker_alternation(merged)
-        if not merged:  # edge case: all turns removed by alternation filter
-            manifest["episodes_skipped_no_turns"] += 1
-            continue
-
-        # 6) cap AFTER merge/filter/alternation (cap counts actual LLM calls)
-        if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
-            merged = merged[: args.max_turns_per_episode]
-
-        log.debug(
-            f"Episode {eid}: {len(raw_turns)} raw → {len(merged)} after multi-speaker-merge+speaker-merge+min_words+alternation"
-        )
-
-        prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
-
-        outputs: List[str] = []
-        for start in range(0, len(prompts), args.batch_size):
-            outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
-
-        parsed_rows = []
-        raw_rows = []
-        parsed_ok = 0
-
-        for m, raw_out in zip(merged, outputs):
-            norm = parse_and_normalize_llm(raw_out)
-
-            meta = m.get("meta", {}) if isinstance(m.get("meta"), dict) else {}
-
-            # ---- put metadata BEFORE explicit/assumption ----
-            row: Dict[str, Any] = {}
-            row["episode_id"] = eid
-            row["turn_file"] = str(turns_path)
-            row["turn_idx"] = m["turn_idx"]  # renumbered after merge/alternation
-            row["speaker_id"] = m["speaker_id"]
-
-            # flatten aggregated meta to top-level (mfcc/F0/F1/transcript/times/etc.)
-            for k, v in meta.items():
-                if k in row:
+            if args.required_num_speakers and args.required_num_speakers > 0:
+                unique_speakers = {
+                    t.get("speaker_id")
+                    for t in cleaned_turns
+                    if t.get("speaker_id") is not None
+                }
+                if len(unique_speakers) != args.required_num_speakers:
+                    manifest["episodes_skipped_speaker_count_mismatch"] += 1
                     continue
-                row[k] = v
 
-            # keep merged text
-            row["turn_text"] = m["turn_text"]
+            merged = merge_consecutive_by_speaker_renumber(cleaned_turns)
 
-            # finally add LLM results
-            if norm is not None:
-                parsed_ok += 1
-                row.update(norm)
+            if args.min_words_per_turn and args.min_words_per_turn > 0:
+                merged = [m for m in merged if count_words(m.get("turn_text", "")) >= args.min_words_per_turn]
 
-            parsed_rows.append(row)
+            merged = enforce_speaker_alternation(merged)
+            if not merged:
+                manifest["episodes_skipped_no_turns"] += 1
+                continue
 
-            raw_rows.append({"turn_idx": m["turn_idx"], "turn_text": m["turn_text"], "raw_output": raw_out})
+            if args.max_turns_per_episode and args.max_turns_per_episode > 0 and len(merged) > args.max_turns_per_episode:
+                merged = merged[: args.max_turns_per_episode]
 
-        out_parsed = parsed_dir / f"{eid}.json"
-        out_raw = raw_dir / f"{eid}_raw.json"
-        with open(out_parsed, "w", encoding="utf-8") as f:
-            json.dump(parsed_rows, f, indent=2, ensure_ascii=False)
-        with open(out_raw, "w", encoding="utf-8") as f:
-            json.dump(raw_rows, f, indent=2, ensure_ascii=False)
+            prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
+            outputs: List[str] = []
+            for start in range(0, len(prompts), args.batch_size):
+                outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
 
-        meta_ep = ep_meta.get(eid, {})
-        manifest["episodes_written"].append(
-            {
-                "episode_id": eid,
-                "turn_file": str(turns_path),
-                "n_turns_written": len(parsed_rows),
-                "parsed_ok": parsed_ok,
-                "parsed_path": str(out_parsed),
-                "raw_path": str(out_raw),
-                "title_ep": meta_ep.get("title_ep"),
-                "pubDate_ep": meta_ep.get("pubDate_ep"),
-                "rssKey": meta_ep.get("rssKey"),
-                "guid_ep": meta_ep.get("guid_ep"),
-                "key": meta_ep.get("key"),
-            }
-        )
+            parsed_rows = []
+            raw_rows = []
+            parsed_ok = 0
 
-        written += 1
+            episode_id = infer_episode_id(turns_path, raw_turns)
+            episode_file_stem = sanitize_filename_stem(turns_path.stem)
 
-    manifest_path = out_root / "manifest_by_episode.json"
-    with open(manifest_path, "w", encoding="utf-8") as f:
-        json.dump(manifest, f, indent=2, ensure_ascii=False)
+            for m, raw_out in zip(merged, outputs):
+                norm = parse_and_normalize_llm(raw_out)
+                meta = m.get("meta", {}) if isinstance(m.get("meta"), dict) else {}
 
-    log.info("Done. Episode files written: %d", written)
-    log.info("Manifest: %s", manifest_path)
+                row: Dict[str, Any] = {}
+                row["category"] = category
+                row["episode_id"] = episode_id
+                row["turn_file"] = str(turns_path)
+                row["turn_idx"] = m["turn_idx"]
+                row["speaker_id"] = m["speaker_id"]
+
+                for k, v in meta.items():
+                    if k in row:
+                        continue
+                    row[k] = v
+
+                row["turn_text"] = m["turn_text"]
+
+                if norm is not None:
+                    parsed_ok += 1
+                    row.update(norm)
+
+                parsed_rows.append(row)
+                raw_rows.append({"turn_idx": m["turn_idx"], "turn_text": m["turn_text"], "raw_output": raw_out})
+
+            out_parsed = parsed_dir / f"{episode_file_stem}.json"
+            out_raw = raw_dir / f"{episode_file_stem}_raw.json"
+            with open(out_parsed, "w", encoding="utf-8") as f:
+                json.dump(parsed_rows, f, indent=2, ensure_ascii=False)
+            with open(out_raw, "w", encoding="utf-8") as f:
+                json.dump(raw_rows, f, indent=2, ensure_ascii=False)
+
+            manifest["episodes_written"].append(
+                {
+                    "category": category,
+                    "episode_id": episode_id,
+                    "source_episode_path": str(turns_path),
+                    "n_turns_written": len(parsed_rows),
+                    "parsed_ok": parsed_ok,
+                    "parsed_path": str(out_parsed),
+                    "raw_path": str(out_raw),
+                }
+            )
+            written += 1
+
+        manifest_path = out_root / "manifest_by_episode.json"
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, ensure_ascii=False)
+
+        global_manifest["category_manifests"][category] = {
+            "episodes_input_considered": len(episode_files),
+            "episodes_written": written,
+            "manifest_path": str(manifest_path),
+        }
+
+        log.info("Category=%s done. Episode files written: %d. Manifest: %s", category, written, manifest_path)
+
+    global_manifest_path = out_base / "manifest_by_category.json"
+    with open(global_manifest_path, "w", encoding="utf-8") as f:
+        json.dump(global_manifest, f, indent=2, ensure_ascii=False)
+
+    log.info("Done. Category manifest: %s", global_manifest_path)
 
 
 if __name__ == "__main__":
