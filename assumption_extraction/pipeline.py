@@ -718,8 +718,8 @@ class LLMInterface:
         min_p: float = 0.1,
         top_k: int = 20,
         repetition_penalty: float = 1.1,
-        max_tokens: int = 1200,
-        max_model_len: int = 100000,
+        max_tokens: int = 512,
+        max_model_len: int = 8192,
     ):
         self.llm = LLM(
             model=model_name,
@@ -779,8 +779,8 @@ def main():
     ap.add_argument(
         "--required_num_speakers",
         type=int,
-        default=0,
-        help="Keep only episodes with exactly this many speakers after cleaning. Set 0 to disable.",
+        default=2,
+        help="Keep only episodes with exactly this many speakers after cleaning. Default 2. Set 0 to disable.",
     )
     ap.add_argument(
         "--episodes_to_try",
@@ -788,9 +788,26 @@ def main():
         default=0,
         help="Per category candidate cap before filtering. 0 means all files in that category.",
     )
-    ap.add_argument("--batch_size", type=int, default=64)
+    ap.add_argument(
+        "--batch_size",
+        type=int,
+        default=0,
+        help="Prompt chunk size per llm.generate() call. Set <=0 to let vLLM schedule from the full prompt list.",
+    )
     ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
     ap.add_argument("--tensor_parallel_size", type=int, default=4)
+    ap.add_argument(
+        "--max_tokens",
+        type=int,
+        default=512,
+        help="Maximum generation tokens per turn (vLLM SamplingParams.max_tokens).",
+    )
+    ap.add_argument(
+        "--max_model_len",
+        type=int,
+        default=8192,
+        help="Maximum context window length for the model runtime.",
+    )
 
     args = ap.parse_args()
 
@@ -807,7 +824,12 @@ def main():
         return
     log.info("Categories to process: %s", ", ".join(categories))
 
-    llm = LLMInterface(model_name=args.model_name, tensor_parallel_size=args.tensor_parallel_size)
+    llm = LLMInterface(
+        model_name=args.model_name,
+        tensor_parallel_size=args.tensor_parallel_size,
+        max_tokens=args.max_tokens,
+        max_model_len=args.max_model_len,
+    )
     rng = random.Random(args.seed)
 
     global_manifest: Dict[str, Any] = {
@@ -816,12 +838,15 @@ def main():
         "categories": categories,
         "num_episodes_per_category": args.num_episodes,
         "episodes_to_try_per_category": args.episodes_to_try,
+        "batch_size": args.batch_size,
         "min_words_per_turn": args.min_words_per_turn,
         "max_turns_per_episode": args.max_turns_per_episode,
         "required_num_speakers": args.required_num_speakers,
         "seed": args.seed,
         "model_name": args.model_name,
         "tensor_parallel_size": args.tensor_parallel_size,
+        "max_tokens": args.max_tokens,
+        "max_model_len": args.max_model_len,
         "category_manifests": {},
     }
 
@@ -846,12 +871,15 @@ def main():
             "raw_category_dir": str(raw_root / category),
             "num_episodes_target": args.num_episodes,
             "episodes_to_try": args.episodes_to_try,
+            "batch_size": args.batch_size,
             "min_words_per_turn": args.min_words_per_turn,
             "max_turns_per_episode": args.max_turns_per_episode,
             "required_num_speakers": args.required_num_speakers,
             "seed": args.seed,
             "model_name": args.model_name,
             "tensor_parallel_size": args.tensor_parallel_size,
+            "max_tokens": args.max_tokens,
+            "max_model_len": args.max_model_len,
             "episodes_written": [],
             "episodes_skipped_no_turns": 0,
             "episodes_skipped_speaker_count_mismatch": 0,
@@ -893,9 +921,12 @@ def main():
                 merged = merged[: args.max_turns_per_episode]
 
             prompts = [PROMPT.format(turn_text=m["turn_text"]) for m in merged]
-            outputs: List[str] = []
-            for start in range(0, len(prompts), args.batch_size):
-                outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
+            if args.batch_size and args.batch_size > 0:
+                outputs: List[str] = []
+                for start in range(0, len(prompts), args.batch_size):
+                    outputs.extend(llm.generate_batch(prompts[start : start + args.batch_size]))
+            else:
+                outputs = llm.generate_batch(prompts)
 
             parsed_rows = []
             raw_rows = []
