@@ -718,8 +718,8 @@ class LLMInterface:
         min_p: float = 0.1,
         top_k: int = 20,
         repetition_penalty: float = 1.1,
-        max_tokens: int = 512,
-        max_model_len: int = 8192,
+        max_tokens: int = 2048,
+        max_model_len: int = 32768,
     ):
         self.llm = LLM(
             model=model_name,
@@ -799,13 +799,13 @@ def main():
     ap.add_argument(
         "--max_tokens",
         type=int,
-        default=512,
+        default=2048,
         help="Maximum generation tokens per turn (vLLM SamplingParams.max_tokens).",
     )
     ap.add_argument(
         "--max_model_len",
         type=int,
-        default=8192,
+        default=32768,
         help="Maximum context window length for the model runtime.",
     )
 
