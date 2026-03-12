@@ -10,6 +10,4 @@
 
 python assumption_extraction/pipeline.py \
     --tensor_parallel_size 4 \
-    --batch_size 0 \
-    --max_tokens 512 \
-    --max_model_len 8192
+    --batch_size 0

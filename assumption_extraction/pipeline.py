@@ -172,13 +172,13 @@ def _explode_obj(obj: Any) -> Iterable[Any]:
 
 
 def iter_turn_records(path: Path) -> Iterator[Dict[str, Any]]:
-    yielded_any = False
+    yielded_turn = False
     for obj in iter_json_objects_jsonl(path):
-        yielded_any = True
         for t in _explode_obj(obj):
             if isinstance(t, dict):
+                yielded_turn = True
                 yield t
-    if yielded_any:
+    if yielded_turn:
         return
     for obj in iter_json_objects_rawdecode(path):
         for t in _explode_obj(obj):
