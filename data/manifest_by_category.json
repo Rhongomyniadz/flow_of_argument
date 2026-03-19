@@ -2,11 +2,7 @@
   "raw_root": "raw",
   "output_root": "data",
   "categories": [
-    "business",
-    "commentary",
-    "news",
-    "religion",
-    "sports"
+    "commentary"
   ],
   "num_episodes_per_category": 0,
   "episodes_to_try_per_category": 0,
@@ -16,34 +12,14 @@
   "required_num_speakers": 2,
   "seed": 42,
   "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-  "tensor_parallel_size": 4,
-  "max_tokens": 512,
-  "max_model_len": 8192,
+  "tensor_parallel_size": 2,
+  "max_tokens": 2048,
+  "max_model_len": 32768,
   "category_manifests": {
-    "business": {
-      "episodes_input_considered": 53726,
-      "episodes_written": 0,
-      "manifest_path": "data/business/manifest_by_episode.json"
-    },
     "commentary": {
       "episodes_input_considered": 11855,
-      "episodes_written": 0,
+      "episodes_written": 1765,
       "manifest_path": "data/commentary/manifest_by_episode.json"
-    },
-    "news": {
-      "episodes_input_considered": 37933,
-      "episodes_written": 0,
-      "manifest_path": "data/news/manifest_by_episode.json"
-    },
-    "religion": {
-      "episodes_input_considered": 67556,
-      "episodes_written": 0,
-      "manifest_path": "data/religion/manifest_by_episode.json"
-    },
-    "sports": {
-      "episodes_input_considered": 42863,
-      "episodes_written": 0,
-      "manifest_path": "data/sports/manifest_by_episode.json"
     }
   }
 }

@@ -8,4 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python data_processing/turn_type_labeler.py
+python data_processing/turn_type_labeler.py \
+    --categories business commentary news religion sports \
+    --tensor_parallel_size 2 \
+    --batch_size 0

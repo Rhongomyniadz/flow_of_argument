@@ -11,6 +11,10 @@ from vllm import LLM, SamplingParams
 
 
 MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+DEFAULT_DATA_ROOT = "data"
+DEFAULT_INPUT_SUBDIR = "parsed"
+DEFAULT_OUTPUT_SUBDIR = "turn_type_labeled"
+DEFAULT_CATEGORIES = ["business", "commentary", "news", "religion", "sports"]
 
 
 class LLMInterface:
@@ -110,6 +114,31 @@ def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
+def discover_category_dirs(
+    data_root: str,
+    categories: Optional[List[str]],
+    auto_categories: bool,
+    input_subdir: str,
+) -> List[str]:
+    if auto_categories:
+        found: List[str] = []
+        if not os.path.isdir(data_root):
+            return found
+        for name in sorted(os.listdir(data_root)):
+            category_dir = os.path.join(data_root, name)
+            if not os.path.isdir(category_dir):
+                continue
+            if os.path.isdir(os.path.join(category_dir, input_subdir)):
+                found.append(name)
+        return found
+    return categories if categories else DEFAULT_CATEGORIES
+
+
+def discover_episode_files(data_root: str, category: str, input_subdir: str) -> List[str]:
+    pattern = os.path.join(data_root, category, input_subdir, "*.json")
+    return sorted(glob.glob(pattern))
+
+
 def load_episode_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -167,51 +196,114 @@ def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input_dir", type=str, default="data/political/parsed")
-    ap.add_argument("--output_dir", type=str, default="data/turn_type_labeled/")
-    ap.add_argument("--batch_size", type=int, default=64)
+    ap.add_argument("--input_root", type=str, default=DEFAULT_DATA_ROOT)
+    ap.add_argument("--output_root", type=str, default=DEFAULT_DATA_ROOT)
+    ap.add_argument("--input_subdir", type=str, default=DEFAULT_INPUT_SUBDIR)
+    ap.add_argument("--output_subdir", type=str, default=DEFAULT_OUTPUT_SUBDIR)
+    ap.add_argument("--categories", nargs="+", default=DEFAULT_CATEGORIES)
+    ap.add_argument(
+        "--auto_categories",
+        action="store_true",
+        help="Discover all category folders under --input_root that contain --input_subdir.",
+    )
+    ap.add_argument(
+        "--batch_size",
+        type=int,
+        default=64,
+        help="Prompt chunk size per llm.generate() call. Set <=0 to label a full episode in one batch.",
+    )
     ap.add_argument("--max_turn_chars", type=int, default=3000)
+    ap.add_argument("--model_name", type=str, default=MODEL_NAME)
+    ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
+    ap.add_argument("--tensor_parallel_size", type=int, default=2)
+    ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--top_p", type=float, default=1.0)
+    ap.add_argument("--min_p", type=float, default=0.0)
+    ap.add_argument("--top_k", type=int, default=0)
+    ap.add_argument("--repetition_penalty", type=float, default=1.05)
+    ap.add_argument("--download_dir", type=str, default="/shared/4/models")
+    ap.add_argument("--max_tokens", type=int, default=8)
     args = ap.parse_args()
 
-    ensure_dir(args.output_dir)
-    files = sorted(glob.glob(os.path.join(args.input_dir, "*.json")))
-    if not files:
-        raise FileNotFoundError(f"No .json files found under: {args.input_dir}")
+    if not os.path.isdir(args.input_root):
+        raise FileNotFoundError(f"Input root not found or not a directory: {args.input_root}")
 
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
-    llm_if = LLMInterface()  # use defaults exactly as defined
+    ensure_dir(args.output_root)
+    categories = discover_category_dirs(
+        args.input_root,
+        args.categories,
+        args.auto_categories,
+        args.input_subdir,
+    )
+    if not categories:
+        raise FileNotFoundError(
+            f"No categories found under input_root={args.input_root} with input_subdir={args.input_subdir}"
+        )
 
-    for fp in tqdm(files, desc="TurnType Episodes"):
-        obj = load_episode_json(fp)
-        turns = extract_turns(obj)
-        if not turns:
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
+    llm_if = LLMInterface(
+        model_name=args.model_name,
+        gpu_memory_utilization=args.gpu_memory_utilization,
+        tensor_parallel_size=args.tensor_parallel_size,
+        temperature=args.temperature,
+        top_p=args.top_p,
+        min_p=args.min_p,
+        top_k=args.top_k,
+        repetition_penalty=args.repetition_penalty,
+        download_dir=args.download_dir,
+        max_tokens=args.max_tokens,
+    )
+
+    for category in categories:
+        files = discover_episode_files(args.input_root, category, args.input_subdir)
+        if not files:
+            print(
+                f"Skipping category={category}: no .json files found under "
+                f"{os.path.join(args.input_root, category, args.input_subdir)}"
+            )
             continue
 
-        episode_id = get_episode_id(turns, fp)
-        out_path = os.path.join(args.output_dir, f"{episode_id}.json")
+        output_dir = os.path.join(args.output_root, category, args.output_subdir)
+        ensure_dir(output_dir)
 
-        prompts: List[str] = []
-        for t in turns:
-            txt = truncate_text(t.get("turn_text", ""), args.max_turn_chars)
-            user = TURN_TYPE_PROMPT.format(turn_text=txt)
-            prompts.append(build_chat_prompt(tokenizer, user))
+        for fp in tqdm(files, desc=f"{category}: TurnType Episodes"):
+            obj = load_episode_json(fp)
+            turns = extract_turns(obj)
+            if not turns:
+                continue
 
-        outputs: List[str] = []
-        for i in range(0, len(prompts), args.batch_size):
-            outputs.extend(llm_if.generate_batch(prompts[i:i + args.batch_size]))
+            episode_id = get_episode_id(turns, fp)
+            out_path = os.path.join(output_dir, f"{episode_id}.json")
 
-        labeled_turns: List[Dict[str, Any]] = []
-        for t, out_text in zip(turns, outputs):
-            rec = dict(t)
-            lab = normalize_label(out_text)
-            rec["turn_type_label"] = lab
-            if lab is None:
-                rec["turn_type_label_error"] = out_text[:400]
-            labeled_turns.append(rec)
+            prompts: List[str] = []
+            for t in turns:
+                txt = truncate_text(t.get("turn_text", ""), args.max_turn_chars)
+                user = TURN_TYPE_PROMPT.format(turn_text=txt)
+                prompts.append(build_chat_prompt(tokenizer, user))
 
-        save_episode_turns(out_path, labeled_turns)
+            if args.batch_size and args.batch_size > 0:
+                outputs: List[str] = []
+                for i in range(0, len(prompts), args.batch_size):
+                    outputs.extend(llm_if.generate_batch(prompts[i:i + args.batch_size]))
+            else:
+                outputs = llm_if.generate_batch(prompts)
 
-    print(f"Done. Wrote per-episode files under: {args.output_dir}")
+            labeled_turns: List[Dict[str, Any]] = []
+            for t, out_text in zip(turns, outputs):
+                rec = dict(t)
+                rec.setdefault("category", category)
+                lab = normalize_label(out_text)
+                rec["turn_type_label"] = lab
+                if lab is None:
+                    rec["turn_type_label_error"] = out_text[:400]
+                labeled_turns.append(rec)
+
+            save_episode_turns(out_path, labeled_turns)
+
+    print(
+        "Done. Wrote per-episode files under: "
+        f"{args.output_root}/{{category}}/{args.output_subdir}"
+    )
 
 
 if __name__ == "__main__":
