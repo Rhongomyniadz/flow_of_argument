@@ -13,7 +13,7 @@ from tqdm.auto import tqdm
 
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
-
+    
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -47,8 +47,7 @@ def normalize_text(text: str) -> str:
     return text.strip()
 
 
-def extract_assumption_texts(turn: Dict) -> List[str]:
-    raw = turn.get("assumptions", [])
+def extract_unique_texts(raw: object) -> List[str]:
     if not isinstance(raw, list):
         return []
 
@@ -69,6 +68,14 @@ def extract_assumption_texts(turn: Dict) -> List[str]:
         seen.add(norm)
         texts.append(norm)
     return texts
+
+
+def extract_assumption_texts(turn: Dict) -> List[str]:
+    return extract_unique_texts(turn.get("assumptions", []))
+
+
+def extract_explicit_texts(turn: Dict) -> List[str]:
+    return extract_unique_texts(turn.get("explicit_propositions", []))
 
 
 def get_duration_sec(turn: Dict) -> float:
@@ -191,6 +198,8 @@ def build_turn_rows(
     )
     for episode_id, turns in episode_iter:
         history_assumptions = set()
+        prior_gap_sum = 0.0
+        prior_gap_count = 0
 
         for i, turn in enumerate(turns):
             next_turn = turns[i + 1] if i + 1 < len(turns) else None
@@ -202,6 +211,7 @@ def build_turn_rows(
 
             duration = get_duration_sec(turn)
             assumptions = extract_assumption_texts(turn)
+            explicit_props = extract_explicit_texts(turn)
             new_assumptions = [a for a in assumptions if a not in history_assumptions]
             new_count = len(new_assumptions)
 
@@ -210,6 +220,7 @@ def build_turn_rows(
                 load = duration / new_count
 
             gap_sec = get_gap_sec(turn, next_turn) if next_turn is not None else float("nan")
+            avg_prev_gap = (prior_gap_sum / prior_gap_count) if prior_gap_count > 0 else float("nan")
             response_type = classify_response_type(
                 next_turn=next_turn,
                 gap_sec=gap_sec,
@@ -223,15 +234,21 @@ def build_turn_rows(
                 "turn_idx": turn_idx,
                 "duration_sec": duration,
                 "assumption_count_in_turn": len(assumptions),
+                "explicit_statement_count": len(explicit_props),
                 "new_assumption_count": new_count,
                 "implicature_load": load,
+                "response_delay_at_time_n": gap_sec,
                 "gap_to_next_sec": gap_sec,
+                "average_response_time_0_to_n_minus_1": avg_prev_gap,
                 "next_response_type": response_type,
                 "next_turn_type_label": (next_turn or {}).get("turn_type_label"),
                 "next_conversation_move_label": (next_turn or {}).get("conversation_move_label"),
             }
             rows.append(row)
             history_assumptions.update(assumptions)
+            if math.isfinite(gap_sec) and gap_sec >= 0:
+                prior_gap_sum += gap_sec
+                prior_gap_count += 1
 
     rows.sort(key=lambda r: (str(r["episode_id"]), int(r["turn_idx"])))
     return rows
@@ -380,6 +397,171 @@ def correlation_stats(x: np.ndarray, y: np.ndarray) -> Dict[str, Optional[float]
         "pearson_p_approx": finite_or_none(pear_p),
         "spearman_rho": finite_or_none(spr_r),
         "spearman_p_approx": finite_or_none(spr_p),
+    }
+
+
+def distribution_stats(x: np.ndarray) -> Dict[str, Optional[float]]:
+    arr = np.asarray(x, dtype=float)
+    arr = arr[np.isfinite(arr)]
+    if len(arr) == 0:
+        return {
+            "n": 0,
+            "mean": None,
+            "std": None,
+            "min": None,
+            "median": None,
+            "q90": None,
+            "q99": None,
+            "max": None,
+            "p_zero": None,
+            "skewness": None,
+            "q99_over_median": None,
+            "supports_log1p": False,
+        }
+
+    mean = float(np.mean(arr))
+    std = float(np.std(arr))
+    min_val = float(np.min(arr))
+    median = float(np.quantile(arr, 0.50))
+    q90 = float(np.quantile(arr, 0.90))
+    q99 = float(np.quantile(arr, 0.99))
+    max_val = float(np.max(arr))
+    p_zero = float(np.mean(arr == 0.0))
+    if std > 1e-12 and len(arr) >= 3:
+        skewness = float(np.mean(((arr - mean) / std) ** 3))
+    else:
+        skewness = float("nan")
+
+    return {
+        "n": int(len(arr)),
+        "mean": mean,
+        "std": std,
+        "min": min_val,
+        "median": median,
+        "q90": q90,
+        "q99": q99,
+        "max": max_val,
+        "p_zero": p_zero,
+        "skewness": finite_or_none(skewness),
+        "q99_over_median": finite_or_none(q99 / median) if median > 0 else None,
+        "supports_log1p": bool(min_val >= 0.0),
+    }
+
+
+def transform_feature(
+    values: np.ndarray,
+    apply_log1p: bool,
+    standardize_feature: bool,
+) -> Tuple[np.ndarray, Dict[str, Optional[float]]]:
+    out = np.asarray(values, dtype=float)
+    if apply_log1p:
+        out = np.log1p(out)
+
+    transform_meta: Dict[str, Optional[float]] = {
+        "used_log1p": bool(apply_log1p),
+        "used_standardize": bool(standardize_feature),
+        "standardize_mean": None,
+        "standardize_std": None,
+    }
+    if standardize_feature:
+        out, mu, sd = standardize(out)
+        transform_meta["standardize_mean"] = finite_or_none(mu)
+        transform_meta["standardize_std"] = finite_or_none(sd)
+    return out, transform_meta
+
+
+def transformed_term_name(name: str, use_log1p: bool, standardize_feature: bool) -> str:
+    term = f"log1p({name})" if use_log1p else name
+    if standardize_feature:
+        term = f"z({term})"
+    return term
+
+
+def coefficient_row(name: str, estimate: float, std_error: float) -> Dict[str, Optional[float]]:
+    z_score = estimate / std_error if std_error > 1e-12 else float("nan")
+    p_value = 2.0 * (1.0 - normal_cdf(abs(z_score))) if math.isfinite(z_score) else float("nan")
+    ci_low = estimate - (1.96 * std_error)
+    ci_high = estimate + (1.96 * std_error)
+    return {
+        "term": name,
+        "estimate": finite_or_none(estimate),
+        "std_error_hc3": finite_or_none(std_error),
+        "z_score": finite_or_none(z_score),
+        "p_value_approx": finite_or_none(p_value),
+        "ci95_low": finite_or_none(ci_low),
+        "ci95_high": finite_or_none(ci_high),
+    }
+
+
+def fit_linear_regression(
+    outcome: np.ndarray,
+    predictors: Sequence[Tuple[str, np.ndarray]],
+) -> Optional[Dict[str, object]]:
+    y = np.asarray(outcome, dtype=float)
+    if len(y) < 10:
+        return None
+
+    columns = [np.ones(len(y), dtype=float)]
+    term_names = ["Intercept"]
+    for name, values in predictors:
+        arr = np.asarray(values, dtype=float)
+        if arr.shape != y.shape:
+            return None
+        columns.append(arr)
+        term_names.append(name)
+
+    X = np.column_stack(columns)
+    finite_mask = np.all(np.isfinite(X), axis=1) & np.isfinite(y)
+    if int(np.sum(finite_mask)) < max(10, len(term_names) + 2):
+        return None
+
+    X = X[finite_mask]
+    y = y[finite_mask]
+    n, p = X.shape
+    xtx = X.T @ X
+    xtx_inv = np.linalg.pinv(xtx)
+    beta = xtx_inv @ (X.T @ y)
+    fitted = X @ beta
+    resid = y - fitted
+
+    dof = max(n - p, 1)
+    sse = float(np.sum(resid ** 2))
+    sst = float(np.sum((y - np.mean(y)) ** 2))
+    r_squared = 1.0 - (sse / sst) if sst > 1e-12 else float("nan")
+    adj_r_squared = (
+        1.0 - ((1.0 - r_squared) * (n - 1) / dof)
+        if math.isfinite(r_squared) and dof > 0
+        else float("nan")
+    )
+    rmse = math.sqrt(max(sse / dof, 0.0))
+
+    leverage = np.sum(X * (X @ xtx_inv), axis=1)
+    leverage = np.clip(leverage, 0.0, 1.0 - 1e-8)
+    omega = (resid / (1.0 - leverage)) ** 2
+    meat = X.T @ (X * omega[:, None])
+    cov_hc3 = xtx_inv @ meat @ xtx_inv
+    std_errors = np.sqrt(np.clip(np.diag(cov_hc3), 0.0, None))
+
+    resid_std = float(np.std(resid))
+    resid_skew = (
+        float(np.mean(((resid - np.mean(resid)) / resid_std) ** 3))
+        if resid_std > 1e-12 and len(resid) >= 3
+        else float("nan")
+    )
+
+    coef_rows = [
+        coefficient_row(str(term_names[i]), float(beta[i]), float(std_errors[i]))
+        for i in range(len(term_names))
+    ]
+
+    return {
+        "n": int(n),
+        "num_parameters": int(p),
+        "r_squared": finite_or_none(r_squared),
+        "adjusted_r_squared": finite_or_none(adj_r_squared),
+        "rmse": finite_or_none(rmse),
+        "residual_skewness": finite_or_none(resid_skew),
+        "coefficients": coef_rows,
     }
 
 
@@ -757,15 +939,171 @@ def main() -> None:
         load_y,
     )
 
+    # Response-delay regression:
+    # response_delay_at_time_n ~ implicature_load + explicit_statement_count + average_response_time_0_to_n_minus_1
+    regression_rows = [
+        r
+        for r in rows
+        if isinstance(r.get("response_delay_at_time_n"), (int, float))
+        and isinstance(r.get("implicature_load"), (int, float))
+        and isinstance(r.get("explicit_statement_count"), (int, float))
+        and isinstance(r.get("average_response_time_0_to_n_minus_1"), (int, float))
+        and math.isfinite(float(r["response_delay_at_time_n"]))
+        and math.isfinite(float(r["implicature_load"]))
+        and math.isfinite(float(r["explicit_statement_count"]))
+        and math.isfinite(float(r["average_response_time_0_to_n_minus_1"]))
+        and float(r["response_delay_at_time_n"]) >= 0
+        and float(r["average_response_time_0_to_n_minus_1"]) >= 0
+    ]
+
+    response_delay_regression: Optional[Dict[str, object]] = None
+    response_delay_regression_coeffs: List[Dict[str, Optional[float]]] = []
+    response_delay_distribution_checks: Dict[str, Dict[str, object]] = {}
+
+    if len(regression_rows) >= 10:
+        delay_raw = np.array([float(r["response_delay_at_time_n"]) for r in regression_rows], dtype=float)
+        load_raw = np.array([float(r["implicature_load"]) for r in regression_rows], dtype=float)
+        explicit_raw = np.array([float(r["explicit_statement_count"]) for r in regression_rows], dtype=float)
+        avg_prev_raw = np.array([float(r["average_response_time_0_to_n_minus_1"]) for r in regression_rows], dtype=float)
+
+        raw_stats = {
+            "response_delay_at_time_n": distribution_stats(delay_raw),
+            "implicature_load": distribution_stats(load_raw),
+            "explicit_statement_count": distribution_stats(explicit_raw),
+            "average_response_time_0_to_n_minus_1": distribution_stats(avg_prev_raw),
+        }
+
+        selected_transforms = {
+            "response_delay_at_time_n": {"use_log1p": True, "standardize": False},
+            "implicature_load": {"use_log1p": False, "standardize": False},
+            "explicit_statement_count": {"use_log1p": False, "standardize": False},
+            "average_response_time_0_to_n_minus_1": {"use_log1p": True, "standardize": False},
+        }
+
+        delay_modeled, delay_meta = transform_feature(
+            delay_raw,
+            apply_log1p=selected_transforms["response_delay_at_time_n"]["use_log1p"],
+            standardize_feature=selected_transforms["response_delay_at_time_n"]["standardize"],
+        )
+        load_modeled, load_meta = transform_feature(
+            load_raw,
+            apply_log1p=selected_transforms["implicature_load"]["use_log1p"],
+            standardize_feature=selected_transforms["implicature_load"]["standardize"],
+        )
+        explicit_modeled, explicit_meta = transform_feature(
+            explicit_raw,
+            apply_log1p=selected_transforms["explicit_statement_count"]["use_log1p"],
+            standardize_feature=selected_transforms["explicit_statement_count"]["standardize"],
+        )
+        avg_prev_modeled, avg_prev_meta = transform_feature(
+            avg_prev_raw,
+            apply_log1p=selected_transforms["average_response_time_0_to_n_minus_1"]["use_log1p"],
+            standardize_feature=selected_transforms["average_response_time_0_to_n_minus_1"]["standardize"],
+        )
+
+        response_delay_distribution_checks = {
+            "response_delay_at_time_n": {
+                "raw": raw_stats["response_delay_at_time_n"],
+                "modeled": distribution_stats(delay_modeled),
+                **delay_meta,
+            },
+            "implicature_load": {
+                "raw": raw_stats["implicature_load"],
+                "modeled": distribution_stats(load_modeled),
+                **load_meta,
+            },
+            "explicit_statement_count": {
+                "raw": raw_stats["explicit_statement_count"],
+                "modeled": distribution_stats(explicit_modeled),
+                **explicit_meta,
+            },
+            "average_response_time_0_to_n_minus_1": {
+                "raw": raw_stats["average_response_time_0_to_n_minus_1"],
+                "modeled": distribution_stats(avg_prev_modeled),
+                **avg_prev_meta,
+            },
+        }
+
+        fitted_outcome_name = transformed_term_name(
+            "response_delay_at_time_n",
+            use_log1p=bool(selected_transforms["response_delay_at_time_n"]["use_log1p"]),
+            standardize_feature=bool(selected_transforms["response_delay_at_time_n"]["standardize"]),
+        )
+        fitted_predictor_names = [
+            transformed_term_name(
+                "implicature_load",
+                use_log1p=bool(selected_transforms["implicature_load"]["use_log1p"]),
+                standardize_feature=bool(selected_transforms["implicature_load"]["standardize"]),
+            ),
+            transformed_term_name(
+                "explicit_statement_count",
+                use_log1p=bool(selected_transforms["explicit_statement_count"]["use_log1p"]),
+                standardize_feature=bool(selected_transforms["explicit_statement_count"]["standardize"]),
+            ),
+            transformed_term_name(
+                "average_response_time_0_to_n_minus_1",
+                use_log1p=bool(selected_transforms["average_response_time_0_to_n_minus_1"]["use_log1p"]),
+                standardize_feature=bool(selected_transforms["average_response_time_0_to_n_minus_1"]["standardize"]),
+            ),
+        ]
+
+        regression_fit = fit_linear_regression(
+            outcome=delay_modeled,
+            predictors=[
+                (fitted_predictor_names[0], load_modeled),
+                (fitted_predictor_names[1], explicit_modeled),
+                (fitted_predictor_names[2], avg_prev_modeled),
+            ],
+        )
+
+        if regression_fit is not None:
+            response_delay_regression_coeffs = list(regression_fit["coefficients"])
+            response_delay_regression = {
+                "requested_formula": (
+                    "response_delay_at_time_n ~ implicature_load + explicit_statement_count + "
+                    "average_response_time_0_to_n_minus_1"
+                ),
+                "fitted_formula": (
+                    f"{fitted_outcome_name} ~ "
+                    f"{fitted_predictor_names[0]} + {fitted_predictor_names[1]} + {fitted_predictor_names[2]}"
+                ),
+                "n": int(regression_fit["n"]),
+                "num_parameters": int(regression_fit["num_parameters"]),
+                "r_squared": regression_fit["r_squared"],
+                "adjusted_r_squared": regression_fit["adjusted_r_squared"],
+                "rmse_on_modeled_scale": regression_fit["rmse"],
+                "residual_skewness": regression_fit["residual_skewness"],
+                "transform_selection": {
+                    "source": "exp5_response_delay_transform_grid",
+                    "selected_model_id": "log1p__raw__raw__log1p",
+                    "selection_rule": "highest adjusted_r_squared in the transform grid",
+                },
+                "operationalization": {
+                    "response_delay_at_time_n": "gap_to_next_sec",
+                    "explicit_statement_count": "count of unique explicit_propositions in the current turn",
+                    "average_response_time_0_to_n_minus_1": (
+                        "within-episode mean of prior non-negative response delays before turn n"
+                    ),
+                },
+                "coefficients": {
+                    str(row["term"]): row["estimate"]
+                    for row in response_delay_regression_coeffs
+                    if row.get("term") is not None
+                },
+            }
+
     # Save CSV tables
     feature_fields = [
         "episode_id",
         "turn_idx",
         "duration_sec",
         "assumption_count_in_turn",
+        "explicit_statement_count",
         "new_assumption_count",
         "implicature_load",
+        "response_delay_at_time_n",
         "gap_to_next_sec",
+        "average_response_time_0_to_n_minus_1",
         "next_response_type",
         "next_turn_type_label",
         "next_conversation_move_label",
@@ -779,6 +1117,36 @@ def main() -> None:
     if coef_rows:
         coef_fields = ["class", "intercept", "coef_scaled_load", "scaler_mean", "scaler_std"]
         write_csv(output_dir / "exp5_logit_coefficients.csv", coef_rows, coef_fields)
+
+    if response_delay_regression_coeffs:
+        regression_coef_fields = [
+            "term",
+            "estimate",
+            "std_error_hc3",
+            "z_score",
+            "p_value_approx",
+            "ci95_low",
+            "ci95_high",
+        ]
+        write_csv(
+            output_dir / "exp5_response_delay_regression_coefficients.csv",
+            response_delay_regression_coeffs,
+            regression_coef_fields,
+        )
+
+    if response_delay_regression is not None:
+        (output_dir / "exp5_response_delay_regression_summary.json").write_text(
+            json.dumps(
+                {
+                    "regression": response_delay_regression,
+                    "distribution_checks": response_delay_distribution_checks,
+                },
+                ensure_ascii=False,
+                indent=2,
+                default=json_default,
+            ),
+            encoding="utf-8",
+        )
 
     response_counts = Counter([str(r.get("next_response_type")) for r in rows if r.get("next_response_type")])
     count_rows = [{"response_type": k, "count": v} for k, v in sorted(response_counts.items())]
@@ -832,6 +1200,8 @@ def main() -> None:
         "min_silence_gap_sec": args.min_silence_gap,
         "assumption_count_vs_response_time_correlation": assumption_count_latency_corr,
         "implicature_load_vs_response_time_correlation": implicature_load_latency_corr,
+        "response_delay_regression": response_delay_regression,
+        "response_delay_regression_distribution_checks": response_delay_distribution_checks,
         "response_type_counts": {k: int(v) for k, v in response_counts.items()},
         "tqdm_enabled": show_progress,
         "png_outputs": png_outputs,
