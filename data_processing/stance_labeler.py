@@ -175,6 +175,13 @@ def parse_stance_digit(raw: str) -> int:
     return 3  # safe fallback
 
 
+def discover_input_files(in_dir: str, pattern: str) -> List[str]:
+    direct_paths = sorted(glob.glob(os.path.join(in_dir, pattern)))
+    if direct_paths:
+        return direct_paths
+    return sorted(glob.glob(os.path.join(in_dir, "*", pattern)))
+
+
 # ----------------- main pipeline -----------------
 
 def main():
@@ -199,7 +206,7 @@ def main():
         max_tokens=args.max_tokens,
     )
 
-    in_paths = sorted(glob.glob(os.path.join(args.in_dir, args.glob)))
+    in_paths = discover_input_files(args.in_dir, args.glob)
     if not in_paths:
         raise FileNotFoundError(f"No input files found under {args.in_dir} matching {args.glob}")
 

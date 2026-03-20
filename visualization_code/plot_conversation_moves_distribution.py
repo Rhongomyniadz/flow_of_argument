@@ -7,18 +7,21 @@ import numpy as np
 def load_conversation_moves_data(directory):
     """Load all conversation move labels from JSON files in the given directory."""
     move_labels = []
-    
-    # Get all JSON files in the directory
-    json_files = [f for f in os.listdir(directory) if f.endswith('.json')]
+
+    json_files = []
+    for root, _, files in os.walk(directory):
+        for file_name in files:
+            if file_name.endswith('.json'):
+                json_files.append(os.path.join(root, file_name))
     print(f"Found {len(json_files)} JSON files in {directory}")
-    
+
     # Load conversation move labels from each file
-    for json_file in json_files:
-        file_path = os.path.join(directory, json_file)
+    for file_path in json_files:
+        json_file = os.path.relpath(file_path, directory)
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                
+
                 # Each file contains a list of records
                 if isinstance(data, list):
                     for record in data:

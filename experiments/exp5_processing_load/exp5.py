@@ -121,10 +121,17 @@ def sort_turns(turns: Iterable[Dict]) -> List[Dict]:
     return [x[2] for x in indexed]
 
 
+def discover_episode_files(input_dir: Path) -> List[Path]:
+    direct_files = sorted(input_dir.glob("*.json"))
+    if direct_files:
+        return direct_files
+    return sorted(input_dir.glob("*/*.json"))
+
+
 def load_episodes(input_dir: Path, show_progress: bool = True) -> Tuple[List[Tuple[str, List[Dict]]], np.ndarray]:
     episodes: List[Tuple[str, List[Dict]]] = []
     gaps: List[float] = []
-    files = sorted(input_dir.glob("*.json"))
+    files = discover_episode_files(input_dir)
     file_iter = maybe_tqdm(files, enabled=show_progress, desc="Loading episodes", unit="file")
     for fp in file_iter:
         try:

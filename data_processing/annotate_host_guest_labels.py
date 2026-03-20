@@ -315,6 +315,13 @@ def write_json(path: Path, obj: object) -> None:
     path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def discover_input_files(input_dir: Path) -> List[Path]:
+    direct_files = sorted(input_dir.glob("*.json"))
+    if direct_files:
+        return direct_files
+    return sorted(input_dir.glob("*/*.json"))
+
+
 def annotate_directory(
     input_dir: Path,
     metadata_by_ep: Dict[int, Dict],
@@ -322,7 +329,7 @@ def annotate_directory(
     summary_out: Optional[Path] = None,
     mapping_csv_out: Optional[Path] = None,
 ) -> Dict:
-    files = sorted(input_dir.glob("*.json"))
+    files = discover_input_files(input_dir)
     summary_rows: List[Dict] = []
     method_counts: Counter = Counter()
     confidence_vals: List[float] = []
@@ -458,4 +465,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=conversation_moves_labeler
-#SBATCH --output=_log/conversation_moves_labeler.out
+#SBATCH --job-name=conversation_moves_labeler_political
+#SBATCH --output=_log/conversation_moves_labeler_political.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1
@@ -9,6 +9,6 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 python data_processing/conversation_moves_labeler.py \
-    --categories business commentary news religion sports \
+    --categories political \
     --tensor_parallel_size 2 \
     --batch_size 0

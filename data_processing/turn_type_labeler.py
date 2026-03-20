@@ -263,7 +263,7 @@ def main():
             )
             continue
 
-        output_dir = os.path.join(args.output_root, category, args.output_subdir)
+        output_dir = os.path.join(args.output_root, args.output_subdir, category)
         ensure_dir(output_dir)
 
         for fp in tqdm(files, desc=f"{category}: TurnType Episodes"):
@@ -302,7 +302,7 @@ def main():
 
     print(
         "Done. Wrote per-episode files under: "
-        f"{args.output_root}/{{category}}/{args.output_subdir}"
+        f"{args.output_root}/{args.output_subdir}/{{category}}"
     )
 
 

@@ -204,7 +204,8 @@ def build_rows(
     short_answer_max_words: int,
     max_files: int = 0,
 ) -> Tuple[List[Dict], Counter, Counter]:
-    files = sorted(input_dir.glob("*.json"))
+    direct_files = sorted(input_dir.glob("*.json"))
+    files = direct_files if direct_files else sorted(input_dir.glob("*/*.json"))
     if max_files > 0:
         files = files[:max_files]
 
