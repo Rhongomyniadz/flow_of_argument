@@ -1,18 +1,24 @@
-import os
-import json
-import glob
 import argparse
-from typing import List, Dict, Any, Tuple
+import glob
+import json
+import os
+from typing import Any, Dict, List, Optional, Tuple
 
 from tqdm import tqdm
-
-# ---- your vLLM wrapper (as provided) ----
 from vllm import LLM, SamplingParams
+
+
+MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+DEFAULT_DATA_ROOT = "data"
+DEFAULT_INPUT_SUBDIR = "conversation_moves_labeled"
+DEFAULT_OUTPUT_SUBDIR = "stance_labeled"
+DEFAULT_CATEGORIES = ["business", "commentary", "news", "political", "religion", "sports"]
+
 
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        model_name: str = MODEL_NAME,
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
         temperature: float = 0.0,
@@ -43,24 +49,61 @@ class LLMInterface:
         return [o.outputs[0].text.strip() for o in out]
 
 
-# ----------------- helpers -----------------
-
 def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
-def load_json(path: str) -> Any:
+
+def discover_category_dirs(
+    data_root: str,
+    categories: Optional[List[str]],
+    auto_categories: bool,
+    input_subdir: str,
+) -> List[str]:
+    category_root = os.path.join(data_root, input_subdir)
+    if auto_categories:
+        found: List[str] = []
+        if not os.path.isdir(category_root):
+            return found
+        for name in sorted(os.listdir(category_root)):
+            category_dir = os.path.join(category_root, name)
+            if os.path.isdir(category_dir):
+                found.append(name)
+        return found
+    return categories if categories else DEFAULT_CATEGORIES
+
+
+def discover_episode_files(data_root: str, input_subdir: str, category: str) -> List[str]:
+    pattern = os.path.join(data_root, input_subdir, category, "*.json")
+    return sorted(glob.glob(pattern))
+
+
+def load_episode_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_json(path: str, obj: Any) -> None:
-    ensure_dir(os.path.dirname(path))
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
+
+def extract_turns(obj: Any) -> List[Dict[str, Any]]:
+    if isinstance(obj, list):
+        return obj
+    if isinstance(obj, dict) and isinstance(obj.get("turns"), list):
+        return obj["turns"]
+    raise ValueError("Unrecognized JSON format: expected list or dict with 'turns' list.")
+
+
+def get_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
+    if turns and turns[0].get("episode_id") is not None:
+        return str(turns[0]["episode_id"])
+    return os.path.splitext(os.path.basename(fallback_path))[0]
+
+
+def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(turns, f, ensure_ascii=False, indent=2)
+
 
 def simple_tokenize(text: str) -> List[str]:
-    # lightweight "token" approximation (whitespace split).
-    # If you want exact tokenizer counts, plug in the HF tokenizer later.
     return text.strip().split()
+
 
 def truncate_to_last_k_tokens(text: str, k: int) -> str:
     if k <= 0:
@@ -70,24 +113,24 @@ def truncate_to_last_k_tokens(text: str, k: int) -> str:
         return text
     return " ".join(toks[-k:])
 
+
 def extract_turn_text(turn: Dict[str, Any]) -> str:
-    # prioritize chosen_text_key if available; fallback to transcript / turn_text
     key = turn.get("chosen_text_key")
-    if isinstance(key, str) and key in turn and isinstance(turn[key], str):
+    if isinstance(key, str) and isinstance(turn.get(key), str):
         return turn[key]
     for cand in ("transcript", "turn_text", "text"):
-        if cand in turn and isinstance(turn[cand], str):
+        if isinstance(turn.get(cand), str):
             return turn[cand]
     return ""
 
+
 def format_history_for_prompt(history_turns: List[Tuple[str, str]]) -> str:
-    # history_turns: [(speaker, text), ...]
-    # keep it compact but explicit
     lines = []
-    for spk, txt in history_turns:
-        txt = txt.replace("\n", " ").strip()
-        lines.append(f"{spk}: {txt}")
+    for speaker, text in history_turns:
+        clean_text = text.replace("\n", " ").strip()
+        lines.append(f"{speaker}: {clean_text}")
     return "\n".join(lines)
+
 
 def build_prompts_for_episode(
     turns: List[Dict[str, Any]],
@@ -95,41 +138,28 @@ def build_prompts_for_episode(
     use_speaker: bool = True,
     stance_target: str = "immediately_previous_turn",
 ) -> List[str]:
-    """
-    stance_target:
-      - "immediately_previous_turn": stance of current turn toward the last turn
-      - "previous_nontrivial_turn": stance toward last non-empty turn text
-    """
-    prompts = []
-    history_accum: List[Tuple[str, str]] = []  # full growing history (speaker, text)
+    prompts: List[str] = []
+    history_accum: List[Tuple[str, str]] = []
 
-    for i, t in enumerate(turns):
-        cur_text = extract_turn_text(t).replace("\n", " ").strip()
-        cur_speaker = t.get("speaker_id") or t.get("speaker") or "SPEAKER"
+    for i, turn in enumerate(turns):
+        cur_text = extract_turn_text(turn).replace("\n", " ").strip()
+        cur_speaker = turn.get("speaker_id") or turn.get("speaker") or "SPEAKER"
         cur_label = cur_speaker if use_speaker else "SPEAKER"
 
-        # identify target text (what current turn is responding to)
         target_text = ""
-        if i == 0:
-            target_text = ""
-        else:
+        if i > 0:
             if stance_target == "previous_nontrivial_turn":
                 j = i - 1
                 while j >= 0:
-                    cand = extract_turn_text(turns[j]).replace("\n", " ").strip()
-                    if cand:
-                        target_text = cand
+                    candidate_text = extract_turn_text(turns[j]).replace("\n", " ").strip()
+                    if candidate_text:
+                        target_text = candidate_text
                         break
                     j -= 1
             else:
                 target_text = extract_turn_text(turns[i - 1]).replace("\n", " ").strip()
 
-        # build context from full conversation so far (excluding current)
-        # then truncate to last k tokens
-        history_str_full = format_history_for_prompt(history_accum)
-        history_str = truncate_to_last_k_tokens(history_str_full, k)
-
-        # prompt: force single-digit output
+        history_str = truncate_to_last_k_tokens(format_history_for_prompt(history_accum), k)
         prompt = f"""You are doing stance detection in a conversation.
 
 Task:
@@ -158,93 +188,137 @@ Current turn:
 Answer (single digit 1-5):"""
         prompts.append(prompt)
 
-        # update history accumulator AFTER building prompt
-        if cur_text:
-            history_accum.append((cur_label, cur_text))
-        else:
-            history_accum.append((cur_label, ""))
+        history_accum.append((cur_label, cur_text))
 
     return prompts
 
+
 def parse_stance_digit(raw: str) -> int:
     raw = (raw or "").strip()
-    # common model outputs: "5", "5.", "Answer: 5", etc.
     for ch in raw:
         if ch in "12345":
             return int(ch)
-    return 3  # safe fallback
+    return 3
 
-
-def discover_input_files(in_dir: str, pattern: str) -> List[str]:
-    direct_paths = sorted(glob.glob(os.path.join(in_dir, pattern)))
-    if direct_paths:
-        return direct_paths
-    return sorted(glob.glob(os.path.join(in_dir, "*", pattern)))
-
-
-# ----------------- main pipeline -----------------
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--in_dir", type=str, default="data/conversation_moves_labeled")
-    ap.add_argument("--out_dir", type=str, default="data/stance_labeled")
-    ap.add_argument("--k", type=int, default=512, help="max prior-context tokens (whitespace tokens)")
-    ap.add_argument("--glob", type=str, default="*.json")
-    ap.add_argument("--batch_size", type=int, default=64)
-    ap.add_argument("--tensor_parallel_size", type=int, default=2)
+    ap.add_argument("--input_root", type=str, default=DEFAULT_DATA_ROOT)
+    ap.add_argument("--output_root", type=str, default=DEFAULT_DATA_ROOT)
+    ap.add_argument("--input_subdir", type=str, default=DEFAULT_INPUT_SUBDIR)
+    ap.add_argument("--output_subdir", type=str, default=DEFAULT_OUTPUT_SUBDIR)
+    ap.add_argument("--categories", nargs="+", default=DEFAULT_CATEGORIES)
+    ap.add_argument(
+        "--auto_categories",
+        action="store_true",
+        help="Discover all category folders under --input_root/--input_subdir.",
+    )
+    ap.add_argument("--k", type=int, default=512, help="Max prior-context whitespace tokens.")
+    ap.add_argument(
+        "--batch_size",
+        type=int,
+        default=64,
+        help="Prompt chunk size per llm.generate() call. Set <=0 to label a full episode in one batch.",
+    )
+    ap.add_argument("--model_name", type=str, default=MODEL_NAME)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
-    ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
-    ap.add_argument("--max_tokens", type=int, default=16)
+    ap.add_argument("--tensor_parallel_size", type=int, default=2)
     ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--top_p", type=float, default=1.0)
+    ap.add_argument("--min_p", type=float, default=0.0)
+    ap.add_argument("--top_k", type=int, default=0)
+    ap.add_argument("--repetition_penalty", type=float, default=1.05)
+    ap.add_argument("--download_dir", type=str, default="/shared/4/models")
+    ap.add_argument("--max_tokens", type=int, default=16)
     args = ap.parse_args()
 
-    llm = LLMInterface(
+    if not os.path.isdir(args.input_root):
+        raise FileNotFoundError(f"Input root not found or not a directory: {args.input_root}")
+
+    ensure_dir(args.output_root)
+    categories = discover_category_dirs(
+        args.input_root,
+        args.categories,
+        args.auto_categories,
+        args.input_subdir,
+    )
+    if not categories:
+        raise FileNotFoundError(
+            f"No categories found under input_root={args.input_root} with input_subdir={args.input_subdir}"
+        )
+
+    llm_if = LLMInterface(
         model_name=args.model_name,
         gpu_memory_utilization=args.gpu_memory_utilization,
         tensor_parallel_size=args.tensor_parallel_size,
         temperature=args.temperature,
+        top_p=args.top_p,
+        min_p=args.min_p,
+        top_k=args.top_k,
+        repetition_penalty=args.repetition_penalty,
+        download_dir=args.download_dir,
         max_tokens=args.max_tokens,
     )
 
-    in_paths = discover_input_files(args.in_dir, args.glob)
-    if not in_paths:
-        raise FileNotFoundError(f"No input files found under {args.in_dir} matching {args.glob}")
+    output_dir = os.path.join(args.output_root, args.output_subdir, str(args.k))
+    ensure_dir(output_dir)
 
-    k_dir = os.path.join(args.out_dir, str(args.k))
-    ensure_dir(k_dir)
+    seen_output_paths: Dict[str, str] = {}
+    for category in categories:
+        files = discover_episode_files(args.input_root, args.input_subdir, category)
+        if not files:
+            print(
+                f"Skipping category={category}: no .json files found under "
+                f"{os.path.join(args.input_root, args.input_subdir, category)}"
+            )
+            continue
 
-    for path in tqdm(in_paths, desc="Episodes"):
-        episode_id = os.path.splitext(os.path.basename(path))[0]
-        out_path = os.path.join(k_dir, f"{episode_id}.json")
+        for fp in tqdm(files, desc=f"{category}: Stance Episodes"):
+            obj = load_episode_json(fp)
+            turns = extract_turns(obj)
+            if not turns:
+                continue
 
-        turns = load_json(path)
-        if not isinstance(turns, list):
-            raise ValueError(f"Expected a list in {path}, got {type(turns)}")
+            episode_id = get_episode_id(turns, fp)
+            out_path = os.path.join(output_dir, f"{episode_id}.json")
+            prev_source = seen_output_paths.get(out_path)
+            if prev_source is not None and prev_source != fp:
+                raise ValueError(
+                    "Multiple category inputs resolve to the same stance output path: "
+                    f"{prev_source} and {fp} -> {out_path}"
+                )
+            seen_output_paths[out_path] = fp
 
-        prompts = build_prompts_for_episode(turns, k=args.k)
+            prompts = build_prompts_for_episode(turns, k=args.k)
 
-        # run vLLM
-        outputs: List[str] = []
-        if args.batch_size and args.batch_size > 0:
-            for i in range(0, len(prompts), args.batch_size):
-                outputs.extend(llm.generate_batch(prompts[i:i + args.batch_size]))
-        else:
-            outputs = llm.generate_batch(prompts)
+            if args.batch_size and args.batch_size > 0:
+                outputs: List[str] = []
+                for i in range(0, len(prompts), args.batch_size):
+                    outputs.extend(llm_if.generate_batch(prompts[i:i + args.batch_size]))
+            else:
+                outputs = llm_if.generate_batch(prompts)
 
-        if len(outputs) != len(turns):
-            raise RuntimeError(f"Output length mismatch for {episode_id}: {len(outputs)} vs {len(turns)}")
+            if len(outputs) != len(turns):
+                raise RuntimeError(
+                    f"Output length mismatch for episode_id={episode_id}: {len(outputs)} vs {len(turns)}"
+                )
 
-        # attach stance results
-        stance_labeled = []
-        for t, raw in zip(turns, outputs):
-            stance = parse_stance_digit(raw)
-            t2 = dict(t)
-            t2["stance_5pt"] = stance
-            t2["stance_raw"] = raw
-            t2["stance_context_k"] = args.k
-            stance_labeled.append(t2)
+            labeled_turns: List[Dict[str, Any]] = []
+            for turn, out_text in zip(turns, outputs):
+                rec = dict(turn)
+                rec.setdefault("category", category)
+                rec["stance_5pt"] = parse_stance_digit(out_text)
+                rec["stance_raw"] = out_text
+                rec["stance_context_k"] = args.k
+                labeled_turns.append(rec)
 
-        save_json(out_path, stance_labeled)
+            save_episode_turns(out_path, labeled_turns)
+
+    print(
+        "Done. Updated per-episode files under: "
+        f"{args.output_root}/{args.output_subdir}/{args.k}"
+    )
+
 
 if __name__ == "__main__":
     main()
