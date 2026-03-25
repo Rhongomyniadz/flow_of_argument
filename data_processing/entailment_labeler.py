@@ -1,14 +1,26 @@
-import os, json, glob, argparse, re
-from typing import List, Dict, Any, Tuple, Optional
+import argparse
+import glob
+import json
+import os
+import re
+from typing import Any, Dict, List, Optional, Tuple
+
 from tqdm import tqdm
 
 from vllm import LLM, SamplingParams
 
 
+MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+DEFAULT_INPUT_DIR = "data/stance_labeled"
+DEFAULT_OUTPUT_DIR = "data/implicature_flow/entailment_pairs_1to10"
+DEFAULT_CATEGORY_LOOKUP_DIR = "data/conversation_moves_labeled"
+DEFAULT_CATEGORIES = ["business", "commentary", "news", "political", "religion", "sports"]
+
+
 class LLMInterface:
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
+        model_name: str = MODEL_NAME,
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
         temperature: float = 0.0,
@@ -62,6 +74,49 @@ def save_json(path: str, obj: Any) -> None:
     ensure_dir(os.path.dirname(path))
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2)
+
+
+def extract_turns(obj: Any) -> List[Dict[str, Any]]:
+    if isinstance(obj, list):
+        return obj
+    if isinstance(obj, dict) and isinstance(obj.get("turns"), list):
+        return obj["turns"]
+    raise ValueError("Unrecognized JSON format: expected list or dict with 'turns' list.")
+
+
+def normalize_category(category: Optional[str]) -> Optional[str]:
+    if not isinstance(category, str):
+        return None
+    norm = category.strip().lower()
+    return norm if norm else None
+
+
+def infer_category_from_turns(turns: List[Dict[str, Any]]) -> Optional[str]:
+    for turn in turns:
+        cat = normalize_category(turn.get("category"))
+        if cat:
+            return cat
+    return None
+
+
+def infer_category_from_lookup(episode_path: str, category_lookup_dir: str) -> Optional[str]:
+    episode_filename = os.path.basename(episode_path)
+    for category in DEFAULT_CATEGORIES:
+        candidate = os.path.join(category_lookup_dir, category, episode_filename)
+        if os.path.isfile(candidate):
+            return category
+    return None
+
+
+def infer_episode_category(
+    episode_path: str,
+    turns: List[Dict[str, Any]],
+    category_lookup_dir: str,
+) -> Optional[str]:
+    category = infer_category_from_turns(turns)
+    if category:
+        return category
+    return infer_category_from_lookup(episode_path, category_lookup_dir)
 
 
 def extract_turn_text(turn: Dict[str, Any]) -> str:
@@ -221,11 +276,12 @@ def run_episode_labeling(
     min_overlap: int,
     context_w: int,
     batch_size: int,
+    turns: Optional[List[Dict[str, Any]]] = None,
+    episode_category: Optional[str] = None,
     retry_max_tokens: int = 2000,  # 重试时使用的更大 token 限制
 ) -> Dict[str, Any]:
-    turns = load_json(episode_path)
-    if not isinstance(turns, list):
-        raise ValueError(f"Expected list in {episode_path}")
+    if turns is None:
+        turns = extract_turns(load_json(episode_path))
 
     # Pre-index explicit claims by turn
     claims_by_turn: List[List[str]] = []
@@ -421,22 +477,45 @@ def run_episode_labeling(
         },
         "pairs": pairs,
     }
+    if episode_category is not None:
+        out_obj["category"] = episode_category
     save_json(out_path, out_obj)
 
-    return {
+    result = {
         "episode_id": episode_id,
         "n_pairs": len(pairs),
         "n_retries": len(failed_indices),
         "out_path": out_path,
     }
+    if episode_category is not None:
+        result["category"] = episode_category
+    return result
+
+
+def get_meta_filename(k: int, categories: Optional[List[str]], auto_categories: bool) -> str:
+    if not auto_categories and categories and len(categories) == 1:
+        return f"_LABELING_META_k{k}_{categories[0]}.json"
+    return f"_LABELING_META_k{k}.json"
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--in_dir", type=str, default="data/stance_labeled")
+    ap.add_argument("--in_dir", type=str, default=DEFAULT_INPUT_DIR)
     ap.add_argument("--k", type=int, required=True)
     ap.add_argument("--glob", type=str, default="*.json")
-    ap.add_argument("--out_dir", type=str, default="data/implicature_flow/entailment_pairs_1to10")
+    ap.add_argument("--out_dir", type=str, default=DEFAULT_OUTPUT_DIR)
+    ap.add_argument("--categories", nargs="+", default=DEFAULT_CATEGORIES)
+    ap.add_argument(
+        "--auto_categories",
+        action="store_true",
+        help="Infer categories from the stance-labeled inputs instead of using --categories as a filter.",
+    )
+    ap.add_argument(
+        "--category_lookup_dir",
+        type=str,
+        default=DEFAULT_CATEGORY_LOOKUP_DIR,
+        help="Fallback directory used to infer categories when stance-labeled files do not include a category field.",
+    )
 
     ap.add_argument("--max_future_turns", type=int, default=30)
     ap.add_argument("--max_claims_per_assumption", type=int, default=15)
@@ -444,7 +523,7 @@ def main():
     ap.add_argument("--context_w", type=int, default=2)
     ap.add_argument("--batch_size", type=int, default=64)
 
-    ap.add_argument("--model_name", type=str, default="Qwen/Qwen3-30B-A3B-Instruct-2507")
+    ap.add_argument("--model_name", type=str, default=MODEL_NAME)
     ap.add_argument("--tensor_parallel_size", type=int, default=2)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     ap.add_argument("--max_tokens", type=int, default=500)
@@ -464,10 +543,36 @@ def main():
     paths = sorted(glob.glob(os.path.join(in_k_dir, args.glob)))
     ensure_dir(args.out_dir)
 
+    requested_categories = None
+    if not args.auto_categories:
+        requested_categories = {
+            cat for cat in (normalize_category(category) for category in args.categories) if cat
+        }
+
     meta = []
+    kept_categories = set()
+    skipped_unknown_category = 0
+    seen_output_paths: Dict[str, str] = {}
     for ep_path in tqdm(paths, desc="Label episodes", unit="ep"):
+        turns = extract_turns(load_json(ep_path))
+        episode_category = infer_episode_category(ep_path, turns, args.category_lookup_dir)
+
+        if requested_categories is not None and episode_category not in requested_categories:
+            if episode_category is None:
+                skipped_unknown_category += 1
+            continue
+
         episode_id = os.path.splitext(os.path.basename(ep_path))[0]
         out_path = os.path.join(args.out_dir, f"{episode_id}.json")
+        prev_source = seen_output_paths.get(out_path)
+        if prev_source is not None and prev_source != ep_path:
+            raise ValueError(
+                "Multiple category inputs resolve to the same entailment output path: "
+                f"{prev_source} and {ep_path} -> {out_path}"
+            )
+        seen_output_paths[out_path] = ep_path
+        if episode_category is not None:
+            kept_categories.add(episode_category)
         meta.append(run_episode_labeling(
             episode_path=ep_path,
             llm=llm,
@@ -477,13 +582,24 @@ def main():
             min_overlap=args.min_overlap,
             context_w=args.context_w,
             batch_size=args.batch_size,
+            turns=turns,
+            episode_category=episode_category,
             retry_max_tokens=args.retry_max_tokens,  # Pass retry limit
         ))
 
-    save_json(os.path.join(args.out_dir, f"_LABELING_META_k{args.k}.json"), {
+    if skipped_unknown_category:
+        print(
+            f"Skipped {skipped_unknown_category} files because category filtering was requested "
+            "but the episode category could not be inferred."
+        )
+
+    sorted_kept_categories = sorted(kept_categories)
+    meta_categories = sorted(requested_categories) if requested_categories is not None else sorted_kept_categories
+    save_json(os.path.join(args.out_dir, get_meta_filename(args.k, meta_categories, args.auto_categories)), {
         "k": args.k,
         "n_episodes": len(meta),
-        "per_episode": meta
+        "categories": sorted_kept_categories,
+        "per_episode": meta,
     })
 
 
