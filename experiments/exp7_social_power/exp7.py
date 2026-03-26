@@ -14,7 +14,11 @@ from tqdm.auto import tqdm
 
 
 DEFAULT_INPUT_DIR = "data/conversation_moves_labeled"
+DEFAULT_MAXIM_DIR = "data/maxim_violations_labeled"
 DEFAULT_OUTPUT_DIR = "experiments/exp7_social_power/results"
+ANNOTATED_VIOLATION_TRIGGER = "annotated_local_context"
+ANNOTATED_VIOLATION_SOURCE = "maxim_violation_label"
+HEURISTIC_VIOLATION_SOURCE = "heuristic_fallback"
 
 ROLE_ORDER = ("guest", "host")
 VIOLATION_ORDER = ("Manner", "Relation", "Quantity")
@@ -43,6 +47,86 @@ FIXED_EFFECT_COLUMNS = [
     "Role[host]:Violation[Relation]",
     "Role[host]:Violation[Quantity]",
 ]
+NON_VIOLATION_LABELS = {
+    "no violation",
+    "none",
+    "no maxim violation",
+}
+POLAR_QUESTION_RE = re.compile(
+    r"^\s*(?:do|does|did|is|are|was|were|can|could|will|would|should|have|has|had|"
+    r"am|didn't|doesn't|isn't|aren't|wasn't|weren't|won't|can't|couldn't|shouldn't)\b",
+    re.IGNORECASE,
+)
+GREETING_CHECK_RE = re.compile(
+    r"\b(?:how are you|how're you|how you doing|how's it going|how have you been)\b",
+    re.IGNORECASE,
+)
+AUDIO_CHECK_RE = re.compile(
+    r"\b(?:can you hear me|can you hear us|can you see me|can you see us|am i audible|"
+    r"can you hear that|audio check|mic check)\b",
+    re.IGNORECASE,
+)
+BRIEF_EXPECTED_RE = re.compile(
+    r"\b(?:rapid fire|favorite|one or two words|one word|in two words|finish this sentence|"
+    r"tell us (?:his|her|their) name again|what(?:'s| is) your favorite|which\b|who\b|where\b|"
+    r"when\b|how many\b|how much\b|how old\b|what year\b|what city\b|what state\b|what food\b|"
+    r"what movie\b|what book\b|what band\b|what musician\b|what team\b)\b",
+    re.IGNORECASE,
+)
+OPEN_ENDED_RE = re.compile(
+    r"\b(?:why\b|how do you\b|how would you\b|what do you think\b|what are your thoughts\b|"
+    r"tell me about\b|tell us about\b|walk me through\b|walk us through\b|can you explain\b|"
+    r"help me understand\b|what happened\b|what should\b|how should\b|"
+    r"what does .* mean(?: to you)?\b|what does .* look like\b)\b",
+    re.IGNORECASE,
+)
+STONEWALL_RE = re.compile(
+    r"\b(?:maybe|i guess|guess so|not really|hard to say|depends|not sure|i don't know|"
+    r"don't know|no comment|we'll see|who knows|whatever|perhaps|probably)\b",
+    re.IGNORECASE,
+)
+POLAR_ANSWER_RE = re.compile(
+    r"^\s*(?:yes|yeah|yep|yup|no|nope|nah|absolutely|definitely|certainly|correct|right|"
+    r"exactly|of course|not really)\b",
+    re.IGNORECASE,
+)
+ACK_CLOSING_RE = re.compile(
+    r"^\s*(?:thanks?|thank you|appreciate it|take care|bye(?:-bye)?|goodbye|sounds good|"
+    r"all right|alright|okay|ok)\b[\s.!?,;:'\"-]*$",
+    re.IGNORECASE,
+)
+CONTENT_WORD_RE = re.compile(r"[A-Za-z0-9']+")
+STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "be",
+    "but",
+    "for",
+    "i",
+    "i'm",
+    "im",
+    "in",
+    "is",
+    "it",
+    "its",
+    "me",
+    "my",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "their",
+    "them",
+    "they",
+    "this",
+    "to",
+    "we",
+    "you",
+    "your",
+}
 
 
 def safe_int(value: object, default: int = 0) -> int:
@@ -110,6 +194,22 @@ def turn_text(turn: Optional[Dict]) -> str:
     return str(turn.get("turn_text") or turn.get("transcript") or "").strip()
 
 
+def normalize_space(text: object) -> str:
+    return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
+def speaker_id(turn: Optional[Dict]) -> str:
+    if not turn:
+        return ""
+    return str(turn.get("speaker_id") or turn.get("speaker") or "").strip()
+
+
+def same_speaker(turn_a: Optional[Dict], turn_b: Optional[Dict]) -> bool:
+    speaker_a = speaker_id(turn_a)
+    speaker_b = speaker_id(turn_b)
+    return bool(speaker_a and speaker_b and speaker_a == speaker_b)
+
+
 def normalize_role(turn: Dict) -> str:
     role = str(turn.get("speaker_role") or "").strip().lower()
     return role if role in ROLE_ORDER else "unknown"
@@ -125,48 +225,183 @@ def word_count(turn: Dict) -> int:
     return len(text.split())
 
 
-def previous_was_question(prev_turn: Optional[Dict]) -> bool:
-    if not prev_turn:
+def previous_turn_projects_response(prev_turn: Optional[Dict], turn: Dict) -> bool:
+    if not prev_turn or same_speaker(prev_turn, turn):
         return False
-    text = turn_text(prev_turn)
     move = str(prev_turn.get("conversation_move_label") or "").strip()
-    if "?" in text:
+    if move in REPAIR_MOVES or move in CHALLENGE_MOVES:
         return True
-    return move in REPAIR_MOVES
+    return "?" in turn_text(prev_turn)
 
 
-def classify_violation(
+def is_substantive_turn(turn: Dict) -> bool:
+    turn_type = str(turn.get("turn_type_label") or "").strip()
+    if turn_type in {"Backchannel", "Procedural"}:
+        return False
+    return bool(turn_text(turn))
+
+
+def content_word_count(text: str) -> int:
+    tokens = [tok.lower() for tok in CONTENT_WORD_RE.findall(text)]
+    return sum(1 for tok in tokens if tok not in STOPWORDS)
+
+
+def response_features(text: str) -> Dict[str, object]:
+    lowered = normalize_space(text).lower()
+    words = len(lowered.split()) if lowered else 0
+    features = {
+        "word_count": words,
+        "has_stonewall_marker": bool(STONEWALL_RE.search(lowered)),
+        "is_polar_answer": bool(POLAR_ANSWER_RE.match(lowered)),
+        "is_ack_or_closing": bool(ACK_CLOSING_RE.match(lowered)),
+        "content_word_count": content_word_count(lowered),
+    }
+    features["looks_contentful"] = bool(
+        words > 0
+        and not features["has_stonewall_marker"]
+        and not features["is_ack_or_closing"]
+        and features["content_word_count"] >= 1
+    )
+    return features
+
+
+def question_features(previous_turns: Sequence[Dict]) -> Dict[str, object]:
+    prev_turn = previous_turns[-1] if previous_turns else None
+    prev_text = turn_text(prev_turn)
+    prev_lower = prev_text.lower()
+    context_text = " ".join(turn_text(turn) for turn in previous_turns[-3:])
+    context_lower = context_text.lower()
+
+    is_greeting_check = bool(GREETING_CHECK_RE.search(prev_lower))
+    is_audio_check = bool(AUDIO_CHECK_RE.search(prev_lower))
+    is_brief_expected = bool(BRIEF_EXPECTED_RE.search(prev_lower) or BRIEF_EXPECTED_RE.search(context_lower))
+    is_forced_choice = (" or " in f" {prev_lower} " and "?" in prev_text)
+    is_polar = bool(POLAR_QUESTION_RE.match(prev_lower) and "?" in prev_text)
+    is_open_ended = bool(
+        OPEN_ENDED_RE.search(prev_lower)
+        and not is_brief_expected
+        and not is_greeting_check
+        and not is_audio_check
+        and not is_polar
+    )
+    return {
+        "is_polar_question": is_polar,
+        "is_brief_expected_prompt": bool(is_brief_expected or is_forced_choice),
+        "is_open_ended_prompt": is_open_ended,
+        "is_greeting_check": is_greeting_check,
+        "is_audio_check": is_audio_check,
+    }
+
+
+def normalize_maxim_violation_label(value: object) -> Optional[str]:
+    text = normalize_space(value)
+    if not text:
+        return None
+    lowered = text.lower()
+    if lowered in NON_VIOLATION_LABELS:
+        return None
+    for label in VIOLATION_ORDER:
+        if lowered == label.lower():
+            return label
+    return None
+
+
+def explicit_no_violation_label(value: object) -> bool:
+    text = normalize_space(value)
+    return bool(text) and text.lower() in NON_VIOLATION_LABELS
+
+
+def annotation_violation_label(turn: Dict) -> Tuple[Optional[str], bool]:
+    raw = turn.get("maxim_violation_label")
+    if raw is None:
+        return None, False
+    label = normalize_maxim_violation_label(raw)
+    if label is not None:
+        return label, True
+    if explicit_no_violation_label(raw):
+        return None, True
+    return None, False
+
+
+def heuristic_violation_label(
     turn: Dict,
     prev_turn: Optional[Dict],
+    previous_turns: Sequence[Dict],
     short_answer_max_words: int,
 ) -> Tuple[Optional[str], Optional[str]]:
     move = str(turn.get("conversation_move_label") or "").strip()
     turn_type = str(turn.get("turn_type_label") or "").strip()
     words = word_count(turn)
+    text = turn_text(turn)
 
-    if move == "Stonewalling / Non-Response":
-        return "Quantity", "stonewalling_non_response"
-
-    if move == "Answer" and previous_was_question(prev_turn) and words <= short_answer_max_words:
-        return "Quantity", "short_answer_after_question"
-
-    if move == "Topic Shift":
-        return "Relation", "topic_shift"
-
-    if turn_type == "Disrupted":
-        return "Manner", "disrupted_turn"
+    if not text:
+        return None, None
 
     if move == "Self-Correction":
-        return "Manner", "self_correction_signal"
+        return None, None
+
+    if turn_type == "Disrupted" and is_substantive_turn(turn):
+        return "Manner", "incomplete_or_unclear_turn"
+
+    if not is_substantive_turn(turn) or not previous_turn_projects_response(prev_turn, turn):
+        return None, None
+
+    q_meta = question_features(previous_turns)
+    r_meta = response_features(text)
+
+    if move == "Topic Shift":
+        return "Relation", "nonresponsive_shift_after_projected_response"
+
+    if move == "Stonewalling / Non-Response":
+        if q_meta["is_greeting_check"] or q_meta["is_audio_check"] or q_meta["is_brief_expected_prompt"]:
+            return None, None
+        if q_meta["is_polar_question"] and r_meta["is_polar_answer"] and not r_meta["has_stonewall_marker"]:
+            return None, None
+        if r_meta["is_ack_or_closing"] and not q_meta["is_open_ended_prompt"]:
+            return None, None
+        return "Quantity", "underinformative_nonresponse"
+
+    if move == "Answer" and prev_turn and "?" in turn_text(prev_turn):
+        if (
+            q_meta["is_open_ended_prompt"]
+            and words <= short_answer_max_words
+            and (
+                r_meta["has_stonewall_marker"]
+                or not r_meta["looks_contentful"]
+                or int(r_meta["content_word_count"]) <= 1
+            )
+        ):
+            return "Quantity", "underinformative_short_answer"
 
     return None, None
+
+
+def classify_violation(
+    turn: Dict,
+    prev_turn: Optional[Dict],
+    previous_turns: Sequence[Dict],
+    short_answer_max_words: int,
+) -> Tuple[Optional[str], Optional[str], str]:
+    annotated_label, annotation_available = annotation_violation_label(turn)
+    if annotation_available:
+        if annotated_label is None:
+            return None, None, ANNOTATED_VIOLATION_SOURCE
+        return annotated_label, ANNOTATED_VIOLATION_TRIGGER, ANNOTATED_VIOLATION_SOURCE
+
+    violation, trigger = heuristic_violation_label(
+        turn=turn,
+        prev_turn=prev_turn,
+        previous_turns=previous_turns,
+        short_answer_max_words=short_answer_max_words,
+    )
+    return violation, trigger, HEURISTIC_VIOLATION_SOURCE
 
 
 def classify_next_turn(
     source_turn: Dict,
     next_turn: Optional[Dict],
 ) -> Dict[str, object]:
-    source_speaker = str(source_turn.get("speaker_id") or source_turn.get("speaker") or "").strip()
+    source_speaker = speaker_id(source_turn)
     next_speaker = ""
     next_role = ""
     next_move = ""
@@ -177,7 +412,7 @@ def classify_next_turn(
     self_repair = 0
 
     if next_turn:
-        next_speaker = str(next_turn.get("speaker_id") or next_turn.get("speaker") or "").strip()
+        next_speaker = speaker_id(next_turn)
         next_role = normalize_role(next_turn)
         next_move = str(next_turn.get("conversation_move_label") or "").strip()
         same_speaker = bool(source_speaker and next_speaker and source_speaker == next_speaker)
@@ -199,11 +434,28 @@ def classify_next_turn(
     }
 
 
+def merge_maxim_annotations(turns: List[Dict], annotation_turns: Sequence[Dict]) -> None:
+    by_idx: Dict[int, Dict] = {}
+    for pos, ann_turn in enumerate(annotation_turns):
+        turn_idx = safe_int(ann_turn.get("turn_idx"), pos)
+        by_idx.setdefault(turn_idx, ann_turn)
+
+    for pos, turn in enumerate(turns):
+        turn_idx = safe_int(turn.get("turn_idx"), pos)
+        ann_turn = by_idx.get(turn_idx)
+        if not ann_turn:
+            continue
+        for field in ("maxim_violation_label", "maxim_violation_scheme", "maxim_violation_label_error"):
+            if field in ann_turn:
+                turn[field] = ann_turn[field]
+
+
 def build_rows(
     input_dir: Path,
+    maxim_dir: Optional[Path],
     short_answer_max_words: int,
     max_files: int = 0,
-) -> Tuple[List[Dict], Counter, Counter]:
+) -> Tuple[List[Dict], Counter, Counter, Counter]:
     direct_files = sorted(input_dir.glob("*.json"))
     files = direct_files if direct_files else sorted(input_dir.glob("*/*.json"))
     if max_files > 0:
@@ -212,11 +464,23 @@ def build_rows(
     rows: List[Dict] = []
     role_turn_counts: Counter = Counter()
     violation_counts: Counter = Counter()
+    violation_source_counts: Counter = Counter()
 
     for path in tqdm(files, desc="Scanning episodes", unit="file"):
         turns = load_turns(path)
         if not turns:
             continue
+
+        if maxim_dir is not None:
+            try:
+                relative_path = path.relative_to(input_dir)
+            except ValueError:
+                relative_path = path.name
+            maxim_path = maxim_dir / relative_path
+            if maxim_path.exists() and maxim_path.resolve() != path.resolve():
+                maxim_turns = load_turns(maxim_path)
+                if maxim_turns:
+                    merge_maxim_annotations(turns, maxim_turns)
 
         episode_id = str(turns[0].get("episode_id") or path.stem)
         for idx, turn in enumerate(turns):
@@ -225,10 +489,12 @@ def build_rows(
                 role_turn_counts[role] += 1
 
             prev_turn = turns[idx - 1] if idx > 0 else None
+            previous_turns = turns[max(0, idx - 3):idx]
             next_turn = turns[idx + 1] if idx + 1 < len(turns) else None
-            violation, trigger = classify_violation(
+            violation, trigger, violation_source = classify_violation(
                 turn=turn,
                 prev_turn=prev_turn,
+                previous_turns=previous_turns,
                 short_answer_max_words=short_answer_max_words,
             )
             if violation is None or role not in ROLE_ORDER:
@@ -238,6 +504,7 @@ def build_rows(
             turn_idx = safe_int(turn.get("turn_idx"), idx)
             wc = word_count(turn)
             violation_counts[(role, violation)] += 1
+            violation_source_counts[violation_source] += 1
 
             rows.append(
                 {
@@ -247,6 +514,7 @@ def build_rows(
                     "speaker_id": str(turn.get("speaker_id") or turn.get("speaker") or ""),
                     "violation_type": violation,
                     "violation_trigger": trigger,
+                    "violation_source": violation_source,
                     "severity": VIOLATION_SEVERITY[violation],
                     "conversation_move_label": str(turn.get("conversation_move_label") or ""),
                     "turn_type_label": str(turn.get("turn_type_label") or ""),
@@ -263,7 +531,7 @@ def build_rows(
             )
 
     rows.sort(key=lambda row: (str(row["episode_id"]), int(row["turn_idx"])))
-    return rows, role_turn_counts, violation_counts
+    return rows, role_turn_counts, violation_counts, violation_source_counts
 
 
 def canonical_term_name(name: str) -> str:
@@ -617,7 +885,7 @@ def render_svg_plot(path: Path, curve_rows: Sequence[Dict[str, object]]) -> None
     lines.append('<text x="460" y="44" font-size="12" text-anchor="middle" fill="#475467">Predicted probability that the next turn polices the violation</text>')
     lines.append(
         f'<text x="{left + (plot_w / 2.0):.2f}" y="{height - 22}" font-size="13" text-anchor="middle" fill="#101828">'
-        'Violation severity (operationalized as Manner -&gt; Relation -&gt; Quantity)</text>'
+        'Violation ordering used in analysis (Manner -&gt; Relation -&gt; Quantity)</text>'
     )
     lines.append(
         f'<text transform="translate(22 {top + (plot_h / 2.0):.2f}) rotate(-90)" font-size="13" text-anchor="middle" fill="#101828">'
@@ -638,13 +906,15 @@ def render_svg_plot(path: Path, curve_rows: Sequence[Dict[str, object]]) -> None
 
 def run_analysis(
     input_dir: Path,
+    maxim_dir: Optional[Path],
     output_dir: Path,
     short_answer_max_words: int,
     max_files: int,
     max_iter: int,
 ) -> Dict[str, object]:
-    rows, role_turn_counts, violation_counts = build_rows(
+    rows, role_turn_counts, violation_counts, violation_source_counts = build_rows(
         input_dir=input_dir,
+        maxim_dir=maxim_dir,
         short_answer_max_words=short_answer_max_words,
         max_files=max_files,
     )
@@ -677,28 +947,48 @@ def run_analysis(
     summary = {
         "experiment": "exp7_social_power",
         "input_dir": str(input_dir),
+        "maxim_dir": str(maxim_dir) if maxim_dir is not None else None,
         "output_dir": str(output_dir),
         "n_violation_rows": len(rows),
         "n_conversations": len(groups),
         "short_answer_max_words": short_answer_max_words,
         "model_formula_proxy": "P(policed_next) ~ violation_type * speaker_role + (1|episode_id)",
         "operationalization": {
+            "definition": (
+                "A maxim violation is a substantive source turn that, relative to the immediately "
+                "preceding turn and the action it projects, creates a local problem of sufficiency, "
+                "relevance, or interpretability strong enough that a cooperative recipient would be "
+                "warranted in withholding straightforward uptake."
+            ),
+            "label_source_precedence": [
+                "Use maxim_violation_label when present on the turn or in a matching sidecar annotation file.",
+                "Otherwise use conservative prev/current-turn heuristics only.",
+            ],
             "Quantity": [
-                "Stonewalling / Non-Response",
-                f"Answer with <= {short_answer_max_words} words immediately after a question",
+                "Underinformative or overinformative relative to the immediate discourse demand.",
+                "Fallback heuristic: stonewalling/non-response only when the previous turn projects a response and the reply is not an adequate brief or polar answer.",
+                f"Fallback heuristic: very short answer (<= {short_answer_max_words} words) only after an open-ended question when it remains underinformative.",
             ],
             "Relation": [
-                "Topic Shift",
+                "Insufficiently responsive to the question, challenge, or repair request currently on the table.",
+                "Fallback heuristic: Topic Shift only when the previous turn projects a response from the current speaker.",
             ],
             "Manner": [
-                "Disrupted turn type",
-                "Self-Correction move",
+                "Too unclear, incomplete, disordered, or under-specified for current purposes.",
+                "Fallback heuristic: disrupted turn type when the turn is locally incomplete or unclear.",
+            ],
+            "ExcludedFromViolation": [
+                "Backchannel and Procedural turns.",
+                "Ordinary topic management when no response is projected from the current speaker.",
+                "Self-Correction as such; self-repair within the same turn is not automatically a violation.",
+                "Rudeness, disagreement, or socially dispreferred but usable turns.",
             ],
             "PolicedNext": [
                 "N+1 is a different speaker",
                 "N+1 move is a clarification request or correction / challenge",
             ],
         },
+        "violation_source_counts": {str(key): int(value) for key, value in violation_source_counts.items()},
         "role_turn_counts": {role: int(role_turn_counts.get(role, 0)) for role in ROLE_ORDER},
         "observed_policing_rate": {
             "guest": observed_guest,
@@ -731,6 +1021,7 @@ def run_analysis(
                     "speaker_id",
                     "violation_type",
                     "violation_trigger",
+                    "violation_source",
                     "severity",
                     "conversation_move_label",
                     "turn_type_label",
@@ -831,10 +1122,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Experiment 7: test whether host turns are policed less often than guest turns "
-            "for comparable maxim violations using data/conversation_moves_labeled."
+            "for comparable local maxim violations, preferring grounding-based maxim_violation_label "
+            "annotations when available."
         )
     )
     parser.add_argument("--input_dir", type=str, default=DEFAULT_INPUT_DIR)
+    parser.add_argument(
+        "--maxim_dir",
+        type=str,
+        default=DEFAULT_MAXIM_DIR,
+        help="Optional sidecar directory with per-turn maxim_violation_label annotations.",
+    )
     parser.add_argument("--output_dir", type=str, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--short_answer_max_words", type=int, default=6)
     parser.add_argument("--max_files", type=int, default=0, help="Optional debug cap on the number of episode files.")
@@ -842,14 +1140,19 @@ def main() -> None:
     args = parser.parse_args()
 
     input_dir = Path(args.input_dir)
+    maxim_dir = Path(args.maxim_dir) if str(args.maxim_dir).strip() else None
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if not input_dir.exists():
         raise FileNotFoundError(f"Input directory does not exist: {input_dir}")
 
+    if maxim_dir is not None and not maxim_dir.exists():
+        maxim_dir = None
+
     summary = run_analysis(
         input_dir=input_dir,
+        maxim_dir=maxim_dir,
         output_dir=output_dir,
         short_answer_max_words=max(1, int(args.short_answer_max_words)),
         max_files=max(0, int(args.max_files)),

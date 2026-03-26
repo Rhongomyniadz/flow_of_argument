@@ -11,7 +11,10 @@ DEFAULT_VIOLATION_CSV = "experiments/exp7_social_power/results/exp7_violation_tu
 DEFAULT_INPUT_DIR = "data/conversation_moves_labeled"
 DEFAULT_OUTPUT_DIR = "experiments/exp7_social_power/results"
 
-TARGET_TRIGGER = "short_answer_after_question"
+TARGET_TRIGGERS = {
+    "underinformative_short_answer",
+    "short_answer_after_question",
+}
 
 POLAR_QUESTION_RE = re.compile(
     r"^\s*(?:do|does|did|is|are|was|were|can|could|will|would|should|have|has|had|"
@@ -155,7 +158,7 @@ def short_response_rows(violation_csv: Path, max_rows: int = 0) -> List[Dict[str
     with violation_csv.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            if str(row.get("violation_trigger") or "").strip() != TARGET_TRIGGER:
+            if str(row.get("violation_trigger") or "").strip() not in TARGET_TRIGGERS:
                 continue
             rows.append(row)
             if max_rows > 0 and len(rows) >= max_rows:
@@ -460,7 +463,7 @@ def build_summary(audited_rows: Sequence[Dict[str, object]]) -> Dict[str, object
 
     return {
         "experiment": "exp7_social_power_short_response_stonewalling_audit",
-        "target_trigger": TARGET_TRIGGER,
+        "target_triggers": sorted(TARGET_TRIGGERS),
         "n_rows_audited": len(audited_rows),
         "decision_counts": {key: int(val) for key, val in decision_counts.items()},
         "question_type_counts": {key: int(val) for key, val in question_type_counts.items()},
@@ -496,7 +499,9 @@ def main() -> None:
 
     short_rows = short_response_rows(violation_csv=violation_csv, max_rows=max(0, int(args.max_rows)))
     if not short_rows:
-        raise RuntimeError(f"No rows with violation_trigger={TARGET_TRIGGER!r} were found in {violation_csv}.")
+        raise RuntimeError(
+            f"No rows with violation_trigger in {sorted(TARGET_TRIGGERS)!r} were found in {violation_csv}."
+        )
 
     episode_ids = [normalize_space(row.get("episode_id")) for row in short_rows]
     episode_index = build_episode_index(input_dir=input_dir, target_episode_ids=episode_ids)

@@ -12,9 +12,10 @@ from vllm import LLM, SamplingParams
 
 MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DATA_ROOT = "data"
-DEFAULT_INPUT_SUBDIR = "turn_type_labeled"
-DEFAULT_OUTPUT_SUBDIR = "conversation_moves_labeled"
+DEFAULT_INPUT_SUBDIR = "conversation_moves_labeled"
+DEFAULT_OUTPUT_SUBDIR = "maxim_violations_labeled"
 DEFAULT_CATEGORIES = ["business", "commentary", "news", "religion", "sports"]
+MAXIM_VIOLATION_SCHEME = "exp7_grounding_v1"
 
 
 class LLMInterface:
@@ -23,13 +24,13 @@ class LLMInterface:
         model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507",
         gpu_memory_utilization: float = 0.9,
         tensor_parallel_size: int = 2,
-        temperature: float = 0.0,   # deterministic for labeling
+        temperature: float = 0.0,
         top_p: float = 1.0,
         min_p: float = 0.0,
         top_k: int = 0,
         repetition_penalty: float = 1.05,
         download_dir: str = "/shared/4/models",
-        max_tokens: int = 8,        # label only
+        max_tokens: int = 8,
     ):
         self.llm = LLM(
             model=model_name,
@@ -57,102 +58,85 @@ SYSTEM_PROMPT = (
 )
 
 ALLOWED = [
-    "Assert / Elaborate",
-    "Agree / Align",
-    "Answer",
-    "Clarification Request (Generic)",
-    "Clarification Request (Specific)",
-    "Correction / Challenge",
-    "Self-Correction",
-    "Topic Shift",
-    "Stonewalling / Non-Response",
+    "No Violation",
+    "Quantity",
+    "Relation",
+    "Manner",
 ]
 ALLOWED_SET = set(ALLOWED)
 
-MOVE_PROMPT = """
-You are an expert conversation analyst. Your job is to label the PRIMARY Conversation Move of the CURRENT TURN,
-using the PREVIOUS TURN only as context.
+MAXIM_PROMPT = """
+You are an expert conversation analyst.
+Your job is to label whether the CURRENT TURN is a maxim violation for Experiment 7.
 
-Conversation Moves are grouped into:
-A) Constructive (Building the World): adds to the "Explicit Claims" pile
-B) Repair / Enforcement (Fixing the World): addresses a local problem in grounding, understanding, or uptake
-C) Disengagement (Abandoning the World): negative outcomes; avoids engaging the world
+Use ONLY the PREVIOUS TURN and the CURRENT TURN. Judge from the source turn plus local context only.
+Do NOT use any later turn, and do NOT infer violation from whether repair actually happened.
 
-You MUST output exactly ONE label from the list below, and output NOTHING ELSE.
+Operational definition:
+A maxim violation is a substantive turn that, relative to the immediately preceding turn and the action it projects,
+creates a local problem of sufficiency, relevance, or interpretability strong enough that a cooperative recipient
+would be warranted in withholding straightforward uptake and instead asking for clarification, pursuing a more
+adequate response, or challenging the turn.
 
 Allowed labels (output EXACTLY one):
-- Assert / Elaborate
-- Agree / Align
-- Answer
-- Clarification Request (Generic)
-- Clarification Request (Specific)
-- Correction / Challenge
-- Self-Correction
-- Topic Shift
-- Stonewalling / Non-Response
+- No Violation
+- Quantity
+- Relation
+- Manner
 
-=== Official Definitions (use these) ===
+Definitions:
+1) Quantity
+   - The turn gives too little or too much for the immediate discourse demand.
+   - Strongest cases: underinformative answers, evasive non-answers, or overlong material that blocks the projected task.
+2) Relation
+   - The turn is insufficiently responsive to what the previous turn puts on the table.
+   - Use when the previous turn projects a response from the current speaker and the current turn shifts away,
+     answers a different question, or otherwise fails to address the locally relevant issue.
+3) Manner
+   - The turn is too hard to interpret for current purposes because it is unclear, incomplete, ambiguous,
+     disordered, or under-specified.
+4) No Violation
+   - The turn is usable enough for current purposes, even if it is awkward, rude, brief, disagreeing, or socially dispreferred.
+   - Ordinary topic management is NOT automatically a violation.
+   - Self-correction is NOT automatically a violation if the speaker repairs the trouble within the same turn.
+   - Backchannels and procedural turns are normally No Violation.
 
-A. Constructive Moves (Building the World)
-1) Assert / Elaborate
-   - Stating a fact, opinion, or description (adds new explicit content).
-   - Includes explaining, justifying, narrating, or elaborating, when not primarily answering a question.
-2) Agree / Align
-   - Explicit agreement with the previous speaker's claim or assumption.
-   - Examples: "That's a good point", "Exactly", "Right", "I agree".
-3) Answer
-   - Providing information solicited by a previous question (directly addresses what was asked).
+Decision rules:
+- Focus on the immediately prior turn and the action it projects.
+- Ask: would a cooperative recipient be warranted in withholding straightforward uptake here?
+- If the current turn is simply a normal next contribution, choose No Violation.
+- If more than one label seems possible, prefer:
+  1) Manner when the turn is too unclear to use at all.
+  2) Relation when the main problem is non-responsiveness to the thing currently on the table.
+  3) Quantity when the turn is responsive but under- or over-informative.
 
-B. Repair Moves (Fixing the World)
-4) Clarification Request (Generic)
-   - Signaling a local problem understanding the prior turn's meaning or relevance.
-   - Examples: "What do you mean?", "I don't follow."
-   - Does NOT specify what exact piece is missing.
-5) Clarification Request (Specific)
-   - Requesting a specific missing element needed to interpret or proceed with the prior turn.
-   - Examples: "Which report are you referring to?", "Who is 'he'?"
-6) Correction / Challenge
-   - Explicitly rejecting, contesting, or pushing back on prior content instead of straightforwardly accepting it.
-   - Examples: "No, that's not right", "I disagree with your premise."
-7) Self-Correction
-   - The speaker catches their own trouble source mid-turn and corrects/rephrases themselves.
-   - Examples: "I mean, well, let me rephrase that..."
-
-C. Disengagement Moves (Abandoning the World)
-8) Topic Shift
-   - Abruptly changing the subject without a bridging assumption.
-   - Example: "Anyway, did you see the game?"
-9) Stonewalling / Non-Response
-   - Deliberately short, non-committal answers to open questions.
-   - Examples: "Maybe", "I guess."
-   - Use when the turn avoids engaging rather than genuinely answering.
-
-=== Primary-move selection rules (IMPORTANT) ===
-- Choose ONE label even if multiple moves appear.
-- Prefer the move that best describes the turn's main function in the interaction.
-
-Tie-breakers (apply in order):
-1) If the CURRENT TURN is primarily asking for clarification, choose Clarification Request (Specific/Generic),
-   even if it also contains commentary.
-2) If the CURRENT TURN primarily rejects/disputes prior content, choose Correction / Challenge.
-3) If the PREVIOUS TURN asked a question and the CURRENT TURN provides the requested information,
-   choose Answer (even if it also elaborates).
-4) If it begins with explicit agreement and then adds detail, choose Agree / Align unless the agreement is minor
-   and the bulk is new assertion (then Assert / Elaborate).
-5) If it avoids engaging with an open question via short non-committal language, choose Stonewalling / Non-Response.
-6) If it abruptly changes topic without a bridge, choose Topic Shift.
+Important:
+- The provided turn-type and move labels are contextual hints only. Do NOT automatically map Topic Shift,
+  Stonewalling / Non-Response, or Self-Correction to a violation label.
+- Judge the local interactional problem, not general conversational quality.
 
 Output rules:
-- Output ONLY one label from the Allowed labels list.
-- No quotes, no punctuation, no explanations.
+- Output ONLY one label from the allowed list.
+- No quotes, no punctuation, no explanation.
+
+PREVIOUS TURN TYPE:
+{prev_type}
+
+PREVIOUS TURN MOVE:
+{prev_move}
 
 PREVIOUS TURN:
 {prev_turn}
 
+CURRENT TURN TYPE:
+{cur_type}
+
+CURRENT TURN MOVE:
+{cur_move}
+
 CURRENT TURN:
 {cur_turn}
 """
-
 
 
 def ensure_dir(path: str) -> None:
@@ -199,15 +183,19 @@ def extract_turns(obj: Any) -> List[Dict[str, Any]]:
 def get_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
     if turns and "episode_id" in turns[0] and turns[0]["episode_id"] is not None:
         return str(turns[0]["episode_id"])
-    m = re.search(r"(\d+)\.json$", os.path.basename(fallback_path))
-    if m:
-        return m.group(1)
+    match = re.search(r"(\d+)\.json$", os.path.basename(fallback_path))
+    if match:
+        return match.group(1)
     raise ValueError(f"Could not infer episode_id from data or filename: {fallback_path}")
 
 
-def truncate_text(s: str, max_chars: int) -> str:
-    s = (s or "").strip()
-    return s if len(s) <= max_chars else (s[:max_chars] + " …(truncated)")
+def normalize_space(text: object) -> str:
+    return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
+def truncate_text(text: str, max_chars: int) -> str:
+    text = normalize_space(text)
+    return text if len(text) <= max_chars else (text[:max_chars] + " …(truncated)")
 
 
 def build_chat_prompt(tokenizer, user_content: str) -> str:
@@ -221,17 +209,16 @@ def build_chat_prompt(tokenizer, user_content: str) -> str:
 def normalize_label(raw: str) -> Optional[str]:
     if raw is None:
         return None
-    s = raw.strip().splitlines()[0].strip()
-    s = s.strip(" \"'\t")
-    s = re.sub(r"[.。]+$", "", s).strip()
+    text = raw.strip().splitlines()[0].strip()
+    text = text.strip(" \"'\t")
+    text = re.sub(r"[.。]+$", "", text).strip()
 
-    if s in ALLOWED_SET:
-        return s
+    if text in ALLOWED_SET:
+        return text
 
-    # Robust parsing only (not heuristic labeling)
-    for lab in sorted(ALLOWED, key=len, reverse=True):
-        if s.startswith(lab):
-            return lab
+    for label in sorted(ALLOWED, key=len, reverse=True):
+        if text.startswith(label):
+            return label
     return None
 
 
@@ -240,7 +227,7 @@ def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
         json.dump(turns, f, ensure_ascii=False, indent=2)
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_root", type=str, default=DEFAULT_DATA_ROOT)
     ap.add_argument("--output_root", type=str, default=DEFAULT_DATA_ROOT)
@@ -312,7 +299,7 @@ def main():
         output_dir = os.path.join(args.output_root, args.output_subdir, category)
         ensure_dir(output_dir)
 
-        for fp in tqdm(files, desc=f"{category}: Move Episodes"):
+        for fp in tqdm(files, desc=f"{category}: Maxim Episodes"):
             obj = load_episode_json(fp)
             turns = extract_turns(obj)
             if not turns:
@@ -322,14 +309,20 @@ def main():
             out_path = os.path.join(output_dir, f"{episode_id}.json")
 
             prompts: List[str] = []
-            for i, t in enumerate(turns):
-                prev_txt = turns[i - 1].get("turn_text", "") if i > 0 else ""
-                cur_txt = t.get("turn_text", "")
+            for i, turn in enumerate(turns):
+                prev_turn = turns[i - 1] if i > 0 else {}
 
-                prev_txt = truncate_text(prev_txt, args.max_turn_chars)
-                cur_txt = truncate_text(cur_txt, args.max_turn_chars)
+                prev_text = truncate_text(prev_turn.get("turn_text", ""), args.max_turn_chars)
+                cur_text = truncate_text(turn.get("turn_text", ""), args.max_turn_chars)
 
-                user = MOVE_PROMPT.format(prev_turn=prev_txt, cur_turn=cur_txt)
+                user = MAXIM_PROMPT.format(
+                    prev_type=normalize_space(prev_turn.get("turn_type_label")) or "[NONE]",
+                    prev_move=normalize_space(prev_turn.get("conversation_move_label")) or "[NONE]",
+                    prev_turn=prev_text or "[NONE]",
+                    cur_type=normalize_space(turn.get("turn_type_label")) or "[UNKNOWN]",
+                    cur_move=normalize_space(turn.get("conversation_move_label")) or "[UNKNOWN]",
+                    cur_turn=cur_text or "[EMPTY]",
+                )
                 prompts.append(build_chat_prompt(tokenizer, user))
 
             if args.batch_size and args.batch_size > 0:
@@ -340,13 +333,14 @@ def main():
                 outputs = llm_if.generate_batch(prompts)
 
             labeled_turns: List[Dict[str, Any]] = []
-            for t, out_text in zip(turns, outputs):
-                rec = dict(t)
+            for turn, out_text in zip(turns, outputs):
+                rec = dict(turn)
                 rec.setdefault("category", category)
-                lab = normalize_label(out_text)
-                rec["conversation_move_label"] = lab
-                if lab is None:
-                    rec["conversation_move_label_error"] = out_text[:400]
+                rec["maxim_violation_scheme"] = MAXIM_VIOLATION_SCHEME
+                label = normalize_label(out_text)
+                rec["maxim_violation_label"] = label
+                if label is None:
+                    rec["maxim_violation_label_error"] = out_text[:400]
                 labeled_turns.append(rec)
 
             save_episode_turns(out_path, labeled_turns)
