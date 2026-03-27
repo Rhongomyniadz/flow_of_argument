@@ -14,7 +14,7 @@ MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DATA_ROOT = "data"
 DEFAULT_INPUT_SUBDIR = "conversation_moves_labeled"
 DEFAULT_OUTPUT_SUBDIR = "maxim_violations_labeled"
-DEFAULT_CATEGORIES = ["business", "commentary", "news", "religion", "sports"]
+DEFAULT_CATEGORIES = ["business", "commentary", "news", "political", "religion", "sports"]
 MAXIM_VIOLATION_SCHEME = "exp7_grounding_v1"
 
 

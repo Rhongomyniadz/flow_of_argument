@@ -5,7 +5,7 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -30,6 +30,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
+
+DEFAULT_DATA_DIR = "data/stance_labeled/512"
+DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 
 # ============================================================================
 # Data Processing
@@ -60,9 +63,20 @@ def preprocess_episode(data: List[dict], metric_type: str, min_turns: int) -> Op
         if stance is None:
             continue
 
-        start_time = float(turn.get("startTime", 0.0))
-        end_time = float(turn.get("endTime", start_time + 0.1))
-        duration = max(end_time - start_time, 0.1)
+        raw_start_time = turn.get("start_time", turn.get("startTime", 0.0))
+        start_time = float(raw_start_time if raw_start_time is not None else 0.0)
+
+        raw_end_time = turn.get("end_time", turn.get("endTime"))
+        raw_duration = turn.get("duration")
+        if raw_end_time is not None:
+            end_time = float(raw_end_time)
+            duration = max(end_time - start_time, 0.1)
+        elif raw_duration is not None:
+            duration = max(float(raw_duration), 0.1)
+            end_time = start_time + duration
+        else:
+            end_time = start_time + 0.1
+            duration = 0.1
 
         explicit_count = len(turn.get("explicit_propositions", []) or [])
         implicit_count = len(turn.get("assumptions", []) or [])
@@ -74,17 +88,187 @@ def preprocess_episode(data: List[dict], metric_type: str, min_turns: int) -> Op
                 "speaker_id": turn.get("speaker_id"),
                 "stance_5pt": float(stance),
                 "iceberg_norm": float(iceberg_val),
-                "startTime": start_time,
+                "start_time": start_time,
             }
         )
 
     if len(features) < min_turns:
         return None
 
-    df = pd.DataFrame(features).sort_values("startTime").reset_index(drop=True)
+    df = pd.DataFrame(features).sort_values("start_time").reset_index(drop=True)
     if df["speaker_id"].nunique() != 2:
         return None
     return df
+
+
+def discover_category_names(data_path: Path, category_data_subdir: str) -> List[str]:
+    """Returns category names for immediate subdirectories that contain the requested data subdir."""
+    categories: List[str] = []
+    for child in sorted(data_path.iterdir()):
+        if not child.is_dir():
+            continue
+        if (child / category_data_subdir).is_dir():
+            categories.append(child.name)
+    return categories
+
+
+def normalize_categories(categories: Optional[Sequence[str]]) -> List[str]:
+    """Deduplicates requested categories while preserving user order."""
+    if not categories:
+        return []
+
+    normalized: List[str] = []
+    seen = set()
+    for category in categories:
+        category_name = str(category).strip()
+        if not category_name:
+            continue
+        key = category_name.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        normalized.append(category_name)
+    return normalized
+
+
+def resolve_requested_categories(requested: Sequence[str], available: Sequence[str]) -> List[str]:
+    """Resolves a user request against available category names, supporting 'all'."""
+    available_lookup = {category.lower(): category for category in available}
+
+    if not requested or any(category.lower() == "all" for category in requested):
+        return list(available)
+
+    resolved: List[str] = []
+    missing: List[str] = []
+    for category in requested:
+        match = available_lookup.get(category.lower())
+        if match is None:
+            missing.append(category)
+            continue
+        resolved.append(match)
+
+    if missing:
+        raise ValueError(
+            f"Unknown categories: {', '.join(sorted(missing))}. "
+            f"Available categories: {', '.join(available)}."
+        )
+
+    return resolved
+
+
+def find_category_lookup_root(data_path: Path, category_data_subdir: str) -> Optional[Path]:
+    """Finds a nearby category-root directory that can be used to map flat files back to categories."""
+    for candidate in [data_path.parent.parent, data_path.parent]:
+        if not candidate.exists() or not candidate.is_dir():
+            continue
+        if discover_category_names(candidate, category_data_subdir):
+            return candidate
+    return None
+
+
+def collect_episode_files(
+    data_path: Path, categories: Optional[Sequence[str]], category_data_subdir: str
+) -> List[Tuple[Optional[str], Path]]:
+    """
+    Collects episode files from one of three layouts:
+      1. Category root: data/{category}/{category_data_subdir}/*.json
+      2. Single category root: data/{category}/{category_data_subdir}
+      3. Direct JSON folder: some/path/*.json
+    """
+    if not data_path.exists():
+        raise FileNotFoundError(f"Input path does not exist: {data_path}")
+
+    requested_categories = normalize_categories(categories)
+    available_categories = discover_category_names(data_path, category_data_subdir)
+
+    if available_categories:
+        selected_categories = resolve_requested_categories(requested_categories, available_categories)
+        logger.info("Running categories: %s", ", ".join(selected_categories))
+
+        episode_files: List[Tuple[Optional[str], Path]] = []
+        for category in selected_categories:
+            category_path = data_path / category / category_data_subdir
+            category_files = sorted(category_path.glob("*.json"))
+            logger.info("Category=%s | files=%d | path=%s", category, len(category_files), category_path)
+            episode_files.extend((category, file_path) for file_path in category_files)
+        return episode_files
+
+    single_category_path = data_path / category_data_subdir
+    if single_category_path.is_dir():
+        category_name = data_path.name
+        if requested_categories and not any(
+            category.lower() in {"all", category_name.lower()} for category in requested_categories
+        ):
+            logger.warning(
+                "Ignoring --categories because %s already points to a single category directory.", data_path
+            )
+        category_files = sorted(single_category_path.glob("*.json"))
+        logger.info("Single category=%s | files=%d | path=%s", category_name, len(category_files), single_category_path)
+        return [(category_name, file_path) for file_path in category_files]
+
+    direct_json_files = sorted(data_path.glob("*.json"))
+    if direct_json_files:
+        inferred_category = data_path.parent.name if data_path.name == category_data_subdir else None
+        category_lookup_root = find_category_lookup_root(data_path, category_data_subdir)
+
+        if requested_categories and inferred_category is None and category_lookup_root is not None:
+            available_categories = discover_category_names(category_lookup_root, category_data_subdir)
+            selected_categories = resolve_requested_categories(requested_categories, available_categories)
+
+            filtered_files: List[Tuple[Optional[str], Path]] = []
+            missing_files = 0
+            for category in selected_categories:
+                category_files = sorted((category_lookup_root / category / category_data_subdir).glob("*.json"))
+                for category_file in category_files:
+                    candidate = data_path / category_file.name
+                    if candidate.exists():
+                        filtered_files.append((category, candidate))
+                    else:
+                        missing_files += 1
+
+            logger.info(
+                "Direct JSON category selection | categories=%s | matched_files=%d | missing_matches=%d | lookup_root=%s",
+                ", ".join(selected_categories),
+                len(filtered_files),
+                missing_files,
+                category_lookup_root,
+            )
+            return filtered_files
+
+        if requested_categories and inferred_category is None:
+            logger.info("Applying category filtering from each episode's embedded 'category' field.")
+        logger.info(
+            "Direct JSON input | inferred_category=%s | files=%d | path=%s",
+            inferred_category or "none",
+            len(direct_json_files),
+            data_path,
+        )
+        return [(inferred_category, file_path) for file_path in direct_json_files]
+
+    raise FileNotFoundError(
+        f"No episode JSON files found under {data_path}. Expected either JSON files directly, "
+        f"a single '{category_data_subdir}' subdirectory, or category directories containing "
+        f"'{category_data_subdir}'."
+    )
+
+
+def build_episode_id(category: Optional[str], file_path: Path) -> str:
+    """Builds a unique episode identifier for combined multi-category runs."""
+    if category:
+        return f"{category}/{file_path.stem}"
+    return file_path.stem
+
+
+def infer_category_from_episode(raw_data: List[dict]) -> Optional[str]:
+    """Infers the category from episode payload metadata when files are stored in a flat directory."""
+    if not raw_data:
+        return None
+
+    for turn in raw_data:
+        category = str(turn.get("category") or "").strip()
+        if category:
+            return category
+    return None
 
 
 # ============================================================================
@@ -217,7 +401,28 @@ def main():
     parser = argparse.ArgumentParser(description="Run Stance->Other-Iceberg Granger Causality over Offset Grid")
 
     # Input/Output
-    parser.add_argument("--data_dir", type=str, required=True, help="Path to folder containing episode JSONs")
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        default=DEFAULT_DATA_DIR,
+        help=(
+            "Path to either a flat stance-labeled directory (default), a category root "
+            "(for example data/), a single category (for example data/commentary), "
+            "or a directory containing episode JSONs."
+        ),
+    )
+    parser.add_argument(
+        "--categories",
+        nargs="+",
+        default=None,
+        help="Category names to run when --data_dir is a category root. Omit or pass 'all' to run every category.",
+    )
+    parser.add_argument(
+        "--category_data_subdir",
+        type=str,
+        default=DEFAULT_CATEGORY_DATA_SUBDIR,
+        help="Per-category subdirectory that contains episode JSONs when using category-root mode.",
+    )
     parser.add_argument(
         "--output_dir", type=str, default="experiments/exp2_iceberg/results", help="Directory to save outputs"
     )
@@ -250,21 +455,36 @@ def main():
     out_path = Path(args.output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
 
-    episode_files = sorted(list(data_path.glob("*.json")))
-    logger.info(f"Found {len(episode_files)} episode files in {data_path}")
+    try:
+        episode_files = collect_episode_files(
+            data_path=data_path,
+            categories=args.categories,
+            category_data_subdir=args.category_data_subdir,
+        )
+    except (FileNotFoundError, ValueError) as e:
+        logger.error(str(e))
+        return
+
+    logger.info("Found %d episode files to process from %s", len(episode_files), data_path)
 
     all_rows: List[dict] = []
+    requested_categories = normalize_categories(args.categories)
+    requested_category_keys = {category.lower() for category in requested_categories if category.lower() != "all"}
 
-    for file_path in tqdm(episode_files, desc="Processing Episodes"):
+    for category, file_path in tqdm(episode_files, desc="Processing Episodes"):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 raw_data = json.load(f)
+
+            file_category = category or infer_category_from_episode(raw_data)
+            if requested_category_keys and (file_category or "").lower() not in requested_category_keys:
+                continue
 
             df_episode = preprocess_episode(raw_data, args.metric, args.min_turns)
             if df_episode is None:
                 continue
 
-            episode_id = file_path.stem
+            episode_id = build_episode_id(file_category, file_path)
             rows = analyze_dyadic_granger_longform(
                 df=df_episode,
                 episode_id=episode_id,
@@ -274,6 +494,8 @@ def main():
                 min_granger_samples=args.min_granger_samples,
                 odd_offsets_only=args.odd_offsets_only,
             )
+            for row in rows:
+                row["category"] = file_category or ""
             all_rows.extend(rows)
 
         except Exception as e:
@@ -284,8 +506,7 @@ def main():
         return
 
     df_long = pd.DataFrame(all_rows)
-    # Update column selection to reflect new output
-    df_long = df_long[["episode", "speaker_id", "offset", "granger_p_value"]]
+    df_long = df_long[["category", "episode", "speaker_id", "offset", "granger_p_value"]]
 
     out_csv = out_path / f"granger_longform_{args.metric}.csv"
     df_long.to_csv(out_csv, index=False)
