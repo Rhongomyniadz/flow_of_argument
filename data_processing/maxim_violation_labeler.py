@@ -67,16 +67,17 @@ ALLOWED_SET = set(ALLOWED)
 
 MAXIM_PROMPT = """
 You are an expert conversation analyst.
-Your job is to label whether the CURRENT TURN is a maxim violation for Experiment 7.
 
-Use ONLY the PREVIOUS TURN and the CURRENT TURN. Judge from the source turn plus local context only.
-Do NOT use any later turn, and do NOT infer violation from whether repair actually happened.
+Your task is to decide whether the CURRENT TURN is a maxim violation.
 
-Operational definition:
-A maxim violation is a substantive turn that, relative to the immediately preceding turn and the action it projects,
-creates a local problem of sufficiency, relevance, or interpretability strong enough that a cooperative recipient
-would be warranted in withholding straightforward uptake and instead asking for clarification, pursuing a more
-adequate response, or challenging the turn.
+Use ONLY the PREVIOUS TURN and the CURRENT TURN.
+Judge only from the source turn and its immediate local context.
+Do NOT use any later turn.
+Do NOT decide based on whether anyone later asked for repair or clarification.
+
+Main idea:
+A maxim violation happens when the CURRENT TURN creates a clear local interaction problem, compared with the PREVIOUS TURN and what it makes relevant next.
+The problem must be strong enough that a cooperative listener would reasonably pause normal uptake and instead ask for clarification, ask for a better answer, or challenge the turn.
 
 Allowed labels (output EXACTLY one):
 - No Violation
@@ -84,40 +85,88 @@ Allowed labels (output EXACTLY one):
 - Relation
 - Manner
 
-Definitions:
+Label meanings:
 1) Quantity
-   - The turn gives too little or too much for the immediate discourse demand.
-   - Strongest cases: underinformative answers, evasive non-answers, or overlong material that blocks the projected task.
-2) Relation
-   - The turn is insufficiently responsive to what the previous turn puts on the table.
-   - Use when the previous turn projects a response from the current speaker and the current turn shifts away,
-     answers a different question, or otherwise fails to address the locally relevant issue.
-3) Manner
-   - The turn is too hard to interpret for current purposes because it is unclear, incomplete, ambiguous,
-     disordered, or under-specified.
-4) No Violation
-   - The turn is usable enough for current purposes, even if it is awkward, rude, brief, disagreeing, or socially dispreferred.
-   - Ordinary topic management is NOT automatically a violation.
-   - Self-correction is NOT automatically a violation if the speaker repairs the trouble within the same turn.
-   - Backchannels and procedural turns are normally No Violation.
+   - The turn gives too little or too much for what is needed right now.
+   - Common cases:
+     - incomplete or underinformative answer
+     - evasive answer
+     - overly long answer that gets in the way of the projected task
 
-Decision rules:
-- Focus on the immediately prior turn and the action it projects.
-- Ask: would a cooperative recipient be warranted in withholding straightforward uptake here?
-- If the current turn is simply a normal next contribution, choose No Violation.
-- If more than one label seems possible, prefer:
-  1) Manner when the turn is too unclear to use at all.
-  2) Relation when the main problem is non-responsiveness to the thing currently on the table.
-  3) Quantity when the turn is responsive but under- or over-informative.
+2) Relation
+   - The turn does not respond well enough to what the previous turn makes relevant.
+   - Use this when the current speaker is expected to address something specific, but instead shifts away, answers a different issue, or does not address the main point on the table.
+
+3) Manner
+   - The turn is too hard to understand for current purposes.
+   - Use this when it is unclear, incomplete, vague, disorganized, ambiguous, or too under-specified to interpret straightforwardly.
+
+4) No Violation
+   - The turn is usable enough for the local purpose, even if it is brief, awkward, rude, disagreeing, or socially dispreferred.
+   - Normal topic management is not automatically a violation.
+   - Self-correction is not automatically a violation if the speaker fixes the problem within the same turn.
+   - Backchannels and procedural turns are usually No Violation.
+
+How to decide:
+- Focus on what the immediately previous turn makes relevant next.
+- Ask: could a cooperative listener continue normally, or would they reasonably need to stop and ask for clarification, ask for more, or challenge it?
+- If the turn works well enough as a normal next contribution, choose No Violation.
+- If more than one label seems possible, use this priority:
+  1) Manner if the turn is too unclear to use at all
+  2) Relation if the main problem is not addressing the relevant issue
+  3) Quantity if it is responsive but gives too little or too much
 
 Important:
-- The provided turn-type and move labels are contextual hints only. Do NOT automatically map Topic Shift,
-  Stonewalling / Non-Response, or Self-Correction to a violation label.
-- Judge the local interactional problem, not general conversational quality.
+- The turn-type and move labels below are only hints.
+- Do NOT automatically treat Topic Shift, Stonewalling / Non-Response, or Self-Correction as violations.
+- Judge the local interaction problem, not overall conversation quality.
+
+Turn type meanings:
+- Substantive:
+  A turn that moves the conversation forward by adding information, making a claim, giving an opinion, answering, or managing the topic.
+  Common signs: usually longer than a few words, contains content words, carries the main discussion.
+- Backchannel:
+  A short signal of attention that does not take the floor.
+  Common signs: very short turns like “yeah,” “uh-huh,” “right,” “okay.”
+- Procedural:
+  Meta-talk about the conversation channel or situation, not the topic itself.
+  Common signs: “Can you hear me?”, “You're muted,” “Hold on.”
+- Disrupted:
+  A turn that gets cut off before a complete thought is finished.
+  Common signs: broken syntax, interruption, trailing dash.
+
+Move type meanings:
+Constructive moves:
+- Assert / Elaborate:
+  States a fact, opinion, claim, explanation, or added detail.
+- Agree / Align:
+  Clearly agrees with or supports the previous speaker.
+- Answer:
+  Gives information requested by a previous question.
+
+Repair moves:
+- Clarification Request (Generic):
+  Signals general difficulty understanding what the other person means.
+  Examples: “What do you mean?” “I don't follow.”
+- Clarification Request (Specific):
+  Signals that some specific missing piece is needed.
+  Examples: “Which report?” “Who is 'he'?”
+- Correction / Challenge:
+  Rejects or disputes a previous claim, assumption, or framing.
+- Self-Correction:
+  The speaker fixes or revises their own turn while still speaking.
+
+Disengagement moves:
+- Topic Shift:
+  Changes the subject without clearly linking it to the current one.
+- Stonewalling / Non-Response:
+  Gives a very short, non-committal, or minimal response where more engagement might have been expected.
 
 Output rules:
-- Output ONLY one label from the allowed list.
-- No quotes, no punctuation, no explanation.
+- Output ONLY one label from the allowed list
+- No quotes
+- No punctuation
+- No explanation
 
 PREVIOUS TURN TYPE:
 {prev_type}

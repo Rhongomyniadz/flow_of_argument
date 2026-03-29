@@ -1,0 +1,40 @@
+{
+  "binary_rows": 283334,
+  "categories": {
+    "business": 174727,
+    "commentary": 36145,
+    "news": 3154,
+    "religion": 59728,
+    "sports": 14999,
+    "unknown": 60978
+  },
+  "event_study_post_turns": 6,
+  "event_study_pre_turns": 4,
+  "feature_cache_path": "experiments/exp2_iceberg/cache/turn_level_features.csv",
+  "high_conflict_min_disagreement_rate": 0.1,
+  "high_conflict_min_disagreement_turns": 6,
+  "hypothesis_alignment": "higher target values mean more explicit relative to implicit content",
+  "loaded_from_cache": true,
+  "model_candidates": [
+    "baseline_temporal_control",
+    "linear_current_plus_history",
+    "linear_temporal_history",
+    "linear_temporal_history_interactions",
+    "spline_temporal_history",
+    "hist_gradient_boosting_temporal"
+  ],
+  "predictor_family": "lagged_stance_and_turn_history_to_explicitness",
+  "progress_curve_role": "diagnostic_only",
+  "progress_used_as_predictor": false,
+  "stance_distribution": {
+    "1.0": 5406,
+    "2.0": 2413,
+    "3.0": 66397,
+    "4.0": 98364,
+    "5.0": 177151
+  },
+  "target_metric_candidates": [
+    "iceberg_log_ratio"
+  ],
+  "turn_rows": 349731
+}
