@@ -305,6 +305,12 @@ def main() -> None:
     ap.add_argument("--repetition_penalty", type=float, default=1.05)
     ap.add_argument("--download_dir", type=str, default="/shared/4/models")
     ap.add_argument("--max_tokens", type=int, default=8)
+    ap.add_argument(
+        "--max_episodes",
+        type=int,
+        default=None,
+        help="Optional cap on number of episode files processed per category.",
+    )
     args = ap.parse_args()
 
     if not os.path.isdir(args.input_root):
@@ -338,6 +344,8 @@ def main() -> None:
 
     for category in categories:
         files = discover_episode_files(args.input_root, args.input_subdir, category)
+        if args.max_episodes is not None and args.max_episodes > 0:
+            files = files[: args.max_episodes]
         if not files:
             print(
                 f"Skipping category={category}: no .json files found under "

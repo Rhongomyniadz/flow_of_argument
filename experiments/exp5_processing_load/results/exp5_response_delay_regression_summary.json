@@ -1,166 +1,177 @@
 {
   "regression": {
-    "requested_formula": "response_delay_at_time_n ~ implicature_load + explicit_statement_count + average_response_time_0_to_n_minus_1",
-    "fitted_formula": "log1p(response_delay_at_time_n) ~ implicature_load + explicit_statement_count + log1p(average_response_time_0_to_n_minus_1)",
-    "n": 61795,
-    "num_parameters": 4,
-    "r_squared": 0.055571552738736374,
-    "adjusted_r_squared": 0.05552570002002677,
-    "rmse_on_modeled_scale": 0.3485253974286627,
-    "residual_skewness": 1.15049282134123,
+    "specification": "primary_spec",
+    "specification_description": "Primary Experiment 5 response-delay model aligned with the stated setup: implicature_load plus prior response-time baseline, without explicit_statement_count.",
+    "requested_formula": "response_delay_at_time_n ~ implicature_load + average_response_time_0_to_n_minus_1",
+    "fitted_formula": "log1p(response_delay_at_time_n) ~ implicature_load + log1p(average_response_time_0_to_n_minus_1)",
+    "n": 386698,
+    "num_parameters": 3,
+    "r_squared": 0.22813784334119191,
+    "adjusted_r_squared": 0.22813385124325092,
+    "rmse_on_modeled_scale": 1.1113935569519122,
+    "residual_skewness": 0.5519812955319585,
+    "model_family": "bayesian_linear_regression_normal_inverse_gamma",
+    "posterior_df": 386702.0,
+    "sigma": {
+      "term": "sigma",
+      "posterior_mean": 1.1113764615499355,
+      "posterior_sd": 0.0012447714323245318
+    },
+    "prior": {
+      "beta_prior_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "beta_prior_precision_diagonal": [
+        1e-06,
+        0.000597043494895698,
+        0.09377059736558713
+      ],
+      "sigma2_prior_a0": 2.0,
+      "sigma2_prior_b0": 1.0
+    },
     "transform_selection": {
-      "source": "exp5_response_delay_transform_grid",
-      "selected_model_id": "log1p__raw__raw__log1p",
-      "selection_rule": "highest adjusted_r_squared in the transform grid"
+      "selected_model_id": "log1p__raw__log1p",
+      "selection_rule": "highest adjusted_r_squared, tie-broken by lowest absolute residual skewness",
+      "candidates": [
+        {
+          "outcome_transform": "log1p",
+          "outcome_name": "log1p(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.22813385124325092,
+          "r_squared": 0.22813784334119191,
+          "rmse_on_modeled_scale": 1.1113935569519122,
+          "residual_skewness": 0.5519812955319585
+        },
+        {
+          "outcome_transform": "sqrt",
+          "outcome_name": "sqrt(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.22639747241481734,
+          "r_squared": 0.22640147349332373,
+          "rmse_on_modeled_scale": 2.1804716883886135,
+          "residual_skewness": 3.395463306347917
+        },
+        {
+          "outcome_transform": "asinh",
+          "outcome_name": "asinh(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.22429619117682864,
+          "r_squared": 0.22430020312317844,
+          "rmse_on_modeled_scale": 1.3281891590674753,
+          "residual_skewness": 0.41589223309803086
+        },
+        {
+          "outcome_transform": "raw",
+          "outcome_name": "response_delay_at_time_n",
+          "adjusted_r_squared": 0.1098400434046819,
+          "r_squared": 0.10984464731915033,
+          "rmse_on_modeled_scale": 42.12068015200272,
+          "residual_skewness": 32.86983719593572
+        }
+      ]
     },
     "operationalization": {
       "response_delay_at_time_n": "gap_to_next_sec",
-      "explicit_statement_count": "count of unique explicit_propositions in the current turn",
       "average_response_time_0_to_n_minus_1": "within-episode mean of prior non-negative response delays before turn n"
     },
     "coefficients": {
-      "Intercept": 0.39439041619832604,
-      "implicature_load": 0.0026629102647588443,
-      "explicit_statement_count": -0.00661351176736194,
-      "log1p(average_response_time_0_to_n_minus_1)": 0.3508332759937538
+      "Intercept": 0.2969827551782869,
+      "implicature_load": 0.003361042558134039,
+      "log1p(average_response_time_0_to_n_minus_1)": 0.5826496036570705
     }
   },
   "distribution_checks": {
     "response_delay_at_time_n": {
+      "transform": "log1p",
       "raw": {
-        "n": 61795,
-        "mean": 0.9706472044663805,
-        "std": 1.1044775350591582,
-        "min": 0.013000000000147338,
-        "median": 0.7410000000000139,
-        "q90": 1.86099999999999,
-        "q99": 4.236299999999978,
-        "max": 54.19200000000001,
-        "p_zero": 0.0,
-        "skewness": 9.701127160115151,
-        "q99_over_median": 5.717004048582859,
+        "n": 386698,
+        "mean": 9.85011475073337,
+        "std": 44.64376228233685,
+        "min": 0.0,
+        "median": 1.1200000000001182,
+        "q90": 23.47434085864429,
+        "q99": 107.32363260646764,
+        "max": 5733.4,
+        "p_zero": 0.17403503509198393,
+        "skewness": 30.432498754689473,
+        "q99_over_median": 95.82467197005028,
         "supports_log1p": true
       },
       "modeled": {
-        "n": 61795,
-        "mean": 0.6011248806508759,
-        "std": 0.35862110521597684,
-        "min": 0.012916225266691776,
-        "median": 0.5544596607860599,
-        "q90": 1.0511712140679697,
-        "q99": 1.6556151163539918,
-        "max": 4.0108180152438075,
-        "p_zero": 0.0,
-        "skewness": 1.1883399008938889,
-        "q99_over_median": 2.9859974195540557,
+        "n": 386698,
+        "mean": 1.240721069680605,
+        "std": 1.2650168659092373,
+        "min": 0.0,
+        "median": 0.7514160886839768,
+        "q90": 3.197625256844071,
+        "q99": 4.685123344478977,
+        "max": 8.654238403340557,
+        "p_zero": 0.17403503509198393,
+        "skewness": 1.079943517303614,
+        "q99_over_median": 6.235058598072419,
         "supports_log1p": true
-      },
-      "used_log1p": true,
-      "used_standardize": false,
-      "standardize_mean": null,
-      "standardize_std": null
+      }
     },
     "implicature_load": {
+      "transform": "raw",
       "raw": {
-        "n": 61795,
-        "mean": 5.896856090613228,
-        "std": 5.723603882647727,
-        "min": 0.006666666666660603,
-        "median": 4.659999999999997,
-        "q90": 11.850919999999991,
-        "q99": 25.48877400000001,
-        "max": 248.5247,
+        "n": 386698,
+        "mean": 5.903232948768203,
+        "std": 12.941869449461079,
+        "min": 0.00125,
+        "median": 3.5700000000000003,
+        "q90": 11.064,
+        "q99": 38.41356683728026,
+        "max": 498.971,
         "p_zero": 0.0,
-        "skewness": 6.227575627696717,
-        "q99_over_median": 5.469693991416315,
+        "skewness": 13.33594020579966,
+        "q99_over_median": 10.760102755540688,
         "supports_log1p": true
       },
       "modeled": {
-        "n": 61795,
-        "mean": 5.896856090613228,
-        "std": 5.723603882647727,
-        "min": 0.006666666666660603,
-        "median": 4.659999999999997,
-        "q90": 11.850919999999991,
-        "q99": 25.48877400000001,
-        "max": 248.5247,
+        "n": 386698,
+        "mean": 5.903232948768203,
+        "std": 12.941869449461079,
+        "min": 0.00125,
+        "median": 3.5700000000000003,
+        "q90": 11.064,
+        "q99": 38.41356683728026,
+        "max": 498.971,
         "p_zero": 0.0,
-        "skewness": 6.227575627696717,
-        "q99_over_median": 5.469693991416315,
+        "skewness": 13.33594020579966,
+        "q99_over_median": 10.760102755540688,
         "supports_log1p": true
-      },
-      "used_log1p": false,
-      "used_standardize": false,
-      "standardize_mean": null,
-      "standardize_std": null
-    },
-    "explicit_statement_count": {
-      "raw": {
-        "n": 61795,
-        "mean": 6.118423820697467,
-        "std": 2.933122943684668,
-        "min": 0.0,
-        "median": 6.0,
-        "q90": 10.0,
-        "q99": 10.0,
-        "max": 10.0,
-        "p_zero": 0.0005178412492920139,
-        "skewness": 0.0867953492981947,
-        "q99_over_median": 1.6666666666666667,
-        "supports_log1p": true
-      },
-      "modeled": {
-        "n": 61795,
-        "mean": 6.118423820697467,
-        "std": 2.933122943684668,
-        "min": 0.0,
-        "median": 6.0,
-        "q90": 10.0,
-        "q99": 10.0,
-        "max": 10.0,
-        "p_zero": 0.0005178412492920139,
-        "skewness": 0.0867953492981947,
-        "q99_over_median": 1.6666666666666667,
-        "supports_log1p": true
-      },
-      "used_log1p": false,
-      "used_standardize": false,
-      "standardize_mean": null,
-      "standardize_std": null
+      }
     },
     "average_response_time_0_to_n_minus_1": {
+      "transform": "log1p",
       "raw": {
-        "n": 61795,
-        "mean": 1.003796485868379,
-        "std": 0.8521239867800767,
-        "min": 0.01999999999998181,
-        "median": 0.8910000000000011,
-        "q90": 1.4891802310654696,
-        "q99": 3.34526999999999,
-        "max": 53.010999999999996,
-        "p_zero": 0.0,
-        "skewness": 21.356744853447378,
-        "q99_over_median": 3.7545117845117684,
+        "n": 386698,
+        "mean": 8.977141909706715,
+        "std": 33.59016495964484,
+        "min": 0.0,
+        "median": 3.5310408080719986,
+        "q90": 17.76974414617959,
+        "q99": 75.5638626600665,
+        "max": 2605.144926782782,
+        "p_zero": 0.023442065901556255,
+        "skewness": 22.267705048360888,
+        "q99_over_median": 21.39988370775174,
         "supports_log1p": true
       },
       "modeled": {
-        "n": 61795,
-        "mean": 0.659845999839143,
-        "std": 0.2354596667528363,
-        "min": 0.01980262729616188,
-        "median": 0.637105789676321,
-        "q90": 0.9119534317718027,
-        "q99": 1.4690878669522391,
-        "max": 3.989187729523196,
-        "p_zero": 0.0,
-        "skewness": 2.148412073398686,
-        "q99_over_median": 2.305877439441577,
+        "n": 386698,
+        "mean": 1.5856866528329112,
+        "std": 1.0326821223859828,
+        "min": 0.0,
+        "median": 1.5109516720532579,
+        "q90": 2.932246219487442,
+        "q99": 4.338125198433221,
+        "max": 7.865627368871684,
+        "p_zero": 0.023442065901556255,
+        "skewness": 0.6622701144225009,
+        "q99_over_median": 2.87112108128387,
         "supports_log1p": true
-      },
-      "used_log1p": true,
-      "used_standardize": false,
-      "standardize_mean": null,
-      "standardize_std": null
+      }
     }
   }
 }
