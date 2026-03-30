@@ -9,9 +9,10 @@ from pathlib import Path
 import matplotlib
 import numpy as np
 import seaborn as sns
+import torch
 from scipy.optimize import minimize
-from sentence_transformers import SentenceTransformer
 from tqdm.auto import tqdm
+from transformers import AutoModel, AutoTokenizer
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -19,26 +20,33 @@ import matplotlib.pyplot as plt
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
 RESPONSE_CLASSES = ["Backchannel", "Substantive", "Clarification", "Silence/Abandonment"]
-_ASSUMPTION_EMBEDDER = None
+_ASSUMPTION_TOKENIZER = None
+_ASSUMPTION_MODEL = None
 
 
 def assumption_embedder():
-    global _ASSUMPTION_EMBEDDER
-    if _ASSUMPTION_EMBEDDER is None:
-        _ASSUMPTION_EMBEDDER = SentenceTransformer("all-MiniLM-L6-v2")
-    return _ASSUMPTION_EMBEDDER
+    global _ASSUMPTION_TOKENIZER, _ASSUMPTION_MODEL
+    if _ASSUMPTION_TOKENIZER is None or _ASSUMPTION_MODEL is None:
+        model_name = "sentence-transformers/all-MiniLM-L6-v2"
+        _ASSUMPTION_TOKENIZER = AutoTokenizer.from_pretrained(model_name)
+        _ASSUMPTION_MODEL = AutoModel.from_pretrained(model_name)
+        _ASSUMPTION_MODEL.eval()
+    return _ASSUMPTION_TOKENIZER, _ASSUMPTION_MODEL
 
 
 def assumption_embeddings(texts):
     texts = [t for t in texts if t]
     if not texts:
         return np.empty((0, 384), dtype=np.float32)
-    return assumption_embedder().encode(
-        texts,
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-        show_progress_bar=False,
-    ).astype(np.float32, copy=False)
+    tokenizer, model = assumption_embedder()
+    batch = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
+    with torch.no_grad():
+        output = model(**batch)
+        hidden = output.last_hidden_state
+        mask = batch["attention_mask"].unsqueeze(-1).expand(hidden.shape).float()
+        pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
+        pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
+    return pooled.cpu().numpy().astype(np.float32, copy=False)
 
 
 def f(x):
