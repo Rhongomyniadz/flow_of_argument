@@ -64,16 +64,65 @@ ALLOWED = [
     "Manner",
 ]
 ALLOWED_SET = set(ALLOWED)
+NON_VIOLATION_TURN_TYPES = {"Backchannel", "Procedural", "Disrupted"}
+NON_VIOLATION_MOVES = {
+    "Clarification Request (Generic)",
+    "Clarification Request (Specific)",
+    "Agree / Align",
+}
+ANSWERISH_MOVES = {
+    "Answer",
+    "Assert / Elaborate",
+}
+PROMO_PATTERNS = [
+    r"\bsponsored by\b",
+    r"\bbrought to you by\b",
+    r"\bpromo code\b",
+    r"\bdownload the app\b",
+    r"\bfree trial\b",
+    r"\bprice estimates\b",
+    r"\btop-rated pros\b",
+    r"\bfree samsung\b",
+    r"\bthumbtack\b",
+    r"\bhomes\.com\b",
+    r"\bmetro\b",
+    r"\b5g data\b",
+]
+SPLICE_START_PATTERNS = (
+    "and ",
+    "but ",
+    "because ",
+    "with ",
+    "from ",
+    "to ",
+    "of ",
+    "for ",
+    "in ",
+    "on ",
+    "at ",
+    "some ",
+    "ones ",
+    "the difference ",
+)
+DISCOURSE_CONTINUATION_PATTERNS = (
+    "yeah",
+    "yes",
+    "no",
+    "so",
+    "i mean",
+    "well",
+    "right",
+    "exactly",
+    "actually",
+    "definitely",
+    "and",
+    "but",
+)
 
 MAXIM_PROMPT = """
 You are an expert conversation analyst.
 
-Your task is to decide whether the CURRENT TURN is a maxim violation.
-
-Use ONLY the PREVIOUS TURN and the CURRENT TURN.
-Judge only from the source turn and its immediate local context.
-Do NOT use any later turn.
-Do NOT decide based on whether anyone later asked for repair or clarification.
+Your task is to decide whether the CURRENT TURN is a maxim violation. Judge from the source turn and its immediate local context.
 
 Main idea:
 A maxim violation happens when the CURRENT TURN creates a clear local interaction problem, compared with the PREVIOUS TURN and what it makes relevant next.
@@ -120,6 +169,21 @@ Important:
 - The turn-type and move labels below are only hints.
 - Do NOT automatically treat Topic Shift, Stonewalling / Non-Response, or Self-Correction as violations.
 - Judge the local interaction problem, not overall conversation quality.
+- Do NOT label obvious advertisement copy, sponsor reads, station IDs, or promo segments as maxim violations just because they are abrupt or off-topic. If the text looks like inserted non-conversational material, choose No Violation.
+- Do NOT label transcript splice boundaries, broken segment joins, or metadata/captioning artifacts as Relation or Quantity violations. If the discontinuity looks like a recording or transcription artifact rather than a cooperative speaker choice, choose No Violation.
+- Do NOT label Disrupted turns as maxim violations unless the remaining text itself creates a clear local Manner problem beyond simple truncation. Simple cut-offs, interruptions, or partial fragments caused by segmentation should usually be No Violation.
+- Do NOT label normal interview progression as a maxim violation. Follow-up questions, topic elaborations, requests to tell us more, and ordinary speaker handoffs are usually No Violation.
+- Do NOT label a turn as Relation just because it introduces a subtopic, example, comparison, anecdote, or partial reframing that still connects naturally to the previous turn.
+- Do NOT label a turn as Quantity just because it is long, detailed, enthusiastic, or somewhat indirect. Use Quantity only when it is clearly too little or too much for the immediate local need.
+- Clarification requests, agreement moves, and ordinary answer-prefaces like "yeah", "so", or "I mean" are usually No Violation unless they create a clear local breakdown.
+- For interviews, podcasts, and conversational Q&A, long informative answers are usually No Violation. Only use Quantity when the answer is plainly evasive, drastically under-informative, or so excessive that it blocks the projected task.
+- Do NOT use Relation when the current turn still answers, elaborates, exemplifies, or extends the previous turn's topic, even if the connection is loose.
+- Prefer No Violation over Relation when both turns share obvious topical vocabulary, named entities, or a clear discourse continuation marker.
+- Use Relation only for a genuine relevance breakdown: the current turn should fail to address what the prior turn made relevant in a way that a cooperative listener would likely challenge.
+- Use Manner only when the current turn itself is seriously hard to interpret. Spoken-style disfluency, casual wording, or compressed syntax are not enough by themselves.
+- Prefer No Violation over Manner when the main point of the turn is still recoverable.
+- Be especially conservative with Relation. If there is any reasonable reading on which the current turn still connects to the prior topic, prefer No Violation.
+- For Manner, brief fragmentary or broken turns can still count when a listener would genuinely struggle to recover the intended meaning from the local context.
 
 Turn type meanings:
 - Substantive:
@@ -276,6 +340,125 @@ def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
         json.dump(turns, f, ensure_ascii=False, indent=2)
 
 
+def looks_like_promo(text: str) -> bool:
+    text = normalize_space(text).lower()
+    return any(re.search(pattern, text) for pattern in PROMO_PATTERNS)
+
+
+def looks_like_splice_artifact(prev_text: str, cur_text: str) -> bool:
+    prev_text = normalize_space(prev_text)
+    cur_text = normalize_space(cur_text)
+    if not prev_text or not cur_text:
+        return False
+    prev_tail = prev_text[-1]
+    cur_head = cur_text[0]
+    return (
+        prev_tail not in ".?!"
+        and cur_head.islower()
+        and cur_text.lower().startswith(SPLICE_START_PATTERNS)
+    )
+
+
+def has_continuation_marker(text: str) -> bool:
+    text = normalize_space(text).lower()
+    return text.startswith(DISCOURSE_CONTINUATION_PATTERNS)
+
+
+def lexical_overlap(prev_text: str, cur_text: str) -> float:
+    prev_tokens = {
+        tok for tok in re.findall(r"[a-zA-Z]{3,}", normalize_space(prev_text).lower())
+        if tok not in {"that", "this", "with", "from", "have", "been", "they", "them", "their", "about", "would", "could", "should"}
+    }
+    cur_tokens = {
+        tok for tok in re.findall(r"[a-zA-Z]{3,}", normalize_space(cur_text).lower())
+        if tok not in {"that", "this", "with", "from", "have", "been", "they", "them", "their", "about", "would", "could", "should"}
+    }
+    if not prev_tokens or not cur_tokens:
+        return 0.0
+    return len(prev_tokens & cur_tokens) / min(len(prev_tokens), len(cur_tokens))
+
+
+def looks_like_reasonable_answer(prev_turn: Dict[str, Any], turn: Dict[str, Any]) -> bool:
+    prev_text = normalize_space(prev_turn.get("turn_text", ""))
+    cur_text = normalize_space(turn.get("turn_text", ""))
+    if not prev_text or not cur_text:
+        return False
+    prev_is_question = "?" in prev_text
+    cur_len = len(cur_text.split())
+    overlap = lexical_overlap(prev_text, cur_text)
+    return (
+        prev_is_question
+        and cur_len >= 12
+        and (has_continuation_marker(cur_text) or overlap >= 0.12)
+    )
+
+
+def severe_manner_signal(text: str) -> bool:
+    text = normalize_space(text)
+    low = text.lower()
+    words = text.split()
+    if not text:
+        return False
+    if text.strip().startswith((".", ",", "?", "'")):
+        return True
+    if "..." in text and len(words) <= 8:
+        return True
+    if len(words) <= 4 and any(ch.isalpha() for ch in text):
+        return True
+    if low.count(" uh") + low.count(" um") >= 2:
+        return True
+    return False
+
+
+def apply_hard_filter(i: int, prev_turn: Dict[str, Any], turn: Dict[str, Any], label: Optional[str]) -> str:
+    turn_type = normalize_space(turn.get("turn_type_label"))
+    move = normalize_space(turn.get("conversation_move_label"))
+    prev_text = str(prev_turn.get("turn_text", ""))
+    cur_text = str(turn.get("turn_text", ""))
+    if i == 0:
+        return "No Violation"
+    if turn_type in NON_VIOLATION_TURN_TYPES:
+        return "No Violation"
+    if move in NON_VIOLATION_MOVES:
+        return "No Violation"
+    if looks_like_promo(cur_text) or looks_like_promo(prev_text):
+        return "No Violation"
+    if looks_like_splice_artifact(prev_text, cur_text):
+        return "No Violation"
+    filtered = label or "No Violation"
+    overlap = lexical_overlap(prev_text, cur_text)
+    if filtered == "Relation":
+        if (
+            has_continuation_marker(cur_text)
+            or overlap >= 0.04
+            or looks_like_reasonable_answer(prev_turn, turn)
+            or move in {"Topic Shift", "Stonewalling / Non-Response"}
+        ):
+            return "No Violation"
+        if "?" in prev_text and len(normalize_space(cur_text).split()) >= 3:
+            return "No Violation"
+        if move == "Assert / Elaborate" and len(normalize_space(cur_text).split()) >= 8:
+            return "No Violation"
+    if filtered == "Quantity":
+        if move in ANSWERISH_MOVES and len(normalize_space(cur_text).split()) >= 12:
+            return "No Violation"
+        if has_continuation_marker(cur_text) and overlap >= 0.12:
+            return "No Violation"
+    if filtered == "Manner":
+        words = normalize_space(cur_text).split()
+        if severe_manner_signal(cur_text):
+            return "Manner"
+        if (
+            len(words) >= 6
+            and (overlap >= 0.06 or has_continuation_marker(cur_text))
+            and not looks_like_splice_artifact(prev_text, cur_text)
+        ):
+            return "No Violation"
+        if cur_text.count("...") == 0 and cur_text.count("uh") + cur_text.count("um") <= 1 and len(words) >= 7:
+            return "No Violation"
+    return filtered
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_root", type=str, default=DEFAULT_DATA_ROOT)
@@ -390,12 +573,13 @@ def main() -> None:
                 outputs = llm_if.generate_batch(prompts)
 
             labeled_turns: List[Dict[str, Any]] = []
-            for turn, out_text in zip(turns, outputs):
+            for i, (turn, out_text) in enumerate(zip(turns, outputs)):
                 rec = dict(turn)
                 rec.setdefault("category", category)
                 rec["maxim_violation_scheme"] = MAXIM_VIOLATION_SCHEME
                 label = normalize_label(out_text)
-                rec["maxim_violation_label"] = label
+                prev_turn = turns[i - 1] if i > 0 else {}
+                rec["maxim_violation_label"] = apply_hard_filter(i, prev_turn, turn, label)
                 if label is None:
                     rec["maxim_violation_label_error"] = out_text[:400]
                 labeled_turns.append(rec)

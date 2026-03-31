@@ -46,16 +46,16 @@
     "fitted_formula": "log1p(response_delay_at_time_n) ~ implicature_load + log1p(average_response_time_0_to_n_minus_1)",
     "n": 386698,
     "num_parameters": 3,
-    "r_squared": 0.22813784334119191,
-    "adjusted_r_squared": 0.22813385124325092,
+    "r_squared": 0.2281378433411918,
+    "adjusted_r_squared": 0.2281338512432508,
     "rmse_on_modeled_scale": 1.1113935569519122,
-    "residual_skewness": 0.5519812955319585,
+    "residual_skewness": 0.5519812955319259,
     "model_family": "bayesian_linear_regression_normal_inverse_gamma",
     "posterior_df": 386702.0,
     "sigma": {
       "term": "sigma",
-      "posterior_mean": 1.1113764615499355,
-      "posterior_sd": 0.0012447714323245318
+      "posterior_mean": 1.1113764615499357,
+      "posterior_sd": 0.0012447714323245342
     },
     "prior": {
       "beta_prior_center": [
@@ -78,34 +78,34 @@
         {
           "outcome_transform": "log1p",
           "outcome_name": "log1p(response_delay_at_time_n)",
-          "adjusted_r_squared": 0.22813385124325092,
-          "r_squared": 0.22813784334119191,
+          "adjusted_r_squared": 0.2281338512432508,
+          "r_squared": 0.2281378433411918,
           "rmse_on_modeled_scale": 1.1113935569519122,
-          "residual_skewness": 0.5519812955319585
+          "residual_skewness": 0.5519812955319259
         },
         {
           "outcome_transform": "sqrt",
           "outcome_name": "sqrt(response_delay_at_time_n)",
-          "adjusted_r_squared": 0.22639747241481734,
-          "r_squared": 0.22640147349332373,
-          "rmse_on_modeled_scale": 2.1804716883886135,
-          "residual_skewness": 3.395463306347917
+          "adjusted_r_squared": 0.22639747241481756,
+          "r_squared": 0.22640147349332385,
+          "rmse_on_modeled_scale": 2.180471688388613,
+          "residual_skewness": 3.3954633063479482
         },
         {
           "outcome_transform": "asinh",
           "outcome_name": "asinh(response_delay_at_time_n)",
-          "adjusted_r_squared": 0.22429619117682864,
-          "r_squared": 0.22430020312317844,
-          "rmse_on_modeled_scale": 1.3281891590674753,
-          "residual_skewness": 0.41589223309803086
+          "adjusted_r_squared": 0.2242961911768283,
+          "r_squared": 0.22430020312317822,
+          "rmse_on_modeled_scale": 1.3281891590674755,
+          "residual_skewness": 0.415892233098094
         },
         {
           "outcome_transform": "raw",
           "outcome_name": "response_delay_at_time_n",
-          "adjusted_r_squared": 0.1098400434046819,
-          "r_squared": 0.10984464731915033,
+          "adjusted_r_squared": 0.10984004340468201,
+          "r_squared": 0.10984464731915045,
           "rmse_on_modeled_scale": 42.12068015200272,
-          "residual_skewness": 32.86983719593572
+          "residual_skewness": 32.869837195935744
         }
       ]
     },
@@ -114,9 +114,9 @@
       "average_response_time_0_to_n_minus_1": "within-episode mean of prior non-negative response delays before turn n"
     },
     "coefficients": {
-      "Intercept": 0.2969827551782869,
-      "implicature_load": 0.003361042558134039,
-      "log1p(average_response_time_0_to_n_minus_1)": 0.5826496036570705
+      "Intercept": 0.29698275517824163,
+      "implicature_load": 0.003361042558134634,
+      "log1p(average_response_time_0_to_n_minus_1)": 0.5826496036570912
     }
   },
   "response_delay_regression_distribution_checks": {

@@ -9,7 +9,7 @@
 #SBATCH --chdir=/home/edenzha/flow_of_argument
 
 python data_processing/maxim_violation_labeler.py \
-    --categories political \
+    --categories political business religion commentary sports news \
     --tensor_parallel_size 2 \
     --batch_size 0 \
-    --max_episodes 3
+    --max_episodes 100

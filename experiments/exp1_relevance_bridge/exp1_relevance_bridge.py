@@ -148,14 +148,14 @@ def bootstrap_mean(values, seed, draws=2000):
 
 
 def distribution_plot(df: pd.DataFrame, path: Path):
-    sns.set_theme(style="whitegrid", context="talk")
-    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.set_theme(style="whitegrid", context="paper")
+    fig, ax = plt.subplots(figsize=(11.5, 7))
     bins = np.linspace(0, 1, 60)
     ax.hist(df["sim_claim"], bins=bins, density=True, alpha=0.5, color="#d95f02", label="Claims Only")
     ax.hist(df["sim_context"], bins=bins, density=True, alpha=0.5, color="#1b9e77", label="With Assumptions")
     ax.axvline(df["sim_claim"].mean(), color="#d95f02", linestyle="--", linewidth=2)
     ax.axvline(df["sim_context"].mean(), color="#1b9e77", linestyle="--", linewidth=2)
-    ax.set_title("Experiment 1: Relevance Bridge Distribution")
+    ax.set_title("Relevance Bridge Distribution", fontsize=15)
     ax.set_xlabel("Cosine Similarity With Previous Substantive Turn")
     ax.set_ylabel("Density")
     ax.legend(frameon=False)
@@ -184,7 +184,8 @@ def umap_plot(df: pd.DataFrame, path: Path, pair_limit: int, seed: int):
     claim_len = np.linalg.norm(a_xy - c_xy, axis=1)
     context_len = np.linalg.norm(a_xy - x_xy, axis=1)
 
-    fig, axes = plt.subplots(1, 2, figsize=(14, 6), sharex=True, sharey=True)
+    sns.set_theme(style="whitegrid", context="paper")
+    fig, axes = plt.subplots(1, 2, figsize=(15.5, 7.2), sharex=True, sharey=True)
     for ax, target_xy, color, title, mean_len in [
         (axes[0], c_xy, "#d95f02", "A -> Claims", claim_len.mean()),
         (axes[1], x_xy, "#1b9e77", "A -> Claims + Assumptions", context_len.mean()),
@@ -193,12 +194,12 @@ def umap_plot(df: pd.DataFrame, path: Path, pair_limit: int, seed: int):
             ax.plot([p0[0], p1[0]], [p0[1], p1[1]], color=color, alpha=0.05, linewidth=0.8)
         ax.scatter(a_xy[:, 0], a_xy[:, 1], s=8, color="#4c4c4c", alpha=0.20, label="Turn A")
         ax.scatter(target_xy[:, 0], target_xy[:, 1], s=8, color=color, alpha=0.20, label=title.split(" -> ", 1)[1])
-        ax.set_title(f"{title}\nMean UMAP Step = {mean_len:.3f}")
+        ax.set_title(f"{title} | Mean step = {mean_len:.3f}", fontsize=14)
         ax.set_xlabel("UMAP 1")
     axes[0].set_ylabel("UMAP 2")
     handles, labels = axes[1].get_legend_handles_labels()
     axes[1].legend(handles, labels, frameon=False, loc="best")
-    fig.suptitle("Experiment 1: Conversation Trajectory Smoothing", y=1.02)
+    fig.suptitle("Conversation Trajectory Smoothing", y=1.01, fontsize=16)
     fig.tight_layout()
     fig.savefig(path, dpi=220, bbox_inches="tight")
     plt.close(fig)

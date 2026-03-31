@@ -416,12 +416,13 @@ def save_plot_curve(rows, out_path):
         return False
 
 
-def save_plot_scatter(x, y, out_path, title, ylabel):
+def save_plot_scatter(x, y, out_path, title, xlabel):
     if len(x) < 3 or len(y) < 3:
         return False
     try:
-        xmin, xmax = robust_xlim(x, lo=0.0, hi=0.995, cap=2000.0)
-        m = np.isfinite(x) & np.isfinite(y) & (x >= xmin) & (x <= xmax)
+        xmin, xmax = robust_xlim(x)
+        ymin, ymax = robust_xlim(y, lo=0.0, hi=0.995, cap=2000.0)
+        m = np.isfinite(x) & np.isfinite(y) & (x >= xmin) & (x <= xmax) & (y >= ymin) & (y <= ymax)
         x, y = np.asarray(x)[m], np.asarray(y)[m]
         if len(x) < 3:
             return False
@@ -434,9 +435,10 @@ def save_plot_scatter(x, y, out_path, title, ylabel):
         sns.scatterplot(x=x_plot, y=y_plot, s=10, alpha=0.18, linewidth=0, color="#4C78A8")
         sns.regplot(x=x, y=y, scatter=False, ci=None, line_kws={"color": "#E45756", "linewidth": 2.2})
         plt.title(title)
-        plt.xlabel("Response latency (seconds)")
-        plt.ylabel(ylabel)
+        plt.xlabel(xlabel)
+        plt.ylabel("Response latency (seconds)")
         plt.xlim(xmin, xmax)
+        plt.ylim(ymin, ymax)
         plt.tight_layout()
         plt.savefig(out_path, dpi=200)
         plt.close()
@@ -670,9 +672,9 @@ def main():
     png_outputs = []
     if curve_rows and save_plot_curve(curve_rows, output_dir / "exp5_probability_curves.png"):
         png_outputs.append("exp5_probability_curves.png")
-    if save_plot_scatter(assumption_y, assumption_x, output_dir / "exp5_assumption_count_vs_response_time.png", "Assumption Count by Response Time", "Assumption count in turn"):
+    if save_plot_scatter(assumption_x, assumption_y, output_dir / "exp5_assumption_count_vs_response_time.png", "Response Time by Assumption Count", "Assumption count in turn"):
         png_outputs.append("exp5_assumption_count_vs_response_time.png")
-    if save_plot_scatter(load_y, load_x, output_dir / "exp5_implicature_load_vs_response_time.png", "Implicature Load by Response Time", "Implicature Load L"):
+    if save_plot_scatter(load_x, load_y, output_dir / "exp5_implicature_load_vs_response_time.png", "Response Time by Implicature Load", "Implicature Load L"):
         png_outputs.append("exp5_implicature_load_vs_response_time.png")
     if save_ridge(rows, output_dir / "exp5_load_ridge_by_response_type.png"):
         png_outputs.append("exp5_load_ridge_by_response_type.png")

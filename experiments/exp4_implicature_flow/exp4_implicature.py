@@ -2,6 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import seaborn as sns
 from pathlib import Path
 from collections import defaultdict
@@ -195,57 +196,68 @@ def generate_sankey(metrics, output_dir):
     if n == 0:
         return None
 
-    fig, ax = plt.subplots(figsize=(14, max(7.5, 0.38 * n + 3.0)))
     ys = [0.5] if n == 1 else list(np.linspace(0.95, 0.05, n))
-    left_pos = {t: ys[i] for i, t in enumerate(all_turns)}
-    right_pos = {t: ys[i] for i, t in enumerate(all_turns)}
     colors = sns.color_palette("husl", n)
-    turn_colors = {t: colors[i] for i, t in enumerate(all_turns)}
+    turn_colors = {
+        t: f"rgba({int(r*255)},{int(g*255)},{int(b*255)},0.65)"
+        for t, (r, g, b) in zip(all_turns, colors)
+    }
+    node_labels = [f"A{t}" for t in all_turns] + [f"C{t}" for t in all_turns]
+    node_x = [0.08] * n + [0.92] * n
+    node_y = ys + ys
+    node_colors = [turn_colors[t] for t in all_turns] + ["rgba(170,170,170,0.85)"] * n
+    node_lookup = {("A", t): i for i, t in enumerate(all_turns)}
+    node_lookup.update({("C", t): i + n for i, t in enumerate(all_turns)})
 
-    edges = []
+    sources, targets, values, link_colors, customdata = [], [], [], [], []
     if flow:
-        for src_turn, targets in flow.items():
-            try:
-                src_turn = int(src_turn)
-            except Exception:
+        for src_turn, targets_dict in flow.items():
+            src_turn = safe_int(src_turn, None)
+            if src_turn not in all_turns:
                 continue
-            for tgt_turn, lags in targets.items():
-                try:
-                    tgt_turn = int(tgt_turn)
-                except Exception:
+            for tgt_turn, lags in targets_dict.items():
+                tgt_turn = safe_int(tgt_turn, None)
+                if tgt_turn not in all_turns or not lags:
                     continue
-                if src_turn in left_pos and tgt_turn in right_pos and lags:
-                    edges.append((src_turn, tgt_turn, len(lags), float(np.mean(lags))))
+                sources.append(node_lookup[("A", src_turn)])
+                targets.append(node_lookup[("C", tgt_turn)])
+                values.append(len(lags))
+                link_colors.append(turn_colors[src_turn])
+                customdata.append((float(np.mean(lags)), len(lags)))
 
-    max_count = max([e[2] for e in edges], default=1)
-    for src_turn, tgt_turn, count, avg_lag in sorted(edges, key=lambda x: (x[0], x[1])):
-        lw = 1.5 + 8.0 * (count / max_count)
-        draw_flow_curve(ax, 0.15, left_pos[src_turn], 0.85, right_pos[tgt_turn], turn_colors[src_turn], lw)
-        if count >= max_count * 0.45:
-            ax.text(0.5, (left_pos[src_turn] + right_pos[tgt_turn]) / 2, f"{count}",
-                    ha="center", va="center", fontsize=8, color="black",
-                    bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.75))
-
-    for t in all_turns:
-        ax.add_patch(plt.Rectangle((0.03, left_pos[t] - 0.015), 0.07, 0.03, color=turn_colors[t], alpha=0.45))
-        ax.add_patch(plt.Rectangle((0.90, right_pos[t] - 0.015), 0.07, 0.03, color="lightgray", alpha=0.9))
-        ax.text(0.02, left_pos[t], f"A{t}", ha="right", va="center", fontsize=9)
-        ax.text(0.98, right_pos[t], f"C{t}", ha="left", va="center", fontsize=9)
-
-    ax.text(0.065, 1.02, "Implicit Pool", transform=ax.transAxes, ha="center", va="bottom", fontsize=13, weight="bold")
-    ax.text(0.935, 1.02, "Explicit Record", transform=ax.transAxes, ha="center", va="bottom", fontsize=13, weight="bold")
-    ax.set_title(
-        f"Episode {metrics['episode_id']} | Conversion {metrics['conversion_rate']:.1f}% | Mean lag {np.mean(metrics['lags']) if metrics['lags'] else 0:.1f}s",
-        fontsize=15,
+    fig = go.Figure(
+        go.Sankey(
+            arrangement="fixed",
+            node=dict(
+                pad=10,
+                thickness=12,
+                line=dict(color="rgba(80,80,80,0.35)", width=0.5),
+                label=node_labels,
+                color=node_colors,
+                x=node_x,
+                y=node_y,
+                hovertemplate="%{label}<extra></extra>",
+            ),
+            link=dict(
+                source=sources,
+                target=targets,
+                value=values,
+                color=link_colors,
+                customdata=customdata,
+                hovertemplate="From %{source.label} to %{target.label}<br>Count: %{value}<br>Mean lag: %{customdata[0]:.1f}s<extra></extra>",
+            ),
+        )
     )
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
+    fig.update_layout(
+        title=f"Episode {metrics['episode_id']} | Conversion {metrics['conversion_rate']:.1f}% | Mean lag {np.mean(metrics['lags']) if metrics['lags'] else 0:.1f}s",
+        font=dict(size=12),
+        width=1100,
+        height=max(550, int(26 * n + 220)),
+        margin=dict(l=40, r=40, t=70, b=30),
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_dir / f"sankey_{metrics['episode_id']}.png"
-    plt.tight_layout()
-    plt.savefig(path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
+    path = output_dir / f"sankey_{metrics['episode_id']}.html"
+    fig.write_html(path, include_plotlyjs="cdn")
     return path
 
 
