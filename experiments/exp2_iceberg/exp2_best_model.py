@@ -3,21 +3,11 @@ import json
 import logging
 import math
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Set, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.colors import TwoSlopeNorm
-from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import HistGradientBoostingRegressor
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import Ridge
-from sklearn.inspection import permutation_importance
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import GroupKFold
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, SplineTransformer, StandardScaler
 from tqdm import tqdm
 
 from exp2_iceberg import (
@@ -38,36 +28,81 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_DATA_DIR = "data/stance_labeled/512"
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
-DEFAULT_FEATURE_CACHE = "turn_level_features.csv"
 DEFAULT_FEATURE_CACHE_PATH = "experiments/exp2_iceberg/cache/turn_level_features.csv"
 DEFAULT_OUTPUT_DIR = "experiments/exp2_iceberg/results_iceberg_from_stance"
-DEFAULT_TARGET_METRIC_CANDIDATES = [
+DEFAULT_EVENT_PRE_TURNS = 1
+DEFAULT_EVENT_POST_TURNS = 3
+PRIMARY_OUTCOMES = ["explicit_count", "implicit_count", "explicit_share"]
+STORED_OUTCOMES = ["explicit_count", "implicit_count", "explicit_share", "total_content", "iceberg_log_ratio"]
+REQUIRED_CACHE_COLUMNS = [
+    "speaker_id",
+    "stance_5pt",
+    "agreement_binary",
+    "explicit_count",
+    "implicit_count",
+    "total_content",
+    "explicit_share",
+    "duration",
+    "start_time",
+    "end_time",
     "iceberg_log_ratio",
+    "episode",
+    "category",
+    "turn_idx",
 ]
-DEFAULT_MODEL_CANDIDATES = [
-    "baseline_temporal_control",
-    "linear_current_plus_history",
-    "linear_temporal_history",
-    "linear_temporal_history_interactions",
-    "spline_temporal_history",
-    "hist_gradient_boosting_temporal",
-]
-DEFAULT_EVENT_PRE_TURNS = 4
-DEFAULT_EVENT_POST_TURNS = 6
-DEFAULT_HIGH_CONFLICT_MIN_DISAGREEMENT_TURNS = 6
-DEFAULT_HIGH_CONFLICT_MIN_DISAGREEMENT_RATE = 0.10
-
-
-def make_one_hot_encoder() -> OneHotEncoder:
-    try:
-        return OneHotEncoder(handle_unknown="ignore", sparse_output=False)
-    except TypeError:
-        return OneHotEncoder(handle_unknown="ignore", sparse=False)
+OUTCOME_LABELS = {
+    "explicit_count": "Explicit claims",
+    "implicit_count": "Implicit assumptions",
+    "explicit_share": "Explicit share",
+    "total_content": "Total content",
+    "iceberg_log_ratio": "Log explicit/implicit ratio",
+}
+ONSET_COLORS = {
+    "agreement": "#2a9d8f",
+    "disagreement": "#bc4749",
+}
+OUTCOME_COLORS = {
+    "explicit_count": "#2a9d8f",
+    "implicit_count": "#bc4749",
+    "explicit_share": "#264653",
+}
 
 
 def save_json(path: Path, payload: dict) -> None:
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, sort_keys=True)
+
+
+def uses_signed_stance_scale(turn: dict) -> bool:
+    stance_scheme = str(turn.get("stance_scheme") or "").lower()
+    if stance_scheme.startswith("signed_5pt"):
+        return True
+    stance_value = float(turn.get("stance_5pt"))
+    return stance_value <= 0.0
+
+
+def compute_agreement_binary(stance_value: float, signed_scale: bool) -> float:
+    if signed_scale:
+        if stance_value > 0.0:
+            return 1.0
+        if stance_value < 0.0:
+            return 0.0
+        return math.nan
+
+    if stance_value >= 4.0:
+        return 1.0
+    if stance_value <= 2.0:
+        return 0.0
+    return math.nan
+
+
+def infer_signed_stance_scale(df_input: pd.DataFrame) -> bool:
+    if "stance_scheme" in df_input.columns:
+        scheme_series = df_input["stance_scheme"].dropna().astype(str).str.lower()
+        if scheme_series.str.startswith("signed_5pt").any():
+            return True
+    stance_series = pd.to_numeric(df_input["stance_5pt"], errors="coerce").dropna()
+    return bool((stance_series <= 0.0).any())
 
 
 def compute_turn_features(turn: dict) -> Optional[dict]:
@@ -93,105 +128,72 @@ def compute_turn_features(turn: dict) -> Optional[dict]:
         duration = 0.1
         end_time = start_time + duration
 
-    explicit_count = len(turn.get("explicit_propositions", []) or [])
-    implicit_count = len(turn.get("assumptions", []) or [])
-    total = explicit_count + implicit_count
-
-    if total > 0:
-        visible_prop = explicit_count / total
-        context_prop = implicit_count / total
-        iceberg_prop_per_sec = (explicit_count / total) / duration
-        iceberg_ratio_per_sec = (explicit_count / (implicit_count + 1e-6)) / duration
-    else:
-        visible_prop = 0.0
-        context_prop = 0.0
-        iceberg_prop_per_sec = 0.0
-        iceberg_ratio_per_sec = 0.0
-
-    iceberg_log_ratio = math.log((explicit_count + 1.0) / (implicit_count + 1.0))
-    iceberg_log_ratio_per_sec = iceberg_log_ratio - math.log(duration)
-    iceberg_context_log_ratio = math.log((implicit_count + 1.0) / (explicit_count + 1.0))
-
+    explicit_count = int(len(turn.get("explicit_propositions", []) or []))
+    implicit_count = int(len(turn.get("assumptions", []) or []))
+    total_content = explicit_count + implicit_count
+    explicit_share = float(explicit_count / total_content) if total_content > 0 else math.nan
     stance_value = float(stance)
-    if stance_value >= 4.0:
-        agreement_binary = 1.0
-    elif stance_value <= 2.0:
-        agreement_binary = 0.0
-    else:
-        agreement_binary = math.nan
+
+    signed_scale = uses_signed_stance_scale(turn)
 
     return {
         "speaker_id": str(turn.get("speaker_id") or ""),
         "stance_5pt": stance_value,
-        "agreement_binary": agreement_binary,
+        "agreement_binary": compute_agreement_binary(stance_value, signed_scale),
         "explicit_count": explicit_count,
         "implicit_count": implicit_count,
+        "total_content": total_content,
+        "explicit_share": explicit_share,
         "duration": duration,
-        "log_duration": math.log(duration),
         "start_time": start_time,
         "end_time": end_time,
-        "iceberg_visible_prop": visible_prop,
-        "iceberg_context_prop": context_prop,
-        "iceberg_prop_per_sec": iceberg_prop_per_sec,
-        "iceberg_ratio_per_sec": iceberg_ratio_per_sec,
-        "iceberg_log_ratio": iceberg_log_ratio,
-        "iceberg_log_ratio_per_sec": iceberg_log_ratio_per_sec,
-        "iceberg_context_log_ratio": iceberg_context_log_ratio,
+        "iceberg_log_ratio": math.log((explicit_count + 1.0) / (implicit_count + 1.0)),
+        "stance_scheme": str(turn.get("stance_scheme") or ""),
     }
 
 
 def upgrade_cached_feature_frame(df_cached: pd.DataFrame) -> Tuple[pd.DataFrame, List[str]]:
     upgraded = df_cached.copy()
-    required_base_columns = {"explicit_count", "implicit_count", "duration"}
+    required_base_columns = {
+        "speaker_id",
+        "stance_5pt",
+        "explicit_count",
+        "implicit_count",
+        "duration",
+        "start_time",
+        "end_time",
+        "episode",
+        "category",
+        "turn_idx",
+    }
     missing_base_columns = sorted(required_base_columns - set(upgraded.columns))
     if missing_base_columns:
         return upgraded, missing_base_columns
 
-    total = upgraded["explicit_count"].astype(float) + upgraded["implicit_count"].astype(float)
-    safe_duration = upgraded["duration"].astype(float).clip(lower=0.1)
+    upgraded["speaker_id"] = upgraded["speaker_id"].fillna("").astype(str)
+    upgraded["explicit_count"] = upgraded["explicit_count"].astype(int)
+    upgraded["implicit_count"] = upgraded["implicit_count"].astype(int)
 
-    if "log_duration" not in upgraded.columns:
-        upgraded["log_duration"] = np.log(safe_duration)
-    if "iceberg_visible_prop" not in upgraded.columns:
-        upgraded["iceberg_visible_prop"] = np.where(total > 0.0, upgraded["explicit_count"].astype(float) / total, 0.0)
-    if "iceberg_context_prop" not in upgraded.columns:
-        upgraded["iceberg_context_prop"] = np.where(total > 0.0, upgraded["implicit_count"].astype(float) / total, 0.0)
-    if "iceberg_context_log_ratio" not in upgraded.columns:
-        upgraded["iceberg_context_log_ratio"] = np.log(
-            (upgraded["implicit_count"].astype(float) + 1.0) / (upgraded["explicit_count"].astype(float) + 1.0)
+    if "agreement_binary" not in upgraded.columns:
+        signed_scale = infer_signed_stance_scale(upgraded)
+        upgraded["agreement_binary"] = upgraded["stance_5pt"].astype(float).map(
+            lambda value: compute_agreement_binary(float(value), signed_scale)
+        )
+    if "total_content" not in upgraded.columns:
+        upgraded["total_content"] = upgraded["explicit_count"] + upgraded["implicit_count"]
+    if "explicit_share" not in upgraded.columns:
+        total_content = upgraded["total_content"].astype(float)
+        upgraded["explicit_share"] = np.where(
+            total_content > 0.0,
+            upgraded["explicit_count"].astype(float) / total_content,
+            np.nan,
+        )
+    if "iceberg_log_ratio" not in upgraded.columns:
+        upgraded["iceberg_log_ratio"] = np.log(
+            (upgraded["explicit_count"].astype(float) + 1.0) / (upgraded["implicit_count"].astype(float) + 1.0)
         )
 
     return upgraded, []
-
-
-def enrich_episode_frame(df_episode: pd.DataFrame, metric_names: Sequence[str]) -> pd.DataFrame:
-    df_episode = df_episode.sort_values("start_time").reset_index(drop=True).copy()
-
-    max_end_time = float(df_episode["end_time"].max()) if len(df_episode) else 0.0
-    if max_end_time > 0.0:
-        df_episode["timeline_progress"] = df_episode["start_time"] / max_end_time
-    else:
-        df_episode["timeline_progress"] = 0.0
-    df_episode["turn_progress"] = (
-        np.arange(len(df_episode), dtype=float) / max(len(df_episode) - 1, 1) if len(df_episode) else 0.0
-    )
-
-    for metric_name in metric_names:
-        speaker_mean_col = f"{metric_name}_speaker_mean"
-        within_col = f"{metric_name}_within_speaker"
-        prev_col = f"{metric_name}_same_speaker_prev"
-        delta_col = f"{metric_name}_same_speaker_delta"
-        episode_mean_col = f"{metric_name}_episode_mean"
-        within_episode_col = f"{metric_name}_within_episode"
-
-        df_episode[speaker_mean_col] = df_episode.groupby("speaker_id")[metric_name].transform("mean")
-        df_episode[within_col] = df_episode[metric_name] - df_episode[speaker_mean_col]
-        df_episode[prev_col] = df_episode.groupby("speaker_id")[metric_name].shift(1)
-        df_episode[delta_col] = df_episode[metric_name] - df_episode[prev_col]
-        df_episode[episode_mean_col] = float(df_episode[metric_name].mean())
-        df_episode[within_episode_col] = df_episode[metric_name] - df_episode[episode_mean_col]
-
-    return df_episode
 
 
 def build_turn_level_features(
@@ -212,15 +214,6 @@ def build_turn_level_features(
 
     requested_categories = normalize_categories(categories)
     requested_category_keys = {category.lower() for category in requested_categories if category.lower() != "all"}
-    metric_names = [
-        "iceberg_visible_prop",
-        "iceberg_context_prop",
-        "iceberg_prop_per_sec",
-        "iceberg_ratio_per_sec",
-        "iceberg_log_ratio",
-        "iceberg_log_ratio_per_sec",
-        "iceberg_context_log_ratio",
-    ]
 
     episode_frames: List[pd.DataFrame] = []
     files_seen = 0
@@ -266,8 +259,6 @@ def build_turn_level_features(
         df_episode["episode"] = episode_id
         df_episode["category"] = file_category or "unknown"
         df_episode["turn_idx"] = np.arange(len(df_episode), dtype=int)
-        df_episode = enrich_episode_frame(df_episode, metric_names)
-
         episode_frames.append(df_episode)
         files_kept += 1
 
@@ -290,1100 +281,596 @@ def build_turn_level_features(
     return df_all, summary
 
 
-def attach_stance_predictor_columns(df_input: pd.DataFrame) -> pd.DataFrame:
+def restrict_cached_features(
+    df_cached: pd.DataFrame,
+    categories: Optional[Sequence[str]],
+    max_episodes: Optional[int],
+) -> pd.DataFrame:
+    df_filtered = df_cached.copy()
+    requested_categories = normalize_categories(categories)
+    requested_category_keys = {category.lower() for category in requested_categories if category.lower() != "all"}
+    if requested_category_keys:
+        df_filtered = df_filtered[df_filtered["category"].astype(str).str.lower().isin(requested_category_keys)].copy()
+
+    if max_episodes is not None and max_episodes > 0:
+        selected_episodes = sorted(df_filtered["episode"].astype(str).unique())[:max_episodes]
+        df_filtered = df_filtered[df_filtered["episode"].astype(str).isin(selected_episodes)].copy()
+
+    return df_filtered.reset_index(drop=True)
+
+
+def attach_event_context_columns(df_input: pd.DataFrame) -> pd.DataFrame:
     df_model = df_input.sort_values(["episode", "start_time", "turn_idx"]).reset_index(drop=True).copy()
-    df_model["stance_raw"] = df_model["stance_5pt"].astype(float)
-    df_model["log_duration"] = np.log(df_model["duration"].clip(lower=0.1))
-    df_model["stance_speaker_mean"] = df_model.groupby(["episode", "speaker_id"])["stance_raw"].transform("mean")
-    df_model["stance_within_speaker"] = df_model["stance_raw"] - df_model["stance_speaker_mean"]
-    df_model["stance_same_speaker_prev"] = df_model.groupby(["episode", "speaker_id"])["stance_raw"].shift(1)
+    df_model["speaker_id"] = df_model["speaker_id"].fillna("").astype(str)
+    df_model["agreement_binary"] = pd.to_numeric(df_model["agreement_binary"], errors="coerce")
 
     episode_groups = df_model.groupby("episode", sort=False)
     df_model["prev_turn_speaker_id"] = episode_groups["speaker_id"].shift(1)
-    df_model["prev_turn_stance_raw"] = episode_groups["stance_raw"].shift(1)
-    df_model["prev_prev_turn_stance_raw"] = episode_groups["stance_raw"].shift(2)
     df_model["prev_turn_agreement_binary"] = episode_groups["agreement_binary"].shift(1)
-    df_model["prev_turn_iceberg_log_ratio"] = episode_groups["iceberg_log_ratio"].shift(1)
-    df_model["prev_prev_turn_iceberg_log_ratio"] = episode_groups["iceberg_log_ratio"].shift(2)
-    df_model["prev_turn_log_duration"] = episode_groups["log_duration"].shift(1)
-    df_model["prev_turn_end_time"] = episode_groups["end_time"].shift(1)
     df_model["speaker_switch"] = np.where(
         df_model["prev_turn_speaker_id"].isna(),
         np.nan,
         (df_model["speaker_id"] != df_model["prev_turn_speaker_id"]).astype(float),
     )
-    df_model["turn_gap_sec"] = (df_model["start_time"] - df_model["prev_turn_end_time"]).clip(lower=0.0)
-    df_model["log_turn_gap_sec"] = np.log1p(df_model["turn_gap_sec"])
-    df_model["stance_change_from_prev_turn"] = df_model["stance_raw"] - df_model["prev_turn_stance_raw"]
-    df_model["prev_turn_iceberg_delta"] = (
-        df_model["prev_turn_iceberg_log_ratio"] - df_model["prev_prev_turn_iceberg_log_ratio"]
-    )
-    df_model["prev_turn_stance_delta"] = df_model["prev_turn_stance_raw"] - df_model["prev_prev_turn_stance_raw"]
-    df_model["speaker_switch_x_stance"] = df_model["speaker_switch"] * df_model["stance_raw"]
-    df_model["prev_turn_target_x_stance"] = df_model["prev_turn_iceberg_log_ratio"] * df_model["stance_raw"]
-    df_model["prev_turn_target_x_speaker_switch"] = (
-        df_model["prev_turn_iceberg_log_ratio"] * df_model["speaker_switch"]
-    )
-    df_model["prev_same_speaker_iceberg_log_ratio"] = df_model["iceberg_log_ratio_same_speaker_prev"]
-
-    prev_other_target = np.full(len(df_model), np.nan, dtype=float)
-    prev_other_stance = np.full(len(df_model), np.nan, dtype=float)
-    prev_other_log_duration = np.full(len(df_model), np.nan, dtype=float)
-
-    for _, episode_index in df_model.groupby("episode", sort=False).groups.items():
-        history_by_speaker: Dict[str, Dict[str, float]] = {}
-        for order, row_idx in enumerate(episode_index):
-            speaker_id = str(df_model.at[row_idx, "speaker_id"])
-            other_candidates = [record for spk, record in history_by_speaker.items() if spk != speaker_id]
-            if other_candidates:
-                latest_other = max(other_candidates, key=lambda record: record["order"])
-                prev_other_target[row_idx] = latest_other["target"]
-                prev_other_stance[row_idx] = latest_other["stance"]
-                prev_other_log_duration[row_idx] = latest_other["log_duration"]
-            history_by_speaker[speaker_id] = {
-                "order": float(order),
-                "target": float(df_model.at[row_idx, "iceberg_log_ratio"]),
-                "stance": float(df_model.at[row_idx, "stance_raw"]),
-                "log_duration": float(df_model.at[row_idx, "log_duration"]),
-            }
-
-    df_model["prev_other_speaker_iceberg_log_ratio"] = prev_other_target
-    df_model["prev_other_speaker_stance_raw"] = prev_other_stance
-    df_model["prev_other_speaker_log_duration"] = prev_other_log_duration
-    df_model["prev_other_target_gap"] = (
-        df_model["prev_turn_iceberg_log_ratio"] - df_model["prev_other_speaker_iceberg_log_ratio"]
-    )
-    df_model["prev_other_stance_gap"] = df_model["stance_raw"] - df_model["prev_other_speaker_stance_raw"]
     return df_model
 
 
-def build_regression_pipeline(model_name: str) -> Tuple[Pipeline, List[str], List[str]]:
-    categorical_features = ["category"]
-    estimator = Ridge(alpha=1.0)
-
-    if model_name == "baseline_temporal_control":
-        numeric_features = ["log_duration", "log_turn_gap_sec", "speaker_switch"]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-    elif model_name == "linear_current_plus_history":
-        numeric_features = [
-            "log_duration",
-            "log_turn_gap_sec",
-            "speaker_switch",
-            "stance_raw",
-            "prev_turn_stance_raw",
-            "prev_turn_iceberg_log_ratio",
-            "prev_turn_iceberg_delta",
-        ]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-    elif model_name == "linear_temporal_history":
-        numeric_features = [
-            "log_duration",
-            "log_turn_gap_sec",
-            "speaker_switch",
-            "stance_raw",
-            "prev_turn_stance_raw",
-            "stance_speaker_mean",
-            "stance_within_speaker",
-            "prev_turn_iceberg_log_ratio",
-            "prev_turn_iceberg_delta",
-            "prev_same_speaker_iceberg_log_ratio",
-            "prev_other_speaker_iceberg_log_ratio",
-            "prev_other_speaker_stance_raw",
-        ]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-    elif model_name == "linear_temporal_history_interactions":
-        numeric_features = [
-            "log_duration",
-            "log_turn_gap_sec",
-            "speaker_switch",
-            "stance_raw",
-            "prev_turn_stance_raw",
-            "stance_speaker_mean",
-            "stance_within_speaker",
-            "prev_turn_iceberg_log_ratio",
-            "prev_turn_iceberg_delta",
-            "prev_same_speaker_iceberg_log_ratio",
-            "prev_other_speaker_iceberg_log_ratio",
-            "prev_other_speaker_stance_raw",
-            "stance_change_from_prev_turn",
-            "prev_turn_stance_delta",
-            "speaker_switch_x_stance",
-            "prev_turn_target_x_stance",
-            "prev_turn_target_x_speaker_switch",
-            "prev_other_target_gap",
-            "prev_other_stance_gap",
-        ]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-    elif model_name == "spline_temporal_history":
-        numeric_features = [
-            "log_duration",
-            "log_turn_gap_sec",
-            "speaker_switch",
-            "prev_turn_stance_raw",
-            "stance_speaker_mean",
-            "prev_turn_iceberg_delta",
-            "prev_other_speaker_iceberg_log_ratio",
-            "prev_other_speaker_stance_raw",
-            "prev_turn_target_x_stance",
-        ]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "stance_spline",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("spline", SplineTransformer(n_knots=5, degree=3, include_bias=False)),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    ["stance_raw"],
-                ),
-                (
-                    "history_spline",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("spline", SplineTransformer(n_knots=5, degree=3, include_bias=False)),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    ["prev_turn_iceberg_log_ratio"],
-                ),
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-    elif model_name == "hist_gradient_boosting_temporal":
-        numeric_features = [
-            "log_duration",
-            "log_turn_gap_sec",
-            "speaker_switch",
-            "stance_raw",
-            "prev_turn_stance_raw",
-            "stance_speaker_mean",
-            "stance_within_speaker",
-            "prev_turn_iceberg_log_ratio",
-            "prev_turn_iceberg_delta",
-            "prev_same_speaker_iceberg_log_ratio",
-            "prev_other_speaker_iceberg_log_ratio",
-            "prev_other_speaker_stance_raw",
-            "prev_other_speaker_log_duration",
-            "stance_change_from_prev_turn",
-            "prev_turn_stance_delta",
-            "speaker_switch_x_stance",
-            "prev_turn_target_x_stance",
-            "prev_turn_target_x_speaker_switch",
-            "prev_other_target_gap",
-            "prev_other_stance_gap",
-        ]
-        preprocessor = ColumnTransformer(
-            transformers=[
-                (
-                    "num",
-                    Pipeline(
-                        steps=[
-                            ("imputer", SimpleImputer(strategy="median")),
-                        ]
-                    ),
-                    numeric_features,
-                ),
-                ("cat", make_one_hot_encoder(), categorical_features),
-            ]
-        )
-        estimator = HistGradientBoostingRegressor(
-            learning_rate=0.05,
-            max_iter=120,
-            max_leaf_nodes=31,
-            min_samples_leaf=40,
-            l2_regularization=0.1,
-            random_state=42,
-        )
+def build_onset_mask(df_model: pd.DataFrame, onset_type: str) -> pd.Series:
+    if onset_type == "disagreement":
+        current_value = 0.0
+    elif onset_type == "agreement":
+        current_value = 1.0
     else:
-        raise ValueError(f"Unknown model_name={model_name}")
+        raise ValueError(f"Unknown onset_type={onset_type}")
 
-    pipeline = Pipeline(
-        steps=[
-            ("preprocess", preprocessor),
-            ("model", estimator),
-        ]
-    )
-    return pipeline, numeric_features, categorical_features
-
-
-def compute_pearson_r(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    if len(y_true) < 2:
-        return 0.0
-    y_true_std = float(np.std(y_true))
-    y_pred_std = float(np.std(y_pred))
-    if np.isclose(y_true_std, 0.0) or np.isclose(y_pred_std, 0.0):
-        return 0.0
-    return float(np.corrcoef(y_true, y_pred)[0, 1])
-
-
-def evaluate_grouped_cv(
-    df_model: pd.DataFrame,
-    pipeline: Pipeline,
-    group_col: str,
-    target_col: str,
-    n_splits: int,
-) -> Tuple[dict, List[dict]]:
-    groups = df_model[group_col].astype(str)
-    X = df_model.copy()
-    y = df_model[target_col].astype(float).to_numpy()
-
-    unique_groups = groups.nunique()
-    split_count = max(2, min(n_splits, unique_groups))
-    splitter = GroupKFold(n_splits=split_count)
-
-    fold_rows: List[dict] = []
-
-    for fold_idx, (train_idx, test_idx) in enumerate(splitter.split(X, y, groups=groups), start=1):
-        x_train = X.iloc[train_idx]
-        x_test = X.iloc[test_idx]
-        y_train = y[train_idx]
-        y_test = y[test_idx]
-
-        pipeline.fit(x_train, y_train)
-        y_pred = pipeline.predict(x_test)
-
-        target_std = float(np.std(y_test))
-        mae = float(mean_absolute_error(y_test, y_pred))
-        rmse = float(math.sqrt(mean_squared_error(y_test, y_pred)))
-        fold_row = {
-            "fold": fold_idx,
-            "n_train": int(len(train_idx)),
-            "n_test": int(len(test_idx)),
-            "target_mean_test": float(np.mean(y_test)),
-            "target_std_test": target_std,
-            "r2": float(r2_score(y_test, y_pred)),
-            "pearson_r": compute_pearson_r(y_test, y_pred),
-            "mae": mae,
-            "rmse": rmse,
-            "mae_over_std": float(mae / target_std) if not np.isclose(target_std, 0.0) else math.nan,
-        }
-        fold_rows.append(fold_row)
-
-    metric_keys = ["r2", "pearson_r", "mae", "rmse", "mae_over_std"]
-    metrics = {f"{key}_mean": float(np.nanmean([row[key] for row in fold_rows])) for key in metric_keys}
-    metrics.update({f"{key}_std": float(np.nanstd([row[key] for row in fold_rows])) for key in metric_keys})
-    metrics["fold_count"] = int(split_count)
-    return metrics, fold_rows
-
-
-def compare_target_metric_candidates(
-    df_target: pd.DataFrame,
-    metric_candidates: Sequence[str],
-    n_splits: int,
-) -> Tuple[pd.DataFrame, str]:
-    rows: List[dict] = []
-    for metric_name in metric_candidates:
-        pipeline, _, _ = build_regression_pipeline("linear_temporal_history")
-        metrics, _ = evaluate_grouped_cv(
-            df_model=df_target,
-            pipeline=pipeline,
-            group_col="episode",
-            target_col=metric_name,
-            n_splits=n_splits,
-        )
-        row = {"metric_name": metric_name, **metrics}
-        rows.append(row)
-        logger.info(
-            "Metric comparison | metric=%s | r2=%.4f | pearson=%.4f | rmse=%.4f",
-            metric_name,
-            metrics["r2_mean"],
-            metrics["pearson_r_mean"],
-            metrics["rmse_mean"],
-        )
-
-    df_results = pd.DataFrame(rows).sort_values(
-        by=["r2_mean", "pearson_r_mean", "mae_over_std_mean"],
-        ascending=[False, False, True],
-    )
-    best_metric = str(df_results.iloc[0]["metric_name"])
-    return df_results, best_metric
-
-
-def compare_model_candidates(
-    df_target: pd.DataFrame,
-    target_metric: str,
-    model_candidates: Sequence[str],
-    n_splits: int,
-) -> Tuple[pd.DataFrame, str]:
-    rows: List[dict] = []
-
-    for model_name in model_candidates:
-        pipeline, _, _ = build_regression_pipeline(model_name)
-        metrics, _ = evaluate_grouped_cv(
-            df_model=df_target,
-            pipeline=pipeline,
-            group_col="episode",
-            target_col=target_metric,
-            n_splits=n_splits,
-        )
-        row = {"model_name": model_name, "target_metric": target_metric, **metrics}
-        rows.append(row)
-        logger.info(
-            "Model comparison | model=%s | r2=%.4f | pearson=%.4f | rmse=%.4f",
-            model_name,
-            metrics["r2_mean"],
-            metrics["pearson_r_mean"],
-            metrics["rmse_mean"],
-        )
-
-    df_results = pd.DataFrame(rows).sort_values(
-        by=["r2_mean", "pearson_r_mean", "rmse_mean", "mae_mean"],
-        ascending=[False, False, True, True],
-    )
-    best_model = str(df_results.iloc[0]["model_name"])
-    return df_results, best_model
-
-
-def fit_full_model(
-    df_target: pd.DataFrame,
-    target_metric: str,
-    model_name: str,
-) -> Pipeline:
-    pipeline, _, _ = build_regression_pipeline(model_name)
-    pipeline.fit(df_target, df_target[target_metric].astype(float).to_numpy())
-    return pipeline
-
-
-def extract_coefficient_table(
-    pipeline: Pipeline,
-    df_target: Optional[pd.DataFrame] = None,
-    target_metric: Optional[str] = None,
-) -> pd.DataFrame:
-    preprocess = pipeline.named_steps["preprocess"]
-    model = pipeline.named_steps["model"]
-    if hasattr(model, "coef_"):
-        feature_names = preprocess.get_feature_names_out()
-        coef_df = pd.DataFrame({"feature": feature_names, "coefficient": model.coef_})
-        coef_df["abs_coefficient"] = coef_df["coefficient"].abs()
-        coef_df["importance_source"] = "model_coefficient"
-        return coef_df.sort_values(["abs_coefficient", "feature"], ascending=[False, True]).reset_index(drop=True)
-
-    if df_target is None or target_metric is None:
-        raise ValueError("df_target and target_metric are required for model families without coefficients.")
-
-    predictor_cols = [
-        "category",
-        "log_duration",
-        "log_turn_gap_sec",
-        "speaker_switch",
-        "stance_raw",
-        "prev_turn_stance_raw",
-        "stance_speaker_mean",
-        "stance_within_speaker",
-        "prev_turn_iceberg_log_ratio",
-        "prev_turn_iceberg_delta",
-        "prev_same_speaker_iceberg_log_ratio",
-        "prev_other_speaker_iceberg_log_ratio",
-        "prev_other_speaker_stance_raw",
-        "prev_other_speaker_log_duration",
-        "stance_change_from_prev_turn",
-        "prev_turn_stance_delta",
-        "speaker_switch_x_stance",
-        "prev_turn_target_x_stance",
-        "prev_turn_target_x_speaker_switch",
-        "prev_other_target_gap",
-        "prev_other_stance_gap",
-    ]
-    available_predictors = [col for col in predictor_cols if col in df_target.columns]
-    sample_size = min(12000, len(df_target))
-    df_sample = df_target.sample(n=sample_size, random_state=42) if len(df_target) > sample_size else df_target.copy()
-    perm_result = permutation_importance(
-        estimator=pipeline,
-        X=df_sample[available_predictors],
-        y=df_sample[target_metric].astype(float).to_numpy(),
-        n_repeats=3,
-        random_state=42,
-        scoring="neg_mean_squared_error",
-    )
-    coef_df = pd.DataFrame(
-        {
-            "feature": available_predictors,
-            "coefficient": perm_result.importances_mean,
-            "coefficient_std": perm_result.importances_std,
-        }
-    )
-    coef_df["abs_coefficient"] = coef_df["coefficient"].abs()
-    coef_df["importance_source"] = "permutation_importance"
-    return coef_df.sort_values(["abs_coefficient", "feature"], ascending=[False, True]).reset_index(drop=True)
-
-
-def summarize_group_curves(group_df: pd.DataFrame, value_col: str) -> Dict[str, float]:
-    summary: Dict[str, float] = {}
-    if group_df.empty:
-        return summary
-
-    group_df = group_df.copy()
-    group_df["timeline_progress"] = pd.to_numeric(group_df["timeline_progress"], errors="coerce")
-    group_df = group_df.dropna(subset=["timeline_progress"])
-
-    for group_name in ["agreement", "disagreement"]:
-        subset = group_df[group_df["stance_group"] == group_name].sort_values("timeline_progress").reset_index(drop=True)
-        if subset.empty:
-            continue
-        summary[f"{group_name}_progress_delta"] = float(subset[value_col].iloc[-1] - subset[value_col].iloc[0])
-
-    for progress in [0.1, 0.5, 0.9]:
-        agreement_subset = group_df[group_df["stance_group"] == "agreement"].copy()
-        disagreement_subset = group_df[group_df["stance_group"] == "disagreement"].copy()
-        if agreement_subset.empty or disagreement_subset.empty:
-            continue
-        agreement_idx = (agreement_subset["timeline_progress"] - progress).abs().idxmin()
-        disagreement_idx = (disagreement_subset["timeline_progress"] - progress).abs().idxmin()
-        summary[f"agreement_minus_disagreement_progress_{progress:.1f}"] = float(
-            agreement_subset.loc[agreement_idx, value_col] - disagreement_subset.loc[disagreement_idx, value_col]
-        )
-    return summary
-
-
-def build_predicted_progress_curves(
-    pipeline: Pipeline,
-    df_model: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-    progress_bins: int = 10,
-) -> Tuple[Dict[str, float], pd.DataFrame]:
-    df_group_prediction = df_model[df_model["agreement_binary"].notna()].copy()
-    if df_group_prediction.empty:
-        empty_df = pd.DataFrame(
-            columns=[
-                "progress_bin",
-                "agreement_binary",
-                "predicted_iceberg",
-                "timeline_progress",
-                "stance_group",
-                "predicted_explicitness",
-                "predicted_context",
-            ]
-        )
-        return {}, empty_df
-    df_group_prediction["predicted_iceberg"] = pipeline.predict(df_group_prediction)
-    bin_edges = np.linspace(0.0, 1.0, progress_bins + 1)
-    df_group_prediction["progress_bin"] = pd.cut(
-        df_group_prediction["timeline_progress"], bins=bin_edges, include_lowest=True
-    )
-    group_df = (
-        df_group_prediction.groupby(["progress_bin", "agreement_binary"], observed=False)["predicted_iceberg"]
-        .mean()
-        .reset_index()
-    )
-    group_df["timeline_progress"] = group_df["progress_bin"].apply(
-        lambda interval: float((interval.left + interval.right) / 2.0) if pd.notna(interval) else math.nan
-    )
-    group_df["timeline_progress"] = pd.to_numeric(group_df["timeline_progress"], errors="coerce")
-    group_df["stance_group"] = group_df["agreement_binary"].map({0.0: "disagreement", 1.0: "agreement"})
-    group_df = group_df.dropna(subset=["timeline_progress", "stance_group"]).reset_index(drop=True)
-    group_df["predicted_explicitness"] = group_df["predicted_iceberg"]
-    group_df["predicted_context"] = group_df["predicted_iceberg"]
-    summary = summarize_group_curves(group_df=group_df, value_col="predicted_iceberg")
-    return summary, group_df
-
-
-def build_observed_progress_curves(
-    df_model: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-    progress_bins: int = 10,
-) -> Tuple[Dict[str, float], pd.DataFrame]:
-    df_observed = df_model[df_model["agreement_binary"].notna()].copy()
-    if df_observed.empty:
-        empty_df = pd.DataFrame(columns=["timeline_progress", target_metric, "n", "stance_group"])
-        return {}, empty_df
-
-    bin_edges = np.linspace(0.0, 1.0, progress_bins + 1)
-    df_observed["progress_bin"] = pd.cut(df_observed["timeline_progress"], bins=bin_edges, include_lowest=True)
-
-    grouped = (
-        df_observed.groupby(["progress_bin", "agreement_binary"], observed=False)[target_metric]
-        .agg(["mean", "size"])
-        .reset_index()
-        .rename(columns={"mean": "observed_target", "size": "n"})
-    )
-    grouped["timeline_progress"] = grouped["progress_bin"].apply(
-        lambda interval: float((interval.left + interval.right) / 2.0) if pd.notna(interval) else math.nan
-    )
-    grouped["timeline_progress"] = pd.to_numeric(grouped["timeline_progress"], errors="coerce")
-    grouped["stance_group"] = grouped["agreement_binary"].map({0.0: "disagreement", 1.0: "agreement"})
-    grouped["observed_explicitness"] = grouped["observed_target"]
-    grouped["observed_context"] = grouped["observed_target"]
-    grouped = grouped.dropna(subset=["timeline_progress", "stance_group"]).reset_index(drop=True)
-    summary = summarize_group_curves(group_df=grouped, value_col="observed_target")
-    return summary, grouped
-
-
-def save_curve_comparison(
-    predicted_group_df: pd.DataFrame,
-    observed_group_df: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-) -> pd.DataFrame:
-    comparison_frames: List[pd.DataFrame] = []
-
-    if not predicted_group_df.empty:
-        comparison_frames.append(
-            predicted_group_df.rename(columns={"predicted_iceberg": "target_value"}).assign(curve_source="predicted")
-        )
-    if not observed_group_df.empty:
-        comparison_frames.append(
-            observed_group_df.rename(columns={"observed_target": "target_value"}).assign(curve_source="observed")
-        )
-
-    if comparison_frames:
-        comparison_df = pd.concat(comparison_frames, ignore_index=True)
-    else:
-        comparison_df = pd.DataFrame(
-            columns=[
-                "progress_bin",
-                "agreement_binary",
-                "target_value",
-                "timeline_progress",
-                "stance_group",
-                "curve_source",
-            ]
-        )
-    comparison_df.to_csv(output_dir / "agreement_disagreement_progress_curve_comparison.csv", index=False)
-    return comparison_df
-
-
-def identify_high_conflict_episodes(
-    df_model: pd.DataFrame,
-    min_disagreement_turns: int,
-    min_disagreement_rate: float,
-) -> Tuple[Set[str], pd.DataFrame]:
-    df_labeled = df_model[df_model["agreement_binary"].notna()].copy()
-    if df_labeled.empty:
-        empty_df = pd.DataFrame(
-            columns=[
-                "episode",
-                "category",
-                "labeled_turns",
-                "agreement_turns",
-                "disagreement_turns",
-                "disagreement_rate",
-                "high_conflict",
-            ]
-        )
-        return set(), empty_df
-
-    episode_stats = (
-        df_labeled.groupby("episode", observed=False)
-        .agg(
-            category=("category", lambda s: str(pd.Series(s).mode().iloc[0]) if not pd.Series(s).mode().empty else "unknown"),
-            labeled_turns=("agreement_binary", "size"),
-            agreement_turns=("agreement_binary", lambda s: int((s == 1.0).sum())),
-            disagreement_turns=("agreement_binary", lambda s: int((s == 0.0).sum())),
-        )
-        .reset_index()
-    )
-    episode_stats["disagreement_rate"] = np.where(
-        episode_stats["labeled_turns"] > 0,
-        episode_stats["disagreement_turns"] / episode_stats["labeled_turns"],
-        0.0,
-    )
-    episode_stats["high_conflict"] = (
-        (episode_stats["disagreement_turns"] >= int(min_disagreement_turns))
-        & (episode_stats["disagreement_rate"] >= float(min_disagreement_rate))
-    )
-    high_conflict_episodes = set(episode_stats.loc[episode_stats["high_conflict"], "episode"].astype(str))
-    return high_conflict_episodes, episode_stats.sort_values(
-        ["high_conflict", "disagreement_turns", "disagreement_rate", "episode"],
-        ascending=[False, False, False, True],
-    ).reset_index(drop=True)
-
-
-def build_disagreement_onset_event_study(
-    df_model: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-    pre_event_turns: int,
-    post_event_turns: int,
-    high_conflict_min_disagreement_turns: int,
-    high_conflict_min_disagreement_rate: float,
-) -> Tuple[Dict[str, object], pd.DataFrame]:
-    high_conflict_episodes, episode_stats_df = identify_high_conflict_episodes(
-        df_model=df_model,
-        min_disagreement_turns=high_conflict_min_disagreement_turns,
-        min_disagreement_rate=high_conflict_min_disagreement_rate,
-    )
-
-    onset_mask = (
-        df_model["agreement_binary"].eq(0.0)
+    return (
+        df_model["agreement_binary"].eq(current_value)
         & df_model["prev_turn_agreement_binary"].eq(1.0)
         & df_model["speaker_switch"].eq(1.0)
-        & df_model[target_metric].notna()
     )
-    onset_indices = list(df_model.index[onset_mask])
 
-    event_rows: List[dict] = []
-    high_conflict_event_count = 0
+
+def coerce_optional_float(value: object) -> float:
+    if pd.isna(value):
+        return math.nan
+    return float(value)
+
+
+def compute_delta(current_value: float, reference_value: float) -> float:
+    if math.isnan(current_value) or math.isnan(reference_value):
+        return math.nan
+    return float(current_value - reference_value)
+
+
+def build_empty_event_frame() -> pd.DataFrame:
+    base_columns = [
+        "event_id",
+        "onset_type",
+        "episode",
+        "category",
+        "onset_row_idx",
+        "pre_row_idx",
+        "response_row_idx",
+        "onset_turn_idx",
+    ]
+    outcome_columns: List[str] = []
+    for outcome in STORED_OUTCOMES:
+        outcome_columns.extend(
+            [
+                f"pre_{outcome}",
+                f"onset_{outcome}",
+                f"response_{outcome}",
+                f"response_minus_onset_{outcome}",
+                f"response_minus_pre_{outcome}",
+            ]
+        )
+    return pd.DataFrame(columns=base_columns + outcome_columns)
+
+
+def collect_response_valid_events(df_model: pd.DataFrame, onset_type: str) -> Tuple[pd.DataFrame, int]:
+    onset_mask = build_onset_mask(df_model, onset_type)
+    onset_indices = list(df_model.index[onset_mask])
+    rows: List[dict] = []
+
     for onset_idx in onset_indices:
+        pre_idx = onset_idx - 1
+        response_idx = onset_idx + 1
+        if pre_idx < 0 or response_idx >= len(df_model):
+            continue
+
         episode = str(df_model.at[onset_idx, "episode"])
-        prev_row_idx = onset_idx - 1
-        if prev_row_idx < 0 or str(df_model.at[prev_row_idx, "episode"]) != episode:
+        if str(df_model.at[pre_idx, "episode"]) != episode or str(df_model.at[response_idx, "episode"]) != episode:
             continue
-        next_row_idx = onset_idx + 1
-        if next_row_idx >= len(df_model) or str(df_model.at[next_row_idx, "episode"]) != episode:
-            continue
+
         onset_speaker_id = str(df_model.at[onset_idx, "speaker_id"])
-        response_speaker_id = str(df_model.at[next_row_idx, "speaker_id"])
+        response_speaker_id = str(df_model.at[response_idx, "speaker_id"])
         if response_speaker_id == onset_speaker_id:
             continue
-        baseline_value = df_model.at[prev_row_idx, target_metric]
-        if pd.isna(baseline_value):
-            continue
-        baseline_value = float(baseline_value)
-        onset_value = df_model.at[onset_idx, target_metric]
-        response_value = df_model.at[next_row_idx, target_metric]
-        if pd.isna(onset_value) or pd.isna(response_value):
-            continue
-        onset_value = float(onset_value)
-        response_value = float(response_value)
-        onset_turn_idx = int(df_model.at[onset_idx, "turn_idx"])
-        onset_category = str(df_model.at[onset_idx, "category"])
-        event_id = f"{episode}::turn_{onset_turn_idx}"
-        is_high_conflict = episode in high_conflict_episodes
-        if is_high_conflict:
-            high_conflict_event_count += 1
+
+        row = {
+            "event_id": f"{episode}::{onset_type}::turn_{int(df_model.at[onset_idx, 'turn_idx'])}",
+            "onset_type": onset_type,
+            "episode": episode,
+            "category": str(df_model.at[onset_idx, "category"]),
+            "onset_row_idx": int(onset_idx),
+            "pre_row_idx": int(pre_idx),
+            "response_row_idx": int(response_idx),
+            "onset_turn_idx": int(df_model.at[onset_idx, "turn_idx"]),
+        }
+
+        for outcome in STORED_OUTCOMES:
+            pre_value = coerce_optional_float(df_model.at[pre_idx, outcome])
+            onset_value = coerce_optional_float(df_model.at[onset_idx, outcome])
+            response_value = coerce_optional_float(df_model.at[response_idx, outcome])
+            row[f"pre_{outcome}"] = pre_value
+            row[f"onset_{outcome}"] = onset_value
+            row[f"response_{outcome}"] = response_value
+            row[f"response_minus_onset_{outcome}"] = compute_delta(response_value, onset_value)
+            row[f"response_minus_pre_{outcome}"] = compute_delta(response_value, pre_value)
+
+        rows.append(row)
+
+    if not rows:
+        return build_empty_event_frame(), int(onset_mask.sum())
+
+    return pd.DataFrame(rows), int(onset_mask.sum())
+
+
+def compute_summary_stats(values: np.ndarray) -> Dict[str, float]:
+    if len(values) == 0:
+        return {
+            "n": 0,
+            "mean": math.nan,
+            "std": math.nan,
+            "se": math.nan,
+            "ci_low": math.nan,
+            "ci_high": math.nan,
+        }
+
+    mean_value = float(np.mean(values))
+    std_value = float(np.std(values, ddof=1)) if len(values) > 1 else 0.0
+    se_value = float(std_value / math.sqrt(len(values)))
+    return {
+        "n": int(len(values)),
+        "mean": mean_value,
+        "std": std_value,
+        "se": se_value,
+        "ci_low": float(mean_value - 1.96 * se_value),
+        "ci_high": float(mean_value + 1.96 * se_value),
+    }
+
+
+def compute_difference_stats(left_values: np.ndarray, right_values: np.ndarray) -> Dict[str, float]:
+    if len(left_values) == 0 or len(right_values) == 0:
+        return {
+            "n": 0,
+            "reference_n": 0,
+            "mean": math.nan,
+            "std": math.nan,
+            "se": math.nan,
+            "ci_low": math.nan,
+            "ci_high": math.nan,
+        }
+
+    left_mean = float(np.mean(left_values))
+    right_mean = float(np.mean(right_values))
+    left_var = float(np.var(left_values, ddof=1)) if len(left_values) > 1 else 0.0
+    right_var = float(np.var(right_values, ddof=1)) if len(right_values) > 1 else 0.0
+    se_value = float(math.sqrt((left_var / len(left_values)) + (right_var / len(right_values))))
+    diff_mean = float(left_mean - right_mean)
+    return {
+        "n": int(len(left_values)),
+        "reference_n": int(len(right_values)),
+        "mean": diff_mean,
+        "std": math.nan,
+        "se": se_value,
+        "ci_low": float(diff_mean - 1.96 * se_value),
+        "ci_high": float(diff_mean + 1.96 * se_value),
+    }
+
+
+def extract_numeric_values(df_input: pd.DataFrame, column_name: str) -> np.ndarray:
+    return pd.to_numeric(df_input[column_name], errors="coerce").dropna().astype(float).to_numpy()
+
+
+def build_group_summary_row(event_df: pd.DataFrame, onset_type: str, outcome: str) -> dict:
+    pre_values = extract_numeric_values(event_df, f"pre_{outcome}")
+    onset_values = extract_numeric_values(event_df, f"onset_{outcome}")
+    response_values = extract_numeric_values(event_df, f"response_{outcome}")
+    delta_onset_values = extract_numeric_values(event_df, f"response_minus_onset_{outcome}")
+    delta_pre_values = extract_numeric_values(event_df, f"response_minus_pre_{outcome}")
+
+    response_stats = compute_summary_stats(response_values)
+    delta_onset_stats = compute_summary_stats(delta_onset_values)
+    delta_pre_stats = compute_summary_stats(delta_pre_values)
+    pre_mean = float(np.mean(pre_values)) if len(pre_values) else math.nan
+    onset_mean = float(np.mean(onset_values)) if len(onset_values) else math.nan
+
+    return {
+        "row_type": "group_mean",
+        "onset_type": onset_type,
+        "reference_onset_type": None,
+        "outcome": outcome,
+        "n_events": int(event_df["event_id"].nunique()),
+        "reference_n_events": math.nan,
+        "pre_turn_mean": pre_mean,
+        "onset_mean": onset_mean,
+        "response_mean": response_stats["mean"],
+        "response_sd": response_stats["std"],
+        "response_se": response_stats["se"],
+        "response_ci_low": response_stats["ci_low"],
+        "response_ci_high": response_stats["ci_high"],
+        "response_minus_onset_mean": delta_onset_stats["mean"],
+        "response_minus_onset_se": delta_onset_stats["se"],
+        "response_minus_onset_ci_low": delta_onset_stats["ci_low"],
+        "response_minus_onset_ci_high": delta_onset_stats["ci_high"],
+        "response_minus_pre_turn_mean": delta_pre_stats["mean"],
+        "response_minus_pre_turn_se": delta_pre_stats["se"],
+        "response_minus_pre_turn_ci_low": delta_pre_stats["ci_low"],
+        "response_minus_pre_turn_ci_high": delta_pre_stats["ci_high"],
+    }
+
+
+def build_contrast_summary_row(
+    disagreement_df: pd.DataFrame,
+    agreement_df: pd.DataFrame,
+    outcome: str,
+) -> dict:
+    disagreement_pre = extract_numeric_values(disagreement_df, f"pre_{outcome}")
+    agreement_pre = extract_numeric_values(agreement_df, f"pre_{outcome}")
+    disagreement_onset = extract_numeric_values(disagreement_df, f"onset_{outcome}")
+    agreement_onset = extract_numeric_values(agreement_df, f"onset_{outcome}")
+    disagreement_response = extract_numeric_values(disagreement_df, f"response_{outcome}")
+    agreement_response = extract_numeric_values(agreement_df, f"response_{outcome}")
+    disagreement_delta_onset = extract_numeric_values(disagreement_df, f"response_minus_onset_{outcome}")
+    agreement_delta_onset = extract_numeric_values(agreement_df, f"response_minus_onset_{outcome}")
+    disagreement_delta_pre = extract_numeric_values(disagreement_df, f"response_minus_pre_{outcome}")
+    agreement_delta_pre = extract_numeric_values(agreement_df, f"response_minus_pre_{outcome}")
+
+    response_stats = compute_difference_stats(disagreement_response, agreement_response)
+    delta_onset_stats = compute_difference_stats(disagreement_delta_onset, agreement_delta_onset)
+    delta_pre_stats = compute_difference_stats(disagreement_delta_pre, agreement_delta_pre)
+    pre_mean_diff = float(np.mean(disagreement_pre) - np.mean(agreement_pre)) if len(disagreement_pre) and len(agreement_pre) else math.nan
+    onset_mean_diff = float(np.mean(disagreement_onset) - np.mean(agreement_onset)) if len(disagreement_onset) and len(agreement_onset) else math.nan
+
+    return {
+        "row_type": "contrast",
+        "onset_type": "disagreement",
+        "reference_onset_type": "agreement",
+        "outcome": outcome,
+        "n_events": int(disagreement_df["event_id"].nunique()),
+        "reference_n_events": int(agreement_df["event_id"].nunique()),
+        "pre_turn_mean": pre_mean_diff,
+        "onset_mean": onset_mean_diff,
+        "response_mean": response_stats["mean"],
+        "response_sd": math.nan,
+        "response_se": response_stats["se"],
+        "response_ci_low": response_stats["ci_low"],
+        "response_ci_high": response_stats["ci_high"],
+        "response_minus_onset_mean": delta_onset_stats["mean"],
+        "response_minus_onset_se": delta_onset_stats["se"],
+        "response_minus_onset_ci_low": delta_onset_stats["ci_low"],
+        "response_minus_onset_ci_high": delta_onset_stats["ci_high"],
+        "response_minus_pre_turn_mean": delta_pre_stats["mean"],
+        "response_minus_pre_turn_se": delta_pre_stats["se"],
+        "response_minus_pre_turn_ci_low": delta_pre_stats["ci_low"],
+        "response_minus_pre_turn_ci_high": delta_pre_stats["ci_high"],
+    }
+
+
+def build_event_response_comparison(
+    disagreement_df: pd.DataFrame,
+    agreement_df: pd.DataFrame,
+) -> pd.DataFrame:
+    rows: List[dict] = []
+    for outcome in STORED_OUTCOMES:
+        rows.append(build_group_summary_row(disagreement_df, "disagreement", outcome))
+        rows.append(build_group_summary_row(agreement_df, "agreement", outcome))
+        rows.append(build_contrast_summary_row(disagreement_df, agreement_df, outcome))
+    return pd.DataFrame(rows)
+
+
+def build_disagreement_event_window(
+    disagreement_df: pd.DataFrame,
+    df_model: pd.DataFrame,
+    pre_event_turns: int,
+    post_event_turns: int,
+) -> pd.DataFrame:
+    rows: List[dict] = []
+    for _, event_row in disagreement_df.iterrows():
+        onset_row_idx = int(event_row["onset_row_idx"])
+        episode = str(event_row["episode"])
+        event_id = str(event_row["event_id"])
 
         for event_time in range(-int(pre_event_turns), int(post_event_turns) + 1):
-            row_idx = onset_idx + event_time
+            row_idx = onset_row_idx + event_time
             if row_idx < 0 or row_idx >= len(df_model):
                 continue
             if str(df_model.at[row_idx, "episode"]) != episode:
                 continue
 
-            target_value = df_model.at[row_idx, target_metric]
-            if pd.isna(target_value):
-                continue
+            for outcome in PRIMARY_OUTCOMES:
+                value = coerce_optional_float(df_model.at[row_idx, outcome])
+                onset_value = coerce_optional_float(df_model.at[onset_row_idx, outcome])
+                if math.isnan(value):
+                    continue
+                rows.append(
+                    {
+                        "event_id": event_id,
+                        "event_time": int(event_time),
+                        "outcome": outcome,
+                        "value": value,
+                        "delta_from_onset": compute_delta(value, onset_value),
+                    }
+                )
 
-            event_rows.append(
-                {
-                    "event_id": event_id,
-                    "episode": episode,
-                    "category": onset_category,
-                    "onset_turn_idx": onset_turn_idx,
-                    "event_time": int(event_time),
-                    "target_value": float(target_value),
-                    "baseline_prev_turn_value": baseline_value,
-                    "onset_turn_value": onset_value,
-                    "response_turn_value": response_value,
-                    "delta_from_prev_turn": float(target_value - baseline_value),
-                    "delta_from_onset_turn": float(target_value - onset_value),
-                    "stance_at_offset": float(df_model.at[row_idx, "stance_raw"]),
-                    "agreement_binary_at_offset": df_model.at[row_idx, "agreement_binary"],
-                    "high_conflict": bool(is_high_conflict),
-                }
-            )
-
-    if not event_rows:
-        empty_df = pd.DataFrame(
+    if not rows:
+        return pd.DataFrame(
             columns=[
+                "outcome",
                 "event_time",
-                "mean_target",
-                "mean_delta_from_prev_turn",
-                "mean_delta_from_onset_turn",
-                "se_target",
-                "se_delta_from_prev_turn",
-                "se_delta_from_onset_turn",
-                "ci_low_target",
-                "ci_high_target",
-                "ci_low_prev_turn",
-                "ci_high_prev_turn",
-                "ci_low_onset_turn",
-                "ci_high_onset_turn",
+                "mean_value",
+                "std_value",
+                "se_value",
+                "ci_low_value",
+                "ci_high_value",
+                "mean_delta_from_onset",
+                "se_delta_from_onset",
+                "ci_low_delta_from_onset",
+                "ci_high_delta_from_onset",
                 "n_rows",
                 "n_events",
             ]
         )
-        empty_df.to_csv(output_dir / "disagreement_onset_event_study.csv", index=False)
-        summary = {
-            "target_metric": target_metric,
-            "clean_onset_definition": "current disagreement turn after agreement turn with speaker switch",
-            "response_turn_requirement": "turn +1 must stay in the same episode and be spoken by the other speaker",
-            "pre_event_turns": int(pre_event_turns),
-            "post_event_turns": int(post_event_turns),
-            "high_conflict_min_disagreement_turns": int(high_conflict_min_disagreement_turns),
-            "high_conflict_min_disagreement_rate": float(high_conflict_min_disagreement_rate),
-            "response_valid_clean_onsets": {"n_events": 0},
-        }
-        return summary, empty_df
 
-    event_df = pd.DataFrame(event_rows)
-    summary_df = (
-        event_df.groupby("event_time", observed=False)
-        .agg(
-            mean_target=("target_value", "mean"),
-            std_target=("target_value", "std"),
-            mean_delta_from_prev_turn=("delta_from_prev_turn", "mean"),
-            std_delta_from_prev_turn=("delta_from_prev_turn", "std"),
-            mean_delta_from_onset_turn=("delta_from_onset_turn", "mean"),
-            std_delta_from_onset_turn=("delta_from_onset_turn", "std"),
-            n_rows=("target_value", "size"),
-            n_events=("event_id", "nunique"),
+    event_window_df = pd.DataFrame(rows)
+    summary_rows: List[dict] = []
+    for (outcome, event_time), group_df in event_window_df.groupby(["outcome", "event_time"], observed=False):
+        value_stats = compute_summary_stats(extract_numeric_values(group_df, "value"))
+        delta_stats = compute_summary_stats(extract_numeric_values(group_df, "delta_from_onset"))
+        summary_rows.append(
+            {
+                "outcome": outcome,
+                "event_time": int(event_time),
+                "mean_value": value_stats["mean"],
+                "std_value": value_stats["std"],
+                "se_value": value_stats["se"],
+                "ci_low_value": value_stats["ci_low"],
+                "ci_high_value": value_stats["ci_high"],
+                "mean_delta_from_onset": delta_stats["mean"],
+                "se_delta_from_onset": delta_stats["se"],
+                "ci_low_delta_from_onset": delta_stats["ci_low"],
+                "ci_high_delta_from_onset": delta_stats["ci_high"],
+                "n_rows": int(len(group_df)),
+                "n_events": int(group_df["event_id"].nunique()),
+            }
         )
-        .reset_index()
-    )
-    summary_df["se_target"] = np.where(
-        summary_df["n_rows"] > 1,
-        summary_df["std_target"].fillna(0.0) / np.sqrt(summary_df["n_rows"]),
-        0.0,
-    )
-    summary_df["se_delta_from_prev_turn"] = np.where(
-        summary_df["n_rows"] > 1,
-        summary_df["std_delta_from_prev_turn"].fillna(0.0) / np.sqrt(summary_df["n_rows"]),
-        0.0,
-    )
-    summary_df["se_delta_from_onset_turn"] = np.where(
-        summary_df["n_rows"] > 1,
-        summary_df["std_delta_from_onset_turn"].fillna(0.0) / np.sqrt(summary_df["n_rows"]),
-        0.0,
-    )
-    summary_df["ci_low_target"] = summary_df["mean_target"] - 1.96 * summary_df["se_target"]
-    summary_df["ci_high_target"] = summary_df["mean_target"] + 1.96 * summary_df["se_target"]
-    summary_df["ci_low_prev_turn"] = summary_df["mean_delta_from_prev_turn"] - 1.96 * summary_df["se_delta_from_prev_turn"]
-    summary_df["ci_high_prev_turn"] = summary_df["mean_delta_from_prev_turn"] + 1.96 * summary_df["se_delta_from_prev_turn"]
-    summary_df["ci_low_onset_turn"] = summary_df["mean_delta_from_onset_turn"] - 1.96 * summary_df["se_delta_from_onset_turn"]
-    summary_df["ci_high_onset_turn"] = summary_df["mean_delta_from_onset_turn"] + 1.96 * summary_df["se_delta_from_onset_turn"]
-    summary_df.to_csv(output_dir / "disagreement_onset_event_study.csv", index=False)
 
-    fig, axes = plt.subplots(1, 2, figsize=(13.8, 5.2), sharex=True)
-    level_color = "#bc4749"
-    response_color = "#2a9d8f"
-    for axis in axes:
-        axis.axvline(0.0, color="#495057", linewidth=1.1, linestyle="--", alpha=0.85)
-        axis.axvline(1.0, color="#0f4c5c", linewidth=1.1, linestyle=":", alpha=0.85)
-        axis.grid(alpha=0.16, linewidth=0.6)
-        axis.set_xticks(list(range(-int(pre_event_turns), int(post_event_turns) + 1)))
-        axis.set_xlabel("Turns from disagreement onset")
-
-    axes[0].plot(summary_df["event_time"], summary_df["mean_target"], color=level_color, linewidth=2.2, marker="o", markersize=4)
-    axes[0].fill_between(
-        summary_df["event_time"],
-        summary_df["ci_low_target"],
-        summary_df["ci_high_target"],
-        color=level_color,
-        alpha=0.18,
-    )
-    axes[0].set_title("Observed Explicit/Implicit Level", fontsize=11, pad=10)
-    axes[0].set_ylabel(target_metric)
-
-    axes[1].axhline(0.0, color="#6c757d", linewidth=1.0, alpha=0.8)
-    axes[1].plot(
-        summary_df["event_time"],
-        summary_df["mean_delta_from_onset_turn"],
-        color=response_color,
-        linewidth=2.2,
-        marker="o",
-        markersize=4,
-    )
-    axes[1].fill_between(
-        summary_df["event_time"],
-        summary_df["ci_low_onset_turn"],
-        summary_df["ci_high_onset_turn"],
-        color=response_color,
-        alpha=0.18,
-    )
-    axes[1].set_title("Change Relative to Disagreement Turn (t=0)", fontsize=11, pad=10)
-    axes[1].set_ylabel(f"{target_metric} - value at turn 0")
-
-    fig.suptitle("Experiment 2: Response-Validated Disagreement Onsets", fontsize=15, y=0.95)
-    fig.subplots_adjust(top=0.84, left=0.08, right=0.98, bottom=0.12, wspace=0.18)
-    fig.savefig(output_dir / "experiment2_disagreement_onset_event_study.png", dpi=200)
-    plt.close(fig)
-
-    onset_row = summary_df[summary_df["event_time"] == 0]
-    response_row = summary_df[summary_df["event_time"] == 1]
-    pre_row = summary_df[summary_df["event_time"] == -1]
-    min_row = summary_df.loc[summary_df["mean_target"].idxmin()]
-    summary = {
-        "target_metric": target_metric,
-        "clean_onset_definition": "current disagreement turn after agreement turn with speaker switch",
-        "response_turn_requirement": "turn +1 must stay in the same episode and be spoken by the other speaker",
-        "pre_event_turns": int(pre_event_turns),
-        "post_event_turns": int(post_event_turns),
-        "high_conflict_min_disagreement_turns": int(high_conflict_min_disagreement_turns),
-        "high_conflict_min_disagreement_rate": float(high_conflict_min_disagreement_rate),
-        "high_conflict_episode_count": int(len(high_conflict_episodes)),
-        "high_conflict_response_valid_onset_count": int(high_conflict_event_count),
-        "response_valid_clean_onsets": {
-            "n_events": int(event_df["event_id"].nunique()),
-            "mean_target_at_pre_turn": float(pre_row["mean_target"].iloc[0]) if not pre_row.empty else math.nan,
-            "mean_target_at_onset": float(onset_row["mean_target"].iloc[0]) if not onset_row.empty else math.nan,
-            "mean_target_at_response_turn": float(response_row["mean_target"].iloc[0]) if not response_row.empty else math.nan,
-            "onset_minus_pre_turn": float(onset_row["mean_delta_from_prev_turn"].iloc[0]) if not onset_row.empty else math.nan,
-            "response_minus_pre_turn": float(response_row["mean_delta_from_prev_turn"].iloc[0]) if not response_row.empty else math.nan,
-            "response_minus_onset_turn": float(response_row["mean_delta_from_onset_turn"].iloc[0]) if not response_row.empty else math.nan,
-            "lowest_mean_target_event_time": int(min_row["event_time"]),
-            "lowest_mean_target_value": float(min_row["mean_target"]),
-        },
-    }
-    return summary, summary_df
+    return pd.DataFrame(summary_rows).sort_values(["outcome", "event_time"]).reset_index(drop=True)
 
 
-def build_transition_heatmap_comparison(
-    pipeline: Pipeline,
-    df_model: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-) -> Tuple[Dict[str, object], pd.DataFrame]:
-    response_df = df_model[
-        (df_model["speaker_switch"] >= 0.5)
-        & df_model["prev_turn_stance_raw"].notna()
-        & df_model["stance_raw"].notna()
+def save_response_comparison_plot(comparison_df: pd.DataFrame, output_dir: Path) -> None:
+    plot_df = comparison_df[
+        comparison_df["row_type"].eq("group_mean") & comparison_df["outcome"].isin(PRIMARY_OUTCOMES)
     ].copy()
-    if response_df.empty:
-        empty_df = pd.DataFrame(
-            columns=[
-                "previous_stance_level",
-                "current_stance_level",
-                "observed_target",
-                "predicted_iceberg",
-                "n",
-                "prediction_error",
-            ]
+    if plot_df.empty:
+        raise RuntimeError("Response comparison plot requires non-empty group summaries.")
+
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, axes = plt.subplots(1, 3, figsize=(13.8, 4.8))
+    onset_order = ["agreement", "disagreement"]
+    x_positions = np.arange(len(onset_order), dtype=float)
+
+    for axis, outcome in zip(axes, PRIMARY_OUTCOMES):
+        outcome_df = plot_df[plot_df["outcome"] == outcome].set_index("onset_type").reindex(onset_order).reset_index()
+        means = outcome_df["response_mean"].astype(float).to_numpy()
+        ci_low = outcome_df["response_ci_low"].astype(float).to_numpy()
+        ci_high = outcome_df["response_ci_high"].astype(float).to_numpy()
+        lower_err = means - ci_low
+        upper_err = ci_high - means
+        colors = [ONSET_COLORS[onset_type] for onset_type in onset_order]
+
+        axis.bar(
+            x_positions,
+            means,
+            color=colors,
+            width=0.62,
+            alpha=0.92,
+            yerr=np.vstack([lower_err, upper_err]),
+            capsize=4,
+            edgecolor="#1f2933",
+            linewidth=0.5,
         )
-        empty_df.to_csv(output_dir / "temporal_transition_heatmap_comparison.csv", index=False)
-        return {"response_turn_rows": 0, "target_metric": target_metric}, empty_df
+        axis.set_xticks(x_positions)
+        axis.set_xticklabels(["Agreement", "Disagreement"])
+        axis.set_title(f"Immediate Reply: {OUTCOME_LABELS[outcome]}", fontsize=11, pad=10)
+        axis.grid(axis="y", alpha=0.16, linewidth=0.6)
+        if outcome == "explicit_share":
+            axis.set_ylim(bottom=0.0, top=min(1.0, float(np.nanmax(ci_high)) * 1.08 if len(ci_high) else 1.0))
+        axis.set_ylabel(OUTCOME_LABELS[outcome])
 
-    response_df["predicted_iceberg"] = pipeline.predict(response_df)
+    fig.suptitle("Experiment 2: Immediate Reply After Agreement vs Disagreement", fontsize=14, y=0.98)
+    fig.subplots_adjust(top=0.80, left=0.07, right=0.98, bottom=0.14, wspace=0.28)
+    fig.savefig(output_dir / "exp2_response_comparison.png", dpi=200)
+    plt.close(fig)
 
-    observed_grouped = (
-        response_df.groupby(["prev_turn_stance_raw", "stance_raw"], observed=False)[target_metric]
-        .agg(["mean", "size"])
-        .reset_index()
-        .rename(columns={"mean": "observed_target", "size": "n"})
-    )
-    predicted_grouped = (
-        response_df.groupby(["prev_turn_stance_raw", "stance_raw"], observed=False)["predicted_iceberg"]
-        .mean()
-        .reset_index()
-    )
-    comparison_df = observed_grouped.merge(
-        predicted_grouped,
-        on=["prev_turn_stance_raw", "stance_raw"],
-        how="outer",
-    )
-    comparison_df = comparison_df.rename(
-        columns={
-            "prev_turn_stance_raw": "previous_stance_level",
-            "stance_raw": "current_stance_level",
-        }
-    )
-    comparison_df["previous_stance_level"] = comparison_df["previous_stance_level"].astype(int)
-    comparison_df["current_stance_level"] = comparison_df["current_stance_level"].astype(int)
-    comparison_df["prediction_error"] = comparison_df["predicted_iceberg"] - comparison_df["observed_target"]
-    comparison_df = comparison_df.sort_values(
-        ["current_stance_level", "previous_stance_level"]
-    ).reset_index(drop=True)
-    comparison_df.to_csv(output_dir / "temporal_transition_heatmap_comparison.csv", index=False)
 
-    summary: Dict[str, object] = {
-        "response_turn_rows": int(len(response_df)),
-        "transition_cell_count": int(len(comparison_df)),
-        "target_metric": target_metric,
+def save_event_window_plot(
+    event_window_df: pd.DataFrame,
+    output_dir: Path,
+    pre_event_turns: int,
+    post_event_turns: int,
+) -> None:
+    if event_window_df.empty:
+        raise RuntimeError("Event-window plot requires non-empty disagreement event summaries.")
+
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, axes = plt.subplots(1, 3, figsize=(14.2, 4.8), sharex=True)
+
+    for axis, outcome in zip(axes, PRIMARY_OUTCOMES):
+        outcome_df = event_window_df[event_window_df["outcome"] == outcome].sort_values("event_time").reset_index(drop=True)
+        axis.plot(
+            outcome_df["event_time"],
+            outcome_df["mean_value"],
+            color=OUTCOME_COLORS[outcome],
+            linewidth=2.2,
+            marker="o",
+            markersize=4,
+        )
+        axis.fill_between(
+            outcome_df["event_time"],
+            outcome_df["ci_low_value"],
+            outcome_df["ci_high_value"],
+            color=OUTCOME_COLORS[outcome],
+            alpha=0.18,
+        )
+        axis.axvline(0.0, color="#495057", linewidth=1.0, linestyle="--", alpha=0.85)
+        axis.axvline(1.0, color="#0f4c5c", linewidth=1.0, linestyle=":", alpha=0.85)
+        axis.set_xticks(list(range(-int(pre_event_turns), int(post_event_turns) + 1)))
+        axis.set_title(OUTCOME_LABELS[outcome], fontsize=11, pad=10)
+        axis.set_xlabel("Turns from disagreement onset")
+        axis.set_ylabel(OUTCOME_LABELS[outcome])
+        axis.grid(alpha=0.16, linewidth=0.6)
+        if outcome == "explicit_share":
+            axis.set_ylim(bottom=0.0, top=min(1.0, float(outcome_df["ci_high_value"].max()) * 1.08))
+
+    fig.suptitle("Experiment 2: Disagreement Event Window", fontsize=14, y=0.98)
+    fig.subplots_adjust(top=0.80, left=0.07, right=0.98, bottom=0.14, wspace=0.30)
+    fig.savefig(output_dir / "exp2_event_window.png", dpi=200)
+    plt.close(fig)
+
+
+def build_verdict(comparison_df: pd.DataFrame) -> Dict[str, object]:
+    contrast_df = comparison_df[
+        comparison_df["row_type"].eq("contrast") & comparison_df["reference_onset_type"].eq("agreement")
+    ].copy()
+    contrast_lookup = contrast_df.set_index("outcome")
+
+    explicit_count_row = contrast_lookup.loc["explicit_count"]
+    explicit_share_row = contrast_lookup.loc["explicit_share"]
+    implicit_count_row = contrast_lookup.loc["implicit_count"]
+
+    supported_on_explicit_count = bool(float(explicit_count_row["response_ci_low"]) > 0.0)
+    supported_on_explicit_share = bool(float(explicit_share_row["response_ci_low"]) > 0.0)
+
+    implicit_ci_low = float(implicit_count_row["response_ci_low"])
+    implicit_ci_high = float(implicit_count_row["response_ci_high"])
+    if implicit_ci_low > 0.0:
+        direction_on_implicit_count = "increase"
+    elif implicit_ci_high < 0.0:
+        direction_on_implicit_count = "decrease"
+    else:
+        direction_on_implicit_count = "no_clear_change"
+
+    if supported_on_explicit_count and supported_on_explicit_share:
+        interpretation = (
+            "The immediate reply after disagreement is more explicit than the matched agreement-control reply: "
+            "it contains more explicit claims and a higher explicit share."
+        )
+    elif supported_on_explicit_count or supported_on_explicit_share:
+        interpretation = (
+            "Disagreement provides partial support for explicitization in the immediate reply, but the evidence is "
+            "not uniform across the explicitness outcomes."
+        )
+    else:
+        interpretation = (
+            "The immediate reply after disagreement is not clearly more explicit than the matched agreement-control "
+            "reply on the primary explicitness outcomes."
+        )
+
+    if direction_on_implicit_count == "decrease":
+        interpretation += " Implicit content decreases at the same time, which strengthens the explicitization reading."
+    elif direction_on_implicit_count == "increase":
+        interpretation += " Implicit content also increases, suggesting disagreement may elicit more content overall rather than only surfacing explicit claims."
+    else:
+        interpretation += " Implicit content shows no clear change."
+
+    return {
+        "hypothesis_tested": "disagreement should make the later turn more explicit",
+        "primary_outcome": "immediate other-speaker reply at turn +1",
+        "supported_on_explicit_count": supported_on_explicit_count,
+        "supported_on_explicit_share": supported_on_explicit_share,
+        "direction_on_implicit_count": direction_on_implicit_count,
+        "interpretation": interpretation,
     }
 
-    for prefix, value_col in [("observed", "observed_target"), ("predicted", "predicted_iceberg")]:
-        subset = comparison_df.dropna(subset=[value_col])
-        if subset.empty:
-            continue
-        max_row = subset.loc[subset[value_col].idxmax()]
-        min_row = subset.loc[subset[value_col].idxmin()]
-        summary[f"{prefix}_max_transition"] = {
-            "previous_stance_level": int(max_row["previous_stance_level"]),
-            "current_stance_level": int(max_row["current_stance_level"]),
-            "value": float(max_row[value_col]),
-        }
-        summary[f"{prefix}_min_transition"] = {
-            "previous_stance_level": int(min_row["previous_stance_level"]),
-            "current_stance_level": int(min_row["current_stance_level"]),
-            "value": float(min_row[value_col]),
-        }
-    return summary, comparison_df
+
+def row_to_summary_payload(row: pd.Series) -> Dict[str, object]:
+    return {
+        "onset_type": row["onset_type"],
+        "reference_onset_type": row["reference_onset_type"],
+        "n_events": int(row["n_events"]) if not pd.isna(row["n_events"]) else 0,
+        "reference_n_events": int(row["reference_n_events"]) if not pd.isna(row["reference_n_events"]) else None,
+        "pre_turn_mean": coerce_optional_float(row["pre_turn_mean"]),
+        "onset_mean": coerce_optional_float(row["onset_mean"]),
+        "response_mean": coerce_optional_float(row["response_mean"]),
+        "response_ci_low": coerce_optional_float(row["response_ci_low"]),
+        "response_ci_high": coerce_optional_float(row["response_ci_high"]),
+        "response_minus_onset_mean": coerce_optional_float(row["response_minus_onset_mean"]),
+        "response_minus_onset_ci_low": coerce_optional_float(row["response_minus_onset_ci_low"]),
+        "response_minus_onset_ci_high": coerce_optional_float(row["response_minus_onset_ci_high"]),
+        "response_minus_pre_turn_mean": coerce_optional_float(row["response_minus_pre_turn_mean"]),
+        "response_minus_pre_turn_ci_low": coerce_optional_float(row["response_minus_pre_turn_ci_low"]),
+        "response_minus_pre_turn_ci_high": coerce_optional_float(row["response_minus_pre_turn_ci_high"]),
+    }
 
 
-def save_temporal_summary_figure(
-    transition_comparison_df: pd.DataFrame,
-    coef_df: pd.DataFrame,
-    output_dir: Path,
-    target_metric: str,
-    best_model: str,
-    best_model_cv: Dict[str, float],
-) -> None:
-    fig = plt.figure(figsize=(14.5, 9.2))
-    grid = fig.add_gridspec(2, 2, height_ratios=[1.0, 0.82], hspace=0.35, wspace=0.28)
-    ax_observed = fig.add_subplot(grid[0, 0])
-    ax_predicted = fig.add_subplot(grid[0, 1])
-    ax_importance = fig.add_subplot(grid[1, :])
+def extract_group_mean_rows(comparison_df: pd.DataFrame, outcomes: Sequence[str]) -> Dict[str, Dict[str, dict]]:
+    subset = comparison_df[
+        comparison_df["row_type"].eq("group_mean") & comparison_df["outcome"].isin(list(outcomes))
+    ].copy()
+    rows: Dict[str, Dict[str, dict]] = {}
+    for _, row in subset.iterrows():
+        outcome = str(row["outcome"])
+        onset_type = str(row["onset_type"])
+        rows.setdefault(outcome, {})
+        rows[outcome][onset_type] = row_to_summary_payload(row)
+    return rows
 
-    levels = [1, 2, 3, 4, 5]
-    observed_matrix = (
-        transition_comparison_df.pivot(
-            index="current_stance_level", columns="previous_stance_level", values="observed_target"
-        )
-        .reindex(index=levels, columns=levels)
-        .astype(float)
-    )
-    predicted_matrix = (
-        transition_comparison_df.pivot(
-            index="current_stance_level", columns="previous_stance_level", values="predicted_iceberg"
-        )
-        .reindex(index=levels, columns=levels)
-        .astype(float)
-    )
 
-    valid_values = np.concatenate(
-        [
-            observed_matrix.to_numpy(dtype=float).ravel(),
-            predicted_matrix.to_numpy(dtype=float).ravel(),
-        ]
-    )
-    valid_values = valid_values[~np.isnan(valid_values)]
-    max_abs_value = float(np.abs(valid_values).max()) if len(valid_values) else 0.1
-    max_abs_value = max(max_abs_value, 0.1)
-    color_norm = TwoSlopeNorm(vmin=-max_abs_value, vcenter=0.0, vmax=max_abs_value)
+def extract_contrast_rows(comparison_df: pd.DataFrame, outcomes: Sequence[str]) -> Dict[str, dict]:
+    subset = comparison_df[
+        comparison_df["row_type"].eq("contrast") & comparison_df["outcome"].isin(list(outcomes))
+    ].copy()
+    rows: Dict[str, dict] = {}
+    for _, row in subset.iterrows():
+        rows[str(row["outcome"])] = row_to_summary_payload(row)
+    return rows
 
-    heatmap_artist = None
-    for axis, matrix, panel_title in [
-        (ax_observed, observed_matrix, "Observed Response-Turn Means"),
-        (ax_predicted, predicted_matrix, "Model-Predicted Response-Turn Means"),
-    ]:
-        heatmap_artist = axis.imshow(matrix.to_numpy(), cmap="RdBu_r", norm=color_norm, origin="lower", aspect="auto")
-        axis.set_title(panel_title, fontsize=12, pad=10)
-        axis.set_xlabel("Previous turn stance")
-        axis.set_ylabel("Current turn stance")
-        axis.set_xticks(range(len(levels)))
-        axis.set_xticklabels(levels)
-        axis.set_yticks(range(len(levels)))
-        axis.set_yticklabels(levels)
-        for row_idx, current_level in enumerate(levels):
-            for col_idx, previous_level in enumerate(levels):
-                value = matrix.loc[current_level, previous_level]
-                if pd.isna(value):
-                    continue
-                text_color = "white" if abs(value) > (0.45 * max_abs_value) else "#1f2933"
-                axis.text(
-                    col_idx,
-                    row_idx,
-                    f"{value:.2f}",
-                    ha="center",
-                    va="center",
-                    fontsize=9,
-                    color=text_color,
-                )
 
-    if heatmap_artist is not None:
-        colorbar = fig.colorbar(heatmap_artist, ax=[ax_observed, ax_predicted], shrink=0.86, pad=0.02)
-        colorbar.set_label(target_metric)
-
-    top_features = coef_df.sort_values("abs_coefficient", ascending=False).head(10).copy()
-    top_features = top_features.sort_values("abs_coefficient", ascending=True)
-    control_features = {"log_duration", "category", "prev_other_speaker_log_duration"}
-    bar_colors = ["#8d99ae" if feature in control_features else "#2a9d8f" for feature in top_features["feature"]]
-    ax_importance.barh(top_features["feature"], top_features["abs_coefficient"], color=bar_colors, alpha=0.92)
-    ax_importance.set_title("Top Predictors (Permutation Importance)", fontsize=12, pad=10)
-    ax_importance.set_xlabel("Held-out importance")
-    text_offset = max(float(top_features["abs_coefficient"].max()) * 0.03, 0.0002) if not top_features.empty else 0.0002
-    for value, feature in zip(top_features["abs_coefficient"], top_features["feature"]):
-        ax_importance.text(value + text_offset, feature, f"{value:.4f}", va="center", fontsize=8.5)
-    ax_importance.grid(axis="x", alpha=0.18, linewidth=0.6)
-
-    fig.suptitle("Experiment 2: Temporal Explicitness Summary", fontsize=16, y=0.98)
-    fig.text(
-        0.015,
-        0.942,
-        (
-            f"Best model: {best_model} | Held-out R^2={best_model_cv['r2_mean']:.3f} | "
-            f"Pearson r={best_model_cv['pearson_r_mean']:.3f} | RMSE={best_model_cv['rmse_mean']:.3f}"
-        ),
-        fontsize=11,
-    )
-    fig.text(
-        0.015,
-        0.918,
-        "Heatmaps use response turns only (speaker switches). Conversation progress is not used as a predictor or shown in this figure.",
-        fontsize=9.5,
-        color="#52606d",
-    )
-    fig.subplots_adjust(top=0.86, left=0.07, right=0.98, bottom=0.07, hspace=0.38, wspace=0.28)
-    fig.savefig(output_dir / "experiment2_temporal_summary.png", dpi=200)
-    plt.close(fig)
+def build_dataset_summary(
+    df_all: pd.DataFrame,
+    feature_cache_path: Path,
+    loaded_from_cache: bool,
+    requested_categories: Optional[Sequence[str]],
+    max_episodes: Optional[int],
+    min_turns: int,
+    require_two_speakers: bool,
+    pre_event_turns: int,
+    post_event_turns: int,
+) -> Dict[str, object]:
+    return {
+        "loaded_from_cache": loaded_from_cache,
+        "turn_rows": int(len(df_all)),
+        "binary_rows": int(df_all["agreement_binary"].notna().sum()),
+        "categories": df_all["category"].value_counts().sort_index().to_dict(),
+        "stance_distribution": df_all["stance_5pt"].value_counts().sort_index().to_dict(),
+        "feature_cache_path": str(feature_cache_path),
+        "requested_categories": list(normalize_categories(requested_categories)),
+        "max_episodes": int(max_episodes) if max_episodes is not None else None,
+        "min_turns": int(min_turns),
+        "require_two_speakers": bool(require_two_speakers),
+        "event_study_pre_turns": int(pre_event_turns),
+        "event_study_post_turns": int(post_event_turns),
+        "hypothesis_alignment": "higher explicit_count and explicit_share after disagreement indicate more explicit replies",
+    }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Compare iceberg metrics and regression model families for Experiment 2, then fit a grouped "
-            "model that predicts explicitness from lagged stance and turn history."
+            "Run the event-centered Experiment 2 analysis that tests whether disagreement makes the immediate "
+            "later turn more explicit."
         )
     )
     parser.add_argument("--data_dir", type=str, default=DEFAULT_DATA_DIR)
@@ -1391,22 +878,11 @@ def main() -> None:
     parser.add_argument("--category_data_subdir", type=str, default=DEFAULT_CATEGORY_DATA_SUBDIR)
     parser.add_argument("--output_dir", type=str, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--min_turns", type=int, default=12)
-    parser.add_argument("--cv_splits", type=int, default=5)
     parser.add_argument("--max_episodes", type=int, default=None)
     parser.add_argument("--rebuild_features", action="store_true")
     parser.add_argument("--allow_non_dyadic", action="store_true")
     parser.add_argument("--event_pre_turns", type=int, default=DEFAULT_EVENT_PRE_TURNS)
     parser.add_argument("--event_post_turns", type=int, default=DEFAULT_EVENT_POST_TURNS)
-    parser.add_argument(
-        "--high_conflict_min_disagreement_turns",
-        type=int,
-        default=DEFAULT_HIGH_CONFLICT_MIN_DISAGREEMENT_TURNS,
-    )
-    parser.add_argument(
-        "--high_conflict_min_disagreement_rate",
-        type=float,
-        default=DEFAULT_HIGH_CONFLICT_MIN_DISAGREEMENT_RATE,
-    )
     parser.add_argument(
         "--feature_cache_path",
         type=str,
@@ -1414,18 +890,11 @@ def main() -> None:
         help="Path for the cached turn-level feature table. Defaults to the shared Experiment 2 cache directory.",
     )
     parser.add_argument("--feature_cache_name", type=str, default=None, help=argparse.SUPPRESS)
-    parser.add_argument(
-        "--target_metric_candidates",
-        nargs="+",
-        default=DEFAULT_TARGET_METRIC_CANDIDATES,
-        help="Explicit-over-implicit targets to compare before selecting the best one.",
-    )
-    parser.add_argument(
-        "--model_candidates",
-        nargs="+",
-        default=DEFAULT_MODEL_CANDIDATES,
-        help="Regression model families to compare after selecting the best explicitness target.",
-    )
+    parser.add_argument("--cv_splits", type=int, default=5, help=argparse.SUPPRESS)
+    parser.add_argument("--target_metric_candidates", nargs="+", default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--model_candidates", nargs="+", default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--high_conflict_min_disagreement_turns", type=int, default=6, help=argparse.SUPPRESS)
+    parser.add_argument("--high_conflict_min_disagreement_rate", type=float, default=0.10, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
@@ -1437,21 +906,28 @@ def main() -> None:
     if use_cache:
         logger.info("Loading cached features from %s", feature_cache_path)
         df_all = pd.read_csv(feature_cache_path)
-        missing_metric_columns = [metric for metric in args.target_metric_candidates if metric not in df_all.columns]
-        if missing_metric_columns:
-            logger.info("Cached features missing requested target columns %s; upgrading cache in place.", missing_metric_columns)
-            df_all, missing_base_columns = upgrade_cached_feature_frame(df_all)
-            if missing_base_columns:
-                logger.info(
-                    "Cached features missing base columns %s required for upgrade; rebuilding feature cache.",
-                    missing_base_columns,
+        df_all, missing_base_columns = upgrade_cached_feature_frame(df_all)
+        if missing_base_columns:
+            logger.info(
+                "Cached features missing required columns %s; rebuilding feature cache.",
+                missing_base_columns,
+            )
+            use_cache = False
+        else:
+            df_all = restrict_cached_features(
+                df_cached=df_all,
+                categories=args.categories,
+                max_episodes=args.max_episodes,
+            )
+            missing_final_columns = sorted(set(REQUIRED_CACHE_COLUMNS) - set(df_all.columns))
+            if missing_final_columns:
+                raise RuntimeError(
+                    f"Cached features are missing required final columns after upgrade: {missing_final_columns}"
                 )
-                use_cache = False
-            else:
-                df_all.to_csv(feature_cache_path, index=False)
-                logger.info("Updated cached features at %s", feature_cache_path)
+            logger.info("Using cached features after request filtering | rows=%d | episodes=%d", len(df_all), df_all["episode"].nunique())
+
     if not use_cache:
-        df_all, dataset_summary = build_turn_level_features(
+        df_all, build_summary = build_turn_level_features(
             data_dir=Path(args.data_dir),
             categories=args.categories,
             category_data_subdir=args.category_data_subdir,
@@ -1462,94 +938,103 @@ def main() -> None:
         df_all.to_csv(feature_cache_path, index=False)
         logger.info("Saved feature cache to %s", feature_cache_path)
     else:
-        dataset_summary = {
-            "loaded_from_cache": True,
+        build_summary = {
+            "files_seen": None,
+            "episode_file_limit": int(args.max_episodes) if args.max_episodes is not None else None,
+            "files_with_substantive_turns": None,
+            "episodes_kept": int(df_all["episode"].nunique()),
+            "episodes_skipped_short": None,
+            "episodes_skipped_speaker_count": None,
             "turn_rows": int(len(df_all)),
             "binary_rows": int(df_all["agreement_binary"].notna().sum()),
             "categories": df_all["category"].value_counts().sort_index().to_dict(),
             "stance_distribution": df_all["stance_5pt"].value_counts().sort_index().to_dict(),
         }
 
-        dataset_summary["target_metric_candidates"] = list(args.target_metric_candidates)
-    dataset_summary["model_candidates"] = list(args.model_candidates)
-    dataset_summary["predictor_family"] = "lagged_stance_and_turn_history_to_explicitness"
-    dataset_summary["hypothesis_alignment"] = "higher target values mean more explicit relative to implicit content"
-    dataset_summary["progress_used_as_predictor"] = False
-    dataset_summary["progress_curve_role"] = "diagnostic_only"
-    dataset_summary["feature_cache_path"] = str(feature_cache_path)
-    dataset_summary["event_study_pre_turns"] = int(args.event_pre_turns)
-    dataset_summary["event_study_post_turns"] = int(args.event_post_turns)
-    dataset_summary["high_conflict_min_disagreement_turns"] = int(args.high_conflict_min_disagreement_turns)
-    dataset_summary["high_conflict_min_disagreement_rate"] = float(args.high_conflict_min_disagreement_rate)
-    save_json(output_dir / "dataset_summary.json", dataset_summary)
+    if df_all.empty:
+        raise RuntimeError("No turn-level features are available after loading or building the dataset.")
 
-    df_model = attach_stance_predictor_columns(df_all)
+    df_model = attach_event_context_columns(df_all)
+    disagreement_events, candidate_disagreement_onsets = collect_response_valid_events(df_model, "disagreement")
+    agreement_events, candidate_agreement_onsets = collect_response_valid_events(df_model, "agreement")
 
-    metric_results, best_metric = compare_target_metric_candidates(
-        df_target=df_model,
-        metric_candidates=args.target_metric_candidates,
-        n_splits=args.cv_splits,
-    )
+    if disagreement_events.empty:
+        raise RuntimeError("No response-valid disagreement onsets were found. Experiment 2 cannot be evaluated.")
+    if agreement_events.empty:
+        raise RuntimeError("No response-valid agreement-control onsets were found. Experiment 2 cannot be evaluated.")
 
-    model_results, best_model = compare_model_candidates(
-        df_target=df_model,
-        target_metric=best_metric,
-        model_candidates=args.model_candidates,
-        n_splits=args.cv_splits,
-    )
-
-    best_pipeline = fit_full_model(
-        df_target=df_model,
-        target_metric=best_metric,
-        model_name=best_model,
-    )
-    coef_df = extract_coefficient_table(
-        pipeline=best_pipeline,
-        df_target=df_model,
-        target_metric=best_metric,
-    )
-    coef_df.to_csv(output_dir / "best_model_coefficients.csv", index=False)
-
-    predicted_curve_summary, predicted_group_df = build_predicted_progress_curves(
-        pipeline=best_pipeline,
+    comparison_df = build_event_response_comparison(disagreement_events, agreement_events)
+    event_window_df = build_disagreement_event_window(
+        disagreement_df=disagreement_events,
         df_model=df_model,
-        output_dir=output_dir,
-        target_metric=best_metric,
-    )
-    observed_curve_summary, observed_group_df = build_observed_progress_curves(
-        df_model=df_model,
-        output_dir=output_dir,
-        target_metric=best_metric,
-    )
-    disagreement_onset_event_study_summary, _ = build_disagreement_onset_event_study(
-        df_model=df_model,
-        output_dir=output_dir,
-        target_metric=best_metric,
         pre_event_turns=args.event_pre_turns,
         post_event_turns=args.event_post_turns,
-        high_conflict_min_disagreement_turns=args.high_conflict_min_disagreement_turns,
-        high_conflict_min_disagreement_rate=args.high_conflict_min_disagreement_rate,
     )
 
-    summary_payload = {
-        "best_target_metric": best_metric,
-        "best_model": best_model,
-        "dataset_summary": dataset_summary,
-        "best_metric_cv": metric_results[metric_results["metric_name"] == best_metric].iloc[0].to_dict(),
-        "best_model_cv": model_results[model_results["model_name"] == best_model].iloc[0].to_dict(),
-        "predicted_curve_summary": predicted_curve_summary,
-        "observed_curve_summary": observed_curve_summary,
-        "disagreement_onset_event_study_summary": disagreement_onset_event_study_summary,
-    }
-    save_json(output_dir / "best_model_summary.json", summary_payload)
+    comparison_df.to_csv(output_dir / "exp2_event_response_comparison.csv", index=False)
+    event_window_df.to_csv(output_dir / "exp2_disagreement_event_window.csv", index=False)
+    save_response_comparison_plot(comparison_df=comparison_df, output_dir=output_dir)
+    save_event_window_plot(
+        event_window_df=event_window_df,
+        output_dir=output_dir,
+        pre_event_turns=args.event_pre_turns,
+        post_event_turns=args.event_post_turns,
+    )
 
-    logger.info("Best target metric: %s", best_metric)
-    logger.info("Best model: %s", best_model)
+    dataset_summary = build_dataset_summary(
+        df_all=df_all,
+        feature_cache_path=feature_cache_path,
+        loaded_from_cache=use_cache,
+        requested_categories=args.categories,
+        max_episodes=args.max_episodes,
+        min_turns=args.min_turns,
+        require_two_speakers=not args.allow_non_dyadic,
+        pre_event_turns=args.event_pre_turns,
+        post_event_turns=args.event_post_turns,
+    )
+    dataset_summary.update(build_summary)
+
+    verdict = build_verdict(comparison_df)
+    summary_payload = {
+        "dataset_summary": dataset_summary,
+        "analysis_design": {
+            "framing": "event_centered_disagreement_analysis",
+            "clean_disagreement_onset_definition": "current disagreement turn after agreement turn with speaker switch",
+            "agreement_control_definition": "current agreement turn after agreement turn with speaker switch",
+            "primary_response_requirement": "turn +1 must stay in the same episode and be spoken by the other speaker",
+            "primary_outcomes": list(PRIMARY_OUTCOMES),
+            "secondary_diagnostics": ["total_content", "iceberg_log_ratio"],
+        },
+        "onset_counts": {
+            "candidate_disagreement_onsets": int(candidate_disagreement_onsets),
+            "response_valid_disagreement_onsets": int(disagreement_events["event_id"].nunique()),
+            "candidate_agreement_onsets": int(candidate_agreement_onsets),
+            "response_valid_agreement_onsets": int(agreement_events["event_id"].nunique()),
+        },
+        "primary_response_group_means": extract_group_mean_rows(
+            comparison_df=comparison_df,
+            outcomes=PRIMARY_OUTCOMES,
+        ),
+        "primary_contrasts": extract_contrast_rows(
+            comparison_df=comparison_df,
+            outcomes=PRIMARY_OUTCOMES,
+        ),
+        "secondary_diagnostics": extract_contrast_rows(
+            comparison_df=comparison_df,
+            outcomes=["total_content", "iceberg_log_ratio"],
+        ),
+        "verdict": verdict,
+    }
+
+    save_json(output_dir / "exp2_summary.json", summary_payload)
+    save_json(output_dir / "dataset_summary.json", dataset_summary)
+
     logger.info(
-        "Best model CV | r2=%.4f | pearson=%.4f | rmse=%.4f",
-        summary_payload["best_model_cv"]["r2_mean"],
-        summary_payload["best_model_cv"]["pearson_r_mean"],
-        summary_payload["best_model_cv"]["rmse_mean"],
+        "Experiment 2 completed | disagreement_events=%d | agreement_events=%d | explicit_count_supported=%s | explicit_share_supported=%s",
+        disagreement_events["event_id"].nunique(),
+        agreement_events["event_id"].nunique(),
+        verdict["supported_on_explicit_count"],
+        verdict["supported_on_explicit_share"],
     )
 
 

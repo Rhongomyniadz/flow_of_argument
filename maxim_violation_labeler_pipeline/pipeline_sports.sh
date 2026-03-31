@@ -2,7 +2,7 @@
 #SBATCH --job-name=maxim_violation_labeler_sports
 #SBATCH --output=_log/maxim_violation_labeler_sports.out
 #SBATCH --partition=gpu
-#SBATCH --time=48:00:00
+#SBATCH --time=03:00:00
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:A6000:2
 #SBATCH --mem=64G

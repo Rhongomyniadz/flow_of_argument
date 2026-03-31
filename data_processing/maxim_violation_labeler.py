@@ -70,10 +70,6 @@ NON_VIOLATION_MOVES = {
     "Clarification Request (Specific)",
     "Agree / Align",
 }
-ANSWERISH_MOVES = {
-    "Answer",
-    "Assert / Elaborate",
-}
 PROMO_PATTERNS = [
     r"\bsponsored by\b",
     r"\bbrought to you by\b",
@@ -167,11 +163,15 @@ How to decide:
 
 Important:
 - The turn-type and move labels below are only hints.
+- Make the conservative decision yourself from the prompt. Do not assume a later cleanup step will correct an over-aggressive label.
 - Do NOT automatically treat Topic Shift, Stonewalling / Non-Response, or Self-Correction as violations.
 - Judge the local interaction problem, not overall conversation quality.
+- The first turn in an episode should be No Violation because there is no prior turn whose conversational demand it can fail.
 - Do NOT label obvious advertisement copy, sponsor reads, station IDs, or promo segments as maxim violations just because they are abrupt or off-topic. If the text looks like inserted non-conversational material, choose No Violation.
 - Do NOT label transcript splice boundaries, broken segment joins, or metadata/captioning artifacts as Relation or Quantity violations. If the discontinuity looks like a recording or transcription artifact rather than a cooperative speaker choice, choose No Violation.
 - Do NOT label Disrupted turns as maxim violations unless the remaining text itself creates a clear local Manner problem beyond simple truncation. Simple cut-offs, interruptions, or partial fragments caused by segmentation should usually be No Violation.
+- Backchannel and Procedural turns should be No Violation.
+- Clarification requests and agreement/alignment moves should be No Violation unless the text itself still creates a clear local Manner problem.
 - Do NOT label normal interview progression as a maxim violation. Follow-up questions, topic elaborations, requests to tell us more, and ordinary speaker handoffs are usually No Violation.
 - Do NOT label a turn as Relation just because it introduces a subtopic, example, comparison, anecdote, or partial reframing that still connects naturally to the previous turn.
 - Do NOT label a turn as Quantity just because it is long, detailed, enthusiastic, or somewhat indirect. Use Quantity only when it is clearly too little or too much for the immediate local need.
@@ -179,11 +179,20 @@ Important:
 - For interviews, podcasts, and conversational Q&A, long informative answers are usually No Violation. Only use Quantity when the answer is plainly evasive, drastically under-informative, or so excessive that it blocks the projected task.
 - Do NOT use Relation when the current turn still answers, elaborates, exemplifies, or extends the previous turn's topic, even if the connection is loose.
 - Prefer No Violation over Relation when both turns share obvious topical vocabulary, named entities, or a clear discourse continuation marker.
+- If the previous turn is a question and the current turn gives a minimally contentful answer, completion, or correction, prefer No Violation over Relation unless the reply is clearly off-track.
+- For Assert / Elaborate turns, use Relation only when the previous turn made a specific issue relevant and the current turn clearly bypasses that issue rather than continuing it.
+- Openings, host setup lines, live commentary, narrative continuation, and ordinary segue language are usually No Violation, not Relation.
+- For Topic Shift turns, choose Relation only when the shift clearly abandons an immediately relevant question, challenge, or request.
+- Broad topical continuation, wrap-up banter, sign-offs, and play-by-play narration are usually No Violation unless they clearly dodge a specific local demand.
 - Use Relation only for a genuine relevance breakdown: the current turn should fail to address what the prior turn made relevant in a way that a cooperative listener would likely challenge.
 - Use Manner only when the current turn itself is seriously hard to interpret. Spoken-style disfluency, casual wording, or compressed syntax are not enough by themselves.
 - Prefer No Violation over Manner when the main point of the turn is still recoverable.
 - Be especially conservative with Relation. If there is any reasonable reading on which the current turn still connects to the prior topic, prefer No Violation.
 - For Manner, brief fragmentary or broken turns can still count when a listener would genuinely struggle to recover the intended meaning from the local context.
+- Short spoken continuations or completions such as brief answer fragments, repairs, or follow-throughs are usually No Violation if their intended meaning is recoverable from the previous turn.
+- Use Manner for short fragments only when the intended proposition is still hard to recover from the previous turn; a short but understandable completion should be No Violation.
+- Single-word or short echoic phrases that repeat or complete material already present in the previous turn are usually No Violation, not Manner.
+- Use Quantity for short replies only when they are clearly under-informative for the specific question or task, not merely brief.
 
 Turn type meanings:
 - Substantive:
@@ -252,11 +261,11 @@ CURRENT TURN:
 """
 
 
-def ensure_dir(path: str) -> None:
+def ensure_output_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def discover_category_dirs(
+def resolve_category_set(
     data_root: str,
     categories: Optional[List[str]],
     auto_categories: bool,
@@ -275,17 +284,17 @@ def discover_category_dirs(
     return categories if categories else DEFAULT_CATEGORIES
 
 
-def discover_episode_files(data_root: str, input_subdir: str, category: str) -> List[str]:
+def collect_episode_paths(data_root: str, input_subdir: str, category: str) -> List[str]:
     pattern = os.path.join(data_root, input_subdir, category, "*.json")
     return sorted(glob.glob(pattern))
 
 
-def load_episode_json(path: str) -> Any:
+def read_episode_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def extract_turns(obj: Any) -> List[Dict[str, Any]]:
+def extract_turn_sequence(obj: Any) -> List[Dict[str, Any]]:
     if isinstance(obj, list):
         return obj
     if isinstance(obj, dict) and isinstance(obj.get("turns"), list):
@@ -293,7 +302,7 @@ def extract_turns(obj: Any) -> List[Dict[str, Any]]:
     raise ValueError("Unrecognized JSON format: expected list or dict with 'turns' list.")
 
 
-def get_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
+def resolve_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
     if turns and "episode_id" in turns[0] and turns[0]["episode_id"] is not None:
         return str(turns[0]["episode_id"])
     match = re.search(r"(\d+)\.json$", os.path.basename(fallback_path))
@@ -302,16 +311,16 @@ def get_episode_id(turns: List[Dict[str, Any]], fallback_path: str) -> str:
     raise ValueError(f"Could not infer episode_id from data or filename: {fallback_path}")
 
 
-def normalize_space(text: object) -> str:
+def canonicalize_whitespace(text: object) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip()
 
 
-def truncate_text(text: str, max_chars: int) -> str:
-    text = normalize_space(text)
+def truncate_turn_text(text: str, max_chars: int) -> str:
+    text = canonicalize_whitespace(text)
     return text if len(text) <= max_chars else (text[:max_chars] + " …(truncated)")
 
 
-def build_chat_prompt(tokenizer, user_content: str) -> str:
+def render_annotation_prompt(tokenizer, user_content: str) -> str:
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_content},
@@ -319,7 +328,7 @@ def build_chat_prompt(tokenizer, user_content: str) -> str:
     return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
 
-def normalize_label(raw: str) -> Optional[str]:
+def parse_maxim_label(raw: str) -> Optional[str]:
     if raw is None:
         return None
     text = raw.strip().splitlines()[0].strip()
@@ -335,19 +344,19 @@ def normalize_label(raw: str) -> Optional[str]:
     return None
 
 
-def save_episode_turns(out_path: str, turns: List[Dict[str, Any]]) -> None:
+def write_annotated_episode(out_path: str, turns: List[Dict[str, Any]]) -> None:
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(turns, f, ensure_ascii=False, indent=2)
 
 
-def looks_like_promo(text: str) -> bool:
-    text = normalize_space(text).lower()
+def is_promotional_segment(text: str) -> bool:
+    text = canonicalize_whitespace(text).lower()
     return any(re.search(pattern, text) for pattern in PROMO_PATTERNS)
 
 
-def looks_like_splice_artifact(prev_text: str, cur_text: str) -> bool:
-    prev_text = normalize_space(prev_text)
-    cur_text = normalize_space(cur_text)
+def is_transcript_splice_artifact(prev_text: str, cur_text: str) -> bool:
+    prev_text = canonicalize_whitespace(prev_text)
+    cur_text = canonicalize_whitespace(cur_text)
     if not prev_text or not cur_text:
         return False
     prev_tail = prev_text[-1]
@@ -359,60 +368,123 @@ def looks_like_splice_artifact(prev_text: str, cur_text: str) -> bool:
     )
 
 
-def has_continuation_marker(text: str) -> bool:
-    text = normalize_space(text).lower()
+def has_discourse_continuation(text: str) -> bool:
+    text = canonicalize_whitespace(text).lstrip(".,?!'\"-:;()[] ").lower()
     return text.startswith(DISCOURSE_CONTINUATION_PATTERNS)
 
 
-def lexical_overlap(prev_text: str, cur_text: str) -> float:
+def compute_lexical_overlap(prev_text: str, cur_text: str) -> float:
+    stopwords = {
+        "that",
+        "this",
+        "with",
+        "from",
+        "have",
+        "been",
+        "they",
+        "them",
+        "their",
+        "about",
+        "would",
+        "could",
+        "should",
+    }
     prev_tokens = {
-        tok for tok in re.findall(r"[a-zA-Z]{3,}", normalize_space(prev_text).lower())
-        if tok not in {"that", "this", "with", "from", "have", "been", "they", "them", "their", "about", "would", "could", "should"}
+        tok for tok in re.findall(r"[a-zA-Z]{3,}", canonicalize_whitespace(prev_text).lower()) if tok not in stopwords
     }
     cur_tokens = {
-        tok for tok in re.findall(r"[a-zA-Z]{3,}", normalize_space(cur_text).lower())
-        if tok not in {"that", "this", "with", "from", "have", "been", "they", "them", "their", "about", "would", "could", "should"}
+        tok for tok in re.findall(r"[a-zA-Z]{3,}", canonicalize_whitespace(cur_text).lower()) if tok not in stopwords
     }
     if not prev_tokens or not cur_tokens:
         return 0.0
     return len(prev_tokens & cur_tokens) / min(len(prev_tokens), len(cur_tokens))
 
 
-def looks_like_reasonable_answer(prev_turn: Dict[str, Any], turn: Dict[str, Any]) -> bool:
-    prev_text = normalize_space(prev_turn.get("turn_text", ""))
-    cur_text = normalize_space(turn.get("turn_text", ""))
+def is_reasonable_answer_continuation(prev_turn: Dict[str, Any], turn: Dict[str, Any]) -> bool:
+    prev_text = canonicalize_whitespace(prev_turn.get("turn_text", ""))
+    cur_text = canonicalize_whitespace(turn.get("turn_text", ""))
+    move = canonicalize_whitespace(turn.get("conversation_move_label", ""))
     if not prev_text or not cur_text:
         return False
     prev_is_question = "?" in prev_text
     cur_len = len(cur_text.split())
-    overlap = lexical_overlap(prev_text, cur_text)
-    return (
-        prev_is_question
-        and cur_len >= 12
-        and (has_continuation_marker(cur_text) or overlap >= 0.12)
+    overlap = compute_lexical_overlap(prev_text, cur_text)
+    return prev_is_question and cur_len >= 4 and (
+        has_discourse_continuation(cur_text)
+        or overlap >= 0.06
+        or move in {"Answer", "Correction / Challenge"}
     )
 
 
-def severe_manner_signal(text: str) -> bool:
-    text = normalize_space(text)
+def has_severe_manner_signal(text: str) -> bool:
+    text = canonicalize_whitespace(text)
     low = text.lower()
     words = text.split()
     if not text:
         return False
-    if text.strip().startswith((".", ",", "?", "'")):
+    if text.strip().startswith((".", ",", "?", "'")) and len(words) <= 5:
         return True
-    if "..." in text and len(words) <= 8:
+    if "..." in text and len(words) <= 7:
         return True
-    if len(words) <= 4 and any(ch.isalpha() for ch in text):
+    if len(words) <= 2 and any(ch.isalpha() for ch in text):
         return True
-    if low.count(" uh") + low.count(" um") >= 2:
+    if len(words) <= 8 and low.count(" uh") + low.count(" um") >= 2:
+        return True
+    if low.count(" uh") + low.count(" um") >= 4:
         return True
     return False
 
 
-def apply_hard_filter(i: int, prev_turn: Dict[str, Any], turn: Dict[str, Any], label: Optional[str]) -> str:
-    turn_type = normalize_space(turn.get("turn_type_label"))
-    move = normalize_space(turn.get("conversation_move_label"))
+def is_fragmentary_continuation(prev_text: str, cur_text: str) -> bool:
+    prev_text = canonicalize_whitespace(prev_text)
+    cur_text = canonicalize_whitespace(cur_text)
+    if not prev_text or not cur_text:
+        return False
+    cur_words = cur_text.split()
+    if len(cur_words) > 4:
+        return False
+    prev_tail = prev_text[-1]
+    cur_head = cur_text.lstrip(".,?!'\"-:;()[] ")
+    if not cur_head:
+        return False
+    return prev_tail not in ".?!" and (cur_head[0].islower() or has_discourse_continuation(cur_text))
+
+
+def is_recoverable_short_completion(prev_turn: Dict[str, Any], turn: Dict[str, Any]) -> bool:
+    prev_text = canonicalize_whitespace(prev_turn.get("turn_text", ""))
+    prev_move = canonicalize_whitespace(prev_turn.get("conversation_move_label", ""))
+    cur_text = canonicalize_whitespace(turn.get("turn_text", ""))
+    move = canonicalize_whitespace(turn.get("conversation_move_label", ""))
+    if not prev_text or not cur_text:
+        return False
+    cur_len = len(cur_text.split())
+    if cur_len > 6:
+        return False
+    overlap = compute_lexical_overlap(prev_text, cur_text)
+    prev_requires_response = "?" in prev_text or prev_move in {
+        "Clarification Request (Generic)",
+        "Clarification Request (Specific)",
+        "Correction / Challenge",
+    }
+    if is_fragmentary_continuation(prev_text, cur_text):
+        return True
+    if overlap >= 0.18:
+        return True
+    if prev_requires_response and move in {"Answer", "Correction / Challenge", "Stonewalling / Non-Response"} and cur_len <= 8:
+        return True
+    if prev_requires_response and "?" in cur_text and cur_len <= 8:
+        return True
+    if has_discourse_continuation(cur_text) and cur_len <= 5:
+        return True
+    if prev_requires_response and overlap >= 0.05:
+        return True
+    return False
+
+
+def apply_gricean_postfilter(i: int, prev_turn: Dict[str, Any], turn: Dict[str, Any], label: Optional[str]) -> str:
+    turn_type = canonicalize_whitespace(turn.get("turn_type_label"))
+    move = canonicalize_whitespace(turn.get("conversation_move_label"))
+    prev_move = canonicalize_whitespace(prev_turn.get("conversation_move_label"))
     prev_text = str(prev_turn.get("turn_text", ""))
     cur_text = str(turn.get("turn_text", ""))
     if i == 0:
@@ -421,41 +493,60 @@ def apply_hard_filter(i: int, prev_turn: Dict[str, Any], turn: Dict[str, Any], l
         return "No Violation"
     if move in NON_VIOLATION_MOVES:
         return "No Violation"
-    if looks_like_promo(cur_text) or looks_like_promo(prev_text):
+    if is_promotional_segment(cur_text) or is_promotional_segment(prev_text):
         return "No Violation"
-    if looks_like_splice_artifact(prev_text, cur_text):
+    if is_transcript_splice_artifact(prev_text, cur_text):
         return "No Violation"
+
     filtered = label or "No Violation"
-    overlap = lexical_overlap(prev_text, cur_text)
+    overlap = compute_lexical_overlap(prev_text, cur_text)
+    cur_len = len(canonicalize_whitespace(cur_text).split())
+    prev_requires_specific_response = "?" in prev_text or prev_move in {
+        "Clarification Request (Generic)",
+        "Clarification Request (Specific)",
+        "Correction / Challenge",
+    }
+
     if filtered == "Relation":
-        if (
-            has_continuation_marker(cur_text)
-            or overlap >= 0.04
-            or looks_like_reasonable_answer(prev_turn, turn)
-            or move in {"Topic Shift", "Stonewalling / Non-Response"}
-        ):
+        if is_fragmentary_continuation(prev_text, cur_text):
             return "No Violation"
-        if "?" in prev_text and len(normalize_space(cur_text).split()) >= 3:
+        if has_discourse_continuation(cur_text) or overlap >= 0.06 or is_reasonable_answer_continuation(prev_turn, turn):
             return "No Violation"
-        if move == "Assert / Elaborate" and len(normalize_space(cur_text).split()) >= 8:
+        if move in {"Topic Shift", "Stonewalling / Non-Response"} and not prev_requires_specific_response:
             return "No Violation"
+        if move == "Assert / Elaborate" and prev_requires_specific_response and cur_len >= 8:
+            return "No Violation"
+        if move == "Assert / Elaborate" and not prev_requires_specific_response and cur_len >= 4:
+            return "No Violation"
+        if move == "Assert / Elaborate" and cur_len >= 6 and overlap >= 0.03:
+            return "No Violation"
+        if move == "Topic Shift" and overlap >= 0.04:
+            return "No Violation"
+        if move in {"Answer", "Correction / Challenge"} and cur_len >= 2:
+            return "No Violation"
+        if "?" in prev_text and cur_len >= 4:
+            return "No Violation"
+
     if filtered == "Quantity":
-        if move in ANSWERISH_MOVES and len(normalize_space(cur_text).split()) >= 12:
+        if move in {"Assert / Elaborate", "Answer"} and cur_len >= 12:
             return "No Violation"
-        if has_continuation_marker(cur_text) and overlap >= 0.12:
+        if has_discourse_continuation(cur_text) and overlap >= 0.12:
             return "No Violation"
+
     if filtered == "Manner":
-        words = normalize_space(cur_text).split()
-        if severe_manner_signal(cur_text):
+        if is_recoverable_short_completion(prev_turn, turn):
+            return "No Violation"
+        if has_severe_manner_signal(cur_text):
             return "Manner"
-        if (
-            len(words) >= 6
-            and (overlap >= 0.06 or has_continuation_marker(cur_text))
-            and not looks_like_splice_artifact(prev_text, cur_text)
-        ):
+        if cur_len >= 8 and cur_text.count("...") == 0 and cur_text.count("uh") + cur_text.count("um") <= 1:
             return "No Violation"
-        if cur_text.count("...") == 0 and cur_text.count("uh") + cur_text.count("um") <= 1 and len(words) >= 7:
+        if prev_requires_specific_response and move in {"Answer", "Stonewalling / Non-Response"} and cur_len <= 10:
             return "No Violation"
+        if cur_len >= 3 and (overlap >= 0.08 or has_discourse_continuation(cur_text)):
+            return "No Violation"
+        if move in {"Answer", "Assert / Elaborate"} and cur_len >= 3 and overlap >= 0.04:
+            return "No Violation"
+
     return filtered
 
 
@@ -499,8 +590,8 @@ def main() -> None:
     if not os.path.isdir(args.input_root):
         raise FileNotFoundError(f"Input root not found or not a directory: {args.input_root}")
 
-    ensure_dir(args.output_root)
-    categories = discover_category_dirs(
+    ensure_output_dir(args.output_root)
+    categories = resolve_category_set(
         args.input_root,
         args.categories,
         args.auto_categories,
@@ -526,7 +617,7 @@ def main() -> None:
     )
 
     for category in categories:
-        files = discover_episode_files(args.input_root, args.input_subdir, category)
+        files = collect_episode_paths(args.input_root, args.input_subdir, category)
         if args.max_episodes is not None and args.max_episodes > 0:
             files = files[: args.max_episodes]
         if not files:
@@ -537,33 +628,33 @@ def main() -> None:
             continue
 
         output_dir = os.path.join(args.output_root, args.output_subdir, category)
-        ensure_dir(output_dir)
+        ensure_output_dir(output_dir)
 
         for fp in tqdm(files, desc=f"{category}: Maxim Episodes"):
-            obj = load_episode_json(fp)
-            turns = extract_turns(obj)
+            obj = read_episode_json(fp)
+            turns = extract_turn_sequence(obj)
             if not turns:
                 continue
 
-            episode_id = get_episode_id(turns, fp)
+            episode_id = resolve_episode_id(turns, fp)
             out_path = os.path.join(output_dir, f"{episode_id}.json")
 
             prompts: List[str] = []
             for i, turn in enumerate(turns):
                 prev_turn = turns[i - 1] if i > 0 else {}
 
-                prev_text = truncate_text(prev_turn.get("turn_text", ""), args.max_turn_chars)
-                cur_text = truncate_text(turn.get("turn_text", ""), args.max_turn_chars)
+                prev_text = truncate_turn_text(prev_turn.get("turn_text", ""), args.max_turn_chars)
+                cur_text = truncate_turn_text(turn.get("turn_text", ""), args.max_turn_chars)
 
                 user = MAXIM_PROMPT.format(
-                    prev_type=normalize_space(prev_turn.get("turn_type_label")) or "[NONE]",
-                    prev_move=normalize_space(prev_turn.get("conversation_move_label")) or "[NONE]",
+                    prev_type=canonicalize_whitespace(prev_turn.get("turn_type_label")) or "[NONE]",
+                    prev_move=canonicalize_whitespace(prev_turn.get("conversation_move_label")) or "[NONE]",
                     prev_turn=prev_text or "[NONE]",
-                    cur_type=normalize_space(turn.get("turn_type_label")) or "[UNKNOWN]",
-                    cur_move=normalize_space(turn.get("conversation_move_label")) or "[UNKNOWN]",
+                    cur_type=canonicalize_whitespace(turn.get("turn_type_label")) or "[UNKNOWN]",
+                    cur_move=canonicalize_whitespace(turn.get("conversation_move_label")) or "[UNKNOWN]",
                     cur_turn=cur_text or "[EMPTY]",
                 )
-                prompts.append(build_chat_prompt(tokenizer, user))
+                prompts.append(render_annotation_prompt(tokenizer, user))
 
             if args.batch_size and args.batch_size > 0:
                 outputs: List[str] = []
@@ -577,14 +668,14 @@ def main() -> None:
                 rec = dict(turn)
                 rec.setdefault("category", category)
                 rec["maxim_violation_scheme"] = MAXIM_VIOLATION_SCHEME
-                label = normalize_label(out_text)
+                label = parse_maxim_label(out_text)
                 prev_turn = turns[i - 1] if i > 0 else {}
-                rec["maxim_violation_label"] = apply_hard_filter(i, prev_turn, turn, label)
+                rec["maxim_violation_label"] = apply_gricean_postfilter(i, prev_turn, turn, label)
                 if label is None:
                     rec["maxim_violation_label_error"] = out_text[:400]
                 labeled_turns.append(rec)
 
-            save_episode_turns(out_path, labeled_turns)
+            write_annotated_episode(out_path, labeled_turns)
 
     print(
         "Done. Updated per-episode files under: "
