@@ -1,0 +1,117 @@
+{
+  "config": {
+    "input_dir": "data/conversation_moves_labeled",
+    "output_dir": "experiments/exp6_quantity_repair_cascades/results",
+    "categories": [
+      "business",
+      "commentary",
+      "news",
+      "political",
+      "religion",
+      "sports"
+    ],
+    "max_episodes_per_category": 0,
+    "event_window_sec": 180.0,
+    "max_followup_turns": 8,
+    "stability_gap_sec": 45.0,
+    "under_assumption_quantile": 0.75,
+    "under_duration_quantile": 0.25,
+    "over_assumption_quantile": 0.25,
+    "over_duration_quantile": 0.75
+  },
+  "dataset": {
+    "n_episode_files": 20189,
+    "n_categories": 6,
+    "n_candidate_turns": 385653,
+    "n_triggers": 2132,
+    "n_cascade_events": 6698
+  },
+  "trigger_counts_by_type": {
+    "under_info": 54,
+    "over_info": 2078
+  },
+  "trigger_counts_by_category": [
+    {
+      "category": "business",
+      "over_info": 1351,
+      "under_info": 26
+    },
+    {
+      "category": "commentary",
+      "over_info": 28,
+      "under_info": 10
+    },
+    {
+      "category": "news",
+      "over_info": 2,
+      "under_info": 0
+    },
+    {
+      "category": "political",
+      "over_info": 439,
+      "under_info": 3
+    },
+    {
+      "category": "religion",
+      "over_info": 154,
+      "under_info": 15
+    },
+    {
+      "category": "sports",
+      "over_info": 104,
+      "under_info": 0
+    }
+  ],
+  "outcome_summary": {
+    "under_info": {
+      "n_triggers": 54,
+      "mean_next_turn_latency_sec": 9.236618109244635,
+      "mean_repair_event_count": 0.6111111111111112,
+      "mean_challenge_event_count": 0.2222222222222222,
+      "mean_hawkes_event_count": 0.8333333333333334,
+      "mean_continuation_event_count": 1.6111111111111112,
+      "mean_cascade_duration_sec": 21.666145437559525,
+      "topic_shift_rate": 0.2222222222222222,
+      "void_rate": 0.5555555555555556
+    },
+    "over_info": {
+      "n_triggers": 2078,
+      "mean_next_turn_latency_sec": 5.467339408281582,
+      "mean_repair_event_count": 0.8787295476419634,
+      "mean_challenge_event_count": 0.1039461020211742,
+      "mean_hawkes_event_count": 0.9826756496631376,
+      "mean_continuation_event_count": 1.8498556304138596,
+      "mean_cascade_duration_sec": 41.979522130801016,
+      "topic_shift_rate": 0.1395572666025024,
+      "void_rate": 0.4109720885466795
+    }
+  },
+  "hawkes_summary": [
+    {
+      "trigger_type": "under_info",
+      "n_cascades": 54,
+      "n_events": 45,
+      "mu": 0.008745657122125087,
+      "alpha": 0.023665517808749266,
+      "beta": 0.08143392078332809,
+      "branching_ratio": 0.29061007478341006,
+      "log_likelihood": -241.16608635431757,
+      "fit_status": "ok"
+    },
+    {
+      "trigger_type": "over_info",
+      "n_cascades": 2078,
+      "n_events": 2042,
+      "mu": 0.0070636890914654174,
+      "alpha": 0.3882392071617531,
+      "beta": 403.4287934927351,
+      "branching_ratio": 0.0009623487798194167,
+      "log_likelihood": -12147.949281600999,
+      "fit_status": "ok"
+    }
+  ],
+  "verdict": {
+    "under_info_burst_supported": false,
+    "over_info_void_supported": false
+  }
+}

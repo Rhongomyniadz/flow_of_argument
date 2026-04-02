@@ -2,7 +2,7 @@
 #SBATCH --job-name=stance_labeler_commentary
 #SBATCH --output=_log/stance_labeler_commentary.out
 #SBATCH --partition=gpu
-#SBATCH --time=48:00:00
+#SBATCH --time=10:00:00
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:A6000:2
 #SBATCH --mem=64G
@@ -12,4 +12,4 @@ python data_processing/stance_labeler.py \
     --categories commentary \
     --tensor_parallel_size 2 \
     --batch_size 0 \
-    --k 512
+    --k 1024

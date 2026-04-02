@@ -1,0 +1,145 @@
+{
+  "analysis_design": {
+    "authoritative_outputs": [
+      "exp2_regression_coefficients.csv",
+      "exp2_regression_model_comparison.csv",
+      "exp2_local_effect_bins.csv",
+      "exp2_local_effect_curve.csv",
+      "exp2_local_relationship.png",
+      "exp2_summary.json",
+      "dataset_summary.json"
+    ],
+    "framing": "local_stance_change_regression",
+    "iceberg_density_definition": "(explicit_count / (implicit_count + 1)) / duration_seconds",
+    "response_variable": "delta_log_iceberg_density",
+    "stance_field": "stance_pt",
+    "stance_mapping": "signed scale from -5 disagreement to +5 agreement, with 0 treated as neutral or no stance"
+  },
+  "dataset_summary": {
+    "categories": {
+      "business": 176349,
+      "commentary": 35912,
+      "news": 2671,
+      "political": 60978,
+      "religion": 58955,
+      "sports": 14854
+    },
+    "delta_stance_pt_distribution": {
+      "-1": 16211,
+      "-10": 13,
+      "-2": 18348,
+      "-3": 49363,
+      "-4": 4094,
+      "-5": 8201,
+      "-6": 522,
+      "-7": 139,
+      "-8": 159,
+      "-9": 12,
+      "0": 137774,
+      "1": 19354,
+      "10": 26,
+      "2": 21760,
+      "3": 52150,
+      "4": 3551,
+      "5": 6947,
+      "6": 491,
+      "7": 109,
+      "8": 167,
+      "9": 27
+    },
+    "episode_file_limit": null,
+    "episodes_in_transition_data": 10301,
+    "episodes_in_turn_data": 10301,
+    "episodes_kept": 10301,
+    "episodes_skipped_short": 9632,
+    "episodes_skipped_speaker_count": 1,
+    "files_seen": 19990,
+    "files_with_substantive_turns": 19934,
+    "max_episodes": null,
+    "min_turns": 12,
+    "requested_categories": [],
+    "require_two_speakers": true,
+    "stance_pt_distribution": {
+      "-1.0": 570,
+      "-2.0": 568,
+      "-3.0": 1371,
+      "-4.0": 294,
+      "-5.0": 368,
+      "0.0": 155342,
+      "1.0": 25660,
+      "2.0": 2229,
+      "3.0": 131079,
+      "4.0": 9105,
+      "5.0": 23133
+    },
+    "transition_rows": 339418,
+    "turn_rows": 349719
+  },
+  "formulas": {
+    "primary_signed_change": "delta_log_iceberg_density ~ delta_stance_strength + lag1_delta_stance_strength + previous_log_iceberg_density + timeline_position + I(timeline_position ** 2) + C(category)",
+    "secondary_directional_change": "delta_log_iceberg_density ~ shift_toward_agreement + shift_toward_disagreement + lag1_shift_toward_agreement + lag1_shift_toward_disagreement + previous_log_iceberg_density + timeline_position + I(timeline_position ** 2) + C(category)"
+  },
+  "headline_coefficients": {
+    "primary_delta_stance_strength": {
+      "ci_high": -0.019095469204131618,
+      "ci_low": -0.020807702212667846,
+      "clustered_se": 0.00043680216117288555,
+      "coefficient": -0.019951585708399732,
+      "model_name": "primary_signed_change",
+      "p": 0.0,
+      "t": -45.67648121251609,
+      "term": "delta_stance_strength"
+    },
+    "secondary_shift_toward_agreement": {
+      "ci_high": -0.023593435975399243,
+      "ci_low": -0.026104442605240405,
+      "clustered_se": 0.0006405746864859913,
+      "coefficient": -0.024848939290319824,
+      "model_name": "secondary_directional_change",
+      "p": 0.0,
+      "t": -38.79163478443703,
+      "term": "shift_toward_agreement"
+    },
+    "secondary_shift_toward_disagreement": {
+      "ci_high": 0.017071171981155348,
+      "ci_low": 0.01408323849783315,
+      "clustered_se": 0.0007622419357933706,
+      "coefficient": 0.015577205239494248,
+      "model_name": "secondary_directional_change",
+      "p": 7.997392319432996e-93,
+      "t": 20.436038097642708,
+      "term": "shift_toward_disagreement"
+    }
+  },
+  "model_comparison": [
+    {
+      "adjusted_rsquared": 0.4631261700465056,
+      "aic": -640414.830917844,
+      "bic": -640296.7460535273,
+      "model_name": "primary_signed_change",
+      "n_episodes": 10301,
+      "n_rows": 339418,
+      "rsquared": 0.46314198757567926
+    },
+    {
+      "adjusted_rsquared": 0.4636885222706131,
+      "aic": -640768.54306047,
+      "bic": -640628.9882208231,
+      "model_name": "secondary_directional_change",
+      "n_episodes": 10301,
+      "n_rows": 339418,
+      "rsquared": 0.4637074834238045
+    }
+  ],
+  "verdict": {
+    "agreement_deepening_supported": true,
+    "directional_agreement_supported": true,
+    "directional_disagreement_supported": true,
+    "disagreement_surfacing_supported": true,
+    "interpretation": "Local movement toward agreement predicts lower subsequent iceberg density, which is consistent with context deepening; the same signed effect implies that movement toward disagreement predicts local iceberg-density increases.",
+    "primary_delta_stance_strength_ci_high": -0.019095469204131618,
+    "primary_delta_stance_strength_ci_low": -0.020807702212667846,
+    "primary_delta_stance_strength_coefficient": -0.019951585708399732,
+    "primary_relationship_detected": true
+  }
+}

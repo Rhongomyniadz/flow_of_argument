@@ -322,7 +322,7 @@ def main():
             for turn_record, raw_model_output in zip(turn_records, model_outputs):
                 labeled_turn = dict(turn_record)
                 labeled_turn.setdefault("category", category)
-                labeled_turn["stance_5pt"] = parse_stance_score(raw_model_output)
+                labeled_turn["stance_pt"] = parse_stance_score(raw_model_output)
                 labeled_turn["stance_raw"] = raw_model_output
                 labeled_turn["stance_context_k"] = args.k
                 labeled_turn["stance_scheme"] = STANCE_LABEL_SCHEME

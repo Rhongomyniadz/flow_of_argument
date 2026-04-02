@@ -1,49 +1,59 @@
 {
   "experiment": "exp7_social_power",
-  "input_dir": "data/conversation_moves_labeled",
+  "input_dir": "data/maxim_violations_labeled/political",
   "output_dir": "experiments/exp7_social_power/results",
-  "n_violation_rows": 9367,
-  "n_conversations": 2033,
-  "short_answer_max_words": 6,
+  "n_violation_rows": 146,
+  "n_conversations": 129,
   "model_formula_proxy": "P(policed_next) ~ violation_type * speaker_role + (1|episode_id)",
   "operationalization": {
+    "definition": "A maxim violation is a substantive source turn that, relative to the immediately preceding turn and the action it projects, creates a local problem of sufficiency, relevance, or interpretability strong enough that a cooperative recipient would be warranted in withholding straightforward uptake.",
+    "label_source_precedence": [
+      "Use maxim_violation_label embedded on each turn in the maxim-labeled input files."
+    ],
     "Quantity": [
-      "Stonewalling / Non-Response",
-      "Answer with <= 6 words immediately after a question"
+      "Underinformative or overinformative relative to the immediate discourse demand."
     ],
     "Relation": [
-      "Topic Shift"
+      "Insufficiently responsive to the question, challenge, or repair request currently on the table."
     ],
     "Manner": [
-      "Disrupted turn type",
-      "Self-Correction move"
+      "Too unclear, incomplete, disordered, or under-specified for current purposes."
+    ],
+    "ExcludedFromViolation": [
+      "Backchannel and Procedural turns.",
+      "Ordinary topic management when no response is projected from the current speaker.",
+      "Self-Correction as such; self-repair within the same turn is not automatically a violation.",
+      "Rudeness, disagreement, or socially dispreferred but usable turns."
     ],
     "PolicedNext": [
       "N+1 is a different speaker",
       "N+1 move is a clarification request or correction / challenge"
     ]
   },
+  "violation_source_counts": {
+    "maxim_violation_label": 146
+  },
   "role_turn_counts": {
     "guest": 34124,
     "host": 35369
   },
   "observed_policing_rate": {
-    "guest": 0.21925589321215563,
-    "host": 0.09972630858706807,
-    "guest_minus_host": 0.11952958462508756
+    "guest": 0.26666666666666666,
+    "host": 0.14285714285714285,
+    "guest_minus_host": 0.12380952380952381
   },
-  "model_weighted_guest_minus_host_gap": 0.0845299064100373,
+  "model_weighted_guest_minus_host_gap": 0.11917434381684086,
   "status_shield_supported": true,
   "interaction_effects": {
-    "role_host_x_relation": -0.37619616761824753,
-    "role_host_x_quantity": -0.14533234126549915
+    "role_host_x_relation": 1.4223729463883292,
+    "role_host_x_quantity": -1.6640404665654531
   },
-  "interaction_effect_magnitude": 0.37619616761824753,
+  "interaction_effect_magnitude": 1.6640404665654531,
   "model_fit": {
     "method": "statsmodels_vb",
     "converged": true,
-    "iterations": 141,
-    "log_likelihood": -3636.5085467734602,
-    "objective": 4641.146837342949
+    "iterations": 46,
+    "log_likelihood": -76.12814783813576,
+    "objective": 147.39176182603467
   }
 }
