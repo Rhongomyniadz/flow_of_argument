@@ -912,7 +912,7 @@ def augment_threshold_counts(threshold_df: pd.DataFrame, trigger_df: pd.DataFram
 
 def save_overview_plot(trigger_df: pd.DataFrame, hawkes_df: pd.DataFrame, output_dir: Path) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 6, figsize=(21.0, 4.6))
+    fig, axes = plt.subplots(1, 6, figsize=(23.5, 5.6))
 
     x_positions = np.arange(len(TRIGGER_ORDER), dtype=float)
     labels = [TRIGGER_LABELS[trigger_type] for trigger_type in TRIGGER_ORDER]
@@ -934,14 +934,16 @@ def save_overview_plot(trigger_df: pd.DataFrame, hawkes_df: pd.DataFrame, output
         )
 
     axes[0].bar(x_positions, branching_ratio_values, color=colors, width=0.62, edgecolor="#1f2933", linewidth=0.6)
-    axes[0].set_title("Excitation alpha / beta", fontsize=11)
+    axes[0].set_title("Excitation alpha / beta", fontsize=12)
     axes[0].set_xticks(x_positions)
-    axes[0].set_xticklabels(labels)
+    axes[0].set_xticklabels(labels, fontsize=11)
+    axes[0].tick_params(axis="y", labelsize=11)
 
     axes[1].bar(x_positions, alpha_values, color=colors, width=0.62, edgecolor="#1f2933", linewidth=0.6)
-    axes[1].set_title("Excitation alpha", fontsize=11)
+    axes[1].set_title("Excitation alpha", fontsize=12)
     axes[1].set_xticks(x_positions)
-    axes[1].set_xticklabels(labels)
+    axes[1].set_xticklabels(labels, fontsize=11)
+    axes[1].tick_params(axis="y", labelsize=11)
 
     metric_specs = [
         ("cascade_duration_sec", "Cascade duration (s)"),
@@ -980,13 +982,13 @@ def save_overview_plot(trigger_df: pd.DataFrame, hawkes_df: pd.DataFrame, output
             yerr=np.vstack([lower_errors, upper_errors]),
             capsize=4,
         )
-        axis.set_title(axis_title, fontsize=11)
+        axis.set_title(axis_title, fontsize=12)
         axis.set_xticks(x_positions)
-        axis.set_xticklabels(labels)
+        axis.set_xticklabels(labels, fontsize=11)
+        axis.tick_params(axis="y", labelsize=11)
 
-    fig.suptitle("Experiment 6: Quantity Violations and Repair Cascades", fontsize=14, y=0.99)
-    fig.subplots_adjust(top=0.80, left=0.04, right=0.995, bottom=0.16, wspace=0.34)
-    fig.savefig(output_dir / "exp6_cascade_overview.png", dpi=200)
+    fig.subplots_adjust(top=0.91, left=0.04, right=0.995, bottom=0.17, wspace=0.34)
+    fig.savefig(output_dir / "exp6_cascade_overview.png", dpi=300)
     plt.close(fig)
 
 
@@ -1016,14 +1018,15 @@ def sample_trigger_rows(trigger_df: pd.DataFrame, trigger_type: str, sample_coun
 
 def save_event_cascade_plot(trigger_df: pd.DataFrame, event_df: pd.DataFrame, output_dir: Path, sample_count: int) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 2, figsize=(15.5, 7.8), sharex=True)
+    fig, axes = plt.subplots(1, 2, figsize=(17.8, 9.0), sharex=True)
 
     for axis, trigger_type in zip(axes, TRIGGER_ORDER):
         sampled_triggers = sample_trigger_rows(trigger_df, trigger_type, sample_count)
         axis.axvline(0.0, color="#495057", linewidth=1.0, linestyle="--", alpha=0.8)
-        axis.set_title(TRIGGER_LABELS[trigger_type], fontsize=12, pad=10)
-        axis.set_xlabel("Seconds from trigger turn")
-        axis.set_ylabel("Cascade sample")
+        axis.set_title(TRIGGER_LABELS[trigger_type], fontsize=13, pad=10)
+        axis.set_xlabel("Seconds from trigger turn", fontsize=13)
+        axis.set_ylabel("Cascade sample", fontsize=13)
+        axis.tick_params(axis="both", labelsize=11)
         axis.grid(alpha=0.12, linewidth=0.6)
 
         if sampled_triggers.empty:
@@ -1075,10 +1078,9 @@ def save_event_cascade_plot(trigger_df: pd.DataFrame, event_df: pd.DataFrame, ou
         legend_handles.append(handle)
         legend_labels.append(event_type.replace("_", " ").title())
 
-    fig.legend(legend_handles, legend_labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 0.98))
-    fig.suptitle("Experiment 6: Event Cascades After Quantity-Like Triggers", fontsize=14, y=0.995)
+    fig.legend(legend_handles, legend_labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 0.98), fontsize=11)
     fig.subplots_adjust(top=0.88, left=0.07, right=0.99, bottom=0.10, wspace=0.16)
-    fig.savefig(output_dir / "exp6_event_cascades.png", dpi=200)
+    fig.savefig(output_dir / "exp6_event_cascades.png", dpi=300)
     plt.close(fig)
 
 
