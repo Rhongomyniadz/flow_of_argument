@@ -20,33 +20,49 @@ import matplotlib.pyplot as plt
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
 RESPONSE_CLASSES = ["Backchannel", "Substantive", "Clarification", "Silence/Abandonment"]
-_ASSUMPTION_TOKENIZER = None
-_ASSUMPTION_MODEL = None
+DEFAULT_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+DEFAULT_QWEN_EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-4B"
 
 
-def assumption_embedder():
-    global _ASSUMPTION_TOKENIZER, _ASSUMPTION_MODEL
-    if _ASSUMPTION_TOKENIZER is None or _ASSUMPTION_MODEL is None:
-        model_name = "sentence-transformers/all-MiniLM-L6-v2"
-        _ASSUMPTION_TOKENIZER = AutoTokenizer.from_pretrained(model_name)
-        _ASSUMPTION_MODEL = AutoModel.from_pretrained(model_name)
-        _ASSUMPTION_MODEL.eval()
-    return _ASSUMPTION_TOKENIZER, _ASSUMPTION_MODEL
+def assumption_embedder(embedding_model_name):
+    assumption_tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
+    assumption_model = AutoModel.from_pretrained(embedding_model_name, trust_remote_code=True)
+    assumption_model.eval()
+    return assumption_tokenizer, assumption_model
 
 
-def assumption_embeddings(texts):
+def assumption_embeddings(texts, assumption_tokenizer, assumption_model):
     texts = [t for t in texts if t]
     if not texts:
-        return np.empty((0, 384), dtype=np.float32)
-    tokenizer, model = assumption_embedder()
-    batch = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
+        return np.empty((0, 0), dtype=np.float32)
+    batch = assumption_tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
     with torch.no_grad():
-        output = model(**batch)
+        output = assumption_model(**batch)
         hidden = output.last_hidden_state
         mask = batch["attention_mask"].unsqueeze(-1).expand(hidden.shape).float()
         pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
         pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
     return pooled.cpu().numpy().astype(np.float32, copy=False)
+
+
+def resolve_output_dir(base_output_dir, embedding_model_name):
+    model_slug = re.sub(r"[^A-Za-z0-9._-]+", "_", embedding_model_name.replace("/", "__").strip())
+    if not model_slug:
+        raise ValueError("embedding_model_name must not be empty.")
+    return Path(base_output_dir) / model_slug
+
+
+def validate_patch_args(num_patches, patch_index):
+    if num_patches < 1:
+        raise ValueError(f"num_patches must be >= 1, got {num_patches}")
+    if patch_index < 0 or patch_index >= num_patches:
+        raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
+
+
+def resolve_patch_output_dir(base_output_dir, num_patches, patch_index):
+    if num_patches == 1:
+        return Path(base_output_dir)
+    return Path(base_output_dir) / "patches" / f"patch_{patch_index:04d}_of_{num_patches:04d}"
 
 
 def f(x):
@@ -105,10 +121,17 @@ def sort_turns(turns):
     return [x[2] for x in sorted(((int(t.get("turn_idx", i)) if str(t.get("turn_idx", i)).lstrip("-").isdigit() else i, i, t) for i, t in enumerate(turns)))]
 
 
-def load_episodes(input_dir, show_progress):
-    files = sorted(input_dir.glob("*.json")) or sorted(input_dir.glob("*/*.json"))
+def collect_episode_paths(input_dir):
+    return sorted(input_dir.glob("*.json")) or sorted(input_dir.glob("*/*.json"))
+
+
+def select_patch_paths(paths, num_patches, patch_index):
+    return [path for idx, path in enumerate(paths) if idx % num_patches == patch_index]
+
+
+def load_episodes_from_paths(paths, show_progress, desc):
     episodes, gaps = [], []
-    for fp in tqdm(files, desc="Loading episodes", unit="file", disable=not show_progress):
+    for fp in tqdm(paths, desc=desc, unit="file", disable=not show_progress):
         try:
             payload = json.loads(fp.read_text(encoding="utf-8"))
         except Exception:
@@ -119,6 +142,10 @@ def load_episodes(input_dir, show_progress):
         episodes.append((str(turns[0].get("episode_id", fp.stem)), turns))
         gaps.extend(g for a, b in zip(turns, turns[1:]) if math.isfinite(g := gap(a, b)))
     return episodes, np.asarray(gaps, dtype=float)
+
+
+def load_episodes(input_dir, show_progress):
+    return load_episodes_from_paths(collect_episode_paths(input_dir), show_progress, "Loading episodes")
 
 
 def classify(next_turn, gap_sec, silence_gap, agree_dur_max, agree_words_max):
@@ -140,7 +167,7 @@ def classify(next_turn, gap_sec, silence_gap, agree_dur_max, agree_words_max):
     return "Substantive"
 
 
-def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progress, assumption_similarity_threshold):
+def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progress, assumption_similarity_threshold, assumption_tokenizer, assumption_model):
     rows = []
     for episode_id, turns in tqdm(episodes, desc="Building turn rows", unit="episode", disable=not show_progress):
         history_embs, gap_sum, gap_n = None, 0.0, 0
@@ -150,7 +177,7 @@ def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progr
             explicit = uniq_texts(turn.get("explicit_propositions", []))
             new_n, current_new = 0, []
             if assumptions:
-                current_embs = assumption_embeddings(assumptions)
+                current_embs = assumption_embeddings(assumptions, assumption_tokenizer, assumption_model)
                 if history_embs is None or len(history_embs) == 0:
                     new_n, current_new = len(assumptions), list(assumptions)
                 else:
@@ -180,7 +207,7 @@ def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progr
                 }
             )
             if current_new:
-                new_embs = assumption_embeddings(current_new)
+                new_embs = assumption_embeddings(current_new, assumption_tokenizer, assumption_model)
                 history_embs = new_embs if history_embs is None else np.vstack([history_embs, new_embs])
             if math.isfinite(g) and g >= 0:
                 gap_sum += g
@@ -531,10 +558,13 @@ def select_delay_transform(delay, load, avg_prev, prior_precision_scale, prior_a
     }
 
 
-def main():
+def build_arg_parser():
     ap = argparse.ArgumentParser(description="Experiment 5: Implicature Load vs Engagement")
     ap.add_argument("--input_dir", default="data/conversation_moves_labeled")
     ap.add_argument("--output_dir", default="experiments/exp5_processing_load/results")
+    ap.add_argument("--embedding_model_name", default=DEFAULT_EMBEDDING_MODEL_NAME)
+    ap.add_argument("--num_patches", type=int, default=1)
+    ap.add_argument("--patch_index", type=int, default=0)
     ap.add_argument("--silence_gap_quantile", type=float, default=0.95)
     ap.add_argument("--min_silence_gap", type=float, default=5.0)
     ap.add_argument("--backchannel_agree_duration_max", type=float, default=4.0)
@@ -547,22 +577,10 @@ def main():
     ap.add_argument("--bayes_linear_prior_a0", type=float, default=2.0)
     ap.add_argument("--bayes_linear_prior_b0", type=float, default=1.0)
     ap.add_argument("--no_tqdm", action="store_true")
-    args = ap.parse_args()
+    return ap
 
-    input_dir, output_dir, show_progress = Path(args.input_dir), Path(args.output_dir), not args.no_tqdm
-    output_dir.mkdir(parents=True, exist_ok=True)
-    episodes, gaps = load_episodes(input_dir, show_progress)
-    nonneg = gaps[np.isfinite(gaps) & (gaps >= 0)]
-    silence_gap = max(float(args.min_silence_gap), float(np.quantile(nonneg, args.silence_gap_quantile))) if len(nonneg) else float(args.min_silence_gap)
-    rows = build_rows(
-        episodes,
-        silence_gap,
-        args.backchannel_agree_duration_max,
-        args.backchannel_agree_words_max,
-        show_progress,
-        args.assumption_similarity_threshold,
-    )
 
+def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, show_progress, summary_extra=None):
     model_rows = [r for r in rows if isinstance(r.get("implicature_load"), (int, float)) and math.isfinite(float(r["implicature_load"])) and r.get("next_response_type")]
     model = curve_rows = None
     coef_rows = []
@@ -682,14 +700,25 @@ def main():
     summary = {
         "input_dir": str(input_dir),
         "output_dir": str(output_dir),
-        "num_episodes": len(episodes),
+        "num_episodes": int(num_episodes),
         "num_turn_rows": len(rows),
         "silence_gap_threshold_sec": silence_gap,
         "silence_gap_quantile": args.silence_gap_quantile,
         "min_silence_gap_sec": args.min_silence_gap,
+        "embedding_model_name": args.embedding_model_name,
+        "num_patches": int(args.num_patches),
+        "patch_index": int(args.patch_index),
+        "bayes_multinomial_prior_sd": args.bayes_multinomial_prior_sd,
+        "bayes_multinomial_draws": args.bayes_multinomial_draws,
+        "bayes_linear_draws": args.bayes_linear_draws,
+        "bayes_linear_prior_precision_scale": args.bayes_linear_prior_precision_scale,
+        "bayes_linear_prior_a0": args.bayes_linear_prior_a0,
+        "bayes_linear_prior_b0": args.bayes_linear_prior_b0,
         "assumption_sharedness_method": {
-            "method": "MiniLM cosine similarity against prior episode assumptions",
-            "model": "all-MiniLM-L6-v2",
+            "method": "Selected embedding model cosine similarity against prior episode assumptions",
+            "model": args.embedding_model_name,
+            "default_model": DEFAULT_EMBEDDING_MODEL_NAME,
+            "recommended_qwen_model": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
             "similarity_threshold": args.assumption_similarity_threshold,
         },
         "assumption_count_vs_response_time_correlation": corr_stats(assumption_x, assumption_y),
@@ -709,8 +738,65 @@ def main():
         "tqdm_enabled": show_progress,
         "png_outputs": png_outputs,
     }
+    if summary_extra:
+        summary.update(summary_extra)
     (output_dir / "exp5_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, default=jdefault), encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=jdefault))
+    return summary
+
+
+def main():
+    ap = build_arg_parser()
+    args = ap.parse_args()
+
+    validate_patch_args(args.num_patches, args.patch_index)
+    input_dir = Path(args.input_dir)
+    model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
+    output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    show_progress = not args.no_tqdm
+
+    all_paths = collect_episode_paths(input_dir)
+    selected_paths = select_patch_paths(all_paths, args.num_patches, args.patch_index)
+    if not selected_paths:
+        raise RuntimeError(
+            f"No episode files selected for patch {args.patch_index} out of {args.num_patches}. "
+            f"Candidate file count: {len(all_paths)}"
+        )
+    print(json.dumps({"selected_episode_file_count": len(selected_paths), "candidate_episode_file_count": len(all_paths), "patch_index": args.patch_index, "num_patches": args.num_patches}))
+
+    if args.num_patches == 1:
+        episodes, gaps = load_episodes_from_paths(selected_paths, show_progress, "Loading episodes")
+    else:
+        _, gaps = load_episodes_from_paths(all_paths, False, "Scanning gaps")
+        episodes, _ = load_episodes_from_paths(selected_paths, show_progress, "Loading selected episodes")
+
+    assumption_tokenizer, assumption_model = assumption_embedder(args.embedding_model_name)
+    nonneg = gaps[np.isfinite(gaps) & (gaps >= 0)]
+    silence_gap = max(float(args.min_silence_gap), float(np.quantile(nonneg, args.silence_gap_quantile))) if len(nonneg) else float(args.min_silence_gap)
+    rows = build_rows(
+        episodes,
+        silence_gap,
+        args.backchannel_agree_duration_max,
+        args.backchannel_agree_words_max,
+        show_progress,
+        args.assumption_similarity_threshold,
+        assumption_tokenizer,
+        assumption_model,
+    )
+    analyze_rows(
+        rows=rows,
+        output_dir=output_dir,
+        input_dir=input_dir,
+        num_episodes=len(episodes),
+        silence_gap=silence_gap,
+        args=args,
+        show_progress=show_progress,
+        summary_extra={
+            "selected_episode_file_count": int(len(selected_paths)),
+            "candidate_episode_file_count": int(len(all_paths)),
+        },
+    )
 
 
 if __name__ == "__main__":

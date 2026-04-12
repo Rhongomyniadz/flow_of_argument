@@ -1,0 +1,46 @@
+{
+  "experiment": "Experiment 1: The Relevance Bridge",
+  "input_dir": "data/conversation_moves_labeled",
+  "embedding_model_name": "Qwen/Qwen3-Embedding-4B",
+  "default_embedding_model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "recommended_qwen_embedding_model_name": "Qwen/Qwen3-Embedding-4B",
+  "categories": [
+    "business",
+    "commentary",
+    "news",
+    "political",
+    "religion",
+    "sports"
+  ],
+  "total_pairs": 355468,
+  "pairs_with_assumptions_on_turn_b": 355228,
+  "assumption_pair_rate": 0.9993248337403086,
+  "bridge_score_mean_delta": -0.007840564223678029,
+  "bridge_score_median_delta": -0.007377207279205322,
+  "positive_bridge_rate": 0.32907884816636096,
+  "mean_similarity_claim_only": 0.7978554489411411,
+  "mean_similarity_with_assumptions": 0.7900148847174631,
+  "mean_similarity_same_episode_implicit_sample": 0.8276763702543374,
+  "mean_similarity_any_episode_implicit_sample": 0.8232835072317308,
+  "mean_similarity_gain_percent": -0.9827048538784222,
+  "bridge_delta_bootstrap": {
+    "mean": -0.007840564223678029,
+    "ci95_low": -0.007909297046973884,
+    "ci95_high": -0.0077743373295442305
+  },
+  "outputs": {
+    "pair_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_bridge_pairs.csv",
+    "category_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_bridge_by_category.csv",
+    "pointplot_summary_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_similarity_pointplot_summary.csv",
+    "pointplot_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_similarity_pointplot.png",
+    "summary_json": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_summary.json",
+    "distance_distribution_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_distance_distribution.png"
+  },
+  "notes": [
+    "Only turns with turn_type_label == 'Substantive' are included.",
+    "Turn A is vectorized from explicit propositions when available, otherwise raw turn text.",
+    "Turn B claims come from explicit_propositions; context adds assumptions from the same turn.",
+    "Matched implicit baselines sample the same number of assumptions as Turn B from the same episode or from the corpus-wide pool.",
+    "Cosine similarity is computed on L2-normalized sentence embeddings from the selected embedding model."
+  ]
+}

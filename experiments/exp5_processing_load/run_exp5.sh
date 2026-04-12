@@ -1,11 +1,17 @@
 #!/bin/bash
-#SBATCH --job-name=exp5_processing_load
-#SBATCH --output=_log/exp5_processing_load.out
-#SBATCH --partition=gpu
-#SBATCH --time=48:00:00
-#SBATCH --nodes=1
-#SBATCH --gres=gpu:A6000:1
-#SBATCH --mem=64G
-#SBATCH --chdir=/home/edenzha/flow_of_argument
 
-python experiments/exp5_processing_load/exp5.py --no_tqdm
+set -euo pipefail
+
+NUM_PATCHES="${NUM_PATCHES:-16}"
+EMBEDDING_MODEL_NAME="${EMBEDDING_MODEL_NAME:-Qwen/Qwen3-Embedding-4B}"
+OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp5_processing_load/results}"
+NO_TQDM="${NO_TQDM:-1}"
+INPUT_DIR="${INPUT_DIR:-data/conversation_moves_labeled}"
+
+export NUM_PATCHES
+export EMBEDDING_MODEL_NAME
+export OUTPUT_DIR
+export NO_TQDM
+export INPUT_DIR
+
+bash experiments/exp5_processing_load/submit_exp5_patches.sh

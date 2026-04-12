@@ -28,6 +28,7 @@ DEFAULT_DATA_DIR = "data/stance_labeled/1024"
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_OUTPUT_DIR = "experiments/exp2_iceberg/results"
 DEFAULT_MIN_TURNS = 12
+DEFAULT_MIN_PLOT_TRANSITION_ROWS = 1000
 
 
 def save_json(path: Path, payload: Dict[str, Any]) -> None:
@@ -476,37 +477,20 @@ def build_local_effect_bins(transition_df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_prediction_curve(transition_df: pd.DataFrame, primary_model: Any) -> pd.DataFrame:
-    delta_values = sorted({int(value) for value in transition_df["delta_stance_pt"].astype(int).tolist()})
-    reference_category = str(transition_df["category"].mode().iloc[0])
-    reference_previous_density = float(transition_df["previous_log_iceberg_density"].median())
-    reference_timeline_position = float(transition_df["timeline_position"].median())
-
-    prediction_df = pd.DataFrame(
-        {
-            "delta_stance_pt": delta_values,
-            "delta_stance_strength": [float(value) / 5.0 for value in delta_values],
-            "lag1_delta_stance_strength": np.zeros(len(delta_values), dtype=float),
-            "previous_log_iceberg_density": np.full(len(delta_values), reference_previous_density, dtype=float),
-            "timeline_position": np.full(len(delta_values), reference_timeline_position, dtype=float),
-            "category": [reference_category] * len(delta_values),
-        }
-    )
-    prediction_df["predicted_delta_log_iceberg_density"] = primary_model.predict(prediction_df).astype(float)
-    prediction_df["reference_category"] = reference_category
-    prediction_df["reference_previous_log_iceberg_density"] = reference_previous_density
-    prediction_df["reference_timeline_position"] = reference_timeline_position
-    return prediction_df
-
-
-def save_local_relationship_plot(binned_df: pd.DataFrame, curve_df: pd.DataFrame, output_dir: Path) -> None:
+def save_local_relationship_plot(binned_df: pd.DataFrame, output_dir: Path) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
     fig, axis = plt.subplots(figsize=(9.8, 5.8))
 
-    x_values = binned_df["delta_stance_pt"].astype(float).to_numpy()
-    y_values = binned_df["mean_delta_log_iceberg_density"].astype(float).to_numpy()
-    lower_values = binned_df["ci_low_delta_log_iceberg_density"].astype(float).to_numpy()
-    upper_values = binned_df["ci_high_delta_log_iceberg_density"].astype(float).to_numpy()
+    plot_df = binned_df[binned_df["n_transition_rows"].astype(int) >= DEFAULT_MIN_PLOT_TRANSITION_ROWS].copy()
+    if plot_df.empty:
+        raise RuntimeError(
+            f"No Exp 2 plot bins meet the minimum row threshold of {DEFAULT_MIN_PLOT_TRANSITION_ROWS}."
+        )
+
+    x_values = plot_df["delta_stance_pt"].astype(float).to_numpy()
+    y_values = plot_df["mean_delta_log_iceberg_density"].astype(float).to_numpy()
+    lower_values = plot_df["ci_low_delta_log_iceberg_density"].astype(float).to_numpy()
+    upper_values = plot_df["ci_high_delta_log_iceberg_density"].astype(float).to_numpy()
 
     axis.errorbar(
         x_values,
@@ -521,17 +505,17 @@ def save_local_relationship_plot(binned_df: pd.DataFrame, curve_df: pd.DataFrame
         label="Empirical mean by delta stance",
     )
     axis.plot(
-        curve_df["delta_stance_pt"].astype(float).to_numpy(),
-        curve_df["predicted_delta_log_iceberg_density"].astype(float).to_numpy(),
+        x_values,
+        y_values,
         color="#d17b0f",
         linewidth=2.3,
-        label="Clustered OLS prediction",
+        label="Global average relationship",
     )
     axis.axhline(0.0, color="#6c757d", linewidth=1.0, alpha=0.75)
     axis.axvline(0.0, color="#6c757d", linewidth=1.0, alpha=0.30)
     axis.set_xlabel("Change in stance (delta stance_pt)")
     axis.set_ylabel("Change in log iceberg density")
-    axis.set_title("Experiment 2: Local Stance Change and Iceberg Density Change", fontsize=13, pad=12)
+    axis.set_title("Experiment 2: Global Average Stance and Iceberg Relationship", fontsize=13, pad=12)
     axis.legend(frameon=False, loc="best")
     axis.grid(alpha=0.16, linewidth=0.6)
     fig.tight_layout()
@@ -675,13 +659,11 @@ def main() -> None:
         transition_df,
     )
     local_effect_bins_df = build_local_effect_bins(transition_df)
-    prediction_curve_df = build_prediction_curve(transition_df, primary_model)
 
     coefficient_df.to_csv(output_dir / "exp2_regression_coefficients.csv", index=False)
     model_comparison_df.to_csv(output_dir / "exp2_regression_model_comparison.csv", index=False)
     local_effect_bins_df.to_csv(output_dir / "exp2_local_effect_bins.csv", index=False)
-    prediction_curve_df.to_csv(output_dir / "exp2_local_effect_curve.csv", index=False)
-    save_local_relationship_plot(local_effect_bins_df, prediction_curve_df, output_dir)
+    save_local_relationship_plot(local_effect_bins_df, output_dir)
 
     dataset_summary = build_dataset_summary(
         turn_df=turn_df,
@@ -703,7 +685,6 @@ def main() -> None:
                 "exp2_regression_coefficients.csv",
                 "exp2_regression_model_comparison.csv",
                 "exp2_local_effect_bins.csv",
-                "exp2_local_effect_curve.csv",
                 "exp2_local_relationship.png",
                 "exp2_summary.json",
                 "dataset_summary.json",

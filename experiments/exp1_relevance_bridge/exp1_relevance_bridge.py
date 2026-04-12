@@ -2,13 +2,13 @@ import argparse
 import json
 import logging
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import torch
-import umap
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 
@@ -22,7 +22,10 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_INPUT_DIR = Path("data/conversation_moves_labeled")
 DEFAULT_OUTPUT_DIR = Path("experiments/exp1_relevance_bridge/results")
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+DEFAULT_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+DEFAULT_QWEN_EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-4B"
+DEFAULT_TARGET_EMBEDDING_MAX_LENGTH = 1024
+DEFAULT_BOOTSTRAP_DRAWS = 2000
 
 
 def parse_args():
@@ -31,11 +34,33 @@ def parse_args():
     ap.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     ap.add_argument("--categories", nargs="*", default=None)
     ap.add_argument("--max_episodes_per_category", type=int, default=None)
+    ap.add_argument("--num_patches", type=int, default=1)
+    ap.add_argument("--patch_index", type=int, default=0)
     ap.add_argument("--embedding_batch_size", type=int, default=128)
-    ap.add_argument("--umap_pairs", type=int, default=4000)
+    ap.add_argument("--embedding_model_name", type=str, default=DEFAULT_EMBEDDING_MODEL_NAME)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no_tqdm", action="store_true")
     return ap.parse_args()
+
+
+def resolve_output_dir(base_output_dir: Path, embedding_model_name: str):
+    model_slug = re.sub(r"[^A-Za-z0-9._-]+", "_", embedding_model_name.replace("/", "__").strip())
+    if not model_slug:
+        raise ValueError("embedding_model_name must not be empty.")
+    return base_output_dir / model_slug
+
+
+def validate_patch_args(num_patches: int, patch_index: int):
+    if num_patches < 1:
+        raise ValueError(f"num_patches must be >= 1, got {num_patches}")
+    if patch_index < 0 or patch_index >= num_patches:
+        raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
+
+
+def resolve_patch_output_dir(base_output_dir: Path, num_patches: int, patch_index: int):
+    if num_patches == 1:
+        return base_output_dir
+    return base_output_dir / "patches" / f"patch_{patch_index:04d}_of_{num_patches:04d}"
 
 
 def normalize_categories(input_dir: Path, requested):
@@ -53,6 +78,20 @@ def normalize_categories(input_dir: Path, requested):
     return chosen
 
 
+def collect_category_files(input_dir: Path, categories, max_episodes_per_category):
+    files = []
+    for category in categories:
+        category_files = sorted((input_dir / category).glob("*.json"))
+        if max_episodes_per_category:
+            category_files = category_files[:max_episodes_per_category]
+        files.extend((category, path) for path in category_files)
+    return files
+
+
+def select_patch_files(category_files, num_patches: int, patch_index: int):
+    return [item for idx, item in enumerate(category_files) if idx % num_patches == patch_index]
+
+
 def load_turns(path: Path):
     data = json.loads(path.read_text())
     return data if isinstance(data, list) else data.get("turns", [])
@@ -63,7 +102,7 @@ def turn_time(turn):
     return float(raw if raw is not None else 0.0)
 
 
-def item_text(items):
+def item_texts(items):
     vals = []
     for item in items or []:
         if isinstance(item, dict):
@@ -72,7 +111,11 @@ def item_text(items):
             text = str(item or "").strip()
         if text:
             vals.append(text)
-    return " ".join(vals).strip()
+    return vals
+
+
+def item_text(items):
+    return " ".join(item_texts(items)).strip()
 
 
 def substantive_pairs(path: Path):
@@ -80,19 +123,29 @@ def substantive_pairs(path: Path):
     turns.sort(key=turn_time)
     rows = []
     for a, b in zip(turns, turns[1:]):
+        episode_id = str(b.get("episode_id") or path.stem)
+        turn_a_idx = int(a.get("turn_idx", -1))
+        turn_b_idx = int(b.get("turn_idx", -1))
         a_text = item_text(a.get("explicit_propositions")) or str(a.get("turn_text") or "").strip()
         b_claim = item_text(b.get("explicit_propositions"))
         if not a_text or not b_claim:
             continue
-        b_assumptions = item_text(b.get("assumptions"))
+        b_assumption_texts = item_texts(b.get("assumptions"))
+        b_assumptions = " ".join(b_assumption_texts).strip()
         rows.append(
             {
-                "episode_id": str(b.get("episode_id") or path.stem),
-                "turn_a_idx": int(a.get("turn_idx", -1)),
-                "turn_b_idx": int(b.get("turn_idx", -1)),
+                "episode_id": episode_id,
+                "turn_a_idx": turn_a_idx,
+                "turn_b_idx": turn_b_idx,
                 "turn_a_text": a_text,
                 "turn_b_claim_text": b_claim,
                 "turn_b_context_text": f"{b_claim} {b_assumptions}".strip(),
+                "turn_b_assumption_count": len(b_assumption_texts),
+                "turn_b_assumption_texts": b_assumption_texts,
+                "turn_b_assumption_ids": [
+                    f"{episode_id}:{turn_b_idx}:{assumption_idx}"
+                    for assumption_idx, _ in enumerate(b_assumption_texts)
+                ],
                 "turn_b_has_assumptions": int(bool(b_assumptions)),
             }
         )
@@ -106,10 +159,22 @@ def mean_pool(last_hidden_state, attention_mask):
     return summed / counts
 
 
-def embed_texts(texts, batch_size, use_tqdm):
+def resolve_embedding_max_length(tokenizer):
+    raw_model_max_length = getattr(tokenizer, "model_max_length", None)
+    if not isinstance(raw_model_max_length, int):
+        return DEFAULT_TARGET_EMBEDDING_MAX_LENGTH
+    if raw_model_max_length <= 0:
+        return DEFAULT_TARGET_EMBEDDING_MAX_LENGTH
+    if raw_model_max_length > 100000:
+        return DEFAULT_TARGET_EMBEDDING_MAX_LENGTH
+    return min(DEFAULT_TARGET_EMBEDDING_MAX_LENGTH, raw_model_max_length)
+
+
+def embed_texts(texts, batch_size, use_tqdm, embedding_model_name):
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModel.from_pretrained(MODEL_NAME).to(device).eval()
+    tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
+    model = AutoModel.from_pretrained(embedding_model_name, trust_remote_code=True).to(device).eval()
+    embedding_max_length = resolve_embedding_max_length(tokenizer)
     unique = list(dict.fromkeys(texts))
     vectors = {}
     iterator = range(0, len(unique), batch_size)
@@ -121,7 +186,7 @@ def embed_texts(texts, batch_size, use_tqdm):
                 batch,
                 padding=True,
                 truncation=True,
-                max_length=256,
+                max_length=embedding_max_length,
                 return_tensors="pt",
             )
             toks = {k: v.to(device) for k, v in toks.items()}
@@ -147,6 +212,142 @@ def bootstrap_mean(values, seed, draws=2000):
     }
 
 
+def build_assumption_pools(df: pd.DataFrame):
+    episode_pools = {}
+    global_pool = []
+    for episode_id, assumption_ids, assumption_texts in zip(
+        df["episode_id"],
+        df["turn_b_assumption_ids"],
+        df["turn_b_assumption_texts"],
+    ):
+        if not isinstance(assumption_ids, list) or not isinstance(assumption_texts, list):
+            continue
+        for assumption_id, assumption_text in zip(assumption_ids, assumption_texts):
+            record = (str(assumption_id), str(assumption_text))
+            episode_pools.setdefault(str(episode_id), []).append(record)
+            global_pool.append(record)
+    return episode_pools, global_pool
+
+
+def sample_assumption_texts(pool_records, excluded_ids, sample_count, rng):
+    if sample_count <= 0:
+        return []
+    candidate_records = [record for record in pool_records if record[0] not in excluded_ids]
+    if not candidate_records:
+        candidate_records = list(pool_records)
+    if not candidate_records:
+        return []
+    replace = len(candidate_records) < sample_count
+    sample_indices = rng.choice(len(candidate_records), size=sample_count, replace=replace)
+    return [candidate_records[int(idx)][1] for idx in np.asarray(sample_indices).tolist()]
+
+
+def add_sampled_contexts(df: pd.DataFrame, seed: int):
+    episode_pools, global_pool = build_assumption_pools(df)
+    rng = np.random.default_rng(seed)
+
+    same_episode_contexts = []
+    global_contexts = []
+    for row in df.itertuples(index=False):
+        sample_count = int(row.turn_b_assumption_count)
+        excluded_ids = set(row.turn_b_assumption_ids)
+
+        same_episode_sample = sample_assumption_texts(
+            episode_pools.get(str(row.episode_id), []),
+            excluded_ids,
+            sample_count,
+            rng,
+        )
+        global_sample = sample_assumption_texts(
+            global_pool,
+            excluded_ids,
+            sample_count,
+            rng,
+        )
+        same_episode_contexts.append(f"{row.turn_b_claim_text} {' '.join(same_episode_sample).strip()}".strip())
+        global_contexts.append(f"{row.turn_b_claim_text} {' '.join(global_sample).strip()}".strip())
+
+    df = df.copy()
+    df["turn_b_same_episode_context_text"] = same_episode_contexts
+    df["turn_b_global_context_text"] = global_contexts
+    return df
+
+
+def pointplot_long_frame(df: pd.DataFrame):
+    value_columns = [
+        ("Claim Only", "sim_claim"),
+        ("With Assumptions", "sim_context"),
+        ("Matched Implicit Sample (Same Episode)", "sim_same_episode_sample"),
+        ("Matched Implicit Sample (Any Episode)", "sim_global_sample"),
+    ]
+    frames = []
+    for condition, column_name in value_columns:
+        part = df[["category", column_name]].rename(columns={column_name: "cosine_similarity"})
+        part["comparison"] = condition
+        frames.append(part)
+    return pd.concat(frames, ignore_index=True)
+
+
+def pointplot_summary(long_df: pd.DataFrame, seed: int):
+    rows = []
+    for summary_idx, ((category, comparison), group_df) in enumerate(
+        long_df.groupby(["category", "comparison"], sort=False, observed=False)
+    ):
+        boot = bootstrap_mean(group_df["cosine_similarity"], seed=seed + summary_idx, draws=DEFAULT_BOOTSTRAP_DRAWS)
+        rows.append(
+            {
+                "category": category,
+                "comparison": comparison,
+                "pair_count": int(len(group_df)),
+                "mean_cosine_similarity": boot["mean"],
+                "ci95_low": boot["ci95_low"],
+                "ci95_high": boot["ci95_high"],
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def bootstrap_pointplot(long_df: pd.DataFrame, path: Path, category_order, seed: int):
+    sns.set_theme(style="whitegrid", context="paper")
+    fig, ax = plt.subplots(figsize=(13.0, 7.4))
+    hue_order = [
+        "Claim Only",
+        "With Assumptions",
+        "Matched Implicit Sample (Same Episode)",
+        "Matched Implicit Sample (Any Episode)",
+    ]
+    palette = {
+        "Claim Only": "#d95f02",
+        "With Assumptions": "#1b9e77",
+        "Matched Implicit Sample (Same Episode)": "#7570b3",
+        "Matched Implicit Sample (Any Episode)": "#e7298a",
+    }
+    sns.pointplot(
+        data=long_df,
+        x="cosine_similarity",
+        y="category",
+        hue="comparison",
+        order=list(category_order),
+        hue_order=hue_order,
+        estimator=np.mean,
+        errorbar=("ci", 95),
+        n_boot=DEFAULT_BOOTSTRAP_DRAWS,
+        seed=seed,
+        dodge=0.6,
+        linestyles="none",
+        palette=palette,
+        markers=["o", "s", "D", "^"],
+        ax=ax,
+    )
+    ax.set_title("Relevance Bridge With Matched Implicit Baselines", fontsize=15)
+    ax.set_xlabel("Cosine Similarity With Previous Substantive Turn")
+    ax.set_ylabel("Category")
+    ax.legend(title=None, frameon=False, loc="best")
+    fig.tight_layout()
+    fig.savefig(path, dpi=220)
+    plt.close(fig)
+
+
 def distribution_plot(df: pd.DataFrame, path: Path):
     sns.set_theme(style="whitegrid", context="paper")
     fig, ax = plt.subplots(figsize=(11.5, 7))
@@ -164,71 +365,31 @@ def distribution_plot(df: pd.DataFrame, path: Path):
     plt.close(fig)
 
 
-def umap_plot(df: pd.DataFrame, path: Path, pair_limit: int, seed: int):
-    if df.empty:
-        return None
-    sample = df.sample(n=min(pair_limit, len(df)), random_state=seed).reset_index(drop=True)
-    stack = np.vstack(
-        [
-            np.stack(sample["vec_a"].to_list()),
-            np.stack(sample["vec_claim"].to_list()),
-            np.stack(sample["vec_context"].to_list()),
-        ]
-    )
-    reducer = umap.UMAP(n_neighbors=25, min_dist=0.15, metric="cosine", random_state=seed)
-    coords = reducer.fit_transform(stack)
-    n = len(sample)
-    a_xy = coords[:n]
-    c_xy = coords[n:2 * n]
-    x_xy = coords[2 * n:]
-    claim_len = np.linalg.norm(a_xy - c_xy, axis=1)
-    context_len = np.linalg.norm(a_xy - x_xy, axis=1)
-
-    sns.set_theme(style="whitegrid", context="paper")
-    fig, axes = plt.subplots(1, 2, figsize=(15.5, 7.2), sharex=True, sharey=True)
-    for ax, target_xy, color, title, mean_len in [
-        (axes[0], c_xy, "#d95f02", "A -> Claims", claim_len.mean()),
-        (axes[1], x_xy, "#1b9e77", "A -> Claims + Assumptions", context_len.mean()),
-    ]:
-        for p0, p1 in zip(a_xy, target_xy):
-            ax.plot([p0[0], p1[0]], [p0[1], p1[1]], color=color, alpha=0.05, linewidth=0.8)
-        ax.scatter(a_xy[:, 0], a_xy[:, 1], s=8, color="#4c4c4c", alpha=0.20, label="Turn A")
-        ax.scatter(target_xy[:, 0], target_xy[:, 1], s=8, color=color, alpha=0.20, label=title.split(" -> ", 1)[1])
-        ax.set_title(f"{title} | Mean step = {mean_len:.3f}", fontsize=14)
-        ax.set_xlabel("UMAP 1")
-    axes[0].set_ylabel("UMAP 2")
-    handles, labels = axes[1].get_legend_handles_labels()
-    axes[1].legend(handles, labels, frameon=False, loc="best")
-    fig.suptitle("Conversation Trajectory Smoothing", y=1.01, fontsize=16)
-    fig.tight_layout()
-    fig.savefig(path, dpi=220, bbox_inches="tight")
-    plt.close(fig)
-
-    sample[["umap_a_x", "umap_a_y"]] = a_xy
-    sample[["umap_claim_x", "umap_claim_y"]] = c_xy
-    sample[["umap_context_x", "umap_context_y"]] = x_xy
-    sample["umap_step_claim"] = claim_len
-    sample["umap_step_context"] = context_len
-    return {
-        "sample_size": int(n),
-        "mean_umap_step_claim": float(claim_len.mean()),
-        "mean_umap_step_context": float(context_len.mean()),
-        "mean_umap_step_delta": float((claim_len - context_len).mean()),
-        "sample_frame": sample.drop(columns=["vec_a", "vec_claim", "vec_context"]),
-    }
-
-
 def main():
     args = parse_args()
-    args.output_dir.mkdir(parents=True, exist_ok=True)
+    validate_patch_args(args.num_patches, args.patch_index)
+    model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
+    output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
+    output_dir.mkdir(parents=True, exist_ok=True)
     categories = normalize_categories(args.input_dir, args.categories)
     use_tqdm = not args.no_tqdm
 
+    category_files = collect_category_files(args.input_dir, categories, args.max_episodes_per_category)
+    selected_files = select_patch_files(category_files, args.num_patches, args.patch_index)
+    if not selected_files:
+        raise RuntimeError(
+            f"No episode files selected for patch {args.patch_index} out of {args.num_patches}. "
+            f"Candidate file count: {len(category_files)}"
+        )
+    logger.info(
+        "Selected %d episode files for patch %d/%d.",
+        len(selected_files),
+        args.patch_index + 1,
+        args.num_patches,
+    )
     rows = []
     for category in categories:
-        files = sorted((args.input_dir / category).glob("*.json"))
-        if args.max_episodes_per_category:
-            files = files[:args.max_episodes_per_category]
+        files = [path for file_category, path in selected_files if file_category == category]
         iterator = tqdm(files, desc=f"{category}: pairs", disable=not use_tqdm)
         for path in iterator:
             for row in substantive_pairs(path):
@@ -239,34 +400,47 @@ def main():
         raise RuntimeError("No valid substantive adjacent pairs found.")
 
     df = pd.DataFrame(rows)
+    df = add_sampled_contexts(df, seed=args.seed)
     logger.info("Collected %d adjacent substantive pairs across %d categories.", len(df), len(categories))
 
     text_to_vec = embed_texts(
         pd.concat(
-            [df["turn_a_text"], df["turn_b_claim_text"], df["turn_b_context_text"]],
+            [
+                df["turn_a_text"],
+                df["turn_b_claim_text"],
+                df["turn_b_context_text"],
+                df["turn_b_same_episode_context_text"],
+                df["turn_b_global_context_text"],
+            ],
             ignore_index=True,
         ).tolist(),
         batch_size=args.embedding_batch_size,
         use_tqdm=use_tqdm,
+        embedding_model_name=args.embedding_model_name,
     )
     df["vec_a"] = df["turn_a_text"].map(text_to_vec)
     df["vec_claim"] = df["turn_b_claim_text"].map(text_to_vec)
     df["vec_context"] = df["turn_b_context_text"].map(text_to_vec)
+    df["vec_same_episode_sample"] = df["turn_b_same_episode_context_text"].map(text_to_vec)
+    df["vec_global_sample"] = df["turn_b_global_context_text"].map(text_to_vec)
     df["sim_claim"] = [float(np.dot(a, b)) for a, b in zip(df["vec_a"], df["vec_claim"])]
     df["sim_context"] = [float(np.dot(a, b)) for a, b in zip(df["vec_a"], df["vec_context"])]
+    df["sim_same_episode_sample"] = [
+        float(np.dot(a, b)) for a, b in zip(df["vec_a"], df["vec_same_episode_sample"])
+    ]
+    df["sim_global_sample"] = [
+        float(np.dot(a, b)) for a, b in zip(df["vec_a"], df["vec_global_sample"])
+    ]
     df["bridge_delta"] = df["sim_context"] - df["sim_claim"]
 
-    pair_csv = args.output_dir / "exp1_bridge_pairs.csv"
-    category_csv = args.output_dir / "exp1_bridge_by_category.csv"
-    summary_json = args.output_dir / "exp1_summary.json"
-    dist_png = args.output_dir / "exp1_distance_distribution.png"
-    umap_png = args.output_dir / "exp1_umap_trajectory.png"
-    umap_csv = args.output_dir / "exp1_umap_sample.csv"
+    pair_csv = output_dir / "exp1_bridge_pairs.csv"
+    category_csv = output_dir / "exp1_bridge_by_category.csv"
+    pointplot_csv = output_dir / "exp1_similarity_pointplot_summary.csv"
+    pointplot_png = output_dir / "exp1_similarity_pointplot.png"
+    summary_json = output_dir / "exp1_summary.json"
+    dist_png = output_dir / "exp1_distance_distribution.png"
 
     distribution_plot(df, dist_png)
-    umap_info = umap_plot(df, umap_png, args.umap_pairs, args.seed)
-    if umap_info is not None:
-        umap_info["sample_frame"].to_csv(umap_csv, index=False)
 
     export_cols = [
         "category",
@@ -276,6 +450,8 @@ def main():
         "turn_b_has_assumptions",
         "sim_claim",
         "sim_context",
+        "sim_same_episode_sample",
+        "sim_global_sample",
         "bridge_delta",
     ]
     df[export_cols].to_csv(pair_csv, index=False)
@@ -286,6 +462,8 @@ def main():
             pair_count=("bridge_delta", "size"),
             mean_sim_claim=("sim_claim", "mean"),
             mean_sim_context=("sim_context", "mean"),
+            mean_sim_same_episode_sample=("sim_same_episode_sample", "mean"),
+            mean_sim_global_sample=("sim_global_sample", "mean"),
             mean_bridge_delta=("bridge_delta", "mean"),
             positive_bridge_rate=("bridge_delta", lambda x: float((x > 0).mean())),
             assumption_pair_rate=("turn_b_has_assumptions", "mean"),
@@ -294,11 +472,24 @@ def main():
     )
     by_category.to_csv(category_csv, index=False)
 
+    long_plot_df = pointplot_long_frame(df)
+    pointplot_summary_df = pointplot_summary(long_plot_df, seed=args.seed)
+    pointplot_summary_df.to_csv(pointplot_csv, index=False)
+    bootstrap_pointplot(long_plot_df, pointplot_png, category_order=categories, seed=args.seed)
+
     boot = bootstrap_mean(df["bridge_delta"], seed=args.seed)
     positive_rate = float((df["bridge_delta"] > 0).mean())
     summary = {
         "experiment": "Experiment 1: The Relevance Bridge",
         "input_dir": str(args.input_dir),
+        "embedding_model_name": str(args.embedding_model_name),
+        "default_embedding_model_name": DEFAULT_EMBEDDING_MODEL_NAME,
+        "recommended_qwen_embedding_model_name": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
+        "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
+        "num_patches": int(args.num_patches),
+        "patch_index": int(args.patch_index),
+        "selected_episode_file_count": int(len(selected_files)),
+        "candidate_episode_file_count": int(len(category_files)),
         "categories": categories,
         "total_pairs": int(len(df)),
         "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
@@ -308,33 +499,30 @@ def main():
         "positive_bridge_rate": positive_rate,
         "mean_similarity_claim_only": float(df["sim_claim"].mean()),
         "mean_similarity_with_assumptions": float(df["sim_context"].mean()),
+        "mean_similarity_same_episode_implicit_sample": float(df["sim_same_episode_sample"].mean()),
+        "mean_similarity_any_episode_implicit_sample": float(df["sim_global_sample"].mean()),
         "mean_similarity_gain_percent": float(
             100.0 * (df["sim_context"].mean() - df["sim_claim"].mean()) / max(abs(df["sim_claim"].mean()), 1e-9)
         ),
         "bridge_delta_bootstrap": boot,
-        "umap_topology": None if umap_info is None else {
-            "sample_size": umap_info["sample_size"],
-            "mean_umap_step_claim": umap_info["mean_umap_step_claim"],
-            "mean_umap_step_context": umap_info["mean_umap_step_context"],
-            "mean_umap_step_delta": umap_info["mean_umap_step_delta"],
-        },
         "outputs": {
             "pair_csv": str(pair_csv),
             "category_csv": str(category_csv),
+            "pointplot_summary_csv": str(pointplot_csv),
+            "pointplot_png": str(pointplot_png),
             "summary_json": str(summary_json),
             "distance_distribution_png": str(dist_png),
-            "umap_png": str(umap_png),
-            "umap_sample_csv": str(umap_csv) if umap_info is not None else None,
         },
         "notes": [
             "Only turns with turn_type_label == 'Substantive' are included.",
             "Turn A is vectorized from explicit propositions when available, otherwise raw turn text.",
             "Turn B claims come from explicit_propositions; context adds assumptions from the same turn.",
-            "Cosine similarity is computed on L2-normalized MiniLM embeddings.",
+            "Matched implicit baselines sample the same number of assumptions as Turn B from the same episode or from the corpus-wide pool.",
+            "Cosine similarity is computed on L2-normalized sentence embeddings from the selected embedding model.",
         ],
     }
     summary_json.write_text(json.dumps(summary, indent=2))
-    logger.info("Done. Wrote results to %s", args.output_dir)
+    logger.info("Done. Wrote results to %s", output_dir)
 
 
 if __name__ == "__main__":
