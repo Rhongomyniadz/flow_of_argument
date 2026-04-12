@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
+from pandas.api.types import is_string_dtype
 from tqdm import tqdm
 
 
@@ -416,8 +417,14 @@ def compute_mean_summary(values: np.ndarray) -> Dict[str, float]:
 
 
 def fit_clustered_ols(formula: str, transition_df: pd.DataFrame) -> Any:
-    ols_model = smf.ols(formula=formula, data=transition_df)
-    return ols_model.fit(cov_type="cluster", cov_kwds={"groups": transition_df["episode"]})
+    model_df = transition_df.copy()
+    # Patsy does not reliably accept pandas nullable StringDtype columns.
+    for column_name in ["category", "episode"]:
+        if column_name in model_df.columns and is_string_dtype(model_df[column_name].dtype):
+            model_df[column_name] = model_df[column_name].astype(object)
+
+    ols_model = smf.ols(formula=formula, data=model_df)
+    return ols_model.fit(cov_type="cluster", cov_kwds={"groups": model_df["episode"]})
 
 
 def build_coefficient_frame(model_result: Any, model_name: str) -> pd.DataFrame:
@@ -479,7 +486,7 @@ def build_local_effect_bins(transition_df: pd.DataFrame) -> pd.DataFrame:
 
 def save_local_relationship_plot(binned_df: pd.DataFrame, output_dir: Path) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axis = plt.subplots(figsize=(9.8, 5.8))
+    fig, axis = plt.subplots(figsize=(10.6, 6.3))
 
     plot_df = binned_df[binned_df["n_transition_rows"].astype(int) >= DEFAULT_MIN_PLOT_TRANSITION_ROWS].copy()
     if plot_df.empty:
@@ -502,24 +509,24 @@ def save_local_relationship_plot(binned_df: pd.DataFrame, output_dir: Path) -> N
         elinewidth=1.2,
         capsize=4,
         markersize=6,
-        label="Empirical mean by delta stance",
+        label="Empirical mean (95% CI)",
     )
     axis.plot(
         x_values,
         y_values,
         color="#d17b0f",
         linewidth=2.3,
-        label="Global average relationship",
+        label="Overall trend",
     )
     axis.axhline(0.0, color="#6c757d", linewidth=1.0, alpha=0.75)
     axis.axvline(0.0, color="#6c757d", linewidth=1.0, alpha=0.30)
-    axis.set_xlabel("Change in stance (delta stance_pt)")
-    axis.set_ylabel("Change in log iceberg density")
-    axis.set_title("Experiment 2: Global Average Stance and Iceberg Relationship", fontsize=13, pad=12)
-    axis.legend(frameon=False, loc="best")
+    axis.set_xlabel(r"Change in stance ($\Delta$ stance$_{pt}$)", fontsize=14)
+    axis.set_ylabel(r"Change in log iceberg density ($\Delta \log D_{\mathrm{iceberg}}$)", fontsize=14)
+    axis.tick_params(axis="both", labelsize=12)
+    axis.legend(frameon=False, loc="best", fontsize=11)
     axis.grid(alpha=0.16, linewidth=0.6)
     fig.tight_layout()
-    fig.savefig(output_dir / "exp2_local_relationship.png", dpi=200)
+    fig.savefig(output_dir / "exp2_local_relationship.png", dpi=300)
     plt.close(fig)
 
 
