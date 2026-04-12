@@ -330,8 +330,10 @@ def fit_statsmodels_mixed_logit(
             "policed_next": [int(row["policed_next"]) for row in rows],
         }
     )
-    frame["speaker_role"] = pd.Categorical(frame["speaker_role"], categories=list(ROLE_ORDER), ordered=True)
-    frame["violation_type"] = pd.Categorical(frame["violation_type"], categories=list(VIOLATION_ORDER), ordered=True)
+    # Patsy/statsmodels can fail on pandas extension string dtypes, so keep
+    # formula inputs as plain Python/object strings.
+    for column_name in ["episode_id", "speaker_role", "violation_type"]:
+        frame[column_name] = frame[column_name].astype(str).astype(object)
 
     formula = (
         "policed_next ~ "
@@ -574,10 +576,10 @@ def render_png_plot(path: Path, curve_rows: Sequence[Dict[str, object]]) -> None
         "guest": "#b42318",
         "host": "#175cd3",
     }
-    severity_to_label = {VIOLATION_SEVERITY[violation]: f"{VIOLATION_SEVERITY[violation]}. {violation}" for violation in VIOLATION_ORDER}
+    severity_to_label = {VIOLATION_SEVERITY[violation]: violation for violation in VIOLATION_ORDER}
     x_values = [VIOLATION_SEVERITY[violation] for violation in VIOLATION_ORDER]
 
-    fig, ax = plt.subplots(figsize=(9.2, 5.6))
+    fig, ax = plt.subplots(figsize=(10.2, 6.1))
     ax.set_facecolor("#ffffff")
     ax.grid(axis="y", color="#e5e7eb", linewidth=1.0)
     ax.set_axisbelow(True)
@@ -587,32 +589,28 @@ def render_png_plot(path: Path, curve_rows: Sequence[Dict[str, object]]) -> None
         role_rows.sort(key=lambda row: int(row["severity"]))
         xs = [int(row["severity"]) for row in role_rows]
         ys = [float(row["predicted_policed_probability"]) for row in role_rows]
-        ax.plot(xs, ys, color=colors[role], linewidth=2.8, marker="o", markersize=6, label=role.title())
-        for x_value, y_value in zip(xs, ys):
-            ax.text(x_value, y_value + 0.03, f"{y_value:.2f}", ha="center", va="bottom", fontsize=10, color=colors[role])
+        ax.plot(xs, ys, color=colors[role], linewidth=3.0, marker="o", markersize=7, label=role.title())
 
-    ax.text(
-        0.5,
-        1.01,
-        "Predicted probability that the next turn polices the violation",
-        transform=ax.transAxes,
-        ha="center",
-        va="bottom",
-        fontsize=11,
-        color="#475467",
-    )
-    ax.set_xlabel("Violation ordering used in analysis (Manner -> Relation -> Quantity)", fontsize=12)
-    ax.set_ylabel("Probability of policing", fontsize=12)
+    ax.set_xlabel("Violation type", fontsize=13)
+    ax.set_ylabel("Predicted policing probability", fontsize=13)
     ax.set_xticks(x_values)
-    ax.set_xticklabels([severity_to_label[x_value] for x_value in x_values], fontsize=11)
-    ax.set_ylim(0.0, 1.0)
-    ax.legend(frameon=False, loc="upper right")
+    ax.set_xticklabels([severity_to_label[x_value] for x_value in x_values], fontsize=12)
+    ax.tick_params(axis="y", labelsize=12)
+    observed_probabilities = [
+        float(row["predicted_policed_probability"])
+        for row in curve_rows
+        if row.get("predicted_policed_probability") is not None
+    ]
+    max_probability = max(observed_probabilities) if observed_probabilities else 0.4
+    upper_limit = min(1.0, max(0.45, math.ceil((max_probability + 0.03) * 20.0) / 20.0))
+    ax.set_ylim(0.0, upper_limit)
+    ax.legend(frameon=False, loc="upper right", fontsize=12)
 
     for spine in ("top", "right"):
         ax.spines[spine].set_visible(False)
 
     fig.tight_layout()
-    fig.savefig(path, dpi=220, bbox_inches="tight")
+    fig.savefig(path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
