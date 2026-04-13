@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -19,10 +20,14 @@ from experiments.exp1_relevance_bridge.exp1_relevance_bridge import (
     DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
     bootstrap_mean,
     bootstrap_pointplot,
+    build_by_category,
+    compute_trajectory_metrics,
     distribution_plot,
+    embed_texts,
     pointplot_long_frame,
     pointplot_summary,
     resolve_output_dir,
+    write_umap_outputs,
 )
 
 
@@ -42,7 +47,10 @@ def collect_patch_dirs(patches_dir: Path) -> list[Path]:
 
 
 def load_patch_summaries(patch_dirs: list[Path]) -> list[dict[str, Any]]:
-    return [json.loads((patch_dir / "exp1_summary.json").read_text()) for patch_dir in patch_dirs]
+    return [
+        json.loads((patch_dir / "exp1_summary.json").read_text())
+        for patch_dir in tqdm(patch_dirs, desc="Loading Exp 1 patch summaries")
+    ]
 
 
 def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> None:
@@ -64,7 +72,10 @@ def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> None:
 
 
 def load_patch_pairs(patch_dirs: list[Path]) -> pd.DataFrame:
-    pair_frames = [pd.read_csv(patch_dir / "exp1_bridge_pairs.csv") for patch_dir in patch_dirs]
+    pair_frames = [
+        pd.read_csv(patch_dir / "exp1_bridge_pairs.csv")
+        for patch_dir in tqdm(patch_dirs, desc="Loading Exp 1 patch pairs")
+    ]
     merged = pd.concat(pair_frames, ignore_index=True)
     duplicate_mask = merged.duplicated(subset=["episode_id", "turn_a_idx", "turn_b_idx"], keep=False)
     if duplicate_mask.any():
@@ -78,21 +89,24 @@ def load_patch_pairs(patch_dirs: list[Path]) -> pd.DataFrame:
     return merged
 
 
-def build_by_category(df: pd.DataFrame) -> pd.DataFrame:
-    return (
-        df.groupby("category", as_index=False)
-        .agg(
-            pair_count=("bridge_delta", "size"),
-            mean_sim_claim=("sim_claim", "mean"),
-            mean_sim_context=("sim_context", "mean"),
-            mean_sim_same_episode_sample=("sim_same_episode_sample", "mean"),
-            mean_sim_global_sample=("sim_global_sample", "mean"),
-            mean_bridge_delta=("bridge_delta", "mean"),
-            positive_bridge_rate=("bridge_delta", lambda x: float((x > 0).mean())),
-            assumption_pair_rate=("turn_b_has_assumptions", "mean"),
-        )
-        .sort_values("mean_bridge_delta", ascending=False)
+def add_vector_columns(df: pd.DataFrame, embedding_model_name: str) -> pd.DataFrame:
+    texts_to_embed = pd.concat(
+        [
+            df["turn_b_claim_text"].astype(str),
+            df["turn_b_selected_context_text"].astype(str),
+        ],
+        ignore_index=True,
+    ).tolist()
+    text_to_vec = embed_texts(
+        texts=texts_to_embed,
+        batch_size=128,
+        use_tqdm=True,
+        embedding_model_name=embedding_model_name,
     )
+    enriched = df.copy()
+    enriched["vec_claim"] = enriched["turn_b_claim_text"].map(text_to_vec)
+    enriched["vec_context"] = enriched["turn_b_selected_context_text"].map(text_to_vec)
+    return enriched
 
 
 def build_summary(
@@ -108,9 +122,13 @@ def build_summary(
     pointplot_png: Path,
     summary_json: Path,
     dist_png: Path,
+    umap_sample_csv: Path,
+    umap_png: Path,
+    trajectory_metrics: dict[str, Any],
+    umap_outputs: dict[str, Any],
 ) -> dict[str, Any]:
-    boot = bootstrap_mean(df["bridge_delta"], seed=args.seed, draws=DEFAULT_BOOTSTRAP_DRAWS)
-    positive_rate = float((df["bridge_delta"] > 0).mean())
+    bridge_boot = bootstrap_mean(df["bridge_delta"], seed=args.seed, draws=DEFAULT_BOOTSTRAP_DRAWS)
+    full_bag_boot = bootstrap_mean(df["full_bag_bridge_delta"], seed=args.seed + 1, draws=DEFAULT_BOOTSTRAP_DRAWS)
     return {
         "experiment": "Experiment 1: The Relevance Bridge",
         "analysis_stage": "merged_full_analysis",
@@ -131,17 +149,28 @@ def build_summary(
         "total_pairs": int(len(df)),
         "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
         "assumption_pair_rate": float(df["turn_b_has_assumptions"].mean()),
+        "selected_assumption_rate": float(df["selected_assumption_rate"].mean()),
+        "average_selected_assumption_count": float(df["selected_assumption_count"].mean()),
         "bridge_score_mean_delta": float(df["bridge_delta"].mean()),
         "bridge_score_median_delta": float(df["bridge_delta"].median()),
-        "positive_bridge_rate": positive_rate,
+        "positive_bridge_rate": float((df["bridge_delta"] > 0).mean()),
+        "legacy_full_bag_mean_delta": float(df["full_bag_bridge_delta"].mean()),
+        "legacy_full_bag_median_delta": float(df["full_bag_bridge_delta"].median()),
+        "legacy_full_bag_positive_rate": float((df["full_bag_bridge_delta"] > 0).mean()),
+        "best_single_assumption_gain_mean": float(df["best_single_assumption_gain"].mean()),
         "mean_similarity_claim_only": float(df["sim_claim"].mean()),
+        "mean_similarity_filtered_context": float(df["sim_context"].mean()),
         "mean_similarity_with_assumptions": float(df["sim_context"].mean()),
+        "mean_similarity_full_bag_context": float(df["sim_full_bag_context"].mean()),
         "mean_similarity_same_episode_implicit_sample": float(df["sim_same_episode_sample"].mean()),
         "mean_similarity_any_episode_implicit_sample": float(df["sim_global_sample"].mean()),
         "mean_similarity_gain_percent": float(
             100.0 * (df["sim_context"].mean() - df["sim_claim"].mean()) / max(abs(df["sim_claim"].mean()), 1e-9)
         ),
-        "bridge_delta_bootstrap": boot,
+        "bridge_delta_bootstrap": bridge_boot,
+        "legacy_full_bag_bridge_delta_bootstrap": full_bag_boot,
+        "trajectory_smoothing": trajectory_metrics,
+        "umap": umap_outputs,
         "patch_merge": {
             "merged_patch_count": int(len(patch_dirs)),
             "num_patches": int(patch_summaries[0]["num_patches"]),
@@ -156,19 +185,22 @@ def build_summary(
             "pointplot_png": str(pointplot_png),
             "summary_json": str(summary_json),
             "distance_distribution_png": str(dist_png),
+            "umap_sample_csv": str(umap_sample_csv),
+            "umap_trajectory_png": str(umap_png),
         },
         "notes": [
             "This summary is merged from completed Exp 1 patch outputs.",
             "Only turns with turn_type_label == 'Substantive' are included.",
             "Turn A is vectorized from explicit propositions when available, otherwise raw turn text.",
-            "Turn B claims come from explicit_propositions; context adds assumptions from the same turn.",
-            "Matched implicit baselines sample the same number of assumptions as Turn B from the same episode or from the corpus-wide pool.",
+            "Turn B context adds only greedily selected same-turn assumptions whose inclusion improves similarity to Turn A.",
+            "Matched implicit baselines sample the same number of assumptions as the filtered bridge context.",
+            "Full bag context is retained only as a diagnostic comparison against the filtered bridge context.",
             "Cosine similarity is computed on L2-normalized sentence embeddings from the selected embedding model.",
         ],
     }
 
 
-def main():
+def main() -> None:
     args = parse_args()
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
     patches_dir = model_output_dir / "patches"
@@ -188,6 +220,8 @@ def main():
     pointplot_png = model_output_dir / "exp1_similarity_pointplot.png"
     summary_json = model_output_dir / "exp1_summary.json"
     dist_png = model_output_dir / "exp1_distance_distribution.png"
+    umap_sample_csv = model_output_dir / "exp1_umap_sample.csv"
+    umap_png = model_output_dir / "exp1_umap_trajectory.png"
 
     distribution_plot(df, dist_png)
     df.to_csv(pair_csv, index=False)
@@ -199,6 +233,15 @@ def main():
     pointplot_summary_df = pointplot_summary(long_plot_df, seed=args.seed)
     pointplot_summary_df.to_csv(pointplot_csv, index=False)
     bootstrap_pointplot(long_plot_df, pointplot_png, category_order=categories, seed=args.seed)
+
+    trajectory_df = add_vector_columns(df, args.embedding_model_name)
+    trajectory_metrics = compute_trajectory_metrics(trajectory_df)
+    umap_outputs = write_umap_outputs(
+        df=trajectory_df,
+        sample_csv_path=umap_sample_csv,
+        plot_path=umap_png,
+        seed=args.seed,
+    )
 
     summary = build_summary(
         args=args,
@@ -213,11 +256,14 @@ def main():
         pointplot_png=pointplot_png,
         summary_json=summary_json,
         dist_png=dist_png,
+        umap_sample_csv=umap_sample_csv,
+        umap_png=umap_png,
+        trajectory_metrics=trajectory_metrics,
+        umap_outputs=umap_outputs,
     )
     summary_json.write_text(json.dumps(summary, indent=2))
     print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":
-    main()
     main()

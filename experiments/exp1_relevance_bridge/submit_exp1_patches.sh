@@ -19,9 +19,12 @@ python - <<'PY'
 from pathlib import Path
 import json
 import os
+import re
 import tempfile
 
 input_dir = Path(os.environ.get("INPUT_DIR", "data/conversation_moves_labeled"))
+output_dir = Path(os.environ.get("OUTPUT_DIR", "experiments/exp1_relevance_bridge/results"))
+embedding_model_name = os.environ.get("EMBEDDING_MODEL_NAME", "Qwen/Qwen3-Embedding-4B")
 categories_csv = os.environ.get("CATEGORIES_CSV", "").strip()
 max_per_category_raw = os.environ.get("MAX_EPISODES_PER_CATEGORY", "").strip()
 max_per_category = int(max_per_category_raw) if max_per_category_raw else None
@@ -49,7 +52,17 @@ for category in selected:
     count += len(category_files)
     selected_files.extend((category, path) for path in category_files)
 
-fd, pool_path = tempfile.mkstemp(prefix="exp1_global_assumption_pool_", suffix=".jsonl", dir="/tmp")
+model_slug = re.sub(r"[^A-Za-z0-9._-]+", "_", embedding_model_name.replace("/", "__").strip())
+if not model_slug:
+    raise SystemExit("EMBEDDING_MODEL_NAME must not be empty.")
+model_output_dir = output_dir / model_slug
+model_output_dir.mkdir(parents=True, exist_ok=True)
+
+fd, pool_path = tempfile.mkstemp(
+    prefix="exp1_global_assumption_pool_",
+    suffix=".jsonl",
+    dir=str(model_output_dir),
+)
 os.close(fd)
 
 with open(pool_path, "w", encoding="utf-8") as handle:

@@ -26,6 +26,9 @@ EXTRA_ARGS=()
 if [[ "${NO_TQDM}" == "1" ]]; then
   EXTRA_ARGS+=(--no_tqdm)
 fi
+if [[ -n "${SILENCE_GAP_THRESHOLD_SEC}" ]]; then
+  EXTRA_ARGS+=(--silence_gap_threshold_sec "${SILENCE_GAP_THRESHOLD_SEC}")
+fi
 
 python -u experiments/exp5_processing_load/exp5.py \
   --input_dir "${INPUT_DIR}" \
@@ -37,5 +40,4 @@ python -u experiments/exp5_processing_load/exp5.py \
   --episodes_per_patch "${EPISODES_PER_PATCH}" \
   --silence_gap_quantile "${SILENCE_GAP_QUANTILE}" \
   --min_silence_gap "${MIN_SILENCE_GAP}" \
-  --silence_gap_threshold_sec "${SILENCE_GAP_THRESHOLD_SEC}" \
   "${EXTRA_ARGS[@]}"

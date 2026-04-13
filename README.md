@@ -6,7 +6,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
 ## Repository Map
 - `data_processing/`: data export and labeling utilities (SPORC export, labelers).
 - `*_pipeline/`: Slurm pipeline entrypoints by category (news, sports, etc.).
-- `experiments/exp1_relevance_bridge/`: assumption relevance bridge analysis (GPU/Slurm patch array).
+- `experiments/exp1_relevance_bridge/`: targeted relevance-bridge analysis with filtered assumption selection and UMAP trajectory diagnostics (GPU/Slurm patch array).
 - `experiments/exp2_iceberg/`: stance/assumption "iceberg" analysis (direct script).
 - `experiments/exp4_implicature_flow/`: implicature flow analysis and global report (direct script).
 - `experiments/exp5_processing_load/`: processing load and response delay analysis (GPU/Slurm patch array).
@@ -47,7 +47,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
 ## Experiment Index
 | Experiment | Input directory | Main script | Primary outputs | GPU/Slurm? |
 | --- | --- | --- | --- | --- |
-| Exp 1: Relevance Bridge | `data/conversation_moves_labeled` | `experiments/exp1_relevance_bridge/exp1_relevance_bridge.py` | `exp1_summary.json`, `exp1_bridge_by_category.csv`, `exp1_similarity_pointplot.png` | Yes (Slurm array) |
+| Exp 1: Relevance Bridge | `data/conversation_moves_labeled` | `experiments/exp1_relevance_bridge/exp1_relevance_bridge.py` | `exp1_summary.json`, `exp1_bridge_by_category.csv`, `exp1_similarity_pointplot.png`, `exp1_umap_trajectory.png` | Yes (Slurm array) |
 | Exp 2: Iceberg | `data/stance_labeled/1024` | `experiments/exp2_iceberg/exp2_iceberg.py` | `exp2_summary.json`, `exp2_regression_coefficients.csv`, `exp2_local_relationship.png` | No |
 | Exp 4: Implicature Flow | `data/implicature_flow/entailment_pairs_1to10` | `experiments/exp4_implicature_flow/exp4_implicature.py` | `implicature_flow_global_report.json`, `global_implicature_flow_summary.png` | No |
 | Exp 5: Processing Load | `data/conversation_moves_labeled` | `experiments/exp5_processing_load/exp5.py` | `exp5_summary.json`, `exp5_logit_coefficients.csv`, `exp5_probability_curves.png` | Yes (Slurm array) |
@@ -73,6 +73,8 @@ These scripts compute patch counts, create required environment variables, and s
 - Tracked/canonical: source code, `README.md`, `pyproject.toml`, minimal `data/` manifests/examples, and experiment-facing summaries/plots under `experiments/*/results`.
 - Generated/local: `raw/`, `_log/`, top-level `results/`, patch shards under `experiments/*/results/*/patches/`, row-level intermediates such as `exp1_bridge_pairs.csv` and `exp5_turn_level_features.csv`, model-scoped caches, and per-episode `exp2` plot trees.
 - What is already in git: the slim submission keeps experiment summary plots and main summary tables, but omits bulk data and large generated intermediates needed only for full reruns.
+
+Exp 1 operationalizes the bridge hypothesis with a filtered assumption context rather than a full same-turn assumption bag. For each adjacent substantive pair, the script compares Turn A against Turn B claims alone, then greedily adds only those Turn B assumptions that measurably increase similarity to Turn A, capped at three assumptions to avoid semantic drift from large generic bags. The canonical Exp 1 outputs therefore include both the filtered-context bridge summaries and the standard UMAP trajectory diagnostics (`exp1_umap_sample.csv`, `exp1_umap_trajectory.png`).
 
 ## Citation
 TBD

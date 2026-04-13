@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -17,8 +18,15 @@ def collect_patch_dirs(patches_dir: Path) -> list[Path]:
     return sorted(path for path in patches_dir.glob("patch_*") if path.is_dir() and (path / "exp5_summary.json").exists())
 
 
-def load_patch_summaries(patch_dirs: list[Path]) -> list[dict[str, Any]]:
-    return [json.loads((patch_dir / "exp5_summary.json").read_text()) for patch_dir in patch_dirs]
+def load_patch_summaries(patch_dirs: list[Path], show_progress: bool) -> list[dict[str, Any]]:
+    return [
+        json.loads((patch_dir / "exp5_summary.json").read_text())
+        for patch_dir in tqdm(
+            patch_dirs,
+            desc="Loading Exp 5 patch summaries",
+            disable=not show_progress,
+        )
+    ]
 
 
 def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> None:
@@ -40,8 +48,18 @@ def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> None:
         raise RuntimeError(f"Expected exactly one embedding model across patches, got {sorted(embedding_models)}")
 
 
-def load_merged_rows(patch_dirs: list[Path]) -> pd.DataFrame:
-    rows = pd.concat([pd.read_csv(path / "exp5_turn_level_features.csv") for path in patch_dirs], ignore_index=True)
+def load_merged_rows(patch_dirs: list[Path], show_progress: bool) -> pd.DataFrame:
+    rows = pd.concat(
+        [
+            pd.read_csv(path / "exp5_turn_level_features.csv")
+            for path in tqdm(
+                patch_dirs,
+                desc="Loading Exp 5 turn-level features",
+                disable=not show_progress,
+            )
+        ],
+        ignore_index=True,
+    )
     duplicate_mask = rows.duplicated(subset=["episode_id", "turn_idx"], keep=False)
     if duplicate_mask.any():
         duplicate_count = int(duplicate_mask.sum())
@@ -84,10 +102,11 @@ def main():
         raise RuntimeError(f"Patches directory does not exist: {patches_dir}")
 
     patch_dirs = collect_patch_dirs(patches_dir)
-    patch_summaries = load_patch_summaries(patch_dirs)
+    show_progress = not args.no_tqdm
+    patch_summaries = load_patch_summaries(patch_dirs, show_progress=show_progress)
     validate_patch_set(patch_summaries)
 
-    rows_df = load_merged_rows(patch_dirs)
+    rows_df = load_merged_rows(patch_dirs, show_progress=show_progress)
     merged_args = build_merge_args(args, patch_summaries[0])
     analyze_rows(
         rows=rows_df.to_dict("records"),
@@ -96,7 +115,7 @@ def main():
         num_episodes=int(rows_df["episode_id"].nunique()),
         silence_gap=float(patch_summaries[0]["silence_gap_threshold_sec"]),
         args=merged_args,
-        show_progress=not args.no_tqdm,
+        show_progress=show_progress,
         summary_extra={
             "selected_episode_file_count": int(
                 sum(int(summary.get("selected_episode_file_count", 0)) for summary in patch_summaries)

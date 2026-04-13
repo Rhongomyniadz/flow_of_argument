@@ -33,6 +33,9 @@ fi
 if [[ "${NO_TQDM}" == "1" ]]; then
   EXTRA_ARGS+=(--no_tqdm)
 fi
+if [[ -n "${GLOBAL_ASSUMPTION_POOL_PATH}" ]]; then
+  EXTRA_ARGS+=(--global_assumption_pool_path "${GLOBAL_ASSUMPTION_POOL_PATH}")
+fi
 
 python -u experiments/exp1_relevance_bridge/exp1_relevance_bridge.py \
   --input_dir "${INPUT_DIR}" \
@@ -42,6 +45,5 @@ python -u experiments/exp1_relevance_bridge/exp1_relevance_bridge.py \
   --num_patches "${NUM_PATCHES}" \
   --patch_index "${PATCH_INDEX}" \
   --episodes_per_patch "${EPISODES_PER_PATCH}" \
-  --global_assumption_pool_path "${GLOBAL_ASSUMPTION_POOL_PATH}" \
   "${CATEGORY_ARGS[@]}" \
   "${EXTRA_ARGS[@]}"
