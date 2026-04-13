@@ -1,8 +1,8 @@
+import re
 import argparse
 import json
 import logging
 from pathlib import Path
-import re
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,7 +11,6 @@ import seaborn as sns
 import torch
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,6 +25,18 @@ DEFAULT_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 DEFAULT_QWEN_EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-4B"
 DEFAULT_TARGET_EMBEDDING_MAX_LENGTH = 1024
 DEFAULT_BOOTSTRAP_DRAWS = 2000
+PAIR_EXPORT_COLUMNS = [
+    "category",
+    "episode_id",
+    "turn_a_idx",
+    "turn_b_idx",
+    "turn_b_has_assumptions",
+    "sim_claim",
+    "sim_context",
+    "sim_same_episode_sample",
+    "sim_global_sample",
+    "bridge_delta",
+]
 
 
 def parse_args():
@@ -36,6 +47,8 @@ def parse_args():
     ap.add_argument("--max_episodes_per_category", type=int, default=None)
     ap.add_argument("--num_patches", type=int, default=1)
     ap.add_argument("--patch_index", type=int, default=0)
+    ap.add_argument("--episodes_per_patch", type=int, default=None)
+    ap.add_argument("--global_assumption_pool_path", type=Path, default=None)
     ap.add_argument("--embedding_batch_size", type=int, default=128)
     ap.add_argument("--embedding_model_name", type=str, default=DEFAULT_EMBEDDING_MODEL_NAME)
     ap.add_argument("--seed", type=int, default=42)
@@ -50,11 +63,13 @@ def resolve_output_dir(base_output_dir: Path, embedding_model_name: str):
     return base_output_dir / model_slug
 
 
-def validate_patch_args(num_patches: int, patch_index: int):
+def validate_patch_args(num_patches: int, patch_index: int, episodes_per_patch):
     if num_patches < 1:
         raise ValueError(f"num_patches must be >= 1, got {num_patches}")
     if patch_index < 0 or patch_index >= num_patches:
         raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
+    if episodes_per_patch is not None and episodes_per_patch < 1:
+        raise ValueError(f"episodes_per_patch must be >= 1, got {episodes_per_patch}")
 
 
 def resolve_patch_output_dir(base_output_dir: Path, num_patches: int, patch_index: int):
@@ -88,7 +103,11 @@ def collect_category_files(input_dir: Path, categories, max_episodes_per_categor
     return files
 
 
-def select_patch_files(category_files, num_patches: int, patch_index: int):
+def select_patch_files(category_files, num_patches: int, patch_index: int, episodes_per_patch):
+    if episodes_per_patch is not None:
+        start = patch_index * episodes_per_patch
+        end = min(start + episodes_per_patch, len(category_files))
+        return category_files[start:end]
     return [item for idx, item in enumerate(category_files) if idx % num_patches == patch_index]
 
 
@@ -150,6 +169,27 @@ def substantive_pairs(path: Path):
             }
         )
     return rows
+
+
+def collect_global_assumption_pool(category_files):
+    global_pool = []
+    for _, path in category_files:
+        for row in substantive_pairs(path):
+            for assumption_id, assumption_text in zip(
+                row["turn_b_assumption_ids"],
+                row["turn_b_assumption_texts"],
+            ):
+                global_pool.append((str(assumption_id), str(assumption_text)))
+    return global_pool
+
+
+def load_global_assumption_pool(path: Path):
+    global_pool = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            payload = json.loads(line)
+            global_pool.append((str(payload["assumption_id"]), str(payload["assumption_text"])))
+    return global_pool
 
 
 def mean_pool(last_hidden_state, attention_mask):
@@ -242,8 +282,9 @@ def sample_assumption_texts(pool_records, excluded_ids, sample_count, rng):
     return [candidate_records[int(idx)][1] for idx in np.asarray(sample_indices).tolist()]
 
 
-def add_sampled_contexts(df: pd.DataFrame, seed: int):
-    episode_pools, global_pool = build_assumption_pools(df)
+def add_sampled_contexts(df: pd.DataFrame, seed: int, global_pool_records=None):
+    episode_pools, local_global_pool = build_assumption_pools(df)
+    global_pool = list(global_pool_records) if global_pool_records is not None else local_global_pool
     rng = np.random.default_rng(seed)
 
     same_episode_contexts = []
@@ -365,9 +406,67 @@ def distribution_plot(df: pd.DataFrame, path: Path):
     plt.close(fig)
 
 
+def write_pair_csv(df: pd.DataFrame, path: Path):
+    df[PAIR_EXPORT_COLUMNS].to_csv(path, index=False)
+
+
+def build_patch_summary(
+    args,
+    output_dir: Path,
+    categories,
+    selected_files,
+    category_files,
+    global_pool_records,
+    global_pool_source: str,
+    df: pd.DataFrame,
+    pair_csv: Path,
+    summary_json: Path,
+):
+    return {
+        "experiment": "Experiment 1: The Relevance Bridge",
+        "analysis_stage": "patch_pair_extraction_only",
+        "input_dir": str(args.input_dir),
+        "embedding_model_name": str(args.embedding_model_name),
+        "default_embedding_model_name": DEFAULT_EMBEDDING_MODEL_NAME,
+        "recommended_qwen_embedding_model_name": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
+        "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
+        "num_patches": int(args.num_patches),
+        "patch_index": int(args.patch_index),
+        "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
+        "selected_episode_file_count": int(len(selected_files)),
+        "candidate_episode_file_count": int(len(category_files)),
+        "global_assumption_pool_size": int(len(global_pool_records)),
+        "global_assumption_pool_scope": "full_selected_corpus",
+        "global_assumption_pool_source": global_pool_source,
+        "global_assumption_pool_path": (
+            str(args.global_assumption_pool_path)
+            if args.global_assumption_pool_path is not None
+            else None
+        ),
+        "categories": categories,
+        "total_pairs": int(len(df)),
+        "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
+        "assumption_pair_rate": float(df["turn_b_has_assumptions"].mean()),
+        "outputs": {
+            "pair_csv": str(pair_csv),
+            "summary_json": str(summary_json),
+        },
+        "deferred_outputs": [
+            "exp1_bridge_by_category.csv",
+            "exp1_similarity_pointplot_summary.csv",
+            "exp1_similarity_pointplot.png",
+            "exp1_distance_distribution.png",
+        ],
+        "notes": [
+            "Patch mode writes adjacent-pair similarity rows only.",
+            "Run merge_exp1_patches.py after all patches finish to build the category summaries and plots.",
+        ],
+    }
+
+
 def main():
     args = parse_args()
-    validate_patch_args(args.num_patches, args.patch_index)
+    validate_patch_args(args.num_patches, args.patch_index, args.episodes_per_patch)
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
     output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -375,7 +474,12 @@ def main():
     use_tqdm = not args.no_tqdm
 
     category_files = collect_category_files(args.input_dir, categories, args.max_episodes_per_category)
-    selected_files = select_patch_files(category_files, args.num_patches, args.patch_index)
+    selected_files = select_patch_files(
+        category_files,
+        args.num_patches,
+        args.patch_index,
+        args.episodes_per_patch,
+    )
     if not selected_files:
         raise RuntimeError(
             f"No episode files selected for patch {args.patch_index} out of {args.num_patches}. "
@@ -400,7 +504,13 @@ def main():
         raise RuntimeError("No valid substantive adjacent pairs found.")
 
     df = pd.DataFrame(rows)
-    df = add_sampled_contexts(df, seed=args.seed)
+    if args.global_assumption_pool_path is not None:
+        global_pool_records = load_global_assumption_pool(args.global_assumption_pool_path)
+        global_pool_source = "precomputed_file"
+    else:
+        global_pool_records = collect_global_assumption_pool(category_files)
+        global_pool_source = "computed_in_process"
+    df = add_sampled_contexts(df, seed=args.seed, global_pool_records=global_pool_records)
     logger.info("Collected %d adjacent substantive pairs across %d categories.", len(df), len(categories))
 
     text_to_vec = embed_texts(
@@ -434,27 +544,32 @@ def main():
     df["bridge_delta"] = df["sim_context"] - df["sim_claim"]
 
     pair_csv = output_dir / "exp1_bridge_pairs.csv"
+    summary_json = output_dir / "exp1_summary.json"
+    write_pair_csv(df, pair_csv)
+
+    if args.num_patches > 1:
+        patch_summary = build_patch_summary(
+            args=args,
+            output_dir=output_dir,
+            categories=categories,
+            selected_files=selected_files,
+            category_files=category_files,
+            global_pool_records=global_pool_records,
+            global_pool_source=global_pool_source,
+            df=df,
+            pair_csv=pair_csv,
+            summary_json=summary_json,
+        )
+        summary_json.write_text(json.dumps(patch_summary, indent=2))
+        logger.info("Done. Wrote patch features to %s", output_dir)
+        return
+
     category_csv = output_dir / "exp1_bridge_by_category.csv"
     pointplot_csv = output_dir / "exp1_similarity_pointplot_summary.csv"
     pointplot_png = output_dir / "exp1_similarity_pointplot.png"
-    summary_json = output_dir / "exp1_summary.json"
     dist_png = output_dir / "exp1_distance_distribution.png"
 
     distribution_plot(df, dist_png)
-
-    export_cols = [
-        "category",
-        "episode_id",
-        "turn_a_idx",
-        "turn_b_idx",
-        "turn_b_has_assumptions",
-        "sim_claim",
-        "sim_context",
-        "sim_same_episode_sample",
-        "sim_global_sample",
-        "bridge_delta",
-    ]
-    df[export_cols].to_csv(pair_csv, index=False)
 
     by_category = (
         df.groupby("category", as_index=False)
@@ -481,6 +596,7 @@ def main():
     positive_rate = float((df["bridge_delta"] > 0).mean())
     summary = {
         "experiment": "Experiment 1: The Relevance Bridge",
+        "analysis_stage": "full_analysis",
         "input_dir": str(args.input_dir),
         "embedding_model_name": str(args.embedding_model_name),
         "default_embedding_model_name": DEFAULT_EMBEDDING_MODEL_NAME,
@@ -488,8 +604,17 @@ def main():
         "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
         "num_patches": int(args.num_patches),
         "patch_index": int(args.patch_index),
+        "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
         "selected_episode_file_count": int(len(selected_files)),
         "candidate_episode_file_count": int(len(category_files)),
+        "global_assumption_pool_size": int(len(global_pool_records)),
+        "global_assumption_pool_scope": "full_selected_corpus",
+        "global_assumption_pool_source": global_pool_source,
+        "global_assumption_pool_path": (
+            str(args.global_assumption_pool_path)
+            if args.global_assumption_pool_path is not None
+            else None
+        ),
         "categories": categories,
         "total_pairs": int(len(df)),
         "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),

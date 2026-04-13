@@ -11,6 +11,7 @@ from scipy.optimize import minimize
 from tqdm.auto import tqdm
 
 matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 
@@ -197,11 +198,11 @@ def turn_type(turn: Dict[str, Any]) -> str:
     return str(turn.get("turn_type_label") or "").strip()
 
 
-def move_label(turn: Dict[str, Any]) -> str:
+def turn_move_label(turn: Dict[str, Any]) -> str:
     return str(turn.get("conversation_move_label") or "").strip()
 
 
-def assumption_count(turn: Dict[str, Any]) -> int:
+def turn_assumption_count(turn: Dict[str, Any]) -> int:
     assumptions = turn.get("assumptions")
     return len(assumptions) if isinstance(assumptions, list) else 0
 
@@ -217,7 +218,7 @@ def turn_word_count(turn: Dict[str, Any]) -> int:
 def previous_turn_invites_response(previous_turn: Optional[Dict[str, Any]]) -> bool:
     if previous_turn is None:
         return False
-    previous_move = move_label(previous_turn)
+    previous_move = turn_move_label(previous_turn)
     previous_text = turn_text(previous_turn)
     if "?" in previous_text:
         return True
@@ -241,7 +242,7 @@ def passes_trigger_context_gate(
         return False
 
     previous_invites_response = previous_turn_invites_response(previous_turn)
-    current_move = move_label(current_turn)
+    current_move = turn_move_label(current_turn)
     current_word_count = turn_word_count(current_turn)
 
     if trigger_type == "under_info":
@@ -317,7 +318,7 @@ def collect_trigger_metric_rows(
                     "category": category,
                     "episode_id": episode_id,
                     "turn_idx": safe_int(turn.get("turn_idx"), position),
-                    "assumption_count": int(assumption_count(turn)),
+                    "assumption_count": int(turn_assumption_count(turn)),
                     "duration_sec": float(turn_duration(turn)),
                 }
             )
@@ -400,7 +401,7 @@ def immediate_next_turn_latency(turns: Sequence[Dict[str, Any]], trigger_positio
 
 
 def classify_followup_event(turn: Dict[str, Any]) -> Optional[str]:
-    current_move = move_label(turn)
+    current_move = turn_move_label(turn)
     current_type = turn_type(turn)
     if current_move in EXIT_MOVES:
         return "exit_marker"
@@ -475,7 +476,7 @@ def extract_trigger_and_cascade_rows(
             if not should_keep_trigger_candidate(trigger_turn):
                 continue
             trigger_duration_sec = turn_duration(trigger_turn)
-            trigger_assumptions = assumption_count(trigger_turn)
+            trigger_assumptions = turn_assumption_count(trigger_turn)
             previous_turn = turns[trigger_position - 1] if trigger_position > 0 else None
             trigger_type = classify_trigger_type(
                 trigger_assumptions,
@@ -554,7 +555,7 @@ def extract_trigger_and_cascade_rows(
                 elif event_type == "support_marker":
                     support_marker_count += 1
                 elif event_type == "exit_marker":
-                    exit_move = move_label(followup_turn)
+                    exit_move = turn_move_label(followup_turn)
                     if exit_move == "Topic Shift":
                         topic_shift_indicator = 1
 
@@ -567,7 +568,7 @@ def extract_trigger_and_cascade_rows(
                             "trigger_type": trigger_type,
                             "followup_turn_idx": safe_int(followup_turn.get("turn_idx"), followup_position),
                             "event_type": event_type,
-                            "move_label": move_label(followup_turn),
+                            "move_label": turn_move_label(followup_turn),
                             "turn_type_label": turn_type(followup_turn),
                             "relative_start_sec": float(relative_start_sec),
                             "relative_end_sec": float(relative_end_sec),

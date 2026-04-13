@@ -1,25 +1,26 @@
+import warnings
+from collections import defaultdict
+from pathlib import Path
 import json
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import seaborn as sns
-from pathlib import Path
-from collections import defaultdict
 from tqdm import tqdm
-import warnings
 warnings.filterwarnings('ignore')
 sns.set_theme(style="whitegrid", context="paper")
 
 
-def robust_get(d, key, default=None):
+def safe_get(record, key, default=None):
     """Robustly extract values from dict, handling key spacing variants"""
-    if not isinstance(d, dict):
+    if not isinstance(record, dict):
         return default
     variants = [key, key.strip(), f"{key} ", f" {key}"]
     for k in variants:
-        if k in d:
-            return d[k]
+        if k in record:
+            return record[k]
     return default
 
 
@@ -63,30 +64,30 @@ def analyze_single_episode(json_path):
     except Exception as e:
         return None, f"JSON parsing error: {str(e)[:100]}"
 
-    episode_id = robust_get(data, 'episode_id', 'unknown')
+    episode_id = safe_get(data, 'episode_id', 'unknown')
     if isinstance(episode_id, str):
         episode_id = episode_id.strip()
 
-    pairs = robust_get(data, 'pairs', [])
+    pairs = safe_get(data, 'pairs', [])
     if not pairs:
         return None, "No valid pairs"
 
     # ---- Collect full turn range (min..max) from a_turn and c_turn ----
     turn_idxs = set()
     for pair in pairs:
-        at = safe_int(robust_get(pair, 'a_turn_idx', None), None)
-        ct = safe_int(robust_get(pair, 'c_turn_idx', None), None)
+        at = safe_int(safe_get(pair, 'a_turn_idx', None), None)
+        ct = safe_int(safe_get(pair, 'c_turn_idx', None), None)
         if at is not None and at != -1:
             turn_idxs.add(at)
         if ct is not None and ct != -1:
             turn_idxs.add(ct)
 
     # Try to get N from episode metadata if available (most robust)
-    N = safe_int(robust_get(data, 'num_turns', None), None)
+    N = safe_int(safe_get(data, 'num_turns', None), None)
 
     # Some datasets store full turns list
     if N is None:
-        turns_list = robust_get(data, 'turns', None)
+        turns_list = safe_get(data, 'turns', None)
         if isinstance(turns_list, list) and len(turns_list) > 0:
             N = len(turns_list)
 
@@ -99,10 +100,10 @@ def analyze_single_episode(json_path):
     # === STEP 1: Collect ALL unique assumptions ===
     all_assumptions = {}  # key: (a_turn, a_idx)
     for pair in pairs:
-        a_turn = safe_int(robust_get(pair, 'a_turn_idx', -1), -1)
-        a_idx = safe_int(robust_get(pair, 'a_idx_in_turn', -1), -1)
-        a_time = robust_get(pair, 'a_time', None)
-        text = robust_get(pair, 'assumption_text', '')
+        a_turn = safe_int(safe_get(pair, 'a_turn_idx', -1), -1)
+        a_idx = safe_int(safe_get(pair, 'a_idx_in_turn', -1), -1)
+        a_time = safe_get(pair, 'a_time', None)
+        text = safe_get(pair, 'assumption_text', '')
 
         if a_turn == -1 or a_idx == -1:
             continue
@@ -121,12 +122,12 @@ def analyze_single_episode(json_path):
     # === STEP 2: Identify accommodated assumptions (entailment_score >= 7) ===
     accommodated = {}  # key: (a_turn, a_idx) -> earliest c_time + c_turn
     for pair in pairs:
-        a_turn = safe_int(robust_get(pair, 'a_turn_idx', -1), -1)
-        a_idx = safe_int(robust_get(pair, 'a_idx_in_turn', -1), -1)
-        c_turn = safe_int(robust_get(pair, 'c_turn_idx', None), None)
-        c_time = robust_get(pair, 'c_time', None)
+        a_turn = safe_int(safe_get(pair, 'a_turn_idx', -1), -1)
+        a_idx = safe_int(safe_get(pair, 'a_idx_in_turn', -1), -1)
+        c_turn = safe_int(safe_get(pair, 'c_turn_idx', None), None)
+        c_time = safe_get(pair, 'c_time', None)
         c_time_num = float(c_time) if c_time is not None and np.isfinite(float(c_time)) else float('inf')
-        entailment = robust_get(pair, 'entailment_score', 0)
+        entailment = safe_get(pair, 'entailment_score', 0)
 
         if a_turn == -1 or a_idx == -1 or entailment < 7:
             continue

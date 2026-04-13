@@ -1,0 +1,27 @@
+[project]
+name = "flow-of-argument"
+version = "0.0.0"
+description = "ACL-style artifact for conversational assumption and implicature analyses."
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "TBD" }
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "matplotlib",
+  "seaborn",
+  "scipy",
+  "statsmodels",
+  "plotly",
+  "tqdm",
+]
+
+[project.optional-dependencies]
+llm = [
+  "torch",
+  "transformers",
+  "sentence-transformers",
+  "vllm",
+  "sporc",
+]

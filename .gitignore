@@ -3,49 +3,44 @@ doc_topics.txt
 topic_keys.txt
 questions.csv
 pairs_prev_next.csv
-raw/
-data/*/jsonl.gz
-data/*/jsonl
-_log/
 
-# Category JSON outputs
-data/business/*.json
-data/business/**/*.json
-data/commentary/*.json
-data/commentary/**/*.json
-data/news/*.json
-data/news/**/*.json
-data/political/*.json
-data/political/**/*.json
-data/religion/*.json
-data/religion/**/*.json
-data/sports/*.json
-data/sports/**/*.json
-data/turn_type_labeled/*.json
-data/turn_type_labeled/**/*.json
-data/conversation_moves_labeled/*.json
-data/conversation_moves_labeled/**/*.json
-data/maxim_violations_labeled/*.json
-data/maxim_violations_labeled/**/*.json
-data/stance_labeled/*.json
-data/stance_labeled/**/*.json
-data/implicature_flow/*.json
-data/implicature_flow/**/*.json
+# Local/generated sources
+/raw/
+/_log/
 
 # Python caches
 __pycache__/
 *.py[cod]
 
-# Experiment 2 generated outputs
+# ACL submission keeps only minimal data manifests/examples in git
+/data/**
+!/data/
+!/data/*/
+!/data/manifest_by_category.json
+!/data/business/manifest_by_episode.json
+!/data/commentary/manifest_by_episode.json
+!/data/news/manifest_by_episode.json
+!/data/political/manifest_by_episode.json
+!/data/religion/manifest_by_episode.json
+!/data/sports/manifest_by_episode.json
+!/data/conversation_moves_labeled_host_guest_episode_mapping.csv
+!/data/conversation_moves_labeled_host_guest_summary.json
+!/data/maxim_violations_labeled/
+!/data/maxim_violations_labeled/maxim_violation_precision_audit.json
+
+# Non-experiment bulk outputs
+/results/
+
+# Experiment-local generated artifacts
 experiments/exp2_iceberg/plots/
-
-# Experiment 5 generated outputs
-experiments/exp5_processing_load/results/exp5_turn_level_features.csv
-
-# Experiment 4 per-episode Sankey HTML outputs
-experiments/exp4_implicature_flow/episode_sankey_html/
-
-experiments/exp7_social_power/results/exp7_short_response_stonewalling_summary.json
-experiments/exp7_social_power/results/exp7_short_response_stonewalling_audit.csv
+experiments/exp1_relevance_bridge/results/*/patches/
+experiments/exp1_relevance_bridge/results/*/exp1_bridge_pairs.csv
 experiments/exp1_relevance_bridge/results/exp1_bridge_pairs.csv
 experiments/exp1_relevance_bridge/results/exp1_umap_sample.csv
+experiments/exp1_relevance_bridge/results/exp1_umap_trajectory.png
+experiments/exp5_processing_load/results/*/patches/
+experiments/exp5_processing_load/results/*/exp5_turn_level_features.csv
+experiments/exp5_processing_load/results/exp5_turn_level_features.csv
+experiments/exp4_implicature_flow/episode_sankey_html/
+experiments/exp7_social_power/results/exp7_short_response_stonewalling_summary.json
+experiments/exp7_social_power/results/exp7_short_response_stonewalling_audit.csv

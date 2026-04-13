@@ -15,6 +15,7 @@ from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 
 matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 RNG_SEED = 42
@@ -22,27 +23,49 @@ np.random.seed(RNG_SEED)
 RESPONSE_CLASSES = ["Backchannel", "Substantive", "Clarification", "Silence/Abandonment"]
 DEFAULT_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 DEFAULT_QWEN_EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-4B"
+DEFAULT_EMBEDDING_BATCH_SIZE = 32
+TURN_LEVEL_FEATURE_FIELDS = [
+    "episode_id",
+    "turn_idx",
+    "duration_sec",
+    "assumption_count_in_turn",
+    "explicit_statement_count",
+    "new_assumption_count",
+    "implicature_load",
+    "response_delay_at_time_n",
+    "gap_to_next_sec",
+    "average_response_time_0_to_n_minus_1",
+    "next_response_type",
+    "next_turn_type_label",
+    "next_conversation_move_label",
+]
 
 
 def assumption_embedder(embedding_model_name):
+    embedding_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assumption_tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
-    assumption_model = AutoModel.from_pretrained(embedding_model_name, trust_remote_code=True)
+    assumption_model = AutoModel.from_pretrained(embedding_model_name, trust_remote_code=True).to(embedding_device)
     assumption_model.eval()
-    return assumption_tokenizer, assumption_model
+    return assumption_tokenizer, assumption_model, embedding_device
 
 
-def assumption_embeddings(texts, assumption_tokenizer, assumption_model):
+def assumption_embeddings(texts, assumption_tokenizer, assumption_model, embedding_device, embedding_batch_size):
     texts = [t for t in texts if t]
     if not texts:
         return np.empty((0, 0), dtype=np.float32)
-    batch = assumption_tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
-    with torch.no_grad():
-        output = assumption_model(**batch)
-        hidden = output.last_hidden_state
-        mask = batch["attention_mask"].unsqueeze(-1).expand(hidden.shape).float()
-        pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
-        pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
-    return pooled.cpu().numpy().astype(np.float32, copy=False)
+    embedding_batches = []
+    with torch.inference_mode():
+        for start in range(0, len(texts), embedding_batch_size):
+            batch_texts = texts[start:start + embedding_batch_size]
+            batch = assumption_tokenizer(batch_texts, padding=True, truncation=True, return_tensors="pt")
+            batch = {key: value.to(embedding_device) for key, value in batch.items()}
+            output = assumption_model(**batch)
+            hidden = output.last_hidden_state
+            mask = batch["attention_mask"].unsqueeze(-1).expand(hidden.shape).float()
+            pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
+            pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
+            embedding_batches.append(pooled.cpu().numpy().astype(np.float32, copy=False))
+    return np.vstack(embedding_batches)
 
 
 def resolve_output_dir(base_output_dir, embedding_model_name):
@@ -52,11 +75,13 @@ def resolve_output_dir(base_output_dir, embedding_model_name):
     return Path(base_output_dir) / model_slug
 
 
-def validate_patch_args(num_patches, patch_index):
+def validate_patch_args(num_patches, patch_index, episodes_per_patch):
     if num_patches < 1:
         raise ValueError(f"num_patches must be >= 1, got {num_patches}")
     if patch_index < 0 or patch_index >= num_patches:
         raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
+    if episodes_per_patch is not None and episodes_per_patch < 1:
+        raise ValueError(f"episodes_per_patch must be >= 1, got {episodes_per_patch}")
 
 
 def resolve_patch_output_dir(base_output_dir, num_patches, patch_index):
@@ -65,14 +90,14 @@ def resolve_patch_output_dir(base_output_dir, num_patches, patch_index):
     return Path(base_output_dir) / "patches" / f"patch_{patch_index:04d}_of_{num_patches:04d}"
 
 
-def f(x):
+def to_float(x):
     try:
         return float(x)
     except Exception:
         return float("nan")
 
 
-def jdefault(x):
+def json_default(x):
     if isinstance(x, np.ndarray):
         return x.tolist()
     if isinstance(x, (np.integer,)):
@@ -83,37 +108,39 @@ def jdefault(x):
     raise TypeError(type(x).__name__)
 
 
-def norm_text(s):
+def normalize_text(s):
     s = re.sub(r"[^\w\s]", "", re.sub(r"\s+", " ", str(s or "").strip().lower()))
     return s.strip()
 
 
-def uniq_texts(raw):
+def unique_texts(raw):
     seen, out = set(), []
     for item in raw if isinstance(raw, list) else []:
         text = item.get("text", "") if isinstance(item, dict) else item if isinstance(item, str) else ""
-        text = norm_text(text)
+        text = normalize_text(text)
         if text and text not in seen:
             seen.add(text)
             out.append(text)
     return out
 
 
-def sec(turn):
-    dur = f(turn.get("duration"))
+def turn_duration_seconds(turn):
+    dur = to_float(turn.get("duration"))
     if math.isfinite(dur) and dur >= 0:
         return dur
-    start, end = f(turn.get("startTime", turn.get("start_time"))), f(turn.get("endTime", turn.get("end_time")))
+    start = to_float(turn.get("startTime", turn.get("start_time")))
+    end = to_float(turn.get("endTime", turn.get("end_time")))
     return max(0.0, end - start) if math.isfinite(start) and math.isfinite(end) else float("nan")
 
 
-def gap(a, b):
-    end, start = f(a.get("endTime", a.get("end_time"))), f(b.get("startTime", b.get("start_time")))
+def gap_seconds(a, b):
+    end = to_float(a.get("endTime", a.get("end_time")))
+    start = to_float(b.get("startTime", b.get("start_time")))
     return start - end if math.isfinite(start) and math.isfinite(end) else float("nan")
 
 
-def words(turn):
-    wc = f(turn.get("wordCount", turn.get("word_count")))
+def word_count(turn):
+    wc = to_float(turn.get("wordCount", turn.get("word_count")))
     return wc if math.isfinite(wc) else float(len(str(turn.get("turn_text", "") or "").split()) or "nan")
 
 
@@ -125,7 +152,11 @@ def collect_episode_paths(input_dir):
     return sorted(input_dir.glob("*.json")) or sorted(input_dir.glob("*/*.json"))
 
 
-def select_patch_paths(paths, num_patches, patch_index):
+def select_patch_paths(paths, num_patches, patch_index, episodes_per_patch):
+    if episodes_per_patch is not None:
+        start = patch_index * episodes_per_patch
+        end = min(start + episodes_per_patch, len(paths))
+        return paths[start:end]
     return [path for idx, path in enumerate(paths) if idx % num_patches == patch_index]
 
 
@@ -140,7 +171,7 @@ def load_episodes_from_paths(paths, show_progress, desc):
             continue
         turns = sort_turns(payload)
         episodes.append((str(turns[0].get("episode_id", fp.stem)), turns))
-        gaps.extend(g for a, b in zip(turns, turns[1:]) if math.isfinite(g := gap(a, b)))
+        gaps.extend(g for a, b in zip(turns, turns[1:]) if math.isfinite(g := gap_seconds(a, b)))
     return episodes, np.asarray(gaps, dtype=float)
 
 
@@ -160,26 +191,33 @@ def classify(next_turn, gap_sec, silence_gap, agree_dur_max, agree_words_max):
     if ttype == "Backchannel":
         return "Backchannel"
     if move == "Agree / Align":
-        if ((not math.isfinite(sec(next_turn))) or sec(next_turn) <= agree_dur_max) and (
-            (not math.isfinite(words(next_turn))) or words(next_turn) <= agree_words_max
+        if ((not math.isfinite(turn_duration_seconds(next_turn))) or turn_duration_seconds(next_turn) <= agree_dur_max) and (
+            (not math.isfinite(word_count(next_turn))) or word_count(next_turn) <= agree_words_max
         ):
             return "Backchannel"
     return "Substantive"
 
 
-def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progress, assumption_similarity_threshold, assumption_tokenizer, assumption_model):
+def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progress, assumption_similarity_threshold, assumption_tokenizer, assumption_model, embedding_device, embedding_batch_size):
     rows = []
     for episode_id, turns in tqdm(episodes, desc="Building turn rows", unit="episode", disable=not show_progress):
         history_embs, gap_sum, gap_n = None, 0.0, 0
         for i, turn in enumerate(turns):
             nxt = turns[i + 1] if i + 1 < len(turns) else None
-            assumptions = uniq_texts(turn.get("assumptions", []))
-            explicit = uniq_texts(turn.get("explicit_propositions", []))
-            new_n, current_new = 0, []
+            assumptions = unique_texts(turn.get("assumptions", []))
+            explicit = unique_texts(turn.get("explicit_propositions", []))
+            new_n, current_new, current_new_indices = 0, [], []
             if assumptions:
-                current_embs = assumption_embeddings(assumptions, assumption_tokenizer, assumption_model)
+                current_embs = assumption_embeddings(
+                    assumptions,
+                    assumption_tokenizer,
+                    assumption_model,
+                    embedding_device,
+                    embedding_batch_size,
+                )
                 if history_embs is None or len(history_embs) == 0:
                     new_n, current_new = len(assumptions), list(assumptions)
+                    current_new_indices = list(range(len(assumptions)))
                 else:
                     sims = history_embs @ current_embs.T
                     for idx, text in enumerate(assumptions):
@@ -187,8 +225,9 @@ def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progr
                         if max_sim < assumption_similarity_threshold:
                             new_n += 1
                             current_new.append(text)
-            duration = sec(turn)
-            g = gap(turn, nxt) if nxt else float("nan")
+                            current_new_indices.append(idx)
+            duration = turn_duration_seconds(turn)
+            g = gap_seconds(turn, nxt) if nxt else float("nan")
             rows.append(
                 {
                     "episode_id": episode_id,
@@ -207,7 +246,7 @@ def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progr
                 }
             )
             if current_new:
-                new_embs = assumption_embeddings(current_new, assumption_tokenizer, assumption_model)
+                new_embs = current_embs[np.asarray(current_new_indices, dtype=int)]
                 history_embs = new_embs if history_embs is None else np.vstack([history_embs, new_embs])
             if math.isfinite(g) and g >= 0:
                 gap_sum += g
@@ -418,6 +457,96 @@ def save_csv(path, rows, fields):
             writer.writerow({k: ("" if isinstance(row.get(k), float) and not math.isfinite(row.get(k)) else row.get(k)) for k in fields})
 
 
+def write_turn_level_feature_csv(rows, output_dir):
+    save_csv(output_dir / "exp5_turn_level_features.csv", rows, TURN_LEVEL_FEATURE_FIELDS)
+
+
+def build_base_summary(rows, output_dir, input_dir, num_episodes, silence_gap, args, show_progress, selected_episode_file_count, candidate_episode_file_count):
+    response_counts = Counter(str(r.get("next_response_type")) for r in rows if r.get("next_response_type"))
+    return {
+        "input_dir": str(input_dir),
+        "output_dir": str(output_dir),
+        "num_episodes": int(num_episodes),
+        "num_turn_rows": len(rows),
+        "selected_episode_file_count": int(selected_episode_file_count),
+        "candidate_episode_file_count": int(candidate_episode_file_count),
+        "silence_gap_threshold_sec": silence_gap,
+        "silence_gap_threshold_source": (
+            "provided"
+            if args.silence_gap_threshold_sec is not None
+            else "computed_from_input"
+        ),
+        "silence_gap_quantile": args.silence_gap_quantile,
+        "min_silence_gap_sec": args.min_silence_gap,
+        "embedding_model_name": args.embedding_model_name,
+        "embedding_batch_size": int(args.embedding_batch_size),
+        "embedding_device": "cuda" if torch.cuda.is_available() else "cpu",
+        "num_patches": int(args.num_patches),
+        "patch_index": int(args.patch_index),
+        "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
+        "bayes_multinomial_prior_sd": args.bayes_multinomial_prior_sd,
+        "bayes_multinomial_draws": args.bayes_multinomial_draws,
+        "bayes_linear_draws": args.bayes_linear_draws,
+        "bayes_linear_prior_precision_scale": args.bayes_linear_prior_precision_scale,
+        "bayes_linear_prior_a0": args.bayes_linear_prior_a0,
+        "bayes_linear_prior_b0": args.bayes_linear_prior_b0,
+        "assumption_sharedness_method": {
+            "method": "Selected embedding model cosine similarity against prior episode assumptions",
+            "model": args.embedding_model_name,
+            "default_model": DEFAULT_EMBEDDING_MODEL_NAME,
+            "recommended_qwen_model": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
+            "similarity_threshold": args.assumption_similarity_threshold,
+        },
+        "response_type_model": None,
+        "response_delay_regression": None,
+        "response_delay_regression_distribution_checks": {},
+        "response_type_counts": {k: int(v) for k, v in response_counts.items()},
+        "tqdm_enabled": show_progress,
+        "png_outputs": [],
+    }
+
+
+def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, args, show_progress, selected_episode_file_count, candidate_episode_file_count):
+    write_turn_level_feature_csv(rows, output_dir)
+    summary = build_base_summary(
+        rows,
+        output_dir,
+        input_dir,
+        num_episodes,
+        silence_gap,
+        args,
+        show_progress,
+        selected_episode_file_count,
+        candidate_episode_file_count,
+    )
+    summary.update(
+        {
+            "analysis_stage": "patch_feature_extraction_only",
+            "deferred_outputs": [
+                "exp5_probability_curves.csv",
+                "exp5_logit_coefficients.csv",
+                "exp5_response_delay_regression_coefficients.csv",
+                "exp5_response_delay_regression_summary.json",
+                "exp5_response_type_counts.csv",
+                "exp5_probability_curves.png",
+                "exp5_assumption_count_vs_response_time.png",
+                "exp5_implicature_load_vs_response_time.png",
+                "exp5_load_ridge_by_response_type.png",
+            ],
+            "notes": [
+                "Patch mode writes turn-level features only.",
+                "Fit the response models and create the figures by running merge_exp5_patches.py after all patches finish.",
+            ],
+        }
+    )
+    (output_dir / "exp5_summary.json").write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2, default=json_default),
+        encoding="utf-8",
+    )
+    print(json.dumps(summary, ensure_ascii=False, indent=2, default=json_default))
+    return summary
+
+
 def save_plot_curve(rows, out_path):
     if not rows:
         return False
@@ -482,15 +611,37 @@ def save_ridge(rows, out_path):
         return False
     try:
         all_vals = np.concatenate(list(by_cls.values()))
-        xmin, xmax = robust_xlim(all_vals, cap=40.0)
+        transformed_all_vals = np.log1p(all_vals)
+        xmin, xmax = robust_xlim(transformed_all_vals, lo=0.0, hi=0.995)
         order = [c for c in RESPONSE_CLASSES if c in by_cls]
         fig, axes = plt.subplots(len(order), 1, figsize=(11, 1.8 * len(order)), sharex=True)
         axes = [axes] if len(order) == 1 else axes
         colors = sns.color_palette("Set2", len(order))
         for i, cls in enumerate(order):
-            ax, vals = axes[i], np.clip(by_cls[cls], xmin, xmax)
-            sns.kdeplot(x=vals, fill=True, alpha=0.7, linewidth=1.0, color=colors[i], ax=ax)
-            sns.kdeplot(x=vals, fill=False, linewidth=1.0, color="black", ax=ax)
+            ax = axes[i]
+            transformed_vals = np.log1p(by_cls[cls])
+            plot_vals = transformed_vals[(transformed_vals >= xmin) & (transformed_vals <= xmax)]
+            if len(plot_vals) < 5:
+                plot_vals = transformed_vals
+            sns.kdeplot(
+                x=plot_vals,
+                fill=True,
+                alpha=0.7,
+                linewidth=1.0,
+                color=colors[i],
+                cut=0,
+                clip=(xmin, xmax),
+                ax=ax,
+            )
+            sns.kdeplot(
+                x=plot_vals,
+                fill=False,
+                linewidth=1.0,
+                color="black",
+                cut=0,
+                clip=(xmin, xmax),
+                ax=ax,
+            )
             ax.set_ylabel(cls, rotation=0, ha="right", va="center", labelpad=35)
             ax.set_yticks([])
             ax.grid(axis="x", alpha=0.2)
@@ -499,8 +650,13 @@ def save_ridge(rows, out_path):
             ax.spines["left"].set_visible(False)
             ax.set_xlim(xmin, xmax)
             ax.set_xlabel("" if i < len(order) - 1 else "Implicature Load L")
-        fig.suptitle("Ridge Plot: Implicature Load Distribution by Response Type", y=1.02)
-        plt.tight_layout()
+        raw_tick_values = np.asarray([0, 5, 10, 20, 40, 80, 160, 320, 640, 1280], dtype=float)
+        transformed_tick_values = np.log1p(raw_tick_values)
+        visible_ticks = transformed_tick_values[(transformed_tick_values >= xmin) & (transformed_tick_values <= xmax)]
+        visible_tick_labels = [str(int(round(np.expm1(value)))) for value in visible_ticks]
+        axes[-1].set_xticks(visible_ticks)
+        axes[-1].set_xticklabels(visible_tick_labels)
+        fig.subplots_adjust(bottom=0.12, top=0.98)
         plt.savefig(out_path, dpi=220, bbox_inches="tight")
         plt.close()
         return True
@@ -563,10 +719,13 @@ def build_arg_parser():
     ap.add_argument("--input_dir", default="data/conversation_moves_labeled")
     ap.add_argument("--output_dir", default="experiments/exp5_processing_load/results")
     ap.add_argument("--embedding_model_name", default=DEFAULT_EMBEDDING_MODEL_NAME)
+    ap.add_argument("--embedding_batch_size", type=int, default=DEFAULT_EMBEDDING_BATCH_SIZE)
     ap.add_argument("--num_patches", type=int, default=1)
     ap.add_argument("--patch_index", type=int, default=0)
+    ap.add_argument("--episodes_per_patch", type=int, default=None)
     ap.add_argument("--silence_gap_quantile", type=float, default=0.95)
     ap.add_argument("--min_silence_gap", type=float, default=5.0)
+    ap.add_argument("--silence_gap_threshold_sec", type=float, default=None)
     ap.add_argument("--backchannel_agree_duration_max", type=float, default=4.0)
     ap.add_argument("--backchannel_agree_words_max", type=int, default=12)
     ap.add_argument("--assumption_similarity_threshold", type=float, default=0.80)
@@ -674,7 +833,7 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
                 "coefficients": {str(r["term"]): r["posterior_mean"] for r in response_delay_regression_coeffs if r.get("term") is not None},
             }
 
-    save_csv(output_dir / "exp5_turn_level_features.csv", rows, ["episode_id", "turn_idx", "duration_sec", "assumption_count_in_turn", "explicit_statement_count", "new_assumption_count", "implicature_load", "response_delay_at_time_n", "gap_to_next_sec", "average_response_time_0_to_n_minus_1", "next_response_type", "next_turn_type_label", "next_conversation_move_label"])
+    write_turn_level_feature_csv(rows, output_dir)
     if curve_rows:
         save_csv(output_dir / "exp5_probability_curves.csv", curve_rows, ["implicature_load"] + [k for k in curve_rows[0] if k != "implicature_load"])
     if coef_rows:
@@ -682,7 +841,7 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     if response_delay_regression_coeffs:
         save_csv(output_dir / "exp5_response_delay_regression_coefficients.csv", response_delay_regression_coeffs, ["term", "posterior_mean", "posterior_sd"])
     if response_delay_regression is not None:
-        (output_dir / "exp5_response_delay_regression_summary.json").write_text(json.dumps({"regression": response_delay_regression, "distribution_checks": response_delay_distribution_checks}, ensure_ascii=False, indent=2, default=jdefault), encoding="utf-8")
+        (output_dir / "exp5_response_delay_regression_summary.json").write_text(json.dumps({"regression": response_delay_regression, "distribution_checks": response_delay_distribution_checks}, ensure_ascii=False, indent=2, default=json_default), encoding="utf-8")
 
     response_counts = Counter(str(r.get("next_response_type")) for r in rows if r.get("next_response_type"))
     save_csv(output_dir / "exp5_response_type_counts.csv", [{"response_type": k, "count": v} for k, v in sorted(response_counts.items())], ["response_type", "count"])
@@ -697,51 +856,40 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     if save_ridge(rows, output_dir / "exp5_load_ridge_by_response_type.png"):
         png_outputs.append("exp5_load_ridge_by_response_type.png")
 
-    summary = {
-        "input_dir": str(input_dir),
-        "output_dir": str(output_dir),
-        "num_episodes": int(num_episodes),
-        "num_turn_rows": len(rows),
-        "silence_gap_threshold_sec": silence_gap,
-        "silence_gap_quantile": args.silence_gap_quantile,
-        "min_silence_gap_sec": args.min_silence_gap,
-        "embedding_model_name": args.embedding_model_name,
-        "num_patches": int(args.num_patches),
-        "patch_index": int(args.patch_index),
-        "bayes_multinomial_prior_sd": args.bayes_multinomial_prior_sd,
-        "bayes_multinomial_draws": args.bayes_multinomial_draws,
-        "bayes_linear_draws": args.bayes_linear_draws,
-        "bayes_linear_prior_precision_scale": args.bayes_linear_prior_precision_scale,
-        "bayes_linear_prior_a0": args.bayes_linear_prior_a0,
-        "bayes_linear_prior_b0": args.bayes_linear_prior_b0,
-        "assumption_sharedness_method": {
-            "method": "Selected embedding model cosine similarity against prior episode assumptions",
-            "model": args.embedding_model_name,
-            "default_model": DEFAULT_EMBEDDING_MODEL_NAME,
-            "recommended_qwen_model": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
-            "similarity_threshold": args.assumption_similarity_threshold,
-        },
-        "assumption_count_vs_response_time_correlation": corr_stats(assumption_x, assumption_y),
-        "implicature_load_vs_response_time_correlation": corr_stats(load_x, load_y),
-        "response_type_model": None if not model else {"model_family": "bayesian_multinomial_logit_laplace", "prior_sd": model["prior_sd"], "posterior_draws": model["posterior_draws"], "reference_class": model["reference_class"], "approximation": model["approximation"]},
-        "response_delay_model_specification": {
-            "active_spec": "primary_spec",
-            "description": (
-                "Experiment 5 primary response-delay specification uses implicature_load and "
-                "average_response_time_0_to_n_minus_1 only."
-            ),
-            "excluded_controls": ["explicit_statement_count"],
-        },
-        "response_delay_regression": response_delay_regression,
-        "response_delay_regression_distribution_checks": response_delay_distribution_checks,
-        "response_type_counts": {k: int(v) for k, v in response_counts.items()},
-        "tqdm_enabled": show_progress,
-        "png_outputs": png_outputs,
-    }
+    summary = build_base_summary(
+        rows,
+        output_dir,
+        input_dir,
+        num_episodes,
+        silence_gap,
+        args,
+        show_progress,
+        0,
+        0,
+    )
+    summary.update(
+        {
+            "analysis_stage": "full_analysis",
+            "assumption_count_vs_response_time_correlation": corr_stats(assumption_x, assumption_y),
+            "implicature_load_vs_response_time_correlation": corr_stats(load_x, load_y),
+            "response_type_model": None if not model else {"model_family": "bayesian_multinomial_logit_laplace", "prior_sd": model["prior_sd"], "posterior_draws": model["posterior_draws"], "reference_class": model["reference_class"], "approximation": model["approximation"]},
+            "response_delay_model_specification": {
+                "active_spec": "primary_spec",
+                "description": (
+                    "Experiment 5 primary response-delay specification uses implicature_load and "
+                    "average_response_time_0_to_n_minus_1 only."
+                ),
+                "excluded_controls": ["explicit_statement_count"],
+            },
+            "response_delay_regression": response_delay_regression,
+            "response_delay_regression_distribution_checks": response_delay_distribution_checks,
+            "png_outputs": png_outputs,
+        }
+    )
     if summary_extra:
         summary.update(summary_extra)
-    (output_dir / "exp5_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, default=jdefault), encoding="utf-8")
-    print(json.dumps(summary, ensure_ascii=False, indent=2, default=jdefault))
+    (output_dir / "exp5_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, default=json_default), encoding="utf-8")
+    print(json.dumps(summary, ensure_ascii=False, indent=2, default=json_default))
     return summary
 
 
@@ -749,7 +897,7 @@ def main():
     ap = build_arg_parser()
     args = ap.parse_args()
 
-    validate_patch_args(args.num_patches, args.patch_index)
+    validate_patch_args(args.num_patches, args.patch_index, args.episodes_per_patch)
     input_dir = Path(args.input_dir)
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
     output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
@@ -757,7 +905,7 @@ def main():
     show_progress = not args.no_tqdm
 
     all_paths = collect_episode_paths(input_dir)
-    selected_paths = select_patch_paths(all_paths, args.num_patches, args.patch_index)
+    selected_paths = select_patch_paths(all_paths, args.num_patches, args.patch_index, args.episodes_per_patch)
     if not selected_paths:
         raise RuntimeError(
             f"No episode files selected for patch {args.patch_index} out of {args.num_patches}. "
@@ -768,12 +916,15 @@ def main():
     if args.num_patches == 1:
         episodes, gaps = load_episodes_from_paths(selected_paths, show_progress, "Loading episodes")
     else:
-        _, gaps = load_episodes_from_paths(all_paths, False, "Scanning gaps")
         episodes, _ = load_episodes_from_paths(selected_paths, show_progress, "Loading selected episodes")
+        gaps = np.asarray([], dtype=float)
 
-    assumption_tokenizer, assumption_model = assumption_embedder(args.embedding_model_name)
-    nonneg = gaps[np.isfinite(gaps) & (gaps >= 0)]
-    silence_gap = max(float(args.min_silence_gap), float(np.quantile(nonneg, args.silence_gap_quantile))) if len(nonneg) else float(args.min_silence_gap)
+    assumption_tokenizer, assumption_model, embedding_device = assumption_embedder(args.embedding_model_name)
+    if args.silence_gap_threshold_sec is not None:
+        silence_gap = float(args.silence_gap_threshold_sec)
+    else:
+        nonneg = gaps[np.isfinite(gaps) & (gaps >= 0)]
+        silence_gap = max(float(args.min_silence_gap), float(np.quantile(nonneg, args.silence_gap_quantile))) if len(nonneg) else float(args.min_silence_gap)
     rows = build_rows(
         episodes,
         silence_gap,
@@ -783,7 +934,26 @@ def main():
         args.assumption_similarity_threshold,
         assumption_tokenizer,
         assumption_model,
+        embedding_device,
+        args.embedding_batch_size,
     )
+    summary_extra = {
+        "selected_episode_file_count": int(len(selected_paths)),
+        "candidate_episode_file_count": int(len(all_paths)),
+    }
+    if args.num_patches > 1:
+        write_patch_outputs(
+            rows,
+            output_dir,
+            input_dir,
+            len(episodes),
+            silence_gap,
+            args,
+            show_progress,
+            int(len(selected_paths)),
+            int(len(all_paths)),
+        )
+        return
     analyze_rows(
         rows=rows,
         output_dir=output_dir,
@@ -792,10 +962,7 @@ def main():
         silence_gap=silence_gap,
         args=args,
         show_progress=show_progress,
-        summary_extra={
-            "selected_episode_file_count": int(len(selected_paths)),
-            "candidate_episode_file_count": int(len(all_paths)),
-        },
+        summary_extra=summary_extra,
     )
 
 

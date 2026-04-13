@@ -1,0 +1,277 @@
+{
+  "input_dir": "data/conversation_moves_labeled",
+  "output_dir": "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B",
+  "num_episodes": 19990,
+  "num_turn_rows": 481372,
+  "selected_episode_file_count": 20189,
+  "candidate_episode_file_count": 20189,
+  "silence_gap_threshold_sec": 41.90576670671961,
+  "silence_gap_threshold_source": "computed_from_input",
+  "silence_gap_quantile": 0.95,
+  "min_silence_gap_sec": 5.0,
+  "embedding_model_name": "Qwen/Qwen3-Embedding-4B",
+  "embedding_batch_size": 32,
+  "embedding_device": "cuda",
+  "num_patches": 21,
+  "patch_index": -1,
+  "episodes_per_patch": 1000,
+  "bayes_multinomial_prior_sd": 2.5,
+  "bayes_multinomial_draws": 1200,
+  "bayes_linear_draws": 4000,
+  "bayes_linear_prior_precision_scale": 0.1,
+  "bayes_linear_prior_a0": 2.0,
+  "bayes_linear_prior_b0": 1.0,
+  "assumption_sharedness_method": {
+    "method": "Selected embedding model cosine similarity against prior episode assumptions",
+    "model": "Qwen/Qwen3-Embedding-4B",
+    "default_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "recommended_qwen_model": "Qwen/Qwen3-Embedding-4B",
+    "similarity_threshold": 0.8
+  },
+  "response_type_model": {
+    "model_family": "bayesian_multinomial_logit_laplace",
+    "prior_sd": 2.5,
+    "posterior_draws": 1200,
+    "reference_class": "Substantive",
+    "approximation": "laplace_map_gaussian_posterior"
+  },
+  "response_delay_regression": {
+    "specification": "primary_spec",
+    "specification_description": "Primary Experiment 5 response-delay model aligned with the stated setup: implicature_load plus prior response-time baseline, without explicit_statement_count.",
+    "requested_formula": "response_delay_at_time_n ~ implicature_load + average_response_time_0_to_n_minus_1",
+    "fitted_formula": "log1p(response_delay_at_time_n) ~ implicature_load + log1p(average_response_time_0_to_n_minus_1)",
+    "n": 218882,
+    "num_parameters": 3,
+    "r_squared": 0.25830126545447074,
+    "adjusted_r_squared": 0.25829448820553824,
+    "rmse_on_modeled_scale": 1.1229892742387457,
+    "residual_skewness": 0.48949602306490664,
+    "model_family": "bayesian_linear_regression_normal_inverse_gamma",
+    "posterior_df": 218886.0,
+    "sigma": {
+      "term": "sigma",
+      "posterior_mean": 1.122963766337651,
+      "posterior_sd": 0.001671773920527158
+    },
+    "prior": {
+      "beta_prior_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "beta_prior_precision_diagonal": [
+        1e-06,
+        1.5682189318730987e-05,
+        0.08757225922243976
+      ],
+      "sigma2_prior_a0": 2.0,
+      "sigma2_prior_b0": 1.0
+    },
+    "transform_selection": {
+      "selected_model_id": "log1p__raw__log1p",
+      "selection_rule": "highest adjusted_r_squared, tie-broken by lowest absolute residual skewness",
+      "candidates": [
+        {
+          "outcome_transform": "log1p",
+          "outcome_name": "log1p(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.25829448820553824,
+          "r_squared": 0.25830126545447074,
+          "rmse_on_modeled_scale": 1.1229892742387457,
+          "residual_skewness": 0.48949602306490664
+        },
+        {
+          "outcome_transform": "asinh",
+          "outcome_name": "asinh(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.2537382601219331,
+          "r_squared": 0.25374507900287646,
+          "rmse_on_modeled_scale": 1.3378313389085021,
+          "residual_skewness": 0.3568355384956994
+        },
+        {
+          "outcome_transform": "sqrt",
+          "outcome_name": "sqrt(response_delay_at_time_n)",
+          "adjusted_r_squared": 0.2493778496034208,
+          "r_squared": 0.24938470832711446,
+          "rmse_on_modeled_scale": 2.3166159890055416,
+          "residual_skewness": 3.6930847439483316
+        },
+        {
+          "outcome_transform": "raw",
+          "outcome_name": "response_delay_at_time_n",
+          "adjusted_r_squared": 0.10213984794967934,
+          "r_squared": 0.10214805204370359,
+          "rmse_on_modeled_scale": 49.868463806874985,
+          "residual_skewness": 30.318098976722563
+        }
+      ]
+    },
+    "operationalization": {
+      "response_delay_at_time_n": "gap_to_next_sec",
+      "average_response_time_0_to_n_minus_1": "within-episode mean of prior non-negative response delays before turn n"
+    },
+    "coefficients": {
+      "Intercept": 0.3004534968204928,
+      "implicature_load": 0.0003827231191723108,
+      "log1p(average_response_time_0_to_n_minus_1)": 0.6185344466817243
+    }
+  },
+  "response_delay_regression_distribution_checks": {
+    "response_delay_at_time_n": {
+      "transform": "log1p",
+      "raw": {
+        "n": 218882,
+        "mean": 11.196524377948716,
+        "std": 52.6284584461677,
+        "min": 0.0,
+        "median": 1.1400000000000006,
+        "q90": 25.52296228884042,
+        "q99": 125.1282222179537,
+        "max": 5733.4,
+        "p_zero": 0.17254502425964674,
+        "skewness": 27.903211847031265,
+        "q99_over_median": 109.76159843680144,
+        "supports_log1p": true
+      },
+      "modeled": {
+        "n": 218882,
+        "mean": 1.275358161133761,
+        "std": 1.3039437679855814,
+        "min": 0.0,
+        "median": 0.7608058290337604,
+        "q90": 3.2780108591931487,
+        "q99": 4.8372990241688845,
+        "max": 8.654238403340557,
+        "p_zero": 0.17254502425964674,
+        "skewness": 1.080058587843503,
+        "q99_over_median": 6.3581256078339425,
+        "supports_log1p": true
+      }
+    },
+    "implicature_load": {
+      "transform": "raw",
+      "raw": {
+        "n": 218882,
+        "mean": 32.677880029296446,
+        "std": 79.85399601570884,
+        "min": 0.0033333333333333,
+        "median": 15.196428425784326,
+        "q90": 70.25,
+        "q99": 261.4238000000001,
+        "max": 4253.89,
+        "p_zero": 0.0,
+        "skewness": 16.18835505547482,
+        "q99_over_median": 17.202976428094967,
+        "supports_log1p": true
+      },
+      "modeled": {
+        "n": 218882,
+        "mean": 32.677880029296446,
+        "std": 79.85399601570884,
+        "min": 0.0033333333333333,
+        "median": 15.196428425784326,
+        "q90": 70.25,
+        "q99": 261.4238000000001,
+        "max": 4253.89,
+        "p_zero": 0.0,
+        "skewness": 16.18835505547482,
+        "q99_over_median": 17.202976428094967,
+        "supports_log1p": true
+      }
+    },
+    "average_response_time_0_to_n_minus_1": {
+      "transform": "log1p",
+      "raw": {
+        "n": 218882,
+        "mean": 9.616121155068596,
+        "std": 39.706308069009864,
+        "min": 0.0,
+        "median": 3.258933493567471,
+        "q90": 18.047915408672466,
+        "q99": 91.3399153909665,
+        "max": 2605.144926782782,
+        "p_zero": 0.03171115030016173,
+        "skewness": 19.760396113595032,
+        "q99_over_median": 28.027548144586106,
+        "supports_log1p": true
+      },
+      "modeled": {
+        "n": 218882,
+        "mean": 1.5559446590871515,
+        "std": 1.068603821671869,
+        "min": 0.0,
+        "median": 1.4490187752949724,
+        "q90": 2.9469576682117076,
+        "q99": 4.525476498068369,
+        "max": 7.865627368871684,
+        "p_zero": 0.03171115030016173,
+        "skewness": 0.7567506709863282,
+        "q99_over_median": 3.123131718667435,
+        "supports_log1p": true
+      }
+    }
+  },
+  "response_type_counts": {
+    "Substantive": 312391,
+    "Clarification": 78781,
+    "Silence/Abandonment": 59879,
+    "Backchannel": 30321
+  },
+  "tqdm_enabled": true,
+  "png_outputs": [
+    "exp5_probability_curves.png",
+    "exp5_assumption_count_vs_response_time.png",
+    "exp5_implicature_load_vs_response_time.png",
+    "exp5_load_ridge_by_response_type.png"
+  ],
+  "analysis_stage": "full_analysis",
+  "assumption_count_vs_response_time_correlation": {
+    "n": 452871,
+    "pearson_r": 0.09560275786430228,
+    "pearson_p_approx": 0.0,
+    "spearman_rho": 0.1651758042902322,
+    "spearman_p_approx": 0.0
+  },
+  "implicature_load_vs_response_time_correlation": {
+    "n": 237927,
+    "pearson_r": 0.09272523761604445,
+    "pearson_p_approx": 0.0,
+    "spearman_rho": 0.05398973761201456,
+    "spearman_p_approx": 0.0
+  },
+  "response_delay_model_specification": {
+    "active_spec": "primary_spec",
+    "description": "Experiment 5 primary response-delay specification uses implicature_load and average_response_time_0_to_n_minus_1 only.",
+    "excluded_controls": [
+      "explicit_statement_count"
+    ]
+  },
+  "patch_merge": {
+    "merged_patch_count": 21,
+    "num_patches": 21,
+    "episodes_per_patch": 1000,
+    "patch_dirs": [
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0000_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0001_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0002_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0003_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0004_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0005_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0006_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0007_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0008_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0009_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0010_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0011_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0012_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0013_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0014_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0015_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0016_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0017_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0018_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0019_of_0021",
+      "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B/patches/patch_0020_of_0021"
+    ],
+    "model_output_dir": "experiments/exp5_processing_load/results/Qwen__Qwen3-Embedding-4B"
+  }
+}

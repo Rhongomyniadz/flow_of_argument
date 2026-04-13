@@ -12,8 +12,13 @@ set -euo pipefail
 
 NUM_PATCHES="${NUM_PATCHES:?Set NUM_PATCHES in the sbatch environment.}"
 PATCH_INDEX="${SLURM_ARRAY_TASK_ID:?This script is intended to run as a Slurm job array.}"
+EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
 EMBEDDING_MODEL_NAME="${EMBEDDING_MODEL_NAME:-Qwen/Qwen3-Embedding-4B}"
+EMBEDDING_BATCH_SIZE="${EMBEDDING_BATCH_SIZE:-32}"
 OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp5_processing_load/results}"
+SILENCE_GAP_QUANTILE="${SILENCE_GAP_QUANTILE:-0.95}"
+MIN_SILENCE_GAP="${MIN_SILENCE_GAP:-5.0}"
+SILENCE_GAP_THRESHOLD_SEC="${SILENCE_GAP_THRESHOLD_SEC:-}"
 NO_TQDM="${NO_TQDM:-1}"
 INPUT_DIR="${INPUT_DIR:-data/conversation_moves_labeled}"
 
@@ -26,6 +31,11 @@ python -u experiments/exp5_processing_load/exp5.py \
   --input_dir "${INPUT_DIR}" \
   --output_dir "${OUTPUT_DIR}" \
   --embedding_model_name "${EMBEDDING_MODEL_NAME}" \
+  --embedding_batch_size "${EMBEDDING_BATCH_SIZE}" \
   --num_patches "${NUM_PATCHES}" \
   --patch_index "${PATCH_INDEX}" \
+  --episodes_per_patch "${EPISODES_PER_PATCH}" \
+  --silence_gap_quantile "${SILENCE_GAP_QUANTILE}" \
+  --min_silence_gap "${MIN_SILENCE_GAP}" \
+  --silence_gap_threshold_sec "${SILENCE_GAP_THRESHOLD_SEC}" \
   "${EXTRA_ARGS[@]}"

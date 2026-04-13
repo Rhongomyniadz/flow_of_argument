@@ -14,6 +14,7 @@ from statsmodels.genmod.bayes_mixed_glm import BinomialBayesMixedGLM
 from tqdm.auto import tqdm
 
 matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 
@@ -142,7 +143,7 @@ def normalize_role(turn: Dict) -> str:
     return role if role in ROLE_ORDER else "unknown"
 
 
-def word_count(turn: Dict) -> int:
+def turn_word_count(turn: Dict) -> int:
     explicit = safe_float(turn.get("wordCount", turn.get("word_count")))
     if math.isfinite(explicit):
         return max(0, int(round(explicit)))
@@ -261,7 +262,7 @@ def build_rows(
 
             next_meta = classify_next_turn(turn, next_turn)
             turn_idx = safe_int(turn.get("turn_idx"), idx)
-            wc = word_count(turn)
+            wc = turn_word_count(turn)
             violation_counts[(role, violation)] += 1
             violation_source_counts[violation_source] += 1
 

@@ -1,0 +1,330 @@
+{
+  "audit_name": "maxim_violation_precision_audit",
+  "audit_date": "2026-04-01",
+  "auditor": "assistant_manual_review",
+  "input_root": "data/maxim_violations_labeled",
+  "label_scheme": "exp7_grounding_v1",
+  "audit_scope": "preliminary precision-oriented spot check on the completed full-dataset maxim-violation outputs",
+  "population_counts": {
+    "No Violation": 484634,
+    "Quantity": 428,
+    "Relation": 397,
+    "Manner": 898
+  },
+  "methodology": {
+    "description": "A compact manual audit of predicted positive labels using only the previous turn and current turn, matching the local-context decision rule used by the labeler.",
+    "sample_design": "Small assistant-reviewed spot check of 10 examples per label drawn from the completed full run and inspected directly from the saved JSON outputs.",
+    "decision_rule": "A prediction is marked correct only when the current turn plausibly satisfies the Gricean violation label better than the alternatives given the immediate previous turn.",
+    "limitations": [
+      "This is not a gold-standard human annotation study.",
+      "The reviewed sample is small and should be treated as a preliminary estimate rather than a final benchmark.",
+      "Confidence intervals are omitted because the sample is tiny and the primary goal is directional quality assessment."
+    ]
+  },
+  "label_results": {
+    "Quantity": {
+      "reviewed_n": 10,
+      "correct_n": 3,
+      "estimated_precision": 0.3,
+      "overall_assessment": "Mixed. A few cases look like genuine under-informative replies, but many predictions are simply short numeric or fragment answers that still adequately respond."
+    },
+    "Relation": {
+      "reviewed_n": 10,
+      "correct_n": 1,
+      "estimated_precision": 0.1,
+      "overall_assessment": "Weak. Most reviewed cases were fragmentary continuation, banter, or rough topical transition rather than a true relevance breakdown."
+    },
+    "Manner": {
+      "reviewed_n": 10,
+      "correct_n": 4,
+      "estimated_precision": 0.4,
+      "overall_assessment": "Better than Relation, but still noisy. The strongest positives are genuinely garbled transcript fragments; many remaining cases are still recoverable spoken shorthand."
+    }
+  },
+  "reviewed_examples": {
+    "Quantity": [
+      {
+        "category": "business",
+        "episode_file": "009___Angela_Ostroff___Social_Media_Marketing.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "correct",
+        "notes": "Very short answer to a direct question. Plausibly under-informative.",
+        "prev_turn_text": "do?",
+        "current_turn_text": "Sales."
+      },
+      {
+        "category": "business",
+        "episode_file": "02._The_Six_Traits_of_Top_Producers_with_Michael_Baker_of_Real_Producer_Magazine.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "Responsive numeric answer. Brief, but not a clear quantity violation.",
+        "prev_turn_text": "okay all right so just around two years so I mean again awesome and I think so far has been very good and you've been the magazine one from a very thin magazine when you first started where you just got my edition a coup",
+        "current_turn_text": "over 200 it's probably closer to 250 right now right yeah"
+      },
+      {
+        "category": "commentary",
+        "episode_file": "0014_-QUALITY_CONTENT_W__SIMON_LUCKHOFF.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "Looks more like a fragmentary continuation or transcript cut than a quantity problem.",
+        "prev_turn_text": "must say I'm off the bat. I'm very, very, very grateful. I feel very supportive of what I do. They've never said you're not allowed to do what you're doing. I've always been very supportive of what I do. But I haven't re",
+        "current_turn_text": ". Studying."
+      },
+      {
+        "category": "commentary",
+        "episode_file": "47-_We_ll_Be_Back_on_August_11th.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "correct",
+        "notes": "Minimal reply where stronger engagement is locally expected.",
+        "prev_turn_text": ". I wonder if Stephanie recognizes you and regrets that now",
+        "current_turn_text": ". Maybe"
+      },
+      {
+        "category": "business",
+        "episode_file": "Vapor_4_with_Tibor_Bodecs.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "A terse answer, but still a usable answer to the direct support question.",
+        "prev_turn_text": "How about something I'm working on this morning, CloudKit? How's CloudKit support and vapor? Anything",
+        "current_turn_text": "? Nothing yet so far."
+      },
+      {
+        "category": "political",
+        "episode_file": "73271.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "Directly addresses the question. Not obviously under- or over-informative.",
+        "prev_turn_text": "how can that, I mean, if the Constitution says you can't not pay your bills, How can those things happen? Discretionary",
+        "current_turn_text": "spending can be cut."
+      },
+      {
+        "category": "commentary",
+        "episode_file": "Is_the_UK_going_down_the_toilet.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "Short but straightforward numeric answer.",
+        "prev_turn_text": "your thoughts are on public toilets. So this is in the United Kingdom. How many public toilets are currently available in the United Kingdom? Just to actually exist, not necessarily open. Oh, it did exist.",
+        "current_turn_text": "I would say approximately 20,000."
+      },
+      {
+        "category": "political",
+        "episode_file": "91211.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "Simple factual answer, not a clear quantity violation.",
+        "prev_turn_text": "I am so happy to hear that. First of all, I'm happy to hear that 10 years later, the four month life sentence you got was wrong. Number one and",
+        "current_turn_text": "28 days."
+      },
+      {
+        "category": "sports",
+        "episode_file": "Ep._11__Jamal_Adams_Trade_Request_and_Players_Coaches_on_the_Hot_Seat_in_2020.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "correct",
+        "notes": "Very short follow-up after a high-engagement listing sequence. Plausibly under-informative.",
+        "prev_turn_text": "isky. Pete Mahomes. All right . You got him. There's two Pete Mahomes. Tom Brady. Wow. That was impressive. I was going to go with five, but I figured that would have been maybe too many. But Rob Gronkowski. There you go",
+        "current_turn_text": "more for five."
+      },
+      {
+        "category": "religion",
+        "episode_file": "0151_Pinkie_The_Pig_Podcast__History_of_The_Pretzel.json",
+        "predicted_label": "Quantity",
+        "assistant_judgment": "incorrect",
+        "notes": "This is a responsive correction, not a quantity problem.",
+        "prev_turn_text": "know. So then you looked at it and it looked like a child crossing its arms in prayer. That's beautiful. Right, I mean, and this goes back to Italy, but there's no real proof of it. There's no like written or, you know,",
+        "current_turn_text": "No, that'd be 111"
+      }
+    ],
+    "Relation": [
+      {
+        "category": "business",
+        "episode_file": "001____From_Dyslexia_To_Reading_800_Words_Per_Minute___Cliff_at_Speechify.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Looks like a continuation of the list of mentor types, not a genuine relevance failure.",
+        "prev_turn_text": ". And now, so then the next set of mentors for me were books, right? So I read about quarter biographies, quarter fantasy, quarter like science, psychology, sci-fi, business self-improvement, and then the quarter of like",
+        "current_turn_text": "Artists, musicians"
+      },
+      {
+        "category": "business",
+        "episode_file": "033___Mike_Explains_the_Economy.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Jokey continuation, not a strong relevance breakdown.",
+        "prev_turn_text": "you broke the microphone. All right. Well, we have certainly gotten well off track. Yeah ,",
+        "current_turn_text": "that's my goal. A mission"
+      },
+      {
+        "category": "business",
+        "episode_file": "051__David_Carroll_-_COO__Bodycare_Workplace_Solutions.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Fragmentary and awkward, but not clearly irrelevant.",
+        "prev_turn_text": "got it. So, exercise physiology and that's a more of a technical type of degree, I think, and then you progressed to being a physiotherapist and started as a technical, hands-on, clinical physiotherapist. Did I get that,",
+        "current_turn_text": "B-run? Yeah, that's great."
+      },
+      {
+        "category": "business",
+        "episode_file": "08__Addressing_the_Transition_Dilemma_-_Joe_Bute__Hollymead_Capital.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "This looks like a concise naming move, not a relevance violation.",
+        "prev_turn_text": ". - Yeah, you're right. And I think there are some surveys out there about satisfaction of owners after a sale and the percentage that say they weren't satisfied with the outcome is higher than you'd think. And so maybe",
+        "current_turn_text": "- Seller remorse"
+      },
+      {
+        "category": "business",
+        "episode_file": "15_Growth_Mindset_with_Jenny_Back.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Playful banter before the actual answer. Not a strong Gricean relevance failure.",
+        "prev_turn_text": "kind of questions",
+        "current_turn_text": ". The first one is it's going to be your ATM passcode. So I'm just kidding. Okay, here we go. What's your most unusual talent? Oh, I've got"
+      },
+      {
+        "category": "political",
+        "episode_file": "45379.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "correct",
+        "notes": "Does not answer the concrete question about campaign help and instead shifts to a locative fragment.",
+        "prev_turn_text": "Our congressman, our new congressman for the 8th congressional district, Gabe Evans is joining me today. Gabe, how much help did you get for your campaign from the Republican Party?",
+        "current_turn_text": "here in colorado"
+      },
+      {
+        "category": "religion",
+        "episode_file": "006___Suffering__World_Events__and_the_End_Times.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Meta-comment about drift, not itself a relevance violation.",
+        "prev_turn_text": "bunkers that they got to pull out again.",
+        "current_turn_text": "I feel like we're losing track here"
+      },
+      {
+        "category": "business",
+        "episode_file": "25_-_On_Utilizing_Local_with_Here_and_Now_Brewing.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Likely a promotional fragment or transition rather than a clean relevance violation.",
+        "prev_turn_text": ". Awesome. Well, congratulations on three years. I'm looking forward to visiting you and your team. And is there anything else you want to promote or discuss or let us know that's on the way ?",
+        "current_turn_text": "Honsa football,"
+      },
+      {
+        "category": "business",
+        "episode_file": "28._Itas_Not_What_You_Do__Itas_Why_You_Do_It__Ownership__Obligation__and_Information_Security.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Directly responsive hedge. Not a relevance failure.",
+        "prev_turn_text": "Right. Yeah, that makes sense. So when someone, let's say a company, has a breach and damages are assessed, what is the basis for those damages? Like, how are they actually quant ified",
+        "current_turn_text": "? It depends"
+      },
+      {
+        "category": "sports",
+        "episode_file": "Best-selling_author_Ryan_Holiday_shares_his_thoughts_on_stillness__ego__and_defining_success.json",
+        "predicted_label": "Relation",
+        "assistant_judgment": "incorrect",
+        "notes": "Normal interview segue to closing questions rather than irrelevance.",
+        "prev_turn_text": "No, I think he descended into sort of a sleep deprived insanity, to be perfectly honest. Yeah,",
+        "current_turn_text": "it's amazing. Well, what's next for you and where can people find you? Just"
+      }
+    ],
+    "Manner": [
+      {
+        "category": "business",
+        "episode_file": "0154_Customer_Businesses_Pay___Also_en_Espanol___BOSSLEE.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "correct",
+        "notes": "Current turn is genuinely garbled and hard to interpret.",
+        "prev_turn_text": "amazing It 's a",
+        "current_turn_text": "trot and manner in creole ."
+      },
+      {
+        "category": "business",
+        "episode_file": "1-on-1_Web_Design_Coaching_Session____5_Ryan_Sciolla.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "correct",
+        "notes": "Current turn is locally unclear and not recoverable with confidence.",
+        "prev_turn_text": "Yeah, let me pull up your home page here. So first issue is that I land on your page and there's nothing there but a video of, I'm assuming, Philadelphia.",
+        "current_turn_text": "West, that's the top better."
+      },
+      {
+        "category": "business",
+        "episode_file": "169._Jonathan_Spears_Interview__100_million_by_25_years_old__How_to_Fast_Track_for_Volume_and_Growth.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "correct",
+        "notes": "Current turn is syntactically broken and difficult to recover.",
+        "prev_turn_text": "yeah that's active",
+        "current_turn_text": "fight close that's the email from close"
+      },
+      {
+        "category": "sports",
+        "episode_file": "41._Binary_Thinking__Us_vs._Them_Mentality.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "correct",
+        "notes": "Repeated malformed phrasing creates a genuine local clarity problem.",
+        "prev_turn_text": "Bringing it back , we created another",
+        "current_turn_text": "theory, we created another new principle. theory, we created another new principle. theory, we created another new principle. theory, we created another new principle. Yeah, we need to start to collect mindful athlete tr"
+      },
+      {
+        "category": "business",
+        "episode_file": "003_-_More_Than_An_Email.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "Awkward, but still understandable as banter.",
+        "prev_turn_text": "Keria. It's going good. You read my mind. You exactly what I was going to say, right",
+        "current_turn_text": "? It's like we've done this"
+      },
+      {
+        "category": "business",
+        "episode_file": "11_Mike_Schein_Interview_with_A_Real_Estate_Alchemist___Co-Host_of_the_100_Millionaires_Podcast_2.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "Short completion that is locally interpretable.",
+        "prev_turn_text": "That's it, and then you got all those awards behind you there. - That's my",
+        "current_turn_text": "Boston University diploma ."
+      },
+      {
+        "category": "business",
+        "episode_file": "13._Make_THESE_Changes_to_Help_You__Your_Family__and_Your_Business.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "Hesitation plus restart, but not a serious clarity failure.",
+        "prev_turn_text": "Yeah, I have a lot of thoughts on that. How do",
+        "current_turn_text": "I articulate"
+      },
+      {
+        "category": "commentary",
+        "episode_file": "310_-_Mic_placement_and_home_recording.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "Locally understandable even though it is fragmentary.",
+        "prev_turn_text": ". >> You",
+        "current_turn_text": "know? >> It just makes sense."
+      },
+      {
+        "category": "news",
+        "episode_file": "Episode_179_Azure_Static_Web_Apps___Azure_Static_Websites.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "A direct short answer, not a clarity failure.",
+        "prev_turn_text": "there is, are you going to make me pull up? Did you go through",
+        "current_turn_text": "the tutorial for Hugo on docs.ms? Yes"
+      },
+      {
+        "category": "news",
+        "episode_file": "Episode_28__Azure_IoT_and_Hardware.json",
+        "predicted_label": "Manner",
+        "assistant_judgment": "incorrect",
+        "notes": "Elliptical but still understandable shorthand.",
+        "prev_turn_text": "? - Yeah",
+        "current_turn_text": ". - I'm a PC"
+      }
+    ]
+  },
+  "overall_conclusion": {
+    "summary": "The full-dataset labels are still best treated as silver labels rather than gold annotations. Quantity is the most usable but remains mixed, Relation is too noisy for a central paper claim, and Manner is somewhat better than Relation but still requires caution.",
+    "recommended_use": [
+      "Use the labels only with explicit validation caveats.",
+      "Report them as automatic or silver labels rather than gold annotations.",
+      "If a paper analysis must be narrowed, Quantity is the strongest candidate, Manner is secondary, and Relation should be treated as exploratory only."
+    ]
+  }
+}

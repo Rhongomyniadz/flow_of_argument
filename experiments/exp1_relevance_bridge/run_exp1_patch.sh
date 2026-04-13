@@ -12,6 +12,9 @@ set -euo pipefail
 
 NUM_PATCHES="${NUM_PATCHES:?Set NUM_PATCHES in the sbatch environment.}"
 PATCH_INDEX="${SLURM_ARRAY_TASK_ID:?This script is intended to run as a Slurm job array.}"
+INPUT_DIR="${INPUT_DIR:-data/conversation_moves_labeled}"
+EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
+GLOBAL_ASSUMPTION_POOL_PATH="${GLOBAL_ASSUMPTION_POOL_PATH:-}"
 EMBEDDING_MODEL_NAME="${EMBEDDING_MODEL_NAME:-Qwen/Qwen3-Embedding-4B}"
 EMBEDDING_BATCH_SIZE="${EMBEDDING_BATCH_SIZE:-8}"
 OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp1_relevance_bridge/results}"
@@ -32,10 +35,13 @@ if [[ "${NO_TQDM}" == "1" ]]; then
 fi
 
 python -u experiments/exp1_relevance_bridge/exp1_relevance_bridge.py \
+  --input_dir "${INPUT_DIR}" \
   --output_dir "${OUTPUT_DIR}" \
   --embedding_model_name "${EMBEDDING_MODEL_NAME}" \
   --embedding_batch_size "${EMBEDDING_BATCH_SIZE}" \
   --num_patches "${NUM_PATCHES}" \
   --patch_index "${PATCH_INDEX}" \
+  --episodes_per_patch "${EPISODES_PER_PATCH}" \
+  --global_assumption_pool_path "${GLOBAL_ASSUMPTION_POOL_PATH}" \
   "${CATEGORY_ARGS[@]}" \
   "${EXTRA_ARGS[@]}"

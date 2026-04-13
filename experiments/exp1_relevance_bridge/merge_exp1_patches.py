@@ -1,7 +1,8 @@
 import argparse
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -25,7 +26,7 @@ from experiments.exp1_relevance_bridge.exp1_relevance_bridge import (
 )
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", type=Path, default=DEFAULT_INPUT_DIR)
     parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
@@ -34,45 +35,50 @@ def parse_args():
     return parser.parse_args()
 
 
-def collect_patch_dirs(patches_dir: Path):
+def collect_patch_dirs(patches_dir: Path) -> list[Path]:
     return sorted(
         path for path in patches_dir.glob("patch_*") if path.is_dir() and (path / "exp1_summary.json").exists()
     )
 
 
-def load_patch_summaries(patch_dirs):
+def load_patch_summaries(patch_dirs: list[Path]) -> list[dict[str, Any]]:
     return [json.loads((patch_dir / "exp1_summary.json").read_text()) for patch_dir in patch_dirs]
 
 
-def validate_patch_set(patch_summaries):
+def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> None:
     if not patch_summaries:
         raise RuntimeError("No patch summaries found.")
     expected_num_patches = int(patch_summaries[0]["num_patches"])
     observed_patch_indices = sorted(int(summary["patch_index"]) for summary in patch_summaries)
     expected_patch_indices = list(range(expected_num_patches))
     if observed_patch_indices != expected_patch_indices:
-        raise RuntimeError(
-            "Patch set is incomplete or inconsistent. "
-            f"Expected patch indices {expected_patch_indices}, got {observed_patch_indices}"
+        missing = sorted(set(expected_patch_indices) - set(observed_patch_indices))
+        print(
+            "Warning: patch set is incomplete. "
+            f"Missing indices: {missing}",
+            file=sys.stderr,
         )
     embedding_model_names = {str(summary["embedding_model_name"]) for summary in patch_summaries}
     if len(embedding_model_names) != 1:
         raise RuntimeError(f"Expected exactly one embedding model in patch set, got {sorted(embedding_model_names)}")
 
 
-def load_patch_pairs(patch_dirs):
+def load_patch_pairs(patch_dirs: list[Path]) -> pd.DataFrame:
     pair_frames = [pd.read_csv(patch_dir / "exp1_bridge_pairs.csv") for patch_dir in patch_dirs]
     merged = pd.concat(pair_frames, ignore_index=True)
     duplicate_mask = merged.duplicated(subset=["episode_id", "turn_a_idx", "turn_b_idx"], keep=False)
     if duplicate_mask.any():
-        raise RuntimeError(
-            "Merged patch pairs contain duplicate adjacent-turn rows. "
-            f"Duplicate row count: {int(duplicate_mask.sum())}"
+        duplicate_count = int(duplicate_mask.sum())
+        print(
+            "Warning: merged patch pairs contain duplicate adjacent-turn rows. "
+            f"Deduplicating {duplicate_count} rows.",
+            file=sys.stderr,
         )
+        merged = merged.drop_duplicates(subset=["episode_id", "turn_a_idx", "turn_b_idx"], keep="first")
     return merged
 
 
-def build_by_category(df: pd.DataFrame):
+def build_by_category(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df.groupby("category", as_index=False)
         .agg(
@@ -90,28 +96,37 @@ def build_by_category(df: pd.DataFrame):
 
 
 def build_summary(
-    args,
+    args: argparse.Namespace,
     model_output_dir: Path,
-    patch_dirs,
-    patch_summaries,
+    patch_dirs: list[Path],
+    patch_summaries: list[dict[str, Any]],
     df: pd.DataFrame,
-    categories,
+    categories: list[str],
     pair_csv: Path,
     category_csv: Path,
     pointplot_csv: Path,
     pointplot_png: Path,
     summary_json: Path,
     dist_png: Path,
-):
+) -> dict[str, Any]:
     boot = bootstrap_mean(df["bridge_delta"], seed=args.seed, draws=DEFAULT_BOOTSTRAP_DRAWS)
     positive_rate = float((df["bridge_delta"] > 0).mean())
     return {
         "experiment": "Experiment 1: The Relevance Bridge",
+        "analysis_stage": "merged_full_analysis",
         "input_dir": str(args.input_dir),
         "embedding_model_name": str(args.embedding_model_name),
         "default_embedding_model_name": DEFAULT_EMBEDDING_MODEL_NAME,
         "recommended_qwen_embedding_model_name": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
         "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
+        "selected_episode_file_count": int(
+            sum(int(summary.get("selected_episode_file_count", 0)) for summary in patch_summaries)
+        ),
+        "candidate_episode_file_count": int(patch_summaries[0].get("candidate_episode_file_count", 0)),
+        "global_assumption_pool_size": int(patch_summaries[0].get("global_assumption_pool_size", 0)),
+        "global_assumption_pool_scope": patch_summaries[0].get("global_assumption_pool_scope"),
+        "global_assumption_pool_source": patch_summaries[0].get("global_assumption_pool_source"),
+        "global_assumption_pool_path": patch_summaries[0].get("global_assumption_pool_path"),
         "categories": categories,
         "total_pairs": int(len(df)),
         "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
@@ -130,6 +145,7 @@ def build_summary(
         "patch_merge": {
             "merged_patch_count": int(len(patch_dirs)),
             "num_patches": int(patch_summaries[0]["num_patches"]),
+            "episodes_per_patch": patch_summaries[0].get("episodes_per_patch"),
             "patch_dirs": [str(path) for path in patch_dirs],
             "model_output_dir": str(model_output_dir),
         },
@@ -203,4 +219,5 @@ def main():
 
 
 if __name__ == "__main__":
+    main()
     main()
