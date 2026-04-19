@@ -3,15 +3,17 @@
   "analysis_stage": "merged_full_analysis",
   "input_dir": "data/conversation_moves_labeled",
   "embedding_model_name": "Qwen/Qwen3-Embedding-4B",
+  "embedding_batch_size": 8,
+  "embedding_device": "cuda",
   "default_embedding_model_name": "sentence-transformers/all-MiniLM-L6-v2",
   "recommended_qwen_embedding_model_name": "Qwen/Qwen3-Embedding-4B",
+  "default_embedding_device": "auto",
   "target_embedding_max_length": 1024,
   "selected_episode_file_count": 20189,
   "candidate_episode_file_count": 20189,
-  "global_assumption_pool_size": 2310182,
-  "global_assumption_pool_scope": "full_selected_corpus",
-  "global_assumption_pool_source": "precomputed_file",
-  "global_assumption_pool_path": "/home/edenzha/flow_of_argument/experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_global_assumption_pool_c7pgi9hq.jsonl",
+  "baseline_sentence_pool_path": "/home/edenzha/flow_of_argument/experiments/exp1_relevance_bridge/unrelated_sentences.json",
+  "baseline_sentence_pool_size": 100,
+  "baseline_sentence_sample_size": 10,
   "categories": [
     "business",
     "commentary",
@@ -23,18 +25,39 @@
   "total_pairs": 351872,
   "pairs_with_assumptions_on_turn_b": 351633,
   "assumption_pair_rate": 0.9993207757366315,
-  "bridge_score_mean_delta": -0.007893523575450766,
-  "bridge_score_median_delta": -0.0078385472297668,
-  "positive_bridge_rate": 0.32735483357584577,
-  "mean_similarity_claim_only": 0.7974935668875847,
-  "mean_similarity_with_assumptions": 0.7896000433121338,
-  "mean_similarity_same_episode_implicit_sample": 0.8280471293604637,
-  "mean_similarity_any_episode_implicit_sample": 0.8235295859532056,
-  "mean_similarity_gain_percent": -0.9897915046835092,
+  "average_assumption_count": 6.496714714441615,
+  "bridge_score_mean_delta": 0.034474918498190454,
+  "bridge_score_median_delta": 0.03350937366485595,
+  "positive_bridge_rate": 0.8339595080029102,
+  "mean_similarity_claim_only": 0.7974969122968594,
+  "mean_similarity_assumption_context": 0.8319718307950499,
+  "mean_similarity_with_assumptions": 0.8319718307950499,
+  "mean_similarity_unrelated_sentences_only": 0.7162674321816227,
+  "mean_similarity_gain_percent": 4.322890529933187,
   "bridge_delta_bootstrap": {
-    "mean": -0.007893523575450766,
-    "ci95_low": -0.007965287728679427,
-    "ci95_high": -0.007822588112002996
+    "mean": 0.034474918498190454,
+    "ci95_low": 0.034335673246622025,
+    "ci95_high": 0.03460025516884176
+  },
+  "trajectory_smoothing": {
+    "claim_only": {
+      "mean_adjacent_step_distance": 0.19951471515790603,
+      "total_path_length": 66493.66572368145,
+      "episode_count": 15100,
+      "transition_count": 333277
+    },
+    "assumption_context": {
+      "mean_adjacent_step_distance": 0.19547171026180607,
+      "total_path_length": 65146.22518092394,
+      "episode_count": 15100,
+      "transition_count": 333277
+    }
+  },
+  "umap": {
+    "sample_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_umap_sample.csv",
+    "plot_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_umap_trajectory.png",
+    "sampled_episode_count": 12,
+    "sampled_row_count": 360
   },
   "patch_merge": {
     "merged_patch_count": 21,
@@ -71,14 +94,16 @@
     "pointplot_summary_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_similarity_pointplot_summary.csv",
     "pointplot_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_similarity_pointplot.png",
     "summary_json": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_summary.json",
-    "distance_distribution_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_distance_distribution.png"
+    "distance_distribution_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_distance_distribution.png",
+    "umap_sample_csv": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_umap_sample.csv",
+    "umap_trajectory_png": "experiments/exp1_relevance_bridge/results/Qwen__Qwen3-Embedding-4B/exp1_umap_trajectory.png"
   },
   "notes": [
     "This summary is merged from completed Exp 1 patch outputs.",
     "Only turns with turn_type_label == 'Substantive' are included.",
     "Turn A is vectorized from explicit propositions when available, otherwise raw turn text.",
-    "Turn B claims come from explicit_propositions; context adds assumptions from the same turn.",
-    "Matched implicit baselines sample the same number of assumptions as Turn B from the same episode or from the corpus-wide pool.",
+    "Turn B context uses the full same-turn assumption bag without any greedy filtering.",
+    "Baseline samples 10 unrelated sentences from the fixed Exp 1 sentence pool without including the Turn B claim.",
     "Cosine similarity is computed on L2-normalized sentence embeddings from the selected embedding model."
   ]
 }
