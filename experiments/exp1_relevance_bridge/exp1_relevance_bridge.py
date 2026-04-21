@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,81 +29,126 @@ DEFAULT_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 DEFAULT_QWEN_EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-4B"
 DEFAULT_EMBEDDING_DEVICE = "auto"
 DEFAULT_TARGET_EMBEDDING_MAX_LENGTH = 1024
-DEFAULT_BOOTSTRAP_DRAWS = 2000
+DEFAULT_BOOTSTRAP_DRAWS = 1000
+DEFAULT_BOOTSTRAP_CONFIDENCE_LEVEL = 0.95
+DEFAULT_CLUSTER_BOOTSTRAP_MIN_CLUSTERS = 20
+WHITENING_EPSILON = 1e-6
+SIM_TIE_EPSILON = 1e-12
+ZERO_NORM_EPSILON = 1e-12
 UNRELATED_SENTENCES_PATH = Path(__file__).with_name("unrelated_sentences.json")
 UNRELATED_SENTENCE_POOL_SIZE = 100
 BASELINE_SENTENCE_SAMPLE_SIZE = 10
-UMAP_MAX_EPISODES = 12
-UMAP_MAX_POINTS_PER_EPISODE = 30
-UMAP_NEIGHBORS = 18
-UMAP_MIN_DIST = 0.18
+HARD_NEGATIVE_TARGET_COUNT = 24
+HARD_NEGATIVE_LAYER_TARGET = 8
+GREEDY_MAX_ASSUMPTIONS = 3
 PAIR_EXPORT_COLUMNS = [
     "category",
     "episode_id",
     "turn_a_idx",
     "turn_b_idx",
-    "turn_b_has_assumptions",
-    "candidate_assumption_count",
-    "sim_claim",
-    "sim_context",
-    "sim_unrelated_sentences_only",
-    "bridge_delta",
+    "pair_id",
+    "turn_b_move_label",
+    "analysis_bucket",
+    "eligible",
+    "eligibility_exclusion_reason",
+    "canonical_retained",
+    "coverage_drop_reason",
     "turn_a_text",
     "turn_b_claim_text",
-    "turn_b_context_text",
+    "candidate_assumption_count",
+    "turn_b_has_assumptions",
+    "selected_assumption_count",
+    "selected_assumption_ids",
+    "selected_context_text",
+    "negative_sample_count_actual",
+    "negative_pool_complete",
+    "random_context_pool_complete",
+    "negative_count_layer1_exact",
+    "negative_count_layer2_gap3",
+    "negative_count_layer2_gap2_backfill",
+    "negative_count_layer3_exact",
+    "negative_count_backfill_same_category",
+    "negative_count_backfill_global",
+    "win_rate_claim",
+    "win_rate_random_context",
+    "win_rate_context",
+    "bridge_lift",
+    "random_context_lift",
+    "bridge_advantage_over_random",
+    "win_rate_full_bag_context",
+    "full_bag_context_valid",
+    "ablation_drop_reason",
+    "legacy_sim_claim_raw",
+    "legacy_sim_context_raw",
+    "legacy_sim_unrelated_only_raw",
+    "legacy_bridge_delta_raw",
 ]
+BOOLEAN_COLUMNS = [
+    "eligible",
+    "canonical_retained",
+]
+NULLABLE_STATUS_BOOLEAN_COLUMNS = [
+    "negative_pool_complete",
+    "random_context_pool_complete",
+    "full_bag_context_valid",
+]
+HEADLINE_CONSTRUCTIVE_MOVES = {
+    "Assert / Elaborate",
+    "Answer",
+    "Agree / Align",
+}
+STRESS_TEST_MOVES = {
+    "Clarification Request (Generic)",
+    "Clarification Request (Specific)",
+    "Correction / Challenge",
+    "Self-Correction",
+    "Topic Shift",
+    "Stonewalling / Non-Response",
+}
 
 
-def parse_args():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--input_dir", type=Path, default=DEFAULT_INPUT_DIR)
-    ap.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    ap.add_argument("--categories", nargs="*", default=None)
-    ap.add_argument("--max_episodes_per_category", type=int, default=None)
-    ap.add_argument("--num_patches", type=int, default=1)
-    ap.add_argument("--patch_index", type=int, default=0)
-    ap.add_argument("--episodes_per_patch", type=int, default=None)
-    ap.add_argument("--embedding_batch_size", type=int, default=128)
-    ap.add_argument("--embedding_model_name", type=str, default=DEFAULT_EMBEDDING_MODEL_NAME)
-    ap.add_argument(
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_dir", type=Path, default=DEFAULT_INPUT_DIR)
+    parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--categories", nargs="*", default=None)
+    parser.add_argument("--max_episodes_per_category", type=int, default=None)
+    parser.add_argument("--num_patches", type=int, default=1)
+    parser.add_argument("--patch_index", type=int, default=0)
+    parser.add_argument("--episodes_per_patch", type=int, default=None)
+    parser.add_argument("--embedding_batch_size", type=int, default=128)
+    parser.add_argument("--embedding_model_name", type=str, default=DEFAULT_EMBEDDING_MODEL_NAME)
+    parser.add_argument(
         "--embedding_device",
         type=str,
         choices=["auto", "cpu", "cuda"],
         default=DEFAULT_EMBEDDING_DEVICE,
     )
-    ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--no_tqdm", action="store_true")
-    return ap.parse_args()
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--no_tqdm", action="store_true")
+    parser.add_argument("--prepare_whitening_only", action="store_true")
+    return parser.parse_args()
 
 
-def resolve_output_dir(base_output_dir: Path, embedding_model_name: str):
+def resolve_output_dir(base_output_dir: Path, embedding_model_name: str) -> Path:
     model_slug = re.sub(r"[^A-Za-z0-9._-]+", "_", embedding_model_name.replace("/", "__").strip())
     if not model_slug:
         raise ValueError("embedding_model_name must not be empty.")
     return base_output_dir / model_slug
 
 
-def validate_patch_args(num_patches: int, patch_index: int, episodes_per_patch):
-    if num_patches < 1:
-        raise ValueError(f"num_patches must be >= 1, got {num_patches}")
-    if patch_index < 0 or patch_index >= num_patches:
-        raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
-    if episodes_per_patch is not None and episodes_per_patch < 1:
-        raise ValueError(f"episodes_per_patch must be >= 1, got {episodes_per_patch}")
-
-
-def resolve_patch_output_dir(base_output_dir: Path, num_patches: int, patch_index: int):
+def resolve_patch_output_dir(base_output_dir: Path, num_patches: int, patch_index: int) -> Path:
     if num_patches == 1:
         return base_output_dir
     return base_output_dir / "patches" / f"patch_{patch_index:04d}_of_{num_patches:04d}"
 
 
-def normalize_categories(input_dir: Path, requested):
+def normalize_categories(input_dir: Path, requested: list[str] | None) -> list[str]:
     available = sorted(path.name for path in input_dir.iterdir() if path.is_dir())
     if not requested or any(str(item).lower() == "all" for item in requested):
         return available
     lookup = {name.lower(): name for name in available}
-    chosen = []
+    chosen: list[str] = []
     for raw_name in requested:
         match = lookup.get(str(raw_name).lower())
         if match is None:
@@ -112,17 +158,26 @@ def normalize_categories(input_dir: Path, requested):
     return chosen
 
 
-def collect_category_files(input_dir: Path, categories, max_episodes_per_category):
-    files = []
+def collect_category_files(
+    input_dir: Path,
+    categories: list[str],
+    max_episodes_per_category: int | None,
+) -> list[tuple[str, Path]]:
+    files: list[tuple[str, Path]] = []
     for category in categories:
         category_files = sorted((input_dir / category).glob("*.json"))
-        if max_episodes_per_category:
+        if max_episodes_per_category is not None:
             category_files = category_files[:max_episodes_per_category]
         files.extend((category, path) for path in category_files)
     return files
 
 
-def select_patch_files(category_files, num_patches: int, patch_index: int, episodes_per_patch):
+def select_patch_files(
+    category_files: list[tuple[str, Path]],
+    num_patches: int,
+    patch_index: int,
+    episodes_per_patch: int | None,
+) -> list[tuple[str, Path]]:
     if episodes_per_patch is not None:
         start = patch_index * episodes_per_patch
         end = min(start + episodes_per_patch, len(category_files))
@@ -130,7 +185,16 @@ def select_patch_files(category_files, num_patches: int, patch_index: int, episo
     return [item for idx, item in enumerate(category_files) if idx % num_patches == patch_index]
 
 
-def load_turns(path: Path):
+def validate_patch_args(num_patches: int, patch_index: int, episodes_per_patch: int | None) -> None:
+    if num_patches < 1:
+        raise ValueError(f"num_patches must be >= 1, got {num_patches}")
+    if patch_index < 0 or patch_index >= num_patches:
+        raise ValueError(f"patch_index must be in [0, {num_patches - 1}], got {patch_index}")
+    if episodes_per_patch is not None and episodes_per_patch < 1:
+        raise ValueError(f"episodes_per_patch must be >= 1, got {episodes_per_patch}")
+
+
+def load_turns(path: Path) -> list[dict[str, Any]]:
     data = json.loads(path.read_text())
     return data if isinstance(data, list) else data.get("turns", [])
 
@@ -163,68 +227,82 @@ def load_unrelated_sentences(path: Path) -> list[str]:
     return sentences
 
 
-def turn_time(turn):
+def normalize_text_list(raw_items: Any) -> tuple[list[str], bool]:
+    if raw_items is None:
+        return [], False
+    if not isinstance(raw_items, list):
+        return [], True
+    texts: list[str] = []
+    corrupt = False
+    for item in raw_items:
+        if isinstance(item, dict):
+            raw_text = item.get("text")
+        else:
+            raw_text = item
+        if not isinstance(raw_text, str):
+            corrupt = True
+            continue
+        text = raw_text.strip()
+        if not text:
+            corrupt = True
+            continue
+        texts.append(text)
+    return texts, corrupt
+
+
+def item_text(items: Any) -> str:
+    texts, _ = normalize_text_list(items)
+    return " ".join(texts).strip()
+
+
+def turn_time(turn: dict[str, Any]) -> float:
     raw = turn.get("start_time", turn.get("startTime", turn.get("end_time", turn.get("endTime", 0.0))))
     return float(raw if raw is not None else 0.0)
 
 
-def item_texts(items):
-    texts = []
-    for item in items or []:
-        if isinstance(item, dict):
-            text = str(item.get("text") or "").strip()
-        else:
-            text = str(item or "").strip()
-        if text:
-            texts.append(text)
-    return texts
+def resolve_analysis_bucket(move_label: str) -> str | None:
+    if move_label in HEADLINE_CONSTRUCTIVE_MOVES:
+        return "headline_constructive"
+    if move_label in STRESS_TEST_MOVES:
+        return "stress_test"
+    return None
 
 
-def item_text(items):
-    return " ".join(item_texts(items)).strip()
+def compute_file_list_hash(category_files: list[tuple[str, Path]]) -> str:
+    payload = "\n".join(f"{category}:{path.as_posix()}" for category, path in category_files)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def substantive_pairs(path: Path):
-    turns = [turn for turn in load_turns(path) if str(turn.get("turn_type_label") or "").strip() == "Substantive"]
-    turns.sort(key=turn_time)
-    rows = []
-    for first_turn, second_turn in zip(turns, turns[1:]):
-        episode_id = str(second_turn.get("episode_id") or path.stem)
-        turn_a_idx = int(first_turn.get("turn_idx", -1))
-        turn_b_idx = int(second_turn.get("turn_idx", -1))
-        turn_a_text = item_text(first_turn.get("explicit_propositions")) or str(first_turn.get("turn_text") or "").strip()
-        turn_b_claim_text = item_text(second_turn.get("explicit_propositions"))
-        if not turn_a_text or not turn_b_claim_text:
-            continue
-        turn_b_assumption_texts = item_texts(second_turn.get("assumptions"))
-        rows.append(
-            {
-                "episode_id": episode_id,
-                "turn_a_idx": turn_a_idx,
-                "turn_b_idx": turn_b_idx,
-                "turn_a_text": turn_a_text,
-                "turn_b_claim_text": turn_b_claim_text,
-                "turn_b_assumption_texts": turn_b_assumption_texts,
-                "turn_b_assumption_ids": [
-                    f"{episode_id}:{turn_b_idx}:{assumption_idx}"
-                    for assumption_idx, _ in enumerate(turn_b_assumption_texts)
-                ],
-                "turn_b_context_text": " ".join([turn_b_claim_text, *turn_b_assumption_texts]).strip(),
-                "candidate_assumption_count": len(turn_b_assumption_texts),
-                "turn_b_has_assumptions": int(bool(turn_b_assumption_texts)),
-            }
-        )
-    return rows
+def build_seed_int(seed_text: str) -> int:
+    return int.from_bytes(hashlib.sha256(seed_text.encode("utf-8")).digest()[:8], "big", signed=False)
 
 
-def mean_pool(last_hidden_state, attention_mask):
-    mask = attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
-    summed = torch.sum(last_hidden_state * mask, dim=1)
-    counts = torch.clamp(mask.sum(dim=1), min=1e-9)
-    return summed / counts
+def build_pair_rng(pair_id: str, sample_label: str, seed: int) -> np.random.Generator:
+    return np.random.default_rng(build_seed_int(f"{pair_id}:{sample_label}:{seed}"))
 
 
-def resolve_embedding_max_length(tokenizer):
+def serialize_json_field(value: Any) -> str | None:
+    if value is None:
+        return None
+    return json.dumps(value, ensure_ascii=False)
+
+
+def coerce_nullable_bool(series: pd.Series) -> pd.Series:
+    def _convert(value: Any) -> Any:
+        if pd.isna(value):
+            return None
+        if isinstance(value, bool):
+            return value
+        text = str(value).strip().lower()
+        if text in {"true", "1"}:
+            return True
+        if text in {"false", "0"}:
+            return False
+        return None
+    return series.map(_convert)
+
+
+def resolve_embedding_max_length(tokenizer: Any) -> int:
     raw_model_max_length = getattr(tokenizer, "model_max_length", None)
     if not isinstance(raw_model_max_length, int):
         return DEFAULT_TARGET_EMBEDDING_MAX_LENGTH
@@ -248,7 +326,20 @@ def resolve_embedding_device(requested_device: str) -> torch.device:
     raise ValueError(f"Unsupported embedding device: {requested_device}")
 
 
-def embed_texts(texts, batch_size, use_tqdm, embedding_model_name, embedding_device):
+def mean_pool(last_hidden_state: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
+    mask = attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
+    summed = torch.sum(last_hidden_state * mask, dim=1)
+    counts = torch.clamp(mask.sum(dim=1), min=1e-9)
+    return summed / counts
+
+
+def embed_texts(
+    texts: list[str],
+    batch_size: int,
+    use_tqdm: bool,
+    embedding_model_name: str,
+    embedding_device: str,
+) -> dict[str, np.ndarray]:
     device = resolve_embedding_device(embedding_device)
     tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
     try:
@@ -263,7 +354,7 @@ def embed_texts(texts, batch_size, use_tqdm, embedding_model_name, embedding_dev
         ) from error
     embedding_max_length = resolve_embedding_max_length(tokenizer)
     unique_texts = list(dict.fromkeys(texts))
-    vectors = {}
+    vectors: dict[str, np.ndarray] = {}
     logger.info(
         "Embedding %d unique texts with model=%s on device=%s and batch_size=%d.",
         len(unique_texts),
@@ -297,245 +388,815 @@ def embed_texts(texts, batch_size, use_tqdm, embedding_model_name, embedding_dev
                     f"model={embedding_model_name}, embedding_device={device.type}, batch_size={batch_size}. "
                     "Reduce --embedding_batch_size, free GPU memory, or rerun with --embedding_device cpu."
                 ) from error
-            pooled = mean_pool(output.last_hidden_state, tokens["attention_mask"])
-            pooled = torch.nn.functional.normalize(pooled, p=2, dim=1).cpu().numpy()
+            pooled = mean_pool(output.last_hidden_state, tokens["attention_mask"]).cpu().numpy()
             for text, vector in zip(batch, pooled):
                 vectors[text] = vector.astype(np.float32, copy=False)
     return vectors
 
 
-def bootstrap_mean(values, seed, draws=2000):
-    vals = np.asarray(values, dtype=np.float64)
-    if len(vals) == 0:
-        return {"mean": 0.0, "ci95_low": 0.0, "ci95_high": 0.0}
-    rng = np.random.default_rng(seed)
-    sample_indices = rng.integers(0, len(vals), size=(draws, len(vals)))
-    means = vals[sample_indices].mean(axis=1)
+def normalize_vector(vector: np.ndarray) -> np.ndarray | None:
+    norm = float(np.linalg.norm(vector))
+    if norm <= ZERO_NORM_EPSILON:
+        return None
+    return (vector / norm).astype(np.float32, copy=False)
+
+
+def fit_whitening_artifact(text_to_raw_vec: dict[str, np.ndarray]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    matrix = np.vstack([text_to_raw_vec[text] for text in sorted(text_to_raw_vec)]).astype(np.float64, copy=False)
+    mean = matrix.mean(axis=0)
+    centered = matrix - mean
+    covariance = (centered.T @ centered) / max(len(centered) - 1, 1)
+    basis, singular_values, _ = np.linalg.svd(covariance, full_matrices=False)
+    scales = 1.0 / np.sqrt(singular_values + WHITENING_EPSILON)
+    return mean.astype(np.float32), basis.astype(np.float32), scales.astype(np.float32)
+
+
+def apply_whitening(
+    text_to_raw_vec: dict[str, np.ndarray],
+    mean: np.ndarray,
+    basis: np.ndarray,
+    scales: np.ndarray,
+) -> dict[str, np.ndarray | None]:
+    transformed: dict[str, np.ndarray | None] = {}
+    basis64 = basis.astype(np.float64, copy=False)
+    scales64 = scales.astype(np.float64, copy=False)
+    mean64 = mean.astype(np.float64, copy=False)
+    for text, raw_vec in text_to_raw_vec.items():
+        centered = raw_vec.astype(np.float64, copy=False) - mean64
+        whitened = (centered @ basis64) * scales64
+        whitened32 = whitened.astype(np.float32, copy=False)
+        transformed[text] = normalize_vector(whitened32)
+    return transformed
+
+
+def whitening_paths(model_output_dir: Path) -> tuple[Path, Path]:
+    return model_output_dir / "exp1_whitening_params.npz", model_output_dir / "exp1_whitening_manifest.json"
+
+
+def build_whitening_manifest(
+    args: argparse.Namespace,
+    categories: list[str],
+    category_files: list[tuple[str, Path]],
+    selected_episode_file_count: int,
+) -> dict[str, Any]:
     return {
-        "mean": float(vals.mean()),
-        "ci95_low": float(np.quantile(means, 0.025)),
-        "ci95_high": float(np.quantile(means, 0.975)),
+        "artifact_version": 2,
+        "input_dir": str(args.input_dir),
+        "embedding_model_name": str(args.embedding_model_name),
+        "embedding_device": str(resolve_embedding_device(args.embedding_device)),
+        "categories": categories,
+        "max_episodes_per_category": int(args.max_episodes_per_category) if args.max_episodes_per_category is not None else None,
+        "selected_episode_file_count": int(selected_episode_file_count),
+        "category_files_hash": compute_file_list_hash(category_files),
+        "whitening_method": "pca_svd",
+        "whitening_epsilon": WHITENING_EPSILON,
     }
 
 
-def compose_normalized_mean(vectors):
-    matrix = np.vstack(vectors).astype(np.float32, copy=False)
-    composed = matrix.mean(axis=0)
-    norm = float(np.linalg.norm(composed))
-    if norm <= 1e-9:
-        return matrix[0].copy()
-    return composed / norm
+def manifest_hash(payload: dict[str, Any]) -> str:
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
 
 
-def cosine_similarity(vec_a, vec_b):
-    return float(np.dot(vec_a, vec_b))
+def write_whitening_artifact(
+    params_path: Path,
+    manifest_path: Path,
+    mean: np.ndarray,
+    basis: np.ndarray,
+    scales: np.ndarray,
+    manifest_payload: dict[str, Any],
+) -> str:
+    manifest_with_hash = dict(manifest_payload)
+    manifest_with_hash["manifest_hash"] = manifest_hash(manifest_payload)
+    params_path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(params_path, mean=mean, basis=basis, scales=scales)
+    manifest_path.write_text(json.dumps(manifest_with_hash, indent=2))
+    return str(manifest_with_hash["manifest_hash"])
 
 
-def build_row_rng(seed: int, episode_id: str, turn_a_idx: int, turn_b_idx: int) -> np.random.Generator:
-    seed_material = f"{seed}:{episode_id}:{turn_a_idx}:{turn_b_idx}".encode("utf-8")
-    row_seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big", signed=False)
-    return np.random.default_rng(row_seed)
+def load_and_validate_whitening_artifact(
+    params_path: Path,
+    manifest_path: Path,
+    expected_payload: dict[str, Any],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+    if not params_path.exists() or not manifest_path.exists():
+        raise RuntimeError(
+            "Missing whitening artifact. Run Exp 1 whitening preparation before patch mode. "
+            f"params_path={params_path}, manifest_path={manifest_path}"
+        )
+    manifest = json.loads(manifest_path.read_text())
+    expected_hash = manifest_hash(expected_payload)
+    observed_hash = manifest.get("manifest_hash")
+    if observed_hash != expected_hash:
+        raise RuntimeError(
+            "Whitening artifact manifest hash mismatch. "
+            f"expected={expected_hash}, observed={observed_hash}"
+        )
+    params = np.load(params_path)
+    return params["mean"], params["basis"], params["scales"], manifest
 
 
-def sample_unrelated_sentences(
-    unrelated_sentences: list[str],
-    seed: int,
-    episode_id: str,
-    turn_a_idx: int,
-    turn_b_idx: int,
+def build_episode_records(category: str, path: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    turns = load_turns(path)
+    ordered_turns = sorted(turns, key=turn_time)
+    substantive_position = 0
+    turn_records: list[dict[str, Any]] = []
+    for turn in ordered_turns:
+        turn_type_label = str(turn.get("turn_type_label") or "").strip()
+        move_label = str(turn.get("conversation_move_label") or "").strip()
+        claim_text = item_text(turn.get("explicit_propositions")) or str(turn.get("turn_text") or "").strip()
+        assumption_texts, assumption_field_corrupt = normalize_text_list(turn.get("assumptions"))
+        episode_id = str(turn.get("episode_id") or path.stem)
+        turn_idx = int(turn.get("turn_idx", -1))
+        assumption_ids = [
+            f"{category}:{episode_id}:{turn_idx}:{assumption_index}"
+            for assumption_index, _ in enumerate(assumption_texts)
+        ]
+        if turn_type_label == "Substantive":
+            substantive_position += 1
+            turn_records.append(
+                {
+                    "turn_id": f"{category}:{episode_id}:{turn_idx}",
+                    "category": category,
+                    "episode_id": episode_id,
+                    "turn_idx": turn_idx,
+                    "substantive_position": substantive_position,
+                    "move_label": move_label,
+                    "analysis_bucket": resolve_analysis_bucket(move_label),
+                    "claim_text": claim_text,
+                    "assumption_texts": assumption_texts,
+                    "assumption_ids": assumption_ids,
+                    "assumption_field_corrupt": bool(assumption_field_corrupt),
+                }
+            )
+
+    pair_rows: list[dict[str, Any]] = []
+    for first_turn, second_turn in zip(ordered_turns, ordered_turns[1:]):
+        episode_id = str(second_turn.get("episode_id") or path.stem)
+        turn_a_idx = int(first_turn.get("turn_idx", -1))
+        turn_b_idx = int(second_turn.get("turn_idx", -1))
+        turn_a_type = str(first_turn.get("turn_type_label") or "").strip()
+        turn_b_type = str(second_turn.get("turn_type_label") or "").strip()
+        turn_b_move_label = str(second_turn.get("conversation_move_label") or "").strip()
+        turn_a_text = item_text(first_turn.get("explicit_propositions")) or str(first_turn.get("turn_text") or "").strip()
+        turn_b_claim_text = item_text(second_turn.get("explicit_propositions")) or str(second_turn.get("turn_text") or "").strip()
+        turn_b_assumption_texts, assumption_field_corrupt = normalize_text_list(second_turn.get("assumptions"))
+        turn_b_assumption_ids = [
+            f"{category}:{episode_id}:{turn_b_idx}:{assumption_index}"
+            for assumption_index, _ in enumerate(turn_b_assumption_texts)
+        ]
+        pair_id = f"{category}:{episode_id}:{turn_a_idx}:{turn_b_idx}"
+        if turn_a_type != "Substantive" or turn_b_type != "Substantive":
+            eligible = False
+            analysis_bucket = None
+            eligibility_exclusion_reason = "non_substantive_pair"
+        else:
+            analysis_bucket = resolve_analysis_bucket(turn_b_move_label)
+            eligible = analysis_bucket is not None
+            eligibility_exclusion_reason = None if eligible else "unsupported_move_bucket"
+        pair_rows.append(
+            {
+                "category": category,
+                "episode_id": episode_id,
+                "turn_a_idx": turn_a_idx,
+                "turn_b_idx": turn_b_idx,
+                "pair_id": pair_id,
+                "turn_b_move_label": turn_b_move_label,
+                "analysis_bucket": analysis_bucket,
+                "eligible": eligible,
+                "eligibility_exclusion_reason": eligibility_exclusion_reason,
+                "turn_a_text": turn_a_text,
+                "turn_b_claim_text": turn_b_claim_text,
+                "turn_b_assumption_texts": turn_b_assumption_texts,
+                "turn_b_assumption_ids": turn_b_assumption_ids,
+                "candidate_assumption_count": len(turn_b_assumption_texts),
+                "turn_b_has_assumptions": int(bool(turn_b_assumption_texts)),
+                "turn_b_assumption_field_corrupt": bool(assumption_field_corrupt),
+            }
+        )
+    return turn_records, pair_rows
+
+
+def pair_sort_key(pair_row: dict[str, Any]) -> tuple[str, str, int, int]:
+    return (
+        str(pair_row["category"]),
+        str(pair_row["episode_id"]),
+        int(pair_row["turn_a_idx"]),
+        int(pair_row["turn_b_idx"]),
+    )
+
+
+def build_global_records(
+    category_files: list[tuple[str, Path]],
+    selected_files: list[tuple[str, Path]],
+    use_tqdm: bool,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    selected_lookup = {path: category for category, path in selected_files}
+    global_turn_records: list[dict[str, Any]] = []
+    selected_pair_rows: list[dict[str, Any]] = []
+    selected_turn_records: list[dict[str, Any]] = []
+    iterator = tqdm(category_files, desc="Loading Exp 1 episodes", disable=not use_tqdm)
+    for category, path in iterator:
+        turn_records, pair_rows = build_episode_records(category, path)
+        global_turn_records.extend(turn_records)
+        if path in selected_lookup:
+            selected_turn_records.extend(turn_records)
+            selected_pair_rows.extend(pair_rows)
+    selected_turn_records = sorted(
+        selected_turn_records,
+        key=lambda item: (
+            str(item["category"]),
+            str(item["episode_id"]),
+            int(item["turn_idx"]),
+        ),
+    )
+    selected_pair_rows = sorted(selected_pair_rows, key=pair_sort_key)
+    return global_turn_records, selected_turn_records, selected_pair_rows
+
+
+def assumption_pool_records(turn_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for turn_record in turn_records:
+        for assumption_index, (assumption_id, assumption_text) in enumerate(
+            zip(turn_record["assumption_ids"], turn_record["assumption_texts"])
+        ):
+            records.append(
+                {
+                    "assumption_id": assumption_id,
+                    "category": turn_record["category"],
+                    "episode_id": turn_record["episode_id"],
+                    "turn_idx": int(turn_record["turn_idx"]),
+                    "assumption_index": assumption_index,
+                    "move_label": turn_record["move_label"],
+                    "analysis_bucket": turn_record["analysis_bucket"],
+                    "text": assumption_text,
+                }
+            )
+    return records
+
+
+def collect_canonical_text_pool(
+    global_turn_records: list[dict[str, Any]],
+    selected_pair_rows: list[dict[str, Any]],
 ) -> list[str]:
+    texts = [
+        record["claim_text"]
+        for record in global_turn_records
+        if record["claim_text"]
+    ]
+    for record in global_turn_records:
+        texts.extend(record["assumption_texts"])
+    for pair_row in selected_pair_rows:
+        if bool(pair_row["eligible"]):
+            texts.append(pair_row["turn_a_text"])
+            texts.append(pair_row["turn_b_claim_text"])
+    return [text for text in texts if isinstance(text, str) and text.strip()]
+
+
+def prepare_whitening_artifact(
+    args: argparse.Namespace,
+    model_output_dir: Path,
+    categories: list[str],
+    category_files: list[tuple[str, Path]],
+    use_tqdm: bool,
+) -> dict[str, Any]:
+    global_turn_records, _, selected_pair_rows = build_global_records(
+        category_files=category_files,
+        selected_files=category_files,
+        use_tqdm=use_tqdm,
+    )
+    texts_to_embed = collect_canonical_text_pool(global_turn_records, selected_pair_rows)
+    text_to_raw_vec = embed_texts(
+        texts=texts_to_embed,
+        batch_size=args.embedding_batch_size,
+        use_tqdm=use_tqdm,
+        embedding_model_name=args.embedding_model_name,
+        embedding_device=args.embedding_device,
+    )
+    mean, basis, scales = fit_whitening_artifact(text_to_raw_vec)
+    params_path, manifest_path = whitening_paths(model_output_dir)
+    payload = build_whitening_manifest(
+        args=args,
+        categories=categories,
+        category_files=category_files,
+        selected_episode_file_count=len(category_files),
+    )
+    observed_hash = write_whitening_artifact(
+        params_path=params_path,
+        manifest_path=manifest_path,
+        mean=mean,
+        basis=basis,
+        scales=scales,
+        manifest_payload=payload,
+    )
+    logger.info("Prepared Exp 1 whitening artifact at %s", params_path)
+    return {
+        "params_path": str(params_path),
+        "manifest_path": str(manifest_path),
+        "manifest_hash": observed_hash,
+        "text_count": int(len(text_to_raw_vec)),
+    }
+
+
+def ensure_whitening_artifact(
+    args: argparse.Namespace,
+    model_output_dir: Path,
+    categories: list[str],
+    category_files: list[tuple[str, Path]],
+    use_tqdm: bool,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+    params_path, manifest_path = whitening_paths(model_output_dir)
+    expected_payload = build_whitening_manifest(
+        args=args,
+        categories=categories,
+        category_files=category_files,
+        selected_episode_file_count=len(category_files),
+    )
+    if args.num_patches == 1 and not params_path.exists():
+        prepare_whitening_artifact(
+            args=args,
+            model_output_dir=model_output_dir,
+            categories=categories,
+            category_files=category_files,
+            use_tqdm=use_tqdm,
+        )
+    return load_and_validate_whitening_artifact(
+        params_path=params_path,
+        manifest_path=manifest_path,
+        expected_payload=expected_payload,
+    )
+
+
+def sample_unrelated_sentences(pair_id: str, unrelated_sentences: list[str], seed: int) -> list[str]:
     if len(unrelated_sentences) < BASELINE_SENTENCE_SAMPLE_SIZE:
         raise ValueError(
             "Unrelated sentence pool is too small for the baseline sample size. "
             f"pool_size={len(unrelated_sentences)}, sample_size={BASELINE_SENTENCE_SAMPLE_SIZE}"
         )
-    row_rng = build_row_rng(seed, episode_id, turn_a_idx, turn_b_idx)
-    sampled_indices = row_rng.choice(
-        len(unrelated_sentences),
-        size=BASELINE_SENTENCE_SAMPLE_SIZE,
-        replace=False,
-    )
+    rng = build_pair_rng(pair_id, "legacy_unrelated_only", seed)
+    sampled_indices = rng.choice(len(unrelated_sentences), size=BASELINE_SENTENCE_SAMPLE_SIZE, replace=False)
     return [unrelated_sentences[int(idx)] for idx in np.asarray(sampled_indices).tolist()]
 
 
-def select_bridge_context(vec_a, vec_claim, assumption_records):
-    sim_claim = cosine_similarity(vec_a, vec_claim)
-    if not assumption_records:
-        return {
-            "sim_claim": sim_claim,
-            "sim_context": sim_claim,
-            "context_assumption_count": 0,
-        }
-
-    context_vec = compose_normalized_mean([vec_claim] + [record["vec"] for record in assumption_records])
-
+def build_turn_indexes(turn_records: list[dict[str, Any]]) -> dict[str, Any]:
+    turn_lookup = {record["turn_id"]: record for record in turn_records}
+    by_category_headline: dict[str, list[str]] = {}
+    by_episode_substantive: dict[tuple[str, str], list[str]] = {}
+    by_category_move_headline: dict[tuple[str, str], list[str]] = {}
+    for record in sorted(
+        turn_records,
+        key=lambda item: (item["category"], item["move_label"], item["episode_id"], int(item["turn_idx"])),
+    ):
+        turn_id = record["turn_id"]
+        if record["analysis_bucket"] == "headline_constructive":
+            by_category_headline.setdefault(record["category"], []).append(turn_id)
+            by_category_move_headline.setdefault((record["category"], record["move_label"]), []).append(turn_id)
+        episode_key = (str(record["category"]), str(record["episode_id"]))
+        by_episode_substantive.setdefault(episode_key, []).append(turn_id)
+    assumption_records = assumption_pool_records(turn_records)
+    assumption_lookup = {record["assumption_id"]: record for record in assumption_records}
+    assumptions_by_category_move: dict[tuple[str, str], list[str]] = {}
+    assumptions_by_category: dict[str, list[str]] = {}
+    assumptions_global_headline: list[str] = []
+    for record in sorted(
+        assumption_records,
+        key=lambda item: (
+            item["category"],
+            item["move_label"],
+            item["episode_id"],
+            int(item["turn_idx"]),
+            int(item["assumption_index"]),
+        ),
+    ):
+        assumptions_by_category_move.setdefault((record["category"], record["move_label"]), []).append(record["assumption_id"])
+        assumptions_by_category.setdefault(record["category"], []).append(record["assumption_id"])
+        if record["analysis_bucket"] == "headline_constructive":
+            assumptions_global_headline.append(record["assumption_id"])
     return {
-        "sim_claim": sim_claim,
-        "sim_context": cosine_similarity(vec_a, context_vec),
-        "context_assumption_count": len(assumption_records),
+        "turn_lookup": turn_lookup,
+        "by_category_headline": by_category_headline,
+        "by_episode_substantive": by_episode_substantive,
+        "by_category_move_headline": by_category_move_headline,
+        "assumption_lookup": assumption_lookup,
+        "assumptions_by_category_move": assumptions_by_category_move,
+        "assumptions_by_category": assumptions_by_category,
+        "assumptions_global_headline": assumptions_global_headline,
     }
 
 
-def add_bridge_metrics(df: pd.DataFrame, text_to_vec, unrelated_sentences: list[str], seed: int, use_tqdm: bool):
-    sim_claim_values = []
-    sim_context_values = []
-    sim_unrelated_sentences_only_values = []
-    bridge_deltas = []
-
-    iterator = tqdm(df.itertuples(index=False), total=len(df), desc="Scoring relevance bridges", disable=not use_tqdm)
-    for row in iterator:
-        vec_a = text_to_vec[row.turn_a_text]
-        vec_claim = text_to_vec[row.turn_b_claim_text]
-        assumption_records = [
-            {
-                "id": assumption_id,
-                "text": assumption_text,
-                "vec": text_to_vec[assumption_text],
-            }
-            for assumption_id, assumption_text in zip(row.turn_b_assumption_ids, row.turn_b_assumption_texts)
-            if assumption_text in text_to_vec
-        ]
-        bridge = select_bridge_context(vec_a, vec_claim, assumption_records)
-        baseline_texts = sample_unrelated_sentences(
-            unrelated_sentences=unrelated_sentences,
-            seed=seed,
-            episode_id=str(row.episode_id),
-            turn_a_idx=int(row.turn_a_idx),
-            turn_b_idx=int(row.turn_b_idx),
-        )
-        baseline_vec = compose_normalized_mean([text_to_vec[text] for text in baseline_texts])
-
-        sim_claim_values.append(bridge["sim_claim"])
-        sim_context_values.append(bridge["sim_context"])
-        sim_unrelated_sentences_only_values.append(cosine_similarity(vec_a, baseline_vec))
-        bridge_deltas.append(bridge["sim_context"] - bridge["sim_claim"])
-
-    df = df.copy()
-    df["sim_claim"] = sim_claim_values
-    df["sim_context"] = sim_context_values
-    df["sim_unrelated_sentences_only"] = sim_unrelated_sentences_only_values
-    df["bridge_delta"] = bridge_deltas
-    return df
+def sample_unique_ids(candidate_ids: list[str], sample_size: int, pair_id: str, sample_label: str, seed: int) -> list[str]:
+    if sample_size <= 0 or not candidate_ids:
+        return []
+    if len(candidate_ids) <= sample_size:
+        return list(candidate_ids)
+    rng = build_pair_rng(pair_id, sample_label, seed)
+    sampled_indices = rng.choice(len(candidate_ids), size=sample_size, replace=False)
+    return [candidate_ids[int(idx)] for idx in np.asarray(sampled_indices).tolist()]
 
 
-def add_representation_vectors(
-    df: pd.DataFrame,
-    embedding_model_name: str,
-    batch_size: int,
-    use_tqdm: bool,
-    embedding_device: str,
-):
-    texts_to_embed = pd.concat(
-        [
-            df["turn_b_claim_text"].astype(str),
-            df["turn_b_context_text"].astype(str),
-        ],
-        ignore_index=True,
-    ).tolist()
-    text_to_vec = embed_texts(
-        texts=texts_to_embed,
-        batch_size=batch_size,
-        use_tqdm=use_tqdm,
-        embedding_model_name=embedding_model_name,
-        embedding_device=embedding_device,
-    )
-    enriched = df.copy()
-    enriched["vec_claim"] = enriched["turn_b_claim_text"].map(text_to_vec)
-    enriched["vec_context"] = enriched["turn_b_context_text"].map(text_to_vec)
-    return enriched
+def select_negative_ids(
+    pair_row: dict[str, Any],
+    turn_indexes: dict[str, Any],
+    seed: int,
+) -> tuple[list[str], dict[str, int], bool]:
+    if not bool(pair_row["eligible"]):
+        return [], {
+            "negative_count_layer1_exact": 0,
+            "negative_count_layer2_gap3": 0,
+            "negative_count_layer2_gap2_backfill": 0,
+            "negative_count_layer3_exact": 0,
+            "negative_count_backfill_same_category": 0,
+            "negative_count_backfill_global": 0,
+        }, False
 
+    pair_id = str(pair_row["pair_id"])
+    category = str(pair_row["category"])
+    episode_id = str(pair_row["episode_id"])
+    episode_key = (category, episode_id)
+    move_label = str(pair_row["turn_b_move_label"])
+    turn_lookup = turn_indexes["turn_lookup"]
+    by_category_headline = turn_indexes["by_category_headline"]
+    by_episode_substantive = turn_indexes["by_episode_substantive"]
+    by_category_move_headline = turn_indexes["by_category_move_headline"]
 
-def pointplot_long_frame(df: pd.DataFrame):
-    value_columns = [
-        ("Claim Only", "sim_claim"),
-        ("Assumption Context", "sim_context"),
-        ("Baseline", "sim_unrelated_sentences_only"),
+    turn_b_turn_id = f"{category}:{episode_id}:{int(pair_row['turn_b_idx'])}"
+    turn_b_record = turn_lookup.get(turn_b_turn_id)
+    turn_b_position = int(turn_b_record["substantive_position"]) if turn_b_record is not None else -1
+    used_ids: set[str] = set()
+    selected_ids: list[str] = []
+    counts = {
+        "negative_count_layer1_exact": 0,
+        "negative_count_layer2_gap3": 0,
+        "negative_count_layer2_gap2_backfill": 0,
+        "negative_count_layer3_exact": 0,
+        "negative_count_backfill_same_category": 0,
+        "negative_count_backfill_global": 0,
+    }
+
+    def available(ids: list[str]) -> list[str]:
+        return [candidate_id for candidate_id in ids if candidate_id not in used_ids]
+
+    layer1_exact = [
+        candidate_id
+        for candidate_id in by_category_headline.get(category, [])
+        if turn_lookup[candidate_id]["episode_id"] != episode_id
     ]
-    frames = []
-    for comparison, column_name in value_columns:
-        part = df[["category", column_name]].rename(columns={column_name: "cosine_similarity"})
-        part["comparison"] = comparison
-        frames.append(part)
-    return pd.concat(frames, ignore_index=True)
+    chosen = sample_unique_ids(available(layer1_exact), HARD_NEGATIVE_LAYER_TARGET, pair_id, "negative_layer1_exact", seed)
+    selected_ids.extend(chosen)
+    used_ids.update(chosen)
+    counts["negative_count_layer1_exact"] = len(chosen)
 
+    same_episode_candidates = [
+        candidate_id
+        for candidate_id in by_episode_substantive.get(episode_key, [])
+        if abs(int(turn_lookup[candidate_id]["substantive_position"]) - turn_b_position) >= 3
+    ]
+    chosen = sample_unique_ids(available(same_episode_candidates), HARD_NEGATIVE_LAYER_TARGET, pair_id, "negative_layer2_gap3", seed)
+    selected_ids.extend(chosen)
+    used_ids.update(chosen)
+    counts["negative_count_layer2_gap3"] = len(chosen)
 
-def pointplot_summary(long_df: pd.DataFrame, seed: int):
-    rows = []
-    for summary_idx, ((category, comparison), group_df) in enumerate(
-        long_df.groupby(["category", "comparison"], sort=False, observed=False)
-    ):
-        boot = bootstrap_mean(group_df["cosine_similarity"], seed=seed + summary_idx, draws=DEFAULT_BOOTSTRAP_DRAWS)
-        rows.append(
-            {
-                "category": category,
-                "comparison": comparison,
-                "pair_count": int(len(group_df)),
-                "mean_cosine_similarity": boot["mean"],
-                "ci95_low": boot["ci95_low"],
-                "ci95_high": boot["ci95_high"],
-            }
+    same_episode_gap2_candidates = [
+        candidate_id
+        for candidate_id in by_episode_substantive.get(episode_key, [])
+        if abs(int(turn_lookup[candidate_id]["substantive_position"]) - turn_b_position) >= 2
+    ]
+    remaining_layer2 = HARD_NEGATIVE_LAYER_TARGET - counts["negative_count_layer2_gap3"]
+    if remaining_layer2 > 0:
+        chosen = sample_unique_ids(
+            available(same_episode_gap2_candidates),
+            remaining_layer2,
+            pair_id,
+            "negative_layer2_gap2_backfill",
+            seed,
         )
+        selected_ids.extend(chosen)
+        used_ids.update(chosen)
+        counts["negative_count_layer2_gap2_backfill"] = len(chosen)
+
+    layer3_exact = [
+        candidate_id
+        for candidate_id in by_category_move_headline.get((category, move_label), [])
+        if turn_lookup[candidate_id]["episode_id"] != episode_id
+    ]
+    chosen = sample_unique_ids(available(layer3_exact), HARD_NEGATIVE_LAYER_TARGET, pair_id, "negative_layer3_exact", seed)
+    selected_ids.extend(chosen)
+    used_ids.update(chosen)
+    counts["negative_count_layer3_exact"] = len(chosen)
+
+    if len(selected_ids) < HARD_NEGATIVE_TARGET_COUNT:
+        same_category_backfill = [
+            candidate_id
+            for candidate_id, record in turn_lookup.items()
+            if record["category"] == category and record["episode_id"] != episode_id
+        ]
+        needed = HARD_NEGATIVE_TARGET_COUNT - len(selected_ids)
+        chosen = sample_unique_ids(
+            available(same_category_backfill),
+            needed,
+            pair_id,
+            "negative_backfill_same_category",
+            seed,
+        )
+        selected_ids.extend(chosen)
+        used_ids.update(chosen)
+        counts["negative_count_backfill_same_category"] = len(chosen)
+
+    if len(selected_ids) < HARD_NEGATIVE_TARGET_COUNT:
+        global_backfill = [
+            candidate_id
+            for candidate_id in turn_lookup
+            if turn_lookup[candidate_id]["analysis_bucket"] == "headline_constructive"
+            and turn_lookup[candidate_id]["episode_id"] != episode_id
+        ]
+        needed = HARD_NEGATIVE_TARGET_COUNT - len(selected_ids)
+        chosen = sample_unique_ids(
+            available(global_backfill),
+            needed,
+            pair_id,
+            "negative_backfill_global",
+            seed,
+        )
+        selected_ids.extend(chosen)
+        used_ids.update(chosen)
+        counts["negative_count_backfill_global"] = len(chosen)
+
+    return selected_ids, counts, len(selected_ids) == HARD_NEGATIVE_TARGET_COUNT
+
+
+def compose_normalized_mean(vectors: list[np.ndarray]) -> np.ndarray | None:
+    matrix = np.vstack(vectors).astype(np.float32, copy=False)
+    composed = matrix.mean(axis=0)
+    return normalize_vector(composed)
+
+
+def cosine_similarity(vec_a: np.ndarray, vec_b: np.ndarray) -> float:
+    return float(np.dot(vec_a, vec_b))
+
+
+def win_rate_from_scores(positive_score: float, negative_scores: list[float]) -> float:
+    if not negative_scores:
+        return float("nan")
+    wins = []
+    for negative_score in negative_scores:
+        delta = positive_score - negative_score
+        if delta > SIM_TIE_EPSILON:
+            wins.append(1.0)
+        elif abs(delta) <= SIM_TIE_EPSILON:
+            wins.append(0.5)
+        else:
+            wins.append(0.0)
+    return float(np.mean(wins))
+
+
+def greedy_select_assumptions(
+    vec_a: np.ndarray,
+    vec_claim: np.ndarray,
+    candidate_records: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], np.ndarray]:
+    selected: list[dict[str, Any]] = []
+    remaining = list(candidate_records)
+    current_vector = vec_claim
+    while remaining and len(selected) < GREEDY_MAX_ASSUMPTIONS:
+        best_record = None
+        best_vector = None
+        best_gain = 0.0
+        current_similarity = cosine_similarity(vec_a, current_vector)
+        for candidate in remaining:
+            candidate_vector = compose_normalized_mean([vec_claim] + [record["vec"] for record in selected] + [candidate["vec"]])
+            if candidate_vector is None:
+                continue
+            candidate_similarity = cosine_similarity(vec_a, candidate_vector)
+            gain = candidate_similarity - current_similarity
+            if gain > best_gain + SIM_TIE_EPSILON:
+                best_record = candidate
+                best_vector = candidate_vector
+                best_gain = gain
+        if best_record is None:
+            break
+        selected.append(best_record)
+        remaining = [record for record in remaining if record["id"] != best_record["id"]]
+        current_vector = best_vector if best_vector is not None else current_vector
+    return selected, current_vector
+
+
+def cluster_bootstrap_mean(
+    df: pd.DataFrame,
+    value_column: str,
+    seed_label: str,
+    seed: int,
+    draws: int,
+) -> dict[str, Any]:
+    valid = df[df[value_column].notna()].copy()
+    if valid.empty:
+        return {
+            "mean": None,
+            "ci95_low": None,
+            "ci95_high": None,
+            "ci_unstable": True,
+            "cluster_count": 0,
+        }
+    valid["_cluster_key"] = valid["category"].astype(str) + "||" + valid["episode_id"].astype(str)
+    clusters = [group[value_column].to_numpy(dtype=np.float64) for _, group in valid.groupby("_cluster_key", sort=False)]
+    cluster_count = len(clusters)
+    point_estimate = float(valid[value_column].mean())
+    if cluster_count < DEFAULT_CLUSTER_BOOTSTRAP_MIN_CLUSTERS:
+        return {
+            "mean": point_estimate,
+            "ci95_low": None,
+            "ci95_high": None,
+            "ci_unstable": True,
+            "cluster_count": cluster_count,
+        }
+    rng = np.random.default_rng(build_seed_int(f"{seed_label}:{seed}"))
+    draws_values = []
+    for _ in range(draws):
+        sampled_indices = rng.integers(0, cluster_count, size=cluster_count)
+        sampled_values = np.concatenate([clusters[int(idx)] for idx in sampled_indices])
+        draws_values.append(float(sampled_values.mean()))
+    alpha = 1.0 - DEFAULT_BOOTSTRAP_CONFIDENCE_LEVEL
+    return {
+        "mean": point_estimate,
+        "ci95_low": float(np.quantile(draws_values, alpha / 2.0)),
+        "ci95_high": float(np.quantile(draws_values, 1.0 - alpha / 2.0)),
+        "ci_unstable": False,
+        "cluster_count": cluster_count,
+    }
+
+
+def build_group_summary(
+    df: pd.DataFrame,
+    group_column: str,
+    seed: int,
+) -> pd.DataFrame:
+    rows: list[dict[str, Any]] = []
+    retained = df[df["canonical_retained"] == True].copy()
+    if retained.empty:
+        return pd.DataFrame(columns=[group_column])
+    for group_value, group_df in retained.groupby(group_column, sort=False, observed=False):
+        row = {
+            group_column: group_value,
+            "pair_count": int(len(group_df)),
+            "cluster_count": int(group_df[["category", "episode_id"]].drop_duplicates().shape[0]),
+            "ci_unstable": bool(
+                group_df[["category", "episode_id"]].drop_duplicates().shape[0]
+                < DEFAULT_CLUSTER_BOOTSTRAP_MIN_CLUSTERS
+            ),
+        }
+        metric_columns = [
+            ("mean_bridge_lift", "bridge_lift"),
+            ("mean_win_rate_claim", "win_rate_claim"),
+            ("mean_win_rate_random_context", "win_rate_random_context"),
+            ("mean_win_rate_context", "win_rate_context"),
+            ("mean_bridge_advantage_over_random", "bridge_advantage_over_random"),
+            ("mean_selected_assumption_count", "selected_assumption_count"),
+        ]
+        for output_column, metric_column in metric_columns:
+            boot = cluster_bootstrap_mean(group_df, metric_column, f"{group_column}:{group_value}:{metric_column}", seed, DEFAULT_BOOTSTRAP_DRAWS)
+            row[output_column] = boot["mean"]
+            row[f"{output_column}_ci95_low"] = boot["ci95_low"]
+            row[f"{output_column}_ci95_high"] = boot["ci95_high"]
+            row[f"{output_column}_ci_unstable"] = boot["ci_unstable"]
+
+        full_bag_valid = group_df[group_df["full_bag_context_valid"] == True].copy()
+        row["full_bag_valid_pair_count"] = int(len(full_bag_valid))
+        if full_bag_valid.empty:
+            row["mean_win_rate_full_bag_context"] = None
+            row["mean_win_rate_full_bag_context_ci95_low"] = None
+            row["mean_win_rate_full_bag_context_ci95_high"] = None
+            row["mean_win_rate_full_bag_context_ci_unstable"] = True
+        else:
+            boot = cluster_bootstrap_mean(
+                full_bag_valid,
+                "win_rate_full_bag_context",
+                f"{group_column}:{group_value}:win_rate_full_bag_context",
+                seed,
+                DEFAULT_BOOTSTRAP_DRAWS,
+            )
+            row["mean_win_rate_full_bag_context"] = boot["mean"]
+            row["mean_win_rate_full_bag_context_ci95_low"] = boot["ci95_low"]
+            row["mean_win_rate_full_bag_context_ci95_high"] = boot["ci95_high"]
+            row["mean_win_rate_full_bag_context_ci_unstable"] = boot["ci_unstable"]
+
+        row["legacy_mean_sim_claim_raw"] = float(group_df["legacy_sim_claim_raw"].dropna().mean()) if group_df["legacy_sim_claim_raw"].notna().any() else None
+        row["legacy_mean_sim_context_raw"] = float(group_df["legacy_sim_context_raw"].dropna().mean()) if group_df["legacy_sim_context_raw"].notna().any() else None
+        row["legacy_mean_sim_unrelated_only_raw"] = float(group_df["legacy_sim_unrelated_only_raw"].dropna().mean()) if group_df["legacy_sim_unrelated_only_raw"].notna().any() else None
+        row["legacy_mean_bridge_delta_raw"] = float(group_df["legacy_bridge_delta_raw"].dropna().mean()) if group_df["legacy_bridge_delta_raw"].notna().any() else None
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
-def bootstrap_pointplot(long_df: pd.DataFrame, path: Path, category_order, seed: int):
+def plot_bridge_lift_by_category(summary_df: pd.DataFrame, path: Path) -> None:
     sns.set_theme(style="whitegrid", context="paper")
-    fig, ax = plt.subplots(figsize=(13.0, 7.4))
-    hue_order = [
-        "Claim Only",
-        "Assumption Context",
-        "Baseline",
-    ]
-    palette = {
-        "Claim Only": "#d95f02",
-        "Assumption Context": "#1b9e77",
-        "Baseline": "#4c78a8",
-    }
-    sns.pointplot(
-        data=long_df,
-        x="cosine_similarity",
-        y="category",
-        hue="comparison",
-        order=list(category_order),
-        hue_order=hue_order,
-        estimator=np.mean,
-        errorbar=("ci", 95),
-        n_boot=DEFAULT_BOOTSTRAP_DRAWS,
-        seed=seed,
-        dodge=0.6,
-        linestyles="none",
-        palette=palette,
-        markers=["o", "s", "D"],
-        ax=ax,
+    fig, ax = plt.subplots(figsize=(11.5, 6.5))
+    ordered = summary_df.sort_values("mean_bridge_lift", ascending=False).reset_index(drop=True)
+    y_positions = np.arange(len(ordered))
+    means = ordered["mean_bridge_lift"].astype(float).to_numpy()
+    lower = ordered["mean_bridge_lift_ci95_low"].astype(float).to_numpy()
+    upper = ordered["mean_bridge_lift_ci95_high"].astype(float).to_numpy()
+    lower_err = np.where(np.isnan(lower), 0.0, means - lower)
+    upper_err = np.where(np.isnan(upper), 0.0, upper - means)
+    ax.errorbar(
+        means,
+        y_positions,
+        xerr=np.vstack([lower_err, upper_err]),
+        fmt="o",
+        color="#1b9e77",
+        ecolor="#1b9e77",
+        capsize=3,
     )
-    ax.set_title("Relevance Bridge With Full Assumption Context", fontsize=15)
-    ax.set_xlabel("Cosine Similarity With Previous Substantive Turn")
+    ax.axvline(0.0, color="black", linestyle="--", linewidth=1.0)
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(ordered["category"].astype(str).tolist())
+    ax.set_xlabel("Bridge Lift")
     ax.set_ylabel("Category")
-    ax.legend(title=None, frameon=False, loc="best")
+    ax.set_title("Exp 1 v2 Bridge Lift by Category")
     fig.tight_layout()
     fig.savefig(path, dpi=220)
     plt.close(fig)
 
 
-def distribution_plot(df: pd.DataFrame, path: Path):
+def build_ablation_summary(summary_df: pd.DataFrame) -> pd.DataFrame:
+    rows: list[dict[str, Any]] = []
+    for row in summary_df.itertuples(index=False):
+        comparisons = [
+            ("Claim Only", row.mean_win_rate_claim, row.mean_win_rate_claim_ci95_low, row.mean_win_rate_claim_ci95_high),
+            ("Random Context", row.mean_win_rate_random_context, row.mean_win_rate_random_context_ci95_low, row.mean_win_rate_random_context_ci95_high),
+            ("Greedy Context", row.mean_win_rate_context, row.mean_win_rate_context_ci95_low, row.mean_win_rate_context_ci95_high),
+            ("Full-Bag Context", row.mean_win_rate_full_bag_context, row.mean_win_rate_full_bag_context_ci95_low, row.mean_win_rate_full_bag_context_ci95_high),
+        ]
+        for comparison, mean_value, ci_low, ci_high in comparisons:
+            rows.append(
+                {
+                    "category": row.category,
+                    "comparison": comparison,
+                    "mean_value": mean_value,
+                    "ci95_low": ci_low,
+                    "ci95_high": ci_high,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def plot_ablation_by_category(summary_df: pd.DataFrame, path: Path) -> None:
+    long_df = build_ablation_summary(summary_df)
+    sns.set_theme(style="whitegrid", context="paper")
+    fig, ax = plt.subplots(figsize=(13.0, 7.0))
+    category_order = summary_df.sort_values("mean_bridge_lift", ascending=False)["category"].astype(str).tolist()
+    comparison_order = ["Claim Only", "Random Context", "Greedy Context", "Full-Bag Context"]
+    palette = {
+        "Claim Only": "#d95f02",
+        "Random Context": "#7570b3",
+        "Greedy Context": "#1b9e77",
+        "Full-Bag Context": "#4c78a8",
+    }
+    for comparison in comparison_order:
+        part = long_df[long_df["comparison"] == comparison].set_index("category").reindex(category_order).reset_index()
+        y_positions = np.arange(len(category_order)) + (comparison_order.index(comparison) - 1.5) * 0.16
+        means = part["mean_value"].astype(float).to_numpy()
+        lower = part["ci95_low"].astype(float).to_numpy()
+        upper = part["ci95_high"].astype(float).to_numpy()
+        lower_err = np.where(np.isnan(lower), 0.0, means - lower)
+        upper_err = np.where(np.isnan(upper), 0.0, upper - means)
+        ax.errorbar(
+            means,
+            y_positions,
+            xerr=np.vstack([lower_err, upper_err]),
+            fmt="o",
+            color=palette[comparison],
+            ecolor=palette[comparison],
+            capsize=2.5,
+            label=comparison,
+        )
+    ax.set_yticks(np.arange(len(category_order)))
+    ax.set_yticklabels(category_order)
+    ax.set_xlabel("Win Rate")
+    ax.set_ylabel("Category")
+    ax.set_title("Exp 1 v2 Ablation by Category")
+    ax.legend(frameon=False, loc="best")
+    fig.tight_layout()
+    fig.savefig(path, dpi=220)
+    plt.close(fig)
+
+
+def plot_legacy_cosine_distribution(df: pd.DataFrame, path: Path) -> None:
+    retained = df[df["canonical_retained"] == True].copy()
+    if retained.empty:
+        empty_fig, empty_ax = plt.subplots(figsize=(11.5, 7))
+        empty_ax.set_title("Exp 1 v2 Legacy Raw Cosine Diagnostics")
+        empty_ax.set_xlabel("Raw Cosine Similarity")
+        empty_ax.set_ylabel("Density")
+        empty_fig.tight_layout()
+        empty_fig.savefig(path, dpi=220)
+        plt.close(empty_fig)
+        return
     sns.set_theme(style="whitegrid", context="paper")
     fig, ax = plt.subplots(figsize=(11.5, 7))
     bins = np.linspace(0, 1, 60)
-    ax.hist(df["sim_claim"], bins=bins, density=True, alpha=0.42, color="#d95f02", label="Claim Only")
-    ax.hist(df["sim_context"], bins=bins, density=True, alpha=0.48, color="#1b9e77", label="Assumption Context")
-    ax.hist(
-        df["sim_unrelated_sentences_only"],
-        bins=bins,
-        density=True,
-        alpha=0.42,
-        color="#4c78a8",
-        label="Baseline",
-    )
-    ax.axvline(df["sim_claim"].mean(), color="#d95f02", linestyle="--", linewidth=1.8)
-    ax.axvline(df["sim_context"].mean(), color="#1b9e77", linestyle="--", linewidth=1.8)
-    ax.axvline(df["sim_unrelated_sentences_only"].mean(), color="#4c78a8", linestyle="--", linewidth=1.8)
-    ax.set_title("Relevance Bridge Distribution", fontsize=15)
-    ax.set_xlabel("Cosine Similarity With Previous Substantive Turn")
+    ax.hist(retained["legacy_sim_claim_raw"].dropna(), bins=bins, density=True, alpha=0.42, color="#d95f02", label="Claim Only")
+    ax.hist(retained["legacy_sim_context_raw"].dropna(), bins=bins, density=True, alpha=0.48, color="#1b9e77", label="Assumption Context")
+    ax.hist(retained["legacy_sim_unrelated_only_raw"].dropna(), bins=bins, density=True, alpha=0.42, color="#4c78a8", label="Unrelated Baseline")
+    ax.set_title("Exp 1 v2 Legacy Raw Cosine Diagnostics")
+    ax.set_xlabel("Raw Cosine Similarity")
     ax.set_ylabel("Density")
     ax.legend(frameon=False)
     fig.tight_layout()
@@ -543,246 +1204,93 @@ def distribution_plot(df: pd.DataFrame, path: Path):
     plt.close(fig)
 
 
-def compute_trajectory_metrics(df: pd.DataFrame):
-    claim_steps = []
-    context_steps = []
-    total_claim_path_length = 0.0
-    total_context_path_length = 0.0
-    episode_count = 0
-
-    ordered = df.sort_values(["episode_id", "turn_b_idx"]).reset_index(drop=True)
-    for _, episode_df in ordered.groupby("episode_id", sort=False, observed=False):
-        if len(episode_df) < 2:
-            continue
-        episode_count += 1
-        claim_vectors = episode_df["vec_claim"].tolist()
-        context_vectors = episode_df["vec_context"].tolist()
-        for idx in range(1, len(episode_df)):
-            claim_step = 1.0 - cosine_similarity(claim_vectors[idx - 1], claim_vectors[idx])
-            context_step = 1.0 - cosine_similarity(context_vectors[idx - 1], context_vectors[idx])
-            claim_steps.append(claim_step)
-            context_steps.append(context_step)
-            total_claim_path_length += claim_step
-            total_context_path_length += context_step
-
-    return {
-        "claim_only": {
-            "mean_adjacent_step_distance": float(np.mean(claim_steps)) if claim_steps else 0.0,
-            "total_path_length": float(total_claim_path_length),
-            "episode_count": int(episode_count),
-            "transition_count": int(len(claim_steps)),
-        },
-        "assumption_context": {
-            "mean_adjacent_step_distance": float(np.mean(context_steps)) if context_steps else 0.0,
-            "total_path_length": float(total_context_path_length),
-            "episode_count": int(episode_count),
-            "transition_count": int(len(context_steps)),
-        },
+def build_segment_summary(df: pd.DataFrame, analysis_bucket: str, seed: int) -> dict[str, Any]:
+    eligible = df[(df["eligible"] == True) & (df["analysis_bucket"] == analysis_bucket)].copy()
+    retained = eligible[eligible["canonical_retained"] == True].copy()
+    summary: dict[str, Any] = {
+        "eligible_pair_count": int(len(eligible)),
+        "retained_pair_count": int(len(retained)),
+        "retained_pair_rate": float(len(retained) / len(eligible)) if len(eligible) > 0 else None,
+        "eligible_zero_assumption_pair_count": int((eligible["selected_assumption_count"].fillna(-1) == 0).sum()),
+        "retained_zero_assumption_pair_count": int((retained["selected_assumption_count"].fillna(-1) == 0).sum()),
     }
-
-
-def select_umap_rows(df: pd.DataFrame):
-    sampled_parts = []
-    episode_sizes = df.groupby("episode_id", observed=False).size().sort_values(ascending=False)
-    for episode_id in episode_sizes.head(UMAP_MAX_EPISODES).index.tolist():
-        episode_df = df[df["episode_id"] == episode_id].sort_values("turn_b_idx")
-        if len(episode_df) > UMAP_MAX_POINTS_PER_EPISODE:
-            sample_indices = np.linspace(0, len(episode_df) - 1, UMAP_MAX_POINTS_PER_EPISODE, dtype=int)
-            episode_df = episode_df.iloc[sample_indices]
-        sampled_parts.append(episode_df)
-    if not sampled_parts:
-        return df.iloc[0:0].copy()
-    return pd.concat(sampled_parts, ignore_index=True)
-
-
-def write_umap_outputs(df: pd.DataFrame, sample_csv_path: Path, plot_path: Path, seed: int):
-    import umap
-
-    sampled_df = select_umap_rows(df)
-    if sampled_df.empty:
-        empty_frame = pd.DataFrame(
-            columns=["episode_id", "category", "turn_b_idx", "representation", "umap_x", "umap_y"]
+    for metric_name, column_name in [
+        ("mean_bridge_lift", "bridge_lift"),
+        ("mean_win_rate_claim", "win_rate_claim"),
+        ("mean_win_rate_random_context", "win_rate_random_context"),
+        ("mean_win_rate_context", "win_rate_context"),
+        ("mean_bridge_advantage_over_random", "bridge_advantage_over_random"),
+    ]:
+        boot = cluster_bootstrap_mean(retained, column_name, f"{analysis_bucket}:{column_name}", seed, DEFAULT_BOOTSTRAP_DRAWS)
+        summary[metric_name] = boot["mean"]
+        summary[f"{metric_name}_ci95_low"] = boot["ci95_low"]
+        summary[f"{metric_name}_ci95_high"] = boot["ci95_high"]
+        summary[f"{metric_name}_ci_unstable"] = boot["ci_unstable"]
+    full_bag_valid = retained[retained["full_bag_context_valid"] == True].copy()
+    if full_bag_valid.empty:
+        summary["mean_win_rate_full_bag_context"] = None
+        summary["mean_win_rate_full_bag_context_ci95_low"] = None
+        summary["mean_win_rate_full_bag_context_ci95_high"] = None
+        summary["mean_win_rate_full_bag_context_ci_unstable"] = True
+    else:
+        boot = cluster_bootstrap_mean(
+            full_bag_valid,
+            "win_rate_full_bag_context",
+            f"{analysis_bucket}:win_rate_full_bag_context",
+            seed,
+            DEFAULT_BOOTSTRAP_DRAWS,
         )
-        empty_frame.to_csv(sample_csv_path, index=False)
-        return {
-            "sample_csv": str(sample_csv_path),
-            "plot_png": str(plot_path),
-            "sampled_episode_count": 0,
-            "sampled_row_count": 0,
-        }
-
-    claim_matrix = np.vstack(sampled_df["vec_claim"].to_list())
-    context_matrix = np.vstack(sampled_df["vec_context"].to_list())
-    stacked_matrix = np.vstack([claim_matrix, context_matrix])
-    umap_model = umap.UMAP(
-        n_components=2,
-        metric="cosine",
-        n_neighbors=min(UMAP_NEIGHBORS, max(2, len(sampled_df) - 1)),
-        min_dist=UMAP_MIN_DIST,
-        random_state=seed,
-    )
-    embedding = umap_model.fit_transform(stacked_matrix)
-    split_index = len(sampled_df)
-    claim_embedding = embedding[:split_index]
-    context_embedding = embedding[split_index:]
-
-    sample_rows = []
-    for row_idx, row in enumerate(sampled_df.itertuples(index=False)):
-        sample_rows.append(
-            {
-                "episode_id": row.episode_id,
-                "category": row.category,
-                "turn_b_idx": int(row.turn_b_idx),
-                "representation": "Claim Only",
-                "umap_x": float(claim_embedding[row_idx, 0]),
-                "umap_y": float(claim_embedding[row_idx, 1]),
-            }
-        )
-        sample_rows.append(
-            {
-                "episode_id": row.episode_id,
-                "category": row.category,
-                "turn_b_idx": int(row.turn_b_idx),
-                "representation": "Assumption Context",
-                "umap_x": float(context_embedding[row_idx, 0]),
-                "umap_y": float(context_embedding[row_idx, 1]),
-            }
-        )
-    sample_df = pd.DataFrame(sample_rows)
-    sample_df.to_csv(sample_csv_path, index=False)
-
-    palette = sns.color_palette("tab20", sampled_df["episode_id"].nunique())
-    episode_colors = {episode_id: palette[idx % len(palette)] for idx, episode_id in enumerate(sampled_df["episode_id"].unique())}
-    fig, axes = plt.subplots(1, 2, figsize=(13.5, 6.2), sharex=True, sharey=True)
-    for ax, representation in zip(axes, ["Claim Only", "Assumption Context"]):
-        part = sample_df[sample_df["representation"] == representation]
-        for episode_id, episode_df in part.groupby("episode_id", sort=False, observed=False):
-            episode_df = episode_df.sort_values("turn_b_idx")
-            color = episode_colors[episode_id]
-            ax.plot(
-                episode_df["umap_x"],
-                episode_df["umap_y"],
-                marker="o",
-                markersize=3.2,
-                linewidth=1.4,
-                alpha=0.82,
-                color=color,
-            )
-        ax.set_title(representation)
-        ax.set_xlabel("UMAP-1")
-        ax.grid(alpha=0.2)
-    axes[0].set_ylabel("UMAP-2")
-    fig.suptitle("Exp 1 Conversation Trajectory Smoothing", fontsize=15)
-    fig.tight_layout()
-    fig.savefig(plot_path, dpi=220)
-    plt.close(fig)
-
-    return {
-        "sample_csv": str(sample_csv_path),
-        "plot_png": str(plot_path),
-        "sampled_episode_count": int(sampled_df["episode_id"].nunique()),
-        "sampled_row_count": int(len(sampled_df)),
-    }
+        summary["mean_win_rate_full_bag_context"] = boot["mean"]
+        summary["mean_win_rate_full_bag_context_ci95_low"] = boot["ci95_low"]
+        summary["mean_win_rate_full_bag_context_ci95_high"] = boot["ci95_high"]
+        summary["mean_win_rate_full_bag_context_ci_unstable"] = boot["ci_unstable"]
+    return summary
 
 
-def build_by_category(df: pd.DataFrame) -> pd.DataFrame:
-    return (
-        df.groupby("category", as_index=False)
-        .agg(
-            pair_count=("bridge_delta", "size"),
-            mean_sim_claim=("sim_claim", "mean"),
-            mean_sim_context=("sim_context", "mean"),
-            mean_sim_unrelated_sentences_only=("sim_unrelated_sentences_only", "mean"),
-            mean_bridge_delta=("bridge_delta", "mean"),
-            positive_bridge_rate=("bridge_delta", lambda values: float((values > 0).mean())),
-            average_assumption_count=("candidate_assumption_count", "mean"),
-            assumption_pair_rate=("turn_b_has_assumptions", "mean"),
-        )
-        .sort_values("mean_bridge_delta", ascending=False)
-    )
-
-
-def write_pair_csv(df: pd.DataFrame, path: Path):
-    df[PAIR_EXPORT_COLUMNS].to_csv(path, index=False)
-
-
-def build_patch_summary(
-    args,
-    categories,
-    selected_files,
-    category_files,
-    df: pd.DataFrame,
-    pair_csv: Path,
-    summary_json: Path,
-):
-    return {
-        "experiment": "Experiment 1: The Relevance Bridge",
-        "analysis_stage": "patch_pair_extraction_only",
-        "input_dir": str(args.input_dir),
-        "embedding_model_name": str(args.embedding_model_name),
-        "embedding_batch_size": int(args.embedding_batch_size),
-        "embedding_device": str(resolve_embedding_device(args.embedding_device)),
-        "default_embedding_model_name": DEFAULT_EMBEDDING_MODEL_NAME,
-        "recommended_qwen_embedding_model_name": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
-        "default_embedding_device": DEFAULT_EMBEDDING_DEVICE,
-        "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
-        "num_patches": int(args.num_patches),
-        "patch_index": int(args.patch_index),
-        "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
-        "selected_episode_file_count": int(len(selected_files)),
-        "candidate_episode_file_count": int(len(category_files)),
-        "baseline_sentence_pool_path": str(UNRELATED_SENTENCES_PATH),
-        "baseline_sentence_pool_size": int(UNRELATED_SENTENCE_POOL_SIZE),
-        "baseline_sentence_sample_size": int(BASELINE_SENTENCE_SAMPLE_SIZE),
-        "categories": categories,
-        "total_pairs": int(len(df)),
-        "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
-        "assumption_pair_rate": float(df["turn_b_has_assumptions"].mean()),
-        "average_assumption_count": float(df["candidate_assumption_count"].mean()),
-        "bridge_score_mean_delta": float(df["bridge_delta"].mean()),
-        "outputs": {
-            "pair_csv": str(pair_csv),
-            "summary_json": str(summary_json),
-        },
-        "deferred_outputs": [
-            "exp1_bridge_by_category.csv",
-            "exp1_similarity_pointplot_summary.csv",
-            "exp1_similarity_pointplot.png",
-            "exp1_distance_distribution.png",
-            "exp1_umap_sample.csv",
-            "exp1_umap_trajectory.png",
-        ],
-        "notes": [
-            "Patch mode writes adjacent-pair bridge diagnostics only.",
-            "Turn B context is the full same-turn assumption bag appended to the claim text.",
-            "Baseline samples 10 unrelated sentences from the fixed Exp 1 sentence pool without including the Turn B claim.",
-            "Run merge_exp1_patches.py after all patches finish to build the merged summaries, plots, and UMAP outputs.",
-        ],
-    }
-
-
-def build_full_summary(
-    args,
+def build_summary_payload(
+    args: argparse.Namespace,
     output_dir: Path,
-    categories,
-    selected_files,
-    category_files,
     df: pd.DataFrame,
+    category_summary: pd.DataFrame,
+    move_summary: pd.DataFrame,
     pair_csv: Path,
     category_csv: Path,
-    pointplot_csv: Path,
-    pointplot_png: Path,
-    dist_png: Path,
-    umap_sample_csv: Path,
-    umap_png: Path,
-    summary_json: Path,
-    trajectory_metrics,
-    umap_outputs,
-):
-    boot = bootstrap_mean(df["bridge_delta"], seed=args.seed)
-    return {
+    move_csv: Path,
+    main_plot_png: Path,
+    ablation_plot_png: Path,
+    diagnostic_plot_png: Path,
+    analysis_stage: str,
+    categories: list[str],
+    selected_files: list[tuple[str, Path]],
+    category_files: list[tuple[str, Path]],
+    whitening_manifest: dict[str, Any],
+    selected_episode_file_count: int | None,
+    candidate_episode_file_count: int | None,
+    extra_sections: dict[str, Any] | None,
+) -> dict[str, Any]:
+    headline_summary = build_segment_summary(df, "headline_constructive", args.seed)
+    stress_summary = build_segment_summary(df, "stress_test", args.seed)
+    eligibility_summary = {
+        "eligible_pair_count": int((df["eligible"] == True).sum()),
+        "excluded_pair_count": int((df["eligible"] != True).sum()),
+        "excluded_non_substantive_pair_count": int((df["eligibility_exclusion_reason"] == "non_substantive_pair").sum()),
+        "excluded_unsupported_move_bucket_count": int((df["eligibility_exclusion_reason"] == "unsupported_move_bucket").sum()),
+    }
+    eligible = df[df["eligible"] == True].copy()
+    coverage = {
+        "coverage_retained_pair_count": int((eligible["canonical_retained"] == True).sum()),
+        "coverage_dropped_pair_count": int((eligible["canonical_retained"] != True).sum()),
+        "coverage_retained_pair_rate": float((eligible["canonical_retained"] == True).mean()) if len(eligible) > 0 else None,
+        "coverage_dropped_insufficient_unique_negatives_count": int((eligible["coverage_drop_reason"] == "insufficient_unique_negatives").sum()),
+        "coverage_dropped_insufficient_random_context_assumptions_count": int((eligible["coverage_drop_reason"] == "insufficient_random_context_assumptions").sum()),
+        "coverage_dropped_zero_norm_whitened_vector_count": int((eligible["coverage_drop_reason"] == "zero_norm_whitened_vector").sum()),
+        "coverage_dropped_corrupt_or_unreadable_assumption_field_count": int((eligible["coverage_drop_reason"] == "corrupt_or_unreadable_assumption_field").sum()),
+    }
+    full_bag_valid = df[df["full_bag_context_valid"] == True]
+    legacy_source = df[df["canonical_retained"] == True].copy()
+    payload = {
         "experiment": "Experiment 1: The Relevance Bridge",
-        "analysis_stage": "full_analysis",
+        "analysis_stage": analysis_stage,
         "input_dir": str(args.input_dir),
         "output_dir": str(output_dir),
         "embedding_model_name": str(args.embedding_model_name),
@@ -792,54 +1300,395 @@ def build_full_summary(
         "recommended_qwen_embedding_model_name": DEFAULT_QWEN_EMBEDDING_MODEL_NAME,
         "default_embedding_device": DEFAULT_EMBEDDING_DEVICE,
         "target_embedding_max_length": DEFAULT_TARGET_EMBEDDING_MAX_LENGTH,
-        "num_patches": int(args.num_patches),
-        "patch_index": int(args.patch_index),
-        "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
-        "selected_episode_file_count": int(len(selected_files)),
-        "candidate_episode_file_count": int(len(category_files)),
-        "baseline_sentence_pool_path": str(UNRELATED_SENTENCES_PATH),
-        "baseline_sentence_pool_size": int(UNRELATED_SENTENCE_POOL_SIZE),
-        "baseline_sentence_sample_size": int(BASELINE_SENTENCE_SAMPLE_SIZE),
+        "bootstrap_draws": DEFAULT_BOOTSTRAP_DRAWS,
+        "bootstrap_confidence_level": DEFAULT_BOOTSTRAP_CONFIDENCE_LEVEL,
+        "bootstrap_cluster_key": ["category", "episode_id"],
         "categories": categories,
-        "total_pairs": int(len(df)),
-        "pairs_with_assumptions_on_turn_b": int(df["turn_b_has_assumptions"].sum()),
-        "assumption_pair_rate": float(df["turn_b_has_assumptions"].mean()),
-        "average_assumption_count": float(df["candidate_assumption_count"].mean()),
-        "bridge_score_mean_delta": float(df["bridge_delta"].mean()),
-        "bridge_score_median_delta": float(df["bridge_delta"].median()),
-        "positive_bridge_rate": float((df["bridge_delta"] > 0).mean()),
-        "mean_similarity_claim_only": float(df["sim_claim"].mean()),
-        "mean_similarity_assumption_context": float(df["sim_context"].mean()),
-        "mean_similarity_with_assumptions": float(df["sim_context"].mean()),
-        "mean_similarity_unrelated_sentences_only": float(df["sim_unrelated_sentences_only"].mean()),
-        "mean_similarity_gain_percent": float(
-            100.0 * (df["sim_context"].mean() - df["sim_claim"].mean()) / max(abs(df["sim_claim"].mean()), 1e-9)
-        ),
-        "bridge_delta_bootstrap": boot,
-        "trajectory_smoothing": trajectory_metrics,
-        "umap": umap_outputs,
+        "selected_episode_file_count": int(selected_episode_file_count) if selected_episode_file_count is not None else int(len(selected_files)),
+        "candidate_episode_file_count": int(candidate_episode_file_count) if candidate_episode_file_count is not None else int(len(category_files)),
+        "headline_constructive": headline_summary,
+        "stress_test": stress_summary,
+        "legacy_diagnostics": {
+            "legacy_mean_sim_claim_raw": float(legacy_source["legacy_sim_claim_raw"].dropna().mean()) if legacy_source["legacy_sim_claim_raw"].notna().any() else None,
+            "legacy_mean_sim_context_raw": float(legacy_source["legacy_sim_context_raw"].dropna().mean()) if legacy_source["legacy_sim_context_raw"].notna().any() else None,
+            "legacy_mean_sim_unrelated_only_raw": float(legacy_source["legacy_sim_unrelated_only_raw"].dropna().mean()) if legacy_source["legacy_sim_unrelated_only_raw"].notna().any() else None,
+            "legacy_mean_bridge_delta_raw": float(legacy_source["legacy_bridge_delta_raw"].dropna().mean()) if legacy_source["legacy_bridge_delta_raw"].notna().any() else None,
+        },
+        "eligibility_summary": eligibility_summary,
+        "coverage": coverage,
+        "full_bag_ablation": {
+            "full_bag_ablation_valid_pair_count": int(len(full_bag_valid)),
+            "full_bag_ablation_invalid_pair_count": int(len(df[df["full_bag_context_valid"] == False])),
+            "full_bag_ablation_invalid_zero_norm_count": int((df["ablation_drop_reason"] == "zero_norm_full_bag_context_vector").sum()),
+        },
+        "whitening_artifact": {
+            "params_path": str(whitening_paths(resolve_output_dir(args.output_dir, args.embedding_model_name))[0]),
+            "manifest_path": str(whitening_paths(resolve_output_dir(args.output_dir, args.embedding_model_name))[1]),
+            "manifest_hash": whitening_manifest.get("manifest_hash"),
+        },
         "outputs": {
             "pair_csv": str(pair_csv),
             "category_csv": str(category_csv),
-            "pointplot_summary_csv": str(pointplot_csv),
-            "pointplot_png": str(pointplot_png),
-            "distance_distribution_png": str(dist_png),
-            "umap_sample_csv": str(umap_sample_csv),
-            "umap_trajectory_png": str(umap_png),
-            "summary_json": str(summary_json),
+            "move_csv": str(move_csv),
+            "bridge_lift_by_category_png": str(main_plot_png),
+            "ablation_by_category_png": str(ablation_plot_png),
+            "legacy_cosine_distribution_png": str(diagnostic_plot_png),
         },
-        "notes": [
-            "Only turns with turn_type_label == 'Substantive' are included.",
-            "Turn A is vectorized from explicit propositions when available, otherwise raw turn text.",
-            "Turn B claim text comes from explicit_propositions.",
-            "Turn B context uses the full same-turn assumption bag without any greedy filtering.",
-            "Baseline samples 10 unrelated sentences from the fixed Exp 1 sentence pool without including the Turn B claim.",
-            "Cosine similarity is computed on L2-normalized sentence embeddings from the selected embedding model.",
-        ],
     }
+    if extra_sections:
+        payload.update(extra_sections)
+    return payload
 
 
-def main():
+def serialize_pair_frame(df: pd.DataFrame) -> pd.DataFrame:
+    serialized = df.copy()
+    for column_name in ["selected_assumption_ids"]:
+        if column_name in serialized.columns:
+            serialized[column_name] = serialized[column_name].map(serialize_json_field)
+    return serialized[PAIR_EXPORT_COLUMNS]
+
+
+def score_pair_rows(
+    pair_rows: list[dict[str, Any]],
+    turn_indexes: dict[str, Any],
+    raw_text_to_vec: dict[str, np.ndarray],
+    whitened_text_to_vec: dict[str, np.ndarray | None],
+    unrelated_sentences: list[str],
+    seed: int,
+    use_tqdm: bool,
+) -> pd.DataFrame:
+    scored_rows: list[dict[str, Any]] = []
+    turn_lookup = turn_indexes["turn_lookup"]
+    assumption_lookup = turn_indexes["assumption_lookup"]
+    assumptions_by_category_move = turn_indexes["assumptions_by_category_move"]
+    assumptions_by_category = turn_indexes["assumptions_by_category"]
+    assumptions_global_headline = turn_indexes["assumptions_global_headline"]
+    iterator = tqdm(pair_rows, desc="Scoring Exp 1 v2 pairs", disable=not use_tqdm)
+    for original_row in iterator:
+        row = dict(original_row)
+        row["canonical_retained"] = None
+        row["coverage_drop_reason"] = None
+        row["negative_pool_complete"] = None
+        row["random_context_pool_complete"] = None
+        row["full_bag_context_valid"] = None
+        row["ablation_drop_reason"] = None
+        row["selected_assumption_count"] = None
+        row["selected_assumption_ids"] = None
+        row["selected_context_text"] = None
+        row["negative_sample_count_actual"] = None
+        row["negative_count_layer1_exact"] = None
+        row["negative_count_layer2_gap3"] = None
+        row["negative_count_layer2_gap2_backfill"] = None
+        row["negative_count_layer3_exact"] = None
+        row["negative_count_backfill_same_category"] = None
+        row["negative_count_backfill_global"] = None
+        row["win_rate_claim"] = None
+        row["win_rate_random_context"] = None
+        row["win_rate_context"] = None
+        row["bridge_lift"] = None
+        row["random_context_lift"] = None
+        row["bridge_advantage_over_random"] = None
+        row["win_rate_full_bag_context"] = None
+        row["legacy_sim_claim_raw"] = None
+        row["legacy_sim_context_raw"] = None
+        row["legacy_sim_unrelated_only_raw"] = None
+        row["legacy_bridge_delta_raw"] = None
+
+        if not bool(row["eligible"]):
+            scored_rows.append(row)
+            continue
+
+        negative_ids, negative_counts, negative_pool_complete = select_negative_ids(row, turn_indexes, seed)
+        row["negative_sample_count_actual"] = int(len(negative_ids))
+        for key, value in negative_counts.items():
+            row[key] = int(value)
+        row["negative_pool_complete"] = bool(negative_pool_complete)
+        if not negative_pool_complete:
+            row["canonical_retained"] = False
+            row["random_context_pool_complete"] = None
+            row["full_bag_context_valid"] = None
+            row["coverage_drop_reason"] = "insufficient_unique_negatives"
+            scored_rows.append(row)
+            continue
+
+        if bool(row["turn_b_assumption_field_corrupt"]):
+            row["canonical_retained"] = False
+            row["random_context_pool_complete"] = None
+            row["full_bag_context_valid"] = None
+            row["coverage_drop_reason"] = "corrupt_or_unreadable_assumption_field"
+            scored_rows.append(row)
+            continue
+
+        vec_a_raw = normalize_vector(raw_text_to_vec[row["turn_a_text"]])
+        vec_claim_raw = normalize_vector(raw_text_to_vec[row["turn_b_claim_text"]])
+        vec_a = whitened_text_to_vec.get(row["turn_a_text"])
+        vec_claim = whitened_text_to_vec.get(row["turn_b_claim_text"])
+        negative_vecs = [whitened_text_to_vec.get(turn_lookup[negative_id]["claim_text"]) for negative_id in negative_ids]
+        if vec_a is None or vec_claim is None or any(negative_vec is None for negative_vec in negative_vecs):
+            row["canonical_retained"] = False
+            row["random_context_pool_complete"] = None
+            row["full_bag_context_valid"] = None
+            row["coverage_drop_reason"] = "zero_norm_whitened_vector"
+            scored_rows.append(row)
+            continue
+
+        assumption_records: list[dict[str, Any]] = []
+        assumption_zero_norm_ids: set[str] = set()
+        for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
+            raw_record = assumption_lookup.get(assumption_id)
+            if raw_record is None:
+                continue
+            whitened_vec = whitened_text_to_vec.get(assumption_text)
+            if whitened_vec is None:
+                assumption_zero_norm_ids.add(assumption_id)
+                continue
+            assumption_records.append(
+                {
+                    "id": assumption_id,
+                    "text": assumption_text,
+                    "vec": whitened_vec,
+                }
+            )
+
+        selected_assumptions, greedy_vec = greedy_select_assumptions(vec_a, vec_claim, assumption_records)
+        selected_assumption_ids = [record["id"] for record in selected_assumptions]
+        selected_assumption_texts_by_id = {record["id"]: record["text"] for record in selected_assumptions}
+        selected_assumption_texts = [
+            assumption_text
+            for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"])
+            if assumption_id in selected_assumption_texts_by_id
+        ]
+        row["selected_assumption_count"] = int(len(selected_assumptions))
+        row["selected_assumption_ids"] = selected_assumption_ids
+        row["selected_context_text"] = " ".join([row["turn_b_claim_text"], *selected_assumption_texts]).strip()
+
+        if selected_assumptions and greedy_vec is None:
+            row["canonical_retained"] = False
+            row["random_context_pool_complete"] = None
+            row["full_bag_context_valid"] = None
+            row["coverage_drop_reason"] = "zero_norm_whitened_vector"
+            scored_rows.append(row)
+            continue
+
+        negative_scores = [cosine_similarity(vec_a, negative_vec) for negative_vec in negative_vecs if negative_vec is not None]
+        claim_score = cosine_similarity(vec_a, vec_claim)
+        win_rate_claim = win_rate_from_scores(claim_score, negative_scores)
+        context_vec = greedy_vec if selected_assumptions else vec_claim
+        context_score = cosine_similarity(vec_a, context_vec)
+        win_rate_context = win_rate_from_scores(context_score, negative_scores)
+
+        if row["selected_assumption_count"] == 0:
+            row["random_context_pool_complete"] = True
+            win_rate_random_context = win_rate_claim
+            random_context_score = claim_score
+        else:
+            category = str(row["category"])
+            move_label = str(row["turn_b_move_label"])
+            episode_id = str(row["episode_id"])
+            excluded_assumption_ids = set(row["turn_b_assumption_ids"])
+
+            def assumption_candidates(ids: list[str]) -> list[str]:
+                return [candidate_id for candidate_id in ids if candidate_id not in excluded_assumption_ids]
+
+            random_pool = [
+                candidate_id
+                for candidate_id in assumptions_by_category_move.get((category, move_label), [])
+                if assumption_lookup[candidate_id]["episode_id"] != episode_id
+            ]
+            random_ids = sample_unique_ids(
+                assumption_candidates(random_pool),
+                row["selected_assumption_count"],
+                row["pair_id"],
+                "random_context_same_category_same_move",
+                seed,
+            )
+            if len(random_ids) < row["selected_assumption_count"]:
+                needed = row["selected_assumption_count"] - len(random_ids)
+                backfill_pool = [
+                    candidate_id
+                    for candidate_id in assumptions_by_category.get(category, [])
+                    if assumption_lookup[candidate_id]["episode_id"] != episode_id
+                    and candidate_id not in random_ids
+                    and candidate_id not in excluded_assumption_ids
+                ]
+                random_ids.extend(
+                    sample_unique_ids(
+                        backfill_pool,
+                        needed,
+                        row["pair_id"],
+                        "random_context_same_category_backfill",
+                        seed,
+                    )
+                )
+            if len(random_ids) < row["selected_assumption_count"]:
+                needed = row["selected_assumption_count"] - len(random_ids)
+                global_pool = [
+                    candidate_id
+                    for candidate_id in assumptions_global_headline
+                    if assumption_lookup[candidate_id]["episode_id"] != episode_id
+                    and candidate_id not in random_ids
+                    and candidate_id not in excluded_assumption_ids
+                ]
+                random_ids.extend(
+                    sample_unique_ids(
+                        global_pool,
+                        needed,
+                        row["pair_id"],
+                        "random_context_global_backfill",
+                        seed,
+                    )
+                )
+            if len(random_ids) < row["selected_assumption_count"]:
+                row["canonical_retained"] = False
+                row["random_context_pool_complete"] = False
+                row["full_bag_context_valid"] = None
+                row["coverage_drop_reason"] = "insufficient_random_context_assumptions"
+                scored_rows.append(row)
+                continue
+            random_assumption_vecs = [whitened_text_to_vec.get(assumption_lookup[random_id]["text"]) for random_id in random_ids]
+            if any(random_assumption_vec is None for random_assumption_vec in random_assumption_vecs):
+                row["canonical_retained"] = False
+                row["random_context_pool_complete"] = False
+                row["full_bag_context_valid"] = None
+                row["coverage_drop_reason"] = "zero_norm_whitened_vector"
+                scored_rows.append(row)
+                continue
+            random_context_vec = compose_normalized_mean([vec_claim] + [vec for vec in random_assumption_vecs if vec is not None])
+            if random_context_vec is None:
+                row["canonical_retained"] = False
+                row["random_context_pool_complete"] = False
+                row["full_bag_context_valid"] = None
+                row["coverage_drop_reason"] = "zero_norm_whitened_vector"
+                scored_rows.append(row)
+                continue
+            row["random_context_pool_complete"] = True
+            random_context_score = cosine_similarity(vec_a, random_context_vec)
+            win_rate_random_context = win_rate_from_scores(random_context_score, negative_scores)
+
+        full_bag_context_valid = True
+        ablation_drop_reason = None
+        if row["candidate_assumption_count"] == 0:
+            win_rate_full_bag_context = win_rate_claim
+        else:
+            full_bag_vectors = []
+            for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
+                assumption_vec = whitened_text_to_vec.get(assumption_text)
+                if assumption_vec is None:
+                    full_bag_context_valid = False
+                    ablation_drop_reason = "zero_norm_full_bag_context_vector"
+                    full_bag_vectors = []
+                    break
+                full_bag_vectors.append(assumption_vec)
+            if full_bag_context_valid:
+                full_bag_context_vec = compose_normalized_mean([vec_claim] + full_bag_vectors)
+                if full_bag_context_vec is None:
+                    full_bag_context_valid = False
+                    ablation_drop_reason = "zero_norm_full_bag_context_vector"
+                    win_rate_full_bag_context = float("nan")
+                else:
+                    win_rate_full_bag_context = win_rate_from_scores(
+                        cosine_similarity(vec_a, full_bag_context_vec),
+                        negative_scores,
+                    )
+            else:
+                win_rate_full_bag_context = float("nan")
+
+        if vec_a_raw is not None and vec_claim_raw is not None:
+            baseline_texts = sample_unrelated_sentences(row["pair_id"], unrelated_sentences, seed)
+            baseline_raw_vecs = [normalize_vector(raw_text_to_vec[text]) for text in baseline_texts]
+            baseline_raw_vecs = [vec for vec in baseline_raw_vecs if vec is not None]
+            if len(baseline_raw_vecs) == BASELINE_SENTENCE_SAMPLE_SIZE:
+                baseline_raw = compose_normalized_mean(baseline_raw_vecs)
+            else:
+                baseline_raw = None
+            assumption_raw_records = []
+            for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
+                raw_vec = normalize_vector(raw_text_to_vec[assumption_text])
+                if raw_vec is None:
+                    continue
+                assumption_raw_records.append(raw_vec)
+            legacy_context_raw = compose_normalized_mean([vec_claim_raw] + assumption_raw_records) if assumption_raw_records else vec_claim_raw
+            row["legacy_sim_claim_raw"] = cosine_similarity(vec_a_raw, vec_claim_raw)
+            row["legacy_sim_context_raw"] = cosine_similarity(vec_a_raw, legacy_context_raw) if legacy_context_raw is not None else None
+            row["legacy_sim_unrelated_only_raw"] = cosine_similarity(vec_a_raw, baseline_raw) if baseline_raw is not None else None
+            if row["legacy_sim_context_raw"] is not None:
+                row["legacy_bridge_delta_raw"] = row["legacy_sim_context_raw"] - row["legacy_sim_claim_raw"]
+
+        row["canonical_retained"] = True
+        row["coverage_drop_reason"] = None
+        row["win_rate_claim"] = win_rate_claim
+        row["win_rate_context"] = win_rate_context
+        row["win_rate_random_context"] = win_rate_random_context
+        row["bridge_lift"] = win_rate_context - win_rate_claim
+        row["random_context_lift"] = win_rate_random_context - win_rate_claim
+        row["bridge_advantage_over_random"] = win_rate_context - win_rate_random_context
+        row["win_rate_full_bag_context"] = win_rate_full_bag_context
+        row["full_bag_context_valid"] = full_bag_context_valid
+        row["ablation_drop_reason"] = ablation_drop_reason
+        scored_rows.append(row)
+    return pd.DataFrame(scored_rows)
+
+
+def finalize_pair_frame(df: pd.DataFrame) -> pd.DataFrame:
+    finalized = df.copy()
+    for column_name in NULLABLE_STATUS_BOOLEAN_COLUMNS:
+        if column_name in finalized.columns:
+            finalized[column_name] = finalized[column_name].where(finalized["eligible"] == True, None)
+    if "eligible" in finalized.columns:
+        finalized["eligible"] = finalized["eligible"].fillna(False).astype(bool)
+    finalized["canonical_retained"] = finalized["canonical_retained"].fillna(False)
+    finalized = finalized.sort_values(
+        by=["category", "episode_id", "turn_a_idx", "turn_b_idx"],
+        kind="stable",
+    ).reset_index(drop=True)
+    return finalized
+
+
+def write_pair_csv(df: pd.DataFrame, path: Path) -> None:
+    serialized = serialize_pair_frame(df)
+    serialized.to_csv(path, index=False)
+
+
+def coerce_pair_frame(df: pd.DataFrame) -> pd.DataFrame:
+    coerced = df.copy()
+    for column_name in NULLABLE_STATUS_BOOLEAN_COLUMNS:
+        if column_name in coerced.columns:
+            coerced[column_name] = coerce_nullable_bool(coerced[column_name])
+    if "eligible" in coerced.columns:
+        coerced["eligible"] = coerce_nullable_bool(coerced["eligible"]).fillna(False).astype(bool)
+    if "canonical_retained" in coerced.columns:
+        coerced["canonical_retained"] = coerce_nullable_bool(coerced["canonical_retained"]).fillna(False).astype(bool)
+    for column_name in [
+        "selected_assumption_count",
+        "negative_sample_count_actual",
+        "negative_count_layer1_exact",
+        "negative_count_layer2_gap3",
+        "negative_count_layer2_gap2_backfill",
+        "negative_count_layer3_exact",
+        "negative_count_backfill_same_category",
+        "negative_count_backfill_global",
+    ]:
+        if column_name in coerced.columns:
+            coerced[column_name] = pd.to_numeric(coerced[column_name], errors="coerce")
+    for column_name in [
+        "win_rate_claim",
+        "win_rate_random_context",
+        "win_rate_context",
+        "bridge_lift",
+        "random_context_lift",
+        "bridge_advantage_over_random",
+        "win_rate_full_bag_context",
+        "legacy_sim_claim_raw",
+        "legacy_sim_context_raw",
+        "legacy_sim_unrelated_only_raw",
+        "legacy_bridge_delta_raw",
+    ]:
+        if column_name in coerced.columns:
+            coerced[column_name] = pd.to_numeric(coerced[column_name], errors="coerce")
+    return coerced
+
+
+def main() -> None:
     args = parse_args()
     validate_patch_args(args.num_patches, args.patch_index, args.episodes_per_patch)
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
@@ -848,136 +1697,169 @@ def main():
     categories = normalize_categories(args.input_dir, args.categories)
     use_tqdm = not args.no_tqdm
     unrelated_sentences = load_unrelated_sentences(UNRELATED_SENTENCES_PATH)
-
     category_files = collect_category_files(args.input_dir, categories, args.max_episodes_per_category)
     selected_files = select_patch_files(
-        category_files,
-        args.num_patches,
-        args.patch_index,
-        args.episodes_per_patch,
+        category_files=category_files,
+        num_patches=args.num_patches,
+        patch_index=args.patch_index,
+        episodes_per_patch=args.episodes_per_patch,
     )
     if not selected_files:
         raise RuntimeError(
             f"No episode files selected for patch {args.patch_index} out of {args.num_patches}. "
-            f"Candidate file count: {len(category_files)}"
+            f"candidate_file_count={len(category_files)}"
         )
-    logger.info(
-        "Selected %d episode files for patch %d/%d.",
-        len(selected_files),
-        args.patch_index + 1,
-        args.num_patches,
+    if args.prepare_whitening_only:
+        artifact_info = prepare_whitening_artifact(
+            args=args,
+            model_output_dir=model_output_dir,
+            categories=categories,
+            category_files=category_files,
+            use_tqdm=use_tqdm,
+        )
+        print(json.dumps({"analysis_stage": "prepare_whitening_only", "artifact": artifact_info}, indent=2))
+        return
+
+    mean, basis, scales, whitening_manifest = ensure_whitening_artifact(
+        args=args,
+        model_output_dir=model_output_dir,
+        categories=categories,
+        category_files=category_files,
+        use_tqdm=use_tqdm,
     )
-
-    rows = []
-    for category in categories:
-        files = [path for file_category, path in selected_files if file_category == category]
-        iterator = tqdm(files, desc=f"{category}: pairs", disable=not use_tqdm)
-        for path in iterator:
-            for row in substantive_pairs(path):
-                row["category"] = category
-                rows.append(row)
-    if not rows:
-        raise RuntimeError("No valid substantive adjacent pairs found.")
-
-    df = pd.DataFrame(rows)
-    texts_to_embed = pd.concat(
-        [
-            df["turn_a_text"],
-            df["turn_b_claim_text"],
-            pd.Series(
-                [text for texts in df["turn_b_assumption_texts"] for text in texts],
-                dtype=object,
-            ),
-            pd.Series(unrelated_sentences, dtype=object),
-        ],
-        ignore_index=True,
-    ).tolist()
-    text_to_vec = embed_texts(
+    global_turn_records, _, selected_pair_rows = build_global_records(
+        category_files=category_files,
+        selected_files=selected_files,
+        use_tqdm=use_tqdm,
+    )
+    turn_indexes = build_turn_indexes(global_turn_records)
+    eligible_selected_rows = [row for row in selected_pair_rows if bool(row["eligible"])]
+    negative_texts: list[str] = []
+    for pair_row in eligible_selected_rows:
+        negative_ids, _, _ = select_negative_ids(pair_row, turn_indexes, args.seed)
+        for negative_id in negative_ids:
+            negative_texts.append(turn_indexes["turn_lookup"][negative_id]["claim_text"])
+    texts_to_embed = list(
+        dict.fromkeys(
+            [
+                row["turn_a_text"]
+                for row in selected_pair_rows
+                if row["turn_a_text"]
+            ]
+            + [
+                row["turn_b_claim_text"]
+                for row in selected_pair_rows
+                if row["turn_b_claim_text"]
+            ]
+            + [
+                assumption_text
+                for row in eligible_selected_rows
+                for assumption_text in row["turn_b_assumption_texts"]
+            ]
+            + negative_texts
+            + unrelated_sentences
+        )
+    )
+    raw_text_to_vec = embed_texts(
         texts=texts_to_embed,
         batch_size=args.embedding_batch_size,
         use_tqdm=use_tqdm,
         embedding_model_name=args.embedding_model_name,
         embedding_device=args.embedding_device,
     )
-    df = add_bridge_metrics(
-        df=df,
-        text_to_vec=text_to_vec,
+    whitened_text_to_vec = apply_whitening(
+        text_to_raw_vec=raw_text_to_vec,
+        mean=mean,
+        basis=basis,
+        scales=scales,
+    )
+    scored_df = score_pair_rows(
+        pair_rows=selected_pair_rows,
+        turn_indexes=turn_indexes,
+        raw_text_to_vec=raw_text_to_vec,
+        whitened_text_to_vec=whitened_text_to_vec,
         unrelated_sentences=unrelated_sentences,
         seed=args.seed,
         use_tqdm=use_tqdm,
     )
-    logger.info("Collected %d adjacent substantive pairs across %d categories.", len(df), len(categories))
-
+    scored_df = finalize_pair_frame(scored_df)
     pair_csv = output_dir / "exp1_bridge_pairs.csv"
     summary_json = output_dir / "exp1_summary.json"
-    write_pair_csv(df, pair_csv)
+    write_pair_csv(scored_df, pair_csv)
 
     if args.num_patches > 1:
-        patch_summary = build_patch_summary(
+        patch_summary = build_summary_payload(
             args=args,
+            output_dir=output_dir,
+            df=scored_df,
+            category_summary=pd.DataFrame(),
+            move_summary=pd.DataFrame(),
+            pair_csv=pair_csv,
+            category_csv=output_dir / "exp1_bridge_by_category.csv",
+            move_csv=output_dir / "exp1_bridge_by_move.csv",
+            main_plot_png=output_dir / "exp1_bridge_lift_by_category.png",
+            ablation_plot_png=output_dir / "exp1_ablation_by_category.png",
+            diagnostic_plot_png=output_dir / "exp1_legacy_cosine_distribution.png",
+            analysis_stage="patch_pair_scoring_only",
             categories=categories,
             selected_files=selected_files,
             category_files=category_files,
-            df=df,
-            pair_csv=pair_csv,
-            summary_json=summary_json,
+            whitening_manifest=whitening_manifest,
+            selected_episode_file_count=len(selected_files),
+            candidate_episode_file_count=len(category_files),
+            extra_sections={
+                "num_patches": int(args.num_patches),
+                "patch_index": int(args.patch_index),
+                "episodes_per_patch": int(args.episodes_per_patch) if args.episodes_per_patch is not None else None,
+            },
         )
         summary_json.write_text(json.dumps(patch_summary, indent=2))
-        logger.info("Done. Wrote patch features to %s", output_dir)
+        logger.info("Done. Wrote patch-level Exp 1 v2 results to %s", output_dir)
         return
 
+    category_summary = build_group_summary(
+        scored_df[(scored_df["analysis_bucket"] == "headline_constructive") & (scored_df["canonical_retained"] == True)].copy(),
+        "category",
+        args.seed,
+    )
+    move_summary = build_group_summary(
+        scored_df[scored_df["canonical_retained"] == True].copy(),
+        "turn_b_move_label",
+        args.seed,
+    )
     category_csv = output_dir / "exp1_bridge_by_category.csv"
-    pointplot_csv = output_dir / "exp1_similarity_pointplot_summary.csv"
-    pointplot_png = output_dir / "exp1_similarity_pointplot.png"
-    dist_png = output_dir / "exp1_distance_distribution.png"
-    umap_sample_csv = output_dir / "exp1_umap_sample.csv"
-    umap_png = output_dir / "exp1_umap_trajectory.png"
-
-    distribution_plot(df, dist_png)
-
-    by_category = build_by_category(df)
-    by_category.to_csv(category_csv, index=False)
-
-    long_plot_df = pointplot_long_frame(df)
-    pointplot_summary_df = pointplot_summary(long_plot_df, seed=args.seed)
-    pointplot_summary_df.to_csv(pointplot_csv, index=False)
-    bootstrap_pointplot(long_plot_df, pointplot_png, category_order=categories, seed=args.seed)
-
-    trajectory_df = add_representation_vectors(
-        df=df,
-        embedding_model_name=args.embedding_model_name,
-        batch_size=args.embedding_batch_size,
-        use_tqdm=use_tqdm,
-        embedding_device=args.embedding_device,
-    )
-    trajectory_metrics = compute_trajectory_metrics(trajectory_df)
-    umap_outputs = write_umap_outputs(
-        df=trajectory_df,
-        sample_csv_path=umap_sample_csv,
-        plot_path=umap_png,
-        seed=args.seed,
-    )
-
-    summary = build_full_summary(
+    move_csv = output_dir / "exp1_bridge_by_move.csv"
+    main_plot_png = output_dir / "exp1_bridge_lift_by_category.png"
+    ablation_plot_png = output_dir / "exp1_ablation_by_category.png"
+    diagnostic_plot_png = output_dir / "exp1_legacy_cosine_distribution.png"
+    category_summary.to_csv(category_csv, index=False)
+    move_summary.to_csv(move_csv, index=False)
+    plot_bridge_lift_by_category(category_summary, main_plot_png)
+    plot_ablation_by_category(category_summary, ablation_plot_png)
+    plot_legacy_cosine_distribution(scored_df, diagnostic_plot_png)
+    summary = build_summary_payload(
         args=args,
         output_dir=output_dir,
+        df=scored_df,
+        category_summary=category_summary,
+        move_summary=move_summary,
+        pair_csv=pair_csv,
+        category_csv=category_csv,
+        move_csv=move_csv,
+        main_plot_png=main_plot_png,
+        ablation_plot_png=ablation_plot_png,
+        diagnostic_plot_png=diagnostic_plot_png,
+        analysis_stage="full_analysis",
         categories=categories,
         selected_files=selected_files,
         category_files=category_files,
-        df=df,
-        pair_csv=pair_csv,
-        category_csv=category_csv,
-        pointplot_csv=pointplot_csv,
-        pointplot_png=pointplot_png,
-        dist_png=dist_png,
-        umap_sample_csv=umap_sample_csv,
-        umap_png=umap_png,
-        summary_json=summary_json,
-        trajectory_metrics=trajectory_metrics,
-        umap_outputs=umap_outputs,
+        whitening_manifest=whitening_manifest,
+        selected_episode_file_count=len(selected_files),
+        candidate_episode_file_count=len(category_files),
+        extra_sections=None,
     )
     summary_json.write_text(json.dumps(summary, indent=2))
-    logger.info("Done. Wrote results to %s", output_dir)
+    logger.info("Done. Wrote Exp 1 v2 results to %s", output_dir)
 
 
 if __name__ == "__main__":

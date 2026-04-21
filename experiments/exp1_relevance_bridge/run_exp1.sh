@@ -60,6 +60,30 @@ PY
 
   NUM_PATCHES=$(( (TOTAL_EPISODES + EPISODES_PER_PATCH - 1) / EPISODES_PER_PATCH ))
 
+  PREP_CATEGORY_ARGS=(--categories all)
+  if [[ -n "${CATEGORIES_CSV:-}" ]]; then
+    IFS=',' read -r -a PREP_CATEGORY_VALUES <<< "${CATEGORIES_CSV}"
+    PREP_CATEGORY_ARGS=(--categories "${PREP_CATEGORY_VALUES[@]}")
+  fi
+
+  PREP_EXTRA_ARGS=()
+  if [[ -n "${MAX_EPISODES_PER_CATEGORY:-}" ]]; then
+    PREP_EXTRA_ARGS+=(--max_episodes_per_category "${MAX_EPISODES_PER_CATEGORY}")
+  fi
+  if [[ "${NO_TQDM}" == "1" ]]; then
+    PREP_EXTRA_ARGS+=(--no_tqdm)
+  fi
+
+  python -u experiments/exp1_relevance_bridge/exp1_relevance_bridge.py \
+    --input_dir "${INPUT_DIR}" \
+    --output_dir "${OUTPUT_DIR}" \
+    --embedding_model_name "${EMBEDDING_MODEL_NAME}" \
+    --embedding_batch_size "${EMBEDDING_BATCH_SIZE}" \
+    --embedding_device "${EMBEDDING_DEVICE}" \
+    --prepare_whitening_only \
+    "${PREP_CATEGORY_ARGS[@]}" \
+    "${PREP_EXTRA_ARGS[@]}"
+
   EXPORT_VARS=(
     "ALL"
     "INPUT_DIR=${INPUT_DIR}"
