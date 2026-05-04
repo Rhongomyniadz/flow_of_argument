@@ -61,6 +61,15 @@ def validate_patch_set(patch_summaries: list[dict[str, Any]]) -> str:
     if not patch_summaries:
         raise RuntimeError("No Exp 1 patch summaries were found.")
 
+    analysis_stages = sorted(str(summary.get("analysis_stage")) for summary in patch_summaries)
+    unexpected_analysis_stages = sorted({stage for stage in analysis_stages if stage != "patch_pair_scoring_only"})
+    if unexpected_analysis_stages:
+        raise RuntimeError(
+            "Exp 1 patch outputs do not use the hard-negative ranking schema. "
+            f"expected_analysis_stage=patch_pair_scoring_only, observed_analysis_stages={unexpected_analysis_stages}. "
+            "Archive or remove the legacy patch directories and rerun experiments/exp1_relevance_bridge/run_exp1.sh."
+        )
+
     embedding_model_names = {str(summary["embedding_model_name"]) for summary in patch_summaries}
     if len(embedding_model_names) != 1:
         raise RuntimeError(

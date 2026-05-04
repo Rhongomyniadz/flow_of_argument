@@ -3,8 +3,9 @@ import hashlib
 import json
 import logging
 import re
+from itertools import combinations
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -127,6 +128,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--no_tqdm", action="store_true")
     parser.add_argument("--prepare_whitening_only", action="store_true")
+    parser.add_argument("--prepare_whitening_patch_only", action="store_true")
+    parser.add_argument("--merge_whitening_patches_only", action="store_true")
     return parser.parse_args()
 
 
@@ -255,6 +258,10 @@ def item_text(items: Any) -> str:
     return " ".join(texts).strip()
 
 
+def build_context_text(claim_text: str, assumption_texts: list[str]) -> str:
+    return " ".join([claim_text, *assumption_texts]).strip()
+
+
 def turn_time(turn: dict[str, Any]) -> float:
     raw = turn.get("start_time", turn.get("startTime", turn.get("end_time", turn.get("endTime", 0.0))))
     return float(raw if raw is not None else 0.0)
@@ -333,13 +340,13 @@ def mean_pool(last_hidden_state: torch.Tensor, attention_mask: torch.Tensor) -> 
     return summed / counts
 
 
-def embed_texts(
+def iter_embedded_text_batches(
     texts: list[str],
     batch_size: int,
     use_tqdm: bool,
     embedding_model_name: str,
     embedding_device: str,
-) -> dict[str, np.ndarray]:
+) -> Iterator[tuple[list[str], np.ndarray]]:
     device = resolve_embedding_device(embedding_device)
     tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
     try:
@@ -354,7 +361,6 @@ def embed_texts(
         ) from error
     embedding_max_length = resolve_embedding_max_length(tokenizer)
     unique_texts = list(dict.fromkeys(texts))
-    vectors: dict[str, np.ndarray] = {}
     logger.info(
         "Embedding %d unique texts with model=%s on device=%s and batch_size=%d.",
         len(unique_texts),
@@ -389,8 +395,26 @@ def embed_texts(
                     "Reduce --embedding_batch_size, free GPU memory, or rerun with --embedding_device cpu."
                 ) from error
             pooled = mean_pool(output.last_hidden_state, tokens["attention_mask"]).cpu().numpy()
-            for text, vector in zip(batch, pooled):
-                vectors[text] = vector.astype(np.float32, copy=False)
+            yield batch, pooled.astype(np.float32, copy=False)
+
+
+def embed_texts(
+    texts: list[str],
+    batch_size: int,
+    use_tqdm: bool,
+    embedding_model_name: str,
+    embedding_device: str,
+) -> dict[str, np.ndarray]:
+    vectors: dict[str, np.ndarray] = {}
+    for batch, pooled in iter_embedded_text_batches(
+        texts=texts,
+        batch_size=batch_size,
+        use_tqdm=use_tqdm,
+        embedding_model_name=embedding_model_name,
+        embedding_device=embedding_device,
+    ):
+        for text, vector in zip(batch, pooled):
+            vectors[text] = vector
     return vectors
 
 
@@ -409,6 +433,75 @@ def fit_whitening_artifact(text_to_raw_vec: dict[str, np.ndarray]) -> tuple[np.n
     basis, singular_values, _ = np.linalg.svd(covariance, full_matrices=False)
     scales = 1.0 / np.sqrt(singular_values + WHITENING_EPSILON)
     return mean.astype(np.float32), basis.astype(np.float32), scales.astype(np.float32)
+
+
+def collect_whitening_moments_from_texts(
+    texts: list[str],
+    batch_size: int,
+    use_tqdm: bool,
+    embedding_model_name: str,
+    embedding_device: str,
+) -> tuple[np.ndarray, np.ndarray, int]:
+    count = 0
+    sum_vector: np.ndarray | None = None
+    cross_product: np.ndarray | None = None
+    for _, pooled in iter_embedded_text_batches(
+        texts=texts,
+        batch_size=batch_size,
+        use_tqdm=use_tqdm,
+        embedding_model_name=embedding_model_name,
+        embedding_device=embedding_device,
+    ):
+        pooled64 = pooled.astype(np.float64, copy=False)
+        if sum_vector is None:
+            embedding_dim = int(pooled64.shape[1])
+            sum_vector = np.zeros(embedding_dim, dtype=np.float64)
+            cross_product = np.zeros((embedding_dim, embedding_dim), dtype=np.float64)
+        sum_vector += pooled64.sum(axis=0)
+        cross_product += pooled64.T @ pooled64
+        count += int(pooled64.shape[0])
+
+    if count < 1 or sum_vector is None or cross_product is None:
+        raise RuntimeError("Cannot fit whitening artifact because no texts were embedded.")
+
+    return sum_vector, cross_product, count
+
+
+def fit_whitening_artifact_from_moments(
+    sum_vector: np.ndarray,
+    cross_product: np.ndarray,
+    count: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if count < 1:
+        raise ValueError(f"count must be >= 1, got {count}")
+    mean = sum_vector / float(count)
+    covariance = (cross_product - (float(count) * np.outer(mean, mean))) / max(count - 1, 1)
+    covariance = (covariance + covariance.T) * 0.5
+    basis, singular_values, _ = np.linalg.svd(covariance, full_matrices=False)
+    scales = 1.0 / np.sqrt(singular_values + WHITENING_EPSILON)
+    return mean.astype(np.float32), basis.astype(np.float32), scales.astype(np.float32)
+
+
+def fit_whitening_artifact_from_texts(
+    texts: list[str],
+    batch_size: int,
+    use_tqdm: bool,
+    embedding_model_name: str,
+    embedding_device: str,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, int]:
+    sum_vector, cross_product, count = collect_whitening_moments_from_texts(
+        texts=texts,
+        batch_size=batch_size,
+        use_tqdm=use_tqdm,
+        embedding_model_name=embedding_model_name,
+        embedding_device=embedding_device,
+    )
+    mean, basis, scales = fit_whitening_artifact_from_moments(
+        sum_vector=sum_vector,
+        cross_product=cross_product,
+        count=count,
+    )
+    return mean, basis, scales, count
 
 
 def apply_whitening(
@@ -431,6 +524,32 @@ def apply_whitening(
 
 def whitening_paths(model_output_dir: Path) -> tuple[Path, Path]:
     return model_output_dir / "exp1_whitening_params.npz", model_output_dir / "exp1_whitening_manifest.json"
+
+
+def whitening_patch_dir(model_output_dir: Path) -> Path:
+    return model_output_dir / "whitening_patches"
+
+
+def whitening_patch_paths(model_output_dir: Path, num_patches: int, patch_index: int) -> tuple[Path, Path]:
+    patch_dir = whitening_patch_dir(model_output_dir)
+    patch_name = f"patch_{patch_index:04d}_of_{num_patches:04d}"
+    return patch_dir / f"{patch_name}.npz", patch_dir / f"{patch_name}.json"
+
+
+def text_partition_index(text: str, num_patches: int) -> int:
+    if num_patches < 1:
+        raise ValueError(f"num_patches must be >= 1, got {num_patches}")
+    return build_seed_int(f"exp1_whitening:{text}") % num_patches
+
+
+def select_whitening_partition_texts(texts: list[str], num_patches: int, patch_index: int) -> list[str]:
+    validate_patch_args(num_patches, patch_index, None)
+    unique_texts = list(dict.fromkeys(texts))
+    return [
+        text
+        for text in unique_texts
+        if text_partition_index(text, num_patches) == patch_index
+    ]
 
 
 def build_whitening_manifest(
@@ -471,6 +590,67 @@ def write_whitening_artifact(
     np.savez_compressed(params_path, mean=mean, basis=basis, scales=scales)
     manifest_path.write_text(json.dumps(manifest_with_hash, indent=2))
     return str(manifest_with_hash["manifest_hash"])
+
+
+def write_whitening_patch_moments(
+    params_path: Path,
+    manifest_path: Path,
+    sum_vector: np.ndarray,
+    cross_product: np.ndarray,
+    count: int,
+    manifest_payload: dict[str, Any],
+    num_patches: int,
+    patch_index: int,
+) -> str:
+    manifest_with_hash = dict(manifest_payload)
+    manifest_with_hash["manifest_hash"] = manifest_hash(manifest_payload)
+    manifest_with_hash["num_patches"] = int(num_patches)
+    manifest_with_hash["patch_index"] = int(patch_index)
+    manifest_with_hash["text_count"] = int(count)
+    params_path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(
+        params_path,
+        sum_vector=sum_vector,
+        cross_product=cross_product,
+        count=np.array(count, dtype=np.int64),
+    )
+    manifest_path.write_text(json.dumps(manifest_with_hash, indent=2), encoding="utf-8")
+    return str(manifest_with_hash["manifest_hash"])
+
+
+def load_and_validate_whitening_patch_moments(
+    params_path: Path,
+    manifest_path: Path,
+    expected_payload: dict[str, Any],
+    num_patches: int,
+    patch_index: int,
+) -> tuple[np.ndarray, np.ndarray, int, dict[str, Any]]:
+    if not params_path.exists() or not manifest_path.exists():
+        raise RuntimeError(
+            "Missing whitening patch moments. "
+            f"params_path={params_path}, manifest_path={manifest_path}"
+        )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    expected_hash = manifest_hash(expected_payload)
+    observed_hash = manifest.get("manifest_hash")
+    if observed_hash != expected_hash:
+        raise RuntimeError(
+            "Whitening patch manifest hash mismatch. "
+            f"patch_index={patch_index}, expected={expected_hash}, observed={observed_hash}"
+        )
+    observed_num_patches = int(manifest.get("num_patches", -1))
+    observed_patch_index = int(manifest.get("patch_index", -1))
+    if observed_num_patches != num_patches or observed_patch_index != patch_index:
+        raise RuntimeError(
+            "Whitening patch metadata mismatch. "
+            f"expected_num_patches={num_patches}, observed_num_patches={observed_num_patches}, "
+            f"expected_patch_index={patch_index}, observed_patch_index={observed_patch_index}"
+        )
+    with np.load(params_path) as params:
+        sum_vector = params["sum_vector"].astype(np.float64, copy=True)
+        cross_product = params["cross_product"].astype(np.float64, copy=True)
+        count = int(params["count"].item())
+    return sum_vector, cross_product, count, manifest
 
 
 def load_and_validate_whitening_artifact(
@@ -652,6 +832,23 @@ def collect_canonical_text_pool(
     return [text for text in texts if isinstance(text, str) and text.strip()]
 
 
+def collect_candidate_context_texts(selected_pair_rows: list[dict[str, Any]]) -> list[str]:
+    texts: list[str] = []
+    for pair_row in selected_pair_rows:
+        if not bool(pair_row["eligible"]):
+            continue
+        claim_text = str(pair_row["turn_b_claim_text"])
+        assumption_texts = [str(text) for text in pair_row["turn_b_assumption_texts"] if str(text).strip()]
+        max_subset_size = min(GREEDY_MAX_ASSUMPTIONS, len(assumption_texts))
+        for subset_size in range(1, max_subset_size + 1):
+            for subset_indices in combinations(range(len(assumption_texts)), subset_size):
+                selected_texts = [assumption_texts[index] for index in subset_indices]
+                texts.append(build_context_text(claim_text, selected_texts))
+        if len(assumption_texts) > GREEDY_MAX_ASSUMPTIONS:
+            texts.append(build_context_text(claim_text, assumption_texts))
+    return [text for text in texts if text.strip()]
+
+
 def prepare_whitening_artifact(
     args: argparse.Namespace,
     model_output_dir: Path,
@@ -665,14 +862,13 @@ def prepare_whitening_artifact(
         use_tqdm=use_tqdm,
     )
     texts_to_embed = collect_canonical_text_pool(global_turn_records, selected_pair_rows)
-    text_to_raw_vec = embed_texts(
+    mean, basis, scales, text_count = fit_whitening_artifact_from_texts(
         texts=texts_to_embed,
         batch_size=args.embedding_batch_size,
         use_tqdm=use_tqdm,
         embedding_model_name=args.embedding_model_name,
         embedding_device=args.embedding_device,
     )
-    mean, basis, scales = fit_whitening_artifact(text_to_raw_vec)
     params_path, manifest_path = whitening_paths(model_output_dir)
     payload = build_whitening_manifest(
         args=args,
@@ -693,7 +889,144 @@ def prepare_whitening_artifact(
         "params_path": str(params_path),
         "manifest_path": str(manifest_path),
         "manifest_hash": observed_hash,
-        "text_count": int(len(text_to_raw_vec)),
+        "text_count": int(text_count),
+    }
+
+
+def prepare_whitening_patch_moments(
+    args: argparse.Namespace,
+    model_output_dir: Path,
+    categories: list[str],
+    category_files: list[tuple[str, Path]],
+    use_tqdm: bool,
+) -> dict[str, Any]:
+    global_turn_records, _, selected_pair_rows = build_global_records(
+        category_files=category_files,
+        selected_files=category_files,
+        use_tqdm=use_tqdm,
+    )
+    texts_to_embed = select_whitening_partition_texts(
+        texts=collect_canonical_text_pool(global_turn_records, selected_pair_rows),
+        num_patches=args.num_patches,
+        patch_index=args.patch_index,
+    )
+    if not texts_to_embed:
+        raise RuntimeError(
+            "No texts selected for whitening patch. "
+            f"num_patches={args.num_patches}, patch_index={args.patch_index}"
+        )
+    sum_vector, cross_product, text_count = collect_whitening_moments_from_texts(
+        texts=texts_to_embed,
+        batch_size=args.embedding_batch_size,
+        use_tqdm=use_tqdm,
+        embedding_model_name=args.embedding_model_name,
+        embedding_device=args.embedding_device,
+    )
+    params_path, manifest_path = whitening_patch_paths(
+        model_output_dir=model_output_dir,
+        num_patches=args.num_patches,
+        patch_index=args.patch_index,
+    )
+    payload = build_whitening_manifest(
+        args=args,
+        categories=categories,
+        category_files=category_files,
+        selected_episode_file_count=len(category_files),
+    )
+    observed_hash = write_whitening_patch_moments(
+        params_path=params_path,
+        manifest_path=manifest_path,
+        sum_vector=sum_vector,
+        cross_product=cross_product,
+        count=text_count,
+        manifest_payload=payload,
+        num_patches=args.num_patches,
+        patch_index=args.patch_index,
+    )
+    logger.info("Prepared Exp 1 whitening patch moments at %s", params_path)
+    return {
+        "params_path": str(params_path),
+        "manifest_path": str(manifest_path),
+        "manifest_hash": observed_hash,
+        "text_count": int(text_count),
+        "num_patches": int(args.num_patches),
+        "patch_index": int(args.patch_index),
+    }
+
+
+def merge_whitening_patch_moments(
+    args: argparse.Namespace,
+    model_output_dir: Path,
+    categories: list[str],
+    category_files: list[tuple[str, Path]],
+) -> dict[str, Any]:
+    payload = build_whitening_manifest(
+        args=args,
+        categories=categories,
+        category_files=category_files,
+        selected_episode_file_count=len(category_files),
+    )
+    merged_sum_vector: np.ndarray | None = None
+    merged_cross_product: np.ndarray | None = None
+    merged_count = 0
+    patch_manifests: list[dict[str, Any]] = []
+    for patch_index in range(args.num_patches):
+        params_path, manifest_path = whitening_patch_paths(
+            model_output_dir=model_output_dir,
+            num_patches=args.num_patches,
+            patch_index=patch_index,
+        )
+        sum_vector, cross_product, count, patch_manifest = load_and_validate_whitening_patch_moments(
+            params_path=params_path,
+            manifest_path=manifest_path,
+            expected_payload=payload,
+            num_patches=args.num_patches,
+            patch_index=patch_index,
+        )
+        if merged_sum_vector is None:
+            merged_sum_vector = np.zeros_like(sum_vector, dtype=np.float64)
+            merged_cross_product = np.zeros_like(cross_product, dtype=np.float64)
+        if merged_sum_vector.shape != sum_vector.shape:
+            raise RuntimeError(
+                "Whitening patch sum vector shape mismatch. "
+                f"patch_index={patch_index}, expected_shape={merged_sum_vector.shape}, observed_shape={sum_vector.shape}"
+            )
+        if merged_cross_product is None or merged_cross_product.shape != cross_product.shape:
+            expected_shape = None if merged_cross_product is None else merged_cross_product.shape
+            raise RuntimeError(
+                "Whitening patch cross-product shape mismatch. "
+                f"patch_index={patch_index}, expected_shape={expected_shape}, observed_shape={cross_product.shape}"
+            )
+        merged_sum_vector += sum_vector
+        merged_cross_product += cross_product
+        merged_count += count
+        patch_manifests.append(patch_manifest)
+
+    if merged_sum_vector is None or merged_cross_product is None:
+        raise RuntimeError("No whitening patch moments were found to merge.")
+
+    mean, basis, scales = fit_whitening_artifact_from_moments(
+        sum_vector=merged_sum_vector,
+        cross_product=merged_cross_product,
+        count=merged_count,
+    )
+    params_path, manifest_path = whitening_paths(model_output_dir)
+    observed_hash = write_whitening_artifact(
+        params_path=params_path,
+        manifest_path=manifest_path,
+        mean=mean,
+        basis=basis,
+        scales=scales,
+        manifest_payload=payload,
+    )
+    logger.info("Merged Exp 1 whitening artifact at %s", params_path)
+    return {
+        "params_path": str(params_path),
+        "manifest_path": str(manifest_path),
+        "manifest_hash": observed_hash,
+        "text_count": int(merged_count),
+        "merged_patch_count": int(len(patch_manifests)),
+        "num_patches": int(args.num_patches),
     }
 
 
@@ -923,6 +1256,103 @@ def select_negative_ids(
     return selected_ids, counts, len(selected_ids) == HARD_NEGATIVE_TARGET_COUNT
 
 
+def select_random_context_assumption_ids(
+    pair_row: dict[str, Any],
+    turn_indexes: dict[str, Any],
+    selected_assumption_count: int,
+    seed: int,
+) -> tuple[list[str], bool]:
+    if selected_assumption_count == 0:
+        return [], True
+
+    category = str(pair_row["category"])
+    move_label = str(pair_row["turn_b_move_label"])
+    episode_id = str(pair_row["episode_id"])
+    assumption_lookup = turn_indexes["assumption_lookup"]
+    assumptions_by_category_move = turn_indexes["assumptions_by_category_move"]
+    assumptions_by_category = turn_indexes["assumptions_by_category"]
+    assumptions_global_headline = turn_indexes["assumptions_global_headline"]
+    excluded_assumption_ids = set(pair_row["turn_b_assumption_ids"])
+
+    def assumption_candidates(ids: list[str]) -> list[str]:
+        return [candidate_id for candidate_id in ids if candidate_id not in excluded_assumption_ids]
+
+    random_pool = [
+        candidate_id
+        for candidate_id in assumptions_by_category_move.get((category, move_label), [])
+        if assumption_lookup[candidate_id]["episode_id"] != episode_id
+    ]
+    random_ids = sample_unique_ids(
+        assumption_candidates(random_pool),
+        selected_assumption_count,
+        str(pair_row["pair_id"]),
+        "random_context_same_category_same_move",
+        seed,
+    )
+    if len(random_ids) < selected_assumption_count:
+        needed = selected_assumption_count - len(random_ids)
+        backfill_pool = [
+            candidate_id
+            for candidate_id in assumptions_by_category.get(category, [])
+            if assumption_lookup[candidate_id]["episode_id"] != episode_id
+            and candidate_id not in random_ids
+            and candidate_id not in excluded_assumption_ids
+        ]
+        random_ids.extend(
+            sample_unique_ids(
+                backfill_pool,
+                needed,
+                str(pair_row["pair_id"]),
+                "random_context_same_category_backfill",
+                seed,
+            )
+        )
+    if len(random_ids) < selected_assumption_count:
+        needed = selected_assumption_count - len(random_ids)
+        global_pool = [
+            candidate_id
+            for candidate_id in assumptions_global_headline
+            if assumption_lookup[candidate_id]["episode_id"] != episode_id
+            and candidate_id not in random_ids
+            and candidate_id not in excluded_assumption_ids
+        ]
+        random_ids.extend(
+            sample_unique_ids(
+                global_pool,
+                needed,
+                str(pair_row["pair_id"]),
+                "random_context_global_backfill",
+                seed,
+            )
+        )
+    return random_ids, len(random_ids) == selected_assumption_count
+
+
+def collect_random_context_texts(
+    selected_pair_rows: list[dict[str, Any]],
+    turn_indexes: dict[str, Any],
+    seed: int,
+) -> list[str]:
+    texts: list[str] = []
+    assumption_lookup = turn_indexes["assumption_lookup"]
+    for pair_row in selected_pair_rows:
+        if not bool(pair_row["eligible"]):
+            continue
+        claim_text = str(pair_row["turn_b_claim_text"])
+        for selected_assumption_count in range(1, GREEDY_MAX_ASSUMPTIONS + 1):
+            random_ids, random_pool_complete = select_random_context_assumption_ids(
+                pair_row=pair_row,
+                turn_indexes=turn_indexes,
+                selected_assumption_count=selected_assumption_count,
+                seed=seed,
+            )
+            if not random_pool_complete:
+                continue
+            random_texts = [str(assumption_lookup[random_id]["text"]) for random_id in random_ids]
+            texts.append(build_context_text(claim_text, random_texts))
+    return [text for text in texts if text.strip()]
+
+
 def compose_normalized_mean(vectors: list[np.ndarray]) -> np.ndarray | None:
     matrix = np.vstack(vectors).astype(np.float32, copy=False)
     composed = matrix.mean(axis=0)
@@ -951,27 +1381,44 @@ def win_rate_from_scores(positive_score: float, negative_scores: list[float]) ->
 def greedy_select_assumptions(
     vec_a: np.ndarray,
     vec_claim: np.ndarray,
+    claim_text: str,
     candidate_records: list[dict[str, Any]],
+    negative_scores: list[float],
+    whitened_text_to_vec: dict[str, np.ndarray | None],
 ) -> tuple[list[dict[str, Any]], np.ndarray]:
     selected: list[dict[str, Any]] = []
     remaining = list(candidate_records)
     current_vector = vec_claim
     while remaining and len(selected) < GREEDY_MAX_ASSUMPTIONS:
-        best_record = None
-        best_vector = None
-        best_gain = 0.0
+        best_record: dict[str, Any] | None = None
+        best_vector: np.ndarray | None = None
+        best_rank_gain = 0.0
+        best_similarity_gain = 0.0
         current_similarity = cosine_similarity(vec_a, current_vector)
+        current_win_rate = win_rate_from_scores(current_similarity, negative_scores)
         for candidate in remaining:
-            candidate_vector = compose_normalized_mean([vec_claim] + [record["vec"] for record in selected] + [candidate["vec"]])
+            trial_ids = {record["id"] for record in selected}
+            trial_ids.add(candidate["id"])
+            trial_texts = [record["text"] for record in candidate_records if record["id"] in trial_ids]
+            candidate_context_text = build_context_text(claim_text, trial_texts)
+            candidate_vector = whitened_text_to_vec.get(candidate_context_text)
             if candidate_vector is None:
                 continue
             candidate_similarity = cosine_similarity(vec_a, candidate_vector)
-            gain = candidate_similarity - current_similarity
-            if gain > best_gain + SIM_TIE_EPSILON:
+            candidate_win_rate = win_rate_from_scores(candidate_similarity, negative_scores)
+            rank_gain = candidate_win_rate - current_win_rate
+            similarity_gain = candidate_similarity - current_similarity
+            improves_rank = rank_gain > best_rank_gain + SIM_TIE_EPSILON
+            ties_rank = abs(rank_gain - best_rank_gain) <= SIM_TIE_EPSILON
+            improves_similarity = similarity_gain > best_similarity_gain + SIM_TIE_EPSILON
+            if improves_rank or (ties_rank and improves_similarity):
                 best_record = candidate
                 best_vector = candidate_vector
-                best_gain = gain
+                best_rank_gain = rank_gain
+                best_similarity_gain = similarity_gain
         if best_record is None:
+            break
+        if best_rank_gain <= SIM_TIE_EPSILON and best_similarity_gain <= SIM_TIE_EPSILON:
             break
         selected.append(best_record)
         remaining = [record for record in remaining if record["id"] != best_record["id"]]
@@ -1360,9 +1807,6 @@ def score_pair_rows(
     scored_rows: list[dict[str, Any]] = []
     turn_lookup = turn_indexes["turn_lookup"]
     assumption_lookup = turn_indexes["assumption_lookup"]
-    assumptions_by_category_move = turn_indexes["assumptions_by_category_move"]
-    assumptions_by_category = turn_indexes["assumptions_by_category"]
-    assumptions_global_headline = turn_indexes["assumptions_global_headline"]
     iterator = tqdm(pair_rows, desc="Scoring Exp 1 v2 pairs", disable=not use_tqdm)
     for original_row in iterator:
         row = dict(original_row)
@@ -1432,25 +1876,29 @@ def score_pair_rows(
             scored_rows.append(row)
             continue
 
+        negative_scores = [cosine_similarity(vec_a, negative_vec) for negative_vec in negative_vecs if negative_vec is not None]
+        claim_score = cosine_similarity(vec_a, vec_claim)
+        win_rate_claim = win_rate_from_scores(claim_score, negative_scores)
+
         assumption_records: list[dict[str, Any]] = []
-        assumption_zero_norm_ids: set[str] = set()
         for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
-            raw_record = assumption_lookup.get(assumption_id)
-            if raw_record is None:
-                continue
-            whitened_vec = whitened_text_to_vec.get(assumption_text)
-            if whitened_vec is None:
-                assumption_zero_norm_ids.add(assumption_id)
+            if assumption_id not in assumption_lookup:
                 continue
             assumption_records.append(
                 {
                     "id": assumption_id,
                     "text": assumption_text,
-                    "vec": whitened_vec,
                 }
             )
 
-        selected_assumptions, greedy_vec = greedy_select_assumptions(vec_a, vec_claim, assumption_records)
+        selected_assumptions, greedy_vec = greedy_select_assumptions(
+            vec_a=vec_a,
+            vec_claim=vec_claim,
+            claim_text=str(row["turn_b_claim_text"]),
+            candidate_records=assumption_records,
+            negative_scores=negative_scores,
+            whitened_text_to_vec=whitened_text_to_vec,
+        )
         selected_assumption_ids = [record["id"] for record in selected_assumptions]
         selected_assumption_texts_by_id = {record["id"]: record["text"] for record in selected_assumptions}
         selected_assumption_texts = [
@@ -1460,7 +1908,7 @@ def score_pair_rows(
         ]
         row["selected_assumption_count"] = int(len(selected_assumptions))
         row["selected_assumption_ids"] = selected_assumption_ids
-        row["selected_context_text"] = " ".join([row["turn_b_claim_text"], *selected_assumption_texts]).strip()
+        row["selected_context_text"] = build_context_text(str(row["turn_b_claim_text"]), selected_assumption_texts)
 
         if selected_assumptions and greedy_vec is None:
             row["canonical_retained"] = False
@@ -1470,9 +1918,6 @@ def score_pair_rows(
             scored_rows.append(row)
             continue
 
-        negative_scores = [cosine_similarity(vec_a, negative_vec) for negative_vec in negative_vecs if negative_vec is not None]
-        claim_score = cosine_similarity(vec_a, vec_claim)
-        win_rate_claim = win_rate_from_scores(claim_score, negative_scores)
         context_vec = greedy_vec if selected_assumptions else vec_claim
         context_score = cosine_similarity(vec_a, context_vec)
         win_rate_context = win_rate_from_scores(context_score, negative_scores)
@@ -1482,78 +1927,22 @@ def score_pair_rows(
             win_rate_random_context = win_rate_claim
             random_context_score = claim_score
         else:
-            category = str(row["category"])
-            move_label = str(row["turn_b_move_label"])
-            episode_id = str(row["episode_id"])
-            excluded_assumption_ids = set(row["turn_b_assumption_ids"])
-
-            def assumption_candidates(ids: list[str]) -> list[str]:
-                return [candidate_id for candidate_id in ids if candidate_id not in excluded_assumption_ids]
-
-            random_pool = [
-                candidate_id
-                for candidate_id in assumptions_by_category_move.get((category, move_label), [])
-                if assumption_lookup[candidate_id]["episode_id"] != episode_id
-            ]
-            random_ids = sample_unique_ids(
-                assumption_candidates(random_pool),
-                row["selected_assumption_count"],
-                row["pair_id"],
-                "random_context_same_category_same_move",
-                seed,
+            random_ids, random_pool_complete = select_random_context_assumption_ids(
+                pair_row=row,
+                turn_indexes=turn_indexes,
+                selected_assumption_count=int(row["selected_assumption_count"]),
+                seed=seed,
             )
-            if len(random_ids) < row["selected_assumption_count"]:
-                needed = row["selected_assumption_count"] - len(random_ids)
-                backfill_pool = [
-                    candidate_id
-                    for candidate_id in assumptions_by_category.get(category, [])
-                    if assumption_lookup[candidate_id]["episode_id"] != episode_id
-                    and candidate_id not in random_ids
-                    and candidate_id not in excluded_assumption_ids
-                ]
-                random_ids.extend(
-                    sample_unique_ids(
-                        backfill_pool,
-                        needed,
-                        row["pair_id"],
-                        "random_context_same_category_backfill",
-                        seed,
-                    )
-                )
-            if len(random_ids) < row["selected_assumption_count"]:
-                needed = row["selected_assumption_count"] - len(random_ids)
-                global_pool = [
-                    candidate_id
-                    for candidate_id in assumptions_global_headline
-                    if assumption_lookup[candidate_id]["episode_id"] != episode_id
-                    and candidate_id not in random_ids
-                    and candidate_id not in excluded_assumption_ids
-                ]
-                random_ids.extend(
-                    sample_unique_ids(
-                        global_pool,
-                        needed,
-                        row["pair_id"],
-                        "random_context_global_backfill",
-                        seed,
-                    )
-                )
-            if len(random_ids) < row["selected_assumption_count"]:
+            if not random_pool_complete:
                 row["canonical_retained"] = False
                 row["random_context_pool_complete"] = False
                 row["full_bag_context_valid"] = None
                 row["coverage_drop_reason"] = "insufficient_random_context_assumptions"
                 scored_rows.append(row)
                 continue
-            random_assumption_vecs = [whitened_text_to_vec.get(assumption_lookup[random_id]["text"]) for random_id in random_ids]
-            if any(random_assumption_vec is None for random_assumption_vec in random_assumption_vecs):
-                row["canonical_retained"] = False
-                row["random_context_pool_complete"] = False
-                row["full_bag_context_valid"] = None
-                row["coverage_drop_reason"] = "zero_norm_whitened_vector"
-                scored_rows.append(row)
-                continue
-            random_context_vec = compose_normalized_mean([vec_claim] + [vec for vec in random_assumption_vecs if vec is not None])
+            random_assumption_texts = [str(assumption_lookup[random_id]["text"]) for random_id in random_ids]
+            random_context_text = build_context_text(str(row["turn_b_claim_text"]), random_assumption_texts)
+            random_context_vec = whitened_text_to_vec.get(random_context_text)
             if random_context_vec is None:
                 row["canonical_retained"] = False
                 row["random_context_pool_complete"] = False
@@ -1570,28 +1959,20 @@ def score_pair_rows(
         if row["candidate_assumption_count"] == 0:
             win_rate_full_bag_context = win_rate_claim
         else:
-            full_bag_vectors = []
-            for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
-                assumption_vec = whitened_text_to_vec.get(assumption_text)
-                if assumption_vec is None:
-                    full_bag_context_valid = False
-                    ablation_drop_reason = "zero_norm_full_bag_context_vector"
-                    full_bag_vectors = []
-                    break
-                full_bag_vectors.append(assumption_vec)
-            if full_bag_context_valid:
-                full_bag_context_vec = compose_normalized_mean([vec_claim] + full_bag_vectors)
-                if full_bag_context_vec is None:
-                    full_bag_context_valid = False
-                    ablation_drop_reason = "zero_norm_full_bag_context_vector"
-                    win_rate_full_bag_context = float("nan")
-                else:
-                    win_rate_full_bag_context = win_rate_from_scores(
-                        cosine_similarity(vec_a, full_bag_context_vec),
-                        negative_scores,
-                    )
-            else:
+            full_bag_context_text = build_context_text(
+                str(row["turn_b_claim_text"]),
+                [str(text) for text in row["turn_b_assumption_texts"]],
+            )
+            full_bag_context_vec = whitened_text_to_vec.get(full_bag_context_text)
+            if full_bag_context_vec is None:
+                full_bag_context_valid = False
+                ablation_drop_reason = "zero_norm_full_bag_context_vector"
                 win_rate_full_bag_context = float("nan")
+            else:
+                win_rate_full_bag_context = win_rate_from_scores(
+                    cosine_similarity(vec_a, full_bag_context_vec),
+                    negative_scores,
+                )
 
         if vec_a_raw is not None and vec_claim_raw is not None:
             baseline_texts = sample_unrelated_sentences(row["pair_id"], unrelated_sentences, seed)
@@ -1601,13 +1982,7 @@ def score_pair_rows(
                 baseline_raw = compose_normalized_mean(baseline_raw_vecs)
             else:
                 baseline_raw = None
-            assumption_raw_records = []
-            for assumption_id, assumption_text in zip(row["turn_b_assumption_ids"], row["turn_b_assumption_texts"]):
-                raw_vec = normalize_vector(raw_text_to_vec[assumption_text])
-                if raw_vec is None:
-                    continue
-                assumption_raw_records.append(raw_vec)
-            legacy_context_raw = compose_normalized_mean([vec_claim_raw] + assumption_raw_records) if assumption_raw_records else vec_claim_raw
+            legacy_context_raw = normalize_vector(raw_text_to_vec[row["selected_context_text"]])
             row["legacy_sim_claim_raw"] = cosine_similarity(vec_a_raw, vec_claim_raw)
             row["legacy_sim_context_raw"] = cosine_similarity(vec_a_raw, legacy_context_raw) if legacy_context_raw is not None else None
             row["legacy_sim_unrelated_only_raw"] = cosine_similarity(vec_a_raw, baseline_raw) if baseline_raw is not None else None
@@ -1690,6 +2065,19 @@ def coerce_pair_frame(df: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     args = parse_args()
+    mode_count = sum(
+        int(enabled)
+        for enabled in [
+            args.prepare_whitening_only,
+            args.prepare_whitening_patch_only,
+            args.merge_whitening_patches_only,
+        ]
+    )
+    if mode_count > 1:
+        raise ValueError(
+            "Choose only one Exp 1 mode flag: --prepare_whitening_only, "
+            "--prepare_whitening_patch_only, or --merge_whitening_patches_only."
+        )
     validate_patch_args(args.num_patches, args.patch_index, args.episodes_per_patch)
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
     output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
@@ -1719,6 +2107,25 @@ def main() -> None:
         )
         print(json.dumps({"analysis_stage": "prepare_whitening_only", "artifact": artifact_info}, indent=2))
         return
+    if args.prepare_whitening_patch_only:
+        artifact_info = prepare_whitening_patch_moments(
+            args=args,
+            model_output_dir=model_output_dir,
+            categories=categories,
+            category_files=category_files,
+            use_tqdm=use_tqdm,
+        )
+        print(json.dumps({"analysis_stage": "prepare_whitening_patch_only", "artifact": artifact_info}, indent=2))
+        return
+    if args.merge_whitening_patches_only:
+        artifact_info = merge_whitening_patch_moments(
+            args=args,
+            model_output_dir=model_output_dir,
+            categories=categories,
+            category_files=category_files,
+        )
+        print(json.dumps({"analysis_stage": "merge_whitening_patches_only", "artifact": artifact_info}, indent=2))
+        return
 
     mean, basis, scales, whitening_manifest = ensure_whitening_artifact(
         args=args,
@@ -1739,6 +2146,12 @@ def main() -> None:
         negative_ids, _, _ = select_negative_ids(pair_row, turn_indexes, args.seed)
         for negative_id in negative_ids:
             negative_texts.append(turn_indexes["turn_lookup"][negative_id]["claim_text"])
+    candidate_context_texts = collect_candidate_context_texts(eligible_selected_rows)
+    random_context_texts = collect_random_context_texts(
+        selected_pair_rows=eligible_selected_rows,
+        turn_indexes=turn_indexes,
+        seed=args.seed,
+    )
     texts_to_embed = list(
         dict.fromkeys(
             [
@@ -1756,6 +2169,8 @@ def main() -> None:
                 for row in eligible_selected_rows
                 for assumption_text in row["turn_b_assumption_texts"]
             ]
+            + candidate_context_texts
+            + random_context_texts
             + negative_texts
             + unrelated_sentences
         )
