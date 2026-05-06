@@ -4,16 +4,10 @@ import math
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-import matplotlib
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 from tqdm.auto import tqdm
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
-
 
 DEFAULT_INPUT_DIR = "data/conversation_moves_labeled"
 DEFAULT_OUTPUT_DIR = "experiments/exp6_quantity_repair_cascades/results"
@@ -24,7 +18,6 @@ DEFAULT_UNDER_ASSUMPTION_QUANTILE = 0.75
 DEFAULT_UNDER_DURATION_QUANTILE = 0.25
 DEFAULT_OVER_ASSUMPTION_QUANTILE = 0.25
 DEFAULT_OVER_DURATION_QUANTILE = 0.75
-DEFAULT_SAMPLE_CASCADE_COUNT = 18
 DEFAULT_TEXT_PREVIEW_CHARS = 180
 MIN_FOLLOWUP_OFFSET_SEC = 1e-3
 RNG_SEED = 42
@@ -33,10 +26,6 @@ TRIGGER_ORDER = ("under_info", "over_info")
 TRIGGER_LABELS = {
     "under_info": "Under-info",
     "over_info": "Over-info",
-}
-TRIGGER_COLORS = {
-    "under_info": "#0f4c5c",
-    "over_info": "#bc6c25",
 }
 ANSWER_RELEVANT_CURRENT_MOVES = {
     "Answer",
@@ -59,20 +48,6 @@ CONTINUATION_MOVES = {
 EXIT_MOVES = {
     "Topic Shift",
     "Stonewalling / Non-Response",
-}
-EVENT_COLORS = {
-    "repair_event": "#1f77b4",
-    "challenge_event": "#d62728",
-    "continuation_event": "#6a994e",
-    "support_marker": "#7f7f7f",
-    "exit_marker": "#2a9d8f",
-}
-EVENT_MARKERS = {
-    "repair_event": "o",
-    "challenge_event": "s",
-    "continuation_event": "^",
-    "support_marker": "x",
-    "exit_marker": "D",
 }
 INTRO_PREFIXES = (
     "welcome to",
@@ -911,180 +886,6 @@ def augment_threshold_counts(threshold_df: pd.DataFrame, trigger_df: pd.DataFram
     return merged_df.drop(columns=[column for column in ["under_info", "over_info"] if column in merged_df.columns])
 
 
-def save_overview_plot(trigger_df: pd.DataFrame, hawkes_df: pd.DataFrame, output_dir: Path) -> None:
-    plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 6, figsize=(23.5, 5.6))
-
-    x_positions = np.arange(len(TRIGGER_ORDER), dtype=float)
-    labels = [TRIGGER_LABELS[trigger_type] for trigger_type in TRIGGER_ORDER]
-    colors = [TRIGGER_COLORS[trigger_type] for trigger_type in TRIGGER_ORDER]
-
-    branching_ratio_values: List[float] = []
-    alpha_values: List[float] = []
-    for trigger_type in TRIGGER_ORDER:
-        row_df = hawkes_df[hawkes_df["trigger_type"] == trigger_type]
-        branching_ratio_values.append(
-            float(row_df["branching_ratio"].iloc[0])
-            if not row_df.empty and finite_or_none(row_df["branching_ratio"].iloc[0]) is not None
-            else 0.0
-        )
-        alpha_values.append(
-            float(row_df["alpha"].iloc[0])
-            if not row_df.empty and finite_or_none(row_df["alpha"].iloc[0]) is not None
-            else 0.0
-        )
-
-    axes[0].bar(x_positions, branching_ratio_values, color=colors, width=0.62, edgecolor="#1f2933", linewidth=0.6)
-    axes[0].set_title("Excitation alpha / beta", fontsize=12)
-    axes[0].set_xticks(x_positions)
-    axes[0].set_xticklabels(labels, fontsize=11)
-    axes[0].tick_params(axis="y", labelsize=11)
-
-    axes[1].bar(x_positions, alpha_values, color=colors, width=0.62, edgecolor="#1f2933", linewidth=0.6)
-    axes[1].set_title("Excitation alpha", fontsize=12)
-    axes[1].set_xticks(x_positions)
-    axes[1].set_xticklabels(labels, fontsize=11)
-    axes[1].tick_params(axis="y", labelsize=11)
-
-    metric_specs = [
-        ("cascade_duration_sec", "Cascade duration (s)"),
-        ("hawkes_event_count", "Repair/challenge events"),
-        ("topic_shift_indicator", "Topic-shift rate"),
-        ("next_turn_latency_sec", "Next-turn latency (s)"),
-    ]
-
-    for axis, (column_name, axis_title) in zip(axes[2:], metric_specs):
-        means: List[float] = []
-        lower_errors: List[float] = []
-        upper_errors: List[float] = []
-        for trigger_type in TRIGGER_ORDER:
-            group_df = trigger_df[trigger_df["trigger_type"] == trigger_type]
-            if group_df.empty:
-                summary = compute_mean_summary(np.asarray([], dtype=float))
-            elif column_name == "hawkes_event_count":
-                values = group_df["repair_event_count"].astype(float).to_numpy() + group_df["challenge_event_count"].astype(float).to_numpy()
-                summary = compute_mean_summary(values)
-            else:
-                summary = compute_mean_summary(group_df[column_name].astype(float).to_numpy())
-            mean_value = summary["mean"] if summary["mean"] is not None else 0.0
-            ci_low = summary["ci_low"] if summary["ci_low"] is not None else mean_value
-            ci_high = summary["ci_high"] if summary["ci_high"] is not None else mean_value
-            means.append(float(mean_value))
-            lower_errors.append(float(mean_value - ci_low))
-            upper_errors.append(float(ci_high - mean_value))
-
-        axis.bar(
-            x_positions,
-            means,
-            color=colors,
-            width=0.62,
-            edgecolor="#1f2933",
-            linewidth=0.6,
-            yerr=np.vstack([lower_errors, upper_errors]),
-            capsize=4,
-        )
-        axis.set_title(axis_title, fontsize=12)
-        axis.set_xticks(x_positions)
-        axis.set_xticklabels(labels, fontsize=11)
-        axis.tick_params(axis="y", labelsize=11)
-
-    fig.subplots_adjust(top=0.91, left=0.04, right=0.995, bottom=0.17, wspace=0.34)
-    fig.savefig(output_dir / "exp6_cascade_overview.png", dpi=300)
-    plt.close(fig)
-
-
-def sample_trigger_rows(trigger_df: pd.DataFrame, trigger_type: str, sample_count: int) -> pd.DataFrame:
-    group_df = trigger_df[trigger_df["trigger_type"] == trigger_type].copy()
-    if group_df.empty:
-        return group_df
-
-    group_df["hawkes_event_count"] = group_df["repair_event_count"].astype(int) + group_df["challenge_event_count"].astype(int)
-
-    ordered_df = group_df.sort_values(
-        ["hawkes_event_count", "cascade_duration_sec", "continuation_event_count", "episode_id", "trigger_turn_idx"],
-        ascending=[False, False, False, True, True],
-    ).reset_index(drop=True)
-    if len(ordered_df) <= sample_count:
-        return ordered_df
-
-    top_count = max(1, sample_count // 2)
-    top_df = ordered_df.head(top_count)
-    remaining_df = ordered_df.iloc[top_count:].copy()
-    remaining_needed = sample_count - len(top_df)
-    rng = np.random.default_rng(RNG_SEED)
-    sampled_positions = rng.choice(len(remaining_df), size=remaining_needed, replace=False)
-    sampled_df = remaining_df.iloc[np.sort(sampled_positions)]
-    return pd.concat([top_df, sampled_df], ignore_index=True)
-
-
-def save_event_cascade_plot(trigger_df: pd.DataFrame, event_df: pd.DataFrame, output_dir: Path, sample_count: int) -> None:
-    plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 2, figsize=(17.8, 9.0), sharex=True)
-
-    for axis, trigger_type in zip(axes, TRIGGER_ORDER):
-        sampled_triggers = sample_trigger_rows(trigger_df, trigger_type, sample_count)
-        axis.axvline(0.0, color="#495057", linewidth=1.0, linestyle="--", alpha=0.8)
-        axis.set_title(TRIGGER_LABELS[trigger_type], fontsize=13, pad=10)
-        axis.set_xlabel("Seconds from trigger turn", fontsize=13)
-        axis.set_ylabel("Cascade sample", fontsize=13)
-        axis.tick_params(axis="both", labelsize=11)
-        axis.grid(alpha=0.12, linewidth=0.6)
-
-        if sampled_triggers.empty:
-            axis.text(0.5, 0.5, "No sampled triggers", ha="center", va="center", transform=axis.transAxes, fontsize=11)
-            continue
-
-        for row_position, (_, trigger_row) in enumerate(sampled_triggers.iterrows()):
-            axis.hlines(
-                y=row_position,
-                xmin=0.0,
-                xmax=float(trigger_row["observation_horizon_sec"]),
-                color="#d9e2ec",
-                linewidth=1.2,
-                alpha=0.95,
-            )
-
-            trigger_events = event_df[
-                (event_df["trigger_type"] == trigger_type)
-                & (event_df["episode_id"] == trigger_row["episode_id"])
-                & (event_df["trigger_turn_idx"] == trigger_row["trigger_turn_idx"])
-            ].copy()
-            for event_type, event_group in trigger_events.groupby("event_type", observed=False):
-                axis.scatter(
-                    event_group["relative_start_sec"].astype(float).to_numpy(),
-                    np.full(len(event_group), row_position, dtype=float),
-                    color=EVENT_COLORS[event_type],
-                    marker=EVENT_MARKERS[event_type],
-                    s=38,
-                    alpha=0.92,
-                    zorder=4,
-                )
-
-        axis.set_ylim(-0.75, len(sampled_triggers) - 0.25)
-        axis.set_yticks(np.arange(len(sampled_triggers), dtype=float))
-        axis.set_yticklabels([str(index + 1) for index in range(len(sampled_triggers))])
-
-    legend_handles = []
-    legend_labels = []
-    for event_type in ["repair_event", "challenge_event", "continuation_event", "support_marker", "exit_marker"]:
-        handle = plt.Line2D(
-            [0],
-            [0],
-            marker=EVENT_MARKERS[event_type],
-            color="none",
-            markerfacecolor=EVENT_COLORS[event_type],
-            markeredgecolor=EVENT_COLORS[event_type],
-            markersize=7,
-        )
-        legend_handles.append(handle)
-        legend_labels.append(event_type.replace("_", " ").title())
-
-    fig.legend(legend_handles, legend_labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 0.98), fontsize=11)
-    fig.subplots_adjust(top=0.88, left=0.07, right=0.99, bottom=0.10, wspace=0.16)
-    fig.savefig(output_dir / "exp6_event_cascades.png", dpi=300)
-    plt.close(fig)
-
-
 def run_experiment(
     input_dir: Path,
     output_dir: Path,
@@ -1136,9 +937,6 @@ def run_experiment(
     trigger_df.to_csv(output_dir / "exp6_trigger_outcomes.csv", index=False)
     event_df.to_csv(output_dir / "exp6_cascade_events.csv", index=False)
     hawkes_df.to_csv(output_dir / "exp6_hawkes_summary.csv", index=False)
-
-    save_overview_plot(trigger_df, hawkes_df, output_dir)
-    save_event_cascade_plot(trigger_df, event_df, output_dir, DEFAULT_SAMPLE_CASCADE_COUNT)
 
     summary = {
         "config": {

@@ -5,11 +5,6 @@ import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-import matplotlib
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
@@ -29,7 +24,6 @@ DEFAULT_DATA_DIR = "data/stance_labeled/1024"
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_OUTPUT_DIR = "experiments/exp2_iceberg/results"
 DEFAULT_MIN_TURNS = 12
-DEFAULT_MIN_PLOT_TRANSITION_ROWS = 1000
 
 
 def save_json(path: Path, payload: Dict[str, Any]) -> None:
@@ -484,52 +478,6 @@ def build_local_effect_bins(transition_df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def save_local_relationship_plot(binned_df: pd.DataFrame, output_dir: Path) -> None:
-    plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axis = plt.subplots(figsize=(10.6, 6.3))
-
-    plot_df = binned_df[binned_df["n_transition_rows"].astype(int) >= DEFAULT_MIN_PLOT_TRANSITION_ROWS].copy()
-    if plot_df.empty:
-        raise RuntimeError(
-            f"No Exp 2 plot bins meet the minimum row threshold of {DEFAULT_MIN_PLOT_TRANSITION_ROWS}."
-        )
-
-    x_values = plot_df["delta_stance_pt"].astype(float).to_numpy()
-    y_values = plot_df["mean_delta_log_iceberg_density"].astype(float).to_numpy()
-    lower_values = plot_df["ci_low_delta_log_iceberg_density"].astype(float).to_numpy()
-    upper_values = plot_df["ci_high_delta_log_iceberg_density"].astype(float).to_numpy()
-
-    axis.errorbar(
-        x_values,
-        y_values,
-        yerr=np.vstack([y_values - lower_values, upper_values - y_values]),
-        fmt="o",
-        color="#1f5c99",
-        ecolor="#8fb8de",
-        elinewidth=1.2,
-        capsize=4,
-        markersize=6,
-        label="Empirical mean (95% CI)",
-    )
-    axis.plot(
-        x_values,
-        y_values,
-        color="#d17b0f",
-        linewidth=2.3,
-        label="Overall trend",
-    )
-    axis.axhline(0.0, color="#6c757d", linewidth=1.0, alpha=0.75)
-    axis.axvline(0.0, color="#6c757d", linewidth=1.0, alpha=0.30)
-    axis.set_xlabel(r"Change in stance ($\Delta$ stance$_{pt}$)", fontsize=14)
-    axis.set_ylabel(r"Change in log iceberg density ($\Delta \log D_{\mathrm{iceberg}}$)", fontsize=14)
-    axis.tick_params(axis="both", labelsize=12)
-    axis.legend(frameon=False, loc="best", fontsize=11)
-    axis.grid(alpha=0.16, linewidth=0.6)
-    fig.tight_layout()
-    fig.savefig(output_dir / "exp2_local_relationship.png", dpi=300)
-    plt.close(fig)
-
-
 def extract_term_row(coefficient_df: pd.DataFrame, model_name: str, term_name: str) -> Dict[str, Any]:
     matching_rows = coefficient_df[
         (coefficient_df["model_name"] == model_name) & (coefficient_df["term"] == term_name)
@@ -670,7 +618,6 @@ def main() -> None:
     coefficient_df.to_csv(output_dir / "exp2_regression_coefficients.csv", index=False)
     model_comparison_df.to_csv(output_dir / "exp2_regression_model_comparison.csv", index=False)
     local_effect_bins_df.to_csv(output_dir / "exp2_local_effect_bins.csv", index=False)
-    save_local_relationship_plot(local_effect_bins_df, output_dir)
 
     dataset_summary = build_dataset_summary(
         turn_df=turn_df,
@@ -692,7 +639,6 @@ def main() -> None:
                 "exp2_regression_coefficients.csv",
                 "exp2_regression_model_comparison.csv",
                 "exp2_local_effect_bins.csv",
-                "exp2_local_relationship.png",
                 "exp2_summary.json",
                 "dataset_summary.json",
             ],

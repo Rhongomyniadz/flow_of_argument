@@ -3,14 +3,10 @@ from collections import defaultdict
 from pathlib import Path
 import json
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
-import seaborn as sns
 from tqdm import tqdm
 warnings.filterwarnings('ignore')
-sns.set_theme(style="whitegrid", context="paper")
 
 
 def safe_get(record, key, default=None):
@@ -178,207 +174,44 @@ def analyze_single_episode(json_path):
     }, None
 
 
-def draw_flow_curve(ax, x0, y0, x1, y1, color, lw, alpha=0.4):
-    path_x = np.linspace(x0, x1, 80)
-    t = np.linspace(0, 1, 80)
-    ease = 3 * t**2 - 2 * t**3
-    path_y = y0 + (y1 - y0) * ease
-    ax.plot(path_x, path_y, color=color, linewidth=lw, alpha=alpha, solid_capstyle='round')
+def build_episode_metrics_frame(report):
+    return pd.DataFrame(report["per_episode_metrics"])
 
 
-def generate_sankey(metrics, output_dir):
-    flow = metrics.get('flow_matrix', None)
-    all_turns = metrics.get('all_turns', None)
-    if not all_turns:
-        return None
-
-    all_turns = sorted(all_turns)
-    n = len(all_turns)
-    if n == 0:
-        return None
-
-    ys = [0.5] if n == 1 else list(np.linspace(0.95, 0.05, n))
-    colors = sns.color_palette("husl", n)
-    turn_colors = {
-        t: f"rgba({int(r*255)},{int(g*255)},{int(b*255)},0.65)"
-        for t, (r, g, b) in zip(all_turns, colors)
-    }
-    node_labels = [f"A{t}" for t in all_turns] + [f"C{t}" for t in all_turns]
-    node_x = [0.08] * n + [0.92] * n
-    node_y = ys + ys
-    node_colors = [turn_colors[t] for t in all_turns] + ["rgba(170,170,170,0.85)"] * n
-    node_lookup = {("A", t): i for i, t in enumerate(all_turns)}
-    node_lookup.update({("C", t): i + n for i, t in enumerate(all_turns)})
-
-    sources, targets, values, link_colors, customdata = [], [], [], [], []
-    if flow:
-        for src_turn, targets_dict in flow.items():
-            src_turn = safe_int(src_turn, None)
-            if src_turn not in all_turns:
-                continue
-            for tgt_turn, lags in targets_dict.items():
-                tgt_turn = safe_int(tgt_turn, None)
-                if tgt_turn not in all_turns or not lags:
-                    continue
-                sources.append(node_lookup[("A", src_turn)])
-                targets.append(node_lookup[("C", tgt_turn)])
-                values.append(len(lags))
-                link_colors.append(turn_colors[src_turn])
-                customdata.append((float(np.mean(lags)), len(lags)))
-
-    fig = go.Figure(
-        go.Sankey(
-            arrangement="fixed",
-            node=dict(
-                pad=10,
-                thickness=12,
-                line=dict(color="rgba(80,80,80,0.35)", width=0.5),
-                label=node_labels,
-                color=node_colors,
-                x=node_x,
-                y=node_y,
-                hovertemplate="%{label}<extra></extra>",
-            ),
-            link=dict(
-                source=sources,
-                target=targets,
-                value=values,
-                color=link_colors,
-                customdata=customdata,
-                hovertemplate="From %{source.label} to %{target.label}<br>Count: %{value}<br>Mean lag: %{customdata[0]:.1f}s<extra></extra>",
-            ),
-        )
-    )
-    fig.update_layout(
-        title=f"Episode {metrics['episode_id']} | Conversion {metrics['conversion_rate']:.1f}% | Mean lag {np.mean(metrics['lags']) if metrics['lags'] else 0:.1f}s",
-        font=dict(size=12),
-        width=1100,
-        height=max(550, int(26 * n + 220)),
-        margin=dict(l=40, r=40, t=70, b=30),
-    )
-    output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_dir / f"sankey_{metrics['episode_id']}.html"
-    fig.write_html(path, include_plotlyjs="cdn")
-    return path
-
-
-def save_conversion_histogram(df, global_conv, out_path):
-    fig, ax = plt.subplots(figsize=(11, 6.5))
-    sns.histplot(df['conversion_rate'], bins=25, color="#4C78A8", edgecolor="white", ax=ax)
-    ax.axvline(global_conv, color="#E45756", linestyle="--", linewidth=2, label=f"Global avg = {global_conv:.1f}%")
-    ax.set_title("Episode-Level Conversion Rate Distribution", fontsize=15)
-    ax.set_xlabel("Conversion Rate (%)")
-    ax.set_ylabel("Episode Count")
-    ax.legend(frameon=False)
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
-
-
-def save_lag_histogram(all_lags, lag_stats, out_path):
-    fig, ax = plt.subplots(figsize=(11, 6.5))
-    sns.histplot(all_lags, bins=40, color="#72B7B2", edgecolor="white", ax=ax)
-    ax.axvline(lag_stats["median"], color="#DD8452", linestyle="--", linewidth=2, label=f"Median = {lag_stats['median']:.1f}s")
-    ax.set_title("Time-to-Surface Distribution", fontsize=15)
-    ax.set_xlabel("Lag (seconds)")
-    ax.set_ylabel("Count")
-    ax.legend(frameon=False)
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
-
-
-def save_episode_scatter(df, out_path):
-    plot_df = df.copy()
-    plot_df["dark_ratio"] = 100.0 * plot_df["dark_matter"] / plot_df["total_assumptions"].clip(lower=1)
-    fig, ax = plt.subplots(figsize=(10.5, 7.5))
-    sns.scatterplot(
-        data=plot_df,
-        x="conversion_rate",
-        y="mean_lag",
-        size="total_assumptions",
-        hue="dark_ratio",
-        palette="viridis",
-        sizes=(20, 180),
-        alpha=0.75,
-        ax=ax,
-    )
-    ax.set_title("Episode-Level Accommodation Profile", fontsize=15)
-    ax.set_xlabel("Conversion Rate (%)")
-    ax.set_ylabel("Mean Time-to-Surface (s)")
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
-
-
-def save_turn_lag_heatmap(all_metrics, out_path):
+def build_lag_samples_frame(all_metrics):
     rows = []
-    for m in all_metrics:
-        for src_turn, targets in m["flow_matrix"].items():
-            for tgt_turn, lags in targets.items():
-                rows.append({"source_turn": int(src_turn), "target_turn": int(tgt_turn), "count": len(lags)})
-    if not rows:
-        return
-    df = pd.DataFrame(rows)
-    heat = df.groupby(["source_turn", "target_turn"], as_index=False)["count"].sum()
-    src_cap = int(np.ceil(np.quantile(heat["source_turn"], 0.95)))
-    tgt_cap = int(np.ceil(np.quantile(heat["target_turn"], 0.95)))
-    heat = heat[(heat["source_turn"] <= src_cap) & (heat["target_turn"] <= tgt_cap)].copy()
-    pivot = heat.pivot(index="source_turn", columns="target_turn", values="count").fillna(0)
-    if pivot.empty:
-        return
-    plot_vals = np.log1p(pivot)
-    fig, ax = plt.subplots(figsize=(10.5, 8.5))
-    cmap = sns.color_palette("mako", as_cmap=True)
-    cmap.set_under("white")
-    sns.heatmap(
-        plot_vals,
-        cmap=cmap,
-        vmin=1e-9,
-        ax=ax,
-        cbar_kws={"label": "log(1 + accommodation count)"},
+    for metrics in all_metrics:
+        for lag in metrics["lags"]:
+            rows.append({"episode_id": metrics["episode_id"], "lag_seconds": float(lag)})
+    return pd.DataFrame(rows, columns=["episode_id", "lag_seconds"])
+
+
+def build_flow_edges_frame(all_metrics):
+    rows = []
+    for metrics in all_metrics:
+        for source_turn, targets in metrics["flow_matrix"].items():
+            for target_turn, lags in targets.items():
+                if not lags:
+                    continue
+                rows.append(
+                    {
+                        "episode_id": metrics["episode_id"],
+                        "source_turn": int(source_turn),
+                        "target_turn": int(target_turn),
+                        "count": int(len(lags)),
+                        "mean_lag_seconds": float(np.mean(lags)),
+                    }
+                )
+    return pd.DataFrame(
+        rows,
+        columns=["episode_id", "source_turn", "target_turn", "count", "mean_lag_seconds"],
     )
-    ax.set_title("Where Assumptions Surface Across Turns", fontsize=15)
-    ax.set_xlabel("Explicit Claim Turn")
-    ax.set_ylabel("Assumption Turn")
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
 
 
-def save_global_summary_flow(report, out_path):
-    total = report["global_metrics"]["total_assumptions"]
-    accommodated = report["global_metrics"]["total_accommodated"]
-    dark = report["global_metrics"]["dark_matter_count"]
-    mean_lag = report["global_metrics"]["lag_distribution_seconds"]["mean"]
-    fig, ax = plt.subplots(figsize=(11, 5.8))
-    ax.add_patch(plt.Rectangle((0.08, 0.35), 0.22, 0.3, color="#4C78A8", alpha=0.35))
-    ax.add_patch(plt.Rectangle((0.70, 0.58), 0.22, 0.2, color="#59A14F", alpha=0.45))
-    ax.add_patch(plt.Rectangle((0.70, 0.12), 0.22, 0.2, color="#E15759", alpha=0.45))
-    ax.text(0.19, 0.5, f"Implicit Pool\n{total:,}", ha="center", va="center", fontsize=15, weight="bold")
-    ax.text(0.81, 0.68, f"Explicit Record\n{accommodated:,}", ha="center", va="center", fontsize=14, weight="bold")
-    ax.text(0.81, 0.22, f"Dark Matter\n{dark:,}", ha="center", va="center", fontsize=14, weight="bold")
-    draw_flow_curve(ax, 0.30, 0.52, 0.70, 0.68, "#59A14F", 10)
-    draw_flow_curve(ax, 0.30, 0.46, 0.70, 0.22, "#E15759", 10)
-    ax.text(0.50, 0.67, f"{report['global_metrics']['conversion_rate_percent']:.1f}%",
-            ha="center", va="center", fontsize=12, bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.85))
-    ax.text(0.50, 0.24, f"{report['global_metrics']['dark_matter_ratio_percent']:.1f}%",
-            ha="center", va="center", fontsize=12, bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.85))
-    ax.set_title("Global Implicature Flow Summary", fontsize=15)
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=220, bbox_inches='tight')
-    plt.close(fig)
-
-
-def batch_analyze(input_dir, output_dir, sankey_limit=50):
+def batch_analyze(input_dir, output_dir):
     input_path = Path(input_dir)
     output_path = Path(output_dir)
-    sankey_output_path = output_path.parent / "episode_sankey_html"
     output_path.mkdir(parents=True, exist_ok=True)
-    sankey_output_path.mkdir(parents=True, exist_ok=True)
 
     json_files = sorted(input_path.glob("*.json"))
     if not json_files:
@@ -427,6 +260,11 @@ def batch_analyze(input_dir, output_dir, sankey_limit=50):
             'dark_matter_ratio_percent': round(dark_ratio, 2),
             'lag_distribution_seconds': lag_stats
         },
+        'plot_data_outputs': [
+            'exp4_episode_metrics.csv',
+            'exp4_lag_samples.csv',
+            'exp4_flow_edges.csv'
+        ],
         'per_episode_metrics': [
             {
                 'episode_id': m['episode_id'],
@@ -445,31 +283,12 @@ def batch_analyze(input_dir, output_dir, sankey_limit=50):
     with open(report_path, 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    df = pd.DataFrame(report['per_episode_metrics'])
-
-    if not df.empty:
-        save_conversion_histogram(df, global_conv, output_path / "conversion_rate_distribution.png")
-        save_episode_scatter(df, output_path / "episode_accommodation_profile.png")
-
-    if all_lags:
-        save_lag_histogram(all_lags, lag_stats, output_path / "lag_distribution.png")
-
-    if all_metrics:
-        save_turn_lag_heatmap(all_metrics, output_path / "turn_lag_heatmap.png")
-        save_global_summary_flow(report, output_path / "global_implicature_flow_summary.png")
-
-    sankey_paths = []
-    if all_metrics:
-        print(f"\nGenerating Sankey diagrams for first {sankey_limit} episodes (sorted by ID)...")
-
-        # allow episodes even if flow empty, still can draw (ghost links will show columns)
-        sorted_episodes = sorted(all_metrics, key=lambda m: str(m['episode_id']))
-        target_episodes = sorted_episodes[:sankey_limit]
-
-        for metrics in tqdm(target_episodes, desc="Sankey Generation", unit="diagram", leave=False):
-            path = generate_sankey(metrics, sankey_output_path)
-            if path:
-                sankey_paths.append(str(path.relative_to(output_path.parent)))
+    episode_metrics_df = build_episode_metrics_frame(report)
+    lag_samples_df = build_lag_samples_frame(all_metrics)
+    flow_edges_df = build_flow_edges_frame(all_metrics)
+    episode_metrics_df.to_csv(output_path / "exp4_episode_metrics.csv", index=False)
+    lag_samples_df.to_csv(output_path / "exp4_lag_samples.csv", index=False)
+    flow_edges_df.to_csv(output_path / "exp4_flow_edges.csv", index=False)
 
     if dark_ratio > 40:
         insight = "⚠️  High Dark Matter ratio → Dialogue contains many unverified implicit premises, potentially impacting collaboration quality"
@@ -490,18 +309,9 @@ def batch_analyze(input_dir, output_dir, sankey_limit=50):
     print(f"\nInsight: {insight}")
     print(f"\nOutput directory: {output_path.absolute()}")
     print(f"  • Global report: implicature_flow_global_report.json")
-    print(f"  • Conversion rate distribution: conversion_rate_distribution.png")
-    print(f"  • Lag distribution: lag_distribution.png")
-    print(f"  • Episode accommodation profile: episode_accommodation_profile.png")
-    print(f"  • Turn-lag heatmap: turn_lag_heatmap.png")
-    print(f"  • Global summary flow: global_implicature_flow_summary.png")
-
-    if sankey_paths:
-        print(f"  • Sankey diagrams: {len(sankey_paths)} generated (Limit: first {sankey_limit} IDs)")
-        for p in sankey_paths[:3]:
-            print(f"      → {p}")
-        if len(sankey_paths) > 3:
-            print(f"      → ... and {len(sankey_paths) - 3} more")
+    print(f"  • Episode metrics: exp4_episode_metrics.csv")
+    print(f"  • Lag samples: exp4_lag_samples.csv")
+    print(f"  • Flow edges: exp4_flow_edges.csv")
     print("\n" + "=" * 70)
 
     return report
@@ -516,4 +326,4 @@ if __name__ == "__main__":
         print("💡 Please verify the path or modify the INPUT_DIR variable")
         print(f"   Suggested check: {Path('.').absolute() / INPUT_DIR}")
     else:
-        batch_analyze(INPUT_DIR, OUTPUT_DIR, sankey_limit=50)
+        batch_analyze(INPUT_DIR, OUTPUT_DIR)

@@ -6,17 +6,11 @@ import re
 from collections import Counter
 from pathlib import Path
 
-import matplotlib
 import numpy as np
-import seaborn as sns
 import torch
 from scipy.optimize import minimize
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
 
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
@@ -502,7 +496,6 @@ def build_base_summary(rows, output_dir, input_dir, num_episodes, silence_gap, a
         "response_delay_regression_distribution_checks": {},
         "response_type_counts": {k: int(v) for k, v in response_counts.items()},
         "tqdm_enabled": show_progress,
-        "png_outputs": [],
     }
 
 
@@ -528,14 +521,10 @@ def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, 
                 "exp5_response_delay_regression_coefficients.csv",
                 "exp5_response_delay_regression_summary.json",
                 "exp5_response_type_counts.csv",
-                "exp5_probability_curves.png",
-                "exp5_assumption_count_vs_response_time.png",
-                "exp5_implicature_load_vs_response_time.png",
-                "exp5_load_ridge_by_response_type.png",
             ],
             "notes": [
                 "Patch mode writes turn-level features only.",
-                "Fit the response models and create the figures by running merge_exp5_patches.py after all patches finish.",
+                "Fit the response models by running merge_exp5_patches.py after all patches finish.",
             ],
         }
     )
@@ -545,124 +534,6 @@ def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, 
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=json_default))
     return summary
-
-
-def save_plot_curve(rows, out_path):
-    if not rows:
-        return False
-    try:
-        x = np.asarray([r["implicature_load"] for r in rows], dtype=float)
-        xmin, xmax = robust_xlim(x)
-        plt.figure(figsize=(10, 6))
-        cols = sorted(k for k in rows[0] if k.startswith("p_"))
-        for col in cols:
-            sns.lineplot(x=x, y=np.asarray([r[col] for r in rows], dtype=float), linewidth=2.0, label=col.replace("p_", ""))
-        plt.title("Bayesian Response Probability Curves by Load")
-        plt.xlabel("Implicature Load L")
-        plt.ylabel("Predicted probability")
-        plt.ylim(0, 1)
-        plt.xlim(xmin, xmax)
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(out_path, dpi=200)
-        plt.close()
-        return True
-    except Exception:
-        plt.close()
-        return False
-
-
-def save_plot_scatter(x, y, out_path, title, xlabel):
-    if len(x) < 3 or len(y) < 3:
-        return False
-    try:
-        xmin, xmax = robust_xlim(x)
-        ymin, ymax = robust_xlim(y, lo=0.0, hi=0.995, cap=2000.0)
-        m = np.isfinite(x) & np.isfinite(y) & (x >= xmin) & (x <= xmax) & (y >= ymin) & (y <= ymax)
-        x, y = np.asarray(x)[m], np.asarray(y)[m]
-        if len(x) < 3:
-            return False
-        if len(x) > 30000:
-            idx = np.random.choice(len(x), size=30000, replace=False)
-            x_plot, y_plot = x[idx], y[idx]
-        else:
-            x_plot, y_plot = x, y
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(x=x_plot, y=y_plot, s=10, alpha=0.18, linewidth=0, color="#4C78A8")
-        sns.regplot(x=x, y=y, scatter=False, ci=None, line_kws={"color": "#E45756", "linewidth": 2.2})
-        plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel("Response latency (seconds)")
-        plt.xlim(xmin, xmax)
-        plt.ylim(ymin, ymax)
-        plt.tight_layout()
-        plt.savefig(out_path, dpi=200)
-        plt.close()
-        return True
-    except Exception:
-        plt.close()
-        return False
-
-
-def save_ridge(rows, out_path):
-    by_cls = {cls: np.asarray([float(r["implicature_load"]) for r in rows if r.get("next_response_type") == cls and isinstance(r.get("implicature_load"), (int, float)) and math.isfinite(float(r["implicature_load"]))], dtype=float) for cls in RESPONSE_CLASSES}
-    by_cls = {k: v for k, v in by_cls.items() if len(v) >= 5}
-    if not by_cls:
-        return False
-    try:
-        all_vals = np.concatenate(list(by_cls.values()))
-        transformed_all_vals = np.log1p(all_vals)
-        xmin, xmax = robust_xlim(transformed_all_vals, lo=0.0, hi=0.995)
-        order = [c for c in RESPONSE_CLASSES if c in by_cls]
-        fig, axes = plt.subplots(len(order), 1, figsize=(11, 1.8 * len(order)), sharex=True)
-        axes = [axes] if len(order) == 1 else axes
-        colors = sns.color_palette("Set2", len(order))
-        for i, cls in enumerate(order):
-            ax = axes[i]
-            transformed_vals = np.log1p(by_cls[cls])
-            plot_vals = transformed_vals[(transformed_vals >= xmin) & (transformed_vals <= xmax)]
-            if len(plot_vals) < 5:
-                plot_vals = transformed_vals
-            sns.kdeplot(
-                x=plot_vals,
-                fill=True,
-                alpha=0.7,
-                linewidth=1.0,
-                color=colors[i],
-                cut=0,
-                clip=(xmin, xmax),
-                ax=ax,
-            )
-            sns.kdeplot(
-                x=plot_vals,
-                fill=False,
-                linewidth=1.0,
-                color="black",
-                cut=0,
-                clip=(xmin, xmax),
-                ax=ax,
-            )
-            ax.set_ylabel(cls, rotation=0, ha="right", va="center", labelpad=35)
-            ax.set_yticks([])
-            ax.grid(axis="x", alpha=0.2)
-            ax.spines["top"].set_visible(False)
-            ax.spines["right"].set_visible(False)
-            ax.spines["left"].set_visible(False)
-            ax.set_xlim(xmin, xmax)
-            ax.set_xlabel("" if i < len(order) - 1 else "Implicature Load L")
-        raw_tick_values = np.asarray([0, 5, 10, 20, 40, 80, 160, 320, 640, 1280], dtype=float)
-        transformed_tick_values = np.log1p(raw_tick_values)
-        visible_ticks = transformed_tick_values[(transformed_tick_values >= xmin) & (transformed_tick_values <= xmax)]
-        visible_tick_labels = [str(int(round(np.expm1(value)))) for value in visible_ticks]
-        axes[-1].set_xticks(visible_ticks)
-        axes[-1].set_xticklabels(visible_tick_labels)
-        fig.subplots_adjust(bottom=0.12, top=0.98)
-        plt.savefig(out_path, dpi=220, bbox_inches="tight")
-        plt.close()
-        return True
-    except Exception:
-        plt.close()
-        return False
 
 
 def build_probability_curves(model, loads):
@@ -846,16 +717,6 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     response_counts = Counter(str(r.get("next_response_type")) for r in rows if r.get("next_response_type"))
     save_csv(output_dir / "exp5_response_type_counts.csv", [{"response_type": k, "count": v} for k, v in sorted(response_counts.items())], ["response_type", "count"])
 
-    png_outputs = []
-    if curve_rows and save_plot_curve(curve_rows, output_dir / "exp5_probability_curves.png"):
-        png_outputs.append("exp5_probability_curves.png")
-    if save_plot_scatter(assumption_x, assumption_y, output_dir / "exp5_assumption_count_vs_response_time.png", "Response Time by Assumption Count", "Assumption count in turn"):
-        png_outputs.append("exp5_assumption_count_vs_response_time.png")
-    if save_plot_scatter(load_x, load_y, output_dir / "exp5_implicature_load_vs_response_time.png", "Response Time by Implicature Load", "Implicature Load L"):
-        png_outputs.append("exp5_implicature_load_vs_response_time.png")
-    if save_ridge(rows, output_dir / "exp5_load_ridge_by_response_type.png"):
-        png_outputs.append("exp5_load_ridge_by_response_type.png")
-
     summary = build_base_summary(
         rows,
         output_dir,
@@ -883,7 +744,6 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
             },
             "response_delay_regression": response_delay_regression,
             "response_delay_regression_distribution_checks": response_delay_distribution_checks,
-            "png_outputs": png_outputs,
         }
     )
     if summary_extra:

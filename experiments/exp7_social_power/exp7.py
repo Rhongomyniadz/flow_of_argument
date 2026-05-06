@@ -7,16 +7,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
-import matplotlib
 import numpy as np
 import pandas as pd
 from statsmodels.genmod.bayes_mixed_glm import BinomialBayesMixedGLM
 from tqdm.auto import tqdm
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
-
 
 DEFAULT_INPUT_DIR = "data/maxim_violations_labeled"
 DEFAULT_OUTPUT_DIR = "experiments/exp7_social_power/results"
@@ -572,49 +566,6 @@ def write_csv(path: Path, rows: Sequence[Dict[str, object]], fieldnames: Sequenc
             writer.writerow(row)
 
 
-def render_png_plot(path: Path, curve_rows: Sequence[Dict[str, object]]) -> None:
-    colors = {
-        "guest": "#b42318",
-        "host": "#175cd3",
-    }
-    severity_to_label = {VIOLATION_SEVERITY[violation]: violation for violation in VIOLATION_ORDER}
-    x_values = [VIOLATION_SEVERITY[violation] for violation in VIOLATION_ORDER]
-
-    fig, ax = plt.subplots(figsize=(10.2, 6.1))
-    ax.set_facecolor("#ffffff")
-    ax.grid(axis="y", color="#e5e7eb", linewidth=1.0)
-    ax.set_axisbelow(True)
-
-    for role in ROLE_ORDER:
-        role_rows = [row for row in curve_rows if row["speaker_role"] == role]
-        role_rows.sort(key=lambda row: int(row["severity"]))
-        xs = [int(row["severity"]) for row in role_rows]
-        ys = [float(row["predicted_policed_probability"]) for row in role_rows]
-        ax.plot(xs, ys, color=colors[role], linewidth=3.0, marker="o", markersize=7, label=role.title())
-
-    ax.set_xlabel("Violation type", fontsize=13)
-    ax.set_ylabel("Predicted policing probability", fontsize=13)
-    ax.set_xticks(x_values)
-    ax.set_xticklabels([severity_to_label[x_value] for x_value in x_values], fontsize=12)
-    ax.tick_params(axis="y", labelsize=12)
-    observed_probabilities = [
-        float(row["predicted_policed_probability"])
-        for row in curve_rows
-        if row.get("predicted_policed_probability") is not None
-    ]
-    max_probability = max(observed_probabilities) if observed_probabilities else 0.4
-    upper_limit = min(1.0, max(0.45, math.ceil((max_probability + 0.03) * 20.0) / 20.0))
-    ax.set_ylim(0.0, upper_limit)
-    ax.legend(frameon=False, loc="upper right", fontsize=12)
-
-    for spine in ("top", "right"):
-        ax.spines[spine].set_visible(False)
-
-    fig.tight_layout()
-    fig.savefig(path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
 def run_analysis(
     input_dir: Path,
     output_dir: Path,
@@ -801,10 +752,6 @@ def run_analysis(
                     "predicted_policed_probability",
                 ],
             ),
-        ),
-        (
-            "exp7_status_shield_plot.png",
-            lambda: render_png_plot(output_dir / "exp7_status_shield_plot.png", curve_rows),
         ),
         (
             "exp7_summary.json",
