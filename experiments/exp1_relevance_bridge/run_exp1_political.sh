@@ -23,6 +23,7 @@ MAX_TOKENS="${MAX_TOKENS:-192}"
 SEED="${SEED:-42}"
 NO_TQDM="${NO_TQDM:-1}"
 DRY_RUN="${DRY_RUN:-0}"
+export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 
 build_extra_args() {
   EXTRA_ARGS=()
@@ -77,6 +78,7 @@ submit_exp1_political_stages() {
     "SEED=${SEED}"
     "NO_TQDM=${NO_TQDM}"
     "DRY_RUN=${DRY_RUN}"
+    "PYTHONNOUSERSITE=${PYTHONNOUSERSITE}"
   )
 
   if [[ -n "${MAX_EPISODES_PER_CATEGORY}" ]]; then

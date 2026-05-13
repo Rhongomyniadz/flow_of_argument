@@ -61,6 +61,7 @@ class PairRecord(TypedDict):
     previous_turn_id: str
     true_next_turn_id: str
     previous_turn_text: str
+    previous_turn_assumptions: list[str]
     true_next_turn_text: str
     true_next_turn_move_label: str
     assumption_count: int
@@ -111,6 +112,7 @@ class CandidateScoreRecord(TypedDict):
     candidate_move_label: str
     candidate_text: str
     candidate_assumptions_json: str
+    prompt_assumptions_json: str
     is_true_next_turn: bool
     negative_source: str
     condition: PromptCondition
@@ -427,9 +429,10 @@ def build_episode_records(category: str, path: Path) -> tuple[list[TurnRecord], 
                 "previous_turn_id": previous_record["turn_id"],
                 "true_next_turn_id": next_record["turn_id"],
                 "previous_turn_text": previous_record["turn_text"],
+                "previous_turn_assumptions": previous_record["assumption_texts"],
                 "true_next_turn_text": next_record["turn_text"],
                 "true_next_turn_move_label": next_record["move_label"],
-                "assumption_count": len(next_record["assumption_texts"]),
+                "assumption_count": len(previous_record["assumption_texts"]),
                 "negative_count": 0,
                 "candidate_count": 0,
                 "candidate_pool_complete": False,
@@ -665,8 +668,9 @@ def build_scoring_prompt(pair_record: PairRecord, candidate_record: CandidateRec
     if condition == "with_assumptions":
         assumption_block = f"""
 
-Candidate next-turn assumptions:
-{format_assumption_block(candidate_record["candidate_assumptions"])}
+Previous-turn assumptions:
+These are implicit premises likely taken for granted in the previous turn. Use them only as context for judging whether the candidate follows naturally.
+{format_assumption_block(pair_record["previous_turn_assumptions"])}
 """
     return f"""You are a strict conversation-continuation judge.
 
@@ -808,6 +812,7 @@ def score_candidates(
     if not candidate_records:
         return []
     tasks = build_prompt_tasks(pair_records, candidate_records)
+    pair_lookup = {record["pair_id"]: record for record in pair_records}
     candidate_lookup = {record["candidate_id"]: record for record in candidate_records}
     llm = LLMInterface(
         model_name=args.model_name,
@@ -833,6 +838,7 @@ def score_candidates(
         for task, raw_output in zip(batch_tasks, raw_outputs):
             parsed = parse_llm_score(raw_output)
             candidate = candidate_lookup[task["candidate_id"]]
+            pair_record = pair_lookup[task["pair_id"]]
             score_records.append(
                 {
                     "pair_id": candidate["pair_id"],
@@ -845,6 +851,7 @@ def score_candidates(
                     "candidate_move_label": candidate["candidate_move_label"],
                     "candidate_text": candidate["candidate_text"],
                     "candidate_assumptions_json": json.dumps(candidate["candidate_assumptions"], ensure_ascii=False),
+                    "prompt_assumptions_json": json.dumps(pair_record["previous_turn_assumptions"], ensure_ascii=False),
                     "is_true_next_turn": candidate["is_true_next_turn"],
                     "negative_source": candidate["negative_source"],
                     "condition": task["condition"],
@@ -1317,7 +1324,9 @@ def write_dry_run_outputs(
     aggregate_counts: dict[str, int],
 ) -> None:
     score_records: list[CandidateScoreRecord] = []
+    pair_lookup = {pair_record["pair_id"]: pair_record for pair_record in pair_records}
     for candidate in candidate_records:
+        pair_record = pair_lookup[candidate["pair_id"]]
         for condition in PROMPT_CONDITIONS:
             typed_condition: PromptCondition = "with_assumptions" if condition == "with_assumptions" else "without_assumptions"
             score_records.append(
@@ -1332,6 +1341,7 @@ def write_dry_run_outputs(
                     "candidate_move_label": candidate["candidate_move_label"],
                     "candidate_text": candidate["candidate_text"],
                     "candidate_assumptions_json": json.dumps(candidate["candidate_assumptions"], ensure_ascii=False),
+                    "prompt_assumptions_json": json.dumps(pair_record["previous_turn_assumptions"], ensure_ascii=False),
                     "is_true_next_turn": candidate["is_true_next_turn"],
                     "negative_source": candidate["negative_source"],
                     "condition": typed_condition,
