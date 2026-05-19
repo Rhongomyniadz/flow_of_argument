@@ -24,6 +24,7 @@ MAX_TOKENS="${MAX_TOKENS:-192}"
 SEED="${SEED:-42}"
 NO_TQDM="${NO_TQDM:-1}"
 DRY_RUN="${DRY_RUN:-0}"
+export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 
 build_category_args() {
   CATEGORY_ARGS=(--categories all)
