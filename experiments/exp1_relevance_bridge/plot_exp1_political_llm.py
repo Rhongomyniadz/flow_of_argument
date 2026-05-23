@@ -12,11 +12,11 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-FONT_SCALE: float = 1.45
-TITLE_SIZE: int = 20
-LABEL_SIZE: int = 17
-TICK_SIZE: int = 14
-LEGEND_SIZE: int = 14
+FONT_SCALE: float = 1.0
+TITLE_SIZE: int = 24
+LABEL_SIZE: int = 18
+TICK_SIZE: int = 16
+LEGEND_SIZE: int = 16
 
 sns.set_theme(style="whitegrid", context="paper", font_scale=FONT_SCALE)
 plt.rcParams.update(
@@ -106,8 +106,21 @@ def build_output_paths(results_dir: Path, output_prefix: str) -> PlotOutputPaths
     }
 
 
+def apply_font_sizes(fig: plt.Figure) -> None:
+    for axis in fig.axes:
+        axis.title.set_fontsize(TITLE_SIZE)
+        axis.xaxis.label.set_fontsize(LABEL_SIZE)
+        axis.yaxis.label.set_fontsize(LABEL_SIZE)
+        axis.tick_params(axis="both", labelsize=TICK_SIZE)
+        legend = axis.get_legend()
+        if legend is not None:
+            for text in legend.get_texts():
+                text.set_fontsize(LEGEND_SIZE)
+
+
 def save_figure(fig: plt.Figure, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    apply_font_sizes(fig)
     fig.savefig(path, format="pdf", bbox_inches="tight")
     plt.close(fig)
 
