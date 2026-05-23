@@ -6,15 +6,31 @@
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:A6000:2
 #SBATCH --mem=64G
-#SBATCH --chdir=/home/edenzha/flow_of_argument
+#SBATCH --chdir=/shared/6/projects/flow_of_argument
 
 set -euo pipefail
 
+CUDA_HOME="${EXP1_CUDA_HOME:-/usr/local/cuda-12.9}"
+if [[ ! -x "${CUDA_HOME}/bin/nvcc" ]]; then
+  echo "CUDA nvcc not found at ${CUDA_HOME}/bin/nvcc. Set EXP1_CUDA_HOME to a CUDA toolkit path with nvcc." >&2
+  exit 1
+fi
+export CUDA_HOME
+export PATH="${CUDA_HOME}/bin:${CUDA_HOME}/nvvm/bin:${PATH}"
+export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${LD_LIBRARY_PATH:-}"
+export TORCH_CUDA_ARCH_LIST="${EXP1_TORCH_CUDA_ARCH_LIST:-8.6}"
+export FLASHINFER_CUDA_ARCH_LIST="${EXP1_FLASHINFER_CUDA_ARCH_LIST:-8.6}"
+export FLASHINFER_COMPUTE_CAPS="${EXP1_FLASHINFER_COMPUTE_CAPS:-86}"
+export FLASHINFER_NVCC="${CUDA_HOME}/bin/nvcc"
+FLASHINFER_JOB_KEY="${SLURM_ARRAY_JOB_ID:-${SLURM_JOB_ID:-manual}}_${SLURM_ARRAY_TASK_ID:-na}"
+export FLASHINFER_WORKSPACE_BASE="${EXP1_FLASHINFER_WORKSPACE_BASE:-/tmp/${USER}/flashinfer_exp1_${FLASHINFER_JOB_KEY}}"
+mkdir -p "${FLASHINFER_WORKSPACE_BASE}"
+
 INPUT_DIR="${INPUT_DIR:-data/conversation_moves_labeled}"
-OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp1_relevance_bridge/results_llm}"
+OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp1_relevance_bridge/results/}"
 EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
-MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY:-}"
-CATEGORIES_CSV="${CATEGORIES_CSV:-}"
+MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY-250}"
+CATEGORIES_CSV="${CATEGORIES_CSV:-all}"
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-30B-A3B-Instruct-2507}"
 DOWNLOAD_DIR="${DOWNLOAD_DIR:-/shared/4/models}"
 TENSOR_PARALLEL_SIZE="${TENSOR_PARALLEL_SIZE:-2}"
@@ -80,6 +96,31 @@ print(count)
 PY
 }
 
+resolve_selected_categories() {
+  export INPUT_DIR CATEGORIES_CSV
+  python - <<'PY'
+from pathlib import Path
+import os
+
+input_dir = Path(os.environ["INPUT_DIR"])
+categories_csv = os.environ.get("CATEGORIES_CSV", "").strip()
+available = sorted(path.name for path in input_dir.iterdir() if path.is_dir())
+requested = [item.strip() for item in categories_csv.split(",") if item.strip()]
+if not requested or any(item.lower() == "all" for item in requested):
+    selected = available
+else:
+    lookup = {name.lower(): name for name in available}
+    selected = []
+    for raw_name in requested:
+        match = lookup.get(raw_name.lower())
+        if match is None:
+            raise SystemExit(f"Unknown category: {raw_name}. Available: {', '.join(available)}")
+        if match not in selected:
+            selected.append(match)
+print(",".join(selected))
+PY
+}
+
 submit_exp1_stages() {
   TOTAL_EPISODES="$(count_total_episodes)"
   if (( TOTAL_EPISODES < 1 )); then
@@ -87,6 +128,8 @@ submit_exp1_stages() {
     exit 1
   fi
 
+  SELECTED_CATEGORIES="$(resolve_selected_categories)"
+  MAX_EPISODES_LABEL="${MAX_EPISODES_PER_CATEGORY:-all}"
   NUM_PATCHES="${NUM_PATCHES:-$(( (TOTAL_EPISODES + EPISODES_PER_PATCH - 1) / EPISODES_PER_PATCH ))}"
   ARRAY_RANGE="0-$((NUM_PATCHES - 1))"
   EXPORT_VARS=(
@@ -127,6 +170,10 @@ submit_exp1_stages() {
   )"
   MERGE_JOB_ID="${MERGE_JOB_SUBMISSION%%;*}"
 
+  echo "Exp 1 selected categories: ${SELECTED_CATEGORIES}."
+  echo "Exp 1 max episodes per category: ${MAX_EPISODES_LABEL}."
+  echo "Exp 1 selected episode files: ${TOTAL_EPISODES}."
+  echo "Exp 1 patch count: ${NUM_PATCHES}; array range: ${ARRAY_RANGE}."
   echo "Submitted Exp 1 LLM patch array ${PATCH_JOB_ID} with range ${ARRAY_RANGE}."
   echo "Submitted Exp 1 LLM merge job ${MERGE_JOB_ID} after ${PATCH_JOB_ID}."
 }

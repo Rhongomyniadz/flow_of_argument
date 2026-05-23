@@ -767,7 +767,7 @@ def main():
     ap.add_argument(
         "--min_words_per_turn",
         type=int,
-        default=0,
+        default=50,
         help="Drop merged turns shorter than this many words. Default 0 keeps all turns.",
     )
     ap.add_argument(

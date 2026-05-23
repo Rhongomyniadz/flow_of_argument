@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 DEFAULT_INPUT_DIR = Path("data/conversation_moves_labeled")
-DEFAULT_OUTPUT_DIR = Path("experiments/exp1_relevance_bridge/results_llm")
+DEFAULT_OUTPUT_DIR = Path("experiments/exp1_relevance_bridge/results")
 DEFAULT_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DOWNLOAD_DIR = Path("/shared/4/models")
 DEFAULT_BOOTSTRAP_DRAWS = 1000
