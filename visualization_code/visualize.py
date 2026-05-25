@@ -299,7 +299,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
     )
     plt.axhline(0, color="black", linewidth=0.8)
     plt.ylim(-0.1, 1.0)
-    plt.title("Correlation between #Explicit and #Implicit per Turn")
     plt.tight_layout()
     plt.savefig(out / "exp_imp_correlation.png")
     plt.close()
@@ -328,7 +327,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         dodge=0.3,
         errorbar="se",
     )
-    plt.title("Lexical Diversity (TTR) by Prompt and Visibility")
     plt.tight_layout()
     plt.savefig(out / "lexical_diversity_pointplot.png")
     plt.close()
@@ -342,7 +340,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         order=prompt_order,
         errorbar="se",
     )
-    plt.title("Explicit ↔ Implicit (Assumptions) Similarity by Prompt")
     plt.ylabel("Mean Pairwise Cosine")
     plt.tight_layout()
     plt.savefig(out / "ep_im_similarity_pointplot.png")
@@ -375,9 +372,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
             alpha=0.1,
             label="Baseline ±1σ",
         )
-    plt.title(
-        "Assumption Redundancy (within-turn) by Prompt\n(with Random Shuffle Baseline)"
-    )
     plt.ylabel("Mean Pairwise Cosine (upper triangle)")
     plt.legend()
     plt.tight_layout()
@@ -408,7 +402,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         dodge=0.3,
         errorbar="se",
     )
-    plt.title("Average Number of Explicit vs. Implicit per Turn (per Prompt)")
     plt.tight_layout()
     plt.savefig(out / "counts_per_prompt_pointplot.png")
     plt.close()
@@ -435,7 +428,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
         hue_order=vis_order,
         errorbar="se",
     )
-    plt.title("Average Number of Explicit vs. Implicit per Turn Index (All Prompts)")
     plt.xlabel("Turn Index within Episode")
 
     # Thin x-axis labels so they don't overlap (no rotation)
@@ -470,7 +462,6 @@ def visualize_metrics(df: pd.DataFrame, outdir: str = "results/analysis_charts")
             hue_order=vis_order,
             errorbar="se",
         )
-        plt.title(f"Average Explicit vs. Implicit per Turn Index\n({p})")
         plt.xlabel("Turn Index within Episode")
 
         xticks = ax.get_xticks()

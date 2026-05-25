@@ -33,7 +33,27 @@
     "prior_sd": 2.5,
     "posterior_draws": 1200,
     "reference_class": "Substantive",
-    "approximation": "laplace_map_gaussian_posterior"
+    "approximation": "laplace_map_gaussian_posterior",
+    "fitted_formula": "next_response_type ~ implicature_load + duration_sec",
+    "predictors": [
+      "implicature_load",
+      "duration_sec"
+    ],
+    "controlled_predictor": "duration_sec",
+    "predictor_standardization": {
+      "implicature_load": {
+        "mean": 36.036859579088514,
+        "std": 104.49164129892455
+      },
+      "duration_sec": {
+        "mean": 74.5002893417846,
+        "std": 222.3937026846787
+      }
+    },
+    "coefficient_interval_level": 0.95,
+    "probability_curve_control_values": {
+      "duration_sec": 27.18
+    }
   },
   "response_delay_regression": {
     "specification": "primary_spec",

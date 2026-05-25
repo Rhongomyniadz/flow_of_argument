@@ -49,7 +49,6 @@ def plot_stance_distribution(stance_values, output_path=None):
     # Customize the plot
     ax.set_xlabel('Stance Value', fontsize=12, fontweight='bold')
     ax.set_ylabel('Frequency', fontsize=12, fontweight='bold')
-    ax.set_title('Stance Distribution from stance_labeled/512', fontsize=14, fontweight='bold')
     ax.set_xticks(stances)
     ax.grid(axis='y', alpha=0.3, linestyle='--')
     

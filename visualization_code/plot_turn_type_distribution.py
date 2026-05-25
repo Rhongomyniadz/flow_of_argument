@@ -54,7 +54,6 @@ def plot_turn_type_distribution(turn_type_labels, output_path=None):
     # Customize the plot
     ax.set_xlabel('Turn Type', fontsize=12, fontweight='bold')
     ax.set_ylabel('Frequency', fontsize=12, fontweight='bold')
-    ax.set_title('Turn Type Distribution from turn_type_labeled', fontsize=14, fontweight='bold')
     ax.set_xticks(range(len(turn_types)))
     ax.set_xticklabels(turn_types, rotation=45, ha='right', fontsize=10)
     ax.grid(axis='y', alpha=0.3, linestyle='--')

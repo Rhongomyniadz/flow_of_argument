@@ -102,7 +102,6 @@ def main():
 
     plt.figure(figsize=(8.5, max(3.8, 0.55 * len(ordered_prompts) + 1)))
     sns.barplot(data=long_df, y="prompt_num", x="count", hue="statement_type")
-    plt.title("Explicit vs Implicit counts by prompt (1..5)")
     plt.tight_layout()
     plt.savefig(outdir / "barplot_y.png", dpi=200)
     plt.close()

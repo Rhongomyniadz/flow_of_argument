@@ -52,7 +52,6 @@ def plot_conversation_moves_distribution(move_labels, output_path=None):
     # Customize the plot
     ax.set_xlabel('Conversation Move', fontsize=12, fontweight='bold')
     ax.set_ylabel('Frequency', fontsize=12, fontweight='bold')
-    ax.set_title('Conversation Moves Distribution from conversation_moves_labeled', fontsize=14, fontweight='bold')
     ax.set_xticks(range(len(moves)))
     ax.set_xticklabels(moves, rotation=45, ha='right', fontsize=10)
     ax.grid(axis='y', alpha=0.3, linestyle='--')

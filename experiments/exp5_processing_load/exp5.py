@@ -253,6 +253,16 @@ def standardize(x):
     return (x - mu) / (sd if math.isfinite(sd) and sd > 1e-12 else 1.0), mu, (sd if math.isfinite(sd) and sd > 1e-12 else 1.0)
 
 
+def standardize_matrix(x):
+    x = np.asarray(x, dtype=float)
+    if x.ndim != 2:
+        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
+    mu = np.mean(x, axis=0)
+    sd = np.std(x, axis=0)
+    sd = np.where(np.isfinite(sd) & (sd > 1e-12), sd, 1.0)
+    return (x - mu) / sd, mu, sd
+
+
 def softmax(z):
     z = z - np.max(z, axis=-1, keepdims=True)
     e = np.exp(z)
@@ -266,13 +276,26 @@ def unpack(theta, p, k):
     return w
 
 
-def fit_multinomial_bayes(x, y_labels, prior_sd=2.5, posterior_draws=1200):
+def fit_multinomial_bayes(x, y_labels, predictor_names, prior_sd, posterior_draws):
+    if len(predictor_names) == 0:
+        raise ValueError("predictor_names must contain at least one predictor.")
+    x = np.asarray(x, dtype=float)
+    if x.ndim != 2:
+        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
+    if x.shape[1] != len(predictor_names):
+        raise ValueError(
+            f"x has {x.shape[1]} predictor columns, but predictor_names has {len(predictor_names)} entries."
+        )
+    if not np.all(np.isfinite(x)):
+        raise ValueError("x contains non-finite predictor values.")
     classes = sorted(set(y_labels))
     if len(classes) < 2:
-        return None
+        raise ValueError(f"Multinomial logit requires at least two classes, got {classes}")
+    if len(y_labels) != x.shape[0]:
+        raise ValueError(f"x row count {x.shape[0]} does not match label count {len(y_labels)}.")
     y = np.asarray([classes.index(v) for v in y_labels], dtype=int)
-    xz, mu, sd = standardize(np.asarray(x, dtype=float))
-    X, p, k = np.column_stack([np.ones_like(xz), xz]), 2, len(classes)
+    xz, mu, sd = standardize_matrix(x)
+    X, p, k = np.column_stack([np.ones(xz.shape[0], dtype=float), xz]), xz.shape[1] + 1, len(classes)
     prior_var = max(prior_sd**2, 1e-12)
 
     def obj(theta):
@@ -286,12 +309,14 @@ def fit_multinomial_bayes(x, y_labels, prior_sd=2.5, posterior_draws=1200):
 
     opt = minimize(fun=lambda t: obj(t)[0], x0=np.zeros(p * (k - 1), dtype=float), jac=lambda t: obj(t)[1], method="L-BFGS-B")
     if not opt.success:
-        return None
+        raise RuntimeError(f"Multinomial logit fit failed with status {opt.status}: {opt.message}")
     theta_map = np.asarray(opt.x, dtype=float)
     probs = softmax(X @ unpack(theta_map, p, k))
     info = np.eye(p * (k - 1), dtype=float) / prior_var
     for i in range(len(y)):
-        info += np.kron(np.diag(probs[i, :-1]) - np.outer(probs[i, :-1], probs[i, :-1]), np.outer(X[i], X[i]))
+        class_info = np.diag(probs[i, :-1]) - np.outer(probs[i, :-1], probs[i, :-1])
+        predictor_info = np.outer(X[i], X[i])
+        info += np.kron(predictor_info, class_info)
     cov = np.linalg.pinv(info)
     rng = np.random.default_rng(RNG_SEED)
     draws = rng.multivariate_normal(theta_map, cov, size=max(int(posterior_draws), 200))
@@ -299,6 +324,7 @@ def fit_multinomial_bayes(x, y_labels, prior_sd=2.5, posterior_draws=1200):
     return {
         "classes": classes,
         "reference_class": classes[-1],
+        "predictor_names": list(predictor_names),
         "x_mean": mu,
         "x_std": sd,
         "W_map": unpack(theta_map, p, k),
@@ -310,8 +336,15 @@ def fit_multinomial_bayes(x, y_labels, prior_sd=2.5, posterior_draws=1200):
 
 
 def posterior_multinomial_proba(model, x):
-    x = (np.asarray(x, dtype=float) - model["x_mean"]) / model["x_std"]
-    X = np.column_stack([np.ones_like(x), x])
+    x = np.asarray(x, dtype=float)
+    if x.ndim != 2:
+        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
+    if x.shape[1] != len(model["predictor_names"]):
+        raise ValueError(
+            f"x has {x.shape[1]} predictor columns, but model has {len(model['predictor_names'])} predictors."
+        )
+    x = (x - model["x_mean"]) / model["x_std"]
+    X = np.column_stack([np.ones(x.shape[0], dtype=float), x])
     return softmax(np.einsum("np,dpk->dnk", X, model["posterior_W"]))
 
 
@@ -383,6 +416,30 @@ def coef_summary(name, draws):
     if len(draws) == 0:
         return {"term": name, "posterior_mean": None, "posterior_sd": None}
     return {"term": name, "posterior_mean": float(np.mean(draws)), "posterior_sd": float(np.std(draws, ddof=1)) if len(draws) >= 2 else 0.0}
+
+
+def prefixed_coef_interval_summary(prefix, draws, map_value):
+    draws = np.asarray(draws, dtype=float)
+    draws = draws[np.isfinite(draws)]
+    if len(draws) == 0:
+        return {
+            f"posterior_mean_{prefix}": None,
+            f"posterior_sd_{prefix}": None,
+            f"posterior_q025_{prefix}": None,
+            f"posterior_q975_{prefix}": None,
+            f"posterior_prob_{prefix}_gt_0": None,
+            f"posterior_prob_{prefix}_lt_0": None,
+            f"map_{prefix}": float(map_value),
+        }
+    return {
+        f"posterior_mean_{prefix}": float(np.mean(draws)),
+        f"posterior_sd_{prefix}": float(np.std(draws, ddof=1)) if len(draws) >= 2 else 0.0,
+        f"posterior_q025_{prefix}": float(np.quantile(draws, 0.025)),
+        f"posterior_q975_{prefix}": float(np.quantile(draws, 0.975)),
+        f"posterior_prob_{prefix}_gt_0": float(np.mean(draws > 0.0)),
+        f"posterior_prob_{prefix}_lt_0": float(np.mean(draws < 0.0)),
+        f"map_{prefix}": float(map_value),
+    }
 
 
 def fit_linear_bayes(y, predictors, prior_precision_scale=0.1, prior_a0=2.0, prior_b0=1.0, posterior_draws=4000):
@@ -536,13 +593,28 @@ def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, 
     return summary
 
 
-def build_probability_curves(model, loads):
+def build_probability_curves(model, loads, duration_values):
+    if list(model["predictor_names"]) != ["implicature_load", "duration_sec"]:
+        raise ValueError(f"Expected predictors ['implicature_load', 'duration_sec'], got {model['predictor_names']}")
     if len(loads) == 0:
         return []
+    duration_values = np.asarray(duration_values, dtype=float)
+    duration_values = duration_values[np.isfinite(duration_values)]
+    if len(duration_values) == 0:
+        raise ValueError("duration_values must contain at least one finite value.")
+    duration_control = float(np.median(duration_values))
     lo, hi = robust_xlim(loads)
-    probs = np.mean(posterior_multinomial_proba(model, np.linspace(lo, hi, 260)), axis=0)
     grid = np.linspace(lo, hi, 260)
-    return [{"implicature_load": float(grid[i]), **{f"p_{cls}": float(probs[i, j]) for j, cls in enumerate(model["classes"])}} for i in range(len(grid))]
+    predictors = np.column_stack([grid, np.full(len(grid), duration_control, dtype=float)])
+    probs = np.mean(posterior_multinomial_proba(model, predictors), axis=0)
+    return [
+        {
+            "implicature_load": float(grid[i]),
+            "duration_sec_control_value": duration_control,
+            **{f"p_{cls}": float(probs[i, j]) for j, cls in enumerate(model["classes"])},
+        }
+        for i in range(len(grid))
+    ]
 
 
 def select_delay_transform(delay, load, avg_prev, prior_precision_scale, prior_a0, prior_b0, posterior_draws):
@@ -611,33 +683,40 @@ def build_arg_parser():
 
 
 def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, show_progress, summary_extra=None):
-    model_rows = [r for r in rows if isinstance(r.get("implicature_load"), (int, float)) and math.isfinite(float(r["implicature_load"])) and r.get("next_response_type")]
+    model_rows = [
+        r
+        for r in rows
+        if all(isinstance(r.get(k), (int, float)) and math.isfinite(float(r[k])) for k in ["implicature_load", "duration_sec"])
+        and float(r["duration_sec"]) >= 0
+        and r.get("next_response_type")
+    ]
     model = curve_rows = None
     coef_rows = []
     if model_rows:
-        x = np.asarray([float(r["implicature_load"]) for r in model_rows], dtype=float)
+        predictor_names = ["implicature_load", "duration_sec"]
+        x = np.asarray([[float(r["implicature_load"]), float(r["duration_sec"])] for r in model_rows], dtype=float)
         y = [str(r["next_response_type"]) for r in model_rows]
         keep = {k for k, v in Counter(y).items() if v >= 2}
-        x = np.asarray([x[i] for i, yi in enumerate(y) if yi in keep], dtype=float)
-        y = [yi for yi in y if yi in keep]
+        keep_indices = [i for i, yi in enumerate(y) if yi in keep]
+        x = x[np.asarray(keep_indices, dtype=int)]
+        y = [y[i] for i in keep_indices]
         if len(set(y)) >= 2 and len(x) >= 10:
-            model = fit_multinomial_bayes(x, y, args.bayes_multinomial_prior_sd, args.bayes_multinomial_draws)
+            model = fit_multinomial_bayes(x, y, predictor_names, args.bayes_multinomial_prior_sd, args.bayes_multinomial_draws)
         if model:
-            curve_rows = build_probability_curves(model, x)
+            curve_rows = build_probability_curves(model, x[:, 0], x[:, 1])
             for j, cls in enumerate(model["classes"]):
                 w = model["posterior_W"][:, :, j]
                 coef_rows.append(
                     {
                         "class": cls,
                         "reference_class": model["reference_class"],
-                        "posterior_mean_intercept": float(np.mean(w[:, 0])),
-                        "posterior_mean_coef_scaled_load": float(np.mean(w[:, 1])),
-                        "posterior_sd_intercept": float(np.std(w[:, 0], ddof=1)),
-                        "posterior_sd_coef_scaled_load": float(np.std(w[:, 1], ddof=1)),
-                        "map_intercept": float(model["W_map"][0, j]),
-                        "map_coef_scaled_load": float(model["W_map"][1, j]),
-                        "scaler_mean": float(model["x_mean"]),
-                        "scaler_std": float(model["x_std"]),
+                        **prefixed_coef_interval_summary("intercept", w[:, 0], model["W_map"][0, j]),
+                        **prefixed_coef_interval_summary("coef_scaled_load", w[:, 1], model["W_map"][1, j]),
+                        **prefixed_coef_interval_summary("coef_scaled_duration_sec", w[:, 2], model["W_map"][2, j]),
+                        "load_scaler_mean": float(model["x_mean"][0]),
+                        "load_scaler_std": float(model["x_std"][0]),
+                        "duration_sec_scaler_mean": float(model["x_mean"][1]),
+                        "duration_sec_scaler_std": float(model["x_std"][1]),
                     }
                 )
 
@@ -708,7 +787,39 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     if curve_rows:
         save_csv(output_dir / "exp5_probability_curves.csv", curve_rows, ["implicature_load"] + [k for k in curve_rows[0] if k != "implicature_load"])
     if coef_rows:
-        save_csv(output_dir / "exp5_logit_coefficients.csv", coef_rows, ["class", "reference_class", "posterior_mean_intercept", "posterior_mean_coef_scaled_load", "posterior_sd_intercept", "posterior_sd_coef_scaled_load", "map_intercept", "map_coef_scaled_load", "scaler_mean", "scaler_std"])
+        save_csv(
+            output_dir / "exp5_logit_coefficients.csv",
+            coef_rows,
+            [
+                "class",
+                "reference_class",
+                "posterior_mean_intercept",
+                "posterior_sd_intercept",
+                "posterior_q025_intercept",
+                "posterior_q975_intercept",
+                "posterior_prob_intercept_gt_0",
+                "posterior_prob_intercept_lt_0",
+                "map_intercept",
+                "posterior_mean_coef_scaled_load",
+                "posterior_sd_coef_scaled_load",
+                "posterior_q025_coef_scaled_load",
+                "posterior_q975_coef_scaled_load",
+                "posterior_prob_coef_scaled_load_gt_0",
+                "posterior_prob_coef_scaled_load_lt_0",
+                "map_coef_scaled_load",
+                "posterior_mean_coef_scaled_duration_sec",
+                "posterior_sd_coef_scaled_duration_sec",
+                "posterior_q025_coef_scaled_duration_sec",
+                "posterior_q975_coef_scaled_duration_sec",
+                "posterior_prob_coef_scaled_duration_sec_gt_0",
+                "posterior_prob_coef_scaled_duration_sec_lt_0",
+                "map_coef_scaled_duration_sec",
+                "load_scaler_mean",
+                "load_scaler_std",
+                "duration_sec_scaler_mean",
+                "duration_sec_scaler_std",
+            ],
+        )
     if response_delay_regression_coeffs:
         save_csv(output_dir / "exp5_response_delay_regression_coefficients.csv", response_delay_regression_coeffs, ["term", "posterior_mean", "posterior_sd"])
     if response_delay_regression is not None:
@@ -716,6 +827,37 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
 
     response_counts = Counter(str(r.get("next_response_type")) for r in rows if r.get("next_response_type"))
     save_csv(output_dir / "exp5_response_type_counts.csv", [{"response_type": k, "count": v} for k, v in sorted(response_counts.items())], ["response_type", "count"])
+
+    preferred_png_outputs = [
+        "exp5_probability_curves.png",
+        "exp5_assumption_count_vs_response_time.png",
+        "exp5_implicature_load_vs_response_time.png",
+        "exp5_load_ridge_by_response_type.png",
+    ]
+    observed_png_outputs = {path.name for path in output_dir.glob("*.png")}
+    png_outputs = [name for name in preferred_png_outputs if name in observed_png_outputs]
+    png_outputs.extend(sorted(observed_png_outputs - set(preferred_png_outputs)))
+    response_type_model_summary = None
+    if model:
+        response_type_model_summary = {
+            "model_family": "bayesian_multinomial_logit_laplace",
+            "prior_sd": model["prior_sd"],
+            "posterior_draws": model["posterior_draws"],
+            "reference_class": model["reference_class"],
+            "approximation": model["approximation"],
+            "fitted_formula": "next_response_type ~ implicature_load + duration_sec",
+            "predictors": list(model["predictor_names"]),
+            "controlled_predictor": "duration_sec",
+            "predictor_standardization": {
+                str(name): {"mean": float(model["x_mean"][i]), "std": float(model["x_std"][i])}
+                for i, name in enumerate(model["predictor_names"])
+            },
+            "coefficient_interval_level": 0.95,
+        }
+        if curve_rows:
+            response_type_model_summary["probability_curve_control_values"] = {
+                "duration_sec": float(curve_rows[0]["duration_sec_control_value"])
+            }
 
     summary = build_base_summary(
         rows,
@@ -730,10 +872,11 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     )
     summary.update(
         {
+            "png_outputs": png_outputs,
             "analysis_stage": "full_analysis",
             "assumption_count_vs_response_time_correlation": corr_stats(assumption_x, assumption_y),
             "implicature_load_vs_response_time_correlation": corr_stats(load_x, load_y),
-            "response_type_model": None if not model else {"model_family": "bayesian_multinomial_logit_laplace", "prior_sd": model["prior_sd"], "posterior_draws": model["posterior_draws"], "reference_class": model["reference_class"], "approximation": model["approximation"]},
+            "response_type_model": response_type_model_summary,
             "response_delay_model_specification": {
                 "active_spec": "primary_spec",
                 "description": (

@@ -192,7 +192,6 @@ def plot_episode_timeline(
     tgt_field: str,
     src_speaker: str,
     tgt_speaker: str,
-    title_suffix: str,
     save_suffix: str,
 ):
     speakers = [src_speaker, tgt_speaker]
@@ -290,10 +289,6 @@ def plot_episode_timeline(
 
     ax.set_xlabel("Turn number")
     ax.set_ylabel("Speaker")
-    ax.set_title(
-        f"{prompt_name} — {episode_key}\n"
-        f"{title_suffix} (carry-over lines: sim≥{SIM_THRESH}, window={WINDOW})"
-    )
 
     plt.tight_layout()
     outdir.mkdir(parents=True, exist_ok=True)
@@ -382,7 +377,6 @@ def main():
                 tgt_field="assumptions",
                 src_speaker=A,
                 tgt_speaker=B,
-                title_suffix=f"{A} explicit → {B} implicit(assumptions)",
                 save_suffix="Aexp_to_Bimpl",
             )
 
@@ -407,7 +401,6 @@ def main():
                 tgt_field="assumptions",
                 src_speaker=B,
                 tgt_speaker=A,
-                title_suffix=f"{B} explicit → {A} implicit(assumptions)",
                 save_suffix="Bexp_to_Aimpl",
             )
 
