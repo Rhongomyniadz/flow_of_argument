@@ -498,7 +498,7 @@ def enforcement_summary_rows(rows: Sequence[Dict]) -> List[Dict[str, object]]:
     return out
 
 
-def predicted_curve(beta: np.ndarray) -> List[Dict[str, object]]:
+def predicted_curve(beta: np.ndarray, cov: np.ndarray) -> List[Dict[str, object]]:
     curve: List[Dict[str, object]] = []
     for role in ROLE_ORDER:
         role_host = 1.0 if role == "host" else 0.0
@@ -517,13 +517,23 @@ def predicted_curve(beta: np.ndarray) -> List[Dict[str, object]]:
                 dtype=float,
             )
             eta = float(np.dot(features, beta))
+            eta_variance = float(features @ cov @ features)
+            if not math.isfinite(eta_variance):
+                raise ValueError(
+                    f"Predicted probability variance is non-finite for role={role}, violation={violation}: {eta_variance}"
+                )
+            eta_se = math.sqrt(max(eta_variance, 0.0))
             probability = float(sigmoid(np.array([eta], dtype=float))[0])
+            ci_low = float(sigmoid(np.array([eta - (1.96 * eta_se)], dtype=float))[0])
+            ci_high = float(sigmoid(np.array([eta + (1.96 * eta_se)], dtype=float))[0])
             curve.append(
                 {
                     "speaker_role": role,
                     "violation_type": violation,
                     "severity": VIOLATION_SEVERITY[violation],
                     "predicted_policed_probability": probability,
+                    "predicted_policed_probability_ci95_low": ci_low,
+                    "predicted_policed_probability_ci95_high": ci_high,
                 }
             )
     curve.sort(key=lambda row: (str(row["speaker_role"]), int(row["severity"])))
@@ -588,7 +598,7 @@ def run_analysis(
     coeffs = coefficient_rows(FIXED_EFFECT_COLUMNS, model["beta"], model["se"])
     matrix_rows = violation_matrix_rows(role_turn_counts, violation_counts)
     enforcement_rows = enforcement_summary_rows(rows)
-    curve_rows = predicted_curve(model["beta"])
+    curve_rows = predicted_curve(model["beta"], model["cov"])
 
     observed_guest = overall_rate(rows, "guest", "policed_next")
     observed_host = overall_rate(rows, "host", "policed_next")
@@ -750,6 +760,8 @@ def run_analysis(
                     "violation_type",
                     "severity",
                     "predicted_policed_probability",
+                    "predicted_policed_probability_ci95_low",
+                    "predicted_policed_probability_ci95_high",
                 ],
             ),
         ),

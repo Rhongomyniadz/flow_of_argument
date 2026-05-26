@@ -164,6 +164,7 @@ def analyze_single_episode(json_path):
 
     return {
         'episode_id': episode_id,
+        'turn_count': len(all_turns_full),
         'total_assumptions': total,
         'accommodated_assumptions': num_acc,
         'dark_matter_count': dark_matter,
@@ -268,6 +269,7 @@ def batch_analyze(input_dir, output_dir):
         'per_episode_metrics': [
             {
                 'episode_id': m['episode_id'],
+                'turn_count': len(m['all_turns']),
                 'total_assumptions': m['total_assumptions'],
                 'accommodated': m['accommodated_assumptions'],
                 'dark_matter': m['dark_matter_count'],

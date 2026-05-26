@@ -606,12 +606,17 @@ def build_probability_curves(model, loads, duration_values):
     lo, hi = robust_xlim(loads)
     grid = np.linspace(lo, hi, 260)
     predictors = np.column_stack([grid, np.full(len(grid), duration_control, dtype=float)])
-    probs = np.mean(posterior_multinomial_proba(model, predictors), axis=0)
+    posterior_probs = posterior_multinomial_proba(model, predictors)
+    probs = np.mean(posterior_probs, axis=0)
+    prob_lows = np.quantile(posterior_probs, 0.025, axis=0)
+    prob_highs = np.quantile(posterior_probs, 0.975, axis=0)
     return [
         {
             "implicature_load": float(grid[i]),
             "duration_sec_control_value": duration_control,
             **{f"p_{cls}": float(probs[i, j]) for j, cls in enumerate(model["classes"])},
+            **{f"p_{cls}_ci95_low": float(prob_lows[i, j]) for j, cls in enumerate(model["classes"])},
+            **{f"p_{cls}_ci95_high": float(prob_highs[i, j]) for j, cls in enumerate(model["classes"])},
         }
         for i in range(len(grid))
     ]
