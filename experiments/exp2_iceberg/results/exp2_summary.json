@@ -4,12 +4,18 @@
       "exp2_regression_coefficients.csv",
       "exp2_regression_model_comparison.csv",
       "exp2_local_effect_bins.csv",
+      "exp2_heuristic_local_effect_bins.csv",
+      "exp2_local_relationship.pdf",
       "exp2_local_relationship.png",
+      "exp2_heuristic_relationship.pdf",
+      "exp2_heuristic_relationship.png",
       "exp2_summary.json",
       "dataset_summary.json"
     ],
     "framing": "local_stance_change_regression",
+    "heuristic_response_variable": "delta_log_words_per_second",
     "iceberg_density_definition": "(explicit_count / (implicit_count + 1)) / duration_seconds",
+    "lexical_rate_baseline": "words_per_second = num_words / duration_seconds, fit as a separate baseline model",
     "response_variable": "delta_log_iceberg_density",
     "stance_field": "stance_pt",
     "stance_mapping": "signed scale from -5 disagreement to +5 agreement, with 0 treated as neutral or no stance"
@@ -75,10 +81,21 @@
     "turn_rows": 349719
   },
   "formulas": {
+    "lexical_rate_baseline": "delta_log_iceberg_density ~ words_per_second + previous_log_iceberg_density + timeline_position + I(timeline_position ** 2) + C(category)",
     "primary_signed_change": "delta_log_iceberg_density ~ delta_stance_strength + lag1_delta_stance_strength + previous_log_iceberg_density + timeline_position + I(timeline_position ** 2) + C(category)",
     "secondary_directional_change": "delta_log_iceberg_density ~ shift_toward_agreement + shift_toward_disagreement + lag1_shift_toward_agreement + lag1_shift_toward_disagreement + previous_log_iceberg_density + timeline_position + I(timeline_position ** 2) + C(category)"
   },
   "headline_coefficients": {
+    "lexical_rate_baseline_words_per_second": {
+      "ci_high": 0.00019510841217850854,
+      "ci_low": 6.81770314765857e-05,
+      "clustered_se": 3.2381049270073685e-05,
+      "coefficient": 0.00013164272182754713,
+      "model_name": "lexical_rate_baseline",
+      "p": 4.7945045432005396e-05,
+      "t": 4.065424833197432,
+      "term": "words_per_second"
+    },
     "primary_delta_stance_strength": {
       "ci_high": -0.019095469204131615,
       "ci_low": -0.02080770221266785,
@@ -128,6 +145,15 @@
       "n_episodes": 10301,
       "n_rows": 339418,
       "rsquared": 0.4637074834238045
+    },
+    {
+      "adjusted_rsquared": 0.4614097224458882,
+      "aic": -639332.4033651376,
+      "bic": -639225.0534884862,
+      "model_name": "lexical_rate_baseline",
+      "n_episodes": 10301,
+      "n_rows": 339418,
+      "rsquared": 0.46142400373556425
     }
   ],
   "verdict": {

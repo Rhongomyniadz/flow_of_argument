@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import math
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -24,6 +25,7 @@ DEFAULT_DATA_DIR = "data/stance_labeled/1024"
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_OUTPUT_DIR = "experiments/exp2_iceberg/results"
 DEFAULT_MIN_TURNS = 12
+WORD_PATTERN: re.Pattern[str] = re.compile(r"\b\w+\b")
 
 
 def save_json(path: Path, payload: Dict[str, Any]) -> None:
@@ -200,6 +202,10 @@ def infer_category_from_episode(raw_data: List[dict]) -> Optional[str]:
     return None
 
 
+def count_words(text: str) -> int:
+    return int(len(WORD_PATTERN.findall(text)))
+
+
 def compute_duration_seconds(turn: Dict[str, Any]) -> Tuple[float, float, float]:
     raw_start = turn.get("start_time", turn.get("startTime", 0.0))
     start_time = float(raw_start if raw_start is not None else 0.0)
@@ -230,6 +236,15 @@ def compute_turn_features(turn: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     stance_pt = float(raw_stance)
     start_time, end_time, duration_seconds = compute_duration_seconds(turn)
     midpoint_time = float((start_time + end_time) / 2.0)
+    raw_turn_text: Any = turn.get("turn_text")
+    if not isinstance(raw_turn_text, str):
+        raise TypeError(
+            "Missing or non-string turn_text for substantive stance-labeled turn: "
+            f"speaker_id={turn.get('speaker_id')!r}, start_time={start_time!r}."
+        )
+    num_words: int = count_words(raw_turn_text)
+    words_per_second: float = float(float(num_words) / max(duration_seconds, 0.1))
+    log_words_per_second: float = float(np.log1p(words_per_second))
 
     explicit_count = int(len(turn.get("explicit_propositions", []) or []))
     implicit_count = int(len(turn.get("assumptions", []) or []))
@@ -243,6 +258,9 @@ def compute_turn_features(turn: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "explicit_count": explicit_count,
         "implicit_count": implicit_count,
         "duration_seconds": duration_seconds,
+        "num_words": num_words,
+        "words_per_second": words_per_second,
+        "log_words_per_second": log_words_per_second,
         "start_time": start_time,
         "end_time": end_time,
         "midpoint_time": midpoint_time,
@@ -359,6 +377,9 @@ def build_transition_frame(turn_df: pd.DataFrame) -> pd.DataFrame:
             current_df["log_iceberg_density"].astype(float) - previous_df["log_iceberg_density"].astype(float)
         )
         current_df["previous_log_iceberg_density"] = previous_df["log_iceberg_density"].astype(float)
+        current_df["delta_log_words_per_second"] = (
+            current_df["log_words_per_second"].astype(float) - previous_df["log_words_per_second"].astype(float)
+        )
         current_df["shift_toward_agreement"] = np.maximum(current_df["delta_stance_strength"].astype(float), 0.0)
         current_df["shift_toward_disagreement"] = np.maximum(-current_df["delta_stance_strength"].astype(float), 0.0)
         current_df["lag1_delta_stance_strength"] = current_df["delta_stance_strength"].shift(1).fillna(0.0)
@@ -377,6 +398,8 @@ def build_transition_frame(turn_df: pd.DataFrame) -> pd.DataFrame:
             "delta_log_iceberg_density",
             "previous_log_iceberg_density",
             "timeline_position",
+            "words_per_second",
+            "delta_log_words_per_second",
         ]
     )
     if transition_df.empty:
@@ -459,23 +482,35 @@ def build_model_comparison_frame(model_results: Dict[str, Any], transition_df: p
     return pd.DataFrame(rows)
 
 
-def build_local_effect_bins(transition_df: pd.DataFrame) -> pd.DataFrame:
+def build_local_effect_bins_for_response(
+    transition_df: pd.DataFrame,
+    response_column: str,
+    response_label: str,
+) -> pd.DataFrame:
     rows: List[Dict[str, Any]] = []
     grouped = transition_df.groupby("delta_stance_pt", observed=False, sort=True)
     for delta_stance_pt, group_df in grouped:
-        stats = compute_mean_summary(group_df["delta_log_iceberg_density"].astype(float).to_numpy())
+        stats = compute_mean_summary(group_df[response_column].astype(float).to_numpy())
         rows.append(
             {
                 "delta_stance_pt": int(delta_stance_pt),
                 "n_transition_rows": stats["n"],
-                "mean_delta_log_iceberg_density": stats["mean"],
-                "std_delta_log_iceberg_density": stats["std"],
-                "se_delta_log_iceberg_density": stats["se"],
-                "ci_low_delta_log_iceberg_density": stats["ci_low"],
-                "ci_high_delta_log_iceberg_density": stats["ci_high"],
+                f"mean_{response_label}": stats["mean"],
+                f"std_{response_label}": stats["std"],
+                f"se_{response_label}": stats["se"],
+                f"ci_low_{response_label}": stats["ci_low"],
+                f"ci_high_{response_label}": stats["ci_high"],
             }
         )
     return pd.DataFrame(rows)
+
+
+def build_local_effect_bins(transition_df: pd.DataFrame) -> pd.DataFrame:
+    return build_local_effect_bins_for_response(
+        transition_df,
+        "delta_log_iceberg_density",
+        "delta_log_iceberg_density",
+    )
 
 
 def extract_term_row(coefficient_df: pd.DataFrame, model_name: str, term_name: str) -> Dict[str, Any]:
@@ -595,14 +630,20 @@ def main() -> None:
         "lag1_shift_toward_agreement + lag1_shift_toward_disagreement + previous_log_iceberg_density + "
         "timeline_position + I(timeline_position ** 2) + C(category)"
     )
+    lexical_rate_baseline_formula = (
+        "delta_log_iceberg_density ~ words_per_second + previous_log_iceberg_density + "
+        "timeline_position + I(timeline_position ** 2) + C(category)"
+    )
 
     primary_model = fit_clustered_ols(primary_formula, transition_df)
     secondary_model = fit_clustered_ols(secondary_formula, transition_df)
+    lexical_rate_baseline_model = fit_clustered_ols(lexical_rate_baseline_formula, transition_df)
 
     coefficient_df = pd.concat(
         [
             build_coefficient_frame(primary_model, "primary_signed_change"),
             build_coefficient_frame(secondary_model, "secondary_directional_change"),
+            build_coefficient_frame(lexical_rate_baseline_model, "lexical_rate_baseline"),
         ],
         ignore_index=True,
     )
@@ -610,14 +651,21 @@ def main() -> None:
         {
             "primary_signed_change": primary_model,
             "secondary_directional_change": secondary_model,
+            "lexical_rate_baseline": lexical_rate_baseline_model,
         },
         transition_df,
     )
     local_effect_bins_df = build_local_effect_bins(transition_df)
+    heuristic_effect_bins_df = build_local_effect_bins_for_response(
+        transition_df,
+        "delta_log_words_per_second",
+        "delta_log_words_per_second",
+    )
 
     coefficient_df.to_csv(output_dir / "exp2_regression_coefficients.csv", index=False)
     model_comparison_df.to_csv(output_dir / "exp2_regression_model_comparison.csv", index=False)
     local_effect_bins_df.to_csv(output_dir / "exp2_local_effect_bins.csv", index=False)
+    heuristic_effect_bins_df.to_csv(output_dir / "exp2_heuristic_local_effect_bins.csv", index=False)
 
     dataset_summary = build_dataset_summary(
         turn_df=turn_df,
@@ -634,11 +682,18 @@ def main() -> None:
             "stance_field": "stance_pt",
             "stance_mapping": "signed scale from -5 disagreement to +5 agreement, with 0 treated as neutral or no stance",
             "iceberg_density_definition": "(explicit_count / (implicit_count + 1)) / duration_seconds",
+            "lexical_rate_baseline": "words_per_second = num_words / duration_seconds, fit as a separate baseline model",
             "response_variable": "delta_log_iceberg_density",
+            "heuristic_response_variable": "delta_log_words_per_second",
             "authoritative_outputs": [
                 "exp2_regression_coefficients.csv",
                 "exp2_regression_model_comparison.csv",
                 "exp2_local_effect_bins.csv",
+                "exp2_heuristic_local_effect_bins.csv",
+                "exp2_local_relationship.pdf",
+                "exp2_local_relationship.png",
+                "exp2_heuristic_relationship.pdf",
+                "exp2_heuristic_relationship.png",
                 "exp2_summary.json",
                 "dataset_summary.json",
             ],
@@ -646,6 +701,7 @@ def main() -> None:
         "formulas": {
             "primary_signed_change": primary_formula,
             "secondary_directional_change": secondary_formula,
+            "lexical_rate_baseline": lexical_rate_baseline_formula,
         },
         "dataset_summary": dataset_summary,
         "model_comparison": model_comparison_df.to_dict(orient="records"),
@@ -658,6 +714,9 @@ def main() -> None:
             ),
             "secondary_shift_toward_disagreement": extract_term_row(
                 coefficient_df, "secondary_directional_change", "shift_toward_disagreement"
+            ),
+            "lexical_rate_baseline_words_per_second": extract_term_row(
+                coefficient_df, "lexical_rate_baseline", "words_per_second"
             ),
         },
         "verdict": build_verdict(coefficient_df),
