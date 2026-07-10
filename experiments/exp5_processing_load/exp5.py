@@ -10,7 +10,12 @@ import numpy as np
 import torch
 from scipy.optimize import minimize
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoTokenizer
+
+try:
+    from transformers import AutoModel, AutoTokenizer
+except ImportError:  # Merge-only baseline analysis can run from extracted CSVs without Transformers.
+    AutoModel = None
+    AutoTokenizer = None
 
 RNG_SEED = 42
 np.random.seed(RNG_SEED)
@@ -22,10 +27,17 @@ TURN_LEVEL_FEATURE_FIELDS = [
     "episode_id",
     "turn_idx",
     "duration_sec",
+    "word_count_in_turn",
     "assumption_count_in_turn",
     "explicit_statement_count",
     "new_assumption_count",
+    "new_assumptions_per_second",
     "implicature_load",
+    "turn_similarity_to_previous",
+    "previous_response_type",
+    "current_turn_type_label",
+    "current_conversation_move_label",
+    "previous_conversation_move_label",
     "response_delay_at_time_n",
     "gap_to_next_sec",
     "average_response_time_0_to_n_minus_1",
@@ -34,8 +46,112 @@ TURN_LEVEL_FEATURE_FIELDS = [
     "next_conversation_move_label",
 ]
 
+BASELINE_MODEL_SPECS = [
+    {
+        "model_id": "surface_basic",
+        "description": "Turn duration and word count only.",
+        "numeric_features": ["duration_sec", "word_count_in_turn"],
+        "categorical_features": [],
+    },
+    {
+        "model_id": "surface_plus_explicit",
+        "description": "Basic surface features plus explicit-proposition count.",
+        "numeric_features": ["duration_sec", "word_count_in_turn", "explicit_statement_count"],
+        "categorical_features": [],
+    },
+    {
+        "model_id": "surface_plus_history",
+        "description": "Surface and explicit features plus prior response history.",
+        "numeric_features": [
+            "duration_sec",
+            "word_count_in_turn",
+            "explicit_statement_count",
+            "average_response_time_0_to_n_minus_1",
+        ],
+        "categorical_features": [
+            "previous_response_type",
+            "current_turn_type_label",
+            "current_conversation_move_label",
+            "previous_conversation_move_label",
+        ],
+    },
+    {
+        "model_id": "surface_plus_similarity",
+        "description": "Surface, explicit, and history features plus adjacent-turn embedding similarity.",
+        "numeric_features": [
+            "duration_sec",
+            "word_count_in_turn",
+            "explicit_statement_count",
+            "average_response_time_0_to_n_minus_1",
+            "turn_similarity_to_previous",
+        ],
+        "categorical_features": [
+            "previous_response_type",
+            "current_turn_type_label",
+            "current_conversation_move_label",
+            "previous_conversation_move_label",
+        ],
+    },
+    {
+        "model_id": "surface_plus_implicit_density",
+        "description": "Full surface baseline plus implicit-assumption count and density.",
+        "numeric_features": [
+            "duration_sec",
+            "word_count_in_turn",
+            "explicit_statement_count",
+            "average_response_time_0_to_n_minus_1",
+            "turn_similarity_to_previous",
+            "assumption_count_in_turn",
+            "new_assumption_count",
+            "new_assumptions_per_second",
+        ],
+        "categorical_features": [
+            "previous_response_type",
+            "current_turn_type_label",
+            "current_conversation_move_label",
+            "previous_conversation_move_label",
+        ],
+    },
+    {
+        "model_id": "surface_plus_implicit_load",
+        "description": "Full surface baseline plus implicit-assumption counts and seconds per new assumption.",
+        "numeric_features": [
+            "duration_sec",
+            "word_count_in_turn",
+            "explicit_statement_count",
+            "average_response_time_0_to_n_minus_1",
+            "turn_similarity_to_previous",
+            "assumption_count_in_turn",
+            "new_assumption_count",
+            "implicature_load",
+        ],
+        "categorical_features": [
+            "previous_response_type",
+            "current_turn_type_label",
+            "current_conversation_move_label",
+            "previous_conversation_move_label",
+        ],
+    },
+]
+
+LOG1P_BASELINE_FEATURES = {
+    "duration_sec",
+    "word_count_in_turn",
+    "explicit_statement_count",
+    "average_response_time_0_to_n_minus_1",
+    "assumption_count_in_turn",
+    "new_assumption_count",
+    "new_assumptions_per_second",
+    "implicature_load",
+}
+
 
 def assumption_embedder(embedding_model_name):
+    if AutoModel is None or AutoTokenizer is None:
+        raise ImportError(
+            "Transformers is required for feature extraction. Install `transformers`, or run "
+            "merge_exp5_patches.py on already extracted patch CSVs."
+        )
     embedding_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assumption_tokenizer = AutoTokenizer.from_pretrained(embedding_model_name, trust_remote_code=True)
     assumption_model = AutoModel.from_pretrained(embedding_model_name, trust_remote_code=True).to(embedding_device)
@@ -60,6 +176,25 @@ def assumption_embeddings(texts, assumption_tokenizer, assumption_model, embeddi
             pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
             embedding_batches.append(pooled.cpu().numpy().astype(np.float32, copy=False))
     return np.vstack(embedding_batches)
+
+
+def embeddings_preserve_order(texts, assumption_tokenizer, assumption_model, embedding_device, embedding_batch_size):
+    """Embed non-empty strings while preserving the original row alignment."""
+    clean = [str(text or "").strip() for text in texts]
+    valid_indices = [idx for idx, text in enumerate(clean) if text]
+    if not valid_indices:
+        return [None] * len(clean)
+    embedded = assumption_embeddings(
+        [clean[idx] for idx in valid_indices],
+        assumption_tokenizer,
+        assumption_model,
+        embedding_device,
+        embedding_batch_size,
+    )
+    result = [None] * len(clean)
+    for idx, vector in zip(valid_indices, embedded):
+        result[idx] = vector
+    return result
 
 
 def resolve_output_dir(base_output_dir, embedding_model_name):
@@ -195,9 +330,17 @@ def classify(next_turn, gap_sec, silence_gap, agree_dur_max, agree_words_max):
 def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progress, assumption_similarity_threshold, assumption_tokenizer, assumption_model, embedding_device, embedding_batch_size):
     rows = []
     for episode_id, turns in tqdm(episodes, desc="Building turn rows", unit="episode", disable=not show_progress):
+        turn_text_embeddings = embeddings_preserve_order(
+            [turn.get("turn_text", "") for turn in turns],
+            assumption_tokenizer,
+            assumption_model,
+            embedding_device,
+            embedding_batch_size,
+        )
         history_embs, gap_sum, gap_n = None, 0.0, 0
         for i, turn in enumerate(turns):
             nxt = turns[i + 1] if i + 1 < len(turns) else None
+            prev = turns[i - 1] if i > 0 else None
             assumptions = unique_texts(turn.get("assumptions", []))
             explicit = unique_texts(turn.get("explicit_propositions", []))
             new_n, current_new, current_new_indices = 0, [], []
@@ -222,15 +365,35 @@ def build_rows(episodes, silence_gap, agree_dur_max, agree_words_max, show_progr
                             current_new_indices.append(idx)
             duration = turn_duration_seconds(turn)
             g = gap_seconds(turn, nxt) if nxt else float("nan")
+            prev_gap = gap_seconds(prev, turn) if prev is not None else float("nan")
+            previous_response_type = (
+                classify(turn, prev_gap, silence_gap, agree_dur_max, agree_words_max)
+                if prev is not None
+                else "EpisodeStart"
+            )
+            previous_similarity = float("nan")
+            if i > 0 and turn_text_embeddings[i] is not None and turn_text_embeddings[i - 1] is not None:
+                previous_similarity = float(np.dot(turn_text_embeddings[i], turn_text_embeddings[i - 1]))
             rows.append(
                 {
                     "episode_id": episode_id,
                     "turn_idx": int(turn.get("turn_idx", i)) if str(turn.get("turn_idx", i)).lstrip("-").isdigit() else i,
                     "duration_sec": duration,
+                    "word_count_in_turn": word_count(turn),
                     "assumption_count_in_turn": len(assumptions),
                     "explicit_statement_count": len(explicit),
                     "new_assumption_count": new_n,
+                    "new_assumptions_per_second": (
+                        new_n / duration
+                        if math.isfinite(duration) and duration > 0 and new_n >= 0
+                        else float("nan")
+                    ),
                     "implicature_load": duration / new_n if math.isfinite(duration) and duration >= 0 and new_n > 0 else float("nan"),
+                    "turn_similarity_to_previous": previous_similarity,
+                    "previous_response_type": previous_response_type,
+                    "current_turn_type_label": turn.get("turn_type_label"),
+                    "current_conversation_move_label": turn.get("conversation_move_label"),
+                    "previous_conversation_move_label": (prev or {}).get("conversation_move_label"),
                     "response_delay_at_time_n": g,
                     "gap_to_next_sec": g,
                     "average_response_time_0_to_n_minus_1": (gap_sum / gap_n) if gap_n else float("nan"),
@@ -253,16 +416,6 @@ def standardize(x):
     return (x - mu) / (sd if math.isfinite(sd) and sd > 1e-12 else 1.0), mu, (sd if math.isfinite(sd) and sd > 1e-12 else 1.0)
 
 
-def standardize_matrix(x):
-    x = np.asarray(x, dtype=float)
-    if x.ndim != 2:
-        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
-    mu = np.mean(x, axis=0)
-    sd = np.std(x, axis=0)
-    sd = np.where(np.isfinite(sd) & (sd > 1e-12), sd, 1.0)
-    return (x - mu) / sd, mu, sd
-
-
 def softmax(z):
     z = z - np.max(z, axis=-1, keepdims=True)
     e = np.exp(z)
@@ -276,26 +429,13 @@ def unpack(theta, p, k):
     return w
 
 
-def fit_multinomial_bayes(x, y_labels, predictor_names, prior_sd, posterior_draws):
-    if len(predictor_names) == 0:
-        raise ValueError("predictor_names must contain at least one predictor.")
-    x = np.asarray(x, dtype=float)
-    if x.ndim != 2:
-        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
-    if x.shape[1] != len(predictor_names):
-        raise ValueError(
-            f"x has {x.shape[1]} predictor columns, but predictor_names has {len(predictor_names)} entries."
-        )
-    if not np.all(np.isfinite(x)):
-        raise ValueError("x contains non-finite predictor values.")
+def fit_multinomial_bayes(x, y_labels, prior_sd=2.5, posterior_draws=1200):
     classes = sorted(set(y_labels))
     if len(classes) < 2:
-        raise ValueError(f"Multinomial logit requires at least two classes, got {classes}")
-    if len(y_labels) != x.shape[0]:
-        raise ValueError(f"x row count {x.shape[0]} does not match label count {len(y_labels)}.")
+        return None
     y = np.asarray([classes.index(v) for v in y_labels], dtype=int)
-    xz, mu, sd = standardize_matrix(x)
-    X, p, k = np.column_stack([np.ones(xz.shape[0], dtype=float), xz]), xz.shape[1] + 1, len(classes)
+    xz, mu, sd = standardize(np.asarray(x, dtype=float))
+    X, p, k = np.column_stack([np.ones_like(xz), xz]), 2, len(classes)
     prior_var = max(prior_sd**2, 1e-12)
 
     def obj(theta):
@@ -309,14 +449,12 @@ def fit_multinomial_bayes(x, y_labels, predictor_names, prior_sd, posterior_draw
 
     opt = minimize(fun=lambda t: obj(t)[0], x0=np.zeros(p * (k - 1), dtype=float), jac=lambda t: obj(t)[1], method="L-BFGS-B")
     if not opt.success:
-        raise RuntimeError(f"Multinomial logit fit failed with status {opt.status}: {opt.message}")
+        return None
     theta_map = np.asarray(opt.x, dtype=float)
     probs = softmax(X @ unpack(theta_map, p, k))
     info = np.eye(p * (k - 1), dtype=float) / prior_var
     for i in range(len(y)):
-        class_info = np.diag(probs[i, :-1]) - np.outer(probs[i, :-1], probs[i, :-1])
-        predictor_info = np.outer(X[i], X[i])
-        info += np.kron(predictor_info, class_info)
+        info += np.kron(np.diag(probs[i, :-1]) - np.outer(probs[i, :-1], probs[i, :-1]), np.outer(X[i], X[i]))
     cov = np.linalg.pinv(info)
     rng = np.random.default_rng(RNG_SEED)
     draws = rng.multivariate_normal(theta_map, cov, size=max(int(posterior_draws), 200))
@@ -324,7 +462,6 @@ def fit_multinomial_bayes(x, y_labels, predictor_names, prior_sd, posterior_draw
     return {
         "classes": classes,
         "reference_class": classes[-1],
-        "predictor_names": list(predictor_names),
         "x_mean": mu,
         "x_std": sd,
         "W_map": unpack(theta_map, p, k),
@@ -336,16 +473,456 @@ def fit_multinomial_bayes(x, y_labels, predictor_names, prior_sd, posterior_draw
 
 
 def posterior_multinomial_proba(model, x):
-    x = np.asarray(x, dtype=float)
-    if x.ndim != 2:
-        raise ValueError(f"x must be a two-dimensional predictor matrix, got shape {x.shape}")
-    if x.shape[1] != len(model["predictor_names"]):
-        raise ValueError(
-            f"x has {x.shape[1]} predictor columns, but model has {len(model['predictor_names'])} predictors."
-        )
-    x = (x - model["x_mean"]) / model["x_std"]
-    X = np.column_stack([np.ones(x.shape[0], dtype=float), x])
+    x = (np.asarray(x, dtype=float) - model["x_mean"]) / model["x_std"]
+    X = np.column_stack([np.ones_like(x), x])
     return softmax(np.einsum("np,dpk->dnk", X, model["posterior_W"]))
+
+
+def ordered_response_classes(labels):
+    observed = set(str(label) for label in labels)
+    return [label for label in RESPONSE_CLASSES if label in observed] + sorted(observed - set(RESPONSE_CLASSES))
+
+
+def fit_multinomial_map_matrix(x, y_labels, feature_names, prior_sd=2.5):
+    """Regularized multinomial logit with a fixed zero reference class."""
+    x = np.asarray(x, dtype=float)
+    if x.ndim != 2 or x.shape[0] != len(y_labels):
+        raise ValueError("x must be a two-dimensional matrix aligned with y_labels.")
+    classes = ordered_response_classes(y_labels)
+    if len(classes) < 2:
+        return None
+    y = np.asarray([classes.index(str(value)) for value in y_labels], dtype=int)
+    X = np.column_stack([np.ones(len(x), dtype=float), x])
+    p, k = X.shape[1], len(classes)
+    prior_var = max(float(prior_sd) ** 2, 1e-12)
+
+    def objective(theta):
+        w = unpack(theta, p, k)
+        probs = softmax(X @ w)
+        log_likelihood = float(np.sum(np.log(np.clip(probs[np.arange(len(y)), y], 1e-12, 1.0))))
+        log_prior = -0.5 * float(np.sum(theta * theta) / prior_var)
+        residual = -probs
+        residual[np.arange(len(y)), y] += 1.0
+        gradient = (X.T @ residual)[:, :-1].reshape(-1) - theta / prior_var
+        return -(log_likelihood + log_prior), -gradient
+
+    opt = minimize(
+        fun=lambda theta: objective(theta)[0],
+        x0=np.zeros(p * (k - 1), dtype=float),
+        jac=lambda theta: objective(theta)[1],
+        method="L-BFGS-B",
+        options={"maxiter": 500},
+    )
+    if not opt.success:
+        return None
+    return {
+        "classes": classes,
+        "reference_class": classes[-1],
+        "feature_names": list(feature_names),
+        "W_map": unpack(np.asarray(opt.x, dtype=float), p, k),
+        "prior_sd": float(prior_sd),
+        "optimization_message": str(opt.message),
+        "optimization_iterations": int(getattr(opt, "nit", 0)),
+    }
+
+
+def predict_multinomial_map_matrix(model, x):
+    x = np.asarray(x, dtype=float)
+    X = np.column_stack([np.ones(len(x), dtype=float), x])
+    return softmax(X @ model["W_map"])
+
+
+def baseline_numeric_value(row, feature_name):
+    value = to_float(row.get(feature_name))
+    if not math.isfinite(value):
+        return float("nan")
+    if feature_name in LOG1P_BASELINE_FEATURES:
+        return math.log1p(max(value, 0.0))
+    return value
+
+
+def fit_baseline_preprocessor(train_rows, spec):
+    numeric_state = []
+    feature_names = []
+    for feature_name in spec["numeric_features"]:
+        values = np.asarray([baseline_numeric_value(row, feature_name) for row in train_rows], dtype=float)
+        finite = values[np.isfinite(values)]
+        median = float(np.median(finite)) if len(finite) else 0.0
+        add_missing_indicator = bool(np.any(~np.isfinite(values)))
+        imputed = np.where(np.isfinite(values), values, median)
+        mean = float(np.mean(imputed))
+        std = float(np.std(imputed))
+        if not math.isfinite(std) or std <= 1e-12:
+            std = 1.0
+        numeric_state.append(
+            {
+                "feature": feature_name,
+                "transform": "log1p" if feature_name in LOG1P_BASELINE_FEATURES else "raw",
+                "median": median,
+                "mean": mean,
+                "std": std,
+                "add_missing_indicator": add_missing_indicator,
+            }
+        )
+        feature_names.append(term(feature_name, "log1p") if feature_name in LOG1P_BASELINE_FEATURES else feature_name)
+        if add_missing_indicator:
+            feature_names.append(f"{feature_name}_missing")
+
+    categorical_state = []
+    for feature_name in spec["categorical_features"]:
+        if feature_name == "previous_response_type":
+            categories = ["EpisodeStart"] + [label for label in RESPONSE_CLASSES if label != "Substantive"]
+            reference = "Substantive"
+        else:
+            observed = [str(row.get(feature_name) or "__MISSING__") for row in train_rows]
+            counts = Counter(observed)
+            reference = counts.most_common(1)[0][0] if counts else "__MISSING__"
+            categories = sorted(value for value in counts if value != reference)
+        categorical_state.append({"feature": feature_name, "categories": categories, "reference": reference})
+        feature_names.extend([f"{feature_name}={category}" for category in categories])
+
+    return {
+        "numeric": numeric_state,
+        "categorical": categorical_state,
+        "feature_names": feature_names,
+    }
+
+
+def apply_baseline_preprocessor(rows, preprocessor):
+    columns = []
+    for state in preprocessor["numeric"]:
+        values = np.asarray([baseline_numeric_value(row, state["feature"]) for row in rows], dtype=float)
+        missing = ~np.isfinite(values)
+        values = np.where(np.isfinite(values), values, state["median"])
+        columns.append((values - state["mean"]) / state["std"])
+        if state.get("add_missing_indicator"):
+            columns.append(missing.astype(float))
+    for state in preprocessor["categorical"]:
+        if state["feature"] == "previous_response_type":
+            raw = [str(row.get(state["feature"]) or "EpisodeStart") for row in rows]
+        else:
+            raw = [str(row.get(state["feature"]) or "__MISSING__") for row in rows]
+        for category in state["categories"]:
+            columns.append(np.asarray([1.0 if value == category else 0.0 for value in raw], dtype=float))
+    if not columns:
+        return np.empty((len(rows), 0), dtype=float)
+    return np.column_stack(columns)
+
+
+def split_rows_by_episode(rows, test_fraction, seed):
+    episode_ids = sorted({str(row["episode_id"]) for row in rows})
+    if len(episode_ids) < 2:
+        raise RuntimeError("At least two episodes are required for held-out baseline evaluation.")
+    n_test = min(max(int(round(len(episode_ids) * float(test_fraction))), 1), len(episode_ids) - 1)
+    all_classes = set(str(row["next_response_type"]) for row in rows)
+    best = None
+    for attempt in range(250):
+        rng = np.random.default_rng(int(seed) + attempt)
+        shuffled = np.asarray(episode_ids, dtype=object)
+        rng.shuffle(shuffled)
+        test_ids = set(str(value) for value in shuffled[:n_test])
+        train_rows = [row for row in rows if str(row["episode_id"]) not in test_ids]
+        test_rows = [row for row in rows if str(row["episode_id"]) in test_ids]
+        train_classes = set(str(row["next_response_type"]) for row in train_rows)
+        test_classes = set(str(row["next_response_type"]) for row in test_rows)
+        score = len(train_classes & all_classes) + len(test_classes & all_classes)
+        if best is None or score > best[0]:
+            best = (score, train_rows, test_rows, test_ids, attempt)
+        if train_classes == all_classes and test_classes == all_classes:
+            return train_rows, test_rows, test_ids, int(seed) + attempt
+    _, train_rows, test_rows, test_ids, attempt = best
+    if set(str(row["next_response_type"]) for row in train_rows) != all_classes:
+        raise RuntimeError("Could not construct an episode split containing every response class in training data.")
+    return train_rows, test_rows, test_ids, int(seed) + attempt
+
+
+def confusion_and_logloss(y_true, probabilities, classes):
+    class_to_idx = {label: idx for idx, label in enumerate(classes)}
+    y_idx = np.asarray([class_to_idx[str(label)] for label in y_true], dtype=int)
+    pred_idx = np.argmax(probabilities, axis=1)
+    confusion = np.zeros((len(classes), len(classes)), dtype=float)
+    np.add.at(confusion, (y_idx, pred_idx), 1.0)
+    logloss_sum = -float(np.sum(np.log(np.clip(probabilities[np.arange(len(y_idx)), y_idx], 1e-12, 1.0))))
+    return confusion, logloss_sum
+
+
+def metrics_from_confusion(confusion, logloss_sum):
+    n = float(np.sum(confusion))
+    recalls, f1s = [], []
+    for idx in range(confusion.shape[0]):
+        tp = confusion[idx, idx]
+        support = float(np.sum(confusion[idx, :]))
+        predicted = float(np.sum(confusion[:, idx]))
+        recall = tp / support if support > 0 else 0.0
+        precision = tp / predicted if predicted > 0 else 0.0
+        f1 = 2.0 * precision * recall / (precision + recall) if precision + recall > 0 else 0.0
+        recalls.append(recall)
+        f1s.append(f1)
+    return {
+        "n_test_rows": int(n),
+        "log_loss": float(logloss_sum / n) if n > 0 else None,
+        "accuracy": float(np.trace(confusion) / n) if n > 0 else None,
+        "balanced_accuracy": float(np.mean(recalls)) if recalls else None,
+        "macro_f1": float(np.mean(f1s)) if f1s else None,
+    }
+
+
+def episode_prediction_statistics(y_true, probabilities, episode_ids, classes):
+    stats = {}
+    episode_ids = np.asarray([str(value) for value in episode_ids], dtype=object)
+    y_true = np.asarray([str(value) for value in y_true], dtype=object)
+    for episode_id in sorted(set(episode_ids.tolist())):
+        mask = episode_ids == episode_id
+        confusion, logloss_sum = confusion_and_logloss(y_true[mask], probabilities[mask], classes)
+        stats[episode_id] = {"confusion": confusion, "logloss_sum": logloss_sum}
+    return stats
+
+
+def aggregate_episode_statistics(stats, sampled_episode_ids):
+    first = next(iter(stats.values()))
+    confusion = np.zeros_like(first["confusion"], dtype=float)
+    logloss_sum = 0.0
+    for episode_id in sampled_episode_ids:
+        confusion += stats[str(episode_id)]["confusion"]
+        logloss_sum += float(stats[str(episode_id)]["logloss_sum"])
+    return metrics_from_confusion(confusion, logloss_sum)
+
+
+def bootstrap_metric_intervals(y_true, probabilities, episode_ids, classes, draws, seed):
+    stats = episode_prediction_statistics(y_true, probabilities, episode_ids, classes)
+    unique_episode_ids = sorted(stats)
+    base = aggregate_episode_statistics(stats, unique_episode_ids)
+    rng = np.random.default_rng(int(seed))
+    sampled_metrics = {key: [] for key in ["log_loss", "accuracy", "balanced_accuracy", "macro_f1"]}
+    for _ in range(max(int(draws), 1)):
+        sampled = rng.choice(unique_episode_ids, size=len(unique_episode_ids), replace=True)
+        metrics = aggregate_episode_statistics(stats, sampled)
+        for key in sampled_metrics:
+            sampled_metrics[key].append(float(metrics[key]))
+    for key, values in sampled_metrics.items():
+        base[f"{key}_ci_low"] = float(np.quantile(values, 0.025))
+        base[f"{key}_ci_high"] = float(np.quantile(values, 0.975))
+    return base
+
+
+def paired_bootstrap_incremental_gain(
+    y_true,
+    surface_probabilities,
+    implicit_probabilities,
+    episode_ids,
+    classes,
+    draws,
+    seed,
+):
+    surface_stats = episode_prediction_statistics(y_true, surface_probabilities, episode_ids, classes)
+    implicit_stats = episode_prediction_statistics(y_true, implicit_probabilities, episode_ids, classes)
+    unique_episode_ids = sorted(set(surface_stats) & set(implicit_stats))
+
+    def gains(sampled):
+        surface = aggregate_episode_statistics(surface_stats, sampled)
+        implicit = aggregate_episode_statistics(implicit_stats, sampled)
+        return {
+            "log_loss_improvement": float(surface["log_loss"] - implicit["log_loss"]),
+            "accuracy_improvement": float(implicit["accuracy"] - surface["accuracy"]),
+            "balanced_accuracy_improvement": float(implicit["balanced_accuracy"] - surface["balanced_accuracy"]),
+            "macro_f1_improvement": float(implicit["macro_f1"] - surface["macro_f1"]),
+        }
+
+    base = gains(unique_episode_ids)
+    rng = np.random.default_rng(int(seed))
+    sampled_values = {key: [] for key in base}
+    for _ in range(max(int(draws), 1)):
+        sampled = rng.choice(unique_episode_ids, size=len(unique_episode_ids), replace=True)
+        draw = gains(sampled)
+        for key, value in draw.items():
+            sampled_values[key].append(value)
+    for key, values in sampled_values.items():
+        base[f"{key}_ci_low"] = float(np.quantile(values, 0.025))
+        base[f"{key}_ci_high"] = float(np.quantile(values, 0.975))
+        base[f"{key}_probability_positive"] = float(np.mean(np.asarray(values) > 0.0))
+    return base
+
+
+def run_response_type_baselines(rows, output_dir, args):
+    if args.disable_response_type_baselines:
+        return {"status": "disabled"}
+    eligible = [
+        row
+        for row in rows
+        if row.get("episode_id") is not None and str(row.get("next_response_type")) in RESPONSE_CLASSES
+    ]
+    required = sorted(
+        set().union(
+            *(set(spec["numeric_features"] + spec["categorical_features"]) for spec in BASELINE_MODEL_SPECS)
+        )
+    )
+    missing = [feature for feature in required if not any(feature in row for row in eligible)]
+    if missing:
+        return {
+            "status": "skipped",
+            "reason": "Turn-level feature files were generated by an older code version.",
+            "missing_features": missing,
+        }
+    if len(eligible) < 20:
+        return {"status": "skipped", "reason": "Too few eligible rows for held-out evaluation."}
+
+    train_rows, test_rows, test_ids, realized_seed = split_rows_by_episode(
+        eligible,
+        args.baseline_test_fraction,
+        args.baseline_split_seed,
+    )
+    split_rows = [
+        {"episode_id": episode_id, "split": "test" if episode_id in test_ids else "train"}
+        for episode_id in sorted({str(row["episode_id"]) for row in eligible})
+    ]
+    save_csv(output_dir / "exp5_response_type_episode_split.csv", split_rows, ["episode_id", "split"])
+
+    y_train = [str(row["next_response_type"]) for row in train_rows]
+    y_test = [str(row["next_response_type"]) for row in test_rows]
+    test_episode_ids = [str(row["episode_id"]) for row in test_rows]
+    comparison_rows, coefficient_rows, fitted = [], [], {}
+    for spec in BASELINE_MODEL_SPECS:
+        preprocessor = fit_baseline_preprocessor(train_rows, spec)
+        x_train = apply_baseline_preprocessor(train_rows, preprocessor)
+        x_test = apply_baseline_preprocessor(test_rows, preprocessor)
+        model = fit_multinomial_map_matrix(
+            x_train,
+            y_train,
+            preprocessor["feature_names"],
+            prior_sd=args.bayes_multinomial_prior_sd,
+        )
+        if model is None:
+            comparison_rows.append(
+                {
+                    "model_id": spec["model_id"],
+                    "description": spec["description"],
+                    "status": "fit_failed",
+                    "n_train_rows": len(train_rows),
+                    "n_test_rows": len(test_rows),
+                    "num_features": len(preprocessor["feature_names"]),
+                }
+            )
+            continue
+        probabilities = predict_multinomial_map_matrix(model, x_test)
+        metrics = bootstrap_metric_intervals(
+            y_test,
+            probabilities,
+            test_episode_ids,
+            model["classes"],
+            args.baseline_bootstrap_draws,
+            args.baseline_split_seed + 1000,
+        )
+        comparison_rows.append(
+            {
+                "model_id": spec["model_id"],
+                "description": spec["description"],
+                "status": "ok",
+                "n_train_rows": len(train_rows),
+                "n_test_rows": len(test_rows),
+                "num_features": len(preprocessor["feature_names"]),
+                **metrics,
+            }
+        )
+        fitted[spec["model_id"]] = {
+            "model": model,
+            "probabilities": probabilities,
+            "preprocessor": preprocessor,
+            "spec": spec,
+        }
+        for class_idx, class_name in enumerate(model["classes"]):
+            terms = ["Intercept"] + list(model["feature_names"])
+            for term_idx, term_name in enumerate(terms):
+                coefficient_rows.append(
+                    {
+                        "model_id": spec["model_id"],
+                        "class": class_name,
+                        "reference_class": model["reference_class"],
+                        "term": term_name,
+                        "map_coefficient": float(model["W_map"][term_idx, class_idx]),
+                    }
+                )
+
+    comparison_fields = [
+        "model_id",
+        "description",
+        "status",
+        "n_train_rows",
+        "n_test_rows",
+        "num_features",
+        "log_loss",
+        "log_loss_ci_low",
+        "log_loss_ci_high",
+        "accuracy",
+        "accuracy_ci_low",
+        "accuracy_ci_high",
+        "balanced_accuracy",
+        "balanced_accuracy_ci_low",
+        "balanced_accuracy_ci_high",
+        "macro_f1",
+        "macro_f1_ci_low",
+        "macro_f1_ci_high",
+    ]
+    save_csv(output_dir / "exp5_response_type_baseline_comparison.csv", comparison_rows, comparison_fields)
+    if coefficient_rows:
+        save_csv(
+            output_dir / "exp5_response_type_baseline_coefficients.csv",
+            coefficient_rows,
+            ["model_id", "class", "reference_class", "term", "map_coefficient"],
+        )
+
+    full_surface_id = "surface_plus_similarity"
+    gain_rows = []
+    if full_surface_id in fitted:
+        for implicit_id in ["surface_plus_implicit_density", "surface_plus_implicit_load"]:
+            if implicit_id not in fitted:
+                continue
+            surface = fitted[full_surface_id]
+            implicit = fitted[implicit_id]
+            if surface["model"]["classes"] != implicit["model"]["classes"]:
+                continue
+            gains = paired_bootstrap_incremental_gain(
+                y_test,
+                surface["probabilities"],
+                implicit["probabilities"],
+                test_episode_ids,
+                surface["model"]["classes"],
+                args.baseline_bootstrap_draws,
+                args.baseline_split_seed + 2000,
+            )
+            gain_rows.append(
+                {
+                    "surface_model_id": full_surface_id,
+                    "implicit_model_id": implicit_id,
+                    **gains,
+                }
+            )
+    if gain_rows:
+        save_csv(
+            output_dir / "exp5_response_type_baseline_incremental_gains.csv",
+            gain_rows,
+            list(gain_rows[0].keys()),
+        )
+
+    return {
+        "status": "ok",
+        "split": {
+            "requested_test_fraction": float(args.baseline_test_fraction),
+            "realized_test_fraction_by_episode": float(len(test_ids) / len(split_rows)),
+            "split_seed": int(realized_seed),
+            "num_train_episodes": int(len(split_rows) - len(test_ids)),
+            "num_test_episodes": int(len(test_ids)),
+            "num_train_rows": int(len(train_rows)),
+            "num_test_rows": int(len(test_rows)),
+        },
+        "bootstrap_draws": int(args.baseline_bootstrap_draws),
+        "full_surface_model_id": full_surface_id,
+        "model_comparison": comparison_rows,
+        "incremental_gains": gain_rows,
+        "interpretation": (
+            "Positive log_loss_improvement means the implicit model has lower held-out log loss. "
+            "Positive accuracy, balanced-accuracy, and macro-F1 improvements favor the implicit model."
+        ),
+    }
 
 
 def corr_stats(x, y):
@@ -416,30 +993,6 @@ def coef_summary(name, draws):
     if len(draws) == 0:
         return {"term": name, "posterior_mean": None, "posterior_sd": None}
     return {"term": name, "posterior_mean": float(np.mean(draws)), "posterior_sd": float(np.std(draws, ddof=1)) if len(draws) >= 2 else 0.0}
-
-
-def prefixed_coef_interval_summary(prefix, draws, map_value):
-    draws = np.asarray(draws, dtype=float)
-    draws = draws[np.isfinite(draws)]
-    if len(draws) == 0:
-        return {
-            f"posterior_mean_{prefix}": None,
-            f"posterior_sd_{prefix}": None,
-            f"posterior_q025_{prefix}": None,
-            f"posterior_q975_{prefix}": None,
-            f"posterior_prob_{prefix}_gt_0": None,
-            f"posterior_prob_{prefix}_lt_0": None,
-            f"map_{prefix}": float(map_value),
-        }
-    return {
-        f"posterior_mean_{prefix}": float(np.mean(draws)),
-        f"posterior_sd_{prefix}": float(np.std(draws, ddof=1)) if len(draws) >= 2 else 0.0,
-        f"posterior_q025_{prefix}": float(np.quantile(draws, 0.025)),
-        f"posterior_q975_{prefix}": float(np.quantile(draws, 0.975)),
-        f"posterior_prob_{prefix}_gt_0": float(np.mean(draws > 0.0)),
-        f"posterior_prob_{prefix}_lt_0": float(np.mean(draws < 0.0)),
-        f"map_{prefix}": float(map_value),
-    }
 
 
 def fit_linear_bayes(y, predictors, prior_precision_scale=0.1, prior_a0=2.0, prior_b0=1.0, posterior_draws=4000):
@@ -541,6 +1094,14 @@ def build_base_summary(rows, output_dir, input_dir, num_episodes, silence_gap, a
         "bayes_linear_prior_precision_scale": args.bayes_linear_prior_precision_scale,
         "bayes_linear_prior_a0": args.bayes_linear_prior_a0,
         "bayes_linear_prior_b0": args.bayes_linear_prior_b0,
+        "response_type_baseline_config": {
+            "enabled": not args.disable_response_type_baselines,
+            "test_fraction": args.baseline_test_fraction,
+            "split_seed": args.baseline_split_seed,
+            "episode_bootstrap_draws": args.baseline_bootstrap_draws,
+            "split_unit": "episode_id",
+            "models": BASELINE_MODEL_SPECS,
+        },
         "assumption_sharedness_method": {
             "method": "Selected embedding model cosine similarity against prior episode assumptions",
             "model": args.embedding_model_name,
@@ -578,6 +1139,10 @@ def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, 
                 "exp5_response_delay_regression_coefficients.csv",
                 "exp5_response_delay_regression_summary.json",
                 "exp5_response_type_counts.csv",
+                "exp5_response_type_episode_split.csv",
+                "exp5_response_type_baseline_comparison.csv",
+                "exp5_response_type_baseline_coefficients.csv",
+                "exp5_response_type_baseline_incremental_gains.csv",
             ],
             "notes": [
                 "Patch mode writes turn-level features only.",
@@ -593,33 +1158,13 @@ def write_patch_outputs(rows, output_dir, input_dir, num_episodes, silence_gap, 
     return summary
 
 
-def build_probability_curves(model, loads, duration_values):
-    if list(model["predictor_names"]) != ["implicature_load", "duration_sec"]:
-        raise ValueError(f"Expected predictors ['implicature_load', 'duration_sec'], got {model['predictor_names']}")
+def build_probability_curves(model, loads):
     if len(loads) == 0:
         return []
-    duration_values = np.asarray(duration_values, dtype=float)
-    duration_values = duration_values[np.isfinite(duration_values)]
-    if len(duration_values) == 0:
-        raise ValueError("duration_values must contain at least one finite value.")
-    duration_control = float(np.median(duration_values))
     lo, hi = robust_xlim(loads)
+    probs = np.mean(posterior_multinomial_proba(model, np.linspace(lo, hi, 260)), axis=0)
     grid = np.linspace(lo, hi, 260)
-    predictors = np.column_stack([grid, np.full(len(grid), duration_control, dtype=float)])
-    posterior_probs = posterior_multinomial_proba(model, predictors)
-    probs = np.mean(posterior_probs, axis=0)
-    prob_lows = np.quantile(posterior_probs, 0.025, axis=0)
-    prob_highs = np.quantile(posterior_probs, 0.975, axis=0)
-    return [
-        {
-            "implicature_load": float(grid[i]),
-            "duration_sec_control_value": duration_control,
-            **{f"p_{cls}": float(probs[i, j]) for j, cls in enumerate(model["classes"])},
-            **{f"p_{cls}_ci95_low": float(prob_lows[i, j]) for j, cls in enumerate(model["classes"])},
-            **{f"p_{cls}_ci95_high": float(prob_highs[i, j]) for j, cls in enumerate(model["classes"])},
-        }
-        for i in range(len(grid))
-    ]
+    return [{"implicature_load": float(grid[i]), **{f"p_{cls}": float(probs[i, j]) for j, cls in enumerate(model["classes"])}} for i in range(len(grid))]
 
 
 def select_delay_transform(delay, load, avg_prev, prior_precision_scale, prior_a0, prior_b0, posterior_draws):
@@ -683,45 +1228,42 @@ def build_arg_parser():
     ap.add_argument("--bayes_linear_prior_precision_scale", type=float, default=0.1)
     ap.add_argument("--bayes_linear_prior_a0", type=float, default=2.0)
     ap.add_argument("--bayes_linear_prior_b0", type=float, default=1.0)
+    ap.add_argument("--baseline_test_fraction", type=float, default=0.20)
+    ap.add_argument("--baseline_split_seed", type=int, default=RNG_SEED)
+    ap.add_argument("--baseline_bootstrap_draws", type=int, default=500)
+    ap.add_argument("--disable_response_type_baselines", action="store_true")
     ap.add_argument("--no_tqdm", action="store_true")
     return ap
 
 
 def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, show_progress, summary_extra=None):
-    model_rows = [
-        r
-        for r in rows
-        if all(isinstance(r.get(k), (int, float)) and math.isfinite(float(r[k])) for k in ["implicature_load", "duration_sec"])
-        and float(r["duration_sec"]) >= 0
-        and r.get("next_response_type")
-    ]
+    model_rows = [r for r in rows if isinstance(r.get("implicature_load"), (int, float)) and math.isfinite(float(r["implicature_load"])) and r.get("next_response_type")]
     model = curve_rows = None
     coef_rows = []
     if model_rows:
-        predictor_names = ["implicature_load", "duration_sec"]
-        x = np.asarray([[float(r["implicature_load"]), float(r["duration_sec"])] for r in model_rows], dtype=float)
+        x = np.asarray([float(r["implicature_load"]) for r in model_rows], dtype=float)
         y = [str(r["next_response_type"]) for r in model_rows]
         keep = {k for k, v in Counter(y).items() if v >= 2}
-        keep_indices = [i for i, yi in enumerate(y) if yi in keep]
-        x = x[np.asarray(keep_indices, dtype=int)]
-        y = [y[i] for i in keep_indices]
+        x = np.asarray([x[i] for i, yi in enumerate(y) if yi in keep], dtype=float)
+        y = [yi for yi in y if yi in keep]
         if len(set(y)) >= 2 and len(x) >= 10:
-            model = fit_multinomial_bayes(x, y, predictor_names, args.bayes_multinomial_prior_sd, args.bayes_multinomial_draws)
+            model = fit_multinomial_bayes(x, y, args.bayes_multinomial_prior_sd, args.bayes_multinomial_draws)
         if model:
-            curve_rows = build_probability_curves(model, x[:, 0], x[:, 1])
+            curve_rows = build_probability_curves(model, x)
             for j, cls in enumerate(model["classes"]):
                 w = model["posterior_W"][:, :, j]
                 coef_rows.append(
                     {
                         "class": cls,
                         "reference_class": model["reference_class"],
-                        **prefixed_coef_interval_summary("intercept", w[:, 0], model["W_map"][0, j]),
-                        **prefixed_coef_interval_summary("coef_scaled_load", w[:, 1], model["W_map"][1, j]),
-                        **prefixed_coef_interval_summary("coef_scaled_duration_sec", w[:, 2], model["W_map"][2, j]),
-                        "load_scaler_mean": float(model["x_mean"][0]),
-                        "load_scaler_std": float(model["x_std"][0]),
-                        "duration_sec_scaler_mean": float(model["x_mean"][1]),
-                        "duration_sec_scaler_std": float(model["x_std"][1]),
+                        "posterior_mean_intercept": float(np.mean(w[:, 0])),
+                        "posterior_mean_coef_scaled_load": float(np.mean(w[:, 1])),
+                        "posterior_sd_intercept": float(np.std(w[:, 0], ddof=1)),
+                        "posterior_sd_coef_scaled_load": float(np.std(w[:, 1], ddof=1)),
+                        "map_intercept": float(model["W_map"][0, j]),
+                        "map_coef_scaled_load": float(model["W_map"][1, j]),
+                        "scaler_mean": float(model["x_mean"]),
+                        "scaler_std": float(model["x_std"]),
                     }
                 )
 
@@ -792,39 +1334,7 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     if curve_rows:
         save_csv(output_dir / "exp5_probability_curves.csv", curve_rows, ["implicature_load"] + [k for k in curve_rows[0] if k != "implicature_load"])
     if coef_rows:
-        save_csv(
-            output_dir / "exp5_logit_coefficients.csv",
-            coef_rows,
-            [
-                "class",
-                "reference_class",
-                "posterior_mean_intercept",
-                "posterior_sd_intercept",
-                "posterior_q025_intercept",
-                "posterior_q975_intercept",
-                "posterior_prob_intercept_gt_0",
-                "posterior_prob_intercept_lt_0",
-                "map_intercept",
-                "posterior_mean_coef_scaled_load",
-                "posterior_sd_coef_scaled_load",
-                "posterior_q025_coef_scaled_load",
-                "posterior_q975_coef_scaled_load",
-                "posterior_prob_coef_scaled_load_gt_0",
-                "posterior_prob_coef_scaled_load_lt_0",
-                "map_coef_scaled_load",
-                "posterior_mean_coef_scaled_duration_sec",
-                "posterior_sd_coef_scaled_duration_sec",
-                "posterior_q025_coef_scaled_duration_sec",
-                "posterior_q975_coef_scaled_duration_sec",
-                "posterior_prob_coef_scaled_duration_sec_gt_0",
-                "posterior_prob_coef_scaled_duration_sec_lt_0",
-                "map_coef_scaled_duration_sec",
-                "load_scaler_mean",
-                "load_scaler_std",
-                "duration_sec_scaler_mean",
-                "duration_sec_scaler_std",
-            ],
-        )
+        save_csv(output_dir / "exp5_logit_coefficients.csv", coef_rows, ["class", "reference_class", "posterior_mean_intercept", "posterior_mean_coef_scaled_load", "posterior_sd_intercept", "posterior_sd_coef_scaled_load", "map_intercept", "map_coef_scaled_load", "scaler_mean", "scaler_std"])
     if response_delay_regression_coeffs:
         save_csv(output_dir / "exp5_response_delay_regression_coefficients.csv", response_delay_regression_coeffs, ["term", "posterior_mean", "posterior_sd"])
     if response_delay_regression is not None:
@@ -832,37 +1342,7 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
 
     response_counts = Counter(str(r.get("next_response_type")) for r in rows if r.get("next_response_type"))
     save_csv(output_dir / "exp5_response_type_counts.csv", [{"response_type": k, "count": v} for k, v in sorted(response_counts.items())], ["response_type", "count"])
-
-    preferred_png_outputs = [
-        "exp5_probability_curves.png",
-        "exp5_assumption_count_vs_response_time.png",
-        "exp5_implicature_load_vs_response_time.png",
-        "exp5_load_ridge_by_response_type.png",
-    ]
-    observed_png_outputs = {path.name for path in output_dir.glob("*.png")}
-    png_outputs = [name for name in preferred_png_outputs if name in observed_png_outputs]
-    png_outputs.extend(sorted(observed_png_outputs - set(preferred_png_outputs)))
-    response_type_model_summary = None
-    if model:
-        response_type_model_summary = {
-            "model_family": "bayesian_multinomial_logit_laplace",
-            "prior_sd": model["prior_sd"],
-            "posterior_draws": model["posterior_draws"],
-            "reference_class": model["reference_class"],
-            "approximation": model["approximation"],
-            "fitted_formula": "next_response_type ~ implicature_load + duration_sec",
-            "predictors": list(model["predictor_names"]),
-            "controlled_predictor": "duration_sec",
-            "predictor_standardization": {
-                str(name): {"mean": float(model["x_mean"][i]), "std": float(model["x_std"][i])}
-                for i, name in enumerate(model["predictor_names"])
-            },
-            "coefficient_interval_level": 0.95,
-        }
-        if curve_rows:
-            response_type_model_summary["probability_curve_control_values"] = {
-                "duration_sec": float(curve_rows[0]["duration_sec_control_value"])
-            }
+    response_type_baselines = run_response_type_baselines(rows, output_dir, args)
 
     summary = build_base_summary(
         rows,
@@ -877,11 +1357,11 @@ def analyze_rows(rows, output_dir, input_dir, num_episodes, silence_gap, args, s
     )
     summary.update(
         {
-            "png_outputs": png_outputs,
             "analysis_stage": "full_analysis",
             "assumption_count_vs_response_time_correlation": corr_stats(assumption_x, assumption_y),
             "implicature_load_vs_response_time_correlation": corr_stats(load_x, load_y),
-            "response_type_model": response_type_model_summary,
+            "response_type_model": None if not model else {"model_family": "bayesian_multinomial_logit_laplace", "prior_sd": model["prior_sd"], "posterior_draws": model["posterior_draws"], "reference_class": model["reference_class"], "approximation": model["approximation"]},
+            "response_type_baselines": response_type_baselines,
             "response_delay_model_specification": {
                 "active_spec": "primary_spec",
                 "description": (
@@ -906,6 +1386,10 @@ def main():
     args = ap.parse_args()
 
     validate_patch_args(args.num_patches, args.patch_index, args.episodes_per_patch)
+    if not 0.0 < args.baseline_test_fraction < 1.0:
+        raise ValueError("baseline_test_fraction must be strictly between 0 and 1.")
+    if args.baseline_bootstrap_draws < 1:
+        raise ValueError("baseline_bootstrap_draws must be >= 1.")
     input_dir = Path(args.input_dir)
     model_output_dir = resolve_output_dir(args.output_dir, args.embedding_model_name)
     output_dir = resolve_patch_output_dir(model_output_dir, args.num_patches, args.patch_index)
