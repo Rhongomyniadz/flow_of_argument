@@ -11,8 +11,12 @@ from typing import Any
 
 import numpy as np
 
-from ..common.embeddings import DEFAULT_INSTRUCTION, TextEmbedder, save_embedding_patch
-from ..common.utils import (
+from experiments.exp8_assumption_embedding_pilot.common.embeddings import (
+    DEFAULT_INSTRUCTION,
+    TextEmbedder,
+    save_embedding_patch,
+)
+from experiments.exp8_assumption_embedding_pilot.common.utils import (
     file_hash,
     make_manifest,
     manifest_matches,

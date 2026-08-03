@@ -10,11 +10,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from ..common.controls import build_control_map
-from ..common.embeddings import EmbeddingStore, component_vectors
-from ..common.evaluation import evaluate_anchor
-from ..common.metrics import normalize, rank_scores
-from ..common.utils import (
+from experiments.exp8_assumption_embedding_pilot.common.controls import build_control_map
+from experiments.exp8_assumption_embedding_pilot.common.embeddings import EmbeddingStore, component_vectors
+from experiments.exp8_assumption_embedding_pilot.common.evaluation import evaluate_anchor
+from experiments.exp8_assumption_embedding_pilot.common.metrics import normalize, rank_scores
+from experiments.exp8_assumption_embedding_pilot.common.utils import (
     file_hash,
     make_manifest,
     manifest_matches,

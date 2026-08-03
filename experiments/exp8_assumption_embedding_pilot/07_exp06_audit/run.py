@@ -9,8 +9,14 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from ..common.progress import run_single
-from ..common.utils import file_hash, read_json, read_jsonl, stable_hash, write_json
+from experiments.exp8_assumption_embedding_pilot.common.progress import run_single
+from experiments.exp8_assumption_embedding_pilot.common.utils import (
+    file_hash,
+    read_json,
+    read_jsonl,
+    stable_hash,
+    write_json,
+)
 
 
 LABELS = ("supported", "plausible", "unsupported", "contradicted", "unclear")

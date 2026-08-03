@@ -25,7 +25,7 @@ Successful CPU stages emit only `tqdm` progress bars. Matching completed patches
 ## Stage 00: prepare data locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.00_prepare_data.run \
+python experiments/exp8_assumption_embedding_pilot/00_prepare_data/run.py \
   --input-dir data/conversation_moves_labeled \
   --episodes-per-task 250 \
   --jobs 8
@@ -44,7 +44,7 @@ The wrapper submits Qwen embedding workers as a `05:45:00` A6000 array and then 
 ## Stage 02: audit the existing Exp1 table locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.02_exp01_audit.run \
+python experiments/exp8_assumption_embedding_pilot/02_exp01_audit/run.py \
   --pairs-csv /path/to/exp1_pairs.csv
 ```
 
@@ -55,7 +55,7 @@ Required columns are `episode_id`, `reciprocal_rank_without_assumptions`, `recip
 Run after the Stage 01 merge completes:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.03_exp02_retrieval.run \
+python experiments/exp8_assumption_embedding_pilot/03_exp02_retrieval/run.py \
   --anchors-per-task 1000 \
   --jobs 8
 ```
@@ -63,7 +63,7 @@ python -m experiments.exp8_assumption_embedding_pilot.03_exp02_retrieval.run \
 ## Stage 04: residual models locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.04_exp03_residual.run \
+python experiments/exp8_assumption_embedding_pilot/04_exp03_residual/run.py \
   --jobs 3
 ```
 
@@ -72,7 +72,7 @@ The three local tasks are the baseline, full, and shuffled-assumption conditions
 ## Stage 05: counterfactual controls locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.05_exp04_controls.run \
+python experiments/exp8_assumption_embedding_pilot/05_exp04_controls/run.py \
   --anchors-per-task 1000 \
   --jobs 8
 ```
@@ -92,7 +92,7 @@ This submits history/full/shuffled crossed with seeds 42, 43, and 44 as nine A60
 Create the immutable blinded sample:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+python experiments/exp8_assumption_embedding_pilot/07_exp06_audit/run.py \
   --mode sample \
   --sample-size 100
 ```
@@ -100,14 +100,14 @@ python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
 Annotate `exp06_results/audit_sample.csv`, then calculate agreement:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+python experiments/exp8_assumption_embedding_pilot/07_exp06_audit/run.py \
   --mode summarize
 ```
 
 Finally collect all experiment summaries:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+python experiments/exp8_assumption_embedding_pilot/07_exp06_audit/run.py \
   --mode pilot-summary
 ```
 

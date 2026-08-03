@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=40.8.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "flow-of-argument"
 version = "0.0.0"
@@ -27,3 +31,8 @@ llm = [
   "vllm",
   "sporc",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["experiments.exp8_assumption_embedding_pilot*"]
+namespaces = true
