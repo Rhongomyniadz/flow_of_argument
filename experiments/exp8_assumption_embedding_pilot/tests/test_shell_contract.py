@@ -22,8 +22,9 @@ class EntrypointContractTests(unittest.TestCase):
         for stage, path in shells.items():
             text = path.read_text(encoding="utf-8")
             self.assertEqual(text.splitlines()[0], "#!/bin/bash")
-            for required in ("#SBATCH", "--array=", "05:45:00", "gpu:A6000:1", "FINAL_JOB_ID="):
+            for required in ("#SBATCH --partition=gpu", "#SBATCH --array=", "05:45:00", "gpu:A6000:1"):
                 self.assertIn(required, text, f"stage {stage}: {required}")
+            self.assertNotIn("sbatch ", text, f"stage {stage} must be a direct GPU job")
 
     def test_cpu_stage_entrypoints_are_plain_sequential_python(self) -> None:
         for stage in ("00", "02", "03", "04", "05", "07"):

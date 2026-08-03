@@ -32,7 +32,22 @@ The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id
 sbatch experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
 ```
 
-The wrapper submits Qwen embedding workers as a `05:45:00` A6000 array and then submits the merge job with an `afterok` dependency.
+This directly submits a `05:45:00` A6000 array with 404 tasks for the current 20,189 episodes. After the array finishes, run the CPU merge locally:
+
+```bash
+python experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.py \
+  --mode merge \
+  --num-patches 404
+```
+
+If the episode count changes, calculate the required array size and override both the array and patch count:
+
+```bash
+EPISODES=$(python -c 'import json; print(json.load(open("experiments/exp8_assumption_embedding_pilot/shared_data/summary.json"))["episode_count"])')
+PATCHES=$(( (EPISODES + 49) / 50 ))
+sbatch --array=0-$((PATCHES - 1))%8 --export=ALL,NUM_PATCHES=$PATCHES \
+  experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
+```
 
 ## Stage 02: audit the existing Exp1 table locally
 
@@ -73,7 +88,13 @@ The script evaluates same-episode, same-category, and explicit-matched controls 
 sbatch experiments/exp8_assumption_embedding_pilot/06_exp05_fusion/run.sh
 ```
 
-This submits history/full/shuffled crossed with seeds 42, 43, and 44 as nine A6000 tasks, followed by a CPU merge.
+This directly submits history/full/shuffled crossed with seeds 42, 43, and 44 as nine A6000 tasks. After the array finishes, run the CPU merge locally:
+
+```bash
+python experiments/exp8_assumption_embedding_pilot/06_exp05_fusion/run.py \
+  --mode merge \
+  --num-patches 9
+```
 
 ## Stage 07: human audit locally
 
