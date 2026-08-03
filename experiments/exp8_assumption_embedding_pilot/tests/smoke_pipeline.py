@@ -69,43 +69,34 @@ def main() -> None:
         data_dir, cache_dir = root / "shared_data", root / "shared_cache"
         results = {index: root / f"exp{index:02d}_results" for index in range(1, 7)}
 
-        prep_patches = 2
-        for index in range(prep_patches):
-            run("prepare.build_pilot_dataset", "--mode", "worker", "--input-dir", input_dir, "--output-dir", data_dir, "--episodes-per-task", 4, "--num-patches", prep_patches, "--patch-index", index, "--candidate-count", 8, "--development-limit", 100, "--seed", 42)
-        run("prepare.build_pilot_dataset", "--mode", "merge", "--input-dir", input_dir, "--output-dir", data_dir, "--episodes-per-task", 4, "--num-patches", prep_patches, "--candidate-count", 8, "--development-limit", 100, "--seed", 42)
+        run(
+            "run_cpu_stage", "prepare", "--root", root, "--input-dir", input_dir,
+            "--episodes-per-task", 4, "--candidate-count", 8,
+            "--development-limit", 100, "--jobs", 2, "--seed", 42,
+        )
 
         embed_patches = 2
         for index in range(embed_patches):
             run("prepare.cache_embeddings", "--mode", "worker", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--patch-index", index, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
         run("prepare.cache_embeddings", "--mode", "merge", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
 
-        run("exp01_existing_result_audit.run", "--pairs-csv", pairs_path, "--output-dir", results[1], "--bootstrap-draws", 20)
-        exp02_patches = 2
-        for index in range(exp02_patches):
-            run("exp02_frozen_retrieval.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[2], "--anchors-per-task", 5, "--num-patches", exp02_patches, "--patch-index", index, "--bootstrap-draws", 20)
-        run("exp02_frozen_retrieval.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[2], "--anchors-per-task", 5, "--num-patches", exp02_patches, "--bootstrap-draws", 20)
-
-        for index in range(3):
-            run("exp03_linear_residual.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[3], "--num-patches", 3, "--patch-index", index, "--feature-dim", 8, "--max-train-anchors", 50)
-        run("exp03_linear_residual.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[3], "--num-patches", 3, "--feature-dim", 8, "--max-train-anchors", 50)
-
-        exp04_patches = 6
-        for index in range(exp04_patches):
-            run("exp04_counterfactual_controls.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[4], "--anchors-per-task", 5, "--num-patches", exp04_patches, "--patch-index", index, "--bootstrap-draws", 20)
-        run("exp04_counterfactual_controls.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[4], "--anchors-per-task", 5, "--num-patches", exp04_patches, "--bootstrap-draws", 20)
+        run("run_cpu_stage", "exp01", "--root", root, "--pairs-csv", pairs_path, "--bootstrap-draws", 20)
+        run("run_cpu_stage", "exp02", "--root", root, "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 2)
+        run("run_cpu_stage", "exp03", "--root", root, "--feature-dim", 8, "--max-train-anchors", 50, "--jobs", 3)
+        run("run_cpu_stage", "exp04", "--root", root, "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 3)
 
         for index in range(9):
             run("exp05_mini_fusion.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--patch-index", index, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
         run("exp05_mini_fusion.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
 
-        run("exp06_human_audit.sample", "--data-dir", data_dir, "--output-dir", results[6], "--sample-size", 12)
+        run("run_cpu_stage", "exp06-sample", "--root", root, "--sample-size", 12)
         audit_path = results[6] / "audit_sample.csv"
         audit = pd.read_csv(audit_path, keep_default_na=False)
         audit["annotator_1_label"] = ["supported" if index % 3 else "plausible" for index in range(len(audit))]
         audit["annotator_2_label"] = ["supported" if index % 4 else "plausible" for index in range(len(audit))]
         audit.to_csv(audit_path, index=False)
-        run("exp06_human_audit.summarize", "--audit-csv", audit_path, "--output-dir", results[6])
-        run("summarize_pilot", "--root", root)
+        run("run_cpu_stage", "exp06-summarize", "--root", root, "--audit-csv", audit_path)
+        run("run_cpu_stage", "pilot-summary", "--root", root)
 
         for index, output_dir in results.items():
             for filename in ("config.json", "summary.json", "metrics.csv"):
