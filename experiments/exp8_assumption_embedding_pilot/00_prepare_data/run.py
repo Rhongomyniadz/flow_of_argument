@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Stage 00: prepare the show-disjoint pilot data."""
+"""Stage 00: prepare the episode-disjoint pilot data."""
 
 import argparse
 import math
@@ -191,7 +191,6 @@ except ImportError:
 
 
 # Stage-local helper functions (data).
-import csv
 import json
 import re
 from pathlib import Path
@@ -260,64 +259,15 @@ def _safe_int(value: Any, default: int) -> int:
         return default
 
 
-def load_show_map(path: Path | None) -> dict[str, str]:
-    if path is None:
-        return {}
-    if not path.exists():
-        raise FileNotFoundError(path)
-    mapping: dict[str, str] = {}
-    if path.suffix.lower() in {".json", ".jsonl"}:
-        value = json.loads(path.read_text(encoding="utf-8")) if path.suffix.lower() == ".json" else None
-        rows = value if isinstance(value, list) else []
-        if path.suffix.lower() == ".jsonl":
-            rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-        if isinstance(value, dict):
-            return {str(key): str(item) for key, item in value.items()}
-        for row in rows:
-            if isinstance(row, dict) and row.get("episode_id") is not None and row.get("show_id") is not None:
-                mapping[str(row["episode_id"])] = str(row["show_id"])
-        return mapping
-    with path.open("r", encoding="utf-8-sig", newline="") as stream:
-        for row in csv.DictReader(stream):
-            episode_id = row.get("episode_id")
-            show_id = row.get("show_id") or row.get("rssKey") or row.get("rss_key")
-            if episode_id and show_id:
-                mapping[str(episode_id)] = str(show_id)
-    return mapping
-
-
-def resolve_show_id(
-    turns: list[dict[str, Any]],
-    episode_id: str,
-    show_map: dict[str, str],
-    allow_episode_fallback: bool,
-) -> str:
-    for turn in turns:
-        for key in ("show_id", "rssKey", "rss_key", "podcast_id", "feed_id"):
-            value = turn.get(key)
-            if value is not None and str(value).strip():
-                return str(value).strip()
-    if episode_id in show_map:
-        return show_map[episode_id]
-    if allow_episode_fallback:
-        return f"episode:{episode_id}"
-    raise ValueError(
-        f"No show identity for episode {episode_id}. Supply --show-map or explicitly use --allow-episode-fallback."
-    )
-
-
-def normalize_episode(
-    path: Path,
-    *,
-    show_map: dict[str, str],
-    allow_episode_fallback: bool,
-) -> dict[str, Any]:
+def normalize_episode(path: Path) -> dict[str, Any]:
     turns = load_turns(path)
     if not turns:
         raise ValueError(f"Episode has no usable turns: {path}")
     episode_id = str(turns[0].get("episode_id") or path.stem)
     category = str(turns[0].get("category") or path.parent.name or "unknown").strip().casefold()
-    show_id = resolve_show_id(turns, episode_id, show_map, allow_episode_fallback)
+    # The labeled corpus has no reliable podcast/show identifier.  Use the
+    # episode ID as the split group and state this explicitly in the outputs.
+    show_id = episode_id
     normalized_turns: list[dict[str, Any]] = []
     for fallback_idx, turn in enumerate(turns):
         index = _safe_int(turn.get("turn_idx"), fallback_idx)
@@ -368,10 +318,10 @@ import numpy as np
 
 
 
-def assign_show_splits(episodes: list[dict[str, Any]], seed: int) -> dict[str, str]:
+def assign_episode_splits(episodes: list[dict[str, Any]], seed: int) -> dict[str, str]:
     by_category: dict[str, set[str]] = defaultdict(set)
     for episode in episodes:
-        by_category[str(episode["category"])].add(str(episode["show_id"]))
+        by_category[str(episode["category"])].add(str(episode["episode_id"]))
 
     assignments: dict[str, str] = {}
     for category in sorted(by_category):
@@ -399,14 +349,14 @@ def assign_show_splits(episodes: list[dict[str, Any]], seed: int) -> dict[str, s
     return assignments
 
 
-def assert_show_disjoint(rows: list[dict[str, Any]]) -> None:
+def assert_episode_disjoint(rows: list[dict[str, Any]]) -> None:
     observed: dict[str, str] = {}
     for row in rows:
-        show = str(row["show_id"])
+        episode_id = str(row["episode_id"])
         split = str(row["split"])
-        previous = observed.setdefault(show, split)
+        previous = observed.setdefault(episode_id, split)
         if previous != split:
-            raise ValueError(f"Show {show} appears in both {previous} and {split}")
+            raise ValueError(f"Episode {episode_id} appears in both {previous} and {split}")
 
 
 def balanced_anchor_sample(
@@ -523,7 +473,7 @@ def build_anchors(
                     rng=rng,
                     used=used,
                     limit=max(0, min(candidate_count, 17) - len(candidates)),
-                    predicate=lambda turn_id: lookup[turn_id]["show_id"] != turn["show_id"],
+                    predicate=lambda turn_id: lookup[turn_id]["episode_id"] != turn["episode_id"],
                 )
             )
             candidates.extend(
@@ -550,7 +500,7 @@ def build_anchors(
                     "show_id": turn["show_id"],
                     "episode_id": turn["episode_id"],
                     "turn_idx": turn["turn_idx"],
-                    "split": splits[str(turn["show_id"])],
+                    "split": splits[str(turn["episode_id"])],
                     "assumption_count": turn["assumption_count"],
                     "assumption_token_count": turn["assumption_token_count"],
                 }
@@ -573,15 +523,13 @@ STAGE = "exp8_prepare_data"
 
 
 def parser() -> argparse.ArgumentParser:
-    value = argparse.ArgumentParser(description="Prepare the show-disjoint Exp8 pilot data.")
+    value = argparse.ArgumentParser(description="Prepare the episode-disjoint Exp8 pilot data.")
     value.add_argument("--input-dir", type=Path, default=Path("data/conversation_moves_labeled"))
     value.add_argument(
         "--output-dir",
         type=Path,
         default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"),
     )
-    value.add_argument("--show-map", type=Path)
-    value.add_argument("--allow-episode-fallback", action="store_true")
     value.add_argument("--candidate-count", type=int, default=25)
     value.add_argument("--development-limit", type=int, default=10000)
     value.add_argument("--seed", type=int, default=42)
@@ -593,18 +541,11 @@ def prepare(args: argparse.Namespace) -> None:
     if not paths:
         raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
 
-    show_map = load_show_map(args.show_map)
     episodes: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
     for path in tqdm(paths, desc="stage 00 prepare", unit="episode", dynamic_ncols=True):
         try:
-            episodes.append(
-                normalize_episode(
-                    path,
-                    show_map=show_map,
-                    allow_episode_fallback=args.allow_episode_fallback,
-                )
-            )
+            episodes.append(normalize_episode(path))
         except Exception as error:
             errors.append({"path": str(path), "error": str(error)})
 
@@ -612,12 +553,12 @@ def prepare(args: argparse.Namespace) -> None:
         detail = errors[0]["error"] if errors else "unknown error"
         raise RuntimeError(f"No episodes could be normalized; first error: {detail}")
 
-    assignments = assign_show_splits(episodes, args.seed)
+    assignments = assign_episode_splits(episodes, args.seed)
     turns = [turn for episode in episodes for turn in episode["turns"]]
     anchors = build_anchors(episodes, assignments, args.candidate_count, show_progress=True)
     for anchor in anchors:
         validate_anchor(anchor)
-    assert_show_disjoint(anchors)
+    assert_episode_disjoint(anchors)
     development = balanced_anchor_sample(
         anchors,
         split="validation",
@@ -626,11 +567,11 @@ def prepare(args: argparse.Namespace) -> None:
     )
     split_rows = [
         {
-            "show_id": show_id,
+            "episode_id": episode_id,
             "split": split,
-            "split_hash_key": stable_hash({"show_id": show_id, "seed": args.seed}),
+            "split_hash_key": stable_hash({"episode_id": episode_id, "seed": args.seed}),
         }
-        for show_id, split in sorted(assignments.items())
+        for episode_id, split in sorted(assignments.items())
     ]
     split_hash = stable_hash(split_rows)
     input_hash = stable_hash(
@@ -655,12 +596,11 @@ def prepare(args: argparse.Namespace) -> None:
         args.output_dir / "summary.json",
         {
             "stage": STAGE,
+            "split_grouping": "episode_id",
             "input_hash": input_hash,
             "split_hash": split_hash,
             "config": {
                 "input_dir": str(args.input_dir),
-                "show_map": str(args.show_map) if args.show_map else None,
-                "allow_episode_fallback": bool(args.allow_episode_fallback),
                 "candidate_count": args.candidate_count,
                 "development_limit": args.development_limit,
                 "seed": args.seed,
@@ -669,7 +609,7 @@ def prepare(args: argparse.Namespace) -> None:
             "turn_count": len(turns),
             "anchor_count": len(anchors),
             "development_anchor_count": len(development),
-            "show_count": len(assignments),
+            "split_group_count": len(assignments),
             "error_count": len(errors),
             "split_counts": {
                 split: sum(1 for value in assignments.values() if value == split)

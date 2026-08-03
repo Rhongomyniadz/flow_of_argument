@@ -24,7 +24,7 @@ python experiments/exp8_assumption_embedding_pilot/00_prepare_data/run.py \
   --input-dir data/conversation_moves_labeled
 ```
 
-If show identity is stored separately, add `--show-map /path/to/episode_show_map.csv`.
+The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id` as the split group and records `split_grouping: episode_id` in `shared_data/summary.json`.
 
 ## Stage 01: cache embeddings on Slurm
 

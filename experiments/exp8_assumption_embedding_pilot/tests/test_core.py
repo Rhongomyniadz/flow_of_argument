@@ -24,8 +24,8 @@ controls = load_stage("exp8_stage05", "05_exp04_controls")
 
 build_anchors = prepare.build_anchors
 validate_anchor = prepare.validate_anchor
-assert_show_disjoint = prepare.assert_show_disjoint
-assign_show_splits = prepare.assign_show_splits
+assert_episode_disjoint = prepare.assert_episode_disjoint
+assign_episode_splits = prepare.assign_episode_splits
 build_control_map = controls.build_control_map
 aggregate_rows = controls.aggregate_rows
 clustered_delta_interval = controls.clustered_delta_interval
@@ -64,16 +64,16 @@ class SplitAndCandidateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.episodes = [episode("news", f"show-{index}", f"ep-{index}") for index in range(5)]
 
-    def test_show_disjoint_and_has_validation(self) -> None:
-        assignment = assign_show_splits(self.episodes, seed=42)
+    def test_episode_disjoint_and_has_validation(self) -> None:
+        assignment = assign_episode_splits(self.episodes, seed=42)
         self.assertIn("validation", set(assignment.values()))
         self.assertIn("test", set(assignment.values()))
         anchors = build_anchors(self.episodes, assignment, candidate_count=8)
-        assert_show_disjoint(anchors)
-        self.assertEqual(len({anchor["show_id"] for anchor in anchors}), 5)
+        assert_episode_disjoint(anchors)
+        self.assertEqual(len({anchor["episode_id"] for anchor in anchors}), 5)
 
     def test_history_never_contains_current_or_future(self) -> None:
-        assignment = assign_show_splits(self.episodes, seed=42)
+        assignment = assign_episode_splits(self.episodes, seed=42)
         anchors = build_anchors(self.episodes, assignment, candidate_count=8)
         for anchor in anchors:
             validate_anchor(anchor)
@@ -83,7 +83,7 @@ class SplitAndCandidateTests(unittest.TestCase):
             self.assertEqual(anchor["candidate_ids"].count(anchor["target_id"]), 1)
 
     def test_candidate_sharding_is_deterministic(self) -> None:
-        assignment = assign_show_splits(self.episodes, seed=42)
+        assignment = assign_episode_splits(self.episodes, seed=42)
         first = build_anchors(self.episodes, assignment, candidate_count=8)
         second = build_anchors(self.episodes, assignment, candidate_count=8)
         self.assertEqual(first, second)
