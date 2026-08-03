@@ -25,16 +25,15 @@ class EntrypointContractTests(unittest.TestCase):
             for required in ("#SBATCH", "--array=", "05:45:00", "gpu:A6000:1", "FINAL_JOB_ID="):
                 self.assertIn(required, text, f"stage {stage}: {required}")
 
-    def test_cpu_stage_entrypoints_use_tqdm_progress(self) -> None:
+    def test_cpu_stage_entrypoints_are_plain_sequential_python(self) -> None:
         for stage in ("00", "02", "03", "04", "05", "07"):
             path = next(ROOT.glob(f"{stage}_*/run.py"))
             text = path.read_text(encoding="utf-8")
-            self.assertIn("run_single", text, stage)
+            self.assertNotIn("ThreadPoolExecutor", text, stage)
+            self.assertNotIn("run_parallel", text, stage)
+            self.assertNotIn("run_single", text, stage)
             self.assertNotIn("run_cpu_stage", text, stage)
             self.assertNotIn("print(", text, stage)
-        for stage in ("00", "03", "04", "05"):
-            path = next(ROOT.glob(f"{stage}_*/run.py"))
-            self.assertIn("run_parallel", path.read_text(encoding="utf-8"), stage)
 
     def test_aggregate_cpu_runner_is_removed(self) -> None:
         self.assertFalse((ROOT / "run_cpu_stage.py").exists())

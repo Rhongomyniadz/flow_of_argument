@@ -15,15 +15,13 @@ The pilot is split into eight independent stages. Every stage directory contains
 
 Run commands from the repository root. Each stage is self-contained and does not require installing this repository as a Python package. The cluster Python environment must provide the dependencies listed in `pyproject.toml`; GPU stages additionally require the `llm` dependencies.
 
-Successful CPU stages emit only `tqdm` progress bars. Matching completed patches are reused automatically.
+CPU stages use ordinary sequential Python loops and emit only `tqdm` progress bars. Slurm sharding is limited to the two GPU stages.
 
 ## Stage 00: prepare data locally
 
 ```bash
 python experiments/exp8_assumption_embedding_pilot/00_prepare_data/run.py \
-  --input-dir data/conversation_moves_labeled \
-  --episodes-per-task 250 \
-  --jobs 8
+  --input-dir data/conversation_moves_labeled
 ```
 
 If show identity is stored separately, add `--show-map /path/to/episode_show_map.csv`.
@@ -50,29 +48,24 @@ Required columns are `episode_id`, `reciprocal_rank_without_assumptions`, `recip
 Run after the Stage 01 merge completes:
 
 ```bash
-python experiments/exp8_assumption_embedding_pilot/03_exp02_retrieval/run.py \
-  --anchors-per-task 1000 \
-  --jobs 8
+python experiments/exp8_assumption_embedding_pilot/03_exp02_retrieval/run.py
 ```
 
 ## Stage 04: residual models locally
 
 ```bash
-python experiments/exp8_assumption_embedding_pilot/04_exp03_residual/run.py \
-  --jobs 3
+python experiments/exp8_assumption_embedding_pilot/04_exp03_residual/run.py
 ```
 
-The three local tasks are the baseline, full, and shuffled-assumption conditions.
+The script runs the baseline, full, and shuffled-assumption conditions sequentially.
 
 ## Stage 05: counterfactual controls locally
 
 ```bash
-python experiments/exp8_assumption_embedding_pilot/05_exp04_controls/run.py \
-  --anchors-per-task 1000 \
-  --jobs 8
+python experiments/exp8_assumption_embedding_pilot/05_exp04_controls/run.py
 ```
 
-The local tasks cross same-episode, same-category, and explicit-matched controls with anchor shards.
+The script evaluates same-episode, same-category, and explicit-matched controls sequentially.
 
 ## Stage 06: fusion training on Slurm
 
@@ -108,8 +101,6 @@ python experiments/exp8_assumption_embedding_pilot/07_exp06_audit/run.py \
 
 ## Common local options
 
-- `--jobs N` controls local shard concurrency for Stages 00, 03, 04, and 05.
-- `--force` recomputes matching completed outputs.
 - `--seed` defaults to 42.
 - `--data-dir`, `--cache-dir`, and `--output-dir` override default artifact paths.
 

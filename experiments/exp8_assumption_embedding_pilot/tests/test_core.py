@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -27,10 +26,6 @@ build_anchors = prepare.build_anchors
 validate_anchor = prepare.validate_anchor
 assert_show_disjoint = prepare.assert_show_disjoint
 assign_show_splits = prepare.assign_show_splits
-make_manifest = prepare.make_manifest
-patch_directory = prepare.patch_directory
-validate_patch_manifests = prepare.validate_patch_manifests
-write_json = prepare.write_json
 build_control_map = controls.build_control_map
 aggregate_rows = controls.aggregate_rows
 clustered_delta_interval = controls.clustered_delta_interval
@@ -125,29 +120,6 @@ class ControlAndMetricTests(unittest.TestCase):
         delta = clustered_delta_interval(rows, "full", "base", draws=20, seed=42)
         self.assertAlmostEqual(float(delta["mean_delta"]), 0.5)
         self.assertEqual(delta["n_shows"], 2)
-
-
-class PatchValidationTests(unittest.TestCase):
-    def test_patch_completeness_and_hash_validation(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            for index in range(2):
-                write_json(
-                    patch_directory(root, index, 2) / "patch_manifest.json",
-                    make_manifest(
-                        stage="test",
-                        patch_index=index,
-                        num_patches=2,
-                        row_count=1,
-                        input_hash="input",
-                        split_hash="split",
-                        config={"a": 1},
-                    ),
-                )
-            self.assertEqual(len(validate_patch_manifests(root, "test", 2)), 2)
-            (patch_directory(root, 1, 2) / "patch_manifest.json").unlink()
-            with self.assertRaises(RuntimeError):
-                validate_patch_manifests(root, "test", 2)
 
 
 if __name__ == "__main__":

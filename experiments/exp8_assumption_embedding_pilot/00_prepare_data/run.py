@@ -182,48 +182,12 @@ def validate_patch_manifests(root: Path, stage: str, num_patches: int) -> list[d
     return manifests
 
 
-# Stage-local helper functions (progress).
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Callable, Iterable, TypeVar
-
+# Stage-local progress display.
 try:
     from tqdm.auto import tqdm
 except ImportError:
-    class tqdm:  # type: ignore[no-redef]
-        """Silent fallback; the project dependency installs the real tqdm."""
-
-        def __init__(self, *args: object, **kwargs: object) -> None:
-            pass
-
-        def __enter__(self) -> "tqdm":
-            return self
-
-        def __exit__(self, *args: object) -> None:
-            pass
-
-        def update(self, amount: int = 1) -> None:
-            pass
-
-
-T = TypeVar("T")
-
-
-def run_parallel(items: Iterable[T], function: Callable[[T], None], jobs: int, description: str) -> None:
-    values = list(items)
-    if not values:
-        raise RuntimeError(f"{description} has no work units")
-    with tqdm(total=len(values), desc=description, unit="task", dynamic_ncols=True) as progress:
-        with ThreadPoolExecutor(max_workers=min(jobs, len(values))) as executor:
-            futures = [executor.submit(function, value) for value in values]
-            for future in as_completed(futures):
-                future.result()
-                progress.update(1)
-
-
-def run_single(function: Callable[[], None], description: str) -> None:
-    with tqdm(total=1, desc=description, unit="task", dynamic_ncols=True) as progress:
-        function()
-        progress.update(1)
+    def tqdm(iterable, **_: Any):
+        return iterable
 
 
 # Stage-local helper functions (data).
@@ -482,7 +446,12 @@ import numpy as np
 
 
 
-def build_anchors(episodes: list[dict[str, Any]], splits: dict[str, str], candidate_count: int = 25) -> list[dict[str, Any]]:
+def build_anchors(
+    episodes: list[dict[str, Any]],
+    splits: dict[str, str],
+    candidate_count: int = 25,
+    show_progress: bool = False,
+) -> list[dict[str, Any]]:
     if candidate_count < 2:
         raise ValueError("candidate_count must be at least 2")
     all_turns = [turn for episode in episodes for turn in episode["turns"]]
@@ -526,7 +495,8 @@ def build_anchors(episodes: list[dict[str, Any]], splits: dict[str, str], candid
                     break
         return selected
 
-    for episode in episodes:
+    episode_iterator = tqdm(episodes, desc="stage 00 anchors", unit="episode", dynamic_ncols=True) if show_progress else episodes
+    for episode in episode_iterator:
         turns = episode["turns"]
         for position, turn in enumerate(turns[:-1]):
             target = turns[position + 1]
@@ -603,61 +573,30 @@ STAGE = "exp8_prepare_data"
 
 
 def parser() -> argparse.ArgumentParser:
-    value = argparse.ArgumentParser(description="Prepare show-disjoint Exp8 pilot data.")
-    value.add_argument("--mode", choices=("local", "worker", "merge"), default="local")
+    value = argparse.ArgumentParser(description="Prepare the show-disjoint Exp8 pilot data.")
     value.add_argument("--input-dir", type=Path, default=Path("data/conversation_moves_labeled"))
-    value.add_argument("--output-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"))
+    value.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"),
+    )
     value.add_argument("--show-map", type=Path)
     value.add_argument("--allow-episode-fallback", action="store_true")
-    value.add_argument("--num-patches", type=int, default=1)
-    value.add_argument("--patch-index", type=int, default=0)
-    value.add_argument("--episodes-per-task", type=int, default=250)
     value.add_argument("--candidate-count", type=int, default=25)
     value.add_argument("--development-limit", type=int, default=10000)
     value.add_argument("--seed", type=int, default=42)
-    value.add_argument("--force", action="store_true")
-    value.add_argument("--jobs", type=int, default=8)
     return value
 
 
-def configuration(args: argparse.Namespace) -> dict[str, Any]:
-    return {
-        "input_dir": str(args.input_dir),
-        "show_map": str(args.show_map) if args.show_map else None,
-        "allow_episode_fallback": bool(args.allow_episode_fallback),
-        "episodes_per_task": int(args.episodes_per_task),
-        "candidate_count": int(args.candidate_count),
-        "development_limit": int(args.development_limit),
-        "seed": int(args.seed),
-    }
-
-
-def worker(args: argparse.Namespace) -> None:
+def prepare(args: argparse.Namespace) -> None:
     paths = list_episode_paths(args.input_dir)
     if not paths:
         raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
-    if args.num_patches != math.ceil(len(paths) / args.episodes_per_task):
-        raise ValueError("--num-patches does not match the current input size")
-    input_hash = episode_input_hash(args.input_dir)
-    config = configuration(args)
-    patch_dir = patch_directory(args.output_dir, args.patch_index, args.num_patches)
-    expected = make_manifest(
-        stage=STAGE,
-        patch_index=args.patch_index,
-        num_patches=args.num_patches,
-        row_count=0,
-        input_hash=input_hash,
-        split_hash="unassigned",
-        config=config,
-    )
-    manifest_path = patch_dir / "patch_manifest.json"
-    if not args.force and manifest_matches(manifest_path, expected):
-        return
-    selected = paths[shard_slice(len(paths), args.patch_index, args.episodes_per_task)]
+
     show_map = load_show_map(args.show_map)
     episodes: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
-    for path in selected:
+    for path in tqdm(paths, desc="stage 00 prepare", unit="episode", dynamic_ncols=True):
         try:
             episodes.append(
                 normalize_episode(
@@ -668,43 +607,14 @@ def worker(args: argparse.Namespace) -> None:
             )
         except Exception as error:
             errors.append({"path": str(path), "error": str(error)})
-    if errors and not episodes:
-        raise RuntimeError(f"Every episode in patch {args.patch_index} failed normalization; first error: {errors[0]}")
-    patch_dir.mkdir(parents=True, exist_ok=True)
-    write_jsonl(patch_dir / "episodes.jsonl", episodes)
-    write_jsonl(patch_dir / "errors.jsonl", errors)
-    manifest = make_manifest(
-        stage=STAGE,
-        patch_index=args.patch_index,
-        num_patches=args.num_patches,
-        row_count=len(episodes),
-        input_hash=input_hash,
-        split_hash="unassigned",
-        config=config,
-        extra={"error_count": len(errors), "source_file_count": len(selected)},
-    )
-    write_json(manifest_path, manifest)
 
+    if not episodes:
+        detail = errors[0]["error"] if errors else "unknown error"
+        raise RuntimeError(f"No episodes could be normalized; first error: {detail}")
 
-def merge(args: argparse.Namespace) -> None:
-    manifests = validate_patch_manifests(args.output_dir, STAGE, args.num_patches)
-    episodes: list[dict[str, Any]] = []
-    for index in range(args.num_patches):
-        episodes.extend(read_jsonl(patch_directory(args.output_dir, index, args.num_patches) / "episodes.jsonl"))
-    keys = [str(episode["episode_key"]) for episode in episodes]
-    if len(keys) != len(set(keys)):
-        raise RuntimeError("Duplicate episode keys found while merging preparation patches")
     assignments = assign_show_splits(episodes, args.seed)
-    split_rows = [
-        {"show_id": show_id, "split": split, "split_hash_key": stable_hash({"show_id": show_id, "seed": args.seed})}
-        for show_id, split in sorted(assignments.items())
-    ]
-    split_hash = stable_hash(split_rows)
     turns = [turn for episode in episodes for turn in episode["turns"]]
-    turn_ids = [str(turn["turn_id"]) for turn in turns]
-    if len(turn_ids) != len(set(turn_ids)):
-        raise RuntimeError("Duplicate turn IDs found while merging preparation patches")
-    anchors = build_anchors(episodes, assignments, args.candidate_count)
+    anchors = build_anchors(episodes, assignments, args.candidate_count, show_progress=True)
     for anchor in anchors:
         validate_anchor(anchor)
     assert_show_disjoint(anchors)
@@ -714,67 +624,66 @@ def merge(args: argparse.Namespace) -> None:
         limit=args.development_limit,
         seed=args.seed,
     )
+    split_rows = [
+        {
+            "show_id": show_id,
+            "split": split,
+            "split_hash_key": stable_hash({"show_id": show_id, "seed": args.seed}),
+        }
+        for show_id, split in sorted(assignments.items())
+    ]
+    split_hash = stable_hash(split_rows)
+    input_hash = stable_hash(
+        [
+            {
+                "path": str(path.relative_to(args.input_dir)),
+                "size": path.stat().st_size,
+                "modified_ns": path.stat().st_mtime_ns,
+            }
+            for path in paths
+        ]
+    )
+
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_jsonl(args.output_dir / "episodes.jsonl", episodes)
     write_jsonl(args.output_dir / "turns.jsonl", turns)
     write_jsonl(args.output_dir / "anchors.jsonl", anchors)
     write_jsonl(args.output_dir / "development_anchors.jsonl", development)
     write_jsonl(args.output_dir / "split_manifest.jsonl", split_rows)
-    summary = {
-        "stage": STAGE,
-        "input_hash": manifests[0]["input_hash"],
-        "split_hash": split_hash,
-        "config": configuration(args),
-        "episode_count": len(episodes),
-        "turn_count": len(turns),
-        "anchor_count": len(anchors),
-        "development_anchor_count": len(development),
-        "show_count": len(assignments),
-        "error_count": sum(int(manifest.get("error_count", 0)) for manifest in manifests),
-        "split_counts": {
-            split: sum(1 for value in assignments.values() if value == split)
-            for split in ("train", "validation", "test")
+    write_jsonl(args.output_dir / "normalization_errors.jsonl", errors)
+    write_json(
+        args.output_dir / "summary.json",
+        {
+            "stage": STAGE,
+            "input_hash": input_hash,
+            "split_hash": split_hash,
+            "config": {
+                "input_dir": str(args.input_dir),
+                "show_map": str(args.show_map) if args.show_map else None,
+                "allow_episode_fallback": bool(args.allow_episode_fallback),
+                "candidate_count": args.candidate_count,
+                "development_limit": args.development_limit,
+                "seed": args.seed,
+            },
+            "episode_count": len(episodes),
+            "turn_count": len(turns),
+            "anchor_count": len(anchors),
+            "development_anchor_count": len(development),
+            "show_count": len(assignments),
+            "error_count": len(errors),
+            "split_counts": {
+                split: sum(1 for value in assignments.values() if value == split)
+                for split in ("train", "validation", "test")
+            },
         },
-        "outputs": {
-            "episodes": str(args.output_dir / "episodes.jsonl"),
-            "turns": str(args.output_dir / "turns.jsonl"),
-            "anchors": str(args.output_dir / "anchors.jsonl"),
-            "development_anchors": str(args.output_dir / "development_anchors.jsonl"),
-        },
-    }
-    write_json(args.output_dir / "summary.json", summary)
-
-
-def local(args: argparse.Namespace) -> None:
-    total = len(list_episode_paths(args.input_dir))
-    patches = math.ceil(total / args.episodes_per_task) if total else 0
-    if patches < 1:
-        raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
-
-    def run_patch(index: int) -> None:
-        child = argparse.Namespace(**vars(args))
-        child.mode = "worker"
-        child.patch_index = index
-        child.num_patches = patches
-        worker(child)
-
-    run_parallel(range(patches), run_patch, args.jobs, "stage 00 workers")
-    merged = argparse.Namespace(**vars(args))
-    merged.mode = "merge"
-    merged.num_patches = patches
-    run_single(lambda: merge(merged), "stage 00 merge")
+    )
 
 
 def main() -> None:
     args = parser().parse_args()
-    if args.episodes_per_task < 1 or args.num_patches < 1 or args.jobs < 1:
-        raise ValueError("Patch sizes and counts must be positive")
-    if args.mode == "local":
-        local(args)
-    elif args.mode == "worker":
-        worker(args)
-    else:
-        merge(args)
+    if args.candidate_count < 2 or args.development_limit < 1:
+        raise ValueError("--candidate-count must be at least 2 and --development-limit must be positive")
+    prepare(args)
 
 
 if __name__ == "__main__":

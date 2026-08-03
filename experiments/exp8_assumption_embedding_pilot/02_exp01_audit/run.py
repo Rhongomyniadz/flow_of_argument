@@ -184,48 +184,12 @@ def validate_patch_manifests(root: Path, stage: str, num_patches: int) -> list[d
     return manifests
 
 
-# Stage-local helper functions (progress).
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Callable, Iterable, TypeVar
-
+# Stage-local progress display.
 try:
     from tqdm.auto import tqdm
 except ImportError:
-    class tqdm:  # type: ignore[no-redef]
-        """Silent fallback; the project dependency installs the real tqdm."""
-
-        def __init__(self, *args: object, **kwargs: object) -> None:
-            pass
-
-        def __enter__(self) -> "tqdm":
-            return self
-
-        def __exit__(self, *args: object) -> None:
-            pass
-
-        def update(self, amount: int = 1) -> None:
-            pass
-
-
-T = TypeVar("T")
-
-
-def run_parallel(items: Iterable[T], function: Callable[[T], None], jobs: int, description: str) -> None:
-    values = list(items)
-    if not values:
-        raise RuntimeError(f"{description} has no work units")
-    with tqdm(total=len(values), desc=description, unit="task", dynamic_ncols=True) as progress:
-        with ThreadPoolExecutor(max_workers=min(jobs, len(values))) as executor:
-            futures = [executor.submit(function, value) for value in values]
-            for future in as_completed(futures):
-                future.result()
-                progress.update(1)
-
-
-def run_single(function: Callable[[], None], description: str) -> None:
-    with tqdm(total=1, desc=description, unit="task", dynamic_ncols=True) as progress:
-        function()
-        progress.update(1)
+    def tqdm(iterable, **_: Any):
+        return iterable
 
 
 
@@ -285,7 +249,9 @@ def run(args: argparse.Namespace) -> None:
     )
     rng = np.random.default_rng(args.seed)
     episode_values = episode["mean_mrr_delta"].to_numpy(dtype=float)
-    draws = [float(np.mean(rng.choice(episode_values, size=len(episode_values), replace=True))) for _ in range(args.bootstrap_draws)]
+    draws = []
+    for _ in tqdm(range(args.bootstrap_draws), desc="stage 02 bootstrap", unit="draw", dynamic_ncols=True):
+        draws.append(float(np.mean(rng.choice(episode_values, size=len(episode_values), replace=True))))
     group_columns = [
         column for column in ("category", "true_next_turn_move_label", "assumption_count", "negative_source")
         if column in frame.columns
@@ -338,7 +304,7 @@ def run(args: argparse.Namespace) -> None:
 
 def main() -> None:
     args = parser().parse_args()
-    run_single(lambda: run(args), "stage 02 audit")
+    run(args)
 
 
 if __name__ == "__main__":

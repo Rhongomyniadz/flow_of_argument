@@ -72,8 +72,7 @@ def main() -> None:
 
         run(
             "00_prepare_data.run", "--input-dir", input_dir, "--output-dir", data_dir,
-            "--episodes-per-task", 4, "--candidate-count", 8,
-            "--development-limit", 100, "--jobs", 2, "--seed", 42,
+            "--candidate-count", 8, "--development-limit", 100, "--seed", 42,
         )
 
         embed_patches = 2
@@ -82,9 +81,9 @@ def main() -> None:
         run("01_cache_embeddings.run", "--mode", "merge", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
 
         run("02_exp01_audit.run", "--pairs-csv", pairs_path, "--output-dir", results[1], "--bootstrap-draws", 20)
-        run("03_exp02_retrieval.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[2], "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 2)
-        run("04_exp03_residual.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[3], "--feature-dim", 8, "--max-train-anchors", 50, "--jobs", 3)
-        run("05_exp04_controls.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[4], "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 3)
+        run("03_exp02_retrieval.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[2], "--bootstrap-draws", 20)
+        run("04_exp03_residual.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[3], "--feature-dim", 8, "--max-train-anchors", 50)
+        run("05_exp04_controls.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[4], "--bootstrap-draws", 20)
 
         for index in range(9):
             run("06_exp05_fusion.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--patch-index", index, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
