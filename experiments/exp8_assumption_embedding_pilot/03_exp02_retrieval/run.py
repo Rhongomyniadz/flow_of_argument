@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 03: evaluate frozen next-turn retrieval."""
+
 import argparse
 import math
 from pathlib import Path
@@ -11,6 +13,7 @@ from ..common.controls import build_control_map
 from ..common.embeddings import EmbeddingStore, load_turn_lookup
 from ..common.evaluation import FROZEN_CONDITIONS, evaluate_anchor
 from ..common.metrics import aggregate_rows, clustered_delta_interval
+from ..common.progress import run_parallel, run_single
 from ..common.utils import (
     file_hash,
     make_manifest,
@@ -29,7 +32,7 @@ STAGE = "exp8_exp02_frozen_retrieval"
 
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description="Run or merge frozen next-turn retrieval shards.")
-    value.add_argument("--mode", choices=("count", "worker", "merge"), required=True)
+    value.add_argument("--mode", choices=("local", "worker", "merge"), default="local")
     value.add_argument("--data-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"))
     value.add_argument("--cache-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_cache"))
     value.add_argument("--output-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/exp02_results"))
@@ -39,6 +42,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--bootstrap-draws", type=int, default=1000)
     value.add_argument("--seed", type=int, default=42)
     value.add_argument("--force", action="store_true")
+    value.add_argument("--jobs", type=int, default=8)
     return value
 
 
@@ -49,12 +53,6 @@ def config(args: argparse.Namespace) -> dict[str, Any]:
         "bootstrap_draws": args.bootstrap_draws,
         "seed": args.seed,
     }
-
-
-def count(args: argparse.Namespace) -> None:
-    total = sum(1 for _ in read_jsonl(args.data_dir / "development_anchors.jsonl"))
-    print(f"TOTAL_ITEMS={total}")
-    print(f"NUM_PATCHES={math.ceil(total / args.anchors_per_task) if total else 0}")
 
 
 def worker(args: argparse.Namespace) -> None:
@@ -79,7 +77,6 @@ def worker(args: argparse.Namespace) -> None:
     )
     manifest_path = patch_dir / "patch_manifest.json"
     if not args.force and manifest_matches(manifest_path, expected):
-        print(f"Reusing completed Exp02 patch {patch_dir}")
         return
     selected = anchors[shard_slice(len(anchors), args.patch_index, args.anchors_per_task)]
     store = EmbeddingStore(args.cache_dir / "cache_index.json")
@@ -142,10 +139,32 @@ def merge(args: argparse.Namespace) -> None:
     )
 
 
+def local(args: argparse.Namespace) -> None:
+    total = sum(1 for _ in read_jsonl(args.data_dir / "development_anchors.jsonl"))
+    patches = math.ceil(total / args.anchors_per_task) if total else 0
+    if patches < 1:
+        raise RuntimeError("Stage 03 has no development anchors")
+
+    def run_patch(index: int) -> None:
+        child = argparse.Namespace(**vars(args))
+        child.mode = "worker"
+        child.patch_index = index
+        child.num_patches = patches
+        worker(child)
+
+    run_parallel(range(patches), run_patch, args.jobs, "stage 03 workers")
+    merged = argparse.Namespace(**vars(args))
+    merged.mode = "merge"
+    merged.num_patches = patches
+    run_single(lambda: merge(merged), "stage 03 merge")
+
+
 def main() -> None:
     args = parser().parse_args()
-    if args.mode == "count":
-        count(args)
+    if args.jobs < 1:
+        raise ValueError("--jobs must be positive")
+    if args.mode == "local":
+        local(args)
     elif args.mode == "worker":
         worker(args)
     else:
@@ -154,4 +173,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

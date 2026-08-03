@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 00: prepare the show-disjoint pilot data."""
+
 import argparse
 import math
 from pathlib import Path
@@ -7,6 +9,7 @@ from typing import Any
 
 from ..common.candidates import build_anchors, validate_anchor
 from ..common.data import episode_input_hash, load_show_map, normalize_episode
+from ..common.progress import run_parallel, run_single
 from ..common.splits import assert_show_disjoint, assign_show_splits, balanced_anchor_sample
 from ..common.utils import (
     file_hash,
@@ -28,7 +31,7 @@ STAGE = "exp8_prepare_data"
 
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description="Prepare show-disjoint Exp8 pilot data.")
-    value.add_argument("--mode", choices=("worker", "merge", "count"), required=True)
+    value.add_argument("--mode", choices=("local", "worker", "merge"), default="local")
     value.add_argument("--input-dir", type=Path, default=Path("data/conversation_moves_labeled"))
     value.add_argument("--output-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"))
     value.add_argument("--show-map", type=Path)
@@ -40,6 +43,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--development-limit", type=int, default=10000)
     value.add_argument("--seed", type=int, default=42)
     value.add_argument("--force", action="store_true")
+    value.add_argument("--jobs", type=int, default=8)
     return value
 
 
@@ -53,13 +57,6 @@ def configuration(args: argparse.Namespace) -> dict[str, Any]:
         "development_limit": int(args.development_limit),
         "seed": int(args.seed),
     }
-
-
-def count(args: argparse.Namespace) -> None:
-    total = len(list_episode_paths(args.input_dir))
-    patches = math.ceil(total / args.episodes_per_task) if total else 0
-    print(f"TOTAL_ITEMS={total}")
-    print(f"NUM_PATCHES={patches}")
 
 
 def worker(args: argparse.Namespace) -> None:
@@ -82,7 +79,6 @@ def worker(args: argparse.Namespace) -> None:
     )
     manifest_path = patch_dir / "patch_manifest.json"
     if not args.force and manifest_matches(manifest_path, expected):
-        print(f"Reusing completed patch {patch_dir}")
         return
     selected = paths[shard_slice(len(paths), args.patch_index, args.episodes_per_task)]
     show_map = load_show_map(args.show_map)
@@ -176,12 +172,32 @@ def merge(args: argparse.Namespace) -> None:
     write_json(args.output_dir / "summary.json", summary)
 
 
+def local(args: argparse.Namespace) -> None:
+    total = len(list_episode_paths(args.input_dir))
+    patches = math.ceil(total / args.episodes_per_task) if total else 0
+    if patches < 1:
+        raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
+
+    def run_patch(index: int) -> None:
+        child = argparse.Namespace(**vars(args))
+        child.mode = "worker"
+        child.patch_index = index
+        child.num_patches = patches
+        worker(child)
+
+    run_parallel(range(patches), run_patch, args.jobs, "stage 00 workers")
+    merged = argparse.Namespace(**vars(args))
+    merged.mode = "merge"
+    merged.num_patches = patches
+    run_single(lambda: merge(merged), "stage 00 merge")
+
+
 def main() -> None:
     args = parser().parse_args()
-    if args.episodes_per_task < 1 or args.num_patches < 1:
+    if args.episodes_per_task < 1 or args.num_patches < 1 or args.jobs < 1:
         raise ValueError("Patch sizes and counts must be positive")
-    if args.mode == "count":
-        count(args)
+    if args.mode == "local":
+        local(args)
     elif args.mode == "worker":
         worker(args)
     else:
@@ -190,4 +206,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

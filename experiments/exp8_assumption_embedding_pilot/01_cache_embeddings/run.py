@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 01: cache frozen episode embeddings on GPU."""
+
 import argparse
 import itertools
 import math

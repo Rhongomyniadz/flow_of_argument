@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 02: audit the existing Exp1 pair table."""
+
 import argparse
 from pathlib import Path
 from typing import Any
@@ -8,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from ..common.utils import file_hash, read_json, runtime_versions, stable_hash, write_json
+from ..common.progress import run_single
 
 
 def parser() -> argparse.ArgumentParser:
@@ -26,8 +29,7 @@ def require_columns(frame: pd.DataFrame, columns: list[str]) -> None:
         raise ValueError(f"Missing required Exp1 columns: {missing}")
 
 
-def main() -> None:
-    args = parser().parse_args()
+def run(args: argparse.Namespace) -> None:
     input_hash = file_hash(args.pairs_csv)
     config = {"pairs_csv": str(args.pairs_csv), "seed": args.seed, "bootstrap_draws": args.bootstrap_draws}
     config_hash = stable_hash(config)
@@ -37,7 +39,6 @@ def main() -> None:
         observed_summary = read_json(summary_path)
         observed_config = read_json(config_path)
         if observed_summary.get("input_hash") == input_hash and observed_config.get("config_hash") == config_hash:
-            print(f"Reusing completed Exp01 audit {args.output_dir}")
             return
     frame = pd.read_csv(args.pairs_csv)
     require_columns(
@@ -117,6 +118,11 @@ def main() -> None:
             "runtime": runtime_versions(),
         },
     )
+
+
+def main() -> None:
+    args = parser().parse_args()
+    run_single(lambda: run(args), "stage 02 audit")
 
 
 if __name__ == "__main__":

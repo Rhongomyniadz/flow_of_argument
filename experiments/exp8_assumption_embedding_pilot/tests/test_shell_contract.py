@@ -8,53 +8,36 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class EntrypointContractTests(unittest.TestCase):
-    def test_only_gpu_stage_shell_files_remain(self) -> None:
-        observed = {path.name for path in ROOT.glob("[0-9][0-9]_*.sh")}
-        self.assertEqual(observed, {"01_cache_embeddings.sh", "06_run_exp05_fusion.sh"})
-        self.assertFalse((ROOT / "submit_all.sh").exists())
-        self.assertFalse((ROOT / "run_smoke.sh").exists())
+    def test_stage_directories_have_only_requested_entrypoints(self) -> None:
+        stages = [path for path in ROOT.iterdir() if path.is_dir() and path.name[:2].isdigit()]
+        self.assertEqual({path.name[:2] for path in stages}, {f"{index:02d}" for index in range(8)})
+        for stage in stages:
+            files = {path.name for path in stage.iterdir() if path.is_file()}
+            expected = {"run.py", "run.sh"} if stage.name[:2] in {"01", "06"} else {"run.py"}
+            self.assertEqual(files, expected, stage.name)
 
-    def test_gpu_stages_have_array_and_direct_sbatch_contracts(self) -> None:
-        for name in ("01_cache_embeddings.sh", "06_run_exp05_fusion.sh"):
-            path = ROOT / name
-            lines = path.read_text(encoding="utf-8").splitlines()
-            self.assertEqual(lines[0], "#!/bin/bash", name)
-            header = "\n".join(lines[:12])
-            for directive in (
-                "#SBATCH --job-name=",
-                "#SBATCH --output=_log/",
-                "#SBATCH --partition=cpu",
-                "#SBATCH --time=00:15:00",
-                "#SBATCH --nodes=1",
-                "#SBATCH --mem=2G",
-                "#SBATCH --chdir=.",
-            ):
-                self.assertIn(directive, header, f"{name}: {directive}")
+    def test_only_gpu_stages_have_slurm_shells(self) -> None:
+        shells = {path.parent.name[:2]: path for path in ROOT.glob("[0-9][0-9]_*/run.sh")}
+        self.assertEqual(set(shells), {"01", "06"})
+        for stage, path in shells.items():
             text = path.read_text(encoding="utf-8")
-            for required in ("MODE=", "DRY_RUN", "LOCAL", "--array=", "05:45:00", "gpu:A6000:1", "FINAL_JOB_ID="):
-                self.assertIn(required, text, f"{name}: {required}")
+            self.assertEqual(text.splitlines()[0], "#!/bin/bash")
+            for required in ("#SBATCH", "--array=", "05:45:00", "gpu:A6000:1", "FINAL_JOB_ID="):
+                self.assertIn(required, text, f"stage {stage}: {required}")
 
-    def test_cpu_stages_are_exposed_by_python_cli(self) -> None:
-        text = (ROOT / "run_cpu_stage.py").read_text(encoding="utf-8")
-        for stage in (
-            '"prepare"',
-            '"exp01"',
-            '"exp02"',
-            '"exp03"',
-            '"exp04"',
-            '"exp06-sample"',
-            '"exp06-summarize"',
-            '"pilot-summary"',
-        ):
-            self.assertIn(stage, text)
-        self.assertNotIn("sbatch", text)
-        self.assertIn("ThreadPoolExecutor", text)
+    def test_cpu_stage_entrypoints_use_tqdm_progress(self) -> None:
+        for stage in ("00", "02", "03", "04", "05", "07"):
+            path = next(ROOT.glob(f"{stage}_*/run.py"))
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("run_single", text, stage)
+            self.assertNotIn("run_cpu_stage", text, stage)
+            self.assertNotIn("print(", text, stage)
+        for stage in ("00", "03", "04", "05"):
+            path = next(ROOT.glob(f"{stage}_*/run.py"))
+            self.assertIn("run_parallel", path.read_text(encoding="utf-8"), stage)
 
-    def test_result_directories_remain_isolated(self) -> None:
-        cpu_runner = (ROOT / "run_cpu_stage.py").read_text(encoding="utf-8")
-        for result in ("exp01_results", "exp02_results", "exp03_results", "exp04_results", "exp06_results"):
-            self.assertIn(result, cpu_runner)
-        self.assertIn("exp05_results", (ROOT / "06_run_exp05_fusion.sh").read_text(encoding="utf-8"))
+    def test_aggregate_cpu_runner_is_removed(self) -> None:
+        self.assertFalse((ROOT / "run_cpu_stage.py").exists())
 
 
 if __name__ == "__main__":

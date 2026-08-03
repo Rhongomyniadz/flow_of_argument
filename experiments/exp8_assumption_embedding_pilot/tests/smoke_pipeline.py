@@ -70,33 +70,33 @@ def main() -> None:
         results = {index: root / f"exp{index:02d}_results" for index in range(1, 7)}
 
         run(
-            "run_cpu_stage", "prepare", "--root", root, "--input-dir", input_dir,
+            "00_prepare_data.run", "--input-dir", input_dir, "--output-dir", data_dir,
             "--episodes-per-task", 4, "--candidate-count", 8,
             "--development-limit", 100, "--jobs", 2, "--seed", 42,
         )
 
         embed_patches = 2
         for index in range(embed_patches):
-            run("prepare.cache_embeddings", "--mode", "worker", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--patch-index", index, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
-        run("prepare.cache_embeddings", "--mode", "merge", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
+            run("01_cache_embeddings.run", "--mode", "worker", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--patch-index", index, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
+        run("01_cache_embeddings.run", "--mode", "merge", "--data-dir", data_dir, "--output-dir", cache_dir, "--episodes-per-task", 4, "--num-patches", embed_patches, "--backend", "hash", "--hash-dim", 16, "--batch-size", 8)
 
-        run("run_cpu_stage", "exp01", "--root", root, "--pairs-csv", pairs_path, "--bootstrap-draws", 20)
-        run("run_cpu_stage", "exp02", "--root", root, "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 2)
-        run("run_cpu_stage", "exp03", "--root", root, "--feature-dim", 8, "--max-train-anchors", 50, "--jobs", 3)
-        run("run_cpu_stage", "exp04", "--root", root, "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 3)
+        run("02_exp01_audit.run", "--pairs-csv", pairs_path, "--output-dir", results[1], "--bootstrap-draws", 20)
+        run("03_exp02_retrieval.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[2], "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 2)
+        run("04_exp03_residual.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[3], "--feature-dim", 8, "--max-train-anchors", 50, "--jobs", 3)
+        run("05_exp04_controls.run", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[4], "--anchors-per-task", 5, "--bootstrap-draws", 20, "--jobs", 3)
 
         for index in range(9):
-            run("exp05_mini_fusion.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--patch-index", index, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
-        run("exp05_mini_fusion.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
+            run("06_exp05_fusion.run", "--mode", "worker", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--patch-index", index, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
+        run("06_exp05_fusion.run", "--mode", "merge", "--data-dir", data_dir, "--cache-dir", cache_dir, "--output-dir", results[5], "--num-patches", 9, "--feature-dim", 8, "--max-train-anchors", 50, "--smoke")
 
-        run("run_cpu_stage", "exp06-sample", "--root", root, "--sample-size", 12)
+        run("07_exp06_audit.run", "--mode", "sample", "--root", root, "--data-dir", data_dir, "--output-dir", results[6], "--sample-size", 12)
         audit_path = results[6] / "audit_sample.csv"
         audit = pd.read_csv(audit_path, keep_default_na=False)
         audit["annotator_1_label"] = ["supported" if index % 3 else "plausible" for index in range(len(audit))]
         audit["annotator_2_label"] = ["supported" if index % 4 else "plausible" for index in range(len(audit))]
         audit.to_csv(audit_path, index=False)
-        run("run_cpu_stage", "exp06-summarize", "--root", root, "--audit-csv", audit_path)
-        run("run_cpu_stage", "pilot-summary", "--root", root)
+        run("07_exp06_audit.run", "--mode", "summarize", "--root", root, "--output-dir", results[6], "--audit-csv", audit_path)
+        run("07_exp06_audit.run", "--mode", "pilot-summary", "--root", root)
 
         for index, output_dir in results.items():
             for filename in ("config.json", "summary.json", "metrics.csv"):

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 06: train the nine mini-fusion GPU conditions."""
+
 import argparse
 import random
 from pathlib import Path

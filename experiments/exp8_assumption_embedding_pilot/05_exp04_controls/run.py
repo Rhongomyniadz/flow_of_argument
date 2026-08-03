@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 05: evaluate counterfactual assumption controls."""
+
 import argparse
 import math
 from pathlib import Path
@@ -11,6 +13,7 @@ from ..common.controls import build_control_map
 from ..common.embeddings import EmbeddingStore
 from ..common.evaluation import evaluate_anchor
 from ..common.metrics import aggregate_rows, clustered_delta_interval
+from ..common.progress import run_parallel, run_single
 from ..common.utils import (
     file_hash,
     make_manifest,
@@ -35,7 +38,7 @@ ROW_COLUMNS = (
 
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description="Evaluate counterfactual controls in anchor shards.")
-    value.add_argument("--mode", choices=("count", "worker", "merge"), required=True)
+    value.add_argument("--mode", choices=("local", "worker", "merge"), default="local")
     value.add_argument("--data-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"))
     value.add_argument("--cache-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_cache"))
     value.add_argument("--output-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/exp04_results"))
@@ -45,6 +48,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--bootstrap-draws", type=int, default=1000)
     value.add_argument("--seed", type=int, default=42)
     value.add_argument("--force", action="store_true")
+    value.add_argument("--jobs", type=int, default=8)
     return value
 
 
@@ -63,15 +67,9 @@ def configuration(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
-def main() -> None:
-    args = parser().parse_args()
+def execute(args: argparse.Namespace) -> None:
     total_anchors, anchor_shards = counts(args)
     total_patches = anchor_shards * len(CONTROL_TYPES)
-    if args.mode == "count":
-        print(f"TOTAL_ITEMS={total_anchors}")
-        print(f"ANCHOR_SHARDS={anchor_shards}")
-        print(f"NUM_PATCHES={total_patches}")
-        return
     if args.mode == "merge":
         manifests = validate_patch_manifests(args.output_dir, STAGE, total_patches)
         frames = [pd.read_csv(patch_directory(args.output_dir, index, total_patches) / "rows.csv") for index in range(total_patches)]
@@ -137,7 +135,6 @@ def main() -> None:
         config=configuration_value,
     )
     if not args.force and manifest_matches(patch_dir / "patch_manifest.json", expected):
-        print(f"Reusing completed Exp04 patch {patch_dir}")
         return
     turns = list(read_jsonl(args.data_dir / "turns.jsonl"))
     source_ids = {str(anchor["anchor_id"]) for anchor in selected}
@@ -177,6 +174,36 @@ def main() -> None:
             extra={"control_type": control_type, "anchor_shard": anchor_shard},
         ),
     )
+
+
+def local(args: argparse.Namespace) -> None:
+    _, anchor_shards = counts(args)
+    patches = anchor_shards * len(CONTROL_TYPES)
+    if patches < 1:
+        raise RuntimeError("Stage 05 has no development anchors")
+
+    def run_patch(index: int) -> None:
+        child = argparse.Namespace(**vars(args))
+        child.mode = "worker"
+        child.patch_index = index
+        child.num_patches = patches
+        execute(child)
+
+    run_parallel(range(patches), run_patch, args.jobs, "stage 05 controls")
+    merged = argparse.Namespace(**vars(args))
+    merged.mode = "merge"
+    merged.num_patches = patches
+    run_single(lambda: execute(merged), "stage 05 merge")
+
+
+def main() -> None:
+    args = parser().parse_args()
+    if args.jobs < 1:
+        raise ValueError("--jobs must be positive")
+    if args.mode == "local":
+        local(args)
+    else:
+        execute(args)
 
 
 if __name__ == "__main__":

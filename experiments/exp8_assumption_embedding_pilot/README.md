@@ -1,145 +1,126 @@
-# Exp8: assumption-embedding pilot
+# Exp8 assumption-embedding pilot
 
-This directory is a self-contained ICLR-oriented pilot. It does not import or write Exp1-Exp7 experiment code or result directories. Preparation and embeddings are shared; every exploratory result is isolated in `exp01_results/` through `exp06_results/`.
+The pilot is split into eight independent stages. Every stage directory contains one `run.py`. Only the two GPU stages, 01 and 06, additionally contain `run.sh` for Slurm submission.
 
-## Execution model
+| Stage | Directory | Execution | Output |
+|---:|---|---|---|
+| 00 | `00_prepare_data/` | local CPU | `shared_data/` |
+| 01 | `01_cache_embeddings/` | Slurm GPU array | `shared_cache/` |
+| 02 | `02_exp01_audit/` | local CPU | `exp01_results/` |
+| 03 | `03_exp02_retrieval/` | local CPU | `exp02_results/` |
+| 04 | `04_exp03_residual/` | local CPU | `exp03_results/` |
+| 05 | `05_exp04_controls/` | local CPU | `exp04_results/` |
+| 06 | `06_exp05_fusion/` | Slurm GPU array | `exp05_results/` |
+| 07 | `07_exp06_audit/` | local CPU/manual annotation | `exp06_results/` and pilot summary |
 
-Only GPU work enters the Slurm queue:
-
-| Shell file | Slurm work | Output |
-|---|---|---|
-| `01_cache_embeddings.sh` | Qwen embedding array, one A6000 per task | `shared_cache/` |
-| `06_run_exp05_fusion.sh` | history/full/shuffled crossed with seeds 42/43/44 | `exp05_results/` |
-
-All CPU-only stages run from the command line through `run_cpu_stage.py`. Its `--jobs` option runs independent shards concurrently on the local machine; after all workers succeed, it runs the merge automatically. Existing matching patches are reused.
-
-| CLI stage | Work | Output |
-|---|---|---|
-| `prepare` | normalize data, create show-disjoint split and candidates | `shared_data/` |
-| `exp01` | audit the supplied Exp1 pair table | `exp01_results/` |
-| `exp02` | frozen retrieval shards and clustered bootstrap | `exp02_results/` |
-| `exp03` | three linear-residual conditions | `exp03_results/` |
-| `exp04` | control type crossed with anchor shards | `exp04_results/` |
-| `exp06-sample` | create the immutable blinded audit sample | `exp06_results/` |
-| `exp06-summarize` | summarize completed annotations | `exp06_results/` |
-| `pilot-summary` | collect all available experiment summaries | `pilot_summary.json` and `.md` |
-
-## Installation and inputs
-
-Run commands from the repository root. Install standard dependencies locally; GPU nodes additionally need the optional model dependencies:
+Run commands from the repository root. Install dependencies first:
 
 ```bash
 pip install -e .
 pip install -e '.[llm]'
 ```
 
-Production embeddings use the official `SentenceTransformer` interface for [`Qwen/Qwen3-Embedding-4B`](https://huggingface.co/Qwen/Qwen3-Embedding-4B). Input episode JSON must contain a show identifier such as `show_id`, `rssKey`, `podcast_id`, or `feed_id`. Otherwise provide `--show-map /path/to/episode_show_map.csv`.
+Successful CPU stages emit only `tqdm` progress bars. Matching completed patches are reused automatically.
 
-Exp01 requires a CSV containing `episode_id`, `reciprocal_rank_without_assumptions`, `reciprocal_rank_with_assumptions`, `top1_without_assumptions`, and `top1_with_assumptions`.
-
-## Recommended command sequence
-
-### 1. Prepare data locally
+## Stage 00: prepare data locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage prepare \
-  --jobs 8 \
+python -m experiments.exp8_assumption_embedding_pilot.00_prepare_data.run \
   --input-dir data/conversation_moves_labeled \
-  --episodes-per-task 250
+  --episodes-per-task 250 \
+  --jobs 8
 ```
 
-If show metadata is external, add `--show-map /path/to/episode_show_map.csv`. `--allow-episode-fallback` is available only for diagnostic data lacking show identity and weakens the split guarantee.
+If show identity is stored separately, add `--show-map /path/to/episode_show_map.csv`.
 
-### 2. Submit GPU embedding work
+## Stage 01: cache embeddings on Slurm
 
 ```bash
-sbatch experiments/exp8_assumption_embedding_pilot/01_cache_embeddings.sh
+sbatch experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
 ```
 
-The submitted orchestration job counts prepared episodes, creates the `05:45:00` A6000 worker array, and submits the cache-index merge with an `afterok` dependency. Inspect its `_log/exp8_embed_submit_<job>.out` file for `FINAL_JOB_ID`.
+The wrapper submits Qwen embedding workers as a `05:45:00` A6000 array and then submits the merge job with an `afterok` dependency.
 
-### 3. Run Exp01-Exp04 locally
-
-Exp01 is independent of the embedding cache:
+## Stage 02: audit the existing Exp1 table locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp01 \
+python -m experiments.exp8_assumption_embedding_pilot.02_exp01_audit.run \
   --pairs-csv /path/to/exp1_pairs.csv
 ```
 
-After the embedding merge has completed:
+Required columns are `episode_id`, `reciprocal_rank_without_assumptions`, `reciprocal_rank_with_assumptions`, `top1_without_assumptions`, and `top1_with_assumptions`.
+
+## Stage 03: frozen retrieval locally
+
+Run after the Stage 01 merge completes:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp02 --jobs 8
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp03 --jobs 3
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp04 --jobs 8
+python -m experiments.exp8_assumption_embedding_pilot.03_exp02_retrieval.run \
+  --anchors-per-task 1000 \
+  --jobs 8
 ```
 
-The defaults are 1,000 anchors per Exp02/Exp04 shard, 1,000 clustered-bootstrap draws, and seed 42. Override these with `--anchors-per-task`, `--bootstrap-draws`, and `--seed`.
-
-### 4. Submit GPU fusion training
+## Stage 04: residual models locally
 
 ```bash
-sbatch experiments/exp8_assumption_embedding_pilot/06_run_exp05_fusion.sh
+python -m experiments.exp8_assumption_embedding_pilot.04_exp03_residual.run \
+  --jobs 3
 ```
 
-This submits nine A6000 jobs with a default `%4` concurrency limit and then a CPU merge job.
+The three local tasks are the baseline, full, and shuffled-assumption conditions.
 
-### 5. Create and summarize the human audit locally
-
-Create the blinded sample:
+## Stage 05: counterfactual controls locally
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp06-sample \
+python -m experiments.exp8_assumption_embedding_pilot.05_exp04_controls.run \
+  --anchors-per-task 1000 \
+  --jobs 8
+```
+
+The local tasks cross same-episode, same-category, and explicit-matched controls with anchor shards.
+
+## Stage 06: fusion training on Slurm
+
+```bash
+sbatch experiments/exp8_assumption_embedding_pilot/06_exp05_fusion/run.sh
+```
+
+This submits history/full/shuffled crossed with seeds 42, 43, and 44 as nine A6000 tasks, followed by a CPU merge.
+
+## Stage 07: human audit locally
+
+Create the immutable blinded sample:
+
+```bash
+python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+  --mode sample \
   --sample-size 100
 ```
 
-Annotate `exp06_results/audit_sample.csv` following `annotation_guidelines.md`. Then run:
+Annotate `exp06_results/audit_sample.csv`, then calculate agreement:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp06-summarize
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage pilot-summary
+python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+  --mode summarize
 ```
 
-The immutable source columns are hashed before annotation; summarization rejects changed sample text or metadata.
-
-## Local runner options
-
-Preview commands and shard counts without running them:
+Finally collect all experiment summaries:
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.run_cpu_stage exp04 \
-  --jobs 8 \
-  --dry-run
+python -m experiments.exp8_assumption_embedding_pilot.07_exp06_audit.run \
+  --mode pilot-summary
 ```
 
-Useful common options:
+## Common local options
 
-- `--jobs N`: maximum concurrent local worker processes.
-- `--root PATH`: alternate Exp8 artifact root.
-- `--data-dir PATH` and `--cache-dir PATH`: override shared inputs.
-- `--output-dir PATH`: override the selected experiment output.
-- `--force`: ignore matching resume manifests and recompute.
-- `--seed`, `--bootstrap-draws`, `--episodes-per-task`, and `--anchors-per-task`: override defaults.
-
-## GPU Slurm configuration
-
-The two remaining shell files have repository-style `#SBATCH` headers and can be submitted from either the repository root or this directory. Override cluster defaults through environment variables when needed:
-
-```bash
-GPU_PARTITION=gpu MAX_CONCURRENT_TASKS=8 \
-  sbatch --export=ALL experiments/exp8_assumption_embedding_pilot/01_cache_embeddings.sh
-```
-
-Embedding defaults are 50 episodes per task and `%8` concurrency. Fusion defaults to `%4`. GPU workers request one A6000 and 64 GB RAM. `DRY_RUN=1 bash <gpu-stage>.sh` prints the planned array and merge commands without submitting them.
+- `--jobs N` controls local shard concurrency for Stages 00, 03, 04, and 05.
+- `--force` recomputes matching completed outputs.
+- `--seed` defaults to 42.
+- `--data-dir`, `--cache-dir`, and `--output-dir` override default artifact paths.
 
 ## Validation
-
-Run the complete CPU-only synthetic pipeline and unit tests directly with Python:
 
 ```bash
 python -m experiments.exp8_assumption_embedding_pilot.tests.smoke_pipeline
 python -m unittest discover -s experiments/exp8_assumption_embedding_pilot/tests -t . -v
 ```
-
-The synthetic pipeline uses deterministic hash embeddings and is only an orchestration/output-contract test, not a scientific result.

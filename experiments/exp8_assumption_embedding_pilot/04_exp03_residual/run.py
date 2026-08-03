@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Stage 04: fit the three linear residual conditions."""
+
 import argparse
 from pathlib import Path
 from typing import Any
@@ -10,6 +12,7 @@ import pandas as pd
 from ..common.controls import build_control_map
 from ..common.embeddings import EmbeddingStore, component_vectors
 from ..common.metrics import normalize, rank_scores
+from ..common.progress import run_parallel, run_single
 from ..common.utils import (
     file_hash,
     make_manifest,
@@ -28,7 +31,7 @@ CONDITIONS = ("baseline", "full", "shuffled")
 
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description="Fit one linear residual condition or merge all conditions.")
-    value.add_argument("--mode", choices=("worker", "merge", "count"), required=True)
+    value.add_argument("--mode", choices=("local", "worker", "merge"), default="local")
     value.add_argument("--data-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_data"))
     value.add_argument("--cache-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/shared_cache"))
     value.add_argument("--output-dir", type=Path, default=Path("experiments/exp8_assumption_embedding_pilot/exp03_results"))
@@ -40,6 +43,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--ridge-alpha", type=float, default=10.0)
     value.add_argument("--seed", type=int, default=42)
     value.add_argument("--force", action="store_true")
+    value.add_argument("--jobs", type=int, default=3)
     return value
 
 
@@ -80,12 +84,7 @@ def predict(x: np.ndarray, weights: np.ndarray, mean: np.ndarray, scale: np.ndar
     return augmented @ weights
 
 
-def main() -> None:
-    args = parser().parse_args()
-    if args.mode == "count":
-        print("TOTAL_ITEMS=3")
-        print("NUM_PATCHES=3")
-        return
+def execute(args: argparse.Namespace) -> None:
     if args.mode == "merge":
         manifests = validate_patch_manifests(args.output_dir, STAGE, len(CONDITIONS))
         observed = {str(manifest["condition"]) for manifest in manifests}
@@ -130,7 +129,6 @@ def main() -> None:
         config=configuration,
     )
     if not args.force and manifest_matches(patch_dir / "patch_manifest.json", expected):
-        print(f"Reusing completed Exp03 condition {condition}")
         return
     all_anchors = list(read_jsonl(anchors_path))
     train = [anchor for anchor in all_anchors if anchor["split"] == "train"]
@@ -192,6 +190,31 @@ def main() -> None:
             extra={"condition": condition},
         ),
     )
+
+
+def local(args: argparse.Namespace) -> None:
+    def run_condition(index: int) -> None:
+        child = argparse.Namespace(**vars(args))
+        child.mode = "worker"
+        child.patch_index = index
+        child.num_patches = len(CONDITIONS)
+        execute(child)
+
+    run_parallel(range(len(CONDITIONS)), run_condition, args.jobs, "stage 04 conditions")
+    merged = argparse.Namespace(**vars(args))
+    merged.mode = "merge"
+    merged.num_patches = len(CONDITIONS)
+    run_single(lambda: execute(merged), "stage 04 merge")
+
+
+def main() -> None:
+    args = parser().parse_args()
+    if args.jobs < 1:
+        raise ValueError("--jobs must be positive")
+    if args.mode == "local":
+        local(args)
+    else:
+        execute(args)
 
 
 if __name__ == "__main__":
