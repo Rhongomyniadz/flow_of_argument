@@ -39,6 +39,13 @@ class EntrypointContractTests(unittest.TestCase):
     def test_aggregate_cpu_runner_is_removed(self) -> None:
         self.assertFalse((ROOT / "run_cpu_stage.py").exists())
 
+    def test_stages_do_not_require_a_shared_python_package(self) -> None:
+        self.assertFalse((ROOT / "common").exists())
+        for path in ROOT.glob("[0-9][0-9]_*/run.py"):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn("exp8_assumption_embedding_pilot.common", text, path.parent.name)
+            self.assertNotIn("sys.path", text, path.parent.name)
+
 
 if __name__ == "__main__":
     unittest.main()

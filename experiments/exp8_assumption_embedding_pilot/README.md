@@ -13,12 +13,7 @@ The pilot is split into eight independent stages. Every stage directory contains
 | 06 | `06_exp05_fusion/` | Slurm GPU array | `exp05_results/` |
 | 07 | `07_exp06_audit/` | local CPU/manual annotation | `exp06_results/` and pilot summary |
 
-Run commands from the repository root. Install dependencies first:
-
-```bash
-pip install -e .
-pip install -e '.[llm]'
-```
+Run commands from the repository root. Each stage is self-contained and does not require installing this repository as a Python package. The cluster Python environment must provide the dependencies listed in `pyproject.toml`; GPU stages additionally require the `llm` dependencies.
 
 Successful CPU stages emit only `tqdm` progress bars. Matching completed patches are reused automatically.
 
@@ -121,6 +116,6 @@ python experiments/exp8_assumption_embedding_pilot/07_exp06_audit/run.py \
 ## Validation
 
 ```bash
-python -m experiments.exp8_assumption_embedding_pilot.tests.smoke_pipeline
+python experiments/exp8_assumption_embedding_pilot/tests/smoke_pipeline.py
 python -m unittest discover -s experiments/exp8_assumption_embedding_pilot/tests -t . -v
 ```

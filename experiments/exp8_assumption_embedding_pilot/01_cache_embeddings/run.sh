@@ -23,15 +23,15 @@ base_args=(--data-dir "${DATA_DIR}" --output-dir "${OUTPUT_DIR}" --episodes-per-
 [[ -n "${DEVICE:-}" ]] && base_args+=(--device "${DEVICE}")
 
 if [[ "${MODE}" == "worker" ]]; then
-  "${PYTHON_BIN}" -m experiments.exp8_assumption_embedding_pilot.01_cache_embeddings.run --mode worker "${base_args[@]}" --patch-index "${SLURM_ARRAY_TASK_ID:-${PATCH_INDEX:-0}}" --num-patches "${NUM_PATCHES:?NUM_PATCHES is required}"
+  "${PYTHON_BIN}" "${STAGE_DIR}/run.py" --mode worker "${base_args[@]}" --patch-index "${SLURM_ARRAY_TASK_ID:-${PATCH_INDEX:-0}}" --num-patches "${NUM_PATCHES:?NUM_PATCHES is required}"
   exit
 fi
 if [[ "${MODE}" == "merge" ]]; then
-  "${PYTHON_BIN}" -m experiments.exp8_assumption_embedding_pilot.01_cache_embeddings.run --mode merge "${base_args[@]}" --num-patches "${NUM_PATCHES:?NUM_PATCHES is required}"
+  "${PYTHON_BIN}" "${STAGE_DIR}/run.py" --mode merge "${base_args[@]}" --num-patches "${NUM_PATCHES:?NUM_PATCHES is required}"
   exit
 fi
 [[ "${MODE}" == "submit" ]] || { echo "MODE must be submit, worker, or merge" >&2; exit 2; }
-count_output="$("${PYTHON_BIN}" -m experiments.exp8_assumption_embedding_pilot.01_cache_embeddings.run --mode count "${base_args[@]}")"
+count_output="$("${PYTHON_BIN}" "${STAGE_DIR}/run.py" --mode count "${base_args[@]}")"
 num_patches="$(awk -F= '$1=="NUM_PATCHES" {print $2}' <<<"${count_output}")"; [[ "${num_patches}" =~ ^[1-9][0-9]*$ ]] || { echo "No embedding patches found" >&2; exit 1; }
 echo "${count_output}"; echo "OUTPUT_DIR=${OUTPUT_DIR}"; echo "MODEL_REVISION=${MODEL_REVISION}"
 if [[ "${LOCAL}" == "1" ]]; then NUM_PATCHES="${num_patches}" PATCH_INDEX="${PATCH_INDEX:-0}" MODE=worker bash "${SELF}"; echo "LOCAL_PATCH_COMPLETE=${PATCH_INDEX:-0}"; exit; fi

@@ -9,11 +9,12 @@ from pathlib import Path
 import pandas as pd
 
 
-MODULE_ROOT = "experiments.exp8_assumption_embedding_pilot"
+STAGE_ROOT = Path(__file__).resolve().parents[1]
 
 
 def run(module: str, *arguments: object) -> None:
-    command = [sys.executable, "-m", f"{MODULE_ROOT}.{module}", *[str(value) for value in arguments]]
+    stage = module.removesuffix(".run")
+    command = [sys.executable, str(STAGE_ROOT / stage / "run.py"), *[str(value) for value in arguments]]
     subprocess.run(command, check=True)
 
 

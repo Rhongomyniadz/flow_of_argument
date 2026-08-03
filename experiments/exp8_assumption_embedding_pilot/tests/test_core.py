@@ -1,16 +1,40 @@
 from __future__ import annotations
 
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
 
 import numpy as np
 
-from ..common.candidates import build_anchors, validate_anchor
-from ..common.controls import build_control_map
-from ..common.metrics import aggregate_rows, clustered_delta_interval, rank_scores
-from ..common.splits import assert_show_disjoint, assign_show_splits
-from ..common.utils import make_manifest, patch_directory, validate_patch_manifests, write_json
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_stage(name: str, directory: str):
+    path = ROOT / directory / "run.py"
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load stage entrypoint: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+prepare = load_stage("exp8_stage00", "00_prepare_data")
+controls = load_stage("exp8_stage05", "05_exp04_controls")
+
+build_anchors = prepare.build_anchors
+validate_anchor = prepare.validate_anchor
+assert_show_disjoint = prepare.assert_show_disjoint
+assign_show_splits = prepare.assign_show_splits
+make_manifest = prepare.make_manifest
+patch_directory = prepare.patch_directory
+validate_patch_manifests = prepare.validate_patch_manifests
+write_json = prepare.write_json
+build_control_map = controls.build_control_map
+aggregate_rows = controls.aggregate_rows
+clustered_delta_interval = controls.clustered_delta_interval
+rank_scores = controls.rank_scores
 
 
 def episode(category: str, show: str, episode_id: str, turn_count: int = 6) -> dict:
@@ -128,4 +152,3 @@ class PatchValidationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

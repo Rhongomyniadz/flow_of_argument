@@ -17,8 +17,8 @@ if [[ -d "${PWD}/experiments/exp8_assumption_embedding_pilot" ]]; then REPO_ROOT
 STAGE_DIR="${PACKAGE_DIR}/06_exp05_fusion"; SELF="${STAGE_DIR}/run.sh"; cd "${REPO_ROOT}"; mkdir -p "${PACKAGE_DIR}/_log"
 args=(--data-dir "${DATA_DIR}" --cache-dir "${CACHE_DIR}" --output-dir "${OUTPUT_DIR}" --feature-dim "${FEATURE_DIM}" --hidden-dim "${HIDDEN_DIM}" --max-train-anchors "${MAX_TRAIN_ANCHORS}" --max-epochs "${MAX_EPOCHS}" --patience "${PATIENCE}" --batch-size "${BATCH_SIZE}" --learning-rate "${LEARNING_RATE}" --num-patches 9)
 [[ "${SMOKE}" == "1" ]] && args+=(--smoke); [[ -n "${DEVICE:-}" ]] && args+=(--device "${DEVICE}")
-if [[ "${MODE}" == "worker" ]]; then "${PYTHON_BIN}" -m experiments.exp8_assumption_embedding_pilot.06_exp05_fusion.run --mode worker "${args[@]}" --patch-index "${SLURM_ARRAY_TASK_ID:-${PATCH_INDEX:-0}}"; exit; fi
-if [[ "${MODE}" == "merge" ]]; then "${PYTHON_BIN}" -m experiments.exp8_assumption_embedding_pilot.06_exp05_fusion.run --mode merge "${args[@]}"; exit; fi
+if [[ "${MODE}" == "worker" ]]; then "${PYTHON_BIN}" "${STAGE_DIR}/run.py" --mode worker "${args[@]}" --patch-index "${SLURM_ARRAY_TASK_ID:-${PATCH_INDEX:-0}}"; exit; fi
+if [[ "${MODE}" == "merge" ]]; then "${PYTHON_BIN}" "${STAGE_DIR}/run.py" --mode merge "${args[@]}"; exit; fi
 [[ "${MODE}" == "submit" ]] || { echo "MODE must be submit, worker, or merge" >&2; exit 2; }; echo "NUM_PATCHES=9"; echo "OUTPUT_DIR=${OUTPUT_DIR}"; echo "TASK_MAPPING=history:{42,43,44},full:{42,43,44},shuffled:{42,43,44}"
 if [[ "${LOCAL}" == "1" ]]; then PATCH_INDEX="${PATCH_INDEX:-0}" MODE=worker bash "${SELF}"; echo "LOCAL_PATCH_COMPLETE=${PATCH_INDEX:-0}"; exit; fi
 dependency=(); [[ -n "${UPSTREAM_JOB_ID:-}" ]] && dependency+=(--dependency="afterok:${UPSTREAM_JOB_ID}")
