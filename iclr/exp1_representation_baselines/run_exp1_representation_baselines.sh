@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=exp1_repr_baselines
-#SBATCH --output=iclr/exp1_representation_baselines/_log/exp1_repr_baselines_%A_%a.out
+#SBATCH --output=iclr/exp1_representation_baselines/exp1_repr_baselines_%A_%a.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1

@@ -275,7 +275,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
         for expected in (
             "#SBATCH --job-name=exp1_repr_baselines",
             "#SBATCH --gres=gpu:A6000:2",
-            "iclr/exp1_representation_baselines/_log/",
+            "iclr/exp1_representation_baselines/exp1_repr_baselines_",
             "EXP1_BASELINE_STAGE",
             "prepare)",
             "patch)",

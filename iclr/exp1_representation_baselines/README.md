@@ -2,7 +2,7 @@
 
 This isolated experiment asks whether explicit propositions plus inferred assumptions make the true immediate next turn easier to rank than raw, explicit-only, history, assumption-only, or corrupted-assumption representations. It does not train an encoder or change any annotation pipeline.
 
-All commands are run from the repository root. Generated artifacts and Slurm logs remain inside this directory and are ignored except for their `.gitkeep` files. Results are model-scoped by default: a model ID such as `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to `results/Qwen__Qwen3-30B-A3B-Instruct-2507/`. The `__` safely represents the `/` in a Hugging Face repository ID.
+All commands are run from the repository root. Generated artifacts and Slurm logs remain inside this directory and are ignored by the repository-level `.gitignore`. Results are model-scoped by default: a model ID such as `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to `results/Qwen__Qwen3-30B-A3B-Instruct-2507/`. The `__` safely represents the `/` in a Hugging Face repository ID.
 
 ## Conditions
 
