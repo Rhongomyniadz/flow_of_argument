@@ -232,6 +232,15 @@ class PreparationAndControlTests(unittest.TestCase):
 
 
 class ParsingRankingAndGoldenTests(unittest.TestCase):
+    def test_default_output_directory_is_model_scoped(self) -> None:
+        first = baseline.parse_args(["--model_name", "Qwen/First-Model"])
+        second = baseline.parse_args(["--model_name", "Other/Second-Model"])
+        baseline.validate_args(first)
+        baseline.validate_args(second)
+        self.assertEqual(first.output_dir, baseline.DEFAULT_OUTPUT_ROOT / "Qwen__First-Model")
+        self.assertEqual(second.output_dir, baseline.DEFAULT_OUTPUT_ROOT / "Other__Second-Model")
+        self.assertNotEqual(first.output_dir, second.output_dir)
+
     def test_legacy_golden_contract(self) -> None:
         golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
         for case in golden["parser_cases"]:
@@ -275,6 +284,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             "ALLOW_FULL_RUN",
             "TENSOR_PARALLEL_SIZE=2",
             "Submit this runner with sbatch, not bash",
+            'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
         ):
             self.assertIn(expected, text)
         self.assertNotIn("experiments/exp1_relevance_bridge/run_exp1.sh", text)

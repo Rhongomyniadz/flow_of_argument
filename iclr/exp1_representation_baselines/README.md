@@ -2,7 +2,7 @@
 
 This isolated experiment asks whether explicit propositions plus inferred assumptions make the true immediate next turn easier to rank than raw, explicit-only, history, assumption-only, or corrupted-assumption representations. It does not train an encoder or change any annotation pipeline.
 
-All commands are run from the repository root. Generated artifacts and Slurm logs remain inside this directory and are ignored except for their `.gitkeep` files.
+All commands are run from the repository root. Generated artifacts and Slurm logs remain inside this directory and are ignored except for their `.gitkeep` files. Results are model-scoped by default: a model ID such as `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to `results/Qwen__Qwen3-30B-A3B-Instruct-2507/`. The `__` safely represents the `/` in a Hugging Face repository ID.
 
 ## Conditions
 
@@ -77,6 +77,8 @@ sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
 Useful overrides include `INPUT_DIR`, `OUTPUT_DIR`, `CATEGORIES_CSV`, `CONDITIONS_CSV`, `MODEL_NAME`, `PROMPT_BATCH_SIZE`, `MAX_TOKENS`, `SEED`, `HISTORY_TURNS`, `DRY_RUN`, and the CUDA/FlashInfer variables retained from the original Experiment 1 runner.
+
+`OUTPUT_ROOT` changes the parent of all model folders. `OUTPUT_DIR` is an intentional exact-directory override; normally leave it unset so changing `MODEL_NAME` automatically selects a different result folder.
 
 Before setting `ALLOW_FULL_RUN=1`, inspect at least 50 rows in `exp1_representation_scores.jsonl` across all conditions and review `exp1_representation_coverage.csv` plus the control-unavailability and parsing sections of `exp1_representation_summary.json`.
 

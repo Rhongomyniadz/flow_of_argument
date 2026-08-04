@@ -10,6 +10,7 @@ import json
 import logging
 import os
 import platform
+import re
 import subprocess
 import tempfile
 from collections import defaultdict
@@ -31,7 +32,7 @@ logger = logging.getLogger(__name__)
 SCRIPT_VERSION = "1.0.0"
 PROMPT_VERSION = "representation-baselines-v1"
 DEFAULT_INPUT_DIR = Path("data/conversation_moves_labeled")
-DEFAULT_OUTPUT_DIR = Path("iclr/exp1_representation_baselines/results")
+DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
 DEFAULT_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DOWNLOAD_DIR = Path("/shared/4/models")
@@ -249,10 +250,25 @@ def normalize_conditions(values: list[str] | None) -> list[str]:
     return chosen
 
 
+def model_output_name(model_name: str) -> str:
+    """Return a filesystem-safe, reversible-enough model identifier."""
+    normalized = model_name.strip().replace("\\", "/")
+    slug = normalized.replace("/", "__")
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "__", slug).strip("._-")
+    if not slug:
+        raise ValueError("model_name must contain at least one filesystem-safe character")
+    return slug
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input_dir", type=Path, default=DEFAULT_INPUT_DIR)
-    parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--output_dir",
+        type=Path,
+        default=None,
+        help="Exact output directory. By default, results/<model-name-with-slashes-as-__> is used.",
+    )
     parser.add_argument("--categories", nargs="*", default=None)
     parser.add_argument("--max_episodes_per_category", type=int, default=None)
     parser.add_argument("--num_patches", type=int, default=1)
@@ -311,6 +327,8 @@ def validate_args(args: argparse.Namespace) -> None:
     if args.prompt_batch_size < 1 or args.max_tokens < 1 or args.bootstrap_draws < 1:
         raise ValueError("Batch size, max tokens, and bootstrap draws must be positive")
     args.conditions = normalize_conditions(args.conditions)
+    if args.output_dir is None:
+        args.output_dir = DEFAULT_OUTPUT_ROOT / model_output_name(args.model_name)
     if args.strict_all_conditions and not set(DEFAULT_CONDITIONS).issubset(args.conditions):
         raise ValueError("strict_all_conditions requires all seven default conditions")
 
