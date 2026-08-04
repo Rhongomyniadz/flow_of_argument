@@ -522,6 +522,33 @@ def validate_anchor(anchor: dict[str, Any]) -> None:
 STAGE = "exp8_prepare_data"
 
 
+def select_balanced_paths(paths: list[Path], limit: int, seed: int) -> list[Path]:
+    if limit == 0 or len(paths) <= limit:
+        return paths
+    by_category: dict[str, list[Path]] = defaultdict(list)
+    for path in paths:
+        by_category[path.parent.name.casefold()].append(path)
+    for category, category_paths in by_category.items():
+        category_paths.sort(
+            key=lambda path: stable_hash(
+                {"seed": seed, "category": category, "path": str(path)}
+            )
+        )
+    selected: list[Path] = []
+    categories = sorted(by_category)
+    while len(selected) < limit:
+        added = False
+        for category in categories:
+            if by_category[category]:
+                selected.append(by_category[category].pop())
+                added = True
+                if len(selected) == limit:
+                    break
+        if not added:
+            break
+    return sorted(selected)
+
+
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description="Prepare the episode-disjoint Exp8 pilot data.")
     value.add_argument("--input-dir", type=Path, default=Path("data/conversation_moves_labeled"))
@@ -532,14 +559,21 @@ def parser() -> argparse.ArgumentParser:
     )
     value.add_argument("--candidate-count", type=int, default=25)
     value.add_argument("--development-limit", type=int, default=10000)
+    value.add_argument(
+        "--max-episodes",
+        type=int,
+        default=1000,
+        help="Deterministic category-balanced pilot size; use 0 for all episodes.",
+    )
     value.add_argument("--seed", type=int, default=42)
     return value
 
 
 def prepare(args: argparse.Namespace) -> None:
-    paths = list_episode_paths(args.input_dir)
-    if not paths:
+    all_paths = list_episode_paths(args.input_dir)
+    if not all_paths:
         raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
+    paths = select_balanced_paths(all_paths, args.max_episodes, args.seed)
 
     episodes: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
@@ -603,8 +637,10 @@ def prepare(args: argparse.Namespace) -> None:
                 "input_dir": str(args.input_dir),
                 "candidate_count": args.candidate_count,
                 "development_limit": args.development_limit,
+                "max_episodes": args.max_episodes,
                 "seed": args.seed,
             },
+            "available_episode_count": len(all_paths),
             "episode_count": len(episodes),
             "turn_count": len(turns),
             "anchor_count": len(anchors),
@@ -621,8 +657,8 @@ def prepare(args: argparse.Namespace) -> None:
 
 def main() -> None:
     args = parser().parse_args()
-    if args.candidate_count < 2 or args.development_limit < 1:
-        raise ValueError("--candidate-count must be at least 2 and --development-limit must be positive")
+    if args.candidate_count < 2 or args.development_limit < 1 or args.max_episodes < 0:
+        raise ValueError("Candidate count and development limit must be positive; max episodes cannot be negative")
     prepare(args)
 
 

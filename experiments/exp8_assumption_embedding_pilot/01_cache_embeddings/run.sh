@@ -8,16 +8,16 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128G
 #SBATCH --gres=gpu:A6000:2
-#SBATCH --array=0-403%4
+#SBATCH --array=0-19%4
 #SBATCH --chdir=.
 
-# Stage 01 GPU array: 20,189 episodes / 50 episodes per task = 404 tasks.
+# Stage 01 GPU array: 1,000 pilot episodes / 50 episodes per task = 20 tasks.
 set -euo pipefail
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
 EPISODES_PER_TASK="${EPISODES_PER_TASK:-50}"
-NUM_PATCHES="${NUM_PATCHES:-404}"
+NUM_PATCHES="${NUM_PATCHES:-20}"
 DATA_DIR="${DATA_DIR:-experiments/exp8_assumption_embedding_pilot/shared_data}"
 OUTPUT_DIR="${OUTPUT_DIR:-experiments/exp8_assumption_embedding_pilot/shared_cache}"
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-Embedding-4B}"

@@ -26,6 +26,7 @@ build_anchors = prepare.build_anchors
 validate_anchor = prepare.validate_anchor
 assert_episode_disjoint = prepare.assert_episode_disjoint
 assign_episode_splits = prepare.assign_episode_splits
+select_balanced_paths = prepare.select_balanced_paths
 build_control_map = controls.build_control_map
 aggregate_rows = controls.aggregate_rows
 clustered_delta_interval = controls.clustered_delta_interval
@@ -87,6 +88,22 @@ class SplitAndCandidateTests(unittest.TestCase):
         first = build_anchors(self.episodes, assignment, candidate_count=8)
         second = build_anchors(self.episodes, assignment, candidate_count=8)
         self.assertEqual(first, second)
+
+    def test_episode_limit_is_balanced_and_deterministic(self) -> None:
+        paths = [
+            Path("data") / category / f"episode-{index}.json"
+            for category in ("business", "sports", "technology")
+            for index in range(5)
+        ]
+        first = select_balanced_paths(paths, limit=6, seed=42)
+        second = select_balanced_paths(paths, limit=6, seed=42)
+        self.assertEqual(first, second)
+        self.assertEqual(len(first), 6)
+        category_counts = {
+            category: sum(path.parent.name == category for path in first)
+            for category in ("business", "sports", "technology")
+        }
+        self.assertEqual(set(category_counts.values()), {2})
 
 
 class ControlAndMetricTests(unittest.TestCase):

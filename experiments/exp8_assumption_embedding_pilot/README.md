@@ -21,10 +21,11 @@ CPU stages use ordinary sequential Python loops and emit only `tqdm` progress ba
 
 ```bash
 python experiments/exp8_assumption_embedding_pilot/00_prepare_data/run.py \
-  --input-dir data/conversation_moves_labeled
+  --input-dir data/conversation_moves_labeled \
+  --max-episodes 1000
 ```
 
-The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id` as the split group and records `split_grouping: episode_id` in `shared_data/summary.json`.
+The default pilot deterministically balances 1,000 episodes across categories, reducing the embedding workload by about 95%. Use `--max-episodes 0` only when a full-corpus run is needed. The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id` as the split group and records `split_grouping: episode_id` in `shared_data/summary.json`.
 
 ## Stage 01: cache embeddings on Slurm
 
@@ -32,12 +33,12 @@ The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id
 sbatch experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
 ```
 
-This directly submits a `05:45:00` array with 404 tasks for the current 20,189 episodes. Each task requests two A6000s, 128 GB host memory, and uses both GPUs for embedding inference. After the array finishes, run the CPU merge locally:
+This directly submits 20 tasks for the 1,000-episode pilot. Each task requests two A6000s, 128 GB host memory, and uses both GPUs for embedding inference. After the array finishes, run the CPU merge locally:
 
 ```bash
 python experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.py \
   --mode merge \
-  --num-patches 404
+  --num-patches 20
 ```
 
 If the episode count changes, calculate the required array size and override both the array and patch count:
@@ -45,7 +46,7 @@ If the episode count changes, calculate the required array size and override bot
 ```bash
 EPISODES=$(python -c 'import json; print(json.load(open("experiments/exp8_assumption_embedding_pilot/shared_data/summary.json"))["episode_count"])')
 PATCHES=$(( (EPISODES + 49) / 50 ))
-sbatch --array=0-$((PATCHES - 1))%8 --export=ALL,NUM_PATCHES=$PATCHES \
+sbatch --array=0-$((PATCHES - 1))%4 --export=ALL,NUM_PATCHES=$PATCHES \
   experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
 ```
 
