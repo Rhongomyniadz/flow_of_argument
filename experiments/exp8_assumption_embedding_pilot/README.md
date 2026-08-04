@@ -32,7 +32,7 @@ The labeled corpus has no reliable show identifier, so Stage 00 uses `episode_id
 sbatch experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.sh
 ```
 
-This directly submits a `05:45:00` A6000 array with 404 tasks for the current 20,189 episodes. After the array finishes, run the CPU merge locally:
+This directly submits a `05:45:00` array with 404 tasks for the current 20,189 episodes. Each task requests two A6000s, 128 GB host memory, and uses both GPUs for embedding inference. After the array finishes, run the CPU merge locally:
 
 ```bash
 python experiments/exp8_assumption_embedding_pilot/01_cache_embeddings/run.py \

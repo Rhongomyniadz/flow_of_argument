@@ -22,7 +22,8 @@ class EntrypointContractTests(unittest.TestCase):
         for stage, path in shells.items():
             text = path.read_text(encoding="utf-8")
             self.assertEqual(text.splitlines()[0], "#!/bin/bash")
-            for required in ("#SBATCH --partition=gpu", "#SBATCH --array=", "05:45:00", "gpu:A6000:1"):
+            gpu_count = "2" if stage == "01" else "1"
+            for required in ("#SBATCH --partition=gpu", "#SBATCH --array=", "05:45:00", f"gpu:A6000:{gpu_count}"):
                 self.assertIn(required, text, f"stage {stage}: {required}")
             self.assertNotIn("sbatch ", text, f"stage {stage} must be a direct GPU job")
 

@@ -5,14 +5,15 @@
 #SBATCH --time=05:45:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=64G
-#SBATCH --gres=gpu:A6000:1
-#SBATCH --array=0-403%8
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=128G
+#SBATCH --gres=gpu:A6000:2
+#SBATCH --array=0-403%4
 #SBATCH --chdir=.
 
 # Stage 01 GPU array: 20,189 episodes / 50 episodes per task = 404 tasks.
 set -euo pipefail
+export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
 EPISODES_PER_TASK="${EPISODES_PER_TASK:-50}"
@@ -34,6 +35,7 @@ args=(
   --model-name "${MODEL_NAME}"
   --model-revision "${MODEL_REVISION}"
   --batch-size "${BATCH_SIZE}"
+  --devices cuda:0 cuda:1
   --episodes-per-task "${EPISODES_PER_TASK}"
   --num-patches "${NUM_PATCHES}"
   --patch-index "${SLURM_ARRAY_TASK_ID}"

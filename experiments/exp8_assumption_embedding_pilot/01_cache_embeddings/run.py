@@ -306,6 +306,7 @@ class TextEmbedder:
         instruction: str = DEFAULT_INSTRUCTION,
         batch_size: int = 32,
         device: str | None = None,
+        devices: list[str] | None = None,
         hash_dim: int = 64,
     ) -> None:
         self.model_name = model_name
@@ -314,8 +315,10 @@ class TextEmbedder:
         self.instruction = instruction
         self.batch_size = batch_size
         self.device = device
+        self.devices = devices or []
         self.hash_dim = hash_dim
         self._model: Any = None
+        self._pool: Any = None
         if backend not in {"sentence_transformer", "hash"}:
             raise ValueError(f"Unsupported embedding backend: {backend}")
 
@@ -326,10 +329,22 @@ class TextEmbedder:
             except ImportError as error:
                 raise ImportError("sentence-transformers is required for the production embedding backend") from error
             kwargs: dict[str, Any] = {"trust_remote_code": True, "revision": self.model_revision}
-            if self.device:
+            if self.device and not self.devices:
                 kwargs["device"] = self.device
             self._model = SentenceTransformer(self.model_name, **kwargs)
         return self._model
+
+    def _encoding_pool(self) -> Any:
+        if self.backend == "hash" or not self.devices:
+            return None
+        if self._pool is None:
+            self._pool = self._load().start_multi_process_pool(target_devices=self.devices)
+        return self._pool
+
+    def close(self) -> None:
+        if self._pool is not None:
+            self._load().stop_multi_process_pool(self._pool)
+            self._pool = None
 
     def _hash_embedding(self, text: str, query: bool) -> np.ndarray:
         seed_text = f"{self.instruction if query else 'document'}\n{text}"
@@ -347,13 +362,31 @@ class TextEmbedder:
             return np.stack([self._hash_embedding(text, query) for text in values])
         model = self._load()
         prepared = [f"Instruct: {self.instruction}\nQuery: {text}" for text in values] if query else values
-        array = model.encode(
-            prepared,
-            batch_size=self.batch_size,
-            normalize_embeddings=True,
-            convert_to_numpy=True,
-            show_progress_bar=False,
-        )
+        # Use a smaller per-device batch for multi-GPU inference. The nominal
+        # batch remains in the manifest, keeping repaired shards compatible
+        # with the 403 already completed patches.
+        batch_size = min(self.batch_size, 8) if self.devices else self.batch_size
+        while True:
+            try:
+                array = model.encode(
+                    prepared,
+                    batch_size=batch_size,
+                    normalize_embeddings=True,
+                    convert_to_numpy=True,
+                    show_progress_bar=False,
+                    pool=self._encoding_pool(),
+                )
+                break
+            except RuntimeError as error:
+                if "out of memory" not in str(error).casefold() or batch_size == 1:
+                    raise
+                batch_size = max(1, batch_size // 2)
+                try:
+                    import torch
+
+                    torch.cuda.empty_cache()
+                except ImportError:
+                    pass
         return np.asarray(array, dtype=np.float32)
 
     def pool_statements(self, statements: list[dict[str, Any]]) -> tuple[np.ndarray, bool]:
@@ -530,6 +563,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--instruction", default=DEFAULT_INSTRUCTION)
     value.add_argument("--batch-size", type=int, default=32)
     value.add_argument("--device")
+    value.add_argument("--devices", nargs="+")
     value.add_argument("--hash-dim", type=int, default=64)
     value.add_argument("--episodes-per-task", type=int, default=50)
     value.add_argument("--num-patches", type=int, default=1)
@@ -596,11 +630,15 @@ def worker(args: argparse.Namespace) -> None:
         instruction=args.instruction,
         batch_size=args.batch_size,
         device=args.device,
+        devices=args.devices,
         hash_dim=args.hash_dim,
     )
     patch_dir.mkdir(parents=True, exist_ok=True)
     output_path = patch_dir / "embeddings.npz"
-    row_count = save_embedding_patch(output_path, turns, embedder)
+    try:
+        row_count = save_embedding_patch(output_path, turns, embedder)
+    finally:
+        embedder.close()
     with np.load(output_path, allow_pickle=False) as data:
         dimension = int(data["query"].shape[1])
     manifest = make_manifest(
