@@ -1,0 +1,25 @@
+{
+  "pair_id": "news:golden-episode:0:1",
+  "parser_cases": [
+    {
+      "raw": "{\"score\": 7, \"rationale\": \"fit\", \"confidence\": 0.8}",
+      "score": 7,
+      "parse_success": true,
+      "parse_error": null
+    },
+    {
+      "raw": "prefix {\"score\": 11, \"rationale\": \"bad\", \"confidence\": 0.5} suffix",
+      "score": null,
+      "parse_success": false,
+      "parse_error": "score_out_of_range"
+    }
+  ],
+  "ranking_rows": [
+    {"candidate_turn_id": "candidate-a", "candidate_order": 2, "score": 7, "parse_success": true, "is_true_next_turn": false},
+    {"candidate_turn_id": "candidate-b", "candidate_order": 0, "score": 7, "parse_success": true, "is_true_next_turn": true},
+    {"candidate_turn_id": "candidate-c", "candidate_order": 1, "score": 3, "parse_success": true, "is_true_next_turn": false}
+  ],
+  "expected_rank_order": ["candidate-b", "candidate-a", "candidate-c"],
+  "expected_true_rank": 1,
+  "expected_true_reciprocal_rank": 1.0
+}
