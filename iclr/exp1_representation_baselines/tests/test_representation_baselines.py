@@ -139,11 +139,33 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertIn(baseline.EMPTY_ASSUMPTIONS, baseline.format_representation(pair, "assumptions_only"))
         self.assertIn(baseline.EMPTY_HISTORY, baseline.format_representation(pair, "raw_turn_with_history"))
         real = baseline.format_representation(pair, "explicit_plus_assumptions")
+        first_one = baseline.format_representation(pair, "explicit_plus_top1_assumption")
+        first_three = baseline.format_representation(pair, "explicit_plus_top3_assumptions")
+        raw_plus = baseline.format_representation(pair, "raw_turn_plus_assumptions")
         corrupt = baseline.format_representation(pair, "explicit_plus_shuffled_assumptions")
         self.assertIn("[Implicit assumptions]", real)
+        self.assertIn("first 1", first_one)
+        self.assertIn("first 3", first_three)
+        self.assertIn("[Raw current turn]", raw_plus)
         self.assertIn("[Implicit assumptions]", corrupt)
         self.assertNotIn("shuffled", corrupt.casefold())
         self.assertNotIn("wrong", real)
+
+    def test_assumption_budget_conditions_preserve_extraction_order(self) -> None:
+        pair = {
+            "pair_id": "budget",
+            "source_turn_text": "raw",
+            "source_explicit_texts": ["explicit"],
+            "source_assumption_texts": ["first", "second", "third", "fourth"],
+            "history_turn_texts": [],
+            "donors": {},
+        }
+        first_one = baseline.format_representation(pair, "explicit_plus_top1_assumption")
+        first_three = baseline.format_representation(pair, "explicit_plus_top3_assumptions")
+        self.assertIn("first", first_one)
+        self.assertNotIn("second", first_one)
+        self.assertIn("third", first_three)
+        self.assertNotIn("fourth", first_three)
 
 
 class PreparationAndControlTests(unittest.TestCase):
@@ -216,7 +238,15 @@ class PreparationAndControlTests(unittest.TestCase):
                 self.assertGreaterEqual(abs(donor_idx - int(pair["source_turn_idx"])), 3)
 
     def test_missing_same_episode_control_is_explicit(self) -> None:
-        _, pairs = self.prepare()
+        args = make_args(
+            self.input_dir,
+            self.root / "controls",
+            "--prepare_only",
+            "--conditions",
+            *baseline.ALL_CONDITIONS,
+        )
+        baseline.prepare_dataset(args)
+        pairs = baseline.read_jsonl(baseline.prepared_path(args))
         beta_control_pairs = [
             pair
             for pair in pairs
@@ -240,6 +270,22 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
         self.assertEqual(first.output_dir, baseline.DEFAULT_OUTPUT_ROOT / "Qwen__First-Model")
         self.assertEqual(second.output_dir, baseline.DEFAULT_OUTPUT_ROOT / "Other__Second-Model")
         self.assertNotEqual(first.output_dir, second.output_dir)
+
+    def test_default_conditions_are_the_diagnostic_decomposition(self) -> None:
+        args = baseline.parse_args([])
+        baseline.validate_args(args)
+        self.assertEqual(
+            args.conditions,
+            [
+                "raw_turn",
+                "raw_turn_with_history",
+                "raw_turn_plus_assumptions",
+                "explicit_only",
+                "explicit_plus_top1_assumption",
+                "explicit_plus_top3_assumptions",
+                "explicit_plus_assumptions",
+            ],
+        )
 
     def test_legacy_golden_contract(self) -> None:
         golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
@@ -267,15 +313,61 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             _, pairs = baseline.build_episode_records("news", path, history_turns=3)
         self.assertEqual(pairs[0]["pair_id"], "news:golden-episode:0:1")
 
+    def test_diagnostic_gate_requires_replication_before_full_corpus(self) -> None:
+        pairwise = pd.DataFrame(
+            [
+                {
+                    "analysis_subset": "assumption_eligible",
+                    "target_condition": "explicit_plus_assumptions",
+                    "baseline_condition": "explicit_only",
+                    "metric": "reciprocal_rank",
+                    "mean_improvement": 0.03,
+                    "ci95_low": 0.01,
+                    "ci95_high": 0.05,
+                },
+                {
+                    "analysis_subset": "assumption_eligible",
+                    "target_condition": "raw_turn_plus_assumptions",
+                    "baseline_condition": "raw_turn",
+                    "metric": "reciprocal_rank",
+                    "mean_improvement": 0.02,
+                    "ci95_low": 0.005,
+                    "ci95_high": 0.04,
+                },
+            ]
+        )
+        long_rows = []
+        for category in ("alpha", "beta"):
+            for condition, value in (
+                ("explicit_only", 0.4),
+                ("explicit_plus_assumptions", 0.5),
+                ("raw_turn", 0.6),
+                ("raw_turn_plus_assumptions", 0.7),
+            ):
+                long_rows.append(
+                    {
+                        "pair_id": f"{category}:pair",
+                        "category": category,
+                        "condition": condition,
+                        "assumption_eligible": True,
+                        "reciprocal_rank": value,
+                    }
+                )
+        coverage = pd.DataFrame([{"retained_pair_rate": 0.99}, {"retained_pair_rate": 1.0}])
+        gate = baseline.diagnostic_gate(pairwise, pd.DataFrame(long_rows), coverage)
+        self.assertTrue(gate["ready_for_cross_model_smoke"])
+        self.assertFalse(gate["ready_for_full_corpus"])
+        self.assertEqual(gate["interpretation"], "assumptions_add_signal_beyond_raw_lexical_context")
+
     def test_slurm_runner_contract_and_isolation(self) -> None:
         runner_path = EXPERIMENT_ROOT / "run_exp1_representation_baselines.sh"
         raw = runner_path.read_bytes()
         text = raw.decode("utf-8")
         self.assertNotIn(b"\r\n", raw)
         for expected in (
-            "#SBATCH --job-name=exp1_repr_baselines",
+            "#SBATCH --job-name=exp1_repr_diagnostic",
             "#SBATCH --gres=gpu:A6000:2",
-            "iclr/exp1_representation_baselines/exp1_repr_baselines_",
+            "iclr/exp1_representation_baselines/_log/exp1_repr_diagnostic_",
             "EXP1_BASELINE_STAGE",
             "prepare)",
             "patch)",
@@ -285,6 +377,10 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             "TENSOR_PARALLEL_SIZE=2",
             "Submit this runner with sbatch, not bash",
             'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
+            "raw_turn_plus_assumptions",
+            "explicit_plus_top1_assumption",
+            "explicit_plus_top3_assumptions",
+            "AUDIT_SAMPLE_SIZE_PER_OUTCOME",
         ):
             self.assertIn(expected, text)
         self.assertNotIn("experiments/exp1_relevance_bridge/run_exp1.sh", text)
@@ -319,7 +415,13 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertTrue((pairwise.loc[pairwise["paired_sample_size"] > 0, "mean_improvement"].fillna(0) == 0).all())
         self.assertIn("output_hashes", summary)
         self.assertNotIn("summary", summary["output_hashes"])
-        self.assertEqual(len(summary["strict_control_paper_table"]), len(baseline.DEFAULT_CONDITIONS))
+        self.assertEqual(len(summary["complete_case_diagnostic_table"]), len(baseline.DEFAULT_CONDITIONS))
+        self.assertFalse(summary["diagnostic_gate"]["ready_for_full_corpus"])
+        decomposition = pd.read_csv(baseline.final_paths(output)["decomposition"])
+        self.assertIn("incremental_implicit_value_after_abstraction", set(decomposition["diagnostic_question"]))
+        audit = pd.read_csv(baseline.final_paths(output)["audit_sample"])
+        self.assertTrue(set(audit["audit_outcome"]).issubset({"win", "loss", "tie"}))
+        self.assertTrue((long_df["complete_case"] == True).any())
 
         resume_args = make_args(self.input_dir, output, "--dry_run", "--score_only")
         resumed = baseline.score_dataset(resume_args)

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Controlled explicit/implicit representation baselines for next-turn ranking."""
+"""Diagnostic explicit/implicit representation decomposition for next-turn ranking."""
 
 import argparse
 import base64
@@ -29,8 +29,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "1.0.0"
-PROMPT_VERSION = "representation-baselines-v1"
+SCRIPT_VERSION = "2.0.0"
+PROMPT_VERSION = "representation-diagnostic-v2"
 DEFAULT_INPUT_DIR = Path("data/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
@@ -48,13 +48,17 @@ EMPTY_HISTORY = "No earlier substantive turn available."
 DEFAULT_CONDITIONS = (
     "raw_turn",
     "raw_turn_with_history",
+    "raw_turn_plus_assumptions",
     "explicit_only",
-    "assumptions_only",
+    "explicit_plus_top1_assumption",
+    "explicit_plus_top3_assumptions",
     "explicit_plus_assumptions",
+)
+OPTIONAL_CONDITIONS = (
+    "assumptions_only",
     "explicit_plus_shuffled_assumptions",
     "explicit_plus_wrong_episode_assumptions",
 )
-OPTIONAL_CONDITIONS = ("raw_turn_plus_assumptions",)
 ALL_CONDITIONS = DEFAULT_CONDITIONS + OPTIONAL_CONDITIONS
 CONTROL_CONDITIONS = (
     "explicit_plus_shuffled_assumptions",
@@ -65,15 +69,22 @@ HEADLINE_CONSTRUCTIVE_MOVES = {
     "Answer",
     "Agree / Align",
 }
-REQUIRED_CONTRASTS = (
+DIAGNOSTIC_CONTRASTS = (
     ("explicit_plus_assumptions", "explicit_only"),
-    ("explicit_plus_assumptions", "raw_turn"),
-    ("explicit_plus_assumptions", "raw_turn_with_history"),
+    ("raw_turn_plus_assumptions", "raw_turn"),
+    ("raw_turn", "explicit_only"),
+    ("raw_turn_with_history", "raw_turn"),
+    ("explicit_plus_top1_assumption", "explicit_only"),
+    ("explicit_plus_top3_assumptions", "explicit_only"),
+    ("explicit_plus_assumptions", "explicit_plus_top1_assumption"),
+    ("explicit_plus_assumptions", "explicit_plus_top3_assumptions"),
+)
+OPTIONAL_CONTROL_CONTRASTS = (
     ("explicit_plus_assumptions", "assumptions_only"),
     ("explicit_plus_assumptions", "explicit_plus_shuffled_assumptions"),
     ("explicit_plus_assumptions", "explicit_plus_wrong_episode_assumptions"),
-    ("explicit_only", "raw_turn"),
 )
+REQUIRED_CONTRASTS = DIAGNOSTIC_CONTRASTS + OPTIONAL_CONTROL_CONTRASTS
 
 
 class TurnRecord(TypedDict):
@@ -280,7 +291,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--tensor_parallel_size", type=int, default=2)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     parser.add_argument("--prompt_batch_size", type=int, default=64)
-    parser.add_argument("--max_tokens", type=int, default=192)
+    parser.add_argument("--max_tokens", type=int, default=96)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top_p", type=float, default=1.0)
     parser.add_argument("--min_p", type=float, default=0.0)
@@ -303,6 +314,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=True,
     )
     parser.add_argument("--overwrite_scores", action="store_true")
+    parser.add_argument(
+        "--audit_sample_size_per_outcome",
+        type=int,
+        default=25,
+        help="Number of strongest wins, losses, and deterministic ties to emit for manual audit.",
+    )
     parser.add_argument("--plot_dpi", type=int, default=300)
     return parser.parse_args(argv)
 
@@ -326,11 +343,13 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("history_turns cannot be negative")
     if args.prompt_batch_size < 1 or args.max_tokens < 1 or args.bootstrap_draws < 1:
         raise ValueError("Batch size, max tokens, and bootstrap draws must be positive")
+    if args.audit_sample_size_per_outcome < 1:
+        raise ValueError("audit_sample_size_per_outcome must be positive")
     args.conditions = normalize_conditions(args.conditions)
     if args.output_dir is None:
         args.output_dir = DEFAULT_OUTPUT_ROOT / model_output_name(args.model_name)
     if args.strict_all_conditions and not set(DEFAULT_CONDITIONS).issubset(args.conditions):
-        raise ValueError("strict_all_conditions requires all seven default conditions")
+        raise ValueError("strict_all_conditions requires all seven diagnostic conditions")
 
 
 def prepared_path(args: argparse.Namespace) -> Path:
@@ -381,13 +400,16 @@ def final_paths(output_dir: Path) -> dict[str, Path]:
         "by_category": output_dir / "exp1_representation_by_category.csv",
         "by_move": output_dir / "exp1_representation_by_move.csv",
         "pairwise": output_dir / "exp1_representation_pairwise_deltas.csv",
+        "decomposition": output_dir / "exp1_representation_decomposition.csv",
+        "audit_sample": output_dir / "exp1_representation_audit_sample.csv",
+        "diagnostic_gate": output_dir / "exp1_representation_diagnostic_gate.json",
         "coverage": output_dir / "exp1_representation_coverage.csv",
         "donors": output_dir / "exp1_representation_donors.jsonl",
         "summary": output_dir / "exp1_representation_summary.json",
-        "baseline_pdf": output_dir / "exp1_representation_baseline_comparison.pdf",
-        "baseline_png": output_dir / "exp1_representation_baseline_comparison.png",
-        "control_pdf": output_dir / "exp1_representation_control_lifts.pdf",
-        "control_png": output_dir / "exp1_representation_control_lifts.png",
+        "diagnostic_pdf": output_dir / "exp1_representation_diagnostic_comparison.pdf",
+        "diagnostic_png": output_dir / "exp1_representation_diagnostic_comparison.png",
+        "decomposition_pdf": output_dir / "exp1_representation_decomposition_lifts.pdf",
+        "decomposition_png": output_dir / "exp1_representation_decomposition_lifts.png",
     }
 
 
@@ -816,6 +838,8 @@ def format_bullets(values: list[str], empty_value: str) -> str:
 def format_representation(pair: dict[str, Any], condition: str) -> str:
     explicit = format_bullets(pair["source_explicit_texts"], EMPTY_EXPLICIT)
     assumptions = format_bullets(pair["source_assumption_texts"], EMPTY_ASSUMPTIONS)
+    top1_assumption = format_bullets(pair["source_assumption_texts"][:1], EMPTY_ASSUMPTIONS)
+    top3_assumptions = format_bullets(pair["source_assumption_texts"][:3], EMPTY_ASSUMPTIONS)
     if condition == "raw_turn":
         return f"[Raw current turn]\n{pair['source_turn_text']}"
     if condition == "raw_turn_with_history":
@@ -833,6 +857,10 @@ def format_representation(pair: dict[str, Any], condition: str) -> str:
         return f"[Implicit assumptions]\n{assumptions}"
     if condition == "explicit_plus_assumptions":
         return f"[Explicit propositions]\n{explicit}\n\n[Implicit assumptions]\n{assumptions}"
+    if condition == "explicit_plus_top1_assumption":
+        return f"[Explicit propositions]\n{explicit}\n\n[Implicit assumptions: first 1]\n{top1_assumption}"
+    if condition == "explicit_plus_top3_assumptions":
+        return f"[Explicit propositions]\n{explicit}\n\n[Implicit assumptions: first 3]\n{top3_assumptions}"
     if condition == "raw_turn_plus_assumptions":
         return f"[Raw current turn]\n{pair['source_turn_text']}\n\n[Implicit assumptions]\n{assumptions}"
     if condition in CONTROL_CONDITIONS:
@@ -1197,7 +1225,7 @@ def build_tasks(pairs: list[dict[str, Any]], args: argparse.Namespace) -> list[d
         if not pair["candidate_pool_complete"]:
             continue
         if args.strict_all_conditions and not all(
-            pair["conditions"].get(condition, {}).get("available") for condition in DEFAULT_CONDITIONS
+            pair["conditions"].get(condition, {}).get("available") for condition in args.conditions
         ):
             continue
         for condition in args.conditions:
@@ -1491,7 +1519,7 @@ def build_metrics(
                 "candidate_pool_complete": bool(pair["candidate_pool_complete"]),
                 "full_retained": False,
                 "assumption_eligible": False,
-                "strict_control": False,
+                "complete_case": False,
             }
             if pair["candidate_pool_complete"] and metric["condition_available"] and len(parsed) == EXPECTED_CANDIDATE_COUNT:
                 ranked = rank_condition_scores(parsed)
@@ -1507,22 +1535,22 @@ def build_metrics(
             long_rows.append(metric)
     long_df = pd.DataFrame(long_rows)
     complete_by_pair: dict[str, bool] = {}
-    default_rows = long_df[long_df["condition"].isin(DEFAULT_CONDITIONS)]
-    for pair_id, group in default_rows.groupby("pair_id", sort=False):
+    selected_rows = long_df[long_df["condition"].isin(args.conditions)]
+    for pair_id, group in selected_rows.groupby("pair_id", sort=False):
         complete_by_pair[str(pair_id)] = bool(
-            len(group) == len(DEFAULT_CONDITIONS)
-            and set(group["condition"]) == set(DEFAULT_CONDITIONS)
+            len(group) == len(args.conditions)
+            and set(group["condition"]) == set(args.conditions)
             and group["full_retained"].all()
         )
-    long_df["strict_control"] = long_df["pair_id"].map(complete_by_pair).fillna(False).astype(bool)
+    long_df["complete_case"] = long_df["pair_id"].map(complete_by_pair).fillna(False).astype(bool)
     for index, row in long_df.iterrows():
         flags = []
         if bool(row["full_retained"]):
             flags.append("full")
         if bool(row["assumption_eligible"]):
             flags.append("assumption_eligible")
-        if bool(row["strict_control"]):
-            flags.append("strict_control")
+        if bool(row["complete_case"]):
+            flags.append("complete_case")
         long_df.at[index, "analysis_subset_flags"] = json.dumps(flags)
     metadata_columns = [
         "pair_id", "category", "episode_id", "source_turn_idx", "true_next_turn_idx",
@@ -1534,7 +1562,7 @@ def build_metrics(
         for column in (
             "true_rank", "true_score", "top1", "reciprocal_rank", "parsed_score_count",
             "condition_available", "control_unavailable_reason", "full_retained",
-            "assumption_eligible", "strict_control",
+            "assumption_eligible", "complete_case",
         ):
             wide[f"{condition}__{column}"] = part[column]
     return long_df, wide.reset_index()
@@ -1549,12 +1577,12 @@ def condition_summary(
     subsets = {
         "full": "full_retained",
         "assumption_eligible": "assumption_eligible",
-        "strict_control": "strict_control",
+        "complete_case": "complete_case",
     }
     metrics = ("true_rank", "top1", "reciprocal_rank", "true_score")
     for subset, flag in subsets.items():
         eligible = long_df[long_df[flag] == True].copy()
-        if subset == "strict_control":
+        if subset == "complete_case":
             eligible = eligible[eligible["full_retained"] == True]
         if eligible.empty:
             continue
@@ -1588,7 +1616,7 @@ def overall_condition_summary(long_df: pd.DataFrame, args: argparse.Namespace) -
     subsets = {
         "full": "full_retained",
         "assumption_eligible": "assumption_eligible",
-        "strict_control": "strict_control",
+        "complete_case": "complete_case",
     }
     metric_names = {
         "true_rank": "mean_rank",
@@ -1599,7 +1627,7 @@ def overall_condition_summary(long_df: pd.DataFrame, args: argparse.Namespace) -
     for subset, flag in subsets.items():
         for condition in args.conditions:
             group = long_df[(long_df["condition"] == condition) & (long_df[flag] == True)].copy()
-            if subset == "strict_control":
+            if subset == "complete_case":
                 group = group[group["full_retained"] == True]
             row: dict[str, Any] = {
                 "analysis_subset": subset,
@@ -1643,7 +1671,7 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
         target_df = long_df[long_df["condition"] == target].set_index("pair_id")
         baseline_df = long_df[long_df["condition"] == baseline].set_index("pair_id")
         common_ids = target_df.index.intersection(baseline_df.index)
-        for subset in ("full", "assumption_eligible", "strict_control"):
+        for subset in ("full", "assumption_eligible", "complete_case"):
             subset_ids = []
             for pair_id in common_ids:
                 target_row = target_df.loc[pair_id]
@@ -1654,8 +1682,8 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
                     keep = bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"])
                 else:
                     keep = bool(
-                        target_row["strict_control"]
-                        and baseline_row["strict_control"]
+                        target_row["complete_case"]
+                        and baseline_row["complete_case"]
                         and target_row["full_retained"]
                         and baseline_row["full_retained"]
                     )
@@ -1722,7 +1750,7 @@ def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: a
                 "condition_available_pair_count": int(group["condition_available"].sum()),
                 "fully_parsed_pair_count": int(group["full_retained"].sum()),
                 "assumption_eligible_pair_count": int(group["assumption_eligible"].sum()),
-                "strict_control_pair_count": int(group["strict_control"].sum()),
+                "complete_case_pair_count": int(group["complete_case"].sum()),
                 "retained_pair_rate": float(group["full_retained"].mean()) if total else None,
                 "score_parse_eligible_pair_count": parse_eligible_count,
                 "score_parse_failure_pair_count": int(parse_failures.sum()),
@@ -1732,6 +1760,194 @@ def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: a
             }
         )
     return pd.DataFrame(rows)
+
+
+def build_decomposition_table(pairwise: pd.DataFrame) -> pd.DataFrame:
+    questions = {
+        ("explicit_plus_assumptions", "explicit_only"): "incremental_implicit_value_after_abstraction",
+        ("raw_turn_plus_assumptions", "raw_turn"): "incremental_implicit_value_with_lexical_context",
+        ("raw_turn", "explicit_only"): "information_retained_by_raw_turn",
+        ("raw_turn_with_history", "raw_turn"): "value_of_discourse_history",
+        ("explicit_plus_top1_assumption", "explicit_only"): "first_assumption_budget",
+        ("explicit_plus_top3_assumptions", "explicit_only"): "first_three_assumption_budget",
+        ("explicit_plus_assumptions", "explicit_plus_top1_assumption"): "all_assumptions_vs_first_one",
+        ("explicit_plus_assumptions", "explicit_plus_top3_assumptions"): "all_assumptions_vs_first_three",
+    }
+    if pairwise.empty:
+        return pd.DataFrame(columns=[*pairwise.columns, "diagnostic_question", "contrast"])
+    selected = pairwise[
+        pairwise.apply(
+            lambda row: (str(row["target_condition"]), str(row["baseline_condition"])) in questions,
+            axis=1,
+        )
+    ].copy()
+    selected["diagnostic_question"] = selected.apply(
+        lambda row: questions[(str(row["target_condition"]), str(row["baseline_condition"]))],
+        axis=1,
+    )
+    selected["contrast"] = selected["target_condition"].astype(str) + " - " + selected["baseline_condition"].astype(str)
+    order = {contrast: index for index, contrast in enumerate(questions)}
+    selected["_contrast_order"] = selected.apply(
+        lambda row: order[(str(row["target_condition"]), str(row["baseline_condition"]))],
+        axis=1,
+    )
+    subset_order = {"assumption_eligible": 0, "complete_case": 1, "full": 2}
+    metric_order = {"reciprocal_rank": 0, "top1": 1, "true_rank": 2, "true_score": 3}
+    selected["_subset_order"] = selected["analysis_subset"].map(subset_order).fillna(99)
+    selected["_metric_order"] = selected["metric"].map(metric_order).fillna(99)
+    return selected.sort_values(
+        ["_contrast_order", "_subset_order", "_metric_order"], kind="stable"
+    ).drop(columns=["_contrast_order", "_subset_order", "_metric_order"])
+
+
+def build_audit_sample(
+    pairs: list[dict[str, Any]],
+    long_df: pd.DataFrame,
+    args: argparse.Namespace,
+) -> pd.DataFrame:
+    columns = [
+        "audit_outcome", "audit_priority", "pair_id", "category", "episode_id",
+        "true_next_turn_move_label", "assumption_count", "mrr_delta", "rank_improvement",
+        "top1_delta", "true_score_delta", "explicit_rank", "combined_rank", "explicit_score",
+        "combined_score", "source_turn_text", "source_explicit_json", "source_assumptions_json",
+        "history_turns_json", "true_next_turn_text",
+    ]
+    required = {"explicit_only", "explicit_plus_assumptions"}
+    if not required.issubset(set(args.conditions)):
+        return pd.DataFrame(columns=columns)
+    lookup = {pair["pair_id"]: pair for pair in pairs}
+    explicit = long_df[long_df["condition"] == "explicit_only"].set_index("pair_id")
+    combined = long_df[long_df["condition"] == "explicit_plus_assumptions"].set_index("pair_id")
+    rows: list[dict[str, Any]] = []
+    for pair_id in explicit.index.intersection(combined.index):
+        explicit_row = explicit.loc[pair_id]
+        combined_row = combined.loc[pair_id]
+        if not bool(explicit_row["assumption_eligible"] and combined_row["assumption_eligible"]):
+            continue
+        pair = lookup[str(pair_id)]
+        mrr_delta = float(combined_row["reciprocal_rank"]) - float(explicit_row["reciprocal_rank"])
+        outcome = "win" if mrr_delta > 0 else "loss" if mrr_delta < 0 else "tie"
+        rows.append(
+            {
+                "audit_outcome": outcome,
+                "pair_id": pair_id,
+                "category": pair["category"],
+                "episode_id": pair["episode_id"],
+                "true_next_turn_move_label": pair["true_next_turn_move_label"],
+                "assumption_count": len(pair["source_assumption_texts"]),
+                "mrr_delta": mrr_delta,
+                "rank_improvement": float(explicit_row["true_rank"]) - float(combined_row["true_rank"]),
+                "top1_delta": float(combined_row["top1"]) - float(explicit_row["top1"]),
+                "true_score_delta": float(combined_row["true_score"]) - float(explicit_row["true_score"]),
+                "explicit_rank": int(explicit_row["true_rank"]),
+                "combined_rank": int(combined_row["true_rank"]),
+                "explicit_score": int(explicit_row["true_score"]),
+                "combined_score": int(combined_row["true_score"]),
+                "source_turn_text": pair["source_turn_text"],
+                "source_explicit_json": json.dumps(pair["source_explicit_texts"], ensure_ascii=False),
+                "source_assumptions_json": json.dumps(pair["source_assumption_texts"], ensure_ascii=False),
+                "history_turns_json": json.dumps(pair["history_turn_texts"], ensure_ascii=False),
+                "true_next_turn_text": pair["true_next_turn_text"],
+                "_tie_order": seed_int(f"audit:{pair_id}:{args.seed}"),
+            }
+        )
+    if not rows:
+        return pd.DataFrame(columns=columns)
+    audit = pd.DataFrame(rows)
+    samples = []
+    for outcome in ("win", "loss", "tie"):
+        group = audit[audit["audit_outcome"] == outcome].copy()
+        if outcome == "win":
+            group = group.sort_values(["mrr_delta", "rank_improvement", "pair_id"], ascending=[False, False, True])
+        elif outcome == "loss":
+            group = group.sort_values(["mrr_delta", "rank_improvement", "pair_id"], ascending=[True, True, True])
+        else:
+            group["_absolute_score_delta"] = group["true_score_delta"].abs()
+            group = group.sort_values(["_absolute_score_delta", "_tie_order"], ascending=[False, True])
+        group = group.head(args.audit_sample_size_per_outcome).copy()
+        group["audit_priority"] = np.arange(1, len(group) + 1)
+        samples.append(group)
+    result = pd.concat(samples, ignore_index=True) if samples else pd.DataFrame(columns=columns)
+    return result.reindex(columns=columns)
+
+
+def diagnostic_gate(
+    pairwise: pd.DataFrame,
+    long_df: pd.DataFrame,
+    coverage: pd.DataFrame,
+) -> dict[str, Any]:
+    def contrast_row(target: str, baseline: str) -> dict[str, Any] | None:
+        match = pairwise[
+            (pairwise["analysis_subset"] == "assumption_eligible")
+            & (pairwise["target_condition"] == target)
+            & (pairwise["baseline_condition"] == baseline)
+            & (pairwise["metric"] == "reciprocal_rank")
+        ]
+        return None if match.empty else match.iloc[0].to_dict()
+
+    def category_deltas(target: str, baseline: str) -> dict[str, float]:
+        target_rows = long_df[long_df["condition"] == target].set_index("pair_id")
+        baseline_rows = long_df[long_df["condition"] == baseline].set_index("pair_id")
+        values: list[dict[str, Any]] = []
+        for pair_id in target_rows.index.intersection(baseline_rows.index):
+            target_row = target_rows.loc[pair_id]
+            baseline_row = baseline_rows.loc[pair_id]
+            if not bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"]):
+                continue
+            values.append(
+                {
+                    "category": str(target_row["category"]),
+                    "delta": float(target_row["reciprocal_rank"]) - float(baseline_row["reciprocal_rank"]),
+                }
+            )
+        if not values:
+            return {}
+        frame = pd.DataFrame(values)
+        return {str(key): float(value) for key, value in frame.groupby("category")["delta"].mean().items()}
+
+    primary = contrast_row("explicit_plus_assumptions", "explicit_only")
+    raw_increment = contrast_row("raw_turn_plus_assumptions", "raw_turn")
+    primary_categories = category_deltas("explicit_plus_assumptions", "explicit_only")
+    raw_categories = category_deltas("raw_turn_plus_assumptions", "raw_turn")
+
+    def supported(row: dict[str, Any] | None) -> bool:
+        return bool(row and row.get("ci95_low") is not None and float(row["ci95_low"]) > 0.0)
+
+    minimum_retained = float(coverage["retained_pair_rate"].min()) if not coverage.empty else 0.0
+    primary_supported = supported(primary)
+    raw_supported = supported(raw_increment)
+    positive_primary_categories = sum(value > 0 for value in primary_categories.values())
+    positive_raw_categories = sum(value > 0 for value in raw_categories.values())
+    category_breadth = max(positive_primary_categories, positive_raw_categories) >= 2
+    coverage_acceptable = minimum_retained >= 0.98
+    if raw_supported:
+        interpretation = "assumptions_add_signal_beyond_raw_lexical_context"
+    elif primary_supported:
+        interpretation = "assumptions_help_after_abstraction_but_not_beyond_raw_context"
+    else:
+        interpretation = "no_robust_incremental_assumption_signal"
+    ready_for_cross_model = bool((primary_supported or raw_supported) and category_breadth and coverage_acceptable)
+    return {
+        "gate_version": "diagnostic-gate-v1",
+        "primary_contrast": primary,
+        "raw_context_contrast": raw_increment,
+        "primary_category_mrr_deltas": primary_categories,
+        "raw_context_category_mrr_deltas": raw_categories,
+        "criteria": {
+            "primary_mrr_ci_excludes_zero": primary_supported,
+            "raw_context_mrr_ci_excludes_zero": raw_supported,
+            "positive_category_count_primary": positive_primary_categories,
+            "positive_category_count_raw_context": positive_raw_categories,
+            "category_breadth_at_least_two": category_breadth,
+            "minimum_condition_retained_rate": minimum_retained,
+            "coverage_at_least_98_percent": coverage_acceptable,
+        },
+        "interpretation": interpretation,
+        "ready_for_cross_model_smoke": ready_for_cross_model,
+        "ready_for_full_corpus": False,
+        "full_corpus_blocker": "A second judge-model smoke run and manual audit are required before the full-corpus gate can pass.",
+        "recommended_next_stage": "cross_model_smoke" if ready_for_cross_model else "manual_audit_or_representation_revision",
+    }
 
 
 def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str, Path], args: argparse.Namespace) -> None:
@@ -1755,9 +1971,9 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             b"xref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000238 00000 n \n0000000380 00000 n \n"
             b"trailer<</Size 6/Root 1 0 R>>\nstartxref\n450\n%%EOF\n"
         )
-        for key in ("baseline_png", "control_png"):
+        for key in ("diagnostic_png", "decomposition_png"):
             atomic_write_bytes(paths[key], transparent_png)
-        for key in ("baseline_pdf", "control_pdf"):
+        for key in ("diagnostic_pdf", "decomposition_pdf"):
             atomic_write_bytes(paths[key], placeholder_pdf)
         return
 
@@ -1767,31 +1983,33 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
     labels = {
         "raw_turn": "Raw",
         "raw_turn_with_history": "Raw + history",
+        "raw_turn_plus_assumptions": "Raw + assumptions",
         "explicit_only": "Explicit",
+        "explicit_plus_top1_assumption": "Explicit + first 1",
+        "explicit_plus_top3_assumptions": "Explicit + first 3",
         "assumptions_only": "Assumptions",
-        "explicit_plus_assumptions": "Explicit + real",
+        "explicit_plus_assumptions": "Explicit + all",
         "explicit_plus_shuffled_assumptions": "Explicit + shuffled",
         "explicit_plus_wrong_episode_assumptions": "Explicit + same-episode wrong",
-        "raw_turn_plus_assumptions": "Raw + assumptions",
     }
-    strict = long_df[(long_df["strict_control"] == True) & (long_df["full_retained"] == True)]
+    complete = long_df[(long_df["complete_case"] == True) & (long_df["full_retained"] == True)]
     condition_rows = []
     for condition in args.conditions:
-        group = strict[strict["condition"] == condition]
+        group = complete[complete["condition"] == condition]
         for metric in ("reciprocal_rank", "top1"):
             result = cluster_bootstrap(
                 group,
                 metric,
-                seed_label=f"plot:strict:{condition}:{metric}",
+                seed_label=f"plot:complete:{condition}:{metric}",
                 seed=args.seed,
                 draws=args.bootstrap_draws,
             )
             condition_rows.append({"condition": condition, "metric": metric, **result})
     plot_df = pd.DataFrame(condition_rows)
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.8), constrained_layout=True)
-    if strict.empty:
+    if complete.empty:
         for axis in axes:
-            axis.text(0.5, 0.5, "No strict-control data available", ha="center", va="center")
+            axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
             axis.set_axis_off()
     else:
         for axis, metric, title in zip(axes, ("reciprocal_rank", "top1"), ("MRR", "Top-1 accuracy")):
@@ -1807,41 +2025,49 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             axis.set_title(title)
             axis.set_ylabel(title)
             axis.grid(axis="y", alpha=0.25)
-        fig.suptitle(f"Representation baselines — strict-control pairs (n={strict['pair_id'].nunique()})")
-    fig.savefig(paths["baseline_pdf"], bbox_inches="tight")
-    fig.savefig(paths["baseline_png"], dpi=args.plot_dpi, bbox_inches="tight")
+        fig.suptitle(f"Diagnostic representations — complete cases (n={complete['pair_id'].nunique()})")
+    fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
+    fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
     plt.close(fig)
 
-    controls = (
-        "explicit_only",
-        "explicit_plus_shuffled_assumptions",
-        "explicit_plus_wrong_episode_assumptions",
-        "raw_turn_with_history",
+    decomposition_contrasts = (
+        ("explicit_plus_assumptions", "explicit_only"),
+        ("raw_turn_plus_assumptions", "raw_turn"),
+        ("raw_turn", "explicit_only"),
+        ("raw_turn_with_history", "raw_turn"),
+        ("explicit_plus_top1_assumption", "explicit_only"),
+        ("explicit_plus_top3_assumptions", "explicit_only"),
     )
-    lift_df = pairwise[
-        (pairwise["analysis_subset"] == "strict_control")
-        & (pairwise["target_condition"] == "explicit_plus_assumptions")
-        & (pairwise["baseline_condition"].isin(controls))
-        & (pairwise["metric"] == "reciprocal_rank")
-    ].set_index("baseline_condition").reindex(controls)
-    fig, axis = plt.subplots(figsize=(8, 4.8), constrained_layout=True)
+    lift_rows = []
+    for target, baseline in decomposition_contrasts:
+        match = pairwise[
+            (pairwise["analysis_subset"] == "assumption_eligible")
+            & (pairwise["target_condition"] == target)
+            & (pairwise["baseline_condition"] == baseline)
+            & (pairwise["metric"] == "reciprocal_rank")
+        ]
+        if not match.empty:
+            lift_rows.append(dict(match.iloc[0], contrast=f"{labels[target]} - {labels[baseline]}"))
+    lift_df = pd.DataFrame(lift_rows)
+    fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
     if lift_df.empty or lift_df["mean_improvement"].isna().all():
-        axis.text(0.5, 0.5, "No strict-control lift data available", ha="center", va="center")
+        axis.text(0.5, 0.5, "No diagnostic lift data available", ha="center", va="center")
         axis.set_axis_off()
     else:
         means = lift_df["mean_improvement"].astype(float).to_numpy()
-        x = np.arange(len(controls))
+        x = np.arange(len(lift_df))
         axis.bar(x, means, color="#F58518")
         lows = lift_df["ci95_low"].to_numpy(dtype=float)
         highs = lift_df["ci95_high"].to_numpy(dtype=float)
         if np.isfinite(lows).all() and np.isfinite(highs).all():
             axis.errorbar(x, means, yerr=np.vstack((means - lows, highs - means)), fmt="none", color="black", capsize=3)
         axis.axhline(0.0, color="black", linewidth=0.8)
-        axis.set_xticks(x, [labels[value] for value in controls], rotation=25, ha="right")
-        axis.set_ylabel("MRR lift of explicit + real assumptions")
+        axis.set_xticks(x, lift_df["contrast"].tolist(), rotation=25, ha="right")
+        axis.set_ylabel("Paired MRR improvement")
+        axis.set_title("Diagnostic decomposition — assumption-eligible pairs")
         axis.grid(axis="y", alpha=0.25)
-    fig.savefig(paths["control_pdf"], bbox_inches="tight")
-    fig.savefig(paths["control_png"], dpi=args.plot_dpi, bbox_inches="tight")
+    fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
+    fig.savefig(paths["decomposition_png"], dpi=args.plot_dpi, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -1872,6 +2098,9 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     move_df = condition_summary(long_df, "true_next_turn_move_label", args)
     pairwise_df = build_pairwise(long_df, args)
     coverage_df = coverage_summary(long_df, pairs, args)
+    decomposition_df = build_decomposition_table(pairwise_df)
+    audit_df = build_audit_sample(pairs, long_df, args)
+    gate = diagnostic_gate(pairwise_df, long_df, coverage_df)
     overall_metrics = overall_condition_summary(long_df, args)
     paths = final_paths(args.output_dir)
     long_df.to_csv(paths["metrics_long"], index=False)
@@ -1879,6 +2108,9 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     category_df.to_csv(paths["by_category"], index=False)
     move_df.to_csv(paths["by_move"], index=False)
     pairwise_df.to_csv(paths["pairwise"], index=False)
+    decomposition_df.to_csv(paths["decomposition"], index=False)
+    audit_df.to_csv(paths["audit_sample"], index=False)
+    write_json(paths["diagnostic_gate"], gate)
     coverage_df.to_csv(paths["coverage"], index=False)
     plot_results(long_df, pairwise_df, paths, args)
     hash_candidates = dict(paths)
@@ -1895,31 +2127,31 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         for name, path in hash_candidates.items()
         if name != "summary" and path.exists()
     }
-    strict_lookup = {
+    complete_lookup = {
         row["condition"]: row
         for row in overall_metrics
-        if row["analysis_subset"] == "strict_control"
+        if row["analysis_subset"] == "complete_case"
     }
-    strict_mrr_lifts = {
+    complete_mrr_lifts = {
         str(row["target_condition"]): row["mean_improvement"]
         for _, row in pairwise_df.iterrows()
-        if row["analysis_subset"] == "strict_control"
+        if row["analysis_subset"] == "complete_case"
         and row["baseline_condition"] == "explicit_only"
         and row["metric"] == "reciprocal_rank"
     }
-    paper_table = [
+    diagnostic_table = [
         {
             "condition": condition,
-            "mean_rank": strict_lookup.get(condition, {}).get("mean_rank"),
-            "top1_rate": strict_lookup.get(condition, {}).get("top1_rate"),
-            "mrr": strict_lookup.get(condition, {}).get("mrr"),
-            "mrr_lift_vs_explicit_only": 0.0 if condition == "explicit_only" else strict_mrr_lifts.get(condition),
-            "pairs": strict_lookup.get(condition, {}).get("pair_count", 0),
+            "mean_rank": complete_lookup.get(condition, {}).get("mean_rank"),
+            "top1_rate": complete_lookup.get(condition, {}).get("top1_rate"),
+            "mrr": complete_lookup.get(condition, {}).get("mrr"),
+            "mrr_lift_vs_explicit_only": 0.0 if condition == "explicit_only" else complete_mrr_lifts.get(condition),
+            "pairs": complete_lookup.get(condition, {}).get("pair_count", 0),
         }
         for condition in args.conditions
     ]
     summary = {
-        "experiment": "Experiment 1: Explicit-Implicit Representation Baselines",
+        "experiment": "Experiment 1: Explicit-Implicit Diagnostic Decomposition",
         "analysis_stage": "final_analysis",
         "script_version": SCRIPT_VERSION,
         "prompt_version": PROMPT_VERSION,
@@ -1956,13 +2188,15 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "assumption_eligible_pair_count": prepare_manifest["assumption_eligible_pair_count"],
         },
         "full_retained_by_condition": dict(zip(coverage_df["condition"], coverage_df["fully_parsed_pair_count"])),
-        "strict_control_pair_count": int(long_df.loc[long_df["strict_control"] == True, "pair_id"].nunique()),
-        "strict_control_removed_pair_count": len(pairs) - int(long_df.loc[long_df["strict_control"] == True, "pair_id"].nunique()),
+        "complete_case_pair_count": int(long_df.loc[long_df["complete_case"] == True, "pair_id"].nunique()),
+        "complete_case_removed_pair_count": len(pairs) - int(long_df.loc[long_df["complete_case"] == True, "pair_id"].nunique()),
         "unavailable_controls": prepare_manifest["unavailable_controls"],
         "unavailable_control_reasons": prepare_manifest["unavailable_control_reasons"],
         "parse_failures_by_condition": dict(zip(coverage_df["condition"], coverage_df["score_parse_failure_pair_count"])),
         "condition_metrics": overall_metrics,
-        "strict_control_paper_table": paper_table,
+        "complete_case_diagnostic_table": diagnostic_table,
+        "diagnostic_gate": gate,
+        "audit_sample_size": len(audit_df),
         "output_hashes": output_hashes,
         "summary_self_hash_excluded": True,
     }

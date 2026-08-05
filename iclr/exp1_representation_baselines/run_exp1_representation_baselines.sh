@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=exp1_repr_baselines
-#SBATCH --output=iclr/exp1_representation_baselines/exp1_repr_baselines_%A_%a.out
+#SBATCH --job-name=exp1_repr_diagnostic
+#SBATCH --output=iclr/exp1_representation_baselines/_log/exp1_repr_diagnostic_%A_%a.out
 #SBATCH --partition=gpu
 #SBATCH --time=48:00:00
 #SBATCH --nodes=1
@@ -15,7 +15,7 @@ OUTPUT_ROOT="${OUTPUT_ROOT:-iclr/exp1_representation_baselines/results}"
 EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
 MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY-}"
 CATEGORIES_CSV="${CATEGORIES_CSV:-all}"
-CONDITIONS_CSV="${CONDITIONS_CSV:-raw_turn,raw_turn_with_history,explicit_only,assumptions_only,explicit_plus_assumptions,explicit_plus_shuffled_assumptions,explicit_plus_wrong_episode_assumptions}"
+CONDITIONS_CSV="${CONDITIONS_CSV:-raw_turn,raw_turn_with_history,raw_turn_plus_assumptions,explicit_only,explicit_plus_top1_assumption,explicit_plus_top3_assumptions,explicit_plus_assumptions}"
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-30B-A3B-Instruct-2507}"
 MODEL_OUTPUT_NAME="${MODEL_NAME//\//__}"
 OUTPUT_DIR="${OUTPUT_DIR:-${OUTPUT_ROOT}/${MODEL_OUTPUT_NAME}}"
@@ -24,7 +24,7 @@ DOWNLOAD_DIR="${DOWNLOAD_DIR:-/shared/4/models}"
 TENSOR_PARALLEL_SIZE="${TENSOR_PARALLEL_SIZE:-2}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.9}"
 PROMPT_BATCH_SIZE="${PROMPT_BATCH_SIZE:-64}"
-MAX_TOKENS="${MAX_TOKENS:-192}"
+MAX_TOKENS="${MAX_TOKENS:-96}"
 SEED="${SEED:-42}"
 HISTORY_TURNS="${HISTORY_TURNS:-3}"
 BOOTSTRAP_DRAWS="${BOOTSTRAP_DRAWS:-1000}"
@@ -32,6 +32,7 @@ NO_TQDM="${NO_TQDM:-1}"
 DRY_RUN="${DRY_RUN:-0}"
 STRICT_ALL_CONDITIONS="${STRICT_ALL_CONDITIONS:-0}"
 OVERWRITE_SCORES="${OVERWRITE_SCORES:-0}"
+AUDIT_SAMPLE_SIZE_PER_OUTCOME="${AUDIT_SAMPLE_SIZE_PER_OUTCOME:-25}"
 ALLOW_FULL_RUN="${ALLOW_FULL_RUN:-0}"
 export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 
@@ -57,6 +58,7 @@ build_common_args() {
     --seed "${SEED}"
     --history_turns "${HISTORY_TURNS}"
     --bootstrap_draws "${BOOTSTRAP_DRAWS}"
+    --audit_sample_size_per_outcome "${AUDIT_SAMPLE_SIZE_PER_OUTCOME}"
   )
   if [[ -n "${MAX_EPISODES_PER_CATEGORY}" ]]; then
     COMMON_ARGS+=(--max_episodes_per_category "${MAX_EPISODES_PER_CATEGORY}")
@@ -112,7 +114,7 @@ prepared_episode_count() {
 
 submit_stages() {
   if [[ -z "${MAX_EPISODES_PER_CATEGORY}" && "${ALLOW_FULL_RUN}" != "1" ]]; then
-    echo "Refusing an ungated full-corpus submission. Run the five-episode smoke test first, then set ALLOW_FULL_RUN=1 after reviewing coverage and parsing." >&2
+    echo "Refusing an ungated full-corpus submission. Run the five-episode diagnostic smoke test first, then review the audit and diagnostic gate before setting ALLOW_FULL_RUN=1." >&2
     exit 1
   fi
   build_common_args
@@ -128,6 +130,7 @@ submit_stages() {
   export MAX_EPISODES_PER_CATEGORY CATEGORIES_CSV CONDITIONS_CSV MODEL_NAME DOWNLOAD_DIR
   export TENSOR_PARALLEL_SIZE GPU_MEMORY_UTILIZATION PROMPT_BATCH_SIZE MAX_TOKENS SEED
   export HISTORY_TURNS BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
+  export AUDIT_SAMPLE_SIZE_PER_OUTCOME
   export ALLOW_FULL_RUN
   PATCH_SUBMISSION="$(sbatch --parsable --array="${ARRAY_RANGE}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"
   PATCH_JOB_ID="${PATCH_SUBMISSION%%;*}"

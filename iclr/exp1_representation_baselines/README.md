@@ -1,26 +1,51 @@
-# Explicit–Implicit Representation Baselines
+# Explicit–Implicit Diagnostic Decomposition
 
-This isolated experiment asks whether explicit propositions plus inferred assumptions make the true immediate next turn easier to rank than raw, explicit-only, history, assumption-only, or corrupted-assumption representations. It does not train an encoder or change any annotation pipeline.
+This experiment diagnoses where next-turn information is lost instead of treating
+`explicit_plus_assumptions` as a single paper claim. Candidate pools, pair construction,
+and deterministic task ordering remain unchanged. The new prompt identity is
+`representation-diagnostic-v2`, so legacy scores cannot be resumed accidentally.
 
-All commands are run from the repository root. Results are model-scoped by default: a model ID such as `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to `results/Qwen__Qwen3-30B-A3B-Instruct-2507/`. The `__` safely represents the `/` in a Hugging Face repository ID. The repository-level `.gitignore` excludes only bulk prepared/scored/donor JSONL data, patch shards, and Slurm logs; generated CSV tables, PDF/PNG plots, summaries, and manifests remain visible to Git.
+Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
 
-## Conditions
+```text
+iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/
+```
 
-The default run scores these exact condition IDs:
+Changing `MODEL_NAME` selects another model-named folder automatically.
+
+## Default diagnostic conditions
+
+The default pipeline scores seven conditions:
 
 1. `raw_turn`
 2. `raw_turn_with_history`
-3. `explicit_only`
-4. `assumptions_only`
-5. `explicit_plus_assumptions`
-6. `explicit_plus_shuffled_assumptions`
-7. `explicit_plus_wrong_episode_assumptions`
+3. `raw_turn_plus_assumptions`
+4. `explicit_only`
+5. `explicit_plus_top1_assumption`
+6. `explicit_plus_top3_assumptions`
+7. `explicit_plus_assumptions`
 
-`raw_turn_plus_assumptions` is available only when named explicitly with `--conditions`.
+The first-one and first-three conditions use the deterministic extraction order because
+the annotations do not contain an importance ranking. The original conditions
+`assumptions_only`, `explicit_plus_shuffled_assumptions`, and
+`explicit_plus_wrong_episode_assumptions` remain available through `--conditions`, but
+they are no longer part of the default diagnostic run.
+
+The principal contrasts are:
+
+| Contrast | Diagnostic question |
+|---|---|
+| `explicit_plus_assumptions - explicit_only` | Do assumptions add signal after abstraction? |
+| `raw_turn_plus_assumptions - raw_turn` | Do assumptions add signal beyond lexical context? |
+| `raw_turn - explicit_only` | How much information is lost during proposition extraction? |
+| `raw_turn_with_history - raw_turn` | How much does discourse history contribute? |
+| first 1 / first 3 / all assumptions | Does assumption volume create overload? |
+
+Positive pairwise values always favor the condition on the left.
 
 ## CPU validation
 
-Run the tests without `vllm` or a GPU:
+Run tests without importing `vllm`:
 
 ```bash
 python -m unittest discover \
@@ -28,14 +53,7 @@ python -m unittest discover \
   -p 'test_*.py' -v
 ```
 
-Build a prepared cache without loading the judge model:
-
-```bash
-python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
-  --prepare_only
-```
-
-Run preparation, deterministic fake scoring, analysis, and plot generation locally:
+Run a one-episode fake-score pipeline:
 
 ```bash
 python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
@@ -44,46 +62,60 @@ python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
   --bootstrap_draws 20
 ```
 
-The fake scorer always gives the true continuation score 10. It validates plumbing only and must never be reported as an experimental result.
+Fake scoring validates plumbing only and must not be reported as an experimental result.
 
-## Resumable stages
+## GPU smoke pipeline
 
-The main entrypoint supports four mutually exclusive stage flags:
+The `_log` directory must exist before Slurm opens the job log. Submit the shell file with
+`sbatch`, not `bash`:
 
 ```bash
-python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py --prepare_only
-python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py --score_only
-python -u iclr/exp1_representation_baselines/merge_exp1_representation_patches.py --num_patches 15
-python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py --analysis_only
+mkdir -p iclr/exp1_representation_baselines/_log
+
+MAX_EPISODES_PER_CATEGORY=5 \
+EPISODES_PER_PATCH=5 \
+sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
-Successful score rows are resumed by `(pair_id, candidate_id, condition, model_name, prompt_version)`. Failed parses are removed once at restart and retried; `--overwrite_scores` intentionally replaces completed rows for the active model and prompt version.
+The coordinator performs preparation, submits a scoring array, then submits dependent
+merge and analysis jobs. Every scoring array task requests two A6000 GPUs and starts one
+vLLM process with `tensor_parallel_size=2` and the multiprocessing executor.
 
-## Slurm
+The default output budget is 96 tokens per judgment. Useful overrides include
+`MODEL_NAME`, `CONDITIONS_CSV`, `PROMPT_BATCH_SIZE`, `MAX_TOKENS`, `SEED`,
+`HISTORY_TURNS`, `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and the CUDA/FlashInfer variables.
 
-Submit the runner with `sbatch`, not `bash`. The coordinator prepares once, submits a score array whose tasks each request two A6000s, and then submits dependent merge and analysis jobs. Each scoring task runs one vLLM process with `tensor_parallel_size=2` and the multiprocessing executor so the model is sharded across both allocated GPUs. An uncapped full-corpus submission is refused unless it is explicitly unlocked.
+## Diagnostic outputs
+
+Analysis emits the usual long/wide metrics, category/move summaries, coverage, and
+pairwise deltas plus:
+
+- `exp1_representation_decomposition.csv`: the planned contrasts in a compact table.
+- `exp1_representation_audit_sample.csv`: up to 25 strongest wins, losses, and ties,
+  including the raw turn, extracted representations, history, and true continuation.
+- `exp1_representation_diagnostic_gate.json`: a machine-readable interpretation and
+  smoke-test gate.
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case MRR and Top-1.
+- `exp1_representation_decomposition_lifts.{pdf,png}`: assumption-eligible MRR lifts.
+
+The analysis subsets are `full`, `assumption_eligible`, and `complete_case`.
+`complete_case` requires all selected conditions to parse successfully on the same pair.
+
+## Decision gate
+
+The script never automatically authorizes a full-corpus run from one judge. It first checks whether an
+incremental MRR interval excludes zero, whether positive effects span at least two
+categories, and whether every condition retains at least 98% of eligible pairs. A
+passing single-model diagnostic advances to a second-model smoke test and manual audit.
+
+Run the same smoke test with another judge by changing `MODEL_NAME`; its artifacts go to
+a separate model folder. Only after both smoke runs and the audit are reviewed should the
+full corpus be unlocked:
 
 ```bash
 ALLOW_FULL_RUN=1 \
 sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
-Five-episode-per-category GPU smoke test:
-
-```bash
-MAX_EPISODES_PER_CATEGORY=5 \
-EPISODES_PER_PATCH=5 \
-sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
-```
-
-Useful overrides include `INPUT_DIR`, `OUTPUT_DIR`, `CATEGORIES_CSV`, `CONDITIONS_CSV`, `MODEL_NAME`, `PROMPT_BATCH_SIZE`, `MAX_TOKENS`, `SEED`, `HISTORY_TURNS`, `DRY_RUN`, and the CUDA/FlashInfer variables retained from the original Experiment 1 runner.
-
-`OUTPUT_ROOT` changes the parent of all model folders. `OUTPUT_DIR` is an intentional exact-directory override; normally leave it unset so changing `MODEL_NAME` automatically selects a different result folder.
-
-Before setting `ALLOW_FULL_RUN=1`, inspect at least 50 rows in `exp1_representation_scores.jsonl` across all conditions and review `exp1_representation_coverage.csv` plus the control-unavailability and parsing sections of `exp1_representation_summary.json`.
-
-## Analysis contract
-
-The analysis produces condition-level and pair-level metrics for the full retained, assumption-eligible, and strict-control subsets. Pairwise improvements are oriented so positive always favors the target condition. The paper plots use only strict-control pairs, ensuring all seven conditions are compared on the same examples.
-
-The default full corpus represented 29,163 pairs in the previous experiment, or roughly 5.1 million pointwise prompts across seven conditions. Inspect the smoke-test preparation coverage, control availability, parsing failures, and saved source representations before submitting that full run.
+The full run remains expensive. Do not unlock it merely because preparation and parsing
+succeeded.
