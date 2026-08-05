@@ -1,0 +1,251 @@
+{
+  "assumption_eligible_pair_count": 643,
+  "candidate_complete_pair_count": 661,
+  "candidate_count_target": 25,
+  "candidate_incomplete_pair_count": 0,
+  "categories": [
+    "business",
+    "commentary",
+    "news",
+    "political",
+    "religion",
+    "sports"
+  ],
+  "complete": true,
+  "conditions": [
+    "raw_turn",
+    "raw_turn_with_history",
+    "explicit_only",
+    "assumptions_only",
+    "explicit_plus_assumptions",
+    "explicit_plus_shuffled_assumptions",
+    "explicit_plus_wrong_episode_assumptions"
+  ],
+  "episode_file_count": 30,
+  "experiment": "Experiment 1: Explicit-Implicit Representation Baselines",
+  "git_commit": "ed2e2ba83fc7d5b123288db6bbff47e3ba76107e",
+  "history_turns": 3,
+  "input_dir": "data/conversation_moves_labeled",
+  "input_manifest_sha256": "c185f6f76b00042fb640ad1bf473021a3b38b98eebb97c8a7e8ac7517c5c5717",
+  "negative_count_target": 24,
+  "negative_sampling_counts": {
+    "negative_count_global_backfill": 0,
+    "negative_count_same_category_backfill": 732,
+    "negative_count_same_category_headline": 5288,
+    "negative_count_same_category_same_move": 4646,
+    "negative_count_same_episode_gap3": 5198
+  },
+  "normalization_error_count": 0,
+  "normalization_errors": [],
+  "output_dir": "iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507",
+  "pair_count_before_candidate_filter": 661,
+  "prepared_pairs_jsonl": "iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/exp1_representation_prepared_pairs.jsonl",
+  "prepared_pairs_sha256": "7a9c3bce211fb381560c0da8ba651ff2e012d043c2cf86a041ed30f01acde26d",
+  "prompt_version": "representation-baselines-v1",
+  "runtime": {
+    "matplotlib": "3.10.3",
+    "numpy": "2.3.5",
+    "pandas": "3.0.2",
+    "platform": "Linux-6.8.0-134-generic-x86_64-with-glibc2.39",
+    "python": "3.12.11",
+    "torch": "2.11.0+cu129",
+    "vllm": "0.22.1"
+  },
+  "script_version": "1.0.0",
+  "seed": 42,
+  "selected_episode_files": [
+    {
+      "category": "business",
+      "modified_ns": 1774057997728169000,
+      "path": "data/conversation_moves_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "size": 69102
+    },
+    {
+      "category": "business",
+      "modified_ns": 1774057998289590000,
+      "path": "data/conversation_moves_labeled/business/0004__Bhang___Jamie_Pearson.json",
+      "size": 44653
+    },
+    {
+      "category": "business",
+      "modified_ns": 1774057999042452000,
+      "path": "data/conversation_moves_labeled/business/0007__Talaria_Transportation___Ari_Raptis.json",
+      "size": 84395
+    },
+    {
+      "category": "business",
+      "modified_ns": 1774057999848373000,
+      "path": "data/conversation_moves_labeled/business/0008__Jay_Rush___Moose_Labs___MouthPeace.json",
+      "size": 84141
+    },
+    {
+      "category": "business",
+      "modified_ns": 1774058000142845000,
+      "path": "data/conversation_moves_labeled/business/001._Magic_Dust.json",
+      "size": 63127
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1774059172810549000,
+      "path": "data/conversation_moves_labeled/commentary/0014_-QUALITY_CONTENT_W__SIMON_LUCKHOFF.json",
+      "size": 193482
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1774059173873719000,
+      "path": "data/conversation_moves_labeled/commentary/0014_-QUALITY_CONTENT_W__SIMON_LUCKHOFF_2.json",
+      "size": 192593
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1774059177140654000,
+      "path": "data/conversation_moves_labeled/commentary/004_-__Dance_Floor_Anthem__I_Don_t_Wanna_Be_In_Love__x_Angela_Mastrogiacomo.json",
+      "size": 337505
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1774059178339991000,
+      "path": "data/conversation_moves_labeled/commentary/004_-__Dance_Floor_Anthem__I_Don_t_Wanna_Be_In_Love__x_Angela_Mastrogiacomo_2.json",
+      "size": 331263
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1774059178771718000,
+      "path": "data/conversation_moves_labeled/commentary/049__Televising_the_Revolution.json",
+      "size": 146539
+    },
+    {
+      "category": "news",
+      "modified_ns": 1774060776989140000,
+      "path": "data/conversation_moves_labeled/news/01__The_Public_Pillory_in_crisis_management.json",
+      "size": 143583
+    },
+    {
+      "category": "news",
+      "modified_ns": 1774060778251552000,
+      "path": "data/conversation_moves_labeled/news/13_Live__Love__Laugh_with_Lexie_in_Lockdown__-_Dancing_Leopard__Dalgonas___Dangerously_tight_shorts.json",
+      "size": 119877
+    },
+    {
+      "category": "news",
+      "modified_ns": 1774060780552173000,
+      "path": "data/conversation_moves_labeled/news/20VC__Mark_Cuban_on_His_Relationship_To_Wealth_and_Risk__Why_Coming_Out_of_The_Pandemic_Will_Be_The_Best_Time_In_The_History_of_Mankind_To_Start_A_Business___Wh.json",
+      "size": 217856
+    },
+    {
+      "category": "news",
+      "modified_ns": 1774060784185811000,
+      "path": "data/conversation_moves_labeled/news/226__MLS_Tournament__Orlando_Or_Bust.json",
+      "size": 277266
+    },
+    {
+      "category": "news",
+      "modified_ns": 1774060784439670000,
+      "path": "data/conversation_moves_labeled/news/56__Livin__that__Phase_2__life.json",
+      "size": 49925
+    },
+    {
+      "category": "political",
+      "modified_ns": 1772641884406378000,
+      "path": "data/conversation_moves_labeled/political/42060.json",
+      "size": 61069
+    },
+    {
+      "category": "political",
+      "modified_ns": 1772641884416753000,
+      "path": "data/conversation_moves_labeled/political/42061.json",
+      "size": 69347
+    },
+    {
+      "category": "political",
+      "modified_ns": 1772641884427212000,
+      "path": "data/conversation_moves_labeled/political/42073.json",
+      "size": 127622
+    },
+    {
+      "category": "political",
+      "modified_ns": 1772641884454101000,
+      "path": "data/conversation_moves_labeled/political/42077.json",
+      "size": 127679
+    },
+    {
+      "category": "political",
+      "modified_ns": 1772641884467232000,
+      "path": "data/conversation_moves_labeled/political/42088.json",
+      "size": 175970
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1774061152821500000,
+      "path": "data/conversation_moves_labeled/religion/001-LIFE_IN_RHYTHM___THE_RHYTHM_OF_PRAYER.json",
+      "size": 137418
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1774061154355224000,
+      "path": "data/conversation_moves_labeled/religion/001_How_Can_I_Help_My_Children_Gain_their_own_Testimony.json",
+      "size": 154355
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1774061154694854000,
+      "path": "data/conversation_moves_labeled/religion/002_-_God_s_Call_Is_Winistry.json",
+      "size": 26310
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1774061155167358000,
+      "path": "data/conversation_moves_labeled/religion/002_Never_Give_Up_On_Your_Dreams.json",
+      "size": 35913
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1774061156491697000,
+      "path": "data/conversation_moves_labeled/religion/003_Living_a__Let_it_Go__Life__Even_as_a_Go-Getter__with_Stephanie_O_Hara.json",
+      "size": 94101
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1774061866964363000,
+      "path": "data/conversation_moves_labeled/sports/006_-_Greg_Bielecki__La_Salle_College_High_School_2.json",
+      "size": 260554
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1774061868892064000,
+      "path": "data/conversation_moves_labeled/sports/034__Looking_Ahead.json",
+      "size": 195338
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1774061870117239000,
+      "path": "data/conversation_moves_labeled/sports/037_-_Haley_Carter__United_Soccer_Coaches_Women_s_Advocacy_Chair.json",
+      "size": 156915
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1774061870906658000,
+      "path": "data/conversation_moves_labeled/sports/05.20.20__How_Volkswagen_Helps_Ski_and_Snowboard_Instructors_Get_to_the_Slopes.json",
+      "size": 83712
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1774061872300027000,
+      "path": "data/conversation_moves_labeled/sports/06.09.2020__The_Bucks_are_headed_to_Disney_World_as_basketball_sets_return.json",
+      "size": 159838
+    }
+  ],
+  "source_episode_count": 28,
+  "stage": "prepare",
+  "turn_count": 817,
+  "unavailable_control_reasons": {
+    "explicit_plus_shuffled_assumptions": {},
+    "explicit_plus_wrong_episode_assumptions": {
+      "no_valid_same_episode_nonadjacent_donor": 4
+    }
+  },
+  "unavailable_controls": {
+    "explicit_plus_shuffled_assumptions": 0,
+    "explicit_plus_wrong_episode_assumptions": 4
+  }
+}
