@@ -1,0 +1,57 @@
+{
+  "criteria": {
+    "category_breadth_at_least_two": true,
+    "coverage_at_least_98_percent": false,
+    "minimum_condition_retained_rate": 0.0045385779122541605,
+    "positive_category_count_primary": 0,
+    "positive_category_count_raw_context": 2,
+    "primary_mrr_ci_excludes_zero": false,
+    "raw_context_mrr_ci_excludes_zero": false
+  },
+  "full_corpus_blocker": "A second judge-model smoke run and manual audit are required before the full-corpus gate can pass.",
+  "gate_version": "diagnostic-gate-v1",
+  "interpretation": "no_robust_incremental_assumption_signal",
+  "primary_category_mrr_deltas": {
+    "news": 0.0,
+    "political": 0.0
+  },
+  "primary_contrast": {
+    "analysis_subset": "assumption_eligible",
+    "baseline_condition": "explicit_only",
+    "ci95_high": null,
+    "ci95_low": null,
+    "ci_unstable": true,
+    "cluster_count": 2,
+    "losses": 0,
+    "mean_improvement": 0.0,
+    "metric": "reciprocal_rank",
+    "paired_sample_size": 3,
+    "target_condition": "explicit_plus_assumptions",
+    "ties": 3,
+    "wins": 0
+  },
+  "raw_context_category_mrr_deltas": {
+    "business": 0.0,
+    "commentary": 0.08333333333333333,
+    "news": 0.007936507936507936,
+    "political": -0.46875
+  },
+  "raw_context_contrast": {
+    "analysis_subset": "assumption_eligible",
+    "baseline_condition": "raw_turn",
+    "ci95_high": null,
+    "ci95_low": null,
+    "ci_unstable": true,
+    "cluster_count": 5,
+    "losses": 1,
+    "mean_improvement": -0.1271494708994709,
+    "metric": "reciprocal_rank",
+    "paired_sample_size": 6,
+    "target_condition": "raw_turn_plus_assumptions",
+    "ties": 3,
+    "wins": 2
+  },
+  "ready_for_cross_model_smoke": false,
+  "ready_for_full_corpus": false,
+  "recommended_next_stage": "manual_audit_or_representation_revision"
+}
