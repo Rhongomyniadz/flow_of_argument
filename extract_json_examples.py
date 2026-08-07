@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Copy one representative JSON file from each dataset directory.
+"""Copy representative JSON files from the repository's data stages.
 
 The repository's data products are commonly arranged as directories such as::
 
     data/<category>/<stage>/*.json
 
-This script selects one data JSON from every directory containing JSON files,
-copies it below ``examples/`` while preserving its relative path, and writes a
-manifest describing the detected JSON structure. Metadata files such as
+This script selects one episode JSON from each requested processing-stage tree,
+plus one episode from outside those trees as a raw-data example. It copies each
+sample to ``examples/<stage>/example.json`` and writes a manifest describing the
+source and detected JSON structure. Metadata files such as
 ``manifest_by_episode.json`` are ignored by default because they do not expose
 the turn schema that downstream preprocessing needs to inspect.
 """
@@ -29,6 +30,14 @@ LOG = logging.getLogger("extract-json-examples")
 DEFAULT_INPUT_ROOT = Path("data")
 DEFAULT_OUTPUT_ROOT = Path("examples")
 MANIFEST_NAME = "examples_manifest.json"
+DEFAULT_STAGE_NAMES = (
+    "conversation_moves_labeled",
+    "implicature_flow",
+    "maxim_violations_labeled",
+    "stance_labeled",
+    "turn_type_labeled",
+)
+RAW_SAMPLE_NAME = "raw_data"
 
 METADATA_FILENAMES = {
     "ai_episode_names.json",
@@ -75,11 +84,20 @@ class DirectoryRecord:
     selected_example: str | None
 
 
+@dataclass(frozen=True)
+class SampleRequestRecord:
+    sample_name: str
+    source_root: str | None
+    status: str
+    source_file: str | None
+    example_file: str | None
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Copy one representative JSON from every JSON-containing directory "
-            "under a data root into examples/."
+            "Copy one episode JSON from each requested processing stage, plus "
+            "one raw-data JSON, into examples/."
         )
     )
     parser.add_argument(
@@ -93,6 +111,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=DEFAULT_OUTPUT_ROOT,
         help="Destination root for copied examples (default: examples).",
+    )
+    parser.add_argument(
+        "--stage",
+        action="append",
+        dest="stages",
+        default=None,
+        help=(
+            "Stage-directory name to sample. Repeat for multiple stages. "
+            "Defaults to conversation_moves_labeled, implicature_flow, "
+            "maxim_violations_labeled, stance_labeled, and turn_type_labeled."
+        ),
+    )
+    parser.add_argument(
+        "--raw-root",
+        type=Path,
+        default=None,
+        help=(
+            "Optional explicit raw-data directory. When omitted, the script "
+            "selects an episode from outside the requested stage directories."
+        ),
     )
     parser.add_argument(
         "--include-metadata",
@@ -125,6 +163,13 @@ def is_relative_to(path: Path, directory: Path) -> bool:
     except ValueError:
         return False
     return True
+
+
+def display_path(path: Path, root: Path) -> str:
+    try:
+        return path.relative_to(root).as_posix() or "."
+    except ValueError:
+        return str(path)
 
 
 def looks_like_turn(value: Any) -> bool:
@@ -207,12 +252,17 @@ def candidate_order(paths: Iterable[Path]) -> list[Path]:
     )
 
 
-def choose_example(
-    directory: Path,
+def choose_example_from_tree(
+    tree_root: Path,
     *,
     include_metadata: bool,
+    excluded_roots: tuple[Path, ...] = (),
 ) -> tuple[Path, JsonDescription] | None:
-    candidates = candidate_order(directory.glob("*.json"))
+    candidates = candidate_order(
+        path
+        for path in tree_root.rglob("*.json")
+        if not any(is_relative_to(path.resolve(), root) for root in excluded_roots)
+    )
     metadata_fallback: tuple[Path, JsonDescription] | None = None
     for path in candidates:
         try:
@@ -237,6 +287,46 @@ def all_data_directories(input_root: Path, output_root: Path) -> list[Path]:
     return sorted(set(directories), key=lambda path: path.as_posix().casefold())
 
 
+def locate_stage_root(input_root: Path, stage_name: str) -> Path | None:
+    direct = input_root / stage_name
+    if direct.is_dir():
+        return direct
+    matches = sorted(
+        (
+            path
+            for path in input_root.rglob(stage_name)
+            if path.is_dir()
+        ),
+        key=lambda path: (len(path.relative_to(input_root).parts), path.as_posix().casefold()),
+    )
+    return matches[0] if matches else None
+
+
+def copy_selected_example(
+    *,
+    input_root: Path,
+    output_root: Path,
+    sample_name: str,
+    source: Path,
+    description: JsonDescription,
+    overwrite: bool,
+) -> ExampleRecord:
+    destination = output_root / sample_name / "example.json"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists() and not overwrite:
+        raise FileExistsError(
+            f"Example already exists: {destination}. Re-run with --overwrite to replace it."
+        )
+    shutil.copy2(source, destination)
+    LOG.info("Selected %s -> %s", source, destination)
+    return ExampleRecord(
+        source_directory=display_path(source.parent, input_root),
+        source_file=display_path(source, input_root),
+        example_file=destination.relative_to(output_root).as_posix(),
+        **asdict(description),
+    )
+
+
 def copy_examples(args: argparse.Namespace) -> list[ExampleRecord]:
     input_root = canonical_path(args.input_root)
     output_root = canonical_path(args.output_root)
@@ -246,69 +336,140 @@ def copy_examples(args: argparse.Namespace) -> list[ExampleRecord]:
         raise ValueError("Input and output roots must be different directories")
 
     output_root.mkdir(parents=True, exist_ok=True)
+    stage_names = tuple(dict.fromkeys(args.stages or DEFAULT_STAGE_NAMES))
+    stage_roots = {
+        stage_name: locate_stage_root(input_root, stage_name)
+        for stage_name in stage_names
+    }
+    existing_stage_roots = tuple(
+        root.resolve() for root in stage_roots.values() if root is not None
+    )
+
     records: list[ExampleRecord] = []
+    request_records: list[SampleRequestRecord] = []
+    for stage_name, stage_root in stage_roots.items():
+        if stage_root is None:
+            request_records.append(
+                SampleRequestRecord(stage_name, None, "stage_directory_missing", None, None)
+            )
+            LOG.warning("Stage directory not found: %s", stage_name)
+            continue
+        chosen = choose_example_from_tree(
+            stage_root,
+            include_metadata=args.include_metadata,
+        )
+        if chosen is None:
+            request_records.append(
+                SampleRequestRecord(
+                    stage_name,
+                    stage_root.relative_to(input_root).as_posix(),
+                    "no_episode_like_json",
+                    None,
+                    None,
+                )
+            )
+            LOG.warning("No episode-like JSON found under %s", stage_root)
+            continue
+        source, description = chosen
+        record = copy_selected_example(
+            input_root=input_root,
+            output_root=output_root,
+            sample_name=stage_name,
+            source=source,
+            description=description,
+            overwrite=args.overwrite,
+        )
+        records.append(record)
+        request_records.append(
+            SampleRequestRecord(
+                stage_name,
+                stage_root.relative_to(input_root).as_posix(),
+                "example_selected",
+                record.source_file,
+                record.example_file,
+            )
+        )
+
+    if args.raw_root is not None:
+        raw_root = canonical_path(args.raw_root)
+        if not raw_root.is_dir():
+            raise FileNotFoundError(
+                f"Explicit raw-data root does not exist or is not a directory: {raw_root}"
+            )
+        raw_exclusions: tuple[Path, ...] = ()
+    else:
+        raw_root = input_root
+        raw_exclusions = existing_stage_roots
+    raw_chosen = choose_example_from_tree(
+        raw_root,
+        include_metadata=args.include_metadata,
+        excluded_roots=raw_exclusions,
+    )
+    if raw_chosen is None:
+        request_records.append(
+            SampleRequestRecord(
+                RAW_SAMPLE_NAME,
+                str(raw_root),
+                "no_episode_like_json_outside_stage_roots",
+                None,
+                None,
+            )
+        )
+        LOG.warning("No raw-data episode JSON found under %s", raw_root)
+    else:
+        source, description = raw_chosen
+        record = copy_selected_example(
+            input_root=input_root,
+            output_root=output_root,
+            sample_name=RAW_SAMPLE_NAME,
+            source=source,
+            description=description,
+            overwrite=args.overwrite,
+        )
+        records.append(record)
+        request_records.append(
+            SampleRequestRecord(
+                RAW_SAMPLE_NAME,
+                str(raw_root),
+                "example_selected",
+                record.source_file,
+                record.example_file,
+            )
+        )
+
     directory_records: list[DirectoryRecord] = []
     for directory in all_data_directories(input_root, output_root):
         direct_json_files = sorted(directory.glob("*.json"))
         relative_directory = directory.relative_to(input_root).as_posix() or "."
-        if not direct_json_files:
-            directory_records.append(
-                DirectoryRecord(
-                    directory=relative_directory,
-                    direct_json_count=0,
-                    status="no_json_files_directly_in_directory",
-                    selected_example=None,
-                )
-            )
-            LOG.info("Directory %s: no direct JSON files", relative_directory)
-            continue
-        chosen = choose_example(directory, include_metadata=args.include_metadata)
-        if chosen is None:
-            directory_records.append(
-                DirectoryRecord(
-                    directory=relative_directory,
-                    direct_json_count=len(direct_json_files),
-                    status="no_episode_like_json",
-                    selected_example=None,
-                )
-            )
-            LOG.info(
-                "Directory %s: %d JSON file(s), but none is episode-like",
-                relative_directory,
-                len(direct_json_files),
-            )
-            continue
-        source, description = chosen
-        relative_path = directory.relative_to(input_root)
-        destination = output_root / relative_path / source.name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        if destination.exists() and not args.overwrite:
-            raise FileExistsError(
-                f"Example already exists: {destination}. Re-run with --overwrite to replace it."
-            )
-        shutil.copy2(source, destination)
-        records.append(
-            ExampleRecord(
-                source_directory=directory.relative_to(input_root).as_posix() or ".",
-                source_file=source.relative_to(input_root).as_posix(),
-                example_file=destination.relative_to(output_root).as_posix(),
-                **asdict(description),
-            )
+        selected = next(
+            (
+                record.example_file
+                for record in records
+                if record.source_directory == relative_directory
+            ),
+            None,
         )
         directory_records.append(
             DirectoryRecord(
                 directory=relative_directory,
                 direct_json_count=len(direct_json_files),
-                status="example_selected",
-                selected_example=destination.relative_to(output_root).as_posix(),
+                status=(
+                    "contains_selected_example"
+                    if selected
+                    else "listed_not_selected"
+                    if direct_json_files
+                    else "no_json_files_directly_in_directory"
+                ),
+                selected_example=selected,
             )
         )
-        LOG.info("Selected %s -> %s", source, destination)
 
     manifest = {
         "input_root": str(input_root),
         "output_root": str(output_root),
         "include_metadata": bool(args.include_metadata),
+        "requested_stages": list(stage_names),
+        "sample_requests": [asdict(record) for record in request_records],
         "directory_count": len(directory_records),
         "directories": [asdict(record) for record in directory_records],
         "sample_count": len(records),
