@@ -1,57 +1,63 @@
 {
   "criteria": {
     "category_breadth_at_least_two": true,
-    "coverage_at_least_98_percent": false,
-    "minimum_condition_retained_rate": 0.0045385779122541605,
-    "positive_category_count_primary": 0,
+    "coverage_at_least_98_percent": true,
+    "minimum_condition_retained_rate": 0.9909228441754917,
+    "positive_category_count_primary": 5,
     "positive_category_count_raw_context": 2,
-    "primary_mrr_ci_excludes_zero": false,
+    "primary_mrr_ci_excludes_zero": true,
     "raw_context_mrr_ci_excludes_zero": false
   },
   "full_corpus_blocker": "A second judge-model smoke run and manual audit are required before the full-corpus gate can pass.",
   "gate_version": "diagnostic-gate-v1",
-  "interpretation": "no_robust_incremental_assumption_signal",
+  "interpretation": "assumptions_help_after_abstraction_but_not_beyond_raw_context",
   "primary_category_mrr_deltas": {
-    "news": 0.0,
-    "political": 0.0
+    "business": -0.004683821804074968,
+    "commentary": 0.004628031742461386,
+    "news": 0.006670665793775416,
+    "political": 0.04434054507583919,
+    "religion": 0.0421006329860146,
+    "sports": 0.04634267047945238
   },
   "primary_contrast": {
     "analysis_subset": "assumption_eligible",
     "baseline_condition": "explicit_only",
-    "ci95_high": null,
-    "ci95_low": null,
-    "ci_unstable": true,
-    "cluster_count": 2,
-    "losses": 0,
-    "mean_improvement": 0.0,
+    "ci95_high": 0.03787403387703447,
+    "ci95_low": 0.0024190815275878107,
+    "ci_unstable": false,
+    "cluster_count": 28,
+    "losses": 131,
+    "mean_improvement": 0.01933858545765604,
     "metric": "reciprocal_rank",
-    "paired_sample_size": 3,
+    "paired_sample_size": 637,
     "target_condition": "explicit_plus_assumptions",
-    "ties": 3,
-    "wins": 0
+    "ties": 327,
+    "wins": 179
   },
   "raw_context_category_mrr_deltas": {
-    "business": 0.0,
-    "commentary": 0.08333333333333333,
-    "news": 0.007936507936507936,
-    "political": -0.46875
+    "business": -0.021537688546251467,
+    "commentary": -0.02950317494414517,
+    "news": -0.004807404596937819,
+    "political": -0.02837824650484497,
+    "religion": 0.0066973597949818225,
+    "sports": 0.013835113484646196
   },
   "raw_context_contrast": {
     "analysis_subset": "assumption_eligible",
     "baseline_condition": "raw_turn",
-    "ci95_high": null,
-    "ci95_low": null,
-    "ci_unstable": true,
-    "cluster_count": 5,
-    "losses": 1,
-    "mean_improvement": -0.1271494708994709,
+    "ci95_high": 0.007384066379894802,
+    "ci95_low": -0.0342556475189436,
+    "ci_unstable": false,
+    "cluster_count": 28,
+    "losses": 148,
+    "mean_improvement": -0.013439559236072476,
     "metric": "reciprocal_rank",
-    "paired_sample_size": 6,
+    "paired_sample_size": 640,
     "target_condition": "raw_turn_plus_assumptions",
-    "ties": 3,
-    "wins": 2
+    "ties": 347,
+    "wins": 145
   },
-  "ready_for_cross_model_smoke": false,
+  "ready_for_cross_model_smoke": true,
   "ready_for_full_corpus": false,
-  "recommended_next_stage": "manual_audit_or_representation_revision"
+  "recommended_next_stage": "cross_model_smoke"
 }
