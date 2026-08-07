@@ -1,0 +1,490 @@
+{
+  "input_root": "/shared/6/projects/flow_of_argument/data",
+  "output_root": "/shared/6/projects/flow_of_argument/examples",
+  "include_metadata": false,
+  "requested_stages": [
+    "conversation_moves_labeled",
+    "implicature_flow",
+    "maxim_violations_labeled",
+    "stance_labeled",
+    "turn_type_labeled"
+  ],
+  "sample_requests": [
+    {
+      "sample_name": "conversation_moves_labeled",
+      "source_root": "conversation_moves_labeled",
+      "status": "example_selected",
+      "source_file": "conversation_moves_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "conversation_moves_labeled/example.json"
+    },
+    {
+      "sample_name": "implicature_flow",
+      "source_root": "implicature_flow",
+      "status": "no_episode_like_json",
+      "source_file": null,
+      "example_file": null
+    },
+    {
+      "sample_name": "maxim_violations_labeled",
+      "source_root": "maxim_violations_labeled",
+      "status": "example_selected",
+      "source_file": "maxim_violations_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "maxim_violations_labeled/example.json"
+    },
+    {
+      "sample_name": "stance_labeled",
+      "source_root": "stance_labeled",
+      "status": "example_selected",
+      "source_file": "stance_labeled/1024/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "stance_labeled/example.json"
+    },
+    {
+      "sample_name": "turn_type_labeled",
+      "source_root": "turn_type_labeled",
+      "status": "example_selected",
+      "source_file": "turn_type_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "turn_type_labeled/example.json"
+    },
+    {
+      "sample_name": "raw_data",
+      "source_root": "/shared/6/projects/flow_of_argument/data",
+      "status": "example_selected",
+      "source_file": "business/parsed/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "raw_data/example.json"
+    }
+  ],
+  "directory_count": 45,
+  "directories": [
+    {
+      "directory": ".",
+      "direct_json_count": 2,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "business",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "business/parsed",
+      "direct_json_count": 7774,
+      "status": "contains_selected_example",
+      "selected_example": "raw_data/example.json"
+    },
+    {
+      "directory": "business/raw",
+      "direct_json_count": 7774,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "commentary",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "commentary/parsed",
+      "direct_json_count": 1765,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "commentary/raw",
+      "direct_json_count": 1765,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled",
+      "direct_json_count": 0,
+      "status": "no_json_files_directly_in_directory",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled/business",
+      "direct_json_count": 7774,
+      "status": "contains_selected_example",
+      "selected_example": "conversation_moves_labeled/example.json"
+    },
+    {
+      "directory": "conversation_moves_labeled/commentary",
+      "direct_json_count": 1765,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled/news",
+      "direct_json_count": 166,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled/political",
+      "direct_json_count": 2308,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled/religion",
+      "direct_json_count": 7743,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "conversation_moves_labeled/sports",
+      "direct_json_count": 433,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "implicature_flow",
+      "direct_json_count": 0,
+      "status": "no_json_files_directly_in_directory",
+      "selected_example": null
+    },
+    {
+      "directory": "implicature_flow/entailment_pairs_1to10",
+      "direct_json_count": 19996,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled/business",
+      "direct_json_count": 7774,
+      "status": "contains_selected_example",
+      "selected_example": "maxim_violations_labeled/example.json"
+    },
+    {
+      "directory": "maxim_violations_labeled/commentary",
+      "direct_json_count": 1765,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled/news",
+      "direct_json_count": 166,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled/political",
+      "direct_json_count": 2308,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled/religion",
+      "direct_json_count": 7743,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "maxim_violations_labeled/sports",
+      "direct_json_count": 433,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "news",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "news/parsed",
+      "direct_json_count": 166,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "news/raw",
+      "direct_json_count": 166,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "political",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "political/parsed",
+      "direct_json_count": 2308,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "political/raw",
+      "direct_json_count": 2308,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "religion",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "religion/parsed",
+      "direct_json_count": 7743,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "religion/raw",
+      "direct_json_count": 7743,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "sports",
+      "direct_json_count": 1,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "sports/parsed",
+      "direct_json_count": 433,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "sports/raw",
+      "direct_json_count": 433,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "stance_labeled",
+      "direct_json_count": 0,
+      "status": "no_json_files_directly_in_directory",
+      "selected_example": null
+    },
+    {
+      "directory": "stance_labeled/1024",
+      "direct_json_count": 19990,
+      "status": "contains_selected_example",
+      "selected_example": "stance_labeled/example.json"
+    },
+    {
+      "directory": "stance_labeled/512",
+      "direct_json_count": 19990,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled",
+      "direct_json_count": 0,
+      "status": "no_json_files_directly_in_directory",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled/business",
+      "direct_json_count": 7774,
+      "status": "contains_selected_example",
+      "selected_example": "turn_type_labeled/example.json"
+    },
+    {
+      "directory": "turn_type_labeled/commentary",
+      "direct_json_count": 1765,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled/news",
+      "direct_json_count": 166,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled/political",
+      "direct_json_count": 2308,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled/religion",
+      "direct_json_count": 7743,
+      "status": "listed_not_selected",
+      "selected_example": null
+    },
+    {
+      "directory": "turn_type_labeled/sports",
+      "direct_json_count": 433,
+      "status": "listed_not_selected",
+      "selected_example": null
+    }
+  ],
+  "sample_count": 5,
+  "samples": [
+    {
+      "source_directory": "conversation_moves_labeled/business",
+      "source_file": "conversation_moves_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "conversation_moves_labeled/example.json",
+      "json_root_type": "list",
+      "detected_kind": "episode",
+      "turn_container_key": null,
+      "turn_count": 23,
+      "top_level_keys": [],
+      "first_turn_keys": [
+        "assumptions",
+        "category",
+        "conversation_move_label",
+        "duration",
+        "end_time",
+        "episode_id",
+        "explicit_propositions",
+        "speaker",
+        "speaker_id",
+        "start_time",
+        "transcript",
+        "turn_count",
+        "turn_file",
+        "turn_idx",
+        "turn_text",
+        "turn_type_label",
+        "wordCount",
+        "word_count",
+        "words_per_second"
+      ]
+    },
+    {
+      "source_directory": "maxim_violations_labeled/business",
+      "source_file": "maxim_violations_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "maxim_violations_labeled/example.json",
+      "json_root_type": "list",
+      "detected_kind": "episode",
+      "turn_container_key": null,
+      "turn_count": 23,
+      "top_level_keys": [],
+      "first_turn_keys": [
+        "assumptions",
+        "category",
+        "conversation_move_label",
+        "duration",
+        "end_time",
+        "episode_id",
+        "explicit_propositions",
+        "maxim_violation_label",
+        "maxim_violation_scheme",
+        "speaker",
+        "speaker_id",
+        "start_time",
+        "transcript",
+        "turn_count",
+        "turn_file",
+        "turn_idx",
+        "turn_text",
+        "turn_type_label",
+        "wordCount",
+        "word_count",
+        "words_per_second"
+      ]
+    },
+    {
+      "source_directory": "stance_labeled/1024",
+      "source_file": "stance_labeled/1024/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "stance_labeled/example.json",
+      "json_root_type": "list",
+      "detected_kind": "episode",
+      "turn_container_key": null,
+      "turn_count": 23,
+      "top_level_keys": [],
+      "first_turn_keys": [
+        "assumptions",
+        "category",
+        "conversation_move_label",
+        "duration",
+        "end_time",
+        "episode_id",
+        "explicit_propositions",
+        "speaker",
+        "speaker_id",
+        "stance_context_k",
+        "stance_pt",
+        "stance_raw",
+        "stance_scheme",
+        "start_time",
+        "transcript",
+        "turn_count",
+        "turn_file",
+        "turn_idx",
+        "turn_text",
+        "turn_type_label",
+        "wordCount",
+        "word_count",
+        "words_per_second"
+      ]
+    },
+    {
+      "source_directory": "turn_type_labeled/business",
+      "source_file": "turn_type_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "turn_type_labeled/example.json",
+      "json_root_type": "list",
+      "detected_kind": "episode",
+      "turn_container_key": null,
+      "turn_count": 23,
+      "top_level_keys": [],
+      "first_turn_keys": [
+        "assumptions",
+        "category",
+        "duration",
+        "end_time",
+        "episode_id",
+        "explicit_propositions",
+        "speaker",
+        "speaker_id",
+        "start_time",
+        "transcript",
+        "turn_count",
+        "turn_file",
+        "turn_idx",
+        "turn_text",
+        "turn_type_label",
+        "wordCount",
+        "word_count",
+        "words_per_second"
+      ]
+    },
+    {
+      "source_directory": "business/parsed",
+      "source_file": "business/parsed/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "example_file": "raw_data/example.json",
+      "json_root_type": "list",
+      "detected_kind": "episode",
+      "turn_container_key": null,
+      "turn_count": 23,
+      "top_level_keys": [],
+      "first_turn_keys": [
+        "assumptions",
+        "category",
+        "duration",
+        "end_time",
+        "episode_id",
+        "explicit_propositions",
+        "speaker",
+        "speaker_id",
+        "start_time",
+        "transcript",
+        "turn_count",
+        "turn_file",
+        "turn_idx",
+        "turn_text",
+        "wordCount",
+        "word_count",
+        "words_per_second"
+      ]
+    }
+  ]
+}
