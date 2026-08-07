@@ -13,6 +13,27 @@ iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/
 
 Changing `MODEL_NAME` selects another model-named folder automatically.
 
+## Input data
+
+Preparation reads the cleaned conversation-move dataset by default:
+
+```text
+data_cleaned/conversation_moves_labeled/
+```
+
+Generate it from the repository root before preparing the experiment:
+
+```bash
+python deduplicate_data.py
+```
+
+The cleaner removes turns shorter than 50 words, merges adjacent remaining turns from
+the same speaker, caps explicit propositions and assumptions at the ten
+highest-confidence items, removes duplicate episodes within each logical dataset, and
+validates two-speaker ABAB alternation. Set `INPUT_DIR` in the Slurm runner or pass
+`--input_dir` to the Python script only when intentionally using another prepared
+dataset.
+
 ## Default diagnostic conditions
 
 The default pipeline scores seven conditions:

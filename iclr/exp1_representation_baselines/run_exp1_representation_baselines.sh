@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-INPUT_DIR="${INPUT_DIR:-data/conversation_moves_labeled}"
+INPUT_DIR="${INPUT_DIR:-data_cleaned/conversation_moves_labeled}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-iclr/exp1_representation_baselines/results}"
 EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
 MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY-}"

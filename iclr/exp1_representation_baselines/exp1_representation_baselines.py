@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 SCRIPT_VERSION = "2.0.0"
 PROMPT_VERSION = "representation-diagnostic-v2"
-DEFAULT_INPUT_DIR = Path("data/conversation_moves_labeled")
+DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
 DEFAULT_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
