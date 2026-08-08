@@ -1179,6 +1179,7 @@ def compact_existing_scores(
     model_name: str,
     prompt_version: str,
     overwrite: bool,
+    allowed_keys: set[tuple[str, str, str, str, str]] | None = None,
 ) -> tuple[list[dict[str, Any]], set[tuple[str, str, str, str, str]]]:
     if not path.exists():
         return [], set()
@@ -1189,6 +1190,9 @@ def compact_existing_scores(
     changed = False
     for row in observed:
         key = task_key(row)
+        if allowed_keys is not None and key not in allowed_keys:
+            changed = True
+            continue
         selected_config = key[3] == model_name and key[4] == prompt_version
         if selected_config and (overwrite or not score_record_valid(row)):
             changed = True
@@ -1330,16 +1334,68 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         args.conditions,
         prepare_manifest["prepared_pairs_sha256"],
     )
+    tasks = build_tasks(selected_pairs, args)
+    selected_keys = {
+        (
+            task["pair"]["pair_id"],
+            task["candidate"]["candidate_id"],
+            task["condition"],
+            args.model_name,
+            PROMPT_VERSION,
+        )
+        for task in tasks
+    }
+    selected_source_paths = sorted({str(pair["source_path"]) for pair in selected_pairs})
+    config = {
+        "model_name": args.model_name,
+        "prompt_version": PROMPT_VERSION,
+        "conditions": args.conditions,
+        "temperature": args.temperature,
+        "top_p": args.top_p,
+        "min_p": args.min_p,
+        "top_k": args.top_k,
+        "repetition_penalty": args.repetition_penalty,
+        "max_tokens": args.max_tokens,
+        "seed": args.seed,
+        "strict_all_conditions": args.strict_all_conditions,
+        "dry_run": args.dry_run,
+    }
+    config_sha256 = stable_hash(config)
     output = patch_dir(args.output_dir, args.patch_index, args.num_patches)
     output.mkdir(parents=True, exist_ok=True)
     scores_file = score_path(output)
+    patch_manifest_path = output / "patch_manifest.json"
+    if patch_manifest_path.exists():
+        previous_manifest = json.loads(patch_manifest_path.read_text(encoding="utf-8"))
+        previous_identity = {
+            "prepared_pairs_sha256": previous_manifest.get("prepared_pairs_sha256"),
+            "config_sha256": previous_manifest.get("config_sha256"),
+            "patch_index": previous_manifest.get("patch_index"),
+            "num_patches": previous_manifest.get("num_patches"),
+            "episodes_per_patch": previous_manifest.get("episodes_per_patch"),
+            "selected_source_paths": previous_manifest.get("selected_source_paths"),
+        }
+        current_identity = {
+            "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
+            "config_sha256": config_sha256,
+            "patch_index": args.patch_index,
+            "num_patches": args.num_patches,
+            "episodes_per_patch": args.episodes_per_patch,
+            "selected_source_paths": selected_source_paths,
+        }
+        if canonical_json(previous_identity) != canonical_json(current_identity):
+            logger.warning(
+                "Patch identity changed for %s; discarding stale score rows before scoring",
+                output,
+            )
+            write_jsonl(scores_file, [])
     existing, completed = compact_existing_scores(
         scores_file,
         model_name=args.model_name,
         prompt_version=PROMPT_VERSION,
         overwrite=args.overwrite_scores,
+        allowed_keys=selected_keys,
     )
-    tasks = build_tasks(selected_pairs, args)
     pending = []
     for task in tasks:
         candidate = task["candidate"]
@@ -1362,6 +1418,22 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         len(pending),
         args.dry_run,
     )
+    in_progress_manifest = {
+        "stage": "score_patch",
+        "complete": False,
+        "script_version": SCRIPT_VERSION,
+        "prompt_version": PROMPT_VERSION,
+        "patch_index": args.patch_index,
+        "num_patches": args.num_patches,
+        "episodes_per_patch": args.episodes_per_patch,
+        "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
+        "config": config,
+        "config_sha256": config_sha256,
+        "selected_source_paths": selected_source_paths,
+        "selected_pair_count": len(selected_pairs),
+        "expected_task_count": len(tasks),
+    }
+    write_json(patch_manifest_path, in_progress_manifest)
     llm = None if args.dry_run or not pending else LLMInterface(args)
     attempted = 0
     parse_failures = 0
@@ -1392,31 +1464,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
     if not scores_file.exists():
         write_jsonl(scores_file, [])
     all_rows = read_jsonl(scores_file) if scores_file.exists() else existing
-    selected_keys = {
-        (
-            task["pair"]["pair_id"],
-            task["candidate"]["candidate_id"],
-            task["condition"],
-            args.model_name,
-            PROMPT_VERSION,
-        )
-        for task in tasks
-    }
     valid_count = sum(score_record_valid(row) and task_key(row) in selected_keys for row in all_rows)
-    config = {
-        "model_name": args.model_name,
-        "prompt_version": PROMPT_VERSION,
-        "conditions": args.conditions,
-        "temperature": args.temperature,
-        "top_p": args.top_p,
-        "min_p": args.min_p,
-        "top_k": args.top_k,
-        "repetition_penalty": args.repetition_penalty,
-        "max_tokens": args.max_tokens,
-        "seed": args.seed,
-        "strict_all_conditions": args.strict_all_conditions,
-        "dry_run": args.dry_run,
-    }
     manifest = {
         "stage": "score_patch",
         "complete": True,
@@ -1427,8 +1475,8 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "episodes_per_patch": args.episodes_per_patch,
         "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
         "config": config,
-        "config_sha256": stable_hash(config),
-        "selected_source_paths": sorted({str(pair["source_path"]) for pair in selected_pairs}),
+        "config_sha256": config_sha256,
+        "selected_source_paths": selected_source_paths,
         "selected_pair_count": len(selected_pairs),
         "expected_task_count": len(tasks),
         "valid_task_count": valid_count,
@@ -1436,7 +1484,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "parse_failures_this_run": parse_failures,
         "scores_sha256": file_hash(scores_file) if scores_file.exists() else None,
     }
-    write_json(output / "patch_manifest.json", manifest)
+    write_json(patch_manifest_path, manifest)
     return manifest
 
 
@@ -2220,14 +2268,67 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         if int(manifest.get("num_patches", -1)) != args.num_patches:
             raise RuntimeError(f"Patch count mismatch in {manifest_path}")
         manifests.append(manifest)
-    for key in ("prepared_pairs_sha256", "config_sha256", "num_patches"):
+    for key in ("prepared_pairs_sha256", "config_sha256", "num_patches", "episodes_per_patch"):
         values = {canonical_json(manifest.get(key)) for manifest in manifests}
         if len(values) != 1:
             raise RuntimeError(f"Mixed {key} values across patches")
+
+    source_path_owner: dict[str, int] = {}
+    for patch_index, manifest in enumerate(manifests):
+        for source_path in manifest.get("selected_source_paths", []):
+            source_path = str(source_path)
+            previous_patch = source_path_owner.get(source_path)
+            if previous_patch is not None and previous_patch != patch_index:
+                raise RuntimeError(
+                    f"Overlapping source path across patches {previous_patch} and {patch_index}: {source_path}"
+                )
+            source_path_owner[source_path] = patch_index
+
+    prepared_pairs = read_jsonl(prepared_path(args))
+    pair_source_paths: dict[str, set[str]] = defaultdict(set)
+    for pair in prepared_pairs:
+        pair_source_paths[str(pair["pair_id"])].add(str(pair["source_path"]))
+    duplicate_pair_ids = {
+        pair_id: sorted(paths)
+        for pair_id, paths in pair_source_paths.items()
+        if len(paths) > 1
+    }
+    if duplicate_pair_ids:
+        pair_id, paths = next(iter(sorted(duplicate_pair_ids.items())))
+        raise RuntimeError(
+            "Prepared data contains a pair_id shared by multiple source files; "
+            f"pair_id={pair_id!r}, source_paths={paths}. Episode IDs must be unique within a category."
+        )
+    pair_source_path = {pair_id: next(iter(paths)) for pair_id, paths in pair_source_paths.items()}
+
     merged: list[dict[str, Any]] = []
     seen: dict[tuple[str, str, str, str, str], str] = {}
-    for directory in expected_dirs:
+    for patch_index, directory in enumerate(expected_dirs):
+        manifest = manifests[patch_index]
+        selected_source_paths = {str(path) for path in manifest.get("selected_source_paths", [])}
+        expected_model_name = str(manifest.get("config", {}).get("model_name"))
+        expected_prompt_version = str(manifest.get("config", {}).get("prompt_version"))
+        expected_conditions = {str(value) for value in manifest.get("config", {}).get("conditions", [])}
         for row in read_jsonl(score_path(directory)):
+            pair_id = str(row["pair_id"])
+            source_path = pair_source_path.get(pair_id)
+            if source_path is None:
+                raise RuntimeError(
+                    f"Stale score row in patch {patch_index}: pair_id {pair_id!r} is absent from the prepared dataset"
+                )
+            if source_path not in selected_source_paths:
+                raise RuntimeError(
+                    "Stale score row belongs to a different patch selection: "
+                    f"patch={patch_index}, pair_id={pair_id!r}, source_path={source_path!r}"
+                )
+            if str(row.get("model_name")) != expected_model_name or str(row.get("prompt_version")) != expected_prompt_version:
+                raise RuntimeError(
+                    f"Stale score configuration in patch {patch_index} for pair_id {pair_id!r}"
+                )
+            if str(row.get("condition")) not in expected_conditions:
+                raise RuntimeError(
+                    f"Stale score condition in patch {patch_index} for pair_id {pair_id!r}: {row.get('condition')!r}"
+                )
             key = task_key(row)
             canonical = canonical_json(row)
             previous = seen.get(key)

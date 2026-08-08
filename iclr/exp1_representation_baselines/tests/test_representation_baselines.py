@@ -512,6 +512,75 @@ class EndToEndAndPatchTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "Missing patch output"):
             baseline.merge_patch_scores(missing_args)
 
+    def test_patch_resume_drops_rows_from_an_old_partition(self) -> None:
+        output = self.root / "repartitioned"
+        prepare_args = make_args(self.input_dir, output, "--prepare_only")
+        baseline.prepare_dataset(prepare_args)
+
+        # First run: two episodes per patch. Patch 1 owns source paths 2 and 3.
+        for patch_index in (0, 1):
+            old_args = make_args(
+                self.input_dir,
+                output,
+                "--dry_run",
+                "--score_only",
+                "--num_patches", "2",
+                "--episodes_per_patch", "2",
+                "--patch_index", str(patch_index),
+            )
+            baseline.score_dataset(old_args)
+
+        # Second run: three episodes per patch. Source path 2 moves from patch 1 to patch 0.
+        for patch_index in (0, 1):
+            new_args = make_args(
+                self.input_dir,
+                output,
+                "--dry_run",
+                "--score_only",
+                "--num_patches", "2",
+                "--episodes_per_patch", "3",
+                "--patch_index", str(patch_index),
+            )
+            baseline.score_dataset(new_args)
+
+        prepared_pairs = baseline.read_jsonl(baseline.prepared_path(prepare_args))
+        pair_to_path = {row["pair_id"]: row["source_path"] for row in prepared_pairs}
+        for patch_index in (0, 1):
+            patch = baseline.patch_dir(output, patch_index, 2)
+            manifest = json.loads((patch / "patch_manifest.json").read_text(encoding="utf-8"))
+            allowed_paths = set(manifest["selected_source_paths"])
+            rows = baseline.read_jsonl(baseline.score_path(patch))
+            self.assertTrue(rows)
+            self.assertTrue(all(pair_to_path[row["pair_id"]] in allowed_paths for row in rows))
+
+        merge_args = make_args(
+            self.input_dir,
+            output,
+            "--merge_patches_only",
+            "--dry_run",
+            "--num_patches", "2",
+            "--episodes_per_patch", "3",
+        )
+        merged = baseline.merge_patch_scores(merge_args)
+        self.assertGreater(merged["merged_score_count"], 0)
+
+    def test_changed_prepared_dataset_invalidates_patch_resume(self) -> None:
+        output = self.root / "changed-prepare"
+        prepare_args = make_args(self.input_dir, output, "--prepare_only")
+        baseline.prepare_dataset(prepare_args)
+        score_args = make_args(self.input_dir, output, "--dry_run", "--score_only")
+        first = baseline.score_dataset(score_args)
+        self.assertGreater(first["attempted_this_run"], 0)
+
+        episode_path = self.input_dir / "alpha" / "alpha-episode-0.json"
+        turns = json.loads(episode_path.read_text(encoding="utf-8"))
+        turns[1]["assumptions"] = ["changed assumption after first scoring run"]
+        episode_path.write_text(json.dumps(turns), encoding="utf-8")
+
+        baseline.prepare_dataset(prepare_args)
+        rescored = baseline.score_dataset(score_args)
+        self.assertEqual(rescored["attempted_this_run"], rescored["expected_task_count"])
+
 
 if __name__ == "__main__":
     unittest.main()
