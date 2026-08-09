@@ -3,7 +3,8 @@
 This experiment diagnoses where next-turn information is lost instead of treating
 `explicit_plus_assumptions` as a single paper claim. Candidate pools, pair construction,
 and deterministic task ordering remain unchanged. The new prompt identity is
-`representation-diagnostic-v2`, so legacy scores cannot be resumed accidentally.
+`representation-diagnostic-v3-full-json-20`, so scores from the previous judge prompt
+cannot be resumed accidentally.
 
 Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
 
@@ -102,9 +103,19 @@ The coordinator performs preparation, submits a scoring array, then submits depe
 merge and analysis jobs. Every scoring array task requests two A6000 GPUs and starts one
 vLLM process with `tensor_parallel_size=2` and the multiprocessing executor.
 
-The default output budget is 96 tokens per judgment. Useful overrides include
-`MODEL_NAME`, `CONDITIONS_CSV`, `PROMPT_BATCH_SIZE`, `MAX_TOKENS`, `SEED`,
-`HISTORY_TURNS`, `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and the CUDA/FlashInfer variables.
+Judge scores use an integer **1--20** scale. A judgment is valid only when the complete
+JSON object parses with exactly three fields: integer `score`, non-empty string
+`rationale`, and numeric `confidence` in `[0, 1]`.
+
+The default initial output budget is 256 tokens per judgment. If a full response fails
+to parse, only the failed judgment is retried with a larger budget: 512 tokens on the
+first retry and 1024 on the second retry by default. The fixed 25/25 candidate-pool
+requirement remains unchanged; retries repair judge-format failures rather than weakening
+the ranking comparison.
+
+Useful overrides include `MODEL_NAME`, `CONDITIONS_CSV`, `PROMPT_BATCH_SIZE`,
+`MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `SEED`, `HISTORY_TURNS`,
+`AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and the CUDA/FlashInfer variables.
 
 ## Diagnostic outputs
 

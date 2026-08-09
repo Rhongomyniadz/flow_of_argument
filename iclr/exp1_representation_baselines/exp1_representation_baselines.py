@@ -29,14 +29,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "2.0.0"
-PROMPT_VERSION = "representation-diagnostic-v2"
+SCRIPT_VERSION = "2.1.0"
+PROMPT_VERSION = "representation-diagnostic-v3-full-json-20"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
 DEFAULT_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DOWNLOAD_DIR = Path("/shared/4/models")
 DEFAULT_BOOTSTRAP_DRAWS = 1000
+DEFAULT_MAX_SCORE_RETRIES = 2
+DEFAULT_MAX_RETRY_TOKENS = 1024
 DEFAULT_CLUSTER_BOOTSTRAP_MIN_CLUSTERS = 20
 HARD_NEGATIVE_TARGET_COUNT = 24
 HARD_NEGATIVE_LAYER_TARGET = 8
@@ -291,7 +293,24 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--tensor_parallel_size", type=int, default=2)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
     parser.add_argument("--prompt_batch_size", type=int, default=64)
-    parser.add_argument("--max_tokens", type=int, default=96)
+    parser.add_argument(
+        "--max_tokens",
+        type=int,
+        default=256,
+        help="Initial judge-generation token budget.",
+    )
+    parser.add_argument(
+        "--max_score_retries",
+        type=int,
+        default=DEFAULT_MAX_SCORE_RETRIES,
+        help="Retry malformed/incomplete judge outputs this many times.",
+    )
+    parser.add_argument(
+        "--max_retry_tokens",
+        type=int,
+        default=DEFAULT_MAX_RETRY_TOKENS,
+        help="Maximum generation token budget used by parse-failure retries.",
+    )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top_p", type=float, default=1.0)
     parser.add_argument("--min_p", type=float, default=0.0)
@@ -343,6 +362,10 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("history_turns cannot be negative")
     if args.prompt_batch_size < 1 or args.max_tokens < 1 or args.bootstrap_draws < 1:
         raise ValueError("Batch size, max tokens, and bootstrap draws must be positive")
+    if args.max_score_retries < 0:
+        raise ValueError("max_score_retries cannot be negative")
+    if args.max_score_retries > 0 and args.max_retry_tokens <= args.max_tokens:
+        raise ValueError("max_retry_tokens must be greater than max_tokens when retries are enabled")
     if args.audit_sample_size_per_outcome < 1:
         raise ValueError("audit_sample_size_per_outcome must be positive")
     args.conditions = normalize_conditions(args.conditions)
@@ -1090,12 +1113,14 @@ Task:
 Given a representation of the current dialogue state and one candidate next turn,
 rate how likely the candidate is the true immediate next turn.
 
-Use this 1-10 scale:
+Use this 1-20 scale:
 1 = impossible or totally unrelated
-3 = weak fit
-5 = plausible but uncertain
-7 = strong local continuation
-10 = almost certainly the immediate next turn
+5 = weak fit
+10 = plausible but uncertain
+15 = strong local continuation
+20 = almost certainly the immediate next turn
+
+Use the full range when useful. The score must be an integer.
 
 Source representation:
 {source_representation}
@@ -1104,7 +1129,46 @@ Candidate next turn:
 {candidate_text}
 
 Return ONLY a raw JSON object with exactly these keys:
-{{"score": <integer 1-10>, "rationale": "<brief reason>", "confidence": <number 0-1>}}
+{{"score": <integer 1-20>, "rationale": "<brief reason>", "confidence": <number 0-1>}}
+All three fields are required. The rationale must be a non-empty string and confidence
+must be a numeric value between 0 and 1 inclusive.
+"""
+
+
+def build_retry_prompt(
+    source_representation: str,
+    candidate_text: str,
+    previous_output: str,
+    parse_error: str | None,
+) -> str:
+    return f"""You are a strict conversation-continuation judge.
+
+Your previous response could not be fully parsed as the required judge output.
+Re-evaluate the SAME source representation and candidate and return a complete response.
+
+Use this 1-20 scale:
+1 = impossible or totally unrelated
+5 = weak fit
+10 = plausible but uncertain
+15 = strong local continuation
+20 = almost certainly the immediate next turn
+
+Source representation:
+{source_representation}
+
+Candidate next turn:
+{candidate_text}
+
+Previous parse error:
+{parse_error or "unknown_parse_error"}
+
+Previous invalid/incomplete response:
+{previous_output[:1000]}
+
+Return ONLY a raw JSON object with exactly these keys:
+{{"score": <integer 1-20>, "rationale": "<brief reason>", "confidence": <number 0-1>}}
+All three fields are required. The rationale must be a non-empty string and confidence
+must be a numeric value between 0 and 1 inclusive.
 """
 
 
@@ -1143,18 +1207,62 @@ def parse_llm_score(raw_output: str) -> ParsedScore:
     parsed = safe_json_extract(raw_output)
     if parsed is None:
         return {"score": None, "rationale": None, "confidence": None, "parse_success": False, "parse_error": "missing_json_object"}
+    required_keys = {"score", "rationale", "confidence"}
+    observed_keys = set(parsed)
+    missing_keys = sorted(required_keys - observed_keys)
+    if missing_keys:
+        return {
+            "score": None,
+            "rationale": None,
+            "confidence": None,
+            "parse_success": False,
+            "parse_error": "missing_required_keys:" + ",".join(missing_keys),
+        }
+    unexpected_keys = sorted(observed_keys - required_keys)
+    if unexpected_keys:
+        return {
+            "score": None,
+            "rationale": None,
+            "confidence": None,
+            "parse_success": False,
+            "parse_error": "unexpected_keys:" + ",".join(unexpected_keys),
+        }
+
     rationale_value = parsed.get("rationale")
-    rationale = None if rationale_value is None else str(rationale_value).strip()
+    if not isinstance(rationale_value, str) or not rationale_value.strip():
+        return {
+            "score": None,
+            "rationale": None,
+            "confidence": None,
+            "parse_success": False,
+            "parse_error": "rationale_missing_or_empty",
+        }
+    rationale = rationale_value.strip()
+
     confidence_value = parsed.get("confidence")
-    confidence = None
-    if isinstance(confidence_value, (int, float)) and not isinstance(confidence_value, bool):
-        numeric = float(confidence_value)
-        confidence = numeric if 0.0 <= numeric <= 1.0 else None
+    if isinstance(confidence_value, bool) or not isinstance(confidence_value, (int, float)):
+        return {
+            "score": None,
+            "rationale": rationale,
+            "confidence": None,
+            "parse_success": False,
+            "parse_error": "confidence_not_numeric",
+        }
+    confidence = float(confidence_value)
+    if not 0.0 <= confidence <= 1.0:
+        return {
+            "score": None,
+            "rationale": rationale,
+            "confidence": None,
+            "parse_success": False,
+            "parse_error": "confidence_out_of_range",
+        }
+
     raw_score = parsed.get("score")
     if isinstance(raw_score, bool) or not isinstance(raw_score, (int, float)):
         return {"score": None, "rationale": rationale, "confidence": confidence, "parse_success": False, "parse_error": "score_not_numeric"}
     score = int(raw_score)
-    if float(score) != float(raw_score) or not 1 <= score <= 10:
+    if float(score) != float(raw_score) or not 1 <= score <= 20:
         return {"score": None, "rationale": rationale, "confidence": confidence, "parse_success": False, "parse_error": "score_out_of_range"}
     return {"score": score, "rationale": rationale, "confidence": confidence, "parse_success": True, "parse_error": None}
 
@@ -1272,21 +1380,31 @@ class LLMInterface:
             distributed_executor_backend="mp",
             trust_remote_code=True,
         )
-        self.params = SamplingParams(
-            max_tokens=args.max_tokens,
-            temperature=args.temperature,
-            top_p=args.top_p,
-            min_p=args.min_p,
-            top_k=args.top_k,
-            repetition_penalty=args.repetition_penalty,
-        )
+        self.SamplingParams = SamplingParams
+        self.sampling_kwargs = {
+            "temperature": args.temperature,
+            "top_p": args.top_p,
+            "min_p": args.min_p,
+            "top_k": args.top_k,
+            "repetition_penalty": args.repetition_penalty,
+        }
 
-    def generate_batch(self, prompts: list[str]) -> list[str]:
-        outputs = self.llm.generate(prompts, self.params)
+    def generate_batch(self, prompts: list[str], *, max_tokens: int) -> list[str]:
+        params = self.SamplingParams(max_tokens=max_tokens, **self.sampling_kwargs)
+        outputs = self.llm.generate(prompts, params)
         return [output.outputs[0].text.strip() for output in outputs]
 
 
-def score_row(task: dict[str, Any], raw_output: str, parsed: ParsedScore, args: argparse.Namespace) -> dict[str, Any]:
+def score_row(
+    task: dict[str, Any],
+    raw_output: str,
+    parsed: ParsedScore,
+    args: argparse.Namespace,
+    *,
+    attempt_outputs: list[str] | None = None,
+    attempt_parse_errors: list[str | None] | None = None,
+    attempt_token_budgets: list[int] | None = None,
+) -> dict[str, Any]:
     pair = task["pair"]
     candidate = task["candidate"]
     donor = pair["donors"].get(task["condition"], {})
@@ -1316,6 +1434,11 @@ def score_row(task: dict[str, Any], raw_output: str, parsed: ParsedScore, args: 
         "parse_success": parsed["parse_success"],
         "parse_error": parsed["parse_error"],
         "raw_output": raw_output,
+        "judge_attempt_count": len(attempt_outputs or [raw_output]),
+        "judge_retry_count": max(0, len(attempt_outputs or [raw_output]) - 1),
+        "judge_attempt_outputs_json": json.dumps(attempt_outputs or [raw_output], ensure_ascii=False),
+        "judge_attempt_parse_errors_json": json.dumps(attempt_parse_errors or [parsed["parse_error"]], ensure_ascii=False),
+        "judge_attempt_token_budgets_json": json.dumps(attempt_token_budgets or [args.max_tokens]),
     }
 
 
@@ -1356,6 +1479,8 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "top_k": args.top_k,
         "repetition_penalty": args.repetition_penalty,
         "max_tokens": args.max_tokens,
+        "max_score_retries": args.max_score_retries,
+        "max_retry_tokens": args.max_retry_tokens,
         "seed": args.seed,
         "strict_all_conditions": args.strict_all_conditions,
         "dry_run": args.dry_run,
@@ -1436,6 +1561,9 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
     write_json(patch_manifest_path, in_progress_manifest)
     llm = None if args.dry_run or not pending else LLMInterface(args)
     attempted = 0
+    generation_attempts = 0
+    retry_generation_count = 0
+    parse_failures_before_retry = 0
     parse_failures = 0
     for start in range(0, len(pending), args.prompt_batch_size):
         batch = pending[start:start + args.prompt_batch_size]
@@ -1444,21 +1572,79 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
             for task in batch:
                 candidate = task["candidate"]
                 if candidate["is_true_next_turn"]:
-                    score = 10
+                    score = 20
                 else:
-                    score = 1 + seed_int(task["pair"]["pair_id"] + candidate["candidate_id"] + task["condition"]) % 5
+                    score = 1 + seed_int(task["pair"]["pair_id"] + candidate["candidate_id"] + task["condition"]) % 10
                 raw_outputs.append(json.dumps({"score": score, "rationale": "dry_run", "confidence": 1.0}))
         else:
             assert llm is not None
             prompts = [build_scoring_prompt(task["source_representation"], task["candidate"]["candidate_text"]) for task in batch]
-            raw_outputs = llm.generate_batch(prompts)
+            raw_outputs = llm.generate_batch(prompts, max_tokens=args.max_tokens)
         if len(raw_outputs) != len(batch):
             raise RuntimeError("Model returned a different number of outputs than prompts")
+
+        generation_attempts += len(raw_outputs)
+        attempt_outputs: list[list[str]] = [[raw_output] for raw_output in raw_outputs]
+        attempt_token_budgets: list[list[int]] = [[args.max_tokens] for _ in raw_outputs]
+        parsed_outputs = [parse_llm_score(raw_output) for raw_output in raw_outputs]
+        attempt_parse_errors: list[list[str | None]] = [[parsed["parse_error"]] for parsed in parsed_outputs]
+        parse_failures_before_retry += sum(not parsed["parse_success"] for parsed in parsed_outputs)
+
+        for retry_index in range(args.max_score_retries):
+            failed_indices = [index for index, parsed in enumerate(parsed_outputs) if not parsed["parse_success"]]
+            if not failed_indices or args.dry_run:
+                break
+            assert llm is not None
+            retry_tokens = min(args.max_retry_tokens, args.max_tokens * (2 ** (retry_index + 1)))
+            retry_prompts = [
+                build_retry_prompt(
+                    batch[index]["source_representation"],
+                    batch[index]["candidate"]["candidate_text"],
+                    attempt_outputs[index][-1],
+                    parsed_outputs[index]["parse_error"],
+                )
+                for index in failed_indices
+            ]
+            logger.info(
+                "Retrying %d malformed judge outputs with max_tokens=%d (retry %d/%d)",
+                len(failed_indices),
+                retry_tokens,
+                retry_index + 1,
+                args.max_score_retries,
+            )
+            retry_outputs = llm.generate_batch(retry_prompts, max_tokens=retry_tokens)
+            if len(retry_outputs) != len(failed_indices):
+                raise RuntimeError("Model returned a different number of retry outputs than retry prompts")
+            generation_attempts += len(retry_outputs)
+            retry_generation_count += len(retry_outputs)
+            for index, retry_output in zip(failed_indices, retry_outputs):
+                attempt_outputs[index].append(retry_output)
+                attempt_token_budgets[index].append(retry_tokens)
+                raw_outputs[index] = retry_output
+                parsed_outputs[index] = parse_llm_score(retry_output)
+                attempt_parse_errors[index].append(parsed_outputs[index]["parse_error"])
+
         rows: list[dict[str, Any]] = []
-        for task, raw_output in zip(batch, raw_outputs):
-            parsed = parse_llm_score(raw_output)
+        for task, raw_output, parsed, outputs_for_task, errors_for_task, budgets_for_task in zip(
+            batch,
+            raw_outputs,
+            parsed_outputs,
+            attempt_outputs,
+            attempt_parse_errors,
+            attempt_token_budgets,
+        ):
             parse_failures += int(not parsed["parse_success"])
-            rows.append(score_row(task, raw_output, parsed, args))
+            rows.append(
+                score_row(
+                    task,
+                    raw_output,
+                    parsed,
+                    args,
+                    attempt_outputs=outputs_for_task,
+                    attempt_parse_errors=errors_for_task,
+                    attempt_token_budgets=budgets_for_task,
+                )
+            )
         append_jsonl(scores_file, rows)
         attempted += len(rows)
     if not scores_file.exists():
@@ -1481,6 +1667,9 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "expected_task_count": len(tasks),
         "valid_task_count": valid_count,
         "attempted_this_run": attempted,
+        "generation_attempts_this_run": generation_attempts,
+        "retry_generation_count_this_run": retry_generation_count,
+        "parse_failures_before_retry_this_run": parse_failures_before_retry,
         "parse_failures_this_run": parse_failures,
         "scores_sha256": file_hash(scores_file) if scores_file.exists() else None,
     }
@@ -2219,6 +2408,11 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "top_k": args.top_k,
             "repetition_penalty": args.repetition_penalty,
             "max_tokens": args.max_tokens,
+            "max_score_retries": args.max_score_retries,
+            "max_retry_tokens": args.max_retry_tokens,
+            "judge_score_min": 1,
+            "judge_score_max": 20,
+            "require_full_judge_json": True,
         },
         "seed": args.seed,
         "candidate_count_target": EXPECTED_CANDIDATE_COUNT,

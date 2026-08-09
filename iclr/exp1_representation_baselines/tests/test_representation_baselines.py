@@ -300,6 +300,42 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
         self.assertEqual(positive["rank"], golden["expected_true_rank"])
         self.assertEqual(1.0 / positive["rank"], golden["expected_true_reciprocal_rank"])
 
+    def test_full_judge_output_is_required_and_uses_1_to_20_scale(self) -> None:
+        valid = baseline.parse_llm_score(
+            '{"score": 20, "rationale": "Very strong immediate continuation.", "confidence": 0.95}'
+        )
+        self.assertTrue(valid["parse_success"])
+        self.assertEqual(valid["score"], 20)
+
+        missing_rationale = baseline.parse_llm_score('{"score": 15, "confidence": 0.8}')
+        self.assertFalse(missing_rationale["parse_success"])
+        self.assertEqual(missing_rationale["parse_error"], "missing_required_keys:rationale")
+
+        empty_rationale = baseline.parse_llm_score(
+            '{"score": 15, "rationale": "", "confidence": 0.8}'
+        )
+        self.assertFalse(empty_rationale["parse_success"])
+        self.assertEqual(empty_rationale["parse_error"], "rationale_missing_or_empty")
+
+        bad_confidence = baseline.parse_llm_score(
+            '{"score": 15, "rationale": "fit", "confidence": 1.2}'
+        )
+        self.assertFalse(bad_confidence["parse_success"])
+        self.assertEqual(bad_confidence["parse_error"], "confidence_out_of_range")
+
+        too_large = baseline.parse_llm_score(
+            '{"score": 21, "rationale": "fit", "confidence": 0.8}'
+        )
+        self.assertFalse(too_large["parse_success"])
+        self.assertEqual(too_large["parse_error"], "score_out_of_range")
+
+    def test_retry_prompt_keeps_full_json_contract_and_1_to_20_scale(self) -> None:
+        prompt = baseline.build_retry_prompt("source", "candidate", "{bad", "missing_json_object")
+        self.assertIn("1-20 scale", prompt)
+        self.assertIn('"rationale"', prompt)
+        self.assertIn('"confidence"', prompt)
+        self.assertIn("Previous parse error", prompt)
+
     def test_pair_id_matches_legacy_contract(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "golden.json"
