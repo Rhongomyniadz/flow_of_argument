@@ -1,0 +1,169 @@
+analysis_subset,condition,true_next_turn_move_label,pair_count,mean_rank,mean_rank_ci95_low,mean_rank_ci95_high,mean_rank_ci_unstable,cluster_count,top1_rate,top1_rate_ci95_low,top1_rate_ci95_high,top1_rate_ci_unstable,mrr,mrr_ci95_low,mrr_ci95_high,mrr_ci_unstable,mean_true_score,mean_true_score_ci95_low,mean_true_score_ci95_high,mean_true_score_ci_unstable
+full,raw_turn,Assert / Elaborate,313,3.0926517571884986,2.524161083831978,3.6516077044901967,False,30,0.4728434504792332,0.41542186887632276,0.5398318979140329,False,0.6374468320733121,0.5927841848890689,0.6865190218599554,False,15.888178913738018,15.303236677375551,16.505469111790312,False
+full,raw_turn_with_history,Assert / Elaborate,313,2.747603833865815,2.368281551139762,3.067190026821283,False,30,0.4536741214057508,0.3952789475681008,0.5166666666666667,False,0.6360396396916788,0.5963032712955038,0.6833918034939477,False,16.757188498402556,16.226554711448752,17.364872301339577,False
+full,raw_turn_plus_assumptions,Assert / Elaborate,313,3.1533546325878596,2.719749180207067,3.5299912326464367,False,30,0.43769968051118213,0.3803159625450343,0.5063115545542324,False,0.6147856521894336,0.5738782683538254,0.6642952399643376,False,15.929712460063898,15.466462271370627,16.412596060311284,False
+full,explicit_only,Assert / Elaborate,313,4.281150159744409,3.7580298171723943,4.878568487792828,False,30,0.402555910543131,0.3512384395907123,0.4536419151109872,False,0.5678884988328938,0.5250445186023046,0.6101801363202757,False,13.476038338658148,12.627798572932507,14.352356754161331,False
+full,explicit_plus_top1_assumption,Assert / Elaborate,313,4.099041533546326,3.582456963367872,4.677866300366301,False,30,0.3929712460063898,0.3503316326530612,0.43892843761708505,False,0.5679556062139954,0.5341494244104126,0.6039513995258954,False,13.53035143769968,12.632391564952048,14.449827927345016,False
+full,explicit_plus_top3_assumptions,Assert / Elaborate,313,3.9552715654952078,3.388401120765459,4.56198427189442,False,30,0.4249201277955272,0.37799474137674915,0.48012257731332403,False,0.5866213416231716,0.5504349759828563,0.6261042969849185,False,13.916932907348242,13.108192890924105,14.766240868309213,False
+full,explicit_plus_assumptions,Assert / Elaborate,313,3.7827476038338657,3.2022371922821025,4.457817191882528,False,30,0.41533546325878595,0.36303630363036304,0.4769285714285714,False,0.5855392843765368,0.5421672340469261,0.6272302362075616,False,14.095846645367413,13.243987662337663,14.973840752274532,False
+full,raw_turn,Agree / Align,30,4.333333333333333,,,True,15,0.13333333333333333,,,True,0.3913227513227513,,,True,15.066666666666666,,,True
+full,raw_turn_with_history,Agree / Align,30,3.7,,,True,15,0.16666666666666666,,,True,0.44337301587301586,,,True,16.633333333333333,,,True
+full,raw_turn_plus_assumptions,Agree / Align,30,4.7,,,True,15,0.16666666666666666,,,True,0.3880170755170755,,,True,14.266666666666667,,,True
+full,explicit_only,Agree / Align,30,5.9,,,True,15,0.16666666666666666,,,True,0.3657412075941488,,,True,12.033333333333333,,,True
+full,explicit_plus_top1_assumption,Agree / Align,30,5.766666666666667,,,True,15,0.2,,,True,0.3891834733893557,,,True,11.4,,,True
+full,explicit_plus_top3_assumptions,Agree / Align,30,5.8,,,True,15,0.2,,,True,0.3990515873015873,,,True,11.733333333333333,,,True
+full,explicit_plus_assumptions,Agree / Align,30,5.866666666666666,,,True,15,0.16666666666666666,,,True,0.37917374727668846,,,True,12.333333333333334,,,True
+full,raw_turn,Clarification Request (Specific),35,4.742857142857143,,,True,16,0.17142857142857143,,,True,0.40412349555206695,,,True,13.2,,,True
+full,raw_turn_with_history,Clarification Request (Specific),35,3.4857142857142858,,,True,16,0.22857142857142856,,,True,0.46125850340136054,,,True,15.857142857142858,,,True
+full,raw_turn_plus_assumptions,Clarification Request (Specific),35,4.885714285714286,,,True,16,0.14285714285714285,,,True,0.3739509947028744,,,True,13.028571428571428,,,True
+full,explicit_only,Clarification Request (Specific),35,5.914285714285715,,,True,16,0.2857142857142857,,,True,0.4626877378849956,,,True,10.857142857142858,,,True
+full,explicit_plus_top1_assumption,Clarification Request (Specific),35,6.457142857142857,,,True,16,0.2857142857142857,,,True,0.44660838073421,,,True,10.371428571428572,,,True
+full,explicit_plus_top3_assumptions,Clarification Request (Specific),35,6.371428571428571,,,True,16,0.2571428571428571,,,True,0.4284542199164048,,,True,10.514285714285714,,,True
+full,explicit_plus_assumptions,Clarification Request (Specific),35,6.285714285714286,,,True,16,0.22857142857142856,,,True,0.42131751706939674,,,True,10.628571428571428,,,True
+full,raw_turn,Topic Shift,14,7.928571428571429,,,True,10,0.2857142857142857,,,True,0.41773088023088023,,,True,9.214285714285714,,,True
+full,raw_turn_with_history,Topic Shift,14,8.071428571428571,,,True,10,0.2857142857142857,,,True,0.4168238507524222,,,True,11.5,,,True
+full,raw_turn_plus_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.2857142857142857,,,True,0.40570394824596506,,,True,9.142857142857142,,,True
+full,explicit_only,Topic Shift,14,8.785714285714286,,,True,10,0.21428571428571427,,,True,0.37505797773654914,,,True,6.0,,,True
+full,explicit_plus_top1_assumption,Topic Shift,14,8.357142857142858,,,True,10,0.35714285714285715,,,True,0.45898654916512066,,,True,6.357142857142857,,,True
+full,explicit_plus_top3_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.21428571428571427,,,True,0.39980531686358756,,,True,6.357142857142857,,,True
+full,explicit_plus_assumptions,Topic Shift,14,8.571428571428571,,,True,10,0.2857142857142857,,,True,0.4004855889724311,,,True,6.0,,,True
+full,raw_turn,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6722222222222222,,,True,16.933333333333334,,,True
+full,raw_turn_with_history,Answer,15,1.9333333333333333,,,True,10,0.5333333333333333,,,True,0.7077777777777778,,,True,17.733333333333334,,,True
+full,raw_turn_plus_assumptions,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6777777777777777,,,True,17.0,,,True
+full,explicit_only,Answer,15,3.066666666666667,,,True,10,0.4,,,True,0.574047619047619,,,True,12.733333333333333,,,True
+full,explicit_plus_top1_assumption,Answer,15,3.2666666666666666,,,True,10,0.3333333333333333,,,True,0.5410052910052909,,,True,12.733333333333333,,,True
+full,explicit_plus_top3_assumptions,Answer,15,4.466666666666667,,,True,10,0.3333333333333333,,,True,0.5457883597883598,,,True,12.466666666666667,,,True
+full,explicit_plus_assumptions,Answer,15,4.066666666666666,,,True,10,0.4666666666666667,,,True,0.6326666666666667,,,True,13.466666666666667,,,True
+full,raw_turn,Stonewalling / Non-Response,3,7.333333333333333,,,True,3,0.0,,,True,0.24305555555555555,,,True,6.666666666666667,,,True
+full,raw_turn_with_history,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+full,raw_turn_plus_assumptions,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+full,explicit_only,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+full,explicit_plus_top1_assumption,Stonewalling / Non-Response,3,6.666666666666667,,,True,3,0.0,,,True,0.24603174603174605,,,True,6.666666666666667,,,True
+full,explicit_plus_top3_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.21825396825396826,,,True,6.666666666666667,,,True
+full,explicit_plus_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+full,raw_turn,Correction / Challenge,5,3.4,,,True,3,0.6,,,True,0.7166666666666667,,,True,14.4,,,True
+full,raw_turn_with_history,Correction / Challenge,5,2.6,,,True,3,0.0,,,True,0.4166666666666667,,,True,15.4,,,True
+full,raw_turn_plus_assumptions,Correction / Challenge,5,3.2,,,True,3,0.6,,,True,0.6866666666666668,,,True,14.4,,,True
+full,explicit_only,Correction / Challenge,5,7.4,,,True,3,0.2,,,True,0.3820289855072464,,,True,6.8,,,True
+full,explicit_plus_top1_assumption,Correction / Challenge,5,10.8,,,True,3,0.4,,,True,0.45072463768115945,,,True,6.6,,,True
+full,explicit_plus_top3_assumptions,Correction / Challenge,5,10.8,,,True,3,0.2,,,True,0.35739130434782607,,,True,6.0,,,True
+full,explicit_plus_assumptions,Correction / Challenge,5,10.4,,,True,3,0.4,,,True,0.46739130434782616,,,True,8.0,,,True
+full,raw_turn,Clarification Request (Generic),1,10.0,,,True,1,0.0,,,True,0.1,,,True,5.0,,,True
+full,raw_turn_with_history,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,15.0,,,True
+full,raw_turn_plus_assumptions,Clarification Request (Generic),1,9.0,,,True,1,0.0,,,True,0.1111111111111111,,,True,5.0,,,True
+full,explicit_only,Clarification Request (Generic),1,6.0,,,True,1,0.0,,,True,0.16666666666666666,,,True,5.0,,,True
+full,explicit_plus_top1_assumption,Clarification Request (Generic),1,5.0,,,True,1,0.0,,,True,0.2,,,True,5.0,,,True
+full,explicit_plus_top3_assumptions,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,5.0,,,True
+full,explicit_plus_assumptions,Clarification Request (Generic),1,25.0,,,True,1,0.0,,,True,0.04,,,True,1.0,,,True
+assumption_eligible,raw_turn,Assert / Elaborate,312,3.0993589743589745,2.518362932604736,3.6554962737127368,False,30,0.47115384615384615,0.41578841570226577,0.5405923679361179,False,0.6362848026889316,0.5949824198824721,0.6835042945923346,False,15.881410256410257,15.348415584415584,16.444506966773847,False
+assumption_eligible,raw_turn_with_history,Assert / Elaborate,312,2.753205128205128,2.370327212806026,3.0750670254696786,False,30,0.4519230769230769,0.3951922844941977,0.5168737607402512,False,0.634873100075306,0.5958023497850485,0.6779287165553015,False,16.753205128205128,16.21314018691589,17.341112778730704,False
+assumption_eligible,raw_turn_plus_assumptions,Assert / Elaborate,312,3.16025641025641,2.7255453797077585,3.5210872824966417,False,30,0.4358974358974359,0.3822709954336173,0.5100648919206237,False,0.6135509908182458,0.5759751965565075,0.6630215652552889,False,15.923076923076923,15.44443556975506,16.381429471914835,False
+assumption_eligible,explicit_only,Assert / Elaborate,312,4.266025641025641,3.730834384648584,4.857598648127835,False,30,0.40384615384615385,0.3501896887159533,0.4570684211996759,False,0.5693525289217458,0.530844103909153,0.6126103977443756,False,13.461538461538462,12.649287403507206,14.352832958807754,False
+assumption_eligible,explicit_plus_top1_assumption,Assert / Elaborate,312,4.089743589743589,3.5794415292353823,4.67561796365791,False,30,0.3942307692307692,0.3501759927797834,0.44528375589622643,False,0.5693181012888571,0.5325836030591717,0.6032294941321877,False,13.51602564102564,12.572247264572642,14.486521498705223,False
+assumption_eligible,explicit_plus_top3_assumptions,Assert / Elaborate,312,3.948717948717949,3.3841171510119357,4.5085992907801415,False,30,0.42628205128205127,0.3771644278850868,0.4861912038825169,False,0.5879673501967501,0.5513933897040515,0.6339645258194588,False,13.903846153846153,13.07205144075373,14.750039808917197,False
+assumption_eligible,explicit_plus_assumptions,Assert / Elaborate,312,3.766025641025641,3.169999205908044,4.3780236127956345,False,30,0.4166666666666667,0.36466788687040524,0.4782701597918989,False,0.5870598874959774,0.5426781149026105,0.6317631449893665,False,14.083333333333334,13.162403361344538,14.994001920761423,False
+assumption_eligible,raw_turn,Agree / Align,30,4.333333333333333,,,True,15,0.13333333333333333,,,True,0.3913227513227513,,,True,15.066666666666666,,,True
+assumption_eligible,raw_turn_with_history,Agree / Align,30,3.7,,,True,15,0.16666666666666666,,,True,0.44337301587301586,,,True,16.633333333333333,,,True
+assumption_eligible,raw_turn_plus_assumptions,Agree / Align,30,4.7,,,True,15,0.16666666666666666,,,True,0.3880170755170755,,,True,14.266666666666667,,,True
+assumption_eligible,explicit_only,Agree / Align,30,5.9,,,True,15,0.16666666666666666,,,True,0.3657412075941488,,,True,12.033333333333333,,,True
+assumption_eligible,explicit_plus_top1_assumption,Agree / Align,30,5.766666666666667,,,True,15,0.2,,,True,0.3891834733893557,,,True,11.4,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Agree / Align,30,5.8,,,True,15,0.2,,,True,0.3990515873015873,,,True,11.733333333333333,,,True
+assumption_eligible,explicit_plus_assumptions,Agree / Align,30,5.866666666666666,,,True,15,0.16666666666666666,,,True,0.37917374727668846,,,True,12.333333333333334,,,True
+assumption_eligible,raw_turn,Clarification Request (Specific),35,4.742857142857143,,,True,16,0.17142857142857143,,,True,0.40412349555206695,,,True,13.2,,,True
+assumption_eligible,raw_turn_with_history,Clarification Request (Specific),35,3.4857142857142858,,,True,16,0.22857142857142856,,,True,0.46125850340136054,,,True,15.857142857142858,,,True
+assumption_eligible,raw_turn_plus_assumptions,Clarification Request (Specific),35,4.885714285714286,,,True,16,0.14285714285714285,,,True,0.3739509947028744,,,True,13.028571428571428,,,True
+assumption_eligible,explicit_only,Clarification Request (Specific),35,5.914285714285715,,,True,16,0.2857142857142857,,,True,0.4626877378849956,,,True,10.857142857142858,,,True
+assumption_eligible,explicit_plus_top1_assumption,Clarification Request (Specific),35,6.457142857142857,,,True,16,0.2857142857142857,,,True,0.44660838073421,,,True,10.371428571428572,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Clarification Request (Specific),35,6.371428571428571,,,True,16,0.2571428571428571,,,True,0.4284542199164048,,,True,10.514285714285714,,,True
+assumption_eligible,explicit_plus_assumptions,Clarification Request (Specific),35,6.285714285714286,,,True,16,0.22857142857142856,,,True,0.42131751706939674,,,True,10.628571428571428,,,True
+assumption_eligible,raw_turn,Topic Shift,14,7.928571428571429,,,True,10,0.2857142857142857,,,True,0.41773088023088023,,,True,9.214285714285714,,,True
+assumption_eligible,raw_turn_with_history,Topic Shift,14,8.071428571428571,,,True,10,0.2857142857142857,,,True,0.4168238507524222,,,True,11.5,,,True
+assumption_eligible,raw_turn_plus_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.2857142857142857,,,True,0.40570394824596506,,,True,9.142857142857142,,,True
+assumption_eligible,explicit_only,Topic Shift,14,8.785714285714286,,,True,10,0.21428571428571427,,,True,0.37505797773654914,,,True,6.0,,,True
+assumption_eligible,explicit_plus_top1_assumption,Topic Shift,14,8.357142857142858,,,True,10,0.35714285714285715,,,True,0.45898654916512066,,,True,6.357142857142857,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.21428571428571427,,,True,0.39980531686358756,,,True,6.357142857142857,,,True
+assumption_eligible,explicit_plus_assumptions,Topic Shift,14,8.571428571428571,,,True,10,0.2857142857142857,,,True,0.4004855889724311,,,True,6.0,,,True
+assumption_eligible,raw_turn,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6722222222222222,,,True,16.933333333333334,,,True
+assumption_eligible,raw_turn_with_history,Answer,15,1.9333333333333333,,,True,10,0.5333333333333333,,,True,0.7077777777777778,,,True,17.733333333333334,,,True
+assumption_eligible,raw_turn_plus_assumptions,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6777777777777777,,,True,17.0,,,True
+assumption_eligible,explicit_only,Answer,15,3.066666666666667,,,True,10,0.4,,,True,0.574047619047619,,,True,12.733333333333333,,,True
+assumption_eligible,explicit_plus_top1_assumption,Answer,15,3.2666666666666666,,,True,10,0.3333333333333333,,,True,0.5410052910052909,,,True,12.733333333333333,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Answer,15,4.466666666666667,,,True,10,0.3333333333333333,,,True,0.5457883597883598,,,True,12.466666666666667,,,True
+assumption_eligible,explicit_plus_assumptions,Answer,15,4.066666666666666,,,True,10,0.4666666666666667,,,True,0.6326666666666667,,,True,13.466666666666667,,,True
+assumption_eligible,raw_turn,Stonewalling / Non-Response,3,7.333333333333333,,,True,3,0.0,,,True,0.24305555555555555,,,True,6.666666666666667,,,True
+assumption_eligible,raw_turn_with_history,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+assumption_eligible,raw_turn_plus_assumptions,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+assumption_eligible,explicit_only,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+assumption_eligible,explicit_plus_top1_assumption,Stonewalling / Non-Response,3,6.666666666666667,,,True,3,0.0,,,True,0.24603174603174605,,,True,6.666666666666667,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.21825396825396826,,,True,6.666666666666667,,,True
+assumption_eligible,explicit_plus_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+assumption_eligible,raw_turn,Correction / Challenge,5,3.4,,,True,3,0.6,,,True,0.7166666666666667,,,True,14.4,,,True
+assumption_eligible,raw_turn_with_history,Correction / Challenge,5,2.6,,,True,3,0.0,,,True,0.4166666666666667,,,True,15.4,,,True
+assumption_eligible,raw_turn_plus_assumptions,Correction / Challenge,5,3.2,,,True,3,0.6,,,True,0.6866666666666668,,,True,14.4,,,True
+assumption_eligible,explicit_only,Correction / Challenge,5,7.4,,,True,3,0.2,,,True,0.3820289855072464,,,True,6.8,,,True
+assumption_eligible,explicit_plus_top1_assumption,Correction / Challenge,5,10.8,,,True,3,0.4,,,True,0.45072463768115945,,,True,6.6,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Correction / Challenge,5,10.8,,,True,3,0.2,,,True,0.35739130434782607,,,True,6.0,,,True
+assumption_eligible,explicit_plus_assumptions,Correction / Challenge,5,10.4,,,True,3,0.4,,,True,0.46739130434782616,,,True,8.0,,,True
+assumption_eligible,raw_turn,Clarification Request (Generic),1,10.0,,,True,1,0.0,,,True,0.1,,,True,5.0,,,True
+assumption_eligible,raw_turn_with_history,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,15.0,,,True
+assumption_eligible,raw_turn_plus_assumptions,Clarification Request (Generic),1,9.0,,,True,1,0.0,,,True,0.1111111111111111,,,True,5.0,,,True
+assumption_eligible,explicit_only,Clarification Request (Generic),1,6.0,,,True,1,0.0,,,True,0.16666666666666666,,,True,5.0,,,True
+assumption_eligible,explicit_plus_top1_assumption,Clarification Request (Generic),1,5.0,,,True,1,0.0,,,True,0.2,,,True,5.0,,,True
+assumption_eligible,explicit_plus_top3_assumptions,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,5.0,,,True
+assumption_eligible,explicit_plus_assumptions,Clarification Request (Generic),1,25.0,,,True,1,0.0,,,True,0.04,,,True,1.0,,,True
+complete_case,raw_turn,Assert / Elaborate,313,3.0926517571884986,2.491884510560981,3.6283198614318706,False,30,0.4728434504792332,0.4143526023651753,0.538841443925047,False,0.6374468320733121,0.5923979152168241,0.6884274130700359,False,15.888178913738018,15.291074478178368,16.5,False
+complete_case,raw_turn_with_history,Assert / Elaborate,313,2.747603833865815,2.3700587977973337,3.083626860754186,False,30,0.4536741214057508,0.39510188087774295,0.526480301178957,False,0.6360396396916788,0.596321869191461,0.6776437161605475,False,16.757188498402556,16.208704818084644,17.33762531328321,False
+complete_case,raw_turn_plus_assumptions,Assert / Elaborate,313,3.1533546325878596,2.741683709907804,3.530983255983256,False,30,0.43769968051118213,0.3821894336030462,0.5108543674067868,False,0.6147856521894336,0.5720824582092521,0.6680643050654143,False,15.929712460063898,15.460806309459004,16.416007960249456,False
+complete_case,explicit_only,Assert / Elaborate,313,4.281150159744409,3.7363145444163472,4.911123033880378,False,30,0.402555910543131,0.35359539252963545,0.45541564872175205,False,0.5678884988328938,0.5266718985681269,0.6113935749097175,False,13.476038338658148,12.658906810035843,14.368179513184584,False
+complete_case,explicit_plus_top1_assumption,Assert / Elaborate,313,4.099041533546326,3.589402714476368,4.671406631981445,False,30,0.3929712460063898,0.3473592893906691,0.43979205211982836,False,0.5679556062139954,0.5333382963282138,0.6009876257324908,False,13.53035143769968,12.621765641569459,14.438016942626108,False
+complete_case,explicit_plus_top3_assumptions,Assert / Elaborate,313,3.9552715654952078,3.452648347272003,4.533779054696276,False,30,0.4249201277955272,0.38012911060525995,0.48230322198678793,False,0.5866213416231716,0.5506597789660312,0.62692708062625,False,13.916932907348242,13.109585375170024,14.773939393939393,False
+complete_case,explicit_plus_assumptions,Assert / Elaborate,313,3.7827476038338657,3.2051538969928717,4.4068676470588235,False,30,0.41533546325878595,0.36292836137395723,0.4758359765150493,False,0.5855392843765368,0.5421565074320236,0.6342782017005406,False,14.095846645367413,13.193764620516374,14.988529411764706,False
+complete_case,raw_turn,Agree / Align,30,4.333333333333333,,,True,15,0.13333333333333333,,,True,0.3913227513227513,,,True,15.066666666666666,,,True
+complete_case,raw_turn_with_history,Agree / Align,30,3.7,,,True,15,0.16666666666666666,,,True,0.44337301587301586,,,True,16.633333333333333,,,True
+complete_case,raw_turn_plus_assumptions,Agree / Align,30,4.7,,,True,15,0.16666666666666666,,,True,0.3880170755170755,,,True,14.266666666666667,,,True
+complete_case,explicit_only,Agree / Align,30,5.9,,,True,15,0.16666666666666666,,,True,0.3657412075941488,,,True,12.033333333333333,,,True
+complete_case,explicit_plus_top1_assumption,Agree / Align,30,5.766666666666667,,,True,15,0.2,,,True,0.3891834733893557,,,True,11.4,,,True
+complete_case,explicit_plus_top3_assumptions,Agree / Align,30,5.8,,,True,15,0.2,,,True,0.3990515873015873,,,True,11.733333333333333,,,True
+complete_case,explicit_plus_assumptions,Agree / Align,30,5.866666666666666,,,True,15,0.16666666666666666,,,True,0.37917374727668846,,,True,12.333333333333334,,,True
+complete_case,raw_turn,Clarification Request (Specific),35,4.742857142857143,,,True,16,0.17142857142857143,,,True,0.40412349555206695,,,True,13.2,,,True
+complete_case,raw_turn_with_history,Clarification Request (Specific),35,3.4857142857142858,,,True,16,0.22857142857142856,,,True,0.46125850340136054,,,True,15.857142857142858,,,True
+complete_case,raw_turn_plus_assumptions,Clarification Request (Specific),35,4.885714285714286,,,True,16,0.14285714285714285,,,True,0.3739509947028744,,,True,13.028571428571428,,,True
+complete_case,explicit_only,Clarification Request (Specific),35,5.914285714285715,,,True,16,0.2857142857142857,,,True,0.4626877378849956,,,True,10.857142857142858,,,True
+complete_case,explicit_plus_top1_assumption,Clarification Request (Specific),35,6.457142857142857,,,True,16,0.2857142857142857,,,True,0.44660838073421,,,True,10.371428571428572,,,True
+complete_case,explicit_plus_top3_assumptions,Clarification Request (Specific),35,6.371428571428571,,,True,16,0.2571428571428571,,,True,0.4284542199164048,,,True,10.514285714285714,,,True
+complete_case,explicit_plus_assumptions,Clarification Request (Specific),35,6.285714285714286,,,True,16,0.22857142857142856,,,True,0.42131751706939674,,,True,10.628571428571428,,,True
+complete_case,raw_turn,Topic Shift,14,7.928571428571429,,,True,10,0.2857142857142857,,,True,0.41773088023088023,,,True,9.214285714285714,,,True
+complete_case,raw_turn_with_history,Topic Shift,14,8.071428571428571,,,True,10,0.2857142857142857,,,True,0.4168238507524222,,,True,11.5,,,True
+complete_case,raw_turn_plus_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.2857142857142857,,,True,0.40570394824596506,,,True,9.142857142857142,,,True
+complete_case,explicit_only,Topic Shift,14,8.785714285714286,,,True,10,0.21428571428571427,,,True,0.37505797773654914,,,True,6.0,,,True
+complete_case,explicit_plus_top1_assumption,Topic Shift,14,8.357142857142858,,,True,10,0.35714285714285715,,,True,0.45898654916512066,,,True,6.357142857142857,,,True
+complete_case,explicit_plus_top3_assumptions,Topic Shift,14,8.285714285714286,,,True,10,0.21428571428571427,,,True,0.39980531686358756,,,True,6.357142857142857,,,True
+complete_case,explicit_plus_assumptions,Topic Shift,14,8.571428571428571,,,True,10,0.2857142857142857,,,True,0.4004855889724311,,,True,6.0,,,True
+complete_case,raw_turn,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6722222222222222,,,True,16.933333333333334,,,True
+complete_case,raw_turn_with_history,Answer,15,1.9333333333333333,,,True,10,0.5333333333333333,,,True,0.7077777777777778,,,True,17.733333333333334,,,True
+complete_case,raw_turn_plus_assumptions,Answer,15,1.9333333333333333,,,True,10,0.4666666666666667,,,True,0.6777777777777777,,,True,17.0,,,True
+complete_case,explicit_only,Answer,15,3.066666666666667,,,True,10,0.4,,,True,0.574047619047619,,,True,12.733333333333333,,,True
+complete_case,explicit_plus_top1_assumption,Answer,15,3.2666666666666666,,,True,10,0.3333333333333333,,,True,0.5410052910052909,,,True,12.733333333333333,,,True
+complete_case,explicit_plus_top3_assumptions,Answer,15,4.466666666666667,,,True,10,0.3333333333333333,,,True,0.5457883597883598,,,True,12.466666666666667,,,True
+complete_case,explicit_plus_assumptions,Answer,15,4.066666666666666,,,True,10,0.4666666666666667,,,True,0.6326666666666667,,,True,13.466666666666667,,,True
+complete_case,raw_turn,Stonewalling / Non-Response,3,7.333333333333333,,,True,3,0.0,,,True,0.24305555555555555,,,True,6.666666666666667,,,True
+complete_case,raw_turn_with_history,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+complete_case,raw_turn_plus_assumptions,Stonewalling / Non-Response,3,7.666666666666667,,,True,3,0.0,,,True,0.24183006535947713,,,True,6.666666666666667,,,True
+complete_case,explicit_only,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+complete_case,explicit_plus_top1_assumption,Stonewalling / Non-Response,3,6.666666666666667,,,True,3,0.0,,,True,0.24603174603174605,,,True,6.666666666666667,,,True
+complete_case,explicit_plus_top3_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.21825396825396826,,,True,6.666666666666667,,,True
+complete_case,explicit_plus_assumptions,Stonewalling / Non-Response,3,7.0,,,True,3,0.0,,,True,0.24444444444444444,,,True,6.666666666666667,,,True
+complete_case,raw_turn,Correction / Challenge,5,3.4,,,True,3,0.6,,,True,0.7166666666666667,,,True,14.4,,,True
+complete_case,raw_turn_with_history,Correction / Challenge,5,2.6,,,True,3,0.0,,,True,0.4166666666666667,,,True,15.4,,,True
+complete_case,raw_turn_plus_assumptions,Correction / Challenge,5,3.2,,,True,3,0.6,,,True,0.6866666666666668,,,True,14.4,,,True
+complete_case,explicit_only,Correction / Challenge,5,7.4,,,True,3,0.2,,,True,0.3820289855072464,,,True,6.8,,,True
+complete_case,explicit_plus_top1_assumption,Correction / Challenge,5,10.8,,,True,3,0.4,,,True,0.45072463768115945,,,True,6.6,,,True
+complete_case,explicit_plus_top3_assumptions,Correction / Challenge,5,10.8,,,True,3,0.2,,,True,0.35739130434782607,,,True,6.0,,,True
+complete_case,explicit_plus_assumptions,Correction / Challenge,5,10.4,,,True,3,0.4,,,True,0.46739130434782616,,,True,8.0,,,True
+complete_case,raw_turn,Clarification Request (Generic),1,10.0,,,True,1,0.0,,,True,0.1,,,True,5.0,,,True
+complete_case,raw_turn_with_history,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,15.0,,,True
+complete_case,raw_turn_plus_assumptions,Clarification Request (Generic),1,9.0,,,True,1,0.0,,,True,0.1111111111111111,,,True,5.0,,,True
+complete_case,explicit_only,Clarification Request (Generic),1,6.0,,,True,1,0.0,,,True,0.16666666666666666,,,True,5.0,,,True
+complete_case,explicit_plus_top1_assumption,Clarification Request (Generic),1,5.0,,,True,1,0.0,,,True,0.2,,,True,5.0,,,True
+complete_case,explicit_plus_top3_assumptions,Clarification Request (Generic),1,7.0,,,True,1,0.0,,,True,0.14285714285714285,,,True,5.0,,,True
+complete_case,explicit_plus_assumptions,Clarification Request (Generic),1,25.0,,,True,1,0.0,,,True,0.04,,,True,1.0,,,True
