@@ -3,7 +3,7 @@
 This experiment tests whether a small, locally grounded implicit representation improves
 next-turn discrimination when explicit propositions underspecify the current turn. It uses
 hard negative pools and order-swapped forced-choice judgments. The prompt identity is
-`representation-pairwise-v4-order-swapped`, so pointwise 1–20 scores from older runs cannot
+`representation-pairwise-v5-json-evidence`, so scores from older prompt contracts cannot
 be resumed or merged.
 
 Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
@@ -108,12 +108,14 @@ The runner defaults to five episodes per array patch and an eight-hour wall-time
 jobs stop as soon as their patch is complete.
 
 Each true continuation is compared directly with each of its 24 negatives. Every comparison
-is presented twice, once in each A/B order. The judge must output exactly `A` or `B`.
-The parser uses the first standalone A/B answer token, allowing punctuation or explanation
-after the initial choice. The positive preference is averaged across the two orders;
+is presented twice, once in each A/B order. The judge must output one JSON object containing
+exactly `answer` and `evidence`. The parser requires an uppercase `A` or `B`, a nonempty
+single-line evidence string, no additional keys, and no text outside the JSON. The selected
+model's chat template is applied before generation. The positive preference is averaged
+across the two orders;
 disagreements become ties, and the fixed candidate order resolves rank ties. A complete
-pair-condition therefore requires 48 parsed choice rows. The default output budget is four
-tokens, with malformed outputs retried using budgets up to 16 tokens. Merge reparses saved
+pair-condition therefore requires 48 parsed choice rows. The default output budget is 64
+tokens, with malformed outputs retried using budgets up to 128 tokens. Merge reparses saved
 raw outputs and fails loudly if any expected choice remains unresolved; analysis also refuses
 to emit an empty result when scorable pairs exist.
 

@@ -29,16 +29,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "3.0.3"
-PROMPT_VERSION = "representation-pairwise-v4-order-swapped"
+SCRIPT_VERSION = "3.1.0"
+PROMPT_VERSION = "representation-pairwise-v5-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
 DEFAULT_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 DEFAULT_DOWNLOAD_DIR = Path("/shared/4/models")
 DEFAULT_BOOTSTRAP_DRAWS = 1000
+DEFAULT_MAX_TOKENS = 64
 DEFAULT_MAX_SCORE_RETRIES = 2
-DEFAULT_MAX_RETRY_TOKENS = 16
+DEFAULT_MAX_RETRY_TOKENS = 128
 DEFAULT_CLUSTER_BOOTSTRAP_MIN_CLUSTERS = 20
 HARD_NEGATIVE_TARGET_COUNT = 24
 SAME_EPISODE_NEGATIVE_TARGET = 12
@@ -130,6 +131,7 @@ class CandidateRecord(TypedDict):
 
 class ParsedChoice(TypedDict):
     choice: str | None
+    evidence: str | None
     parse_success: bool
     parse_error: str | None
     parse_method: str | None
@@ -305,8 +307,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--max_tokens",
         type=int,
-        default=4,
-        help="Initial forced-choice generation token budget.",
+        default=DEFAULT_MAX_TOKENS,
+        help="Initial JSON judgment generation token budget.",
     )
     parser.add_argument(
         "--max_score_retries",
@@ -1364,10 +1366,17 @@ def build_scoring_prompt(
 ) -> str:
     return f"""You are a strict conversation-continuation judge.
 
-Given the source representation, choose which candidate is more likely to be the
-immediate next turn. Compare the candidates directly. Prefer local conversational fit,
-the response expected by the final dialogue act, stance continuity, and supported
-presuppositions. Do not reward a candidate merely for repeating topic words.
+Your task is to determine which candidate is more likely to be the immediate next turn in the conversation described by the source representation.
+
+Evaluate Candidate A and Candidate B comparatively. Prioritize:
+
+* local conversational fit with the immediately preceding context
+* the response expected by the final dialogue act
+* stance, intent, and speaker continuity
+* consistency with supported presuppositions
+* naturalness as the immediate next turn
+
+Do not prefer a candidate merely because it repeats words, entities, or topics from the source representation.
 
 Source representation:
 {source_representation}
@@ -1378,7 +1387,26 @@ Candidate A:
 Candidate B:
 {candidate_b_text}
 
-Return exactly one uppercase letter: A or B.
+Choose exactly one candidate.
+
+Return ONLY a valid JSON object with exactly these two keys:
+
+{{
+"answer": "A",
+"evidence": "Brief reason why A is a better immediate continuation than B."
+}}
+
+Output requirements:
+
+* "answer" must be exactly "A" or "B".
+* "evidence" must be a single concise sentence.
+* The evidence must compare the candidates based on conversational fit, not summarize or repeat their full content.
+* Do not repeat the source representation.
+* Do not quote the candidates unless necessary to identify a decisive distinction.
+* Do not provide chain-of-thought, step-by-step reasoning, scores, probabilities, explanations outside the JSON, or markdown.
+* Do not add any keys.
+* Output exactly one JSON object and nothing else.
+
 """
 
 
@@ -1391,8 +1419,21 @@ def build_retry_prompt(
 ) -> str:
     return f"""You are a strict conversation-continuation judge.
 
-Your previous response was not exactly A or B. Re-evaluate the same source and the same
-two candidates. Choose the candidate that is more likely to be the immediate next turn.
+Your previous response did not satisfy the required output format.
+
+Re-evaluate the same source representation and the same two candidates. Determine which
+candidate is more likely to be the immediate next turn in the conversation.
+
+Evaluate Candidate A and Candidate B comparatively. Prioritize:
+
+- local conversational fit with the immediately preceding context
+- the response expected by the final dialogue act
+- stance, intent, and speaker continuity
+- consistency with supported presuppositions
+- naturalness as the immediate next turn
+
+Do not prefer a candidate merely because it repeats words, entities, or topics from the
+source representation.
 
 Source representation:
 {source_representation}
@@ -1406,35 +1447,83 @@ Candidate B:
 Previous parse error:
 {parse_error or "unknown_parse_error"}
 
-Previous invalid/incomplete response:
+Previous invalid response:
 {previous_output[:200]}
 
-Return exactly one uppercase letter: A or B.
+Choose exactly one candidate.
+
+Return ONLY a valid JSON object with exactly these two keys:
+
+{{
+  "answer": "A",
+  "evidence": "Brief reason why A is a better immediate continuation than B."
+}}
+
+Output requirements:
+- "answer" must be exactly "A" or "B".
+- "evidence" must be a single concise sentence.
+- The evidence must state the decisive conversational distinction between the candidates.
+- Do not summarize the source representation.
+- Do not repeat or reproduce the previous invalid response.
+- Do not quote or restate the candidates unless necessary to identify the decisive distinction.
+- Do not provide chain-of-thought, step-by-step reasoning, scores, or probabilities.
+- Do not use markdown or code fences.
+- Do not add any keys.
+- Output exactly one JSON object and nothing else.
 """
 
 
 def parse_llm_choice(raw_output: str) -> ParsedChoice:
-    normalized = raw_output.strip().upper()
-    if normalized in {"A", "B"}:
+    try:
+        payload = json.loads(raw_output)
+    except json.JSONDecodeError:
         return {
-            "choice": normalized,
-            "parse_success": True,
-            "parse_error": None,
-            "parse_method": "exact",
+            "choice": None,
+            "evidence": None,
+            "parse_success": False,
+            "parse_error": "invalid_json",
+            "parse_method": None,
         }
-    leading = re.match(r"^\s*(?:\*\*)?([AB])(?:\*\*)?(?=$|[\s.,:;!?()\[\]\-])", normalized)
-    if leading is not None:
+    if not isinstance(payload, dict):
         return {
-            "choice": leading.group(1),
-            "parse_success": True,
-            "parse_error": None,
-            "parse_method": "leading_choice_token",
+            "choice": None,
+            "evidence": None,
+            "parse_success": False,
+            "parse_error": "expected_json_object",
+            "parse_method": None,
+        }
+    if set(payload) != {"answer", "evidence"}:
+        return {
+            "choice": None,
+            "evidence": None,
+            "parse_success": False,
+            "parse_error": "expected_exact_keys_answer_evidence",
+            "parse_method": None,
+        }
+    answer = payload["answer"]
+    evidence = payload["evidence"]
+    if not isinstance(answer, str) or answer not in {"A", "B"}:
+        return {
+            "choice": None,
+            "evidence": None,
+            "parse_success": False,
+            "parse_error": "answer_must_be_A_or_B",
+            "parse_method": None,
+        }
+    if not isinstance(evidence, str) or not evidence.strip() or "\n" in evidence:
+        return {
+            "choice": None,
+            "evidence": None,
+            "parse_success": False,
+            "parse_error": "evidence_must_be_nonempty_single_line_string",
+            "parse_method": None,
         }
     return {
-        "choice": None,
-        "parse_success": False,
-        "parse_error": "expected_leading_A_or_B",
-        "parse_method": None,
+        "choice": answer,
+        "evidence": evidence.strip(),
+        "parse_success": True,
+        "parse_error": None,
+        "parse_method": "strict_json_answer_evidence",
     }
 
 
@@ -1442,6 +1531,7 @@ def normalize_score_choice(row: dict[str, Any]) -> dict[str, Any]:
     normalized = dict(row)
     parsed = parse_llm_choice(str(row.get("raw_output") or ""))
     normalized["choice"] = parsed["choice"]
+    normalized["judge_evidence"] = parsed["evidence"]
     normalized["parse_success"] = parsed["parse_success"]
     normalized["parse_error"] = parsed["parse_error"]
     normalized["parse_method"] = parsed["parse_method"]
@@ -1610,6 +1700,7 @@ class LLMInterface:
             distributed_executor_backend="mp",
             trust_remote_code=True,
         )
+        self.tokenizer = self.llm.get_tokenizer()
         self.SamplingParams = SamplingParams
         self.sampling_kwargs = {
             "temperature": args.temperature,
@@ -1621,7 +1712,19 @@ class LLMInterface:
 
     def generate_batch(self, prompts: list[str], *, max_tokens: int) -> list[str]:
         params = self.SamplingParams(max_tokens=max_tokens, **self.sampling_kwargs)
-        outputs = self.llm.generate(prompts, params)
+        rendered_prompts: list[str] = []
+        for prompt in prompts:
+            rendered = self.tokenizer.apply_chat_template(
+                [{"role": "user", "content": prompt}],
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+            if not isinstance(rendered, str):
+                raise TypeError(
+                    f"Tokenizer chat template returned {type(rendered).__name__}; expected str"
+                )
+            rendered_prompts.append(rendered)
+        outputs = self.llm.generate(rendered_prompts, params)
         return [output.outputs[0].text.strip() for output in outputs]
 
 
@@ -1674,6 +1777,7 @@ def score_row(
         "donor_fallback_level": donor.get("donor_fallback_level"),
         "candidate_pool_sha256": pair["candidate_pool_sha256"],
         "choice": parsed["choice"],
+        "judge_evidence": parsed["evidence"],
         "positive_preference": positive_preference,
         "parse_success": parsed["parse_success"],
         "parse_error": parsed["parse_error"],
@@ -1820,7 +1924,19 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         if args.dry_run:
             raw_outputs = []
             for task in batch:
-                raw_outputs.append("A" if task["candidate_a"]["is_true_next_turn"] else "B")
+                choice = "A" if task["candidate_a"]["is_true_next_turn"] else "B"
+                other_choice = "B" if choice == "A" else "A"
+                raw_outputs.append(
+                    json.dumps(
+                        {
+                            "answer": choice,
+                            "evidence": (
+                                f"Candidate {choice} fits the immediate conversational context "
+                                f"better than Candidate {other_choice}."
+                            ),
+                        }
+                    )
+                )
         else:
             assert llm is not None
             prompts = [

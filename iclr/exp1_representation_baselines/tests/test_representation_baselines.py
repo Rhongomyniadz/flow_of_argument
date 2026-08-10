@@ -379,11 +379,11 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             "candidate A",
             "candidate B",
             "invalid",
-            "expected_exactly_A_or_B",
+            "invalid_json",
         )
         self.assertIn("Candidate A", prompt)
         self.assertIn("Candidate B", prompt)
-        self.assertIn("exactly one uppercase letter", prompt)
+        self.assertIn("valid JSON object", prompt)
         self.assertIn("Previous parse error", prompt)
 
     def test_pair_id_matches_legacy_contract(self) -> None:
@@ -545,15 +545,20 @@ class EndToEndAndPatchTests(unittest.TestCase):
             choice=None,
             positive_preference=None,
             parse_success=False,
-            parse_error="expected_exactly_A_or_B",
-            raw_output=f"{score_rows[0]['choice']}. The selected continuation is this candidate.",
+            parse_error="invalid_json",
+            raw_output=json.dumps(
+                {
+                    "answer": score_rows[0]["choice"],
+                    "evidence": "The selected candidate is the better immediate continuation.",
+                }
+            ),
         )
         baseline.write_jsonl(score_file, [repairable_root, *score_rows[1:]])
         repaired_summary = baseline.analyze_dataset(args)
         self.assertEqual(repaired_summary["score_repair"]["repaired_score_count"], 1)
         repaired_root_rows = baseline.read_jsonl(score_file)
         self.assertTrue(repaired_root_rows[0]["parse_success"])
-        self.assertEqual(repaired_root_rows[0]["parse_method"], "leading_choice_token")
+        self.assertEqual(repaired_root_rows[0]["parse_method"], "strict_json_answer_evidence")
 
         score_rows = repaired_root_rows
         old_pointwise_row = {
@@ -576,7 +581,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
             choice=None,
             positive_preference=None,
             parse_success=False,
-            parse_error="expected_exactly_A_or_B",
+            parse_error="invalid_json",
             raw_output="invalid",
         )
         baseline.write_jsonl(score_file, [invalid, *score_rows[1:]])
@@ -624,8 +629,13 @@ class EndToEndAndPatchTests(unittest.TestCase):
             choice=None,
             positive_preference=None,
             parse_success=False,
-            parse_error="expected_exactly_A_or_B",
-            raw_output=f"{patch_zero_rows[0]['choice']}. The selected continuation is this candidate.",
+            parse_error="invalid_json",
+            raw_output=json.dumps(
+                {
+                    "answer": patch_zero_rows[0]["choice"],
+                    "evidence": "The selected candidate is the better immediate continuation.",
+                }
+            ),
         )
         baseline.write_jsonl(patch_zero_scores, [repairable, *patch_zero_rows[1:]])
         merge_args = make_args(
@@ -643,7 +653,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         repaired_rows = [row for row in merged_rows if baseline.task_key(row) == baseline.task_key(repairable)]
         self.assertEqual(len(repaired_rows), 1)
         self.assertTrue(repaired_rows[0]["parse_success"])
-        self.assertEqual(repaired_rows[0]["parse_method"], "leading_choice_token")
+        self.assertEqual(repaired_rows[0]["parse_method"], "strict_json_answer_evidence")
         merged_order = [
             (
                 row["pair_id"],

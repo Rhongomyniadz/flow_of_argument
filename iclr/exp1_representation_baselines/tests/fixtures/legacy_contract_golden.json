@@ -2,40 +2,40 @@
   "pair_id": "news:golden-episode:0:1",
   "parser_cases": [
     {
-      "raw": "A",
+      "raw": "{\"answer\": \"A\", \"evidence\": \"Candidate A directly answers the source while Candidate B changes topic.\"}",
       "choice": "A",
       "parse_success": true,
       "parse_error": null
     },
     {
-      "raw": "  b\n",
+      "raw": "  {\"answer\": \"B\", \"evidence\": \"Candidate B preserves the expected response relation better than Candidate A.\"}\n",
       "choice": "B",
       "parse_success": true,
       "parse_error": null
     },
     {
-      "raw": "B.",
-      "choice": "B",
-      "parse_success": true,
-      "parse_error": null
-    },
-    {
-      "raw": "A. The immediate next turn is Candidate A.",
-      "choice": "A",
-      "parse_success": true,
-      "parse_error": null
-    },
-    {
-      "raw": "**A**.",
-      "choice": "A",
-      "parse_success": true,
-      "parse_error": null
+      "raw": "{\"answer\": \"B\"}",
+      "choice": null,
+      "parse_success": false,
+      "parse_error": "expected_exact_keys_answer_evidence"
     },
     {
       "raw": "{\"choice\": \"A\"}",
       "choice": null,
       "parse_success": false,
-      "parse_error": "expected_leading_A_or_B"
+      "parse_error": "expected_exact_keys_answer_evidence"
+    },
+    {
+      "raw": "```json\n{\"answer\": \"A\", \"evidence\": \"Candidate A fits better.\"}\n```",
+      "choice": null,
+      "parse_success": false,
+      "parse_error": "invalid_json"
+    },
+    {
+      "raw": "{\"answer\": \"C\", \"evidence\": \"Candidate C fits better.\"}",
+      "choice": null,
+      "parse_success": false,
+      "parse_error": "answer_must_be_A_or_B"
     }
   ],
   "pairwise_ranking": {
