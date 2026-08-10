@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "3.0.2"
+SCRIPT_VERSION = "3.0.3"
 PROMPT_VERSION = "representation-pairwise-v4-order-swapped"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -2736,7 +2736,31 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         args.conditions,
     )
     pairs = read_jsonl(prepared)
-    scores = read_jsonl(scores_file)
+    original_scores = read_jsonl(scores_file)
+    scores: list[dict[str, Any]] = []
+    repaired_score_count = 0
+    score_file_changed = False
+    parse_method_counts: Counter[str] = Counter()
+    for original_row in original_scores:
+        normalized_row = normalize_score_choice(original_row)
+        repaired_score_count += int(
+            any(
+                original_row.get(field) != normalized_row.get(field)
+                for field in ("choice", "positive_preference", "parse_success", "parse_error")
+            )
+        )
+        score_file_changed = score_file_changed or (
+            canonical_json(original_row) != canonical_json(normalized_row)
+        )
+        parse_method_counts[str(normalized_row.get("parse_method") or "unparsed")] += 1
+        scores.append(normalized_row)
+    unresolved_scores = [row for row in scores if not score_record_valid(row)]
+    if unresolved_scores:
+        examples = [str(row.get("raw_output"))[:120] for row in unresolved_scores[:5]]
+        raise RuntimeError(
+            f"Analysis found {len(unresolved_scores)} unresolved forced-choice rows after "
+            f"reparsing the merged scores. Example outputs: {examples}"
+        )
     seen: dict[tuple[str, str, str, str, str, str], str] = {}
     for row in scores:
         key = task_key(row)
@@ -2744,6 +2768,35 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         previous = seen.setdefault(key, canonical)
         if previous != canonical:
             raise RuntimeError(f"Conflicting duplicate score task key during analysis: {key}")
+    merge_manifest_path = args.output_dir / "exp1_representation_merge_manifest.json"
+    if score_file_changed:
+        merge_manifest = None
+        if merge_manifest_path.exists():
+            merge_manifest = json.loads(merge_manifest_path.read_text(encoding="utf-8"))
+            expected_count = int(merge_manifest.get("merged_score_count", -1))
+            if expected_count != len(scores):
+                raise RuntimeError(
+                    f"Merged score count changed before analysis repair: manifest={expected_count}, "
+                    f"scores={len(scores)}"
+                )
+            expected_hash = merge_manifest.get("scores_sha256")
+            observed_hash = file_hash(scores_file)
+            if expected_hash and str(expected_hash) != observed_hash:
+                raise RuntimeError(
+                    "Merged score hash does not match its manifest before analysis repair"
+                )
+        write_jsonl(scores_file, scores)
+        if merge_manifest is not None:
+            merge_manifest["valid_score_count"] = len(scores)
+            merge_manifest["repaired_score_count"] = repaired_score_count
+            merge_manifest["parse_method_counts"] = dict(sorted(parse_method_counts.items()))
+            merge_manifest["scores_sha256"] = file_hash(scores_file)
+            write_json(merge_manifest_path, merge_manifest)
+        logger.info(
+            "Repaired %d/%d merged score rows from saved raw outputs",
+            repaired_score_count,
+            len(scores),
+        )
     long_df, wide_df = build_metrics(pairs, scores, args)
     scorable_pair_condition_count = sum(
         bool(pair["candidate_pool_complete"])
@@ -2779,7 +2832,6 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     hash_candidates = dict(paths)
     hash_candidates["prepared_pairs"] = prepared
     hash_candidates["prepare_manifest"] = prepare_manifest_path(args)
-    merge_manifest_path = args.output_dir / "exp1_representation_merge_manifest.json"
     if merge_manifest_path.exists():
         hash_candidates["merge_manifest"] = merge_manifest_path
     root_patch_manifest = args.output_dir / "patch_manifest.json"
@@ -2872,6 +2924,12 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "parse_failures_by_condition": dict(
             zip(coverage_df["condition"], coverage_df["comparison_parse_failure_pair_count"])
         ),
+        "score_repair": {
+            "score_file_changed": score_file_changed,
+            "repaired_score_count": repaired_score_count,
+            "valid_score_count": len(scores),
+            "parse_method_counts": dict(sorted(parse_method_counts.items())),
+        },
         "condition_metrics": overall_metrics,
         "complete_case_diagnostic_table": diagnostic_table,
         "diagnostic_gate": gate,

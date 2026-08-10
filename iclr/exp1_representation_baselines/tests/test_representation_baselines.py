@@ -540,6 +540,22 @@ class EndToEndAndPatchTests(unittest.TestCase):
         resume_args = make_args(self.input_dir, output, "--dry_run", "--score_only")
         score_file = baseline.final_paths(output)["scores"]
         score_rows = baseline.read_jsonl(score_file)
+        repairable_root = dict(
+            score_rows[0],
+            choice=None,
+            positive_preference=None,
+            parse_success=False,
+            parse_error="expected_exactly_A_or_B",
+            raw_output=f"{score_rows[0]['choice']}. The selected continuation is this candidate.",
+        )
+        baseline.write_jsonl(score_file, [repairable_root, *score_rows[1:]])
+        repaired_summary = baseline.analyze_dataset(args)
+        self.assertEqual(repaired_summary["score_repair"]["repaired_score_count"], 1)
+        repaired_root_rows = baseline.read_jsonl(score_file)
+        self.assertTrue(repaired_root_rows[0]["parse_success"])
+        self.assertEqual(repaired_root_rows[0]["parse_method"], "leading_choice_token")
+
+        score_rows = repaired_root_rows
         old_pointwise_row = {
             "pair_id": score_rows[0]["pair_id"],
             "condition": score_rows[0]["condition"],
