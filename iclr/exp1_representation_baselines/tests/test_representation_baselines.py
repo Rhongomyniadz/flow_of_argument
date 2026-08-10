@@ -601,6 +601,17 @@ class EndToEndAndPatchTests(unittest.TestCase):
                 "--patch_index", str(patch_index),
             )
             baseline.score_dataset(args)
+        patch_zero_scores = baseline.score_path(baseline.patch_dir(output, 0, 2))
+        patch_zero_rows = baseline.read_jsonl(patch_zero_scores)
+        repairable = dict(
+            patch_zero_rows[0],
+            choice=None,
+            positive_preference=None,
+            parse_success=False,
+            parse_error="expected_exactly_A_or_B",
+            raw_output=f"{patch_zero_rows[0]['choice']}. The selected continuation is this candidate.",
+        )
+        baseline.write_jsonl(patch_zero_scores, [repairable, *patch_zero_rows[1:]])
         merge_args = make_args(
             self.input_dir,
             output,
@@ -611,7 +622,12 @@ class EndToEndAndPatchTests(unittest.TestCase):
         )
         merged = baseline.merge_patch_scores(merge_args)
         self.assertGreater(merged["merged_score_count"], 0)
+        self.assertEqual(merged["repaired_score_count"], 1)
         merged_rows = baseline.read_jsonl(baseline.final_paths(output)["scores"])
+        repaired_rows = [row for row in merged_rows if baseline.task_key(row) == baseline.task_key(repairable)]
+        self.assertEqual(len(repaired_rows), 1)
+        self.assertTrue(repaired_rows[0]["parse_success"])
+        self.assertEqual(repaired_rows[0]["parse_method"], "leading_choice_token")
         merged_order = [
             (
                 row["pair_id"],
@@ -628,7 +644,6 @@ class EndToEndAndPatchTests(unittest.TestCase):
         )
         self.assertEqual(merged_order, expected_order)
 
-        patch_zero_scores = baseline.score_path(baseline.patch_dir(output, 0, 2))
         duplicate = baseline.read_jsonl(patch_zero_scores)[0]
         baseline.append_jsonl(patch_zero_scores, [duplicate])
         merged_again = baseline.merge_patch_scores(merge_args)

@@ -109,10 +109,13 @@ jobs stop as soon as their patch is complete.
 
 Each true continuation is compared directly with each of its 24 negatives. Every comparison
 is presented twice, once in each A/B order. The judge must output exactly `A` or `B`.
-The positive preference is averaged across the two orders; disagreements become ties, and
-the fixed candidate order resolves rank ties. A complete pair-condition therefore requires
-48 parsed choice rows. The default output budget is four tokens, with malformed outputs
-retried using budgets up to 16 tokens.
+The parser uses the first standalone A/B answer token, allowing punctuation or explanation
+after the initial choice. The positive preference is averaged across the two orders;
+disagreements become ties, and the fixed candidate order resolves rank ties. A complete
+pair-condition therefore requires 48 parsed choice rows. The default output budget is four
+tokens, with malformed outputs retried using budgets up to 16 tokens. Merge reparses saved
+raw outputs and fails loudly if any expected choice remains unresolved; analysis also refuses
+to emit an empty result when scorable pairs exist.
 
 Negative pools prioritize up to 12 hard same-episode nonadjacent turns, then six
 same-category/same-move turns, followed by topic- and length-matched category and global

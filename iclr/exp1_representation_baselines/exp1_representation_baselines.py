@@ -13,7 +13,7 @@ import platform
 import re
 import subprocess
 import tempfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable, TypedDict
 
@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "3.0.1"
+SCRIPT_VERSION = "3.0.2"
 PROMPT_VERSION = "representation-pairwise-v4-order-swapped"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -132,6 +132,7 @@ class ParsedChoice(TypedDict):
     choice: str | None
     parse_success: bool
     parse_error: str | None
+    parse_method: str | None
 
 
 def canonical_json(value: Any) -> str:
@@ -1414,13 +1415,48 @@ Return exactly one uppercase letter: A or B.
 
 def parse_llm_choice(raw_output: str) -> ParsedChoice:
     normalized = raw_output.strip().upper()
-    if normalized not in {"A", "B"}:
+    if normalized in {"A", "B"}:
         return {
-            "choice": None,
-            "parse_success": False,
-            "parse_error": "expected_exactly_A_or_B",
+            "choice": normalized,
+            "parse_success": True,
+            "parse_error": None,
+            "parse_method": "exact",
         }
-    return {"choice": normalized, "parse_success": True, "parse_error": None}
+    leading = re.match(r"^\s*(?:\*\*)?([AB])(?:\*\*)?(?=$|[\s.,:;!?()\[\]\-])", normalized)
+    if leading is not None:
+        return {
+            "choice": leading.group(1),
+            "parse_success": True,
+            "parse_error": None,
+            "parse_method": "leading_choice_token",
+        }
+    return {
+        "choice": None,
+        "parse_success": False,
+        "parse_error": "expected_leading_A_or_B",
+        "parse_method": None,
+    }
+
+
+def normalize_score_choice(row: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(row)
+    parsed = parse_llm_choice(str(row.get("raw_output") or ""))
+    normalized["choice"] = parsed["choice"]
+    normalized["parse_success"] = parsed["parse_success"]
+    normalized["parse_error"] = parsed["parse_error"]
+    normalized["parse_method"] = parsed["parse_method"]
+    if not parsed["parse_success"]:
+        normalized["positive_preference"] = None
+        return normalized
+    required = ("candidate_a_id", "candidate_b_id", "positive_candidate_id")
+    missing = [field for field in required if not row.get(field)]
+    if missing:
+        raise ValueError(
+            f"Cannot normalize parsed score row {row.get('pair_id')!r}; missing fields: {missing}"
+        )
+    chosen_id = row["candidate_a_id"] if parsed["choice"] == "A" else row["candidate_b_id"]
+    normalized["positive_preference"] = int(chosen_id == row["positive_candidate_id"])
+    return normalized
 
 
 def task_key(row: dict[str, Any]) -> tuple[str, str, str, str, str, str]:
@@ -1469,6 +1505,10 @@ def compact_existing_scores(
         if not identity_fields.issubset(row):
             changed = True
             continue
+        normalized_row = normalize_score_choice(row)
+        if canonical_json(normalized_row) != canonical_json(row):
+            changed = True
+        row = normalized_row
         key = task_key(row)
         if allowed_keys is not None and key not in allowed_keys:
             changed = True
@@ -1637,6 +1677,7 @@ def score_row(
         "positive_preference": positive_preference,
         "parse_success": parsed["parse_success"],
         "parse_error": parsed["parse_error"],
+        "parse_method": parsed["parse_method"],
         "raw_output": raw_output,
         "judge_attempt_count": len(attempt_outputs or [raw_output]),
         "judge_retry_count": max(0, len(attempt_outputs or [raw_output]) - 1),
@@ -1865,7 +1906,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
     valid_count = sum(score_record_valid(row) and task_key(row) in selected_keys for row in all_rows)
     manifest = {
         "stage": "score_patch",
-        "complete": True,
+        "complete": valid_count == len(tasks),
         "script_version": SCRIPT_VERSION,
         "prompt_version": PROMPT_VERSION,
         "patch_index": args.patch_index,
@@ -1886,6 +1927,12 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "scores_sha256": file_hash(scores_file) if scores_file.exists() else None,
     }
     write_json(patch_manifest_path, manifest)
+    if valid_count != len(tasks):
+        raise RuntimeError(
+            f"Patch {args.patch_index} has {len(tasks) - valid_count} unresolved forced-choice "
+            "rows after retries. Valid rows were checkpointed; rerun this patch to retry only "
+            "the unresolved tasks."
+        )
     return manifest
 
 
@@ -2698,6 +2745,18 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         if previous != canonical:
             raise RuntimeError(f"Conflicting duplicate score task key during analysis: {key}")
     long_df, wide_df = build_metrics(pairs, scores, args)
+    scorable_pair_condition_count = sum(
+        bool(pair["candidate_pool_complete"])
+        and bool(pair["conditions"].get(condition, {}).get("available"))
+        for pair in pairs
+        for condition in args.conditions
+    )
+    if scorable_pair_condition_count and not bool(long_df["full_retained"].any()):
+        raise RuntimeError(
+            "Analysis retained zero pair-conditions despite having "
+            f"{scorable_pair_condition_count} scorable pair-conditions. Re-merge scores with "
+            "the current parser or inspect unresolved forced-choice outputs."
+        )
     category_df = condition_summary(long_df, "category", args)
     move_df = condition_summary(long_df, "true_next_turn_move_label", args)
     pairwise_df = build_pairwise(long_df, args)
@@ -2783,6 +2842,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "max_retry_tokens": args.max_retry_tokens,
             "scoring_mode": "order_swapped_forced_choice",
             "valid_outputs": ["A", "B"],
+            "parser": "leading_standalone_choice_token",
             "comparison_rows_per_pair_condition": EXPECTED_COMPARISONS_PER_CONDITION,
         },
         "seed": args.seed,
@@ -2874,13 +2934,20 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
 
     merged: list[dict[str, Any]] = []
     seen: dict[tuple[str, str, str, str, str, str], str] = {}
+    repaired_score_count = 0
+    parse_method_counts: Counter[str] = Counter()
     for patch_index, directory in enumerate(expected_dirs):
         manifest = manifests[patch_index]
         selected_source_paths = {str(path) for path in manifest.get("selected_source_paths", [])}
         expected_model_name = str(manifest.get("config", {}).get("model_name"))
         expected_prompt_version = str(manifest.get("config", {}).get("prompt_version"))
         expected_conditions = {str(value) for value in manifest.get("config", {}).get("conditions", [])}
-        for row in read_jsonl(score_path(directory)):
+        for original_row in read_jsonl(score_path(directory)):
+            row = normalize_score_choice(original_row)
+            was_repaired = any(
+                original_row.get(field) != row.get(field)
+                for field in ("choice", "positive_preference", "parse_success", "parse_error")
+            )
             pair_id = str(row["pair_id"])
             source_path = pair_source_path.get(pair_id)
             if source_path is None:
@@ -2908,7 +2975,21 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
                     raise RuntimeError(f"Conflicting duplicate score task key during merge: {key}")
                 continue
             seen[key] = canonical
+            repaired_score_count += int(was_repaired)
+            parse_method_counts[str(row.get("parse_method") or "unparsed")] += 1
             merged.append(row)
+    expected_score_count = sum(int(manifest.get("expected_task_count", -1)) for manifest in manifests)
+    if expected_score_count < 0 or len(merged) != expected_score_count:
+        raise RuntimeError(
+            f"Merged score count mismatch: expected {expected_score_count}, observed {len(merged)}"
+        )
+    unresolved = [row for row in merged if not score_record_valid(row)]
+    if unresolved:
+        examples = [str(row.get("raw_output"))[:120] for row in unresolved[:5]]
+        raise RuntimeError(
+            f"Merge found {len(unresolved)} unresolved forced-choice rows after reparsing. "
+            f"Example outputs: {examples}"
+        )
     presentation_order = {"positive_first": 0, "positive_second": 1}
     merged.sort(
         key=lambda row: (
@@ -2928,6 +3009,9 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         "prepared_pairs_sha256": manifests[0]["prepared_pairs_sha256"],
         "config_sha256": manifests[0]["config_sha256"],
         "merged_score_count": len(merged),
+        "valid_score_count": len(merged) - len(unresolved),
+        "repaired_score_count": repaired_score_count,
+        "parse_method_counts": dict(sorted(parse_method_counts.items())),
         "scores_sha256": file_hash(destination),
     }
     write_json(args.output_dir / "exp1_representation_merge_manifest.json", merge_manifest)
