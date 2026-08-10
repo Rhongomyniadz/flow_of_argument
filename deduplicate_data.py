@@ -41,7 +41,7 @@ from typing import Any, Iterable
 
 LOG = logging.getLogger("deduplicate-data")
 
-SCRIPT_VERSION = "1.1.0"
+SCRIPT_VERSION = "1.1.1"
 DEFAULT_INPUT_ROOT = Path("data")
 DEFAULT_OUTPUT_ROOT = Path("data_cleaned")
 DEFAULT_MIN_WORDS = 50
@@ -575,7 +575,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     input_root = canonical_path(args.input_root)
     output_root = canonical_path(args.output_root)
     validate_roots(input_root, output_root)
+    if output_root.exists() and args.overwrite:
+        LOG.info("Removing existing output tree: %s", output_root)
+    else:
+        LOG.info("Preparing output tree: %s", output_root)
     prepare_output_root(output_root, overwrite=args.overwrite)
+    LOG.info("Output tree is ready: %s", output_root)
 
     LOG.info("Scanning JSON files under %s", input_root)
     files = input_json_files(input_root)
@@ -693,6 +698,8 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(message)s",
+        stream=sys.stdout,
+        force=True,
     )
     try:
         manifest = run(args)
