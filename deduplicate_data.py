@@ -39,7 +39,6 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
-
 LOG = logging.getLogger("deduplicate-data")
 
 SCRIPT_VERSION = "1.1.0"
@@ -578,7 +577,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     validate_roots(input_root, output_root)
     prepare_output_root(output_root, overwrite=args.overwrite)
 
+    LOG.info("Scanning JSON files under %s", input_root)
     files = input_json_files(input_root)
+    LOG.info("Discovered %d JSON files; cleaning into %s", len(files), output_root)
     dataset_stats: defaultdict[str, DatasetStats] = defaultdict(DatasetStats)
     kept_by_fingerprint: dict[tuple[str, str], str] = {}
     overall_status = Counter()
@@ -587,6 +588,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     with audit_path.open("w", encoding="utf-8") as audit_handle:
         for index, path in enumerate(files, start=1):
             relative = path.relative_to(input_root)
+            if args.verbose:
+                LOG.info("Processing %d/%d: %s", index, len(files), relative)
             key = dataset_key(relative)
             stats = dataset_stats[key]
             stats.json_files_seen += 1
@@ -658,8 +661,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             )
             write_jsonl_row(audit_handle, audit)
             overall_status[status] += 1
-            if args.verbose and (index <= 20 or index % 1000 == 0):
-                LOG.info("Processed %d/%d: %s", index, len(files), relative)
 
     manifest = {
         "script": "deduplicate_data.py",
