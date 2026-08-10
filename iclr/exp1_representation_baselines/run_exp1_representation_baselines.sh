@@ -2,7 +2,7 @@
 #SBATCH --job-name=exp1_repr_diagnostic
 #SBATCH --output=iclr/exp1_representation_baselines/_log/exp1_repr_diagnostic_%A_%a.out
 #SBATCH --partition=gpu
-#SBATCH --time=02:00:00
+#SBATCH --time=08:00:00
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:A6000:2
 #SBATCH --mem=64G
@@ -12,10 +12,10 @@ set -euo pipefail
 
 INPUT_DIR="${INPUT_DIR:-data_cleaned/conversation_moves_labeled}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-iclr/exp1_representation_baselines/results}"
-EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-100}"
+EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-5}"
 MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY-}"
 CATEGORIES_CSV="${CATEGORIES_CSV:-all}"
-CONDITIONS_CSV="${CONDITIONS_CSV:-raw_turn,raw_turn_with_history,raw_turn_plus_assumptions,explicit_only,explicit_plus_top1_assumption,explicit_plus_top3_assumptions,explicit_plus_assumptions}"
+CONDITIONS_CSV="${CONDITIONS_CSV:-raw_turn,raw_turn_with_history,raw_turn_plus_assumptions,explicit_only,explicit_plus_top3_assumptions,explicit_plus_shuffled_assumptions,explicit_plus_wrong_episode_assumptions}"
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-30B-A3B-Instruct-2507}"
 MODEL_OUTPUT_NAME="${MODEL_NAME//\//__}"
 OUTPUT_DIR="${OUTPUT_DIR:-${OUTPUT_ROOT}/${MODEL_OUTPUT_NAME}}"
@@ -24,11 +24,14 @@ DOWNLOAD_DIR="${DOWNLOAD_DIR:-/shared/4/models}"
 TENSOR_PARALLEL_SIZE="${TENSOR_PARALLEL_SIZE:-2}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.9}"
 PROMPT_BATCH_SIZE="${PROMPT_BATCH_SIZE:-64}"
-MAX_TOKENS="${MAX_TOKENS:-256}"
+MAX_TOKENS="${MAX_TOKENS:-4}"
 MAX_SCORE_RETRIES="${MAX_SCORE_RETRIES:-2}"
-MAX_RETRY_TOKENS="${MAX_RETRY_TOKENS:-1024}"
+MAX_RETRY_TOKENS="${MAX_RETRY_TOKENS:-16}"
 SEED="${SEED:-42}"
 HISTORY_TURNS="${HISTORY_TURNS:-3}"
+SOURCE_TAIL_WORDS="${SOURCE_TAIL_WORDS:-100}"
+CANDIDATE_HEAD_WORDS="${CANDIDATE_HEAD_WORDS:-100}"
+ASSUMPTION_BUDGET="${ASSUMPTION_BUDGET:-3}"
 BOOTSTRAP_DRAWS="${BOOTSTRAP_DRAWS:-1000}"
 NO_TQDM="${NO_TQDM:-1}"
 DRY_RUN="${DRY_RUN:-0}"
@@ -61,6 +64,9 @@ build_common_args() {
     --max_retry_tokens "${MAX_RETRY_TOKENS}"
     --seed "${SEED}"
     --history_turns "${HISTORY_TURNS}"
+    --source_tail_words "${SOURCE_TAIL_WORDS}"
+    --candidate_head_words "${CANDIDATE_HEAD_WORDS}"
+    --assumption_budget "${ASSUMPTION_BUDGET}"
     --bootstrap_draws "${BOOTSTRAP_DRAWS}"
     --audit_sample_size_per_outcome "${AUDIT_SAMPLE_SIZE_PER_OUTCOME}"
   )
@@ -133,7 +139,8 @@ submit_stages() {
   export INPUT_DIR OUTPUT_ROOT OUTPUT_DIR PREPARED_PAIRS_JSONL EPISODES_PER_PATCH NUM_PATCHES
   export MAX_EPISODES_PER_CATEGORY CATEGORIES_CSV CONDITIONS_CSV MODEL_NAME DOWNLOAD_DIR
   export TENSOR_PARALLEL_SIZE GPU_MEMORY_UTILIZATION PROMPT_BATCH_SIZE MAX_TOKENS MAX_SCORE_RETRIES MAX_RETRY_TOKENS SEED
-  export HISTORY_TURNS BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
+  export HISTORY_TURNS SOURCE_TAIL_WORDS CANDIDATE_HEAD_WORDS ASSUMPTION_BUDGET
+  export BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
   export AUDIT_SAMPLE_SIZE_PER_OUTCOME
   export ALLOW_FULL_RUN
   PATCH_SUBMISSION="$(sbatch --parsable --array="${ARRAY_RANGE}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"

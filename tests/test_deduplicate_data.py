@@ -79,6 +79,7 @@ class CleanEpisodeTests(unittest.TestCase):
         self.assertEqual(cleaned.turns[0]["conversation_move_label"], "Answer")
         self.assertEqual(cleaned.turns[0]["merged_from_turn_indices"], [0, 2])
         self.assertEqual(cleaned.turns[1]["merged_from_turn_indices"], [3, 4])
+        self.assertEqual(cleaned.turns[2]["merged_from_turn_indices"], [5])
         self.assertEqual(len(cleaned.turns[0]["explicit_propositions"]), 10)
         self.assertEqual(len(cleaned.turns[1]["assumptions"]), 10)
         explicit_confidences = [
@@ -105,6 +106,10 @@ class CleanEpisodeTests(unittest.TestCase):
         self.assertEqual(serialized["episode_id"], "object-episode")
         self.assertEqual(serialized["metadata"], {"source": "fixture"})
         self.assertEqual(len(serialized["turns"]), 2)
+        self.assertEqual(
+            [row["merged_from_turn_indices"] for row in serialized["turns"]],
+            [[0], [1]],
+        )
 
 
 class EndToEndTests(unittest.TestCase):

@@ -18,8 +18,8 @@ For each episode it performs these operations in order:
 The original data is never modified. Cleaned files retain their paths relative
 to the input root under a separate output root. When turns are merged, metadata
 from the last component is retained because it represents the most recent
-dialogue state; text, annotations, timing, counts, and merge provenance are
-recomputed.
+dialogue state; text, annotations, timing, counts, and original-turn provenance
+are recomputed. Provenance is retained for singleton and merged turns.
 """
 
 from __future__ import annotations
@@ -42,7 +42,7 @@ from typing import Any, Iterable
 
 LOG = logging.getLogger("deduplicate-data")
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.1.0"
 DEFAULT_INPUT_ROOT = Path("data")
 DEFAULT_OUTPUT_ROOT = Path("data_cleaned")
 DEFAULT_MIN_WORDS = 50
@@ -382,15 +382,14 @@ def merge_turn_group(
     if duration is not None and duration > 0:
         merged["words_per_second"] = count / duration
 
+    merged["merged_from_turn_indices"] = [
+        original_turn_identifier(record, position)
+        for position, record in group
+    ]
     if len(group) > 1:
         merged["merged_turn_count"] = len(group)
-        merged["merged_from_turn_indices"] = [
-            original_turn_identifier(record, position)
-            for position, record in group
-        ]
     else:
         merged.pop("merged_turn_count", None)
-        merged.pop("merged_from_turn_indices", None)
     return merged, duplicate_total, capped_total
 
 
@@ -673,6 +672,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "turn_filter_order": "minimum_words_then_merge_adjacent_same_speaker",
             "duplicate_identity": "dataset_key_plus_cleaned_normalized_speaker_text_sha256",
             "merge_metadata_policy": "last_component_metadata_with_recomputed_structural_fields",
+            "turn_provenance_policy": "original_index_list_on_every_cleaned_turn",
             "speaker_policy": "skip_episode_unless_exactly_two_speakers_remain",
         },
         "input_json_file_count": len(files),

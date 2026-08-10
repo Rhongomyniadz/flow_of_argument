@@ -1,10 +1,10 @@
-# Explicit–Implicit Diagnostic Decomposition
+# Pairwise Explicit–Implicit Confirmatory Ranking
 
-This experiment diagnoses where next-turn information is lost instead of treating
-`explicit_plus_assumptions` as a single paper claim. Candidate pools, pair construction,
-and deterministic task ordering remain unchanged. The new prompt identity is
-`representation-diagnostic-v3-full-json-20`, so scores from the previous judge prompt
-cannot be resumed accidentally.
+This experiment tests whether a small, locally grounded implicit representation improves
+next-turn discrimination when explicit propositions underspecify the current turn. It uses
+hard negative pools and order-swapped forced-choice judgments. The prompt identity is
+`representation-pairwise-v4-order-swapped`, so pointwise 1–20 scores from older runs cannot
+be resumed or merged.
 
 Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
 
@@ -25,7 +25,7 @@ data_cleaned/conversation_moves_labeled/
 Generate it from the repository root before preparing the experiment:
 
 ```bash
-python deduplicate_data.py
+python deduplicate_data.py --overwrite
 ```
 
 The cleaner removes turns shorter than 50 words, merges adjacent remaining turns from
@@ -33,7 +33,9 @@ the same speaker, caps explicit propositions and assumptions at the ten
 highest-confidence items, removes duplicate episodes within each logical dataset, and
 validates two-speaker ABAB alternation. Set `INPUT_DIR` in the Slurm runner or pass
 `--input_dir` to the Python script only when intentionally using another prepared
-dataset.
+dataset. The cleaner now records original indices on every retained turn. Preparation rejects
+pairs that bridge deleted turns or contain a merge across nonconsecutive original indices, and
+fails with an actionable error if it sees old cleaned data without this provenance.
 
 ## Default diagnostic conditions
 
@@ -43,25 +45,26 @@ The default pipeline scores seven conditions:
 2. `raw_turn_with_history`
 3. `raw_turn_plus_assumptions`
 4. `explicit_only`
-5. `explicit_plus_top1_assumption`
-6. `explicit_plus_top3_assumptions`
-7. `explicit_plus_assumptions`
+5. `explicit_plus_top3_assumptions`
+6. `explicit_plus_shuffled_assumptions`
+7. `explicit_plus_wrong_episode_assumptions`
 
-The first-one and first-three conditions use the deterministic extraction order because
-the annotations do not contain an importance ranking. The original conditions
-`assumptions_only`, `explicit_plus_shuffled_assumptions`, and
-`explicit_plus_wrong_episode_assumptions` remain available through `--conditions`, but
-they are no longer part of the default diagnostic run.
+Preparation uses the final 100 words of the current turn and the first 100 words of every
+candidate by default. It selects three assumptions without looking at candidates, ranking
+them by lexical grounding in the final source window. The same three-item budget applies to
+true, shuffled, and wrong-episode blocks. `assumptions_only`, `explicit_plus_top1_assumption`,
+and `explicit_plus_assumptions` remain optional diagnostics.
 
 The principal contrasts are:
 
 | Contrast | Diagnostic question |
 |---|---|
-| `explicit_plus_assumptions - explicit_only` | Do assumptions add signal after abstraction? |
+| `explicit_plus_top3_assumptions - explicit_only` | Do assumptions help sparse explicit representations? |
+| true top 3 minus shuffled top 3 | Is the gain specific to the extracted assumptions? |
+| true top 3 minus wrong-episode top 3 | Is the gain specific to the local dialogue state? |
 | `raw_turn_plus_assumptions - raw_turn` | Do assumptions add signal beyond lexical context? |
 | `raw_turn - explicit_only` | How much information is lost during proposition extraction? |
 | `raw_turn_with_history - raw_turn` | How much does discourse history contribute? |
-| first 1 / first 3 / all assumptions | Does assumption volume create overload? |
 
 Positive pairwise values always favor the condition on the left.
 
@@ -95,26 +98,30 @@ The `_log` directory must exist before Slurm opens the job log. Submit the shell
 mkdir -p iclr/exp1_representation_baselines/_log
 
 MAX_EPISODES_PER_CATEGORY=5 \
-EPISODES_PER_PATCH=5 \
 sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
 The coordinator performs preparation, submits a scoring array, then submits dependent
 merge and analysis jobs. Every scoring array task requests two A6000 GPUs and starts one
 vLLM process with `tensor_parallel_size=2` and the multiprocessing executor.
+The runner defaults to five episodes per array patch and an eight-hour wall-time ceiling;
+jobs stop as soon as their patch is complete.
 
-Judge scores use an integer **1--20** scale. A judgment is valid only when the complete
-JSON object parses with exactly three fields: integer `score`, non-empty string
-`rationale`, and numeric `confidence` in `[0, 1]`.
+Each true continuation is compared directly with each of its 24 negatives. Every comparison
+is presented twice, once in each A/B order. The judge must output exactly `A` or `B`.
+The positive preference is averaged across the two orders; disagreements become ties, and
+the fixed candidate order resolves rank ties. A complete pair-condition therefore requires
+48 parsed choice rows. The default output budget is four tokens, with malformed outputs
+retried using budgets up to 16 tokens.
 
-The default initial output budget is 256 tokens per judgment. If a full response fails
-to parse, only the failed judgment is retried with a larger budget: 512 tokens on the
-first retry and 1024 on the second retry by default. The fixed 25/25 candidate-pool
-requirement remains unchanged; retries repair judge-format failures rather than weakening
-the ranking comparison.
+Negative pools prioritize up to 12 hard same-episode nonadjacent turns, then six
+same-category/same-move turns, followed by topic- and length-matched category and global
+backfills. A same-episode assumption donor is reserved before candidate construction so the
+wrong-episode control remains independent of the candidate pool.
 
 Useful overrides include `MODEL_NAME`, `CONDITIONS_CSV`, `PROMPT_BATCH_SIZE`,
 `MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `SEED`, `HISTORY_TURNS`,
+`SOURCE_TAIL_WORDS`, `CANDIDATE_HEAD_WORDS`, `ASSUMPTION_BUDGET`,
 `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and the CUDA/FlashInfer variables.
 
 ## Diagnostic outputs
@@ -130,15 +137,16 @@ pairwise deltas plus:
 - `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case MRR and Top-1.
 - `exp1_representation_decomposition_lifts.{pdf,png}`: assumption-eligible MRR lifts.
 
-The analysis subsets are `full`, `assumption_eligible`, and `complete_case`.
+The analysis subsets are `full`, `assumption_eligible`, `sparse_explicit` (at most four
+explicit propositions), `dense_explicit` (at least five), and `complete_case`.
 `complete_case` requires all selected conditions to parse successfully on the same pair.
 
 ## Decision gate
 
-The script never automatically authorizes a full-corpus run from one judge. It first checks whether an
-incremental MRR interval excludes zero, whether positive effects span at least two
-categories, and whether every condition retains at least 98% of eligible pairs. A
-passing single-model diagnostic advances to a second-model smoke test and manual audit.
+The script never automatically authorizes a full-corpus run from one judge. The primary
+gate requires a positive sparse-explicit MRR interval, superiority to both corrupted
+controls, positive effects in at least two categories, and at least 98% retained coverage.
+A passing run advances only to a different-family judge smoke test and manual audit.
 
 Run the same smoke test with another judge by changing `MODEL_NAME`; its artifacts go to
 a separate model folder. Only after both smoke runs and the audit are reviewed should the

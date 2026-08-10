@@ -19,6 +19,7 @@ def synthetic_turn(category: str, episode: str, index: int) -> dict:
         "category": category,
         "episode_id": episode,
         "turn_idx": index,
+        "merged_from_turn_indices": [index],
         "start_time": float(index),
         "turn_type_label": "Substantive",
         "conversation_move_label": "Assert / Elaborate" if index % 2 == 0 else "Answer",
@@ -87,12 +88,23 @@ def make_args(input_dir: Path, output_dir: Path, *extra: str):
     return args
 
 
+def build_records(category: str, path: Path, history_turns: int):
+    return baseline.build_episode_records(
+        category,
+        path,
+        history_turns,
+        baseline.DEFAULT_SOURCE_TAIL_WORDS,
+        baseline.DEFAULT_CANDIDATE_HEAD_WORDS,
+        baseline.DEFAULT_ASSUMPTION_BUDGET,
+    )
+
+
 class LoadingAndRepresentationTests(unittest.TestCase):
     def test_list_and_object_roots_and_chronological_order(self) -> None:
-        list_turns, list_pairs = baseline.build_episode_records(
+        list_turns, list_pairs, _ = build_records(
             "news", FIXTURES / "list_root_episode.json", history_turns=3
         )
-        object_turns, object_pairs = baseline.build_episode_records(
+        object_turns, object_pairs, _ = build_records(
             "news", FIXTURES / "object_root_episode.json", history_turns=3
         )
         self.assertEqual([turn["turn_idx"] for turn in list_turns], [0, 1])
@@ -115,7 +127,7 @@ class LoadingAndRepresentationTests(unittest.TestCase):
                 synthetic_turn("news", "break", 3),
             ]
             path.write_text(json.dumps(turns), encoding="utf-8")
-            records, pairs = baseline.build_episode_records("news", path, history_turns=3)
+            records, pairs, _ = build_records("news", path, history_turns=3)
         self.assertEqual(len(records), 3)
         self.assertEqual([(pair["source_turn_idx"], pair["true_next_turn_idx"]) for pair in pairs], [(2, 3)])
         source_two = next(turn for turn in records if turn["turn_idx"] == 2)
@@ -125,8 +137,10 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         pair = {
             "pair_id": "p",
             "source_turn_text": "raw",
+            "source_tail_text": "raw",
             "source_explicit_texts": [],
             "source_assumption_texts": [],
+            "source_all_assumption_texts": [],
             "history_turn_texts": [],
             "donors": {
                 "explicit_plus_shuffled_assumptions": {
@@ -143,10 +157,10 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         first_three = baseline.format_representation(pair, "explicit_plus_top3_assumptions")
         raw_plus = baseline.format_representation(pair, "raw_turn_plus_assumptions")
         corrupt = baseline.format_representation(pair, "explicit_plus_shuffled_assumptions")
-        self.assertIn("[Implicit assumptions]", real)
+        self.assertIn("[All extracted implicit assumptions]", real)
         self.assertIn("first 1", first_one)
         self.assertIn("first 3", first_three)
-        self.assertIn("[Raw current turn]", raw_plus)
+        self.assertIn("[Final local window of the current turn]", raw_plus)
         self.assertIn("[Implicit assumptions]", corrupt)
         self.assertNotIn("shuffled", corrupt.casefold())
         self.assertNotIn("wrong", real)
@@ -155,8 +169,10 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         pair = {
             "pair_id": "budget",
             "source_turn_text": "raw",
+            "source_tail_text": "raw",
             "source_explicit_texts": ["explicit"],
             "source_assumption_texts": ["first", "second", "third", "fourth"],
+            "source_all_assumption_texts": ["first", "second", "third", "fourth"],
             "history_turn_texts": [],
             "donors": {},
         }
@@ -166,6 +182,29 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertNotIn("second", first_one)
         self.assertIn("third", first_three)
         self.assertNotIn("fourth", first_three)
+
+    def test_local_grounding_and_nonconsecutive_merge_provenance(self) -> None:
+        selected = baseline.select_locally_grounded_assumptions(
+            [
+                "Institutions generally value social identity.",
+                "The speaker expects the budget question to be answered.",
+                "People often hold broad cultural beliefs.",
+            ],
+            "What is your answer to the budget question?",
+            1,
+        )
+        self.assertEqual(selected, ["The speaker expects the budget question to be answered."])
+
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "provenance.json"
+            source = synthetic_turn("news", "provenance", 0)
+            source["merged_from_turn_indices"] = [0, 2]
+            target = synthetic_turn("news", "provenance", 1)
+            target["merged_from_turn_indices"] = [3]
+            path.write_text(json.dumps([source, target]), encoding="utf-8")
+            _, pairs, counts = build_records("news", path, history_turns=3)
+        self.assertEqual(pairs, [])
+        self.assertEqual(counts["boundary_invalid_merged_group_count"], 1)
 
 
 class PreparationAndControlTests(unittest.TestCase):
@@ -203,6 +242,16 @@ class PreparationAndControlTests(unittest.TestCase):
             self.assertFalse(set(ids).intersection(pair["history_turn_ids"]))
             for condition in args.conditions:
                 self.assertEqual(pair["candidate_pool_sha256"], baseline.stable_hash(ids))
+
+    def test_prepare_rejects_cleaned_data_without_original_provenance(self) -> None:
+        path = self.input_dir / "alpha" / "alpha-episode-0.json"
+        turns = json.loads(path.read_text(encoding="utf-8"))
+        for turn in turns:
+            turn.pop("merged_from_turn_indices")
+        path.write_text(json.dumps(turns), encoding="utf-8")
+        args = make_args(self.input_dir, self.root / "missing-provenance", "--prepare_only")
+        with self.assertRaisesRegex(RuntimeError, "Regenerate data_cleaned"):
+            baseline.prepare_dataset(args)
 
     def test_donors_are_deterministic_valid_and_seed_sensitive(self) -> None:
         _, first = self.prepare(seed=42, output_name="first")
@@ -274,6 +323,8 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
     def test_default_conditions_are_the_diagnostic_decomposition(self) -> None:
         args = baseline.parse_args([])
         baseline.validate_args(args)
+        self.assertEqual(args.source_tail_words, 100)
+        self.assertEqual(args.candidate_head_words, 100)
         self.assertEqual(
             args.conditions,
             [
@@ -281,62 +332,62 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
                 "raw_turn_with_history",
                 "raw_turn_plus_assumptions",
                 "explicit_only",
-                "explicit_plus_top1_assumption",
                 "explicit_plus_top3_assumptions",
-                "explicit_plus_assumptions",
+                "explicit_plus_shuffled_assumptions",
+                "explicit_plus_wrong_episode_assumptions",
             ],
         )
 
-    def test_legacy_golden_contract(self) -> None:
+    def test_forced_choice_parser_and_pairwise_tie_ranking(self) -> None:
         golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
         for case in golden["parser_cases"]:
-            parsed = baseline.parse_llm_score(case["raw"])
-            self.assertEqual(parsed["score"], case["score"])
+            parsed = baseline.parse_llm_choice(case["raw"])
+            self.assertEqual(parsed["choice"], case["choice"])
             self.assertEqual(parsed["parse_success"], case["parse_success"])
             self.assertEqual(parsed["parse_error"], case["parse_error"])
-        ranked = baseline.rank_condition_scores(golden["ranking_rows"])
-        self.assertEqual([row["candidate_turn_id"] for row in ranked], golden["expected_rank_order"])
-        positive = next(row for row in ranked if row["is_true_next_turn"])
-        self.assertEqual(positive["rank"], golden["expected_true_rank"])
-        self.assertEqual(1.0 / positive["rank"], golden["expected_true_reciprocal_rank"])
 
-    def test_full_judge_output_is_required_and_uses_1_to_20_scale(self) -> None:
-        valid = baseline.parse_llm_score(
-            '{"score": 20, "rationale": "Very strong immediate continuation.", "confidence": 0.95}'
+        ranking = golden["pairwise_ranking"]
+        rows = []
+        for index in range(24):
+            preferences = ranking["preference_overrides"].get(
+                str(index),
+                ranking["default_preferences"],
+            )
+            negative_order = ranking["negative_candidate_orders"][index]
+            for order, preference in zip(("positive_first", "positive_second"), preferences):
+                rows.append(
+                    {
+                        "comparison_id": f"comparison-{index}",
+                        "presentation_order": order,
+                        "positive_candidate_order": ranking["positive_candidate_order"],
+                        "negative_candidate_order": negative_order,
+                        "choice": "A",
+                        "positive_preference": preference,
+                        "parse_success": True,
+                    }
+                )
+        ranked = baseline.aggregate_pairwise_condition(rows)
+        self.assertIsNotNone(ranked)
+        assert ranked is not None
+        self.assertEqual(ranked["true_rank"], ranking["expected_true_rank"])
+        self.assertEqual(ranked["reciprocal_rank"], ranking["expected_true_reciprocal_rank"])
+        self.assertEqual(ranked["true_pairwise_win_rate"], ranking["expected_pairwise_win_rate"])
+
+    def test_retry_prompt_preserves_forced_choice_contract(self) -> None:
+        prompt = baseline.build_retry_prompt(
+            "source",
+            "candidate A",
+            "candidate B",
+            "invalid",
+            "expected_exactly_A_or_B",
         )
-        self.assertTrue(valid["parse_success"])
-        self.assertEqual(valid["score"], 20)
-
-        missing_rationale = baseline.parse_llm_score('{"score": 15, "confidence": 0.8}')
-        self.assertFalse(missing_rationale["parse_success"])
-        self.assertEqual(missing_rationale["parse_error"], "missing_required_keys:rationale")
-
-        empty_rationale = baseline.parse_llm_score(
-            '{"score": 15, "rationale": "", "confidence": 0.8}'
-        )
-        self.assertFalse(empty_rationale["parse_success"])
-        self.assertEqual(empty_rationale["parse_error"], "rationale_missing_or_empty")
-
-        bad_confidence = baseline.parse_llm_score(
-            '{"score": 15, "rationale": "fit", "confidence": 1.2}'
-        )
-        self.assertFalse(bad_confidence["parse_success"])
-        self.assertEqual(bad_confidence["parse_error"], "confidence_out_of_range")
-
-        too_large = baseline.parse_llm_score(
-            '{"score": 21, "rationale": "fit", "confidence": 0.8}'
-        )
-        self.assertFalse(too_large["parse_success"])
-        self.assertEqual(too_large["parse_error"], "score_out_of_range")
-
-    def test_retry_prompt_keeps_full_json_contract_and_1_to_20_scale(self) -> None:
-        prompt = baseline.build_retry_prompt("source", "candidate", "{bad", "missing_json_object")
-        self.assertIn("1-20 scale", prompt)
-        self.assertIn('"rationale"', prompt)
-        self.assertIn('"confidence"', prompt)
+        self.assertIn("Candidate A", prompt)
+        self.assertIn("Candidate B", prompt)
+        self.assertIn("exactly one uppercase letter", prompt)
         self.assertIn("Previous parse error", prompt)
 
     def test_pair_id_matches_legacy_contract(self) -> None:
+        golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "golden.json"
             path.write_text(
@@ -346,20 +397,38 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
                 ]),
                 encoding="utf-8",
             )
-            _, pairs = baseline.build_episode_records("news", path, history_turns=3)
-        self.assertEqual(pairs[0]["pair_id"], "news:golden-episode:0:1")
+            _, pairs, _ = build_records("news", path, history_turns=3)
+        self.assertEqual(pairs[0]["pair_id"], golden["pair_id"])
 
     def test_diagnostic_gate_requires_replication_before_full_corpus(self) -> None:
         pairwise = pd.DataFrame(
             [
                 {
-                    "analysis_subset": "assumption_eligible",
-                    "target_condition": "explicit_plus_assumptions",
+                    "analysis_subset": "sparse_explicit",
+                    "target_condition": "explicit_plus_top3_assumptions",
                     "baseline_condition": "explicit_only",
                     "metric": "reciprocal_rank",
                     "mean_improvement": 0.03,
                     "ci95_low": 0.01,
                     "ci95_high": 0.05,
+                },
+                {
+                    "analysis_subset": "sparse_explicit",
+                    "target_condition": "explicit_plus_top3_assumptions",
+                    "baseline_condition": "explicit_plus_shuffled_assumptions",
+                    "metric": "reciprocal_rank",
+                    "mean_improvement": 0.02,
+                    "ci95_low": 0.005,
+                    "ci95_high": 0.04,
+                },
+                {
+                    "analysis_subset": "sparse_explicit",
+                    "target_condition": "explicit_plus_top3_assumptions",
+                    "baseline_condition": "explicit_plus_wrong_episode_assumptions",
+                    "metric": "reciprocal_rank",
+                    "mean_improvement": 0.02,
+                    "ci95_low": 0.004,
+                    "ci95_high": 0.04,
                 },
                 {
                     "analysis_subset": "assumption_eligible",
@@ -376,7 +445,9 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
         for category in ("alpha", "beta"):
             for condition, value in (
                 ("explicit_only", 0.4),
-                ("explicit_plus_assumptions", 0.5),
+                ("explicit_plus_top3_assumptions", 0.5),
+                ("explicit_plus_shuffled_assumptions", 0.45),
+                ("explicit_plus_wrong_episode_assumptions", 0.44),
                 ("raw_turn", 0.6),
                 ("raw_turn_plus_assumptions", 0.7),
             ):
@@ -386,6 +457,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
                         "category": category,
                         "condition": condition,
                         "assumption_eligible": True,
+                        "sparse_explicit": True,
                         "reciprocal_rank": value,
                     }
                 )
@@ -414,8 +486,14 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             "Submit this runner with sbatch, not bash",
             'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
             "raw_turn_plus_assumptions",
-            "explicit_plus_top1_assumption",
             "explicit_plus_top3_assumptions",
+            "explicit_plus_shuffled_assumptions",
+            "explicit_plus_wrong_episode_assumptions",
+            "SOURCE_TAIL_WORDS",
+            "CANDIDATE_HEAD_WORDS",
+            'SOURCE_TAIL_WORDS="${SOURCE_TAIL_WORDS:-100}"',
+            'CANDIDATE_HEAD_WORDS="${CANDIDATE_HEAD_WORDS:-100}"',
+            "ASSUMPTION_BUDGET",
             "AUDIT_SAMPLE_SIZE_PER_OUTCOME",
         ):
             self.assertIn(expected, text)
@@ -460,16 +538,29 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertTrue((long_df["complete_case"] == True).any())
 
         resume_args = make_args(self.input_dir, output, "--dry_run", "--score_only")
+        score_file = baseline.final_paths(output)["scores"]
+        score_rows = baseline.read_jsonl(score_file)
+        old_pointwise_row = {
+            "pair_id": score_rows[0]["pair_id"],
+            "condition": score_rows[0]["condition"],
+            "model_name": score_rows[0]["model_name"],
+            "prompt_version": "representation-json-v3-diagnostic",
+            "candidate_id": "legacy-candidate",
+            "score": 7,
+            "parse_success": True,
+        }
+        baseline.write_jsonl(score_file, [old_pointwise_row, *score_rows])
         resumed = baseline.score_dataset(resume_args)
         self.assertEqual(resumed["attempted_this_run"], 0)
+        self.assertNotIn(old_pointwise_row, baseline.read_jsonl(score_file))
 
-        score_file = baseline.final_paths(output)["scores"]
         score_rows = baseline.read_jsonl(score_file)
         invalid = dict(
             score_rows[0],
-            score=None,
+            choice=None,
+            positive_preference=None,
             parse_success=False,
-            parse_error="missing_json_object",
+            parse_error="expected_exactly_A_or_B",
             raw_output="invalid",
         )
         baseline.write_jsonl(score_file, [invalid, *score_rows[1:]])
@@ -522,10 +613,20 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertGreater(merged["merged_score_count"], 0)
         merged_rows = baseline.read_jsonl(baseline.final_paths(output)["scores"])
         merged_order = [
-            (row["pair_id"], row["condition"], int(row["candidate_order"]))
+            (
+                row["pair_id"],
+                row["condition"],
+                int(row["negative_candidate_order"]),
+                row["presentation_order"],
+            )
             for row in merged_rows
         ]
-        self.assertEqual(merged_order, sorted(merged_order))
+        order_rank = {"positive_first": 0, "positive_second": 1}
+        expected_order = sorted(
+            merged_order,
+            key=lambda row: (row[0], row[1], row[2], order_rank[row[3]]),
+        )
+        self.assertEqual(merged_order, expected_order)
 
         patch_zero_scores = baseline.score_path(baseline.patch_dir(output, 0, 2))
         duplicate = baseline.read_jsonl(patch_zero_scores)[0]
@@ -533,7 +634,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         merged_again = baseline.merge_patch_scores(merge_args)
         self.assertEqual(merged_again["merged_score_count"], merged["merged_score_count"])
 
-        conflicting = dict(duplicate, rationale="conflicting duplicate")
+        conflicting = dict(duplicate, raw_output="conflicting duplicate")
         baseline.append_jsonl(patch_zero_scores, [conflicting])
         with self.assertRaisesRegex(RuntimeError, "Conflicting duplicate"):
             baseline.merge_patch_scores(merge_args)
