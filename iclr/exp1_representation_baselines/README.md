@@ -150,8 +150,9 @@ pairwise deltas plus:
   including the raw turn, extracted representations, history, and true continuation.
 - `exp1_representation_diagnostic_gate.json`: a machine-readable interpretation and
   smoke-test gate.
-- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case MRR and Top-1.
-- `exp1_representation_decomposition_lifts.{pdf,png}`: assumption-eligible MRR lifts.
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case mean rank and Top-1.
+- `exp1_representation_decomposition_lifts.{pdf,png}`: paired mean-rank improvements,
+  oriented as baseline rank minus target rank so positive values favor the target condition.
 
 The analysis subsets are `full`, `assumption_eligible`, `sparse_explicit` (at most four
 explicit propositions), `dense_explicit` (at least five), and `complete_case`.

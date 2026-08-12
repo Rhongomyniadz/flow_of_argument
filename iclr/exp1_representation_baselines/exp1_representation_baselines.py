@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "3.1.0"
+SCRIPT_VERSION = "3.1.1"
 PROMPT_VERSION = "representation-pairwise-v5-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -2762,7 +2762,7 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
     condition_rows = []
     for condition in args.conditions:
         group = complete[complete["condition"] == condition]
-        for metric in ("reciprocal_rank", "top1"):
+        for metric in ("true_rank", "top1"):
             result = cluster_bootstrap(
                 group,
                 metric,
@@ -2778,7 +2778,11 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
             axis.set_axis_off()
     else:
-        for axis, metric, title in zip(axes, ("reciprocal_rank", "top1"), ("MRR", "Top-1 accuracy")):
+        for axis, metric, title in zip(
+            axes,
+            ("true_rank", "top1"),
+            ("Mean rank (lower is better)", "Top-1 accuracy"),
+        ):
             metric_df = plot_df[plot_df["metric"] == metric].set_index("condition").reindex(args.conditions)
             means = metric_df["mean"].astype(float).to_numpy()
             x = np.arange(len(args.conditions))
@@ -2791,7 +2795,7 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             axis.set_title(title)
             axis.set_ylabel(title)
             axis.grid(axis="y", alpha=0.25)
-        fig.suptitle(f"Pairwise representation comparison — complete cases (n={complete['pair_id'].nunique()})")
+        fig.suptitle(f"Pairwise representation comparison - complete cases (n={complete['pair_id'].nunique()})")
     fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
     fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
     plt.close(fig)
@@ -2811,10 +2815,16 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             (pairwise["analysis_subset"] == subset)
             & (pairwise["target_condition"] == target)
             & (pairwise["baseline_condition"] == baseline)
-            & (pairwise["metric"] == "reciprocal_rank")
+            & (pairwise["metric"] == "true_rank")
         ]
         if not match.empty:
-            lift_rows.append(dict(match.iloc[0], contrast=f"{labels[target]} - {labels[baseline]}"))
+            subset_label = subset.replace("_", " ")
+            lift_rows.append(
+                dict(
+                    match.iloc[0],
+                    contrast=f"{labels[target]} - {labels[baseline]}\n({subset_label})",
+                )
+            )
     lift_df = pd.DataFrame(lift_rows)
     fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
     if lift_df.empty or lift_df["mean_improvement"].isna().all():
@@ -2826,12 +2836,25 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         axis.bar(x, means, color="#F58518")
         lows = lift_df["ci95_low"].to_numpy(dtype=float)
         highs = lift_df["ci95_high"].to_numpy(dtype=float)
-        if np.isfinite(lows).all() and np.isfinite(highs).all():
-            axis.errorbar(x, means, yerr=np.vstack((means - lows, highs - means)), fmt="none", color="black", capsize=3)
+        finite_intervals = np.isfinite(lows) & np.isfinite(highs)
+        if finite_intervals.any():
+            axis.errorbar(
+                x[finite_intervals],
+                means[finite_intervals],
+                yerr=np.vstack(
+                    (
+                        means[finite_intervals] - lows[finite_intervals],
+                        highs[finite_intervals] - means[finite_intervals],
+                    )
+                ),
+                fmt="none",
+                color="black",
+                capsize=3,
+            )
         axis.axhline(0.0, color="black", linewidth=0.8)
         axis.set_xticks(x, lift_df["contrast"].tolist(), rotation=25, ha="right")
-        axis.set_ylabel("Paired MRR improvement")
-        axis.set_title("Confirmatory pairwise decomposition — sparse explicit primary subset")
+        axis.set_ylabel("Paired mean-rank improvement (baseline - target)")
+        axis.set_title("Pairwise mean-rank improvements by planned contrast")
         axis.grid(axis="y", alpha=0.25)
     fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
     fig.savefig(paths["decomposition_png"], dpi=args.plot_dpi, bbox_inches="tight")
