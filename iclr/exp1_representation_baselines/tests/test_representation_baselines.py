@@ -495,6 +495,13 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             'CANDIDATE_HEAD_WORDS="${CANDIDATE_HEAD_WORDS:-100}"',
             "ASSUMPTION_BUDGET",
             "AUDIT_SAMPLE_SIZE_PER_OUTCOME",
+            'MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-30B-A3B-Instruct-2507}"',
+            'TEMPERATURE="${TEMPERATURE:-0.0}"',
+            'TOP_P="${TOP_P:-1.0}"',
+            'MIN_P="${MIN_P:-0.0}"',
+            'TOP_K="${TOP_K:-0}"',
+            'REPETITION_PENALTY="${REPETITION_PENALTY:-1.05}"',
+            'PLOT_DPI="${PLOT_DPI:-300}"',
         ):
             self.assertIn(expected, text)
         self.assertNotIn("experiments/exp1_relevance_bridge/run_exp1.sh", text)

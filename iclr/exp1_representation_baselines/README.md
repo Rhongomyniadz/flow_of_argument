@@ -124,10 +124,21 @@ same-category/same-move turns, followed by topic- and length-matched category an
 backfills. A same-episode assumption donor is reserved before candidate construction so the
 wrong-episode control remains independent of the candidate pool.
 
-Useful overrides include `MODEL_NAME`, `CONDITIONS_CSV`, `PROMPT_BATCH_SIZE`,
-`MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `SEED`, `HISTORY_TURNS`,
-`SOURCE_TAIL_WORDS`, `CANDIDATE_HEAD_WORDS`, `ASSUMPTION_BUDGET`,
-`AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and the CUDA/FlashInfer variables.
+The runner treats the experiment configuration as environment-variable hyperparameters.
+`MODEL_NAME` defaults to `Qwen/Qwen3-30B-A3B-Instruct-2507`; changing it automatically
+selects a separate model-named result directory. User-selectable settings include:
+
+- Data and outputs: `INPUT_DIR`, `OUTPUT_ROOT`, `OUTPUT_DIR`, `PREPARED_PAIRS_JSONL`,
+  `CATEGORIES_CSV`, `MAX_EPISODES_PER_CATEGORY`, and `EPISODES_PER_PATCH`.
+- Judge and resources: `MODEL_NAME`, `DOWNLOAD_DIR`, `TENSOR_PARALLEL_SIZE`,
+  `GPU_MEMORY_UTILIZATION`, and `PROMPT_BATCH_SIZE`.
+- Decoding: `MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `TEMPERATURE`,
+  `TOP_P`, `MIN_P`, `TOP_K`, and `REPETITION_PENALTY`.
+- Experiment and analysis: `CONDITIONS_CSV`, `SEED`, `HISTORY_TURNS`,
+  `SOURCE_TAIL_WORDS`, `CANDIDATE_HEAD_WORDS`, `ASSUMPTION_BUDGET`,
+  `BOOTSTRAP_DRAWS`, `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and `PLOT_DPI`.
+
+The CUDA and FlashInfer environment variables remain overridable for the cluster runtime.
 
 ## Diagnostic outputs
 
