@@ -1,0 +1,153 @@
+{
+  "artifact_sha256": {
+    "rq1_timing_coefficients.csv": "252e2cfe41342c9b22cbc16fc4f26e93260500a46918ef1b6ddae02c10a6d72f",
+    "rq1_timing_comparison.pdf": "0d8be59347647281140a6104e2b5ae88fa519d68b8be0396805921a2b55f7ed3",
+    "rq1_timing_comparison.png": "c2a8cda0fc07e8c30d6323f54328ef014bc34b56fce40c441ff8927b3d046a39",
+    "rq1_timing_data_audit.json": "f8f5263a3dec84ea9c52674bf6f5327678031d75df44b60c4e2e3f74dc51120d",
+    "rq1_timing_model_fit.csv": "11dd6b333e6b3c93a46eef465c77985f684e838c9bfb1ef77993b961e060c94d",
+    "rq1_timing_observations.csv": "cc7a74cc8785d52073e3fbce10a7905140d6cd6ee6f63e3b8f49ea8878ebc463",
+    "rq1_timing_stance_comparison.csv": "4d8a6306f466321a062c7a3619cc491941aef64418d51bbabc49a7b4396a1f09"
+  },
+  "both_directional_intervals_survive_timing_adjustment": false,
+  "causal_claim": false,
+  "configuration": {
+    "categories": [
+      "all"
+    ],
+    "category_data_subdir": "parsed",
+    "data_dir": "data/stance_labeled/1024",
+    "max_episodes": null,
+    "output_dir": "iclr/rq1_timing_analysis/results",
+    "plot_dpi": 300
+  },
+  "duration_note": "Duration may be a mediator rather than a conventional confound.",
+  "episode_count": 14588,
+  "estimands": {
+    "per_second": "combined stance-density-pacing association",
+    "token_normalized": "association after removing duration from the outcome",
+    "token_timing_adjusted": "conditional association holding observed duration and response timing constant"
+  },
+  "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+  "formulas": {
+    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "token_normalized": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category)",
+    "token_timing_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "token_timing_previous_duration": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+  },
+  "git": {
+    "commit": "d4faf3b2fbc2eb7b8325bdb2a68ce3fe11fd511f",
+    "dirty": true
+  },
+  "headline_coefficients": {
+    "per_second:agree_move": {
+      "ci95_high": -0.023616730653298244,
+      "ci95_low": -0.026265979788530958,
+      "clustered_se": 0.0006758412797708658,
+      "coefficient": -0.0249413552209146,
+      "model_name": "per_second",
+      "p_value": 3.962873189415309e-298,
+      "term": "agree_move",
+      "z_or_t": -36.90416073633532
+    },
+    "per_second:disagree_move": {
+      "ci95_high": 0.016713113551970245,
+      "ci95_low": 0.01349073975618828,
+      "clustered_se": 0.0008220492369246682,
+      "coefficient": 0.015101926654079263,
+      "model_name": "per_second",
+      "p_value": 2.2393996929345955e-75,
+      "term": "disagree_move",
+      "z_or_t": 18.37107313739066
+    },
+    "token_normalized:agree_move": {
+      "ci95_high": -0.006128019258227027,
+      "ci95_low": -0.006674880404117945,
+      "clustered_se": 0.0001395079578513916,
+      "coefficient": -0.006401449831172486,
+      "model_name": "token_normalized",
+      "p_value": 0.0,
+      "term": "agree_move",
+      "z_or_t": -45.885911669580295
+    },
+    "token_normalized:disagree_move": {
+      "ci95_high": 0.005185310324128805,
+      "ci95_low": 0.004534438781936584,
+      "clustered_se": 0.00016604170977788698,
+      "coefficient": 0.004859874553032694,
+      "model_name": "token_normalized",
+      "p_value": 2.5737834547883052e-188,
+      "term": "disagree_move",
+      "z_or_t": 29.268998491606236
+    },
+    "token_timing_adjusted:agree_move": {
+      "ci95_high": -0.00021263302740520289,
+      "ci95_low": -0.0006092667197255461,
+      "clustered_se": 0.00010118392364577596,
+      "coefficient": -0.0004109498735653745,
+      "model_name": "token_timing_adjusted",
+      "p_value": 4.877624279613245e-05,
+      "term": "agree_move",
+      "z_or_t": -4.061414686823425
+    },
+    "token_timing_adjusted:disagree_move": {
+      "ci95_high": -0.0002999773478841115,
+      "ci95_low": -0.0008264193440733881,
+      "clustered_se": 0.00013429889537302315,
+      "coefficient": -0.0005631983459787498,
+      "model_name": "token_timing_adjusted",
+      "p_value": 2.745394297452176e-05,
+      "term": "disagree_move",
+      "z_or_t": -4.193618602851743
+    }
+  },
+  "manuscript_reference_comparison": [
+    {
+      "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
+      "manuscript_approximate_coefficient": -0.0056,
+      "sign_matches": true,
+      "strict_adjacency_coefficient": -0.006401449831172486,
+      "strict_minus_manuscript": -0.000801449831172486,
+      "term": "agree_move"
+    },
+    {
+      "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
+      "manuscript_approximate_coefficient": 0.0049,
+      "sign_matches": true,
+      "strict_adjacency_coefficient": 0.004859874553032694,
+      "strict_minus_manuscript": -4.012544696730541e-05,
+      "term": "disagree_move"
+    }
+  ],
+  "package_versions": {
+    "matplotlib": "3.10.3",
+    "numpy": "2.2.6",
+    "pandas": "3.0.2",
+    "statsmodels": "0.14.5",
+    "tqdm": "4.68.1"
+  },
+  "script_version": "1.0.0",
+  "summary_self_hash_excluded": true,
+  "timing_adjustment_interpretation": [
+    {
+      "attenuation_percent": 93.58036250531538,
+      "direction": "agreement",
+      "status": "direction_preserved_and_interval_excludes_zero",
+      "term": "agree_move",
+      "timing_adjusted_ci95_high": -0.00021263302740520289,
+      "timing_adjusted_ci95_low": -0.0006092667197255461,
+      "timing_adjusted_coefficient": -0.0004109498735653745,
+      "token_normalized_coefficient": -0.006401449831172486
+    },
+    {
+      "attenuation_percent": 88.41125753693994,
+      "direction": "disagreement",
+      "status": "sign_reversed_after_timing_adjustment",
+      "term": "disagree_move",
+      "timing_adjusted_ci95_high": -0.0002999773478841115,
+      "timing_adjusted_ci95_low": -0.0008264193440733881,
+      "timing_adjusted_coefficient": -0.0005631983459787498,
+      "token_normalized_coefficient": 0.004859874553032694
+    }
+  ],
+  "transition_count": 241284
+}

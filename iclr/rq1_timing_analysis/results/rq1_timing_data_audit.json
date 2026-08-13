@@ -1,0 +1,98 @@
+{
+  "candidate_window_count": 441230,
+  "category_data_subdir": "parsed",
+  "category_episode_counts": {
+    "business": 7743,
+    "commentary": 1706,
+    "news": 123,
+    "political": 2308,
+    "religion": 7682,
+    "sports": 428
+  },
+  "category_observation_counts": {
+    "business": 121681,
+    "commentary": 21619,
+    "news": 1586,
+    "political": 50411,
+    "religion": 36523,
+    "sports": 9464
+  },
+  "common_model_sample_verified": true,
+  "current_duration_seconds": {
+    "max": 4372.535852240358,
+    "mean": 47.457702377623676,
+    "median": 26.068890347163432,
+    "min": 0.009999999999763531,
+    "p25": 10.993999999999993,
+    "p75": 56.363624934521056,
+    "p95": 147.2789499999998
+  },
+  "current_words_per_second": {
+    "max": 15934.69955629106,
+    "mean": 4.342263490178093,
+    "median": 3.358208955223929,
+    "min": 0.022319704006386866,
+    "p25": 2.8363636363636364,
+    "p75": 4.343293858160054,
+    "p95": 8.455745685292685
+  },
+  "data_dir": "data/stance_labeled/1024",
+  "density_per_second_definition": "(explicit_count / (assumption_count + 1)) / duration_seconds",
+  "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
+  "episode_count_with_observations": 14588,
+  "excluded_window_count": 199946,
+  "exclusion_counts": {
+    "empty_or_zero_word_turn": 5,
+    "non_substantive_window": 199941
+  },
+  "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+  "files_discovered": 19990,
+  "files_examined": 19990,
+  "formulas": {
+    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "token_normalized": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category)",
+    "token_timing_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "token_timing_previous_duration": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+  },
+  "git": {
+    "commit": "d4faf3b2fbc2eb7b8325bdb2a68ce3fe11fd511f",
+    "dirty": true
+  },
+  "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
+  "max_episodes": null,
+  "observation_csv_sha256": "cc7a74cc8785d52073e3fbce10a7905140d6cd6ee6f63e3b8f49ea8878ebc463",
+  "observation_hash_method": "sha256(canonical JSON per row in construction order, newline-delimited)",
+  "observation_rows_sha256": "d6f43500627c66bd438562a910f8575db6ac03dd43daca8378440017a06287de",
+  "overlap_count": 4186,
+  "overlap_rate": 0.01734885031746821,
+  "package_versions": {
+    "matplotlib": "3.10.3",
+    "numpy": "2.2.6",
+    "pandas": "3.0.2",
+    "statsmodels": "0.14.5",
+    "tqdm": "4.68.1"
+  },
+  "raw_gap_seconds": {
+    "max": 4612.18,
+    "mean": 9.700360992914982,
+    "median": 1.0600000000000023,
+    "min": -2864.478350208087,
+    "p25": 0.25,
+    "p75": 7.87428227615672,
+    "p95": 42.56885696561644
+  },
+  "requested_categories": [
+    "all"
+  ],
+  "retained_observation_count": 241284,
+  "script_sha256": "4ffeb76dfa3efd2c0f02c3f8880553e26a5cf29201a0b2ac573a32774ebece1a",
+  "script_version": "1.0.0",
+  "selected_episode_count": 19990,
+  "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
+  "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",
+  "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
+  "timestamp_source_counts": {
+    "start_end": 481210
+  },
+  "word_count_definition": "count of Unicode regex matches for \\b\\w+\\b in turn_text"
+}
