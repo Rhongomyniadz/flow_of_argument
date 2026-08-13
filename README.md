@@ -12,6 +12,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
 - `experiments/exp5_processing_load/`: processing load and response delay analysis (GPU/Slurm patch array).
 - `experiments/exp6_quantity_repair_cascades/`: quantity violations and repair cascades (direct script).
 - `experiments/exp7_social_power/`: social power and enforcement dynamics (direct script).
+- `iclr/rq1_timing_analysis/`: self-contained timing-aware robustness analysis for RQ1.
 - `visualization_code/`: analysis visualizations and summary plots.
 - `raw/`: exported raw episode JSONs (generated locally, not tracked).
 - `results/`: non-experiment bulk outputs kept local in the slim submission version.
@@ -42,7 +43,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
 3. Run experiments:
    - `exp1` and `exp5` via Slurm patch arrays
    - `exp2`, `exp4`, `exp6`, `exp7` via direct scripts
-4. Inspect committed outputs under `experiments/*/results`.
+4. Inspect committed outputs under `experiments/*/results` and `iclr/*/results`.
 
 ## Experiment Index
 | Experiment | Input directory | Main script | Primary outputs | GPU/Slurm? |
@@ -53,6 +54,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
 | Exp 5: Processing Load | `data/conversation_moves_labeled` | `experiments/exp5_processing_load/exp5.py` | `exp5_summary.json`, `exp5_logit_coefficients.csv`, `exp5_probability_curves.png` | Yes (Slurm array) |
 | Exp 6: Quantity Repair Cascades | `data/conversation_moves_labeled` | `experiments/exp6_quantity_repair_cascades/exp6.py` | `exp6_summary.json`, `exp6_cascade_events.csv`, `exp6_event_cascades.png` | No |
 | Exp 7: Social Power | `data/maxim_violations_labeled` | `experiments/exp7_social_power/exp7.py` | `exp7_summary.json`, `exp7_model_coefficients.csv`, `exp7_status_shield_plot.png` | No |
+| ICLR RQ1 Timing | `data/stance_labeled/1024` | `iclr/rq1_timing_analysis/rq1_timing_analysis.py` | `rq1_timing_summary.json`, `rq1_timing_stance_comparison.csv`, `rq1_timing_comparison.png` | No |
 
 ## Running Locally
 - Direct scripts (exp2/exp4/exp6/exp7):
@@ -60,6 +62,7 @@ This repository contains the data processing pipelines, experiment scripts, and 
   - `python experiments/exp4_implicature_flow/exp4_implicature.py`
   - `python experiments/exp6_quantity_repair_cascades/exp6.py`
   - `python experiments/exp7_social_power/exp7.py`
+  - `python iclr/rq1_timing_analysis/rq1_timing_analysis.py`
 
 ## Running on Slurm
 - Exp 1 patch array submission:
