@@ -96,10 +96,26 @@ def build_records(category: str, path: Path, history_turns: int):
         baseline.DEFAULT_SOURCE_TAIL_WORDS,
         baseline.DEFAULT_CANDIDATE_HEAD_WORDS,
         baseline.DEFAULT_ASSUMPTION_BUDGET,
+        list(baseline.DEFAULT_FUTURE_HORIZONS),
     )
 
 
 class LoadingAndRepresentationTests(unittest.TestCase):
+    def test_future_horizons_use_exact_turn_offsets(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "horizons.json"
+            turns = [synthetic_turn("news", "horizons", index) for index in range(6)]
+            path.write_text(json.dumps(turns), encoding="utf-8")
+            _, pairs, _ = build_records("news", path, history_turns=3)
+        counts = pd.Series([pair["future_horizon"] for pair in pairs]).value_counts().to_dict()
+        self.assertEqual(counts, {1: 5, 3: 3, 5: 1})
+        horizon_three = next(
+            pair
+            for pair in pairs
+            if pair["source_turn_idx"] == 0 and pair["future_horizon"] == 3
+        )
+        self.assertEqual(horizon_three["true_next_turn_idx"], 3)
+
     def test_list_and_object_roots_and_chronological_order(self) -> None:
         list_turns, list_pairs, _ = build_records(
             "news", FIXTURES / "list_root_episode.json", history_turns=3
@@ -284,7 +300,7 @@ class PreparationAndControlTests(unittest.TestCase):
             if wrong["donor_turn_id"]:
                 self.assertEqual(wrong["donor_episode_id"], pair["episode_id"])
                 donor_idx = int(str(wrong["donor_turn_id"]).rsplit(":", 1)[1])
-                self.assertGreaterEqual(abs(donor_idx - int(pair["source_turn_idx"])), 3)
+                self.assertGreaterEqual(int(pair["source_turn_idx"]) - donor_idx, 3)
 
     def test_missing_same_episode_control_is_explicit(self) -> None:
         args = make_args(
@@ -310,7 +326,7 @@ class PreparationAndControlTests(unittest.TestCase):
         )
 
 
-class ParsingRankingAndGoldenTests(unittest.TestCase):
+class ParsingAccuracyAndGoldenTests(unittest.TestCase):
     def test_default_output_directory_is_model_scoped(self) -> None:
         first = baseline.parse_args(["--model_name", "Qwen/First-Model"])
         second = baseline.parse_args(["--model_name", "Other/Second-Model"])
@@ -325,6 +341,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
         baseline.validate_args(args)
         self.assertEqual(args.source_tail_words, 100)
         self.assertEqual(args.candidate_head_words, 100)
+        self.assertEqual(args.future_horizons, [1, 3, 5])
         self.assertEqual(
             args.conditions,
             [
@@ -338,7 +355,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             ],
         )
 
-    def test_forced_choice_parser_and_pairwise_tie_ranking(self) -> None:
+    def test_forced_choice_parser_and_binary_accuracy(self) -> None:
         golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
         for case in golden["parser_cases"]:
             parsed = baseline.parse_llm_choice(case["raw"])
@@ -346,38 +363,41 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             self.assertEqual(parsed["parse_success"], case["parse_success"])
             self.assertEqual(parsed["parse_error"], case["parse_error"])
 
-        ranking = golden["pairwise_ranking"]
+        accuracy_fixture = golden["binary_accuracy"]
         rows = []
         for index in range(24):
-            preferences = ranking["preference_overrides"].get(
+            preferences = accuracy_fixture["preference_overrides"].get(
                 str(index),
-                ranking["default_preferences"],
+                accuracy_fixture["default_preferences"],
             )
-            negative_order = ranking["negative_candidate_orders"][index]
+            negative_order = accuracy_fixture["negative_candidate_orders"][index]
             for order, preference in zip(("positive_first", "positive_second"), preferences):
                 rows.append(
                     {
                         "comparison_id": f"comparison-{index}",
                         "presentation_order": order,
-                        "positive_candidate_order": ranking["positive_candidate_order"],
+                        "positive_candidate_order": accuracy_fixture["positive_candidate_order"],
                         "negative_candidate_order": negative_order,
                         "choice": "A",
                         "positive_preference": preference,
                         "parse_success": True,
                     }
                 )
-        ranked = baseline.aggregate_pairwise_condition(rows)
-        self.assertIsNotNone(ranked)
-        assert ranked is not None
-        self.assertEqual(ranked["true_rank"], ranking["expected_true_rank"])
-        self.assertEqual(ranked["reciprocal_rank"], ranking["expected_true_reciprocal_rank"])
-        self.assertEqual(ranked["true_pairwise_win_rate"], ranking["expected_pairwise_win_rate"])
+        metrics = baseline.aggregate_pairwise_condition(rows)
+        self.assertIsNotNone(metrics)
+        assert metrics is not None
+        self.assertEqual(metrics["accuracy"], accuracy_fixture["expected_accuracy"])
+        self.assertEqual(
+            metrics["order_consistency_rate"],
+            accuracy_fixture["expected_order_consistency_rate"],
+        )
 
     def test_retry_prompt_preserves_forced_choice_contract(self) -> None:
         prompt = baseline.build_retry_prompt(
             "source",
             "candidate A",
             "candidate B",
+            3,
             "invalid",
             "invalid_json",
         )
@@ -405,36 +425,40 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             [
                 {
                     "analysis_subset": "sparse_explicit",
+                    "future_horizon": 1,
                     "target_condition": "explicit_plus_top3_assumptions",
                     "baseline_condition": "explicit_only",
-                    "metric": "reciprocal_rank",
+                    "metric": "accuracy",
                     "mean_improvement": 0.03,
                     "ci95_low": 0.01,
                     "ci95_high": 0.05,
                 },
                 {
                     "analysis_subset": "sparse_explicit",
+                    "future_horizon": 1,
                     "target_condition": "explicit_plus_top3_assumptions",
                     "baseline_condition": "explicit_plus_shuffled_assumptions",
-                    "metric": "reciprocal_rank",
+                    "metric": "accuracy",
                     "mean_improvement": 0.02,
                     "ci95_low": 0.005,
                     "ci95_high": 0.04,
                 },
                 {
                     "analysis_subset": "sparse_explicit",
+                    "future_horizon": 1,
                     "target_condition": "explicit_plus_top3_assumptions",
                     "baseline_condition": "explicit_plus_wrong_episode_assumptions",
-                    "metric": "reciprocal_rank",
+                    "metric": "accuracy",
                     "mean_improvement": 0.02,
                     "ci95_low": 0.004,
                     "ci95_high": 0.04,
                 },
                 {
                     "analysis_subset": "assumption_eligible",
+                    "future_horizon": 1,
                     "target_condition": "raw_turn_plus_assumptions",
                     "baseline_condition": "raw_turn",
-                    "metric": "reciprocal_rank",
+                    "metric": "accuracy",
                     "mean_improvement": 0.02,
                     "ci95_low": 0.005,
                     "ci95_high": 0.04,
@@ -456,9 +480,10 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
                         "pair_id": f"{category}:pair",
                         "category": category,
                         "condition": condition,
+                        "future_horizon": 1,
                         "assumption_eligible": True,
                         "sparse_explicit": True,
-                        "reciprocal_rank": value,
+                        "accuracy": value,
                     }
                 )
         coverage = pd.DataFrame([{"retained_pair_rate": 0.99}, {"retained_pair_rate": 1.0}])
@@ -491,6 +516,7 @@ class ParsingRankingAndGoldenTests(unittest.TestCase):
             "explicit_plus_wrong_episode_assumptions",
             "SOURCE_TAIL_WORDS",
             "CANDIDATE_HEAD_WORDS",
+            'FUTURE_HORIZONS_CSV="${FUTURE_HORIZONS_CSV:-1,3,5}"',
             'SOURCE_TAIL_WORDS="${SOURCE_TAIL_WORDS:-100}"',
             'CANDIDATE_HEAD_WORDS="${CANDIDATE_HEAD_WORDS:-100}"',
             "ASSUMPTION_BUDGET",
@@ -531,12 +557,16 @@ class EndToEndAndPatchTests(unittest.TestCase):
         for path in baseline.final_paths(output).values():
             self.assertTrue(path.exists(), path)
         long_df = pd.read_csv(baseline.final_paths(output)["metrics_long"])
-        self.assertTrue((long_df.loc[long_df["full_retained"] == True, "true_rank"] == 1).all())
+        self.assertTrue((long_df.loc[long_df["full_retained"] == True, "accuracy"] == 1).all())
         pairwise = pd.read_csv(baseline.final_paths(output)["pairwise"])
         self.assertTrue((pairwise.loc[pairwise["paired_sample_size"] > 0, "mean_improvement"].fillna(0) == 0).all())
         self.assertIn("output_hashes", summary)
         self.assertNotIn("summary", summary["output_hashes"])
-        self.assertEqual(len(summary["complete_case_diagnostic_table"]), len(baseline.DEFAULT_CONDITIONS))
+        self.assertEqual(
+            len(summary["complete_case_diagnostic_table"]),
+            len(baseline.DEFAULT_CONDITIONS) * len(baseline.DEFAULT_FUTURE_HORIZONS),
+        )
+
         self.assertFalse(summary["diagnostic_gate"]["ready_for_full_corpus"])
         decomposition = pd.read_csv(baseline.final_paths(output)["decomposition"])
         self.assertIn("incremental_implicit_value_after_abstraction", set(decomposition["diagnostic_question"]))
@@ -595,6 +625,12 @@ class EndToEndAndPatchTests(unittest.TestCase):
         retried = baseline.score_dataset(resume_args)
         self.assertEqual(retried["attempted_this_run"], 1)
         self.assertEqual(retried["valid_task_count"], retried["expected_task_count"])
+
+    def test_future_horizons_must_be_positive_and_odd(self) -> None:
+        for value in (0, 2, -1):
+            args = baseline.parse_args(["--future_horizons", str(value)])
+            with self.assertRaisesRegex(ValueError, "positive odd integers"):
+                baseline.validate_args(args)
 
     def test_incomplete_candidate_pool_still_produces_auditable_outputs(self) -> None:
         input_dir = self.root / "small-input" / "news"

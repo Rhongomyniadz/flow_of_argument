@@ -1,9 +1,10 @@
-# Pairwise Explicit–Implicit Confirmatory Ranking
+# Explicit-Implicit Future-Turn Accuracy
 
 This experiment tests whether a small, locally grounded implicit representation improves
-next-turn discrimination when explicit propositions underspecify the current turn. It uses
-hard negative pools and order-swapped forced-choice judgments. The prompt identity is
-`representation-pairwise-v5-json-evidence`, so scores from older prompt contracts cannot
+binary future-turn discrimination when explicit propositions underspecify the current turn.
+It uses hard negative pools and order-swapped forced-choice judgments at future-turn horizons
+`n=1`, `n=3`, and `n=5` by default. The prompt identity is
+`representation-future-turn-v1-json-evidence`, so scores from older prompt contracts cannot
 be resumed or merged.
 
 Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
@@ -55,13 +56,19 @@ them by lexical grounding in the final source window. The same three-item budget
 true, shuffled, and wrong-episode blocks. `assumptions_only`, `explicit_plus_top1_assumption`,
 and `explicit_plus_assumptions` remain optional diagnostics.
 
+For a source at position `t`, the positive candidate is the turn at `t+n`. Only positive odd
+horizons are accepted because the cleaned data has an ABAB speaker structure, so the target is
+always spoken by the other speaker. A horizon example is retained only when the complete span
+from `t` through `t+n` contains substantive turns with verified, contiguous original-turn
+provenance. Missing horizons are reported as coverage loss and are never backfilled.
+
 The principal contrasts are:
 
 | Contrast | Diagnostic question |
 |---|---|
 | `explicit_plus_top3_assumptions - explicit_only` | Do assumptions help sparse explicit representations? |
 | true top 3 minus shuffled top 3 | Is the gain specific to the extracted assumptions? |
-| true top 3 minus wrong-episode top 3 | Is the gain specific to the local dialogue state? |
+| true top 3 minus wrong same-episode top 3 | Is the gain specific to the local dialogue state? |
 | `raw_turn_plus_assumptions - raw_turn` | Do assumptions add signal beyond lexical context? |
 | `raw_turn - explicit_only` | How much information is lost during proposition extraction? |
 | `raw_turn_with_history - raw_turn` | How much does discourse history contribute? |
@@ -107,22 +114,26 @@ vLLM process with `tensor_parallel_size=2` and the multiprocessing executor.
 The runner defaults to five episodes per array patch and an eight-hour wall-time ceiling;
 jobs stop as soon as their patch is complete.
 
-Each true continuation is compared directly with each of its 24 negatives. Every comparison
+Each true future turn at each requested horizon is compared directly with each of its 24
+negatives. Every comparison
 is presented twice, once in each A/B order. The judge must output one JSON object containing
 exactly `answer` and `evidence`. The parser requires an uppercase `A` or `B`, a nonempty
 single-line evidence string, no additional keys, and no text outside the JSON. The selected
-model's chat template is applied before generation. The positive preference is averaged
-across the two orders;
-disagreements become ties, and the fixed candidate order resolves rank ties. A complete
-pair-condition therefore requires 48 parsed choice rows. The default output budget is 64
+model's chat template is applied before generation. A complete pair-condition therefore
+requires 48 parsed binary decisions. Accuracy is the number of decisions that select the true
+future turn divided by 48. A reversal disagreement contributes one correct and one incorrect
+decision, or 50% accuracy for that negative. Chance accuracy is 50%. No rank or MRR metric is
+used. The default output budget is 64
 tokens, with malformed outputs retried using budgets up to 128 tokens. Merge reparses saved
 raw outputs and fails loudly if any expected choice remains unresolved; analysis also refuses
 to emit an empty result when scorable pairs exist.
 
 Negative pools prioritize up to 12 hard same-episode nonadjacent turns, then six
 same-category/same-move turns, followed by topic- and length-matched category and global
-backfills. A same-episode assumption donor is reserved before candidate construction so the
-wrong-episode control remains independent of the candidate pool.
+backfills. A nonadjacent earlier assumption donor from the same episode is reserved before
+candidate construction, so the condition with the legacy ID
+`explicit_plus_wrong_episode_assumptions` remains independent of the candidate pool and
+cannot leak future context.
 
 The runner treats the experiment configuration as environment-variable hyperparameters.
 `MODEL_NAME` defaults to `Qwen/Qwen3-30B-A3B-Instruct-2507`; changing it automatically
@@ -135,6 +146,7 @@ selects a separate model-named result directory. User-selectable settings includ
 - Decoding: `MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `TEMPERATURE`,
   `TOP_P`, `MIN_P`, `TOP_K`, and `REPETITION_PENALTY`.
 - Experiment and analysis: `CONDITIONS_CSV`, `SEED`, `HISTORY_TURNS`,
+  `FUTURE_HORIZONS_CSV`,
   `SOURCE_TAIL_WORDS`, `CANDIDATE_HEAD_WORDS`, `ASSUMPTION_BUDGET`,
   `BOOTSTRAP_DRAWS`, `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and `PLOT_DPI`.
 
@@ -150,9 +162,9 @@ pairwise deltas plus:
   including the raw turn, extracted representations, history, and true continuation.
 - `exp1_representation_diagnostic_gate.json`: a machine-readable interpretation and
   smoke-test gate.
-- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case mean rank and Top-1.
-- `exp1_representation_decomposition_lifts.{pdf,png}`: paired mean-rank improvements,
-  oriented as baseline rank minus target rank so positive values favor the target condition.
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case accuracy by horizon.
+- `exp1_representation_decomposition_lifts.{pdf,png}`: paired accuracy improvements by
+  horizon, oriented as target accuracy minus baseline accuracy.
 
 The analysis subsets are `full`, `assumption_eligible`, `sparse_explicit` (at most four
 explicit propositions), `dense_explicit` (at least five), and `complete_case`.
@@ -161,7 +173,8 @@ explicit propositions), `dense_explicit` (at least five), and `complete_case`.
 ## Decision gate
 
 The script never automatically authorizes a full-corpus run from one judge. The primary
-gate requires a positive sparse-explicit MRR interval, superiority to both corrupted
+gate uses the `n=1` accuracy contrast and requires a positive sparse-explicit accuracy
+interval, superiority to both corrupted
 controls, positive effects in at least two categories, and at least 98% retained coverage.
 A passing run advances only to a different-family judge smoke test and manual audit.
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Diagnostic explicit/implicit representation decomposition for next-turn ranking."""
+"""Explicit/implicit representation accuracy for future-turn prediction horizons."""
 
 import argparse
 import base64
@@ -29,8 +29,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "3.1.1"
-PROMPT_VERSION = "representation-pairwise-v5-json-evidence"
+SCRIPT_VERSION = "4.0.0"
+PROMPT_VERSION = "representation-future-turn-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
@@ -49,6 +49,7 @@ EXPECTED_COMPARISONS_PER_CONDITION = HARD_NEGATIVE_TARGET_COUNT * 2
 DEFAULT_SOURCE_TAIL_WORDS = 100
 DEFAULT_CANDIDATE_HEAD_WORDS = 100
 DEFAULT_ASSUMPTION_BUDGET = 3
+DEFAULT_FUTURE_HORIZONS = (1, 3, 5)
 EMPTY_EXPLICIT = "None extracted."
 EMPTY_ASSUMPTIONS = "None extracted."
 EMPTY_HISTORY = "No earlier substantive turn available."
@@ -333,6 +334,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dry_run", action="store_true", help="Use deterministic fake scores; do not load a model.")
     parser.add_argument("--conditions", nargs="*", default=None)
     parser.add_argument("--history_turns", type=int, default=3)
+    parser.add_argument("--future_horizons", nargs="+", type=int, default=list(DEFAULT_FUTURE_HORIZONS))
     parser.add_argument("--source_tail_words", type=int, default=DEFAULT_SOURCE_TAIL_WORDS)
     parser.add_argument("--candidate_head_words", type=int, default=DEFAULT_CANDIDATE_HEAD_WORDS)
     parser.add_argument("--assumption_budget", type=int, default=DEFAULT_ASSUMPTION_BUDGET)
@@ -374,6 +376,14 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("max_episodes_per_category must be positive")
     if args.history_turns < 0:
         raise ValueError("history_turns cannot be negative")
+    args.future_horizons = list(dict.fromkeys(args.future_horizons))
+    if not args.future_horizons:
+        raise ValueError("At least one future horizon is required")
+    if any(horizon < 1 or horizon % 2 == 0 for horizon in args.future_horizons):
+        raise ValueError(
+            "future_horizons must contain positive odd integers so the target is spoken "
+            "by the other speaker in the cleaned ABAB dialogue"
+        )
     if args.source_tail_words < 1 or args.candidate_head_words < 1:
         raise ValueError("source_tail_words and candidate_head_words must be positive")
     if args.assumption_budget < 1:
@@ -419,6 +429,8 @@ def load_prepare_manifest(args: argparse.Namespace) -> dict[str, Any]:
         raise RuntimeError("Scoring/analysis seed must match the preparation seed")
     if int(args.history_turns) != int(manifest.get("history_turns", args.history_turns)):
         raise RuntimeError("Scoring/analysis history length must match the prepared representations")
+    if list(args.future_horizons) != list(manifest.get("future_horizons", args.future_horizons)):
+        raise RuntimeError("Scoring/analysis future horizons must match preparation")
     for argument_name in ("source_tail_words", "candidate_head_words", "assumption_budget"):
         if int(getattr(args, argument_name)) != int(manifest.get(argument_name, getattr(args, argument_name))):
             raise RuntimeError(f"Scoring/analysis {argument_name} must match preparation")
@@ -608,6 +620,7 @@ def build_episode_records(
     source_tail_words: int,
     candidate_head_words: int,
     assumption_budget: int,
+    future_horizons: list[int],
 ) -> tuple[list[TurnRecord], list[dict[str, Any]], dict[str, int]]:
     raw_turns = load_turns(path)
     indexed = list(enumerate(raw_turns))
@@ -669,57 +682,71 @@ def build_episode_records(
         "boundary_verified_pair_count": 0,
         "boundary_unverified_pair_count": 0,
     }
-    for list_position in range(len(ordered_turns) - 1):
-        source = substantive_by_list_position.get(list_position)
-        target = substantive_by_list_position.get(list_position + 1)
-        if source is None or target is None:
-            continue
-        if not provenance_is_contiguous(source["original_turn_indices"]) or not provenance_is_contiguous(
-            target["original_turn_indices"]
-        ):
-            boundary_counts["boundary_invalid_merged_group_count"] += 1
-            continue
-        boundary_verified = bool(source["merge_provenance_present"] and target["merge_provenance_present"])
-        if boundary_verified and source["original_turn_indices"][-1] + 1 != target["original_turn_indices"][0]:
-            boundary_counts["boundary_invalid_merged_group_count"] += 1
-            continue
-        count_key = "boundary_verified_pair_count" if boundary_verified else "boundary_unverified_pair_count"
-        boundary_counts[count_key] += 1
-        pair_id = f"{category}:{target['episode_id']}:{source['turn_idx']}:{target['turn_idx']}"
-        pairs.append(
-            {
-                "pair_id": pair_id,
-                "category": category,
-                "episode_id": target["episode_id"],
-                "source_path": str(path),
-                "source_turn_id": source["turn_id"],
-                "source_turn_idx": source["turn_idx"],
-                "source_substantive_position": source["substantive_position"],
-                "source_turn_text": source["turn_text"],
-                "source_tail_text": source["source_tail_text"],
-                "source_word_count": source["word_count"],
-                "source_explicit_texts": source["explicit_texts"],
-                "source_assumption_texts": source["assumption_texts"],
-                "source_all_assumption_texts": source["all_assumption_texts"],
-                "source_original_turn_indices": source["original_turn_indices"],
-                "true_next_original_turn_indices": target["original_turn_indices"],
-                "original_boundary_verified": boundary_verified,
-                "history_turn_ids": source["history_turn_ids"],
-                "history_turn_texts": source["history_turn_texts"],
-                "history_turn_count": len(source["history_turn_ids"]),
-                "true_next_turn_id": target["turn_id"],
-                "true_next_turn_idx": target["turn_idx"],
-                "true_next_turn_text": target["turn_text"],
-                "true_next_turn_head_text": target["candidate_head_text"],
-                "true_next_turn_move_label": target["move_label"],
-                "candidate_pool_complete": False,
-                "coverage_drop_reason": None,
-                "candidate_pool_sha256": None,
-                "candidates": [],
-                "conditions": {},
-                "donors": {},
-            }
-        )
+    for list_position, source in sorted(substantive_by_list_position.items()):
+        for future_horizon in future_horizons:
+            target_position = list_position + future_horizon
+            span = [
+                substantive_by_list_position.get(position)
+                for position in range(list_position, target_position + 1)
+            ]
+            if any(record is None for record in span):
+                continue
+            verified_span = [record for record in span if record is not None]
+            target = verified_span[-1]
+            if any(
+                not provenance_is_contiguous(record["original_turn_indices"])
+                for record in verified_span
+            ):
+                boundary_counts["boundary_invalid_merged_group_count"] += 1
+                continue
+            boundary_verified = all(record["merge_provenance_present"] for record in verified_span)
+            if boundary_verified and any(
+                left["original_turn_indices"][-1] + 1 != right["original_turn_indices"][0]
+                for left, right in zip(verified_span, verified_span[1:])
+            ):
+                boundary_counts["boundary_invalid_merged_group_count"] += 1
+                continue
+            count_key = "boundary_verified_pair_count" if boundary_verified else "boundary_unverified_pair_count"
+            boundary_counts[count_key] += 1
+            pair_id = (
+                f"{category}:{target['episode_id']}:{source['turn_idx']}:"
+                f"{target['turn_idx']}:h{future_horizon}"
+            )
+            pairs.append(
+                {
+                    "pair_id": pair_id,
+                    "future_horizon": future_horizon,
+                    "category": category,
+                    "episode_id": target["episode_id"],
+                    "source_path": str(path),
+                    "source_turn_id": source["turn_id"],
+                    "source_turn_idx": source["turn_idx"],
+                    "source_substantive_position": source["substantive_position"],
+                    "source_turn_text": source["turn_text"],
+                    "source_tail_text": source["source_tail_text"],
+                    "source_word_count": source["word_count"],
+                    "source_explicit_texts": source["explicit_texts"],
+                    "source_assumption_texts": source["assumption_texts"],
+                    "source_all_assumption_texts": source["all_assumption_texts"],
+                    "source_original_turn_indices": source["original_turn_indices"],
+                    "true_next_original_turn_indices": target["original_turn_indices"],
+                    "original_boundary_verified": boundary_verified,
+                    "history_turn_ids": source["history_turn_ids"],
+                    "history_turn_texts": source["history_turn_texts"],
+                    "history_turn_count": len(source["history_turn_ids"]),
+                    "true_next_turn_id": target["turn_id"],
+                    "true_next_turn_idx": target["turn_idx"],
+                    "true_next_turn_text": target["turn_text"],
+                    "true_next_turn_head_text": target["candidate_head_text"],
+                    "true_next_turn_move_label": target["move_label"],
+                    "candidate_pool_complete": False,
+                    "coverage_drop_reason": None,
+                    "candidate_pool_sha256": None,
+                    "candidates": [],
+                    "conditions": {},
+                    "donors": {},
+                }
+            )
     return turns, pairs, boundary_counts
 
 
@@ -766,18 +793,18 @@ def reserve_wrong_episode_donor(
         and turn["episode_id"] == pair["episode_id"]
         and turn["assumption_texts"]
         and turn["assumption_texts"] != pair["source_assumption_texts"]
-        and abs(int(turn["substantive_position"]) - source_position) >= 3
+        and source_position - int(turn["substantive_position"]) >= 3
     ]
     if not eligible:
         return None
     largest_distance = max(
-        abs(int(turn["substantive_position"]) - source_position) for turn in eligible
+        source_position - int(turn["substantive_position"]) for turn in eligible
     )
     ties = sorted(
         (
             turn
             for turn in eligible
-            if abs(int(turn["substantive_position"]) - source_position) == largest_distance
+            if source_position - int(turn["substantive_position"]) == largest_distance
         ),
         key=lambda row: row["turn_id"],
     )
@@ -1008,7 +1035,7 @@ def choose_donors(
         if base_eligible(turn)
         and turn["category"] == pair["category"]
         and turn["episode_id"] == pair["episode_id"]
-        and abs(int(turn["substantive_position"]) - source_position) >= 3
+        and source_position - int(turn["substantive_position"]) >= 3
     ]
     wrong = None
     reserved_wrong_donor_id = pair.get("reserved_wrong_donor_id")
@@ -1023,12 +1050,14 @@ def choose_donors(
             )
         wrong = reserved_matches[0]
     elif same_episode:
-        largest_distance = max(abs(int(turn["substantive_position"]) - source_position) for turn in same_episode)
+        largest_distance = max(
+            source_position - int(turn["substantive_position"]) for turn in same_episode
+        )
         ties = sorted(
             (
                 turn
                 for turn in same_episode
-                if abs(int(turn["substantive_position"]) - source_position) == largest_distance
+                if source_position - int(turn["substantive_position"]) == largest_distance
             ),
             key=lambda row: row["turn_id"],
         )
@@ -1046,17 +1075,20 @@ def choose_donors(
         (
             "explicit_plus_wrong_episode_assumptions",
             wrong,
-            "same_episode_farthest" if wrong is not None else None,
-            None if wrong is not None else "no_valid_same_episode_nonadjacent_donor",
+            "same_episode_farthest_earlier" if wrong is not None else None,
+            None if wrong is not None else "no_valid_same_episode_earlier_nonadjacent_donor",
         ),
     ):
         audit = {
             "pair_id": pair["pair_id"],
+            "future_horizon": int(pair["future_horizon"]),
             "condition": condition,
             "source_turn_id": pair["source_turn_id"],
+            "source_substantive_position": source_position,
             "donor_turn_id": donor["turn_id"] if donor else None,
             "donor_episode_id": donor["episode_id"] if donor else None,
             "donor_category": donor["category"] if donor else None,
+            "donor_substantive_position": donor["substantive_position"] if donor else None,
             "donor_fallback_level": fallback,
             "donor_assumption_count": len(donor["assumption_texts"]) if donor else 0,
             "donor_assumptions": donor["assumption_texts"] if donor else [],
@@ -1168,6 +1200,17 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             pair["true_next_turn_id"],
         }:
             raise ValueError(f"Donor/candidate leakage for {pair['pair_id']} / {condition}")
+        if condition == "explicit_plus_wrong_episode_assumptions":
+            donor_turn = indexes["lookup"][donor["donor_turn_id"]]
+            if donor_turn["episode_id"] != source["episode_id"]:
+                raise ValueError(f"Wrong-episode control crossed episodes for {pair['pair_id']}")
+            donor_distance = int(source["substantive_position"]) - int(
+                donor_turn["substantive_position"]
+            )
+            if donor_distance < 3:
+                raise ValueError(
+                    f"Wrong-episode control is not an earlier gap-three donor for {pair['pair_id']}"
+                )
     for condition in conditions:
         metadata = pair["conditions"].get(condition)
         if metadata is None:
@@ -1184,9 +1227,10 @@ def pair_csv_row(pair: dict[str, Any]) -> dict[str, Any]:
         "source_path": pair["source_path"],
         "source_turn_id": pair["source_turn_id"],
         "source_turn_idx": pair["source_turn_idx"],
-        "true_next_turn_id": pair["true_next_turn_id"],
-        "true_next_turn_idx": pair["true_next_turn_idx"],
-        "true_next_turn_move_label": pair["true_next_turn_move_label"],
+        "future_horizon": pair["future_horizon"],
+        "true_future_turn_id": pair["true_next_turn_id"],
+        "true_future_turn_idx": pair["true_next_turn_idx"],
+        "true_future_turn_move_label": pair["true_next_turn_move_label"],
         "source_word_count": pair["source_word_count"],
         "source_tail_word_count": len(text_words(pair["source_tail_text"])),
         "explicit_count": len(pair["source_explicit_texts"]),
@@ -1235,6 +1279,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
                 args.source_tail_words,
                 args.candidate_head_words,
                 args.assumption_budget,
+                args.future_horizons,
             )
         except Exception as error:
             errors.append({"path": str(path), "error": str(error)})
@@ -1281,7 +1326,14 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
                 donors.append(audit)
         build_conditions(pair, args.conditions)
         validate_prepared_pair(pair, indexes, args.conditions)
-    pairs.sort(key=lambda row: (row["category"], row["episode_id"], row["source_turn_idx"], row["true_next_turn_idx"]))
+    pairs.sort(
+        key=lambda row: (
+            row["category"],
+            row["episode_id"],
+            row["source_turn_idx"],
+            row["future_horizon"],
+        )
+    )
     donors.sort(key=lambda row: (row["pair_id"], row["condition"]))
     args.output_dir.mkdir(parents=True, exist_ok=True)
     prepared = prepared_path(args)
@@ -1298,7 +1350,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         for category, path in category_files
     ]
     manifest = {
-        "experiment": "Experiment 1: Explicit-Implicit Representation Baselines",
+        "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
         "stage": "prepare",
         "complete": True,
         "script_version": SCRIPT_VERSION,
@@ -1313,6 +1365,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "prepared_pairs_jsonl": str(prepared),
         "prepared_pairs_sha256": file_hash(prepared),
         "conditions": args.conditions,
+        "future_horizons": args.future_horizons,
         "history_turns": args.history_turns,
         "source_tail_words": args.source_tail_words,
         "candidate_head_words": args.candidate_head_words,
@@ -1326,6 +1379,10 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "source_episode_count": len({str(pair["source_path"]) for pair in pairs}),
         "turn_count": len(turns),
         "pair_count_before_candidate_filter": len(pairs),
+        "pair_count_by_horizon": {
+            str(horizon): sum(int(pair["future_horizon"]) == horizon for pair in pairs)
+            for horizon in args.future_horizons
+        },
         "candidate_complete_pair_count": sum(bool(pair["candidate_pool_complete"]) for pair in pairs),
         "candidate_incomplete_pair_count": sum(not pair["candidate_pool_complete"] for pair in pairs),
         "assumption_eligible_pair_count": sum(bool(pair["source_assumption_texts"]) for pair in pairs),
@@ -1363,10 +1420,14 @@ def build_scoring_prompt(
     source_representation: str,
     candidate_a_text: str,
     candidate_b_text: str,
+    future_horizon: int,
 ) -> str:
+    target_description = (
+        "the immediate next turn" if future_horizon == 1 else f"the turn exactly {future_horizon} turns later"
+    )
     return f"""You are a strict conversation-continuation judge.
 
-Your task is to determine which candidate is more likely to be the immediate next turn in the conversation described by the source representation.
+Your task is to determine which candidate is more likely to be {target_description} in the conversation described by the source representation.
 
 Evaluate Candidate A and Candidate B comparatively. Prioritize:
 
@@ -1374,7 +1435,7 @@ Evaluate Candidate A and Candidate B comparatively. Prioritize:
 * the response expected by the final dialogue act
 * stance, intent, and speaker continuity
 * consistency with supported presuppositions
-* naturalness as the immediate next turn
+* naturalness at the specified future-turn horizon
 
 Do not prefer a candidate merely because it repeats words, entities, or topics from the source representation.
 
@@ -1393,7 +1454,7 @@ Return ONLY a valid JSON object with exactly these two keys:
 
 {{
 "answer": "A",
-"evidence": "Brief reason why A is a better immediate continuation than B."
+"evidence": "Brief reason why A is more likely than B at the specified future-turn horizon."
 }}
 
 Output requirements:
@@ -1414,15 +1475,19 @@ def build_retry_prompt(
     source_representation: str,
     candidate_a_text: str,
     candidate_b_text: str,
+    future_horizon: int,
     previous_output: str,
     parse_error: str | None,
 ) -> str:
+    target_description = (
+        "the immediate next turn" if future_horizon == 1 else f"the turn exactly {future_horizon} turns later"
+    )
     return f"""You are a strict conversation-continuation judge.
 
 Your previous response did not satisfy the required output format.
 
 Re-evaluate the same source representation and the same two candidates. Determine which
-candidate is more likely to be the immediate next turn in the conversation.
+candidate is more likely to be {target_description} in the conversation.
 
 Evaluate Candidate A and Candidate B comparatively. Prioritize:
 
@@ -1430,7 +1495,7 @@ Evaluate Candidate A and Candidate B comparatively. Prioritize:
 - the response expected by the final dialogue act
 - stance, intent, and speaker continuity
 - consistency with supported presuppositions
-- naturalness as the immediate next turn
+- naturalness at the specified future-turn horizon
 
 Do not prefer a candidate merely because it repeats words, entities, or topics from the
 source representation.
@@ -1456,7 +1521,7 @@ Return ONLY a valid JSON object with exactly these two keys:
 
 {{
   "answer": "A",
-  "evidence": "Brief reason why A is a better immediate continuation than B."
+  "evidence": "Brief reason why A is more likely than B at the specified future-turn horizon."
 }}
 
 Output requirements:
@@ -1668,6 +1733,7 @@ def build_tasks(pairs: list[dict[str, Any]], args: argparse.Namespace) -> list[d
                             "candidate_b": candidate_b,
                             "comparison_id": comparison_id,
                             "presentation_order": presentation_order,
+                            "future_horizon": int(pair["future_horizon"]),
                             "condition": condition,
                             "source_representation": metadata["source_representation"],
                         }
@@ -1753,6 +1819,7 @@ def score_row(
         "comparison_id": task["comparison_id"],
         "presentation_order": task["presentation_order"],
         "condition": task["condition"],
+        "future_horizon": int(pair["future_horizon"]),
         "model_name": args.model_name,
         "prompt_version": PROMPT_VERSION,
         "source_turn_id": pair["source_turn_id"],
@@ -1823,6 +1890,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "model_name": args.model_name,
         "prompt_version": PROMPT_VERSION,
         "conditions": args.conditions,
+        "future_horizons": args.future_horizons,
         "temperature": args.temperature,
         "top_p": args.top_p,
         "min_p": args.min_p,
@@ -1831,7 +1899,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "max_tokens": args.max_tokens,
         "max_score_retries": args.max_score_retries,
         "max_retry_tokens": args.max_retry_tokens,
-        "scoring_mode": "order_swapped_forced_choice",
+        "scoring_mode": "order_swapped_binary_future_turn_accuracy",
         "source_tail_words": args.source_tail_words,
         "candidate_head_words": args.candidate_head_words,
         "assumption_budget": args.assumption_budget,
@@ -1931,7 +1999,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
                         {
                             "answer": choice,
                             "evidence": (
-                                f"Candidate {choice} fits the immediate conversational context "
+                                f"Candidate {choice} fits the specified future-turn horizon "
                                 f"better than Candidate {other_choice}."
                             ),
                         }
@@ -1944,6 +2012,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
                     task["source_representation"],
                     task["candidate_a"]["candidate_text"],
                     task["candidate_b"]["candidate_text"],
+                    task["future_horizon"],
                 )
                 for task in batch
             ]
@@ -1969,6 +2038,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
                     batch[index]["source_representation"],
                     batch[index]["candidate_a"]["candidate_text"],
                     batch[index]["candidate_b"]["candidate_text"],
+                    batch[index]["future_horizon"],
                     attempt_outputs[index][-1],
                     parsed_outputs[index]["parse_error"],
                 )
@@ -2062,7 +2132,7 @@ def aggregate_pairwise_condition(rows: list[dict[str, Any]]) -> dict[str, float 
     if len(grouped) != HARD_NEGATIVE_TARGET_COUNT:
         return None
     comparison_preferences: list[float] = []
-    true_rank = 1
+    decision_correctness: list[int] = []
     order_consistent_count = 0
     for comparison_id, comparison_rows in grouped.items():
         orders = {str(row["presentation_order"]) for row in comparison_rows}
@@ -2075,16 +2145,10 @@ def aggregate_pairwise_condition(rows: list[dict[str, Any]]) -> dict[str, float 
         preferences = [int(row["positive_preference"]) for row in comparison_rows]
         preference = float(np.mean(preferences))
         comparison_preferences.append(preference)
+        decision_correctness.extend(preferences)
         order_consistent_count += int(preferences[0] == preferences[1])
-        positive_order = next(iter(positive_orders))
-        negative_order = next(iter(negative_orders))
-        if preference < 0.5 or (preference == 0.5 and negative_order < positive_order):
-            true_rank += 1
     return {
-        "true_rank": true_rank,
-        "top1": int(true_rank == 1),
-        "reciprocal_rank": 1.0 / true_rank,
-        "true_pairwise_win_rate": float(np.mean(comparison_preferences)),
+        "accuracy": float(np.mean(decision_correctness)),
         "order_consistency_rate": order_consistent_count / HARD_NEGATIVE_TARGET_COUNT,
         "complete_comparison_count": len(comparison_preferences),
     }
@@ -2147,8 +2211,9 @@ def build_metrics(
                 "category": pair["category"],
                 "episode_id": pair["episode_id"],
                 "source_turn_idx": pair["source_turn_idx"],
-                "true_next_turn_idx": pair["true_next_turn_idx"],
-                "true_next_turn_move_label": pair["true_next_turn_move_label"],
+                "future_horizon": int(pair["future_horizon"]),
+                "true_future_turn_idx": pair["true_next_turn_idx"],
+                "true_future_turn_move_label": pair["true_next_turn_move_label"],
                 "condition": condition,
                 "explicit_count": len(pair["source_explicit_texts"]),
                 "assumption_count": len(pair["source_assumption_texts"]),
@@ -2156,10 +2221,7 @@ def build_metrics(
                 "source_word_count": pair["source_word_count"],
                 "original_boundary_verified": pair["original_boundary_verified"],
                 "analysis_subset_flags": "[]",
-                "true_rank": None,
-                "top1": None,
-                "reciprocal_rank": None,
-                "true_pairwise_win_rate": None,
+                "accuracy": None,
                 "order_consistency_rate": None,
                 "candidate_count": len(pair["candidates"]),
                 "expected_comparison_row_count": EXPECTED_COMPARISONS_PER_CONDITION,
@@ -2215,16 +2277,15 @@ def build_metrics(
             flags.append("complete_case")
         long_df.at[index, "analysis_subset_flags"] = json.dumps(flags)
     metadata_columns = [
-        "pair_id", "category", "episode_id", "source_turn_idx", "true_next_turn_idx",
-        "true_next_turn_move_label", "explicit_count", "assumption_count",
+        "pair_id", "category", "episode_id", "source_turn_idx", "future_horizon",
+        "true_future_turn_idx", "true_future_turn_move_label", "explicit_count", "assumption_count",
         "all_assumption_count", "source_word_count", "original_boundary_verified",
     ]
     wide = long_df[metadata_columns].drop_duplicates("pair_id").set_index("pair_id")
     for condition in args.conditions:
         part = long_df[long_df["condition"] == condition].set_index("pair_id")
         for column in (
-            "true_rank", "top1", "reciprocal_rank", "true_pairwise_win_rate",
-            "order_consistency_rate", "parsed_comparison_row_count", "complete_comparison_count",
+            "accuracy", "order_consistency_rate", "parsed_comparison_row_count", "complete_comparison_count",
             "condition_available", "control_unavailable_reason", "full_retained",
             "assumption_eligible", "sparse_explicit", "dense_explicit", "complete_case",
         ):
@@ -2245,23 +2306,20 @@ def condition_summary(
         "dense_explicit": "dense_explicit",
         "complete_case": "complete_case",
     }
-    metrics = (
-        "true_rank",
-        "top1",
-        "reciprocal_rank",
-        "true_pairwise_win_rate",
-        "order_consistency_rate",
-    )
+    metrics = ("accuracy", "order_consistency_rate")
     for subset, flag in subsets.items():
         eligible = long_df[long_df[flag] == True].copy()
         if subset == "complete_case":
             eligible = eligible[eligible["full_retained"] == True]
         if eligible.empty:
             continue
-        for (condition, group_value), group in eligible.groupby(["condition", group_column], sort=False, dropna=False):
+        for (condition, future_horizon, group_value), group in eligible.groupby(
+            ["condition", "future_horizon", group_column], sort=False, dropna=False
+        ):
             row: dict[str, Any] = {
                 "analysis_subset": subset,
                 "condition": condition,
+                "future_horizon": int(future_horizon),
                 group_column: group_value,
                 "pair_count": len(group),
             }
@@ -2269,15 +2327,15 @@ def condition_summary(
                 result = cluster_bootstrap(
                     group,
                     metric,
-                    seed_label=f"{subset}:{condition}:{group_column}:{group_value}:{metric}",
+                    seed_label=(
+                        f"{subset}:h{int(future_horizon)}:{condition}:"
+                        f"{group_column}:{group_value}:{metric}"
+                    ),
                     seed=args.seed,
                     draws=args.bootstrap_draws,
                 )
                 prefix = {
-                    "true_rank": "mean_rank",
-                    "top1": "top1_rate",
-                    "reciprocal_rank": "mrr",
-                    "true_pairwise_win_rate": "mean_pairwise_win_rate",
+                    "accuracy": "accuracy",
                     "order_consistency_rate": "mean_order_consistency_rate",
                 }[metric]
                 row[prefix] = result["mean"]
@@ -2299,36 +2357,39 @@ def overall_condition_summary(long_df: pd.DataFrame, args: argparse.Namespace) -
         "complete_case": "complete_case",
     }
     metric_names = {
-        "true_rank": "mean_rank",
-        "top1": "top1_rate",
-        "reciprocal_rank": "mrr",
-        "true_pairwise_win_rate": "mean_pairwise_win_rate",
+        "accuracy": "accuracy",
         "order_consistency_rate": "mean_order_consistency_rate",
     }
     for subset, flag in subsets.items():
-        for condition in args.conditions:
-            group = long_df[(long_df["condition"] == condition) & (long_df[flag] == True)].copy()
-            if subset == "complete_case":
-                group = group[group["full_retained"] == True]
-            row: dict[str, Any] = {
-                "analysis_subset": subset,
-                "condition": condition,
-                "pair_count": int(len(group)),
-            }
-            for metric, output_name in metric_names.items():
-                result = cluster_bootstrap(
-                    group,
-                    metric,
-                    seed_label=f"overall:{subset}:{condition}:{metric}",
-                    seed=args.seed,
-                    draws=args.bootstrap_draws,
-                )
-                row[output_name] = result["mean"]
-                row[f"{output_name}_ci95_low"] = result["ci95_low"]
-                row[f"{output_name}_ci95_high"] = result["ci95_high"]
-                row[f"{output_name}_ci_unstable"] = result["ci_unstable"]
-                row["cluster_count"] = result["cluster_count"]
-            rows.append(row)
+        for future_horizon in args.future_horizons:
+            for condition in args.conditions:
+                group = long_df[
+                    (long_df["condition"] == condition)
+                    & (long_df["future_horizon"] == future_horizon)
+                    & (long_df[flag] == True)
+                ].copy()
+                if subset == "complete_case":
+                    group = group[group["full_retained"] == True]
+                row: dict[str, Any] = {
+                    "analysis_subset": subset,
+                    "condition": condition,
+                    "future_horizon": future_horizon,
+                    "pair_count": int(len(group)),
+                }
+                for metric, output_name in metric_names.items():
+                    result = cluster_bootstrap(
+                        group,
+                        metric,
+                        seed_label=f"overall:{subset}:h{future_horizon}:{condition}:{metric}",
+                        seed=args.seed,
+                        draws=args.bootstrap_draws,
+                    )
+                    row[output_name] = result["mean"]
+                    row[f"{output_name}_ci95_low"] = result["ci95_low"]
+                    row[f"{output_name}_ci95_high"] = result["ci95_high"]
+                    row[f"{output_name}_ci_unstable"] = result["ci_unstable"]
+                    row["cluster_count"] = result["cluster_count"]
+                rows.append(row)
     return rows
 
 
@@ -2347,66 +2408,62 @@ def contrast_list(conditions: list[str]) -> list[tuple[str, str]]:
 
 def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
-    metric_columns = (
-        "true_rank",
-        "top1",
-        "reciprocal_rank",
-        "true_pairwise_win_rate",
-        "order_consistency_rate",
-    )
     for target, baseline in contrast_list(args.conditions):
-        target_df = long_df[long_df["condition"] == target].set_index("pair_id")
-        baseline_df = long_df[long_df["condition"] == baseline].set_index("pair_id")
-        common_ids = target_df.index.intersection(baseline_df.index)
-        for subset in (
-            "full",
-            "assumption_eligible",
-            "sparse_explicit",
-            "dense_explicit",
-            "complete_case",
-        ):
-            subset_ids = []
-            for pair_id in common_ids:
-                target_row = target_df.loc[pair_id]
-                baseline_row = baseline_df.loc[pair_id]
-                if subset == "full":
-                    keep = bool(target_row["full_retained"] and baseline_row["full_retained"])
-                elif subset == "assumption_eligible":
-                    keep = bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"])
-                elif subset == "sparse_explicit":
-                    keep = bool(target_row["sparse_explicit"] and baseline_row["sparse_explicit"])
-                elif subset == "dense_explicit":
-                    keep = bool(target_row["dense_explicit"] and baseline_row["dense_explicit"])
-                else:
-                    keep = bool(
-                        target_row["complete_case"]
-                        and baseline_row["complete_case"]
-                        and target_row["full_retained"]
-                        and baseline_row["full_retained"]
-                    )
-                if keep:
-                    subset_ids.append(pair_id)
-            for metric in metric_columns:
+        for future_horizon in args.future_horizons:
+            target_df = long_df[
+                (long_df["condition"] == target)
+                & (long_df["future_horizon"] == future_horizon)
+            ].set_index("pair_id")
+            baseline_df = long_df[
+                (long_df["condition"] == baseline)
+                & (long_df["future_horizon"] == future_horizon)
+            ].set_index("pair_id")
+            common_ids = target_df.index.intersection(baseline_df.index)
+            for subset in (
+                "full",
+                "assumption_eligible",
+                "sparse_explicit",
+                "dense_explicit",
+                "complete_case",
+            ):
+                subset_ids = []
+                for pair_id in common_ids:
+                    target_row = target_df.loc[pair_id]
+                    baseline_row = baseline_df.loc[pair_id]
+                    if subset == "full":
+                        keep = bool(target_row["full_retained"] and baseline_row["full_retained"])
+                    elif subset == "assumption_eligible":
+                        keep = bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"])
+                    elif subset == "sparse_explicit":
+                        keep = bool(target_row["sparse_explicit"] and baseline_row["sparse_explicit"])
+                    elif subset == "dense_explicit":
+                        keep = bool(target_row["dense_explicit"] and baseline_row["dense_explicit"])
+                    else:
+                        keep = bool(
+                            target_row["complete_case"]
+                            and baseline_row["complete_case"]
+                            and target_row["full_retained"]
+                            and baseline_row["full_retained"]
+                        )
+                    if keep:
+                        subset_ids.append(pair_id)
                 delta_rows = []
                 for pair_id in subset_ids:
                     target_row = target_df.loc[pair_id]
                     baseline_row = baseline_df.loc[pair_id]
-                    target_value = float(target_row[metric])
-                    baseline_value = float(baseline_row[metric])
-                    delta = baseline_value - target_value if metric == "true_rank" else target_value - baseline_value
                     delta_rows.append(
                         {
                             "pair_id": pair_id,
                             "category": target_row["category"],
                             "episode_id": target_row["episode_id"],
-                            "delta": delta,
+                            "delta": float(target_row["accuracy"]) - float(baseline_row["accuracy"]),
                         }
                     )
                 delta_df = pd.DataFrame(delta_rows, columns=["pair_id", "category", "episode_id", "delta"])
                 result = cluster_bootstrap(
                     delta_df,
                     "delta",
-                    seed_label=f"paired:{subset}:{target}:{baseline}:{metric}",
+                    seed_label=f"paired:{subset}:h{future_horizon}:{target}:{baseline}:accuracy",
                     seed=args.seed,
                     draws=args.bootstrap_draws,
                 )
@@ -2414,9 +2471,10 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
                 rows.append(
                     {
                         "analysis_subset": subset,
+                        "future_horizon": future_horizon,
                         "target_condition": target,
                         "baseline_condition": baseline,
-                        "metric": metric,
+                        "metric": "accuracy",
                         "paired_sample_size": len(delta_df),
                         "mean_improvement": result["mean"],
                         "ci95_low": result["ci95_low"],
@@ -2433,31 +2491,36 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
 
 def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: argparse.Namespace) -> pd.DataFrame:
     rows = []
-    total = len(pairs)
-    for condition in args.conditions:
-        group = long_df[long_df["condition"] == condition]
-        parse_eligible = (group["condition_available"] == True) & (group["candidate_pool_complete"] == True)
-        parse_failures = parse_eligible & (group["full_retained"] == False)
-        parse_eligible_count = int(parse_eligible.sum())
-        rows.append(
-            {
-                "condition": condition,
-                "pair_count": total,
-                "candidate_complete_pair_count": int(group["candidate_pool_complete"].sum()),
-                "condition_available_pair_count": int(group["condition_available"].sum()),
-                "fully_parsed_pair_count": int(group["full_retained"].sum()),
-                "assumption_eligible_pair_count": int(group["assumption_eligible"].sum()),
-                "sparse_explicit_pair_count": int(group["sparse_explicit"].sum()),
-                "dense_explicit_pair_count": int(group["dense_explicit"].sum()),
-                "complete_case_pair_count": int(group["complete_case"].sum()),
-                "retained_pair_rate": float(group["full_retained"].mean()) if total else None,
-                "comparison_parse_eligible_pair_count": parse_eligible_count,
-                "comparison_parse_failure_pair_count": int(parse_failures.sum()),
-                "comparison_parse_failure_rate": (
-                    float(parse_failures.sum() / parse_eligible_count) if parse_eligible_count else None
-                ),
-            }
-        )
+    for future_horizon in args.future_horizons:
+        total = sum(int(pair["future_horizon"]) == future_horizon for pair in pairs)
+        for condition in args.conditions:
+            group = long_df[
+                (long_df["condition"] == condition)
+                & (long_df["future_horizon"] == future_horizon)
+            ]
+            parse_eligible = (group["condition_available"] == True) & (group["candidate_pool_complete"] == True)
+            parse_failures = parse_eligible & (group["full_retained"] == False)
+            parse_eligible_count = int(parse_eligible.sum())
+            rows.append(
+                {
+                    "future_horizon": future_horizon,
+                    "condition": condition,
+                    "pair_count": total,
+                    "candidate_complete_pair_count": int(group["candidate_pool_complete"].sum()),
+                    "condition_available_pair_count": int(group["condition_available"].sum()),
+                    "fully_parsed_pair_count": int(group["full_retained"].sum()),
+                    "assumption_eligible_pair_count": int(group["assumption_eligible"].sum()),
+                    "sparse_explicit_pair_count": int(group["sparse_explicit"].sum()),
+                    "dense_explicit_pair_count": int(group["dense_explicit"].sum()),
+                    "complete_case_pair_count": int(group["complete_case"].sum()),
+                    "retained_pair_rate": float(group["full_retained"].mean()) if total else None,
+                    "comparison_parse_eligible_pair_count": parse_eligible_count,
+                    "comparison_parse_failure_pair_count": int(parse_failures.sum()),
+                    "comparison_parse_failure_rate": (
+                        float(parse_failures.sum() / parse_eligible_count) if parse_eligible_count else None
+                    ),
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -2504,17 +2567,11 @@ def build_decomposition_table(pairwise: pd.DataFrame) -> pd.DataFrame:
         "dense_explicit": 3,
         "full": 4,
     }
-    metric_order = {
-        "reciprocal_rank": 0,
-        "top1": 1,
-        "true_rank": 2,
-        "true_pairwise_win_rate": 3,
-        "order_consistency_rate": 4,
-    }
+    metric_order = {"accuracy": 0}
     selected["_subset_order"] = selected["analysis_subset"].map(subset_order).fillna(99)
     selected["_metric_order"] = selected["metric"].map(metric_order).fillna(99)
     return selected.sort_values(
-        ["_contrast_order", "_subset_order", "_metric_order"], kind="stable"
+        ["_contrast_order", "future_horizon", "_subset_order", "_metric_order"], kind="stable"
     ).drop(columns=["_contrast_order", "_subset_order", "_metric_order"])
 
 
@@ -2525,12 +2582,11 @@ def build_audit_sample(
 ) -> pd.DataFrame:
     columns = [
         "audit_outcome", "audit_priority", "pair_id", "category", "episode_id",
-        "true_next_turn_move_label", "explicit_count", "assumption_count", "mrr_delta",
-        "rank_improvement", "top1_delta", "pairwise_win_rate_delta", "explicit_rank",
-        "combined_rank", "explicit_pairwise_win_rate", "combined_pairwise_win_rate",
+        "future_horizon", "true_future_turn_move_label", "explicit_count", "assumption_count",
+        "accuracy_delta", "explicit_accuracy", "combined_accuracy",
         "original_boundary_verified", "source_turn_text", "source_tail_text",
         "source_explicit_json", "source_assumptions_json", "source_all_assumptions_json",
-        "history_turns_json", "true_next_turn_text",
+        "history_turns_json", "true_future_turn_text",
     ]
     required = {"explicit_only", "explicit_plus_top3_assumptions"}
     if not required.issubset(set(args.conditions)):
@@ -2545,26 +2601,21 @@ def build_audit_sample(
         if not bool(explicit_row["assumption_eligible"] and combined_row["assumption_eligible"]):
             continue
         pair = lookup[str(pair_id)]
-        mrr_delta = float(combined_row["reciprocal_rank"]) - float(explicit_row["reciprocal_rank"])
-        outcome = "win" if mrr_delta > 0 else "loss" if mrr_delta < 0 else "tie"
+        accuracy_delta = float(combined_row["accuracy"]) - float(explicit_row["accuracy"])
+        outcome = "win" if accuracy_delta > 0 else "loss" if accuracy_delta < 0 else "tie"
         rows.append(
             {
                 "audit_outcome": outcome,
                 "pair_id": pair_id,
                 "category": pair["category"],
                 "episode_id": pair["episode_id"],
-                "true_next_turn_move_label": pair["true_next_turn_move_label"],
+                "future_horizon": int(pair["future_horizon"]),
+                "true_future_turn_move_label": pair["true_next_turn_move_label"],
                 "explicit_count": len(pair["source_explicit_texts"]),
                 "assumption_count": len(pair["source_assumption_texts"]),
-                "mrr_delta": mrr_delta,
-                "rank_improvement": float(explicit_row["true_rank"]) - float(combined_row["true_rank"]),
-                "top1_delta": float(combined_row["top1"]) - float(explicit_row["top1"]),
-                "pairwise_win_rate_delta": float(combined_row["true_pairwise_win_rate"])
-                - float(explicit_row["true_pairwise_win_rate"]),
-                "explicit_rank": int(explicit_row["true_rank"]),
-                "combined_rank": int(combined_row["true_rank"]),
-                "explicit_pairwise_win_rate": float(explicit_row["true_pairwise_win_rate"]),
-                "combined_pairwise_win_rate": float(combined_row["true_pairwise_win_rate"]),
+                "accuracy_delta": accuracy_delta,
+                "explicit_accuracy": float(explicit_row["accuracy"]),
+                "combined_accuracy": float(combined_row["accuracy"]),
                 "original_boundary_verified": pair["original_boundary_verified"],
                 "source_turn_text": pair["source_turn_text"],
                 "source_tail_text": pair["source_tail_text"],
@@ -2574,7 +2625,7 @@ def build_audit_sample(
                     pair["source_all_assumption_texts"], ensure_ascii=False
                 ),
                 "history_turns_json": json.dumps(pair["history_turn_texts"], ensure_ascii=False),
-                "true_next_turn_text": pair["true_next_turn_text"],
+                "true_future_turn_text": pair["true_next_turn_text"],
                 "_tie_order": seed_int(f"audit:{pair_id}:{args.seed}"),
             }
         )
@@ -2585,15 +2636,11 @@ def build_audit_sample(
     for outcome in ("win", "loss", "tie"):
         group = audit[audit["audit_outcome"] == outcome].copy()
         if outcome == "win":
-            group = group.sort_values(["mrr_delta", "rank_improvement", "pair_id"], ascending=[False, False, True])
+            group = group.sort_values(["accuracy_delta", "pair_id"], ascending=[False, True])
         elif outcome == "loss":
-            group = group.sort_values(["mrr_delta", "rank_improvement", "pair_id"], ascending=[True, True, True])
+            group = group.sort_values(["accuracy_delta", "pair_id"], ascending=[True, True])
         else:
-            group["_absolute_win_rate_delta"] = group["pairwise_win_rate_delta"].abs()
-            group = group.sort_values(
-                ["_absolute_win_rate_delta", "_tie_order"],
-                ascending=[False, True],
-            )
+            group = group.sort_values(["_tie_order"], ascending=[True])
         group = group.head(args.audit_sample_size_per_outcome).copy()
         group["audit_priority"] = np.arange(1, len(group) + 1)
         samples.append(group)
@@ -2606,12 +2653,15 @@ def diagnostic_gate(
     long_df: pd.DataFrame,
     coverage: pd.DataFrame,
 ) -> dict[str, Any]:
+    primary_horizon = 1
+
     def contrast_row(target: str, baseline: str, subset: str) -> dict[str, Any] | None:
         match = pairwise[
             (pairwise["analysis_subset"] == subset)
+            & (pairwise["future_horizon"] == primary_horizon)
             & (pairwise["target_condition"] == target)
             & (pairwise["baseline_condition"] == baseline)
-            & (pairwise["metric"] == "reciprocal_rank")
+            & (pairwise["metric"] == "accuracy")
         ]
         return None if match.empty else match.iloc[0].to_dict()
 
@@ -2622,12 +2672,15 @@ def diagnostic_gate(
         for pair_id in target_rows.index.intersection(baseline_rows.index):
             target_row = target_rows.loc[pair_id]
             baseline_row = baseline_rows.loc[pair_id]
-            if not bool(target_row[subset_flag] and baseline_row[subset_flag]):
+            if (
+                int(target_row["future_horizon"]) != primary_horizon
+                or not bool(target_row[subset_flag] and baseline_row[subset_flag])
+            ):
                 continue
             values.append(
                 {
                     "category": str(target_row["category"]),
-                    "delta": float(target_row["reciprocal_rank"]) - float(baseline_row["reciprocal_rank"]),
+                    "delta": float(target_row["accuracy"]) - float(baseline_row["accuracy"]),
                 }
             )
         if not values:
@@ -2688,20 +2741,21 @@ def diagnostic_gate(
         primary_supported and specificity_supported and category_breadth and coverage_acceptable
     )
     return {
-        "gate_version": "confirmatory-gate-v3-pairwise",
+        "gate_version": "confirmatory-gate-v4-accuracy-horizon",
+        "primary_future_horizon": primary_horizon,
         "primary_contrast": primary,
         "exploratory_all_assumption_eligible_contrast": exploratory_primary,
         "shuffled_control_contrast": shuffled_control,
         "wrong_episode_control_contrast": wrong_episode_control,
         "raw_context_contrast": raw_increment,
-        "primary_category_mrr_deltas": primary_categories,
-        "raw_context_category_mrr_deltas": raw_categories,
+        "primary_category_accuracy_deltas": primary_categories,
+        "raw_context_category_accuracy_deltas": raw_categories,
         "criteria": {
-            "primary_mrr_ci_excludes_zero": primary_supported,
-            "shuffled_control_mrr_ci_excludes_zero": shuffled_supported,
-            "wrong_episode_control_mrr_ci_excludes_zero": wrong_episode_supported,
+            "primary_accuracy_ci_excludes_zero": primary_supported,
+            "shuffled_control_accuracy_ci_excludes_zero": shuffled_supported,
+            "wrong_episode_control_accuracy_ci_excludes_zero": wrong_episode_supported,
             "control_specificity_supported": specificity_supported,
-            "raw_context_mrr_ci_excludes_zero": raw_supported,
+            "raw_context_accuracy_ci_excludes_zero": raw_supported,
             "positive_category_count_primary": positive_primary_categories,
             "positive_category_count_raw_context": positive_raw_categories,
             "category_breadth_at_least_two": category_breadth,
@@ -2756,46 +2810,65 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         "assumptions_only": "Assumptions",
         "explicit_plus_assumptions": "Explicit + all",
         "explicit_plus_shuffled_assumptions": "Explicit + shuffled top 3",
-        "explicit_plus_wrong_episode_assumptions": "Explicit + wrong-episode top 3",
+        "explicit_plus_wrong_episode_assumptions": "Explicit + wrong same-episode top 3",
     }
     complete = long_df[(long_df["complete_case"] == True) & (long_df["full_retained"] == True)]
-    condition_rows = []
+    condition_rows: list[dict[str, Any]] = []
     for condition in args.conditions:
-        group = complete[complete["condition"] == condition]
-        for metric in ("true_rank", "top1"):
+        for future_horizon in args.future_horizons:
+            group = complete[
+                (complete["condition"] == condition)
+                & (complete["future_horizon"] == future_horizon)
+            ]
             result = cluster_bootstrap(
                 group,
-                metric,
-                seed_label=f"plot:complete:{condition}:{metric}",
+                "accuracy",
+                seed_label=f"plot:complete:h{future_horizon}:{condition}:accuracy",
                 seed=args.seed,
                 draws=args.bootstrap_draws,
             )
-            condition_rows.append({"condition": condition, "metric": metric, **result})
+            condition_rows.append(
+                {"condition": condition, "future_horizon": future_horizon, **result}
+            )
     plot_df = pd.DataFrame(condition_rows)
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8), constrained_layout=True)
+    fig, axis = plt.subplots(figsize=(10.5, 5.8), constrained_layout=True)
     if complete.empty:
-        for axis in axes:
-            axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
-            axis.set_axis_off()
+        axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
+        axis.set_axis_off()
     else:
-        for axis, metric, title in zip(
-            axes,
-            ("true_rank", "top1"),
-            ("Mean rank (lower is better)", "Top-1 accuracy"),
-        ):
-            metric_df = plot_df[plot_df["metric"] == metric].set_index("condition").reindex(args.conditions)
-            means = metric_df["mean"].astype(float).to_numpy()
-            x = np.arange(len(args.conditions))
-            axis.bar(x, means, color="#4C78A8")
+        for condition in args.conditions:
+            metric_df = plot_df[plot_df["condition"] == condition].set_index(
+                "future_horizon"
+            ).reindex(args.future_horizons)
+            means = metric_df["mean"].to_numpy(dtype=float)
+            x = np.asarray(args.future_horizons, dtype=float)
             lows = metric_df["ci95_low"].to_numpy(dtype=float)
             highs = metric_df["ci95_high"].to_numpy(dtype=float)
-            if np.isfinite(lows).all() and np.isfinite(highs).all():
-                axis.errorbar(x, means, yerr=np.vstack((means - lows, highs - means)), fmt="none", color="black", capsize=3)
-            axis.set_xticks(x, [labels[value] for value in args.conditions], rotation=35, ha="right")
-            axis.set_title(title)
-            axis.set_ylabel(title)
-            axis.grid(axis="y", alpha=0.25)
-        fig.suptitle(f"Pairwise representation comparison - complete cases (n={complete['pair_id'].nunique()})")
+            finite_intervals = np.isfinite(lows) & np.isfinite(highs) & np.isfinite(means)
+            axis.plot(x, means, marker="o", linewidth=1.8, label=labels[condition])
+            if finite_intervals.any():
+                axis.errorbar(
+                    x[finite_intervals],
+                    means[finite_intervals],
+                    yerr=np.vstack(
+                        (
+                            means[finite_intervals] - lows[finite_intervals],
+                            highs[finite_intervals] - means[finite_intervals],
+                        )
+                    ),
+                    fmt="none",
+                    color="black",
+                    alpha=0.45,
+                    capsize=3,
+                )
+        axis.axhline(0.5, color="black", linewidth=0.9, linestyle="--", label="Chance")
+        axis.set_xticks(args.future_horizons)
+        axis.set_xlabel("Future-turn horizon n")
+        axis.set_ylabel("Binary accuracy")
+        axis.set_ylim(0.0, 1.0)
+        axis.set_title("Which candidate is the future turn? - complete cases")
+        axis.legend(loc="best", fontsize=8, ncol=2)
+        axis.grid(axis="y", alpha=0.25)
     fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
     fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
     plt.close(fig)
@@ -2808,22 +2881,18 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         ("raw_turn", "explicit_only"),
         ("raw_turn_with_history", "raw_turn"),
     )
-    lift_rows = []
+    lift_rows: list[dict[str, Any]] = []
     for target, baseline in decomposition_contrasts:
         subset = "sparse_explicit" if target == "explicit_plus_top3_assumptions" else "assumption_eligible"
         match = pairwise[
             (pairwise["analysis_subset"] == subset)
             & (pairwise["target_condition"] == target)
             & (pairwise["baseline_condition"] == baseline)
-            & (pairwise["metric"] == "true_rank")
+            & (pairwise["metric"] == "accuracy")
         ]
-        if not match.empty:
-            subset_label = subset.replace("_", " ")
+        for _, row in match.iterrows():
             lift_rows.append(
-                dict(
-                    match.iloc[0],
-                    contrast=f"{labels[target]} - {labels[baseline]}\n({subset_label})",
-                )
+                dict(row, contrast=f"{labels[target]} - {labels[baseline]}")
             )
     lift_df = pd.DataFrame(lift_rows)
     fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
@@ -2831,30 +2900,35 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         axis.text(0.5, 0.5, "No diagnostic lift data available", ha="center", va="center")
         axis.set_axis_off()
     else:
-        means = lift_df["mean_improvement"].astype(float).to_numpy()
-        x = np.arange(len(lift_df))
-        axis.bar(x, means, color="#F58518")
-        lows = lift_df["ci95_low"].to_numpy(dtype=float)
-        highs = lift_df["ci95_high"].to_numpy(dtype=float)
-        finite_intervals = np.isfinite(lows) & np.isfinite(highs)
-        if finite_intervals.any():
-            axis.errorbar(
-                x[finite_intervals],
-                means[finite_intervals],
-                yerr=np.vstack(
-                    (
-                        means[finite_intervals] - lows[finite_intervals],
-                        highs[finite_intervals] - means[finite_intervals],
-                    )
-                ),
-                fmt="none",
-                color="black",
-                capsize=3,
-            )
+        for contrast, group in lift_df.groupby("contrast", sort=False):
+            ordered = group.set_index("future_horizon").reindex(args.future_horizons)
+            means = ordered["mean_improvement"].to_numpy(dtype=float)
+            x = np.asarray(args.future_horizons, dtype=float)
+            lows = ordered["ci95_low"].to_numpy(dtype=float)
+            highs = ordered["ci95_high"].to_numpy(dtype=float)
+            finite_intervals = np.isfinite(lows) & np.isfinite(highs) & np.isfinite(means)
+            axis.plot(x, means, marker="o", linewidth=1.8, label=contrast)
+            if finite_intervals.any():
+                axis.errorbar(
+                    x[finite_intervals],
+                    means[finite_intervals],
+                    yerr=np.vstack(
+                        (
+                            means[finite_intervals] - lows[finite_intervals],
+                            highs[finite_intervals] - means[finite_intervals],
+                        )
+                    ),
+                    fmt="none",
+                    color="black",
+                    alpha=0.45,
+                    capsize=3,
+                )
         axis.axhline(0.0, color="black", linewidth=0.8)
-        axis.set_xticks(x, lift_df["contrast"].tolist(), rotation=25, ha="right")
-        axis.set_ylabel("Paired mean-rank improvement (baseline - target)")
-        axis.set_title("Pairwise mean-rank improvements by planned contrast")
+        axis.set_xticks(args.future_horizons)
+        axis.set_xlabel("Future-turn horizon n")
+        axis.set_ylabel("Paired accuracy improvement (target - baseline)")
+        axis.set_title("Representation accuracy improvements across future horizons")
+        axis.legend(loc="best", fontsize=8)
         axis.grid(axis="y", alpha=0.25)
     fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
     fig.savefig(paths["decomposition_png"], dpi=args.plot_dpi, bbox_inches="tight")
@@ -2950,7 +3024,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "the current parser or inspect unresolved forced-choice outputs."
         )
     category_df = condition_summary(long_df, "category", args)
-    move_df = condition_summary(long_df, "true_next_turn_move_label", args)
+    move_df = condition_summary(long_df, "true_future_turn_move_label", args)
     pairwise_df = build_pairwise(long_df, args)
     coverage_df = coverage_summary(long_df, pairs, args)
     decomposition_df = build_decomposition_table(pairwise_df)
@@ -2982,34 +3056,37 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         if name != "summary" and path.exists()
     }
     complete_lookup = {
-        row["condition"]: row
+        (row["condition"], int(row["future_horizon"])): row
         for row in overall_metrics
         if row["analysis_subset"] == "complete_case"
     }
-    complete_mrr_lifts = {
-        str(row["target_condition"]): row["mean_improvement"]
+    complete_accuracy_lifts = {
+        (str(row["target_condition"]), int(row["future_horizon"])): row["mean_improvement"]
         for _, row in pairwise_df.iterrows()
         if row["analysis_subset"] == "complete_case"
         and row["baseline_condition"] == "explicit_only"
-        and row["metric"] == "reciprocal_rank"
+        and row["metric"] == "accuracy"
     }
     diagnostic_table = [
         {
             "condition": condition,
-            "mean_rank": complete_lookup.get(condition, {}).get("mean_rank"),
-            "top1_rate": complete_lookup.get(condition, {}).get("top1_rate"),
-            "mrr": complete_lookup.get(condition, {}).get("mrr"),
-            "mean_pairwise_win_rate": complete_lookup.get(condition, {}).get("mean_pairwise_win_rate"),
-            "mean_order_consistency_rate": complete_lookup.get(condition, {}).get(
+            "future_horizon": future_horizon,
+            "accuracy": complete_lookup.get((condition, future_horizon), {}).get("accuracy"),
+            "mean_order_consistency_rate": complete_lookup.get((condition, future_horizon), {}).get(
                 "mean_order_consistency_rate"
             ),
-            "mrr_lift_vs_explicit_only": 0.0 if condition == "explicit_only" else complete_mrr_lifts.get(condition),
-            "pairs": complete_lookup.get(condition, {}).get("pair_count", 0),
+            "accuracy_lift_vs_explicit_only": (
+                0.0
+                if condition == "explicit_only"
+                else complete_accuracy_lifts.get((condition, future_horizon))
+            ),
+            "pairs": complete_lookup.get((condition, future_horizon), {}).get("pair_count", 0),
         }
+        for future_horizon in args.future_horizons
         for condition in args.conditions
     ]
     summary = {
-        "experiment": "Experiment 1: Pairwise Explicit-Implicit Confirmatory Ranking",
+        "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
         "analysis_stage": "final_analysis",
         "script_version": SCRIPT_VERSION,
         "prompt_version": PROMPT_VERSION,
@@ -3031,7 +3108,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "max_tokens": args.max_tokens,
             "max_score_retries": args.max_score_retries,
             "max_retry_tokens": args.max_retry_tokens,
-            "scoring_mode": "order_swapped_forced_choice",
+            "scoring_mode": "order_swapped_binary_future_turn_accuracy",
             "valid_outputs": ["A", "B"],
             "parser": "leading_standalone_choice_token",
             "comparison_rows_per_pair_condition": EXPECTED_COMPARISONS_PER_CONDITION,
@@ -3039,6 +3116,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "seed": args.seed,
         "candidate_count_target": EXPECTED_CANDIDATE_COUNT,
         "conditions": args.conditions,
+        "future_horizons": prepare_manifest["future_horizons"],
         "history_turns": prepare_manifest["history_turns"],
         "source_tail_words": prepare_manifest["source_tail_words"],
         "candidate_head_words": prepare_manifest["candidate_head_words"],
@@ -3050,19 +3128,35 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "source_episode_count": prepare_manifest["source_episode_count"],
             "turn_count": prepare_manifest["turn_count"],
             "pair_count_before_candidate_filter": prepare_manifest["pair_count_before_candidate_filter"],
+            "pair_count_by_horizon": prepare_manifest["pair_count_by_horizon"],
             "candidate_complete_pair_count": prepare_manifest["candidate_complete_pair_count"],
             "candidate_incomplete_pair_count": prepare_manifest["candidate_incomplete_pair_count"],
             "assumption_eligible_pair_count": prepare_manifest["assumption_eligible_pair_count"],
             "boundary_provenance_counts": prepare_manifest["boundary_provenance_counts"],
         },
-        "full_retained_by_condition": dict(zip(coverage_df["condition"], coverage_df["fully_parsed_pair_count"])),
+        "full_retained_by_horizon_condition": {
+            f"h{int(row['future_horizon'])}:{row['condition']}": int(row["fully_parsed_pair_count"])
+            for _, row in coverage_df.iterrows()
+        },
         "complete_case_pair_count": int(long_df.loc[long_df["complete_case"] == True, "pair_id"].nunique()),
         "complete_case_removed_pair_count": len(pairs) - int(long_df.loc[long_df["complete_case"] == True, "pair_id"].nunique()),
+        "complete_case_pair_count_by_horizon": {
+            str(horizon): int(
+                long_df.loc[
+                    (long_df["future_horizon"] == horizon) & (long_df["complete_case"] == True),
+                    "pair_id",
+                ].nunique()
+            )
+            for horizon in prepare_manifest["future_horizons"]
+        },
         "unavailable_controls": prepare_manifest["unavailable_controls"],
         "unavailable_control_reasons": prepare_manifest["unavailable_control_reasons"],
-        "parse_failures_by_condition": dict(
-            zip(coverage_df["condition"], coverage_df["comparison_parse_failure_pair_count"])
-        ),
+        "parse_failures_by_horizon_condition": {
+            f"h{int(row['future_horizon'])}:{row['condition']}": int(
+                row["comparison_parse_failure_pair_count"]
+            )
+            for _, row in coverage_df.iterrows()
+        },
         "score_repair": {
             "score_file_changed": score_file_changed,
             "repaired_score_count": repaired_score_count,
