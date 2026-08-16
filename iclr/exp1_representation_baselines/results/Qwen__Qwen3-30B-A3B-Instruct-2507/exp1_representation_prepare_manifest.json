@@ -1,13 +1,13 @@
 {
   "assumption_budget": 3,
-  "assumption_eligible_pair_count": 213,
+  "assumption_eligible_pair_count": 345,
   "assumption_selection": "candidate_blind_source_tail_lexical_grounding",
   "boundary_provenance_counts": {
-    "boundary_invalid_merged_group_count": 202,
+    "boundary_invalid_merged_group_count": 678,
     "boundary_unverified_pair_count": 0,
-    "boundary_verified_pair_count": 214
+    "boundary_verified_pair_count": 348
   },
-  "candidate_complete_pair_count": 214,
+  "candidate_complete_pair_count": 348,
   "candidate_count_target": 25,
   "candidate_head_words": 100,
   "candidate_incomplete_pair_count": 0,
@@ -31,25 +31,35 @@
     "explicit_plus_wrong_episode_assumptions"
   ],
   "episode_file_count": 30,
-  "experiment": "Experiment 1: Explicit-Implicit Representation Baselines",
-  "git_commit": "47eac1ad57334e62254b6d0f5d06767d545ce34b",
+  "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
+  "future_horizons": [
+    1,
+    3,
+    5
+  ],
+  "git_commit": "0fd9f79daa0e280f62abb5565b573e242506e6ad",
   "history_turns": 3,
   "input_dir": "data_cleaned/conversation_moves_labeled",
   "input_manifest_sha256": "db383a69df9245c08c74ab3501f8746eceb2e7b5342175670febfedb33504008",
   "negative_count_target": 24,
   "negative_sampling_counts": {
     "negative_count_global_topic_length": 0,
-    "negative_count_same_category_same_move": 1146,
-    "negative_count_same_category_topic_length": 1807,
-    "negative_count_same_episode_hard": 2183
+    "negative_count_same_category_same_move": 1882,
+    "negative_count_same_category_topic_length": 2772,
+    "negative_count_same_episode_hard": 3698
   },
   "normalization_error_count": 0,
   "normalization_errors": [],
   "output_dir": "iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507",
-  "pair_count_before_candidate_filter": 214,
+  "pair_count_before_candidate_filter": 348,
+  "pair_count_by_horizon": {
+    "1": 214,
+    "3": 88,
+    "5": 46
+  },
   "prepared_pairs_jsonl": "iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/exp1_representation_prepared_pairs.jsonl",
-  "prepared_pairs_sha256": "8b8495aea639f3e6a20b2ad5b9d4d3dc5638c2d82adf583b9196758f5f1d1ff8",
-  "prompt_version": "representation-pairwise-v5-json-evidence",
+  "prepared_pairs_sha256": "80ef49711cd00e527c4f61ca69c905a74c78a933a66fe850b1c31f2d06eec7b9",
+  "prompt_version": "representation-future-turn-v1-json-evidence",
   "runtime": {
     "matplotlib": "3.10.3",
     "numpy": "2.3.5",
@@ -59,7 +69,7 @@
     "torch": "2.11.0+cu129",
     "vllm": "0.22.1"
   },
-  "script_version": "3.1.0",
+  "script_version": "4.0.0",
   "seed": 42,
   "selected_episode_files": [
     {
@@ -250,11 +260,11 @@
   "unavailable_control_reasons": {
     "explicit_plus_shuffled_assumptions": {},
     "explicit_plus_wrong_episode_assumptions": {
-      "no_valid_same_episode_nonadjacent_donor": 4
+      "no_valid_same_episode_earlier_nonadjacent_donor": 63
     }
   },
   "unavailable_controls": {
     "explicit_plus_shuffled_assumptions": 0,
-    "explicit_plus_wrong_episode_assumptions": 4
+    "explicit_plus_wrong_episode_assumptions": 63
   }
 }
