@@ -1,83 +1,74 @@
-# Explicit-Implicit Future-Turn Accuracy
+# Experiment 1: Matched-History Representation Baselines
 
-This experiment tests whether a small, locally grounded implicit representation improves
-binary future-turn discrimination when explicit propositions underspecify the current turn.
-It uses hard negative pools and order-swapped forced-choice judgments at future-turn horizons
-`n=1`, `n=3`, and `n=5` by default. The prompt identity is
-`representation-future-turn-v1-json-evidence`, so scores from older prompt contracts cannot
-be resumed or merged.
+This experiment tests whether an accumulated explicit–implicit discourse state predicts a
+future turn better than raw dialogue history when both representations are built from the
+same source turns and have the same maximum length. It does not train an encoder and it does
+not select a condition after seeing the result.
 
-Results remain model-scoped. For example, `Qwen/Qwen3-30B-A3B-Instruct-2507` writes to:
+The prompt identity is `representation-matched-history-v2-json-evidence`, so scores from the
+older representation experiment cannot be resumed or merged. Results remain model-scoped;
+the default Qwen run writes under:
 
 ```text
 iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/
 ```
 
-Changing `MODEL_NAME` selects another model-named folder automatically.
+## Prespecified design
 
-## Input data
+For each source turn `t`, the default history is the previous three substantive turns plus
+the current source turn: `t-3, ..., t`. All conditions use this same candidate-blind window.
+The default source-representation caps are 128, 256, and 512 whitespace tokens. The cap
+includes turn and state labels, and the actual realized length is saved with every condition.
+Content is allocated from the current turn backward, then displayed chronologically.
 
-Preparation reads the cleaned conversation-move dataset by default:
+The five default base conditions are expanded at every budget:
+
+1. `raw_history`
+2. `structured_explicit_history`
+3. `structured_explicit_assumption_history`
+4. `structured_explicit_shuffled_assumption_history`
+5. `structured_explicit_wrong_episode_assumption_history`
+
+The structured state keeps temporal turn boundaries. Repeated explicit propositions and
+assumptions are deterministically deduplicated, retaining their most recent occurrence.
+Assumptions are selected within each source turn without looking at candidates. The corrupted
+conditions preserve the explicit history and replace only the implicit content with a
+different-episode donor or a nonadjacent earlier donor from the same episode.
+
+The primary comparison is fixed in advance:
 
 ```text
-data_cleaned/conversation_moves_labeled/
+structured_explicit_assumption_history - raw_history
 ```
 
-Generate it from the repository root before preparing the experiment:
+The 256-token, one-turn-horizon contrast is the primary diagnostic. The 128- and 512-token
+results show the budget curve. Secondary contrasts test incremental assumption value against
+structured explicit-only history and specificity against both corrupted-assumption controls.
+Positive pairwise values always favor the condition on the left. The analysis reports all
+budgets even when the expected ordering does not occur.
+
+The existing legacy single-turn conditions remain available when explicitly requested, but
+they are no longer the default experiment.
+
+## Data and scoring
+
+Preparation reads `data_cleaned/conversation_moves_labeled/`. Regenerate it from the
+repository root before a confirmatory run:
 
 ```bash
 python deduplicate_data.py --overwrite
 ```
 
-The cleaner removes turns shorter than 50 words, merges adjacent remaining turns from
-the same speaker, caps explicit propositions and assumptions at the ten
-highest-confidence items, removes duplicate episodes within each logical dataset, and
-validates two-speaker ABAB alternation. Set `INPUT_DIR` in the Slurm runner or pass
-`--input_dir` to the Python script only when intentionally using another prepared
-dataset. The cleaner now records original indices on every retained turn. Preparation rejects
-pairs that bridge deleted turns or contain a merge across nonconsecutive original indices, and
-fails with an actionable error if it sees old cleaned data without this provenance.
+Preparation rejects pairs without contiguous original-turn provenance. The positive at
+horizon `n` is the turn exactly `n` positions after the source. Default horizons are 1, 3,
+and 5; only positive odd horizons are accepted for the cleaned ABAB dialogues.
 
-## Default diagnostic conditions
-
-The default pipeline scores seven conditions:
-
-1. `raw_turn`
-2. `raw_turn_with_history`
-3. `raw_turn_plus_assumptions`
-4. `explicit_only`
-5. `explicit_plus_top3_assumptions`
-6. `explicit_plus_shuffled_assumptions`
-7. `explicit_plus_wrong_episode_assumptions`
-
-Preparation uses the final 100 words of the current turn and the first 100 words of every
-candidate by default. It selects three assumptions without looking at candidates, ranking
-them by lexical grounding in the final source window. The same three-item budget applies to
-true, shuffled, and wrong-episode blocks. `assumptions_only`, `explicit_plus_top1_assumption`,
-and `explicit_plus_assumptions` remain optional diagnostics.
-
-For a source at position `t`, the positive candidate is the turn at `t+n`. Only positive odd
-horizons are accepted because the cleaned data has an ABAB speaker structure, so the target is
-always spoken by the other speaker. A horizon example is retained only when the complete span
-from `t` through `t+n` contains substantive turns with verified, contiguous original-turn
-provenance. Missing horizons are reported as coverage loss and are never backfilled.
-
-The principal contrasts are:
-
-| Contrast | Diagnostic question |
-|---|---|
-| `explicit_plus_top3_assumptions - explicit_only` | Do assumptions help sparse explicit representations? |
-| true top 3 minus shuffled top 3 | Is the gain specific to the extracted assumptions? |
-| true top 3 minus wrong same-episode top 3 | Is the gain specific to the local dialogue state? |
-| `raw_turn_plus_assumptions - raw_turn` | Do assumptions add signal beyond lexical context? |
-| `raw_turn - explicit_only` | How much information is lost during proposition extraction? |
-| `raw_turn_with_history - raw_turn` | How much does discourse history contribute? |
-
-Positive pairwise values always favor the condition on the left.
+Each positive is paired with 24 hard negatives. Every pair is shown in both A/B orders, so a
+complete pair-condition contains 48 valid binary judgments. Accuracy is the proportion that
+selects the true future turn. The judge must emit strict JSON with exactly `answer` and
+`evidence`. Fake scoring validates plumbing only and is not an experimental result.
 
 ## CPU validation
-
-Run tests without importing `vllm`:
 
 ```bash
 python -m unittest discover \
@@ -85,7 +76,7 @@ python -m unittest discover \
   -p 'test_*.py' -v
 ```
 
-Run a one-episode fake-score pipeline:
+For a small end-to-end plumbing run:
 
 ```bash
 python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
@@ -94,12 +85,9 @@ python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
   --bootstrap_draws 20
 ```
 
-Fake scoring validates plumbing only and must not be reported as an experimental result.
+## Slurm run
 
-## GPU smoke pipeline
-
-The `_log` directory must exist before Slurm opens the job log. Submit the shell file with
-`sbatch`, not `bash`:
+Create the log directory, then submit the coordinator:
 
 ```bash
 mkdir -p iclr/exp1_representation_baselines/_log
@@ -108,84 +96,27 @@ MAX_EPISODES_PER_CATEGORY=5 \
 sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
-The coordinator performs preparation, submits a scoring array, then submits dependent
-merge and analysis jobs. Every scoring array task requests two A6000 GPUs and starts one
-vLLM process with `tensor_parallel_size=2` and the multiprocessing executor.
-The runner defaults to five episodes per array patch and an eight-hour wall-time ceiling;
-jobs stop as soon as their patch is complete.
+The coordinator prepares once, submits a GPU scoring array, then dependent merge and analysis
+jobs. Important overrides include `MODEL_NAME`, `HISTORY_TURNS`,
+`REPRESENTATION_BUDGETS_CSV`, `FUTURE_HORIZONS_CSV`, `CONDITIONS_CSV`,
+`MAX_EPISODES_PER_CATEGORY`, and `EPISODES_PER_PATCH`. The default runner uses two A6000 GPUs
+and `tensor_parallel_size=2`.
 
-Each true future turn at each requested horizon is compared directly with each of its 24
-negatives. Every comparison
-is presented twice, once in each A/B order. The judge must output one JSON object containing
-exactly `answer` and `evidence`. The parser requires an uppercase `A` or `B`, a nonempty
-single-line evidence string, no additional keys, and no text outside the JSON. The selected
-model's chat template is applied before generation. A complete pair-condition therefore
-requires 48 parsed binary decisions. Accuracy is the number of decisions that select the true
-future turn divided by 48. A reversal disagreement contributes one correct and one incorrect
-decision, or 50% accuracy for that negative. Chance accuracy is 50%. No rank or MRR metric is
-used. The default output budget is 64
-tokens, with malformed outputs retried using budgets up to 128 tokens. Merge reparses saved
-raw outputs and fails loudly if any expected choice remains unresolved; analysis also refuses
-to emit an empty result when scorable pairs exist.
+An ungated full-corpus submission is blocked unless `ALLOW_FULL_RUN=1`. Even a passing primary
+run advances only to a different-family judge smoke test and manual audit.
 
-Negative pools prioritize up to 12 hard same-episode nonadjacent turns, then six
-same-category/same-move turns, followed by topic- and length-matched category and global
-backfills. A nonadjacent earlier assumption donor from the same episode is reserved before
-candidate construction, so the condition with the legacy ID
-`explicit_plus_wrong_episode_assumptions` remains independent of the candidate pool and
-cannot leak future context.
+## Outputs
 
-The runner treats the experiment configuration as environment-variable hyperparameters.
-`MODEL_NAME` defaults to `Qwen/Qwen3-30B-A3B-Instruct-2507`; changing it automatically
-selects a separate model-named result directory. User-selectable settings include:
+In addition to long/wide metrics, coverage, category/move summaries, and score manifests, the
+analysis emits:
 
-- Data and outputs: `INPUT_DIR`, `OUTPUT_ROOT`, `OUTPUT_DIR`, `PREPARED_PAIRS_JSONL`,
-  `CATEGORIES_CSV`, `MAX_EPISODES_PER_CATEGORY`, and `EPISODES_PER_PATCH`.
-- Judge and resources: `MODEL_NAME`, `DOWNLOAD_DIR`, `TENSOR_PARALLEL_SIZE`,
-  `GPU_MEMORY_UTILIZATION`, and `PROMPT_BATCH_SIZE`.
-- Decoding: `MAX_TOKENS`, `MAX_SCORE_RETRIES`, `MAX_RETRY_TOKENS`, `TEMPERATURE`,
-  `TOP_P`, `MIN_P`, `TOP_K`, and `REPETITION_PENALTY`.
-- Experiment and analysis: `CONDITIONS_CSV`, `SEED`, `HISTORY_TURNS`,
-  `FUTURE_HORIZONS_CSV`,
-  `SOURCE_TAIL_WORDS`, `CANDIDATE_HEAD_WORDS`, `ASSUMPTION_BUDGET`,
-  `BOOTSTRAP_DRAWS`, `AUDIT_SAMPLE_SIZE_PER_OUTCOME`, and `PLOT_DPI`.
+- `exp1_representation_decomposition.csv`: all planned matched-budget contrasts.
+- `exp1_representation_audit_sample.csv`: strongest wins, losses, and ties with both primary
+  source representations.
+- `exp1_representation_diagnostic_gate.json`: the prespecified 256-token primary decision and
+  all-budget curve.
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: accuracy by representation budget.
+- `exp1_representation_decomposition_lifts.{pdf,png}`: paired lifts by budget.
 
-The CUDA and FlashInfer environment variables remain overridable for the cluster runtime.
-
-## Diagnostic outputs
-
-Analysis emits the usual long/wide metrics, category/move summaries, coverage, and
-pairwise deltas plus:
-
-- `exp1_representation_decomposition.csv`: the planned contrasts in a compact table.
-- `exp1_representation_audit_sample.csv`: up to 25 strongest wins, losses, and ties,
-  including the raw turn, extracted representations, history, and true continuation.
-- `exp1_representation_diagnostic_gate.json`: a machine-readable interpretation and
-  smoke-test gate.
-- `exp1_representation_diagnostic_comparison.{pdf,png}`: complete-case accuracy by horizon.
-- `exp1_representation_decomposition_lifts.{pdf,png}`: paired accuracy improvements by
-  horizon, oriented as target accuracy minus baseline accuracy.
-
-The analysis subsets are `full`, `assumption_eligible`, `sparse_explicit` (at most four
-explicit propositions), `dense_explicit` (at least five), and `complete_case`.
-`complete_case` requires all selected conditions to parse successfully on the same pair.
-
-## Decision gate
-
-The script never automatically authorizes a full-corpus run from one judge. The primary
-gate uses the `n=1` accuracy contrast and requires a positive sparse-explicit accuracy
-interval, superiority to both corrupted
-controls, positive effects in at least two categories, and at least 98% retained coverage.
-A passing run advances only to a different-family judge smoke test and manual audit.
-
-Run the same smoke test with another judge by changing `MODEL_NAME`; its artifacts go to
-a separate model folder. Only after both smoke runs and the audit are reviewed should the
-full corpus be unlocked:
-
-```bash
-ALLOW_FULL_RUN=1 \
-sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
-```
-
-The full run remains expensive. Do not unlock it merely because preparation and parsing
-succeeded.
+The preparation manifest records the exact budgeting policy, token-count convention,
+deduplication rule, source window, seed, and hashes needed to audit or reproduce the run.

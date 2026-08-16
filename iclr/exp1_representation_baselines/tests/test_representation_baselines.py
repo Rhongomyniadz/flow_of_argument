@@ -199,6 +199,45 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertIn("third", first_three)
         self.assertNotIn("fourth", first_three)
 
+    def test_matched_history_conditions_share_window_and_respect_budget(self) -> None:
+        context_turns = [
+            {
+                "turn_id": f"turn-{index}",
+                "turn_idx": index,
+                "substantive_position": index + 1,
+                "turn_text": " ".join(f"raw{index}_{word}" for word in range(80)),
+                "explicit_texts": [f"explicit state {index}", "repeated state"],
+                "assumption_texts": [f"implicit state {index}", "repeated assumption"],
+            }
+            for index in range(4)
+        ]
+        pair = {
+            "pair_id": "matched",
+            "context_turns": context_turns,
+            "donors": {
+                "explicit_plus_shuffled_assumptions": {
+                    "donor_all_assumptions": [f"shuffled assumption {index}" for index in range(8)],
+                    "control_unavailable_reason": None,
+                },
+                "explicit_plus_wrong_episode_assumptions": {
+                    "donor_all_assumptions": [f"wrong assumption {index}" for index in range(8)],
+                    "control_unavailable_reason": None,
+                },
+            },
+        }
+        for base_condition in baseline.MATCHED_BASE_CONDITIONS:
+            condition = baseline.matched_condition_id(base_condition, 128)
+            representation = baseline.format_representation(pair, condition)
+            self.assertLessEqual(baseline.whitespace_token_count(representation), 128)
+            for label in ("t-3", "t-2", "t-1", "t (current)"):
+                self.assertIn(label, representation)
+        structured = baseline.format_representation(
+            pair,
+            baseline.matched_condition_id("structured_explicit_assumption_history", 128),
+        )
+        self.assertEqual(structured.count("repeated state"), 1)
+        self.assertEqual(structured.count("repeated assumption"), 1)
+
     def test_local_grounding_and_nonconsecutive_merge_provenance(self) -> None:
         selected = baseline.select_locally_grounded_assumptions(
             [
@@ -342,18 +381,8 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
         self.assertEqual(args.source_tail_words, 100)
         self.assertEqual(args.candidate_head_words, 100)
         self.assertEqual(args.future_horizons, [1, 3, 5])
-        self.assertEqual(
-            args.conditions,
-            [
-                "raw_turn",
-                "raw_turn_with_history",
-                "raw_turn_plus_assumptions",
-                "explicit_only",
-                "explicit_plus_top3_assumptions",
-                "explicit_plus_shuffled_assumptions",
-                "explicit_plus_wrong_episode_assumptions",
-            ],
-        )
+        self.assertEqual(args.representation_budgets, [128, 256, 512])
+        self.assertEqual(args.conditions, list(baseline.DEFAULT_CONDITIONS))
 
     def test_forced_choice_parser_and_binary_accuracy(self) -> None:
         golden = json.loads((FIXTURES / "legacy_contract_golden.json").read_text(encoding="utf-8"))
@@ -510,10 +539,12 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             "TENSOR_PARALLEL_SIZE=2",
             "Submit this runner with sbatch, not bash",
             'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
-            "raw_turn_plus_assumptions",
-            "explicit_plus_top3_assumptions",
-            "explicit_plus_shuffled_assumptions",
-            "explicit_plus_wrong_episode_assumptions",
+            "raw_history",
+            "structured_explicit_history",
+            "structured_explicit_assumption_history",
+            "structured_explicit_shuffled_assumption_history",
+            "structured_explicit_wrong_episode_assumption_history",
+            "REPRESENTATION_BUDGETS_CSV",
             "SOURCE_TAIL_WORDS",
             "CANDIDATE_HEAD_WORDS",
             'FUTURE_HORIZONS_CSV="${FUTURE_HORIZONS_CSV:-1,3,5}"',
@@ -569,7 +600,10 @@ class EndToEndAndPatchTests(unittest.TestCase):
 
         self.assertFalse(summary["diagnostic_gate"]["ready_for_full_corpus"])
         decomposition = pd.read_csv(baseline.final_paths(output)["decomposition"])
-        self.assertIn("incremental_implicit_value_after_abstraction", set(decomposition["diagnostic_question"]))
+        self.assertIn(
+            "structured_explicit_assumption_state_vs_raw_history",
+            set(decomposition["diagnostic_question"]),
+        )
         audit = pd.read_csv(baseline.final_paths(output)["audit_sample"])
         self.assertTrue(set(audit["audit_outcome"]).issubset({"win", "loss", "tie"}))
         self.assertTrue((long_df["complete_case"] == True).any())

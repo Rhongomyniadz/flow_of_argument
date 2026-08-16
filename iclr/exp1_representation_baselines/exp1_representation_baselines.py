@@ -29,8 +29,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "4.0.0"
-PROMPT_VERSION = "representation-future-turn-v1-json-evidence"
+SCRIPT_VERSION = "5.0.0"
+PROMPT_VERSION = "representation-matched-history-v2-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
@@ -50,11 +50,25 @@ DEFAULT_SOURCE_TAIL_WORDS = 100
 DEFAULT_CANDIDATE_HEAD_WORDS = 100
 DEFAULT_ASSUMPTION_BUDGET = 3
 DEFAULT_FUTURE_HORIZONS = (1, 3, 5)
+DEFAULT_REPRESENTATION_BUDGETS = (128, 256, 512)
+REPRESENTATION_BUDGET_TOKENIZER = "whitespace_v1"
 EMPTY_EXPLICIT = "None extracted."
 EMPTY_ASSUMPTIONS = "None extracted."
 EMPTY_HISTORY = "No earlier substantive turn available."
 
-DEFAULT_CONDITIONS = (
+MATCHED_BASE_CONDITIONS = (
+    "raw_history",
+    "structured_explicit_history",
+    "structured_explicit_assumption_history",
+    "structured_explicit_shuffled_assumption_history",
+    "structured_explicit_wrong_episode_assumption_history",
+)
+DEFAULT_CONDITIONS = tuple(
+    f"{condition}_b{budget}"
+    for budget in DEFAULT_REPRESENTATION_BUDGETS
+    for condition in MATCHED_BASE_CONDITIONS
+)
+LEGACY_CONDITIONS = (
     "raw_turn",
     "raw_turn_with_history",
     "raw_turn_plus_assumptions",
@@ -63,12 +77,12 @@ DEFAULT_CONDITIONS = (
     "explicit_plus_shuffled_assumptions",
     "explicit_plus_wrong_episode_assumptions",
 )
-OPTIONAL_CONDITIONS = (
+LEGACY_OPTIONAL_CONDITIONS = (
     "assumptions_only",
     "explicit_plus_top1_assumption",
     "explicit_plus_assumptions",
 )
-ALL_CONDITIONS = DEFAULT_CONDITIONS + OPTIONAL_CONDITIONS
+ALL_CONDITIONS = DEFAULT_CONDITIONS + LEGACY_CONDITIONS + LEGACY_OPTIONAL_CONDITIONS
 CONTROL_CONDITIONS = (
     "explicit_plus_shuffled_assumptions",
     "explicit_plus_wrong_episode_assumptions",
@@ -113,6 +127,7 @@ class TurnRecord(TypedDict):
     all_assumption_texts: list[str]
     history_turn_ids: list[str]
     history_turn_texts: list[str]
+    history_turn_records: list[dict[str, Any]]
     original_turn_indices: list[int]
     merge_provenance_present: bool
 
@@ -261,15 +276,49 @@ def runtime_versions() -> dict[str, str]:
     return versions
 
 
-def normalize_conditions(values: list[str] | None) -> list[str]:
+def matched_condition_id(base_condition: str, budget: int) -> str:
+    if base_condition not in MATCHED_BASE_CONDITIONS:
+        raise ValueError(f"Unknown matched-history base condition: {base_condition}")
+    return f"{base_condition}_b{int(budget)}"
+
+
+def parse_matched_condition(condition: str) -> tuple[str | None, int | None]:
+    match = re.fullmatch(r"(.+)_b([1-9][0-9]*)", condition)
+    if not match or match.group(1) not in MATCHED_BASE_CONDITIONS:
+        return None, None
+    return match.group(1), int(match.group(2))
+
+
+def condition_donor_key(condition: str) -> str | None:
+    base_condition, _ = parse_matched_condition(condition)
+    return {
+        "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
+        "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
+    }.get(base_condition, condition if condition in CONTROL_CONDITIONS else None)
+
+
+def normalize_conditions(values: list[str] | None, budgets: list[int]) -> list[str]:
     if not values or any(value.casefold() == "all" for value in values):
-        return list(DEFAULT_CONDITIONS)
+        return [
+            matched_condition_id(condition, budget)
+            for budget in budgets
+            for condition in MATCHED_BASE_CONDITIONS
+        ]
     chosen: list[str] = []
     for value in values:
-        if value not in ALL_CONDITIONS:
-            raise ValueError(f"Unknown condition {value!r}; choose from {', '.join(ALL_CONDITIONS)}")
-        if value not in chosen:
-            chosen.append(value)
+        expanded = (
+            [matched_condition_id(value, budget) for budget in budgets]
+            if value in MATCHED_BASE_CONDITIONS
+            else [value]
+        )
+        for condition in expanded:
+            base, condition_budget = parse_matched_condition(condition)
+            valid_dynamic = base is not None and condition_budget in budgets
+            if condition not in ALL_CONDITIONS and not valid_dynamic:
+                choices = (*MATCHED_BASE_CONDITIONS, *LEGACY_CONDITIONS, *LEGACY_OPTIONAL_CONDITIONS)
+                raise ValueError(f"Unknown condition {value!r}; choose from {', '.join(choices)}")
+            if condition not in chosen:
+                chosen.append(condition)
     if not chosen:
         raise ValueError("At least one condition is required")
     return chosen
@@ -334,6 +383,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dry_run", action="store_true", help="Use deterministic fake scores; do not load a model.")
     parser.add_argument("--conditions", nargs="*", default=None)
     parser.add_argument("--history_turns", type=int, default=3)
+    parser.add_argument(
+        "--representation_budgets",
+        nargs="+",
+        type=int,
+        default=list(DEFAULT_REPRESENTATION_BUDGETS),
+        help="Whitespace-token caps for matched raw-history and structured-state conditions.",
+    )
     parser.add_argument("--future_horizons", nargs="+", type=int, default=list(DEFAULT_FUTURE_HORIZONS))
     parser.add_argument("--source_tail_words", type=int, default=DEFAULT_SOURCE_TAIL_WORDS)
     parser.add_argument("--candidate_head_words", type=int, default=DEFAULT_CANDIDATE_HEAD_WORDS)
@@ -376,6 +432,9 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("max_episodes_per_category must be positive")
     if args.history_turns < 0:
         raise ValueError("history_turns cannot be negative")
+    args.representation_budgets = list(dict.fromkeys(args.representation_budgets))
+    if not args.representation_budgets or any(value < 32 for value in args.representation_budgets):
+        raise ValueError("representation_budgets must contain unique positive values of at least 32")
     args.future_horizons = list(dict.fromkeys(args.future_horizons))
     if not args.future_horizons:
         raise ValueError("At least one future horizon is required")
@@ -396,11 +455,16 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("max_retry_tokens must be greater than max_tokens when retries are enabled")
     if args.audit_sample_size_per_outcome < 1:
         raise ValueError("audit_sample_size_per_outcome must be positive")
-    args.conditions = normalize_conditions(args.conditions)
+    args.conditions = normalize_conditions(args.conditions, args.representation_budgets)
     if args.output_dir is None:
         args.output_dir = DEFAULT_OUTPUT_ROOT / model_output_name(args.model_name)
-    if args.strict_all_conditions and not set(DEFAULT_CONDITIONS).issubset(args.conditions):
-        raise ValueError("strict_all_conditions requires all seven confirmatory conditions")
+    required = {
+        matched_condition_id(condition, budget)
+        for budget in args.representation_budgets
+        for condition in MATCHED_BASE_CONDITIONS
+    }
+    if args.strict_all_conditions and not required.issubset(args.conditions):
+        raise ValueError("strict_all_conditions requires all five matched conditions at every budget")
 
 
 def prepared_path(args: argparse.Namespace) -> Path:
@@ -429,6 +493,10 @@ def load_prepare_manifest(args: argparse.Namespace) -> dict[str, Any]:
         raise RuntimeError("Scoring/analysis seed must match the preparation seed")
     if int(args.history_turns) != int(manifest.get("history_turns", args.history_turns)):
         raise RuntimeError("Scoring/analysis history length must match the prepared representations")
+    if list(args.representation_budgets) != list(
+        manifest.get("representation_budgets", args.representation_budgets)
+    ):
+        raise RuntimeError("Scoring/analysis representation budgets must match preparation")
     if list(args.future_horizons) != list(manifest.get("future_horizons", args.future_horizons)):
         raise RuntimeError("Scoring/analysis future horizons must match preparation")
     for argument_name in ("source_tail_words", "candidate_head_words", "assumption_budget"):
@@ -647,6 +715,17 @@ def build_episode_records(
         all_assumptions = normalize_text_list(turn.get("assumptions"))
         substantive_position += 1
         previous = history[-history_turns:] if history_turns else []
+        previous_records = [
+            {
+                "turn_id": item["turn_id"],
+                "turn_idx": item["turn_idx"],
+                "substantive_position": item["substantive_position"],
+                "turn_text": item["turn_text"],
+                "explicit_texts": list(item["explicit_texts"]),
+                "assumption_texts": list(item["assumption_texts"]),
+            }
+            for item in previous
+        ]
         record: TurnRecord = {
             "turn_id": f"{category}:{episode_id}:{turn_idx}",
             "category": category,
@@ -669,6 +748,7 @@ def build_episode_records(
             "all_assumption_texts": all_assumptions,
             "history_turn_ids": [item["turn_id"] for item in previous],
             "history_turn_texts": [item["source_tail_text"] for item in previous],
+            "history_turn_records": previous_records,
             "original_turn_indices": provenance_indices,
             "merge_provenance_present": provenance_present,
         }
@@ -733,6 +813,17 @@ def build_episode_records(
                     "original_boundary_verified": boundary_verified,
                     "history_turn_ids": source["history_turn_ids"],
                     "history_turn_texts": source["history_turn_texts"],
+                    "context_turns": [
+                        *source["history_turn_records"],
+                        {
+                            "turn_id": source["turn_id"],
+                            "turn_idx": source["turn_idx"],
+                            "substantive_position": source["substantive_position"],
+                            "turn_text": source["turn_text"],
+                            "explicit_texts": list(source["explicit_texts"]),
+                            "assumption_texts": list(source["assumption_texts"]),
+                        },
+                    ],
                     "history_turn_count": len(source["history_turn_ids"]),
                     "true_next_turn_id": target["turn_id"],
                     "true_next_turn_idx": target["turn_idx"],
@@ -1092,6 +1183,7 @@ def choose_donors(
             "donor_fallback_level": fallback,
             "donor_assumption_count": len(donor["assumption_texts"]) if donor else 0,
             "donor_assumptions": donor["assumption_texts"] if donor else [],
+            "donor_all_assumptions": donor["all_assumption_texts"] if donor else [],
             "control_unavailable_reason": unavailable_reason,
         }
         pair["donors"][condition] = audit
@@ -1103,7 +1195,159 @@ def format_bullets(values: list[str], empty_value: str) -> str:
     return "\n".join(f"- {value}" for value in values) if values else empty_value
 
 
+def whitespace_token_count(text: str) -> int:
+    return len(text.split())
+
+
+def deduplicate_context_state(context_turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Retain the most recent occurrence of each state item without changing turn order."""
+    retained: list[dict[str, Any]] = [dict(turn, explicit_texts=[], assumption_texts=[]) for turn in context_turns]
+    for field in ("explicit_texts", "assumption_texts"):
+        seen: set[str] = set()
+        for index in range(len(context_turns) - 1, -1, -1):
+            values = list(context_turns[index].get(field, []))
+            chosen: list[str] = []
+            for value in reversed(values):
+                key = re.sub(r"\s+", " ", str(value)).strip().casefold()
+                if key and key not in seen:
+                    seen.add(key)
+                    chosen.append(str(value).strip())
+            retained[index][field] = list(reversed(chosen))
+    return retained
+
+
+def context_turn_header(index: int, count: int, kind: str | None = None) -> str:
+    offset = index - (count - 1)
+    turn_name = "t (current)" if offset == 0 else f"t{offset}"
+    suffix = f" {kind}" if kind else ""
+    return f"[Turn {turn_name}{suffix}]"
+
+
+def format_raw_history(pair: dict[str, Any], budget: int) -> str:
+    context = list(pair["context_turns"])
+    headers = [context_turn_header(index, len(context), "raw") for index in range(len(context))]
+    remaining = budget - sum(whitespace_token_count(header) for header in headers)
+    if remaining < 0:
+        raise ValueError(f"Budget {budget} is too small for {len(context)} turn headers")
+    selected: list[list[str]] = [[] for _ in context]
+    for index in range(len(context) - 1, -1, -1):
+        if remaining == 0:
+            break
+        words = str(context[index]["turn_text"]).split()
+        take = min(remaining, len(words))
+        selected[index] = words[-take:] if take else []
+        remaining -= take
+    lines: list[str] = []
+    for header, words in zip(headers, selected):
+        lines.append(header)
+        if words:
+            lines.append(" ".join(words))
+    representation = "\n".join(lines)
+    if whitespace_token_count(representation) > budget:
+        raise AssertionError("Raw history exceeded its representation budget")
+    return representation
+
+
+def replace_context_assumptions(
+    context: list[dict[str, Any]],
+    donor_assumptions: list[str],
+) -> list[dict[str, Any]]:
+    replacement = [dict(turn, assumption_texts=[]) for turn in context]
+    cursor = 0
+    for index in range(len(context) - 1, -1, -1):
+        turn = context[index]
+        count = len(turn.get("assumption_texts", []))
+        replacement[index]["assumption_texts"] = donor_assumptions[cursor:cursor + count]
+        cursor += count
+    return replacement
+
+
+def format_structured_history(
+    pair: dict[str, Any],
+    budget: int,
+    *,
+    include_assumptions: bool,
+    donor_assumptions: list[str] | None = None,
+) -> str:
+    context = deduplicate_context_state(list(pair["context_turns"]))
+    if donor_assumptions is not None:
+        context = replace_context_assumptions(context, list(dict.fromkeys(donor_assumptions)))
+    headers: list[tuple[str, str, str | None]] = []
+    for index in range(len(context)):
+        headers.append(
+            (
+                context_turn_header(index, len(context)),
+                "Explicit:",
+                "Implicit:" if include_assumptions else None,
+            )
+        )
+    fixed_words = sum(
+        whitespace_token_count(line)
+        for header_group in headers
+        for line in header_group
+        if line is not None
+    )
+    remaining = budget - fixed_words
+    if remaining < 0:
+        raise ValueError(f"Budget {budget} is too small for {len(context)} structured turn headers")
+    selected_explicit: list[list[str]] = [[] for _ in context]
+    selected_implicit: list[list[str]] = [[] for _ in context]
+    for index in range(len(context) - 1, -1, -1):
+        explicit_values = list(context[index].get("explicit_texts", []))
+        implicit_values = list(context[index].get("assumption_texts", [])) if include_assumptions else []
+        for item_index in range(max(len(explicit_values), len(implicit_values))):
+            for values, destination in (
+                (explicit_values, selected_explicit[index]),
+                (implicit_values, selected_implicit[index]),
+            ):
+                if item_index >= len(values) or remaining <= 1:
+                    continue
+                words = str(values[item_index]).split()
+                take = min(len(words), remaining - 1)
+                if take:
+                    destination.append("- " + " ".join(words[:take]))
+                    remaining -= take + 1
+            if remaining <= 1:
+                break
+        if remaining <= 1:
+            break
+    lines: list[str] = []
+    for index, (turn_header, explicit_header, implicit_header) in enumerate(headers):
+        lines.extend((turn_header, explicit_header, *selected_explicit[index]))
+        if implicit_header is not None:
+            lines.extend((implicit_header, *selected_implicit[index]))
+    representation = "\n".join(lines)
+    if whitespace_token_count(representation) > budget:
+        raise AssertionError("Structured history exceeded its representation budget")
+    return representation
+
+
 def format_representation(pair: dict[str, Any], condition: str) -> str:
+    base_condition, budget = parse_matched_condition(condition)
+    if base_condition is not None and budget is not None:
+        if base_condition == "raw_history":
+            return format_raw_history(pair, budget)
+        if base_condition == "structured_explicit_history":
+            return format_structured_history(pair, budget, include_assumptions=False)
+        if base_condition == "structured_explicit_assumption_history":
+            return format_structured_history(pair, budget, include_assumptions=True)
+        donor_key = {
+            "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
+            "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
+        }.get(base_condition)
+        if donor_key is not None:
+            donor = pair["donors"].get(donor_key, {})
+            if donor.get("control_unavailable_reason"):
+                raise ValueError(f"Condition {condition} is unavailable for {pair['pair_id']}")
+            donor_assumptions = list(
+                donor.get("donor_all_assumptions") or donor.get("donor_assumptions") or []
+            )
+            return format_structured_history(
+                pair,
+                budget,
+                include_assumptions=True,
+                donor_assumptions=donor_assumptions,
+            )
     explicit = format_bullets(pair["source_explicit_texts"], EMPTY_EXPLICIT)
     assumptions = format_bullets(pair["source_assumption_texts"], EMPTY_ASSUMPTIONS)
     all_assumptions = format_bullets(pair["source_all_assumption_texts"], EMPTY_ASSUMPTIONS)
@@ -1149,19 +1393,33 @@ def format_representation(pair: dict[str, Any], condition: str) -> str:
 
 def build_conditions(pair: dict[str, Any], conditions: list[str]) -> None:
     for condition in conditions:
-        donor = pair["donors"].get(condition)
+        base_condition, budget = parse_matched_condition(condition)
+        donor_key = {
+            "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
+            "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
+        }.get(base_condition)
+        donor = pair["donors"].get(donor_key or condition)
         unavailable = donor.get("control_unavailable_reason") if donor else None
         if unavailable:
             pair["conditions"][condition] = {
                 "available": False,
                 "control_unavailable_reason": unavailable,
                 "source_representation": None,
+                "base_condition": base_condition,
+                "representation_budget": budget,
+                "representation_token_count": None,
+                "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER if budget else None,
             }
         else:
+            representation = format_representation(pair, condition)
             pair["conditions"][condition] = {
                 "available": True,
                 "control_unavailable_reason": None,
-                "source_representation": format_representation(pair, condition),
+                "source_representation": representation,
+                "base_condition": base_condition,
+                "representation_budget": budget,
+                "representation_token_count": whitespace_token_count(representation),
+                "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER if budget else None,
             }
 
 
@@ -1217,9 +1475,22 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             raise ValueError(f"Pair {pair['pair_id']} is missing condition {condition}")
         if metadata["available"] and not metadata["source_representation"]:
             raise ValueError(f"Pair {pair['pair_id']} has an empty representation for {condition}")
+        base_condition, budget = parse_matched_condition(condition)
+        if metadata["available"] and base_condition is not None and budget is not None:
+            observed = whitespace_token_count(str(metadata["source_representation"]))
+            if observed != int(metadata["representation_token_count"]):
+                raise ValueError(f"Representation token-count mismatch for {pair['pair_id']} / {condition}")
+            if observed > budget:
+                raise ValueError(f"Representation budget exceeded for {pair['pair_id']} / {condition}")
+            if metadata.get("budget_tokenizer") != REPRESENTATION_BUDGET_TOKENIZER:
+                raise ValueError(f"Missing budget-tokenizer audit field for {pair['pair_id']} / {condition}")
 
 
 def pair_csv_row(pair: dict[str, Any]) -> dict[str, Any]:
+    context_explicit = sum(len(turn.get("explicit_texts", [])) for turn in pair.get("context_turns", []))
+    context_assumptions = sum(
+        len(turn.get("assumption_texts", [])) for turn in pair.get("context_turns", [])
+    )
     return {
         "pair_id": pair["pair_id"],
         "category": pair["category"],
@@ -1237,6 +1508,8 @@ def pair_csv_row(pair: dict[str, Any]) -> dict[str, Any]:
         "assumption_count": len(pair["source_assumption_texts"]),
         "all_assumption_count": len(pair["source_all_assumption_texts"]),
         "history_turn_count": pair["history_turn_count"],
+        "context_explicit_count": context_explicit,
+        "context_assumption_count": context_assumptions,
         "original_boundary_verified": pair["original_boundary_verified"],
         "source_original_turn_indices_json": json.dumps(pair["source_original_turn_indices"]),
         "true_next_original_turn_indices_json": json.dumps(pair["true_next_original_turn_indices"]),
@@ -1257,13 +1530,14 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
     if not category_files:
         raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
     logger.info(
-        "Preparing representation baseline: version=%s prompt=%s input=%s categories=%s files=%d seed=%d conditions=%s",
+        "Preparing matched-history representation experiment: version=%s prompt=%s input=%s categories=%s files=%d seed=%d budgets=%s conditions=%s",
         SCRIPT_VERSION,
         PROMPT_VERSION,
         args.input_dir,
         categories,
         len(category_files),
         args.seed,
+        args.representation_budgets,
         args.conditions,
     )
     turns: list[TurnRecord] = []
@@ -1365,6 +1639,10 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "prepared_pairs_jsonl": str(prepared),
         "prepared_pairs_sha256": file_hash(prepared),
         "conditions": args.conditions,
+        "representation_budgets": args.representation_budgets,
+        "representation_budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
+        "representation_budget_policy": "headers_plus_content_capped; content allocated current-to-earlier; output chronological",
+        "state_deduplication": "exact_normalized_text_keep_most_recent",
         "future_horizons": args.future_horizons,
         "history_turns": args.history_turns,
         "source_tail_words": args.source_tail_words,
@@ -1390,7 +1668,8 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
             condition: sum(
                 pair["conditions"].get(condition, {}).get("available") is False for pair in pairs
             )
-            for condition in CONTROL_CONDITIONS
+            for condition in args.conditions
+            if condition_donor_key(condition) is not None
         },
         "unavailable_control_reasons": {
             condition: {
@@ -1404,7 +1683,8 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
                     dtype="object",
                 ).value_counts().items()
             }
-            for condition in CONTROL_CONDITIONS
+            for condition in args.conditions
+            if condition_donor_key(condition) is not None
         },
         "normalization_error_count": len(errors),
         "normalization_errors": errors,
@@ -1809,7 +2089,8 @@ def score_row(
     negative = task["negative_candidate"]
     candidate_a = task["candidate_a"]
     candidate_b = task["candidate_b"]
-    donor = pair["donors"].get(task["condition"], {})
+    condition_metadata = pair["conditions"].get(task["condition"], {})
+    donor = pair["donors"].get(condition_donor_key(task["condition"]) or task["condition"], {})
     positive_preference = None
     if parsed["parse_success"]:
         chosen_candidate = candidate_a if parsed["choice"] == "A" else candidate_b
@@ -1819,6 +2100,10 @@ def score_row(
         "comparison_id": task["comparison_id"],
         "presentation_order": task["presentation_order"],
         "condition": task["condition"],
+        "base_condition": condition_metadata.get("base_condition"),
+        "representation_budget": condition_metadata.get("representation_budget"),
+        "representation_token_count": condition_metadata.get("representation_token_count"),
+        "budget_tokenizer": condition_metadata.get("budget_tokenizer"),
         "future_horizon": int(pair["future_horizon"]),
         "model_name": args.model_name,
         "prompt_version": PROMPT_VERSION,
@@ -1890,7 +2175,10 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "model_name": args.model_name,
         "prompt_version": PROMPT_VERSION,
         "conditions": args.conditions,
+        "representation_budgets": args.representation_budgets,
+        "representation_budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
         "future_horizons": args.future_horizons,
+        "history_turns": args.history_turns,
         "temperature": args.temperature,
         "top_p": args.top_p,
         "min_p": args.min_p,
@@ -2215,8 +2503,18 @@ def build_metrics(
                 "true_future_turn_idx": pair["true_next_turn_idx"],
                 "true_future_turn_move_label": pair["true_next_turn_move_label"],
                 "condition": condition,
+                "base_condition": metadata.get("base_condition"),
+                "representation_budget": metadata.get("representation_budget"),
+                "representation_token_count": metadata.get("representation_token_count"),
+                "budget_tokenizer": metadata.get("budget_tokenizer"),
                 "explicit_count": len(pair["source_explicit_texts"]),
                 "assumption_count": len(pair["source_assumption_texts"]),
+                "context_explicit_count": sum(
+                    len(turn.get("explicit_texts", [])) for turn in pair.get("context_turns", [])
+                ),
+                "context_assumption_count": sum(
+                    len(turn.get("assumption_texts", [])) for turn in pair.get("context_turns", [])
+                ),
                 "all_assumption_count": len(pair["source_all_assumption_texts"]),
                 "source_word_count": pair["source_word_count"],
                 "original_boundary_verified": pair["original_boundary_verified"],
@@ -2245,7 +2543,9 @@ def build_metrics(
                 if aggregated is not None:
                     metric.update(aggregated)
                     metric["full_retained"] = True
-                    metric["assumption_eligible"] = bool(pair["source_assumption_texts"])
+                    metric["assumption_eligible"] = bool(
+                        any(turn.get("assumption_texts") for turn in pair.get("context_turns", []))
+                    )
                     metric["sparse_explicit"] = bool(
                         pair["source_assumption_texts"] and len(pair["source_explicit_texts"]) <= 4
                     )
@@ -2254,15 +2554,28 @@ def build_metrics(
                     )
             long_rows.append(metric)
     long_df = pd.DataFrame(long_rows)
-    complete_by_pair: dict[str, bool] = {}
+    long_df["complete_case"] = False
     selected_rows = long_df[long_df["condition"].isin(args.conditions)]
-    for pair_id, group in selected_rows.groupby("pair_id", sort=False):
-        complete_by_pair[str(pair_id)] = bool(
-            len(group) == len(args.conditions)
-            and set(group["condition"]) == set(args.conditions)
+    for (pair_id, budget), group in selected_rows.groupby(
+        ["pair_id", "representation_budget"], sort=False, dropna=False
+    ):
+        if pd.isna(budget):
+            expected = [condition for condition in args.conditions if parse_matched_condition(condition)[1] is None]
+            mask = (long_df["pair_id"] == pair_id) & long_df["representation_budget"].isna()
+        else:
+            expected = [
+                condition
+                for condition in args.conditions
+                if parse_matched_condition(condition)[1] == int(budget)
+            ]
+            mask = (long_df["pair_id"] == pair_id) & (long_df["representation_budget"] == budget)
+        complete = bool(
+            expected
+            and len(group) == len(expected)
+            and set(group["condition"]) == set(expected)
             and group["full_retained"].all()
         )
-    long_df["complete_case"] = long_df["pair_id"].map(complete_by_pair).fillna(False).astype(bool)
+        long_df.loc[mask, "complete_case"] = complete
     for index, row in long_df.iterrows():
         flags = []
         if bool(row["full_retained"]):
@@ -2279,18 +2592,23 @@ def build_metrics(
     metadata_columns = [
         "pair_id", "category", "episode_id", "source_turn_idx", "future_horizon",
         "true_future_turn_idx", "true_future_turn_move_label", "explicit_count", "assumption_count",
-        "all_assumption_count", "source_word_count", "original_boundary_verified",
+        "all_assumption_count", "context_explicit_count", "context_assumption_count",
+        "source_word_count", "original_boundary_verified",
     ]
-    wide = long_df[metadata_columns].drop_duplicates("pair_id").set_index("pair_id")
+    wide_parts = [long_df[metadata_columns].drop_duplicates("pair_id").set_index("pair_id")]
+    wide_value_columns = (
+        "accuracy", "order_consistency_rate", "parsed_comparison_row_count", "complete_comparison_count",
+        "condition_available", "control_unavailable_reason", "full_retained",
+        "assumption_eligible", "sparse_explicit", "dense_explicit", "complete_case",
+        "representation_budget", "representation_token_count", "budget_tokenizer",
+    )
     for condition in args.conditions:
         part = long_df[long_df["condition"] == condition].set_index("pair_id")
-        for column in (
-            "accuracy", "order_consistency_rate", "parsed_comparison_row_count", "complete_comparison_count",
-            "condition_available", "control_unavailable_reason", "full_retained",
-            "assumption_eligible", "sparse_explicit", "dense_explicit", "complete_case",
-        ):
-            wide[f"{condition}__{column}"] = part[column]
-    return long_df, wide.reset_index()
+        selected = part[list(wide_value_columns)].rename(
+            columns={column: f"{condition}__{column}" for column in wide_value_columns}
+        )
+        wide_parts.append(selected)
+    return long_df, pd.concat(wide_parts, axis=1).reset_index()
 
 
 def condition_summary(
@@ -2319,6 +2637,8 @@ def condition_summary(
             row: dict[str, Any] = {
                 "analysis_subset": subset,
                 "condition": condition,
+                "base_condition": parse_matched_condition(str(condition))[0],
+                "representation_budget": parse_matched_condition(str(condition))[1],
                 "future_horizon": int(future_horizon),
                 group_column: group_value,
                 "pair_count": len(group),
@@ -2373,6 +2693,8 @@ def overall_condition_summary(long_df: pd.DataFrame, args: argparse.Namespace) -
                 row: dict[str, Any] = {
                     "analysis_subset": subset,
                     "condition": condition,
+                    "base_condition": parse_matched_condition(str(condition))[0],
+                    "representation_budget": parse_matched_condition(str(condition))[1],
                     "future_horizon": future_horizon,
                     "pair_count": int(len(group)),
                 }
@@ -2395,6 +2717,29 @@ def overall_condition_summary(long_df: pd.DataFrame, args: argparse.Namespace) -
 
 def contrast_list(conditions: list[str]) -> list[tuple[str, str]]:
     rows: list[tuple[str, str]] = []
+    budgets = sorted(
+        {
+            budget
+            for condition in conditions
+            for _, budget in [parse_matched_condition(condition)]
+            if budget is not None
+        }
+    )
+    for budget in budgets:
+        raw = matched_condition_id("raw_history", budget)
+        explicit = matched_condition_id("structured_explicit_history", budget)
+        combined = matched_condition_id("structured_explicit_assumption_history", budget)
+        shuffled = matched_condition_id("structured_explicit_shuffled_assumption_history", budget)
+        wrong = matched_condition_id("structured_explicit_wrong_episode_assumption_history", budget)
+        for contrast in (
+            (combined, raw),
+            (combined, explicit),
+            (combined, shuffled),
+            (combined, wrong),
+            (explicit, raw),
+        ):
+            if contrast[0] in conditions and contrast[1] in conditions:
+                rows.append(contrast)
     for contrast in REQUIRED_CONTRASTS:
         if contrast[0] in conditions and contrast[1] in conditions and contrast not in rows:
             rows.append(contrast)
@@ -2474,6 +2819,13 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
                         "future_horizon": future_horizon,
                         "target_condition": target,
                         "baseline_condition": baseline,
+                        "target_base_condition": parse_matched_condition(target)[0],
+                        "baseline_base_condition": parse_matched_condition(baseline)[0],
+                        "representation_budget": (
+                            parse_matched_condition(target)[1]
+                            if parse_matched_condition(target)[1] == parse_matched_condition(baseline)[1]
+                            else None
+                        ),
                         "metric": "accuracy",
                         "paired_sample_size": len(delta_df),
                         "mean_improvement": result["mean"],
@@ -2505,6 +2857,8 @@ def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: a
                 {
                     "future_horizon": future_horizon,
                     "condition": condition,
+                    "base_condition": parse_matched_condition(condition)[0],
+                    "representation_budget": parse_matched_condition(condition)[1],
                     "pair_count": total,
                     "candidate_complete_pair_count": int(group["candidate_pool_complete"].sum()),
                     "condition_available_pair_count": int(group["condition_available"].sum()),
@@ -2525,7 +2879,27 @@ def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: a
 
 
 def build_decomposition_table(pairwise: pd.DataFrame) -> pd.DataFrame:
-    questions = {
+    questions: dict[tuple[str, str], str] = {}
+    if not pairwise.empty and "representation_budget" in pairwise:
+        budgets = sorted(
+            int(value)
+            for value in pairwise["representation_budget"].dropna().unique().tolist()
+        )
+        for budget in budgets:
+            combined = matched_condition_id("structured_explicit_assumption_history", budget)
+            questions.update(
+                {
+                    (combined, matched_condition_id("raw_history", budget)):
+                        "structured_explicit_assumption_state_vs_raw_history",
+                    (combined, matched_condition_id("structured_explicit_history", budget)):
+                        "incremental_assumption_value_in_structured_history",
+                    (combined, matched_condition_id("structured_explicit_shuffled_assumption_history", budget)):
+                        "true_history_assumptions_vs_shuffled_control",
+                    (combined, matched_condition_id("structured_explicit_wrong_episode_assumption_history", budget)):
+                        "true_history_assumptions_vs_wrong_episode_control",
+                }
+            )
+    questions.update({
         ("explicit_plus_top3_assumptions", "explicit_only"): "incremental_implicit_value_after_abstraction",
         (
             "explicit_plus_top3_assumptions",
@@ -2541,7 +2915,7 @@ def build_decomposition_table(pairwise: pd.DataFrame) -> pd.DataFrame:
         ("explicit_plus_top1_assumption", "explicit_only"): "first_assumption_budget",
         ("explicit_plus_assumptions", "explicit_plus_top1_assumption"): "all_assumptions_vs_first_one",
         ("explicit_plus_assumptions", "explicit_plus_top3_assumptions"): "all_assumptions_vs_first_three",
-    }
+    })
     if pairwise.empty:
         return pd.DataFrame(columns=[*pairwise.columns, "diagnostic_question", "contrast"])
     selected = pairwise[
@@ -2583,25 +2957,40 @@ def build_audit_sample(
     columns = [
         "audit_outcome", "audit_priority", "pair_id", "category", "episode_id",
         "future_horizon", "true_future_turn_move_label", "explicit_count", "assumption_count",
-        "accuracy_delta", "explicit_accuracy", "combined_accuracy",
+        "representation_budget", "target_condition", "baseline_condition",
+        "accuracy_delta", "baseline_accuracy", "target_accuracy",
         "original_boundary_verified", "source_turn_text", "source_tail_text",
         "source_explicit_json", "source_assumptions_json", "source_all_assumptions_json",
-        "history_turns_json", "true_future_turn_text",
+        "history_turns_json", "raw_history_representation", "structured_state_representation",
+        "true_future_turn_text",
     ]
-    required = {"explicit_only", "explicit_plus_top3_assumptions"}
-    if not required.issubset(set(args.conditions)):
+    available_budgets = sorted(
+        budget
+        for condition in args.conditions
+        for _, budget in [parse_matched_condition(condition)]
+        if budget is not None
+    )
+    if available_budgets:
+        budget = 256 if 256 in available_budgets else available_budgets[len(available_budgets) // 2]
+        baseline_condition = matched_condition_id("raw_history", budget)
+        target_condition = matched_condition_id("structured_explicit_assumption_history", budget)
+    else:
+        budget = None
+        baseline_condition = "explicit_only"
+        target_condition = "explicit_plus_top3_assumptions"
+    if not {baseline_condition, target_condition}.issubset(set(args.conditions)):
         return pd.DataFrame(columns=columns)
     lookup = {pair["pair_id"]: pair for pair in pairs}
-    explicit = long_df[long_df["condition"] == "explicit_only"].set_index("pair_id")
-    combined = long_df[long_df["condition"] == "explicit_plus_top3_assumptions"].set_index("pair_id")
+    baseline_rows = long_df[long_df["condition"] == baseline_condition].set_index("pair_id")
+    target_rows = long_df[long_df["condition"] == target_condition].set_index("pair_id")
     rows: list[dict[str, Any]] = []
-    for pair_id in explicit.index.intersection(combined.index):
-        explicit_row = explicit.loc[pair_id]
-        combined_row = combined.loc[pair_id]
-        if not bool(explicit_row["assumption_eligible"] and combined_row["assumption_eligible"]):
+    for pair_id in baseline_rows.index.intersection(target_rows.index):
+        baseline_row = baseline_rows.loc[pair_id]
+        target_row = target_rows.loc[pair_id]
+        if not bool(baseline_row["assumption_eligible"] and target_row["assumption_eligible"]):
             continue
         pair = lookup[str(pair_id)]
-        accuracy_delta = float(combined_row["accuracy"]) - float(explicit_row["accuracy"])
+        accuracy_delta = float(target_row["accuracy"]) - float(baseline_row["accuracy"])
         outcome = "win" if accuracy_delta > 0 else "loss" if accuracy_delta < 0 else "tie"
         rows.append(
             {
@@ -2613,9 +3002,12 @@ def build_audit_sample(
                 "true_future_turn_move_label": pair["true_next_turn_move_label"],
                 "explicit_count": len(pair["source_explicit_texts"]),
                 "assumption_count": len(pair["source_assumption_texts"]),
+                "representation_budget": budget,
+                "target_condition": target_condition,
+                "baseline_condition": baseline_condition,
                 "accuracy_delta": accuracy_delta,
-                "explicit_accuracy": float(explicit_row["accuracy"]),
-                "combined_accuracy": float(combined_row["accuracy"]),
+                "baseline_accuracy": float(baseline_row["accuracy"]),
+                "target_accuracy": float(target_row["accuracy"]),
                 "original_boundary_verified": pair["original_boundary_verified"],
                 "source_turn_text": pair["source_turn_text"],
                 "source_tail_text": pair["source_tail_text"],
@@ -2625,6 +3017,8 @@ def build_audit_sample(
                     pair["source_all_assumption_texts"], ensure_ascii=False
                 ),
                 "history_turns_json": json.dumps(pair["history_turn_texts"], ensure_ascii=False),
+                "raw_history_representation": pair["conditions"][baseline_condition]["source_representation"],
+                "structured_state_representation": pair["conditions"][target_condition]["source_representation"],
                 "true_future_turn_text": pair["true_next_turn_text"],
                 "_tie_order": seed_int(f"audit:{pair_id}:{args.seed}"),
             }
@@ -2648,7 +3042,7 @@ def build_audit_sample(
     return result.reindex(columns=columns)
 
 
-def diagnostic_gate(
+def legacy_diagnostic_gate(
     pairwise: pd.DataFrame,
     long_df: pd.DataFrame,
     coverage: pd.DataFrame,
@@ -2770,6 +3164,135 @@ def diagnostic_gate(
     }
 
 
+def diagnostic_gate(
+    pairwise: pd.DataFrame,
+    long_df: pd.DataFrame,
+    coverage: pd.DataFrame,
+) -> dict[str, Any]:
+    budgets = []
+    if not pairwise.empty and "representation_budget" in pairwise:
+        budgets = sorted(int(value) for value in pairwise["representation_budget"].dropna().unique())
+    if not budgets:
+        return legacy_diagnostic_gate(pairwise, long_df, coverage)
+
+    primary_horizon = 1
+    primary_budget = 256 if 256 in budgets else budgets[len(budgets) // 2]
+
+    def condition(base: str, budget: int = primary_budget) -> str:
+        return matched_condition_id(base, budget)
+
+    def contrast_row(target: str, baseline: str) -> dict[str, Any] | None:
+        match = pairwise[
+            (pairwise["analysis_subset"] == "assumption_eligible")
+            & (pairwise["future_horizon"] == primary_horizon)
+            & (pairwise["target_condition"] == target)
+            & (pairwise["baseline_condition"] == baseline)
+            & (pairwise["metric"] == "accuracy")
+        ]
+        return None if match.empty else match.iloc[0].to_dict()
+
+    raw = condition("raw_history")
+    explicit = condition("structured_explicit_history")
+    combined = condition("structured_explicit_assumption_history")
+    shuffled = condition("structured_explicit_shuffled_assumption_history")
+    wrong = condition("structured_explicit_wrong_episode_assumption_history")
+    primary = contrast_row(combined, raw)
+    incremental = contrast_row(combined, explicit)
+    shuffled_control = contrast_row(combined, shuffled)
+    wrong_control = contrast_row(combined, wrong)
+
+    budget_curve = {
+        str(budget): contrast_row(
+            condition("structured_explicit_assumption_history", budget),
+            condition("raw_history", budget),
+        )
+        for budget in budgets
+    }
+    target_rows = long_df[long_df["condition"] == combined].set_index("pair_id")
+    baseline_rows = long_df[long_df["condition"] == raw].set_index("pair_id")
+    category_values: list[dict[str, Any]] = []
+    for pair_id in target_rows.index.intersection(baseline_rows.index):
+        target_row = target_rows.loc[pair_id]
+        baseline_row = baseline_rows.loc[pair_id]
+        if (
+            int(target_row["future_horizon"]) == primary_horizon
+            and bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"])
+        ):
+            category_values.append(
+                {
+                    "category": str(target_row["category"]),
+                    "delta": float(target_row["accuracy"]) - float(baseline_row["accuracy"]),
+                }
+            )
+    category_deltas = (
+        {
+            str(key): float(value)
+            for key, value in pd.DataFrame(category_values).groupby("category")["delta"].mean().items()
+        }
+        if category_values
+        else {}
+    )
+
+    def supported(row: dict[str, Any] | None) -> bool:
+        return bool(row and row.get("ci95_low") is not None and float(row["ci95_low"]) > 0.0)
+
+    relevant_coverage = coverage
+    if "representation_budget" in coverage:
+        relevant_coverage = coverage[coverage["representation_budget"] == primary_budget]
+    minimum_retained = (
+        float(relevant_coverage["retained_pair_rate"].min()) if not relevant_coverage.empty else 0.0
+    )
+    primary_supported = supported(primary)
+    incremental_supported = supported(incremental)
+    shuffled_supported = supported(shuffled_control)
+    wrong_supported = supported(wrong_control)
+    specificity_supported = shuffled_supported and wrong_supported
+    positive_categories = sum(value > 0 for value in category_deltas.values())
+    category_breadth = positive_categories >= 2
+    coverage_acceptable = minimum_retained >= 0.98
+    if primary_supported and incremental_supported and specificity_supported:
+        interpretation = "structured_explicit_assumption_history_outperforms_matched_raw_history"
+    elif primary_supported:
+        interpretation = "structured_state_gain_without_complete_incremental_or_specificity_support"
+    else:
+        interpretation = "no_robust_structured_state_advantage_over_matched_raw_history"
+    ready_for_cross_model = bool(
+        primary_supported
+        and incremental_supported
+        and specificity_supported
+        and category_breadth
+        and coverage_acceptable
+    )
+    return {
+        "gate_version": "matched-history-gate-v5",
+        "primary_future_horizon": primary_horizon,
+        "primary_representation_budget": primary_budget,
+        "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
+        "primary_contrast": primary,
+        "incremental_assumption_contrast": incremental,
+        "shuffled_control_contrast": shuffled_control,
+        "wrong_episode_control_contrast": wrong_control,
+        "structured_vs_raw_budget_curve": budget_curve,
+        "primary_category_accuracy_deltas": category_deltas,
+        "criteria": {
+            "structured_vs_raw_ci_excludes_zero": primary_supported,
+            "structured_ea_vs_structured_e_ci_excludes_zero": incremental_supported,
+            "shuffled_control_ci_excludes_zero": shuffled_supported,
+            "wrong_episode_control_ci_excludes_zero": wrong_supported,
+            "control_specificity_supported": specificity_supported,
+            "positive_category_count": positive_categories,
+            "category_breadth_at_least_two": category_breadth,
+            "minimum_condition_retained_rate": minimum_retained,
+            "coverage_at_least_98_percent": coverage_acceptable,
+        },
+        "interpretation": interpretation,
+        "ready_for_cross_model_smoke": ready_for_cross_model,
+        "ready_for_full_corpus": False,
+        "full_corpus_blocker": "A different-family judge smoke run and manual audit are required before a full-corpus claim.",
+        "recommended_next_stage": "cross_model_smoke" if ready_for_cross_model else "manual_audit_or_representation_revision",
+    }
+
+
 def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str, Path], args: argparse.Namespace) -> None:
     try:
         import matplotlib
@@ -2799,6 +3322,121 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    matched = long_df[long_df["representation_budget"].notna()].copy()
+    if not matched.empty:
+        primary_horizon = 1
+        budgets = sorted(int(value) for value in matched["representation_budget"].unique())
+        base_labels = {
+            "raw_history": "Raw history",
+            "structured_explicit_history": "Structured explicit history",
+            "structured_explicit_assumption_history": "Structured explicit + assumption history",
+            "structured_explicit_shuffled_assumption_history": "Structured + shuffled assumptions",
+            "structured_explicit_wrong_episode_assumption_history": "Structured + wrong-episode assumptions",
+        }
+        complete = matched[
+            (matched["complete_case"] == True)
+            & (matched["full_retained"] == True)
+            & (matched["future_horizon"] == primary_horizon)
+        ]
+        rows: list[dict[str, Any]] = []
+        for base_condition in MATCHED_BASE_CONDITIONS:
+            for budget in budgets:
+                group = complete[
+                    (complete["base_condition"] == base_condition)
+                    & (complete["representation_budget"] == budget)
+                ]
+                result = cluster_bootstrap(
+                    group,
+                    "accuracy",
+                    seed_label=f"plot:matched:h{primary_horizon}:{base_condition}:b{budget}",
+                    seed=args.seed,
+                    draws=args.bootstrap_draws,
+                )
+                rows.append({"base_condition": base_condition, "budget": budget, **result})
+        plot_df = pd.DataFrame(rows)
+        fig, axis = plt.subplots(figsize=(10.5, 5.8), constrained_layout=True)
+        if complete.empty:
+            axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
+            axis.set_axis_off()
+        else:
+            for base_condition in MATCHED_BASE_CONDITIONS:
+                group = plot_df[plot_df["base_condition"] == base_condition].set_index("budget").reindex(budgets)
+                means = group["mean"].to_numpy(dtype=float)
+                lows = group["ci95_low"].to_numpy(dtype=float)
+                highs = group["ci95_high"].to_numpy(dtype=float)
+                x = np.asarray(budgets, dtype=float)
+                axis.plot(x, means, marker="o", linewidth=1.8, label=base_labels[base_condition])
+                finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
+                if finite.any():
+                    axis.errorbar(
+                        x[finite],
+                        means[finite],
+                        yerr=np.vstack((means[finite] - lows[finite], highs[finite] - means[finite])),
+                        fmt="none",
+                        color="black",
+                        alpha=0.35,
+                        capsize=3,
+                    )
+            axis.axhline(0.5, color="black", linewidth=0.9, linestyle="--", label="Chance")
+            axis.set_xticks(budgets)
+            axis.set_xlabel(f"Source-representation budget ({REPRESENTATION_BUDGET_TOKENIZER})")
+            axis.set_ylabel("Binary accuracy")
+            axis.set_ylim(0.0, 1.0)
+            axis.set_title("Matched-history future-turn accuracy (horizon 1)")
+            axis.legend(loc="best", fontsize=8)
+            axis.grid(axis="y", alpha=0.25)
+        fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
+        fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
+        plt.close(fig)
+
+        contrast_labels = {
+            "raw_history": "Structured E+A - raw history",
+            "structured_explicit_history": "Structured E+A - structured E",
+            "structured_explicit_shuffled_assumption_history": "True - shuffled assumptions",
+            "structured_explicit_wrong_episode_assumption_history": "True - wrong-episode assumptions",
+        }
+        lift = pairwise[
+            (pairwise["analysis_subset"] == "assumption_eligible")
+            & (pairwise["future_horizon"] == primary_horizon)
+            & (pairwise["target_base_condition"] == "structured_explicit_assumption_history")
+            & (pairwise["baseline_base_condition"].isin(contrast_labels))
+            & (pairwise["metric"] == "accuracy")
+        ].copy()
+        fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
+        if lift.empty or lift["mean_improvement"].isna().all():
+            axis.text(0.5, 0.5, "No matched-history lift data available", ha="center", va="center")
+            axis.set_axis_off()
+        else:
+            for baseline_base, group in lift.groupby("baseline_base_condition", sort=False):
+                ordered = group.set_index("representation_budget").reindex(budgets)
+                means = ordered["mean_improvement"].to_numpy(dtype=float)
+                lows = ordered["ci95_low"].to_numpy(dtype=float)
+                highs = ordered["ci95_high"].to_numpy(dtype=float)
+                x = np.asarray(budgets, dtype=float)
+                axis.plot(x, means, marker="o", linewidth=1.8, label=contrast_labels[str(baseline_base)])
+                finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
+                if finite.any():
+                    axis.errorbar(
+                        x[finite],
+                        means[finite],
+                        yerr=np.vstack((means[finite] - lows[finite], highs[finite] - means[finite])),
+                        fmt="none",
+                        color="black",
+                        alpha=0.35,
+                        capsize=3,
+                    )
+            axis.axhline(0.0, color="black", linewidth=0.8)
+            axis.set_xticks(budgets)
+            axis.set_xlabel(f"Source-representation budget ({REPRESENTATION_BUDGET_TOKENIZER})")
+            axis.set_ylabel("Paired accuracy improvement")
+            axis.set_title("Structured-state lifts over matched controls (horizon 1)")
+            axis.legend(loc="best", fontsize=8)
+            axis.grid(axis="y", alpha=0.25)
+        fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
+        fig.savefig(paths["decomposition_png"], dpi=args.plot_dpi, bbox_inches="tight")
+        plt.close(fig)
+        return
 
     labels = {
         "raw_turn": "Raw",
@@ -3064,7 +3702,10 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         (str(row["target_condition"]), int(row["future_horizon"])): row["mean_improvement"]
         for _, row in pairwise_df.iterrows()
         if row["analysis_subset"] == "complete_case"
-        and row["baseline_condition"] == "explicit_only"
+        and (
+            row["baseline_condition"] == "explicit_only"
+            or parse_matched_condition(str(row["baseline_condition"]))[0] == "raw_history"
+        )
         and row["metric"] == "accuracy"
     }
     diagnostic_table = [
@@ -3075,10 +3716,8 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "mean_order_consistency_rate": complete_lookup.get((condition, future_horizon), {}).get(
                 "mean_order_consistency_rate"
             ),
-            "accuracy_lift_vs_explicit_only": (
-                0.0
-                if condition == "explicit_only"
-                else complete_accuracy_lifts.get((condition, future_horizon))
+            "accuracy_lift_vs_prespecified_baseline": complete_accuracy_lifts.get(
+                (condition, future_horizon)
             ),
             "pairs": complete_lookup.get((condition, future_horizon), {}).get("pair_count", 0),
         }
@@ -3116,6 +3755,8 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "seed": args.seed,
         "candidate_count_target": EXPECTED_CANDIDATE_COUNT,
         "conditions": args.conditions,
+        "representation_budgets": prepare_manifest["representation_budgets"],
+        "representation_budget_tokenizer": prepare_manifest["representation_budget_tokenizer"],
         "future_horizons": prepare_manifest["future_horizons"],
         "history_turns": prepare_manifest["history_turns"],
         "source_tail_words": prepare_manifest["source_tail_words"],

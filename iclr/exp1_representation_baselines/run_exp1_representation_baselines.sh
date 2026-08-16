@@ -15,7 +15,7 @@ OUTPUT_ROOT="${OUTPUT_ROOT:-iclr/exp1_representation_baselines/results}"
 EPISODES_PER_PATCH="${EPISODES_PER_PATCH:-5}"
 MAX_EPISODES_PER_CATEGORY="${MAX_EPISODES_PER_CATEGORY-}"
 CATEGORIES_CSV="${CATEGORIES_CSV:-all}"
-CONDITIONS_CSV="${CONDITIONS_CSV:-raw_turn,raw_turn_with_history,raw_turn_plus_assumptions,explicit_only,explicit_plus_top3_assumptions,explicit_plus_shuffled_assumptions,explicit_plus_wrong_episode_assumptions}"
+CONDITIONS_CSV="${CONDITIONS_CSV:-raw_history,structured_explicit_history,structured_explicit_assumption_history,structured_explicit_shuffled_assumption_history,structured_explicit_wrong_episode_assumption_history}"
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-30B-A3B-Instruct-2507}"
 MODEL_OUTPUT_NAME="${MODEL_NAME//\//__}"
 OUTPUT_DIR="${OUTPUT_DIR:-${OUTPUT_ROOT}/${MODEL_OUTPUT_NAME}}"
@@ -34,6 +34,7 @@ TOP_K="${TOP_K:-0}"
 REPETITION_PENALTY="${REPETITION_PENALTY:-1.05}"
 SEED="${SEED:-42}"
 HISTORY_TURNS="${HISTORY_TURNS:-3}"
+REPRESENTATION_BUDGETS_CSV="${REPRESENTATION_BUDGETS_CSV:-128,256,512}"
 FUTURE_HORIZONS_CSV="${FUTURE_HORIZONS_CSV:-1,3,5}"
 SOURCE_TAIL_WORDS="${SOURCE_TAIL_WORDS:-100}"
 CANDIDATE_HEAD_WORDS="${CANDIDATE_HEAD_WORDS:-100}"
@@ -56,6 +57,7 @@ build_common_args() {
   IFS=',' read -r -a CATEGORY_VALUES <<< "${CATEGORIES_CSV}"
   IFS=',' read -r -a CONDITION_VALUES <<< "${CONDITIONS_CSV}"
   IFS=',' read -r -a FUTURE_HORIZON_VALUES <<< "${FUTURE_HORIZONS_CSV}"
+  IFS=',' read -r -a REPRESENTATION_BUDGET_VALUES <<< "${REPRESENTATION_BUDGETS_CSV}"
   COMMON_ARGS=(
     --input_dir "${INPUT_DIR}"
     --output_dir "${OUTPUT_DIR}"
@@ -77,6 +79,7 @@ build_common_args() {
     --repetition_penalty "${REPETITION_PENALTY}"
     --seed "${SEED}"
     --history_turns "${HISTORY_TURNS}"
+    --representation_budgets "${REPRESENTATION_BUDGET_VALUES[@]}"
     --future_horizons "${FUTURE_HORIZON_VALUES[@]}"
     --source_tail_words "${SOURCE_TAIL_WORDS}"
     --candidate_head_words "${CANDIDATE_HEAD_WORDS}"
@@ -155,7 +158,7 @@ submit_stages() {
   export MAX_EPISODES_PER_CATEGORY CATEGORIES_CSV CONDITIONS_CSV MODEL_NAME DOWNLOAD_DIR
   export TENSOR_PARALLEL_SIZE GPU_MEMORY_UTILIZATION PROMPT_BATCH_SIZE MAX_TOKENS MAX_SCORE_RETRIES MAX_RETRY_TOKENS
   export TEMPERATURE TOP_P MIN_P TOP_K REPETITION_PENALTY SEED
-  export HISTORY_TURNS FUTURE_HORIZONS_CSV SOURCE_TAIL_WORDS CANDIDATE_HEAD_WORDS ASSUMPTION_BUDGET
+  export HISTORY_TURNS REPRESENTATION_BUDGETS_CSV FUTURE_HORIZONS_CSV SOURCE_TAIL_WORDS CANDIDATE_HEAD_WORDS ASSUMPTION_BUDGET
   export BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
   export AUDIT_SAMPLE_SIZE_PER_OUTCOME PLOT_DPI
   export ALLOW_FULL_RUN
