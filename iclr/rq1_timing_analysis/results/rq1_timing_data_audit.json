@@ -49,21 +49,20 @@
   "files_discovered": 19990,
   "files_examined": 19990,
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "token_duration_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "token_normalized": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category)",
-    "token_timing_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "token_timing_previous_duration": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "5970596182f6108f97ca4810dce9b7a2d58f56a2",
+    "commit": "240ba755f3352c8bbd71db15885740b7cddc10c7",
     "dirty": true
   },
   "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
   "max_episodes": null,
-  "observation_csv_sha256": "cc7a74cc8785d52073e3fbce10a7905140d6cd6ee6f63e3b8f49ea8878ebc463",
+  "observation_csv_sha256": "587c1852a08ed30c9e0f81ef64b41723089a30183f4eb623c95491c6681e0397",
   "observation_hash_method": "sha256(canonical JSON per row in construction order, newline-delimited)",
-  "observation_rows_sha256": "d6f43500627c66bd438562a910f8575db6ac03dd43daca8378440017a06287de",
+  "observation_rows_sha256": "b24904d39306937f171355ed99c292320b215edbc0b321d22206368f3bc79305",
   "overlap_count": 4186,
   "overlap_rate": 0.01734885031746821,
   "package_versions": {
@@ -86,8 +85,8 @@
     "all"
   ],
   "retained_observation_count": 241284,
-  "script_sha256": "6ad072f95c7e6c963440c88bcf111ab522edc8c2cde1a961bad7fed96b18707f",
-  "script_version": "1.1.0",
+  "script_sha256": "2039572285f3b453c2ad03a5a01c476d2616d028913cb95a359c0f8b0946fbcf",
+  "script_version": "2.0.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",

@@ -1,12 +1,12 @@
 {
   "artifact_sha256": {
-    "rq1_timing_coefficients.csv": "8d02b2981d1472c78bc719a43bf29780ae0d8f18f28a811116a1ae07edba6826",
-    "rq1_timing_comparison.pdf": "4f7a09214b73eae450d103d8a980b3a06e19f142dfad3718ebc3b073dcf48b15",
-    "rq1_timing_comparison.png": "ea351c24f082e3361949d96393ed397519c3720b71c8c382228d4b38b60e0c0d",
-    "rq1_timing_data_audit.json": "5cb4da6a8f025ea1cc2f610fdc38ce476712dae8155eb401b6fcb8cf7ac43cd6",
-    "rq1_timing_model_fit.csv": "6a132367e1d6cb5e28a4588189d899dcb9c51e18406eb1fc990bed22103d4f11",
-    "rq1_timing_observations.csv": "cc7a74cc8785d52073e3fbce10a7905140d6cd6ee6f63e3b8f49ea8878ebc463",
-    "rq1_timing_stance_comparison.csv": "45e940f318afcbb85f5078cda6b82d51aa6f9fd2dc5607feac553fa8457094b3"
+    "rq1_timing_coefficients.csv": "8915ffdcb7f84560ce28933cc24437b7caeda695a9957dfc91a3f4b3c38191ec",
+    "rq1_timing_comparison.pdf": "35a83c551f20dc489a0c1e26b318cb13cc6be5709345cd7a393e1a2591fb3d89",
+    "rq1_timing_comparison.png": "1d672cf69d536d09f1efd10839fbda512bd7317184bbb1c4eda7311b86a68a6e",
+    "rq1_timing_data_audit.json": "d0885d27b3c2a75ccf4984472c1c0292aa9f5311314a654cce7c4132a039c00a",
+    "rq1_timing_model_fit.csv": "f86b69b4369b35c80069bd2b128fcd7a001403a9520180651ccb26ee8f24e7aa",
+    "rq1_timing_observations.csv": "587c1852a08ed30c9e0f81ef64b41723089a30183f4eb623c95491c6681e0397",
+    "rq1_timing_stance_comparison.csv": "38485d329daad13af9a50b5835ce23db80ea90b594d1f1dff106be28c5ff378d"
   },
   "both_directional_intervals_survive_timing_adjustment": false,
   "causal_claim": false,
@@ -23,103 +23,81 @@
   "duration_note": "Duration may be a mediator rather than a conventional confound.",
   "episode_count": 14588,
   "estimands": {
-    "per_second": "combined stance-density-pacing association",
-    "token_duration_adjusted": "conditional association holding current-turn duration constant",
-    "token_normalized": "association after removing duration from the outcome",
-    "token_timing_adjusted": "conditional association holding current-turn duration and response timing constant"
+    "per_second": "paper stance-density-pacing association on the timing sample",
+    "per_second_duration_adjusted": "paper association conditional on current-turn duration",
+    "per_second_timing_adjusted": "paper association conditional on current-turn duration and response timing"
   },
   "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "token_duration_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "token_normalized": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category)",
-    "token_timing_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "token_timing_previous_duration": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "5970596182f6108f97ca4810dce9b7a2d58f56a2",
+    "commit": "240ba755f3352c8bbd71db15885740b7cddc10c7",
     "dirty": true
   },
   "headline_coefficients": {
     "per_second:agree_move": {
-      "ci95_high": -0.023616730653298244,
-      "ci95_low": -0.026265979788530958,
-      "clustered_se": 0.0006758412797708658,
-      "coefficient": -0.0249413552209146,
+      "ci95_high": -0.022107730605531548,
+      "ci95_low": -0.024759492932435193,
+      "clustered_se": 0.0006764824118760367,
+      "coefficient": -0.02343361176898337,
       "model_name": "per_second",
-      "p_value": 3.962873189415309e-298,
+      "p_value": 6.234324824687777e-263,
       "term": "agree_move",
-      "z_or_t": -36.90416073633532
+      "z_or_t": -34.64038585126956
     },
     "per_second:disagree_move": {
-      "ci95_high": 0.016713113551970245,
-      "ci95_low": 0.01349073975618828,
-      "clustered_se": 0.0008220492369246682,
-      "coefficient": 0.015101926654079263,
+      "ci95_high": 0.018936684399021766,
+      "ci95_low": 0.015602309722656986,
+      "clustered_se": 0.0008506214151550494,
+      "coefficient": 0.017269497060839377,
       "model_name": "per_second",
-      "p_value": 2.2393996929345955e-75,
+      "p_value": 1.2292281892972538e-91,
       "term": "disagree_move",
-      "z_or_t": 18.37107313739066
+      "z_or_t": 20.302212891843936
     },
-    "token_duration_adjusted:agree_move": {
-      "ci95_high": -0.0002622308956759131,
-      "ci95_low": -0.000662205694855946,
-      "clustered_se": 0.0001020362624861944,
-      "coefficient": -0.00046221829526592957,
-      "model_name": "token_duration_adjusted",
-      "p_value": 5.900003340728784e-06,
+    "per_second_duration_adjusted:agree_move": {
+      "ci95_high": 0.0036662114688016155,
+      "ci95_low": 0.0015792899414285532,
+      "clustered_se": 0.0005323877234057445,
+      "coefficient": 0.0026227507051150845,
+      "model_name": "per_second_duration_adjusted",
+      "p_value": 8.376180742196404e-07,
       "term": "agree_move",
-      "z_or_t": -4.529941454181234
+      "z_or_t": 4.926392157086289
     },
-    "token_duration_adjusted:disagree_move": {
-      "ci95_high": -1.6445612709930016e-05,
-      "ci95_low": -0.0005431730432455031,
-      "clustered_se": 0.00013437171159529762,
-      "coefficient": -0.00027980932797771655,
-      "model_name": "token_duration_adjusted",
-      "p_value": 0.037310244088201876,
+    "per_second_duration_adjusted:disagree_move": {
+      "ci95_high": -0.007449486843875964,
+      "ci95_low": -0.010281169618621171,
+      "clustered_se": 0.0007223813287083741,
+      "coefficient": -0.008865328231248568,
+      "model_name": "per_second_duration_adjusted",
+      "p_value": 1.2747273223235057e-34,
       "term": "disagree_move",
-      "z_or_t": -2.0823529346745966
+      "z_or_t": -12.272366240555904
     },
-    "token_normalized:agree_move": {
-      "ci95_high": -0.006128019258227027,
-      "ci95_low": -0.006674880404117945,
-      "clustered_se": 0.0001395079578513916,
-      "coefficient": -0.006401449831172486,
-      "model_name": "token_normalized",
-      "p_value": 0.0,
+    "per_second_timing_adjusted:agree_move": {
+      "ci95_high": 0.0036243484595958092,
+      "ci95_low": 0.001537918527504617,
+      "clustered_se": 0.0005322623141416591,
+      "coefficient": 0.002581133493550213,
+      "model_name": "per_second_timing_adjusted",
+      "p_value": 1.2385820203474848e-06,
       "term": "agree_move",
-      "z_or_t": -45.885911669580295
+      "z_or_t": 4.8493636031937
     },
-    "token_normalized:disagree_move": {
-      "ci95_high": 0.005185310324128805,
-      "ci95_low": 0.004534438781936584,
-      "clustered_se": 0.00016604170977788698,
-      "coefficient": 0.004859874553032694,
-      "model_name": "token_normalized",
-      "p_value": 2.5737834547883052e-188,
+    "per_second_timing_adjusted:disagree_move": {
+      "ci95_high": -0.007291708400240625,
+      "ci95_low": -0.010136635951699276,
+      "clustered_se": 0.000725760160364955,
+      "coefficient": -0.008714172175969951,
+      "model_name": "per_second_timing_adjusted",
+      "p_value": 3.26638309883573e-33,
       "term": "disagree_move",
-      "z_or_t": 29.268998491606236
-    },
-    "token_timing_adjusted:agree_move": {
-      "ci95_high": -0.00021263302740520289,
-      "ci95_low": -0.0006092667197255461,
-      "clustered_se": 0.00010118392364577596,
-      "coefficient": -0.0004109498735653745,
-      "model_name": "token_timing_adjusted",
-      "p_value": 4.877624279613245e-05,
-      "term": "agree_move",
-      "z_or_t": -4.061414686823425
-    },
-    "token_timing_adjusted:disagree_move": {
-      "ci95_high": -0.0002999773478841115,
-      "ci95_low": -0.0008264193440733881,
-      "clustered_se": 0.00013429889537302315,
-      "coefficient": -0.0005631983459787498,
-      "model_name": "token_timing_adjusted",
-      "p_value": 2.745394297452176e-05,
-      "term": "disagree_move",
-      "z_or_t": -4.193618602851743
+      "z_or_t": -12.006958568224455
     }
   },
   "manuscript_reference_comparison": [
@@ -127,16 +105,16 @@
       "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
       "manuscript_approximate_coefficient": -0.0056,
       "sign_matches": true,
-      "strict_adjacency_coefficient": -0.006401449831172486,
-      "strict_minus_manuscript": -0.000801449831172486,
+      "strict_adjacency_coefficient": -0.02343361176898337,
+      "strict_minus_manuscript": -0.01783361176898337,
       "term": "agree_move"
     },
     {
       "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
       "manuscript_approximate_coefficient": 0.0049,
       "sign_matches": true,
-      "strict_adjacency_coefficient": 0.004859874553032694,
-      "strict_minus_manuscript": -4.012544696730541e-05,
+      "strict_adjacency_coefficient": 0.017269497060839377,
+      "strict_minus_manuscript": 0.012369497060839377,
       "term": "disagree_move"
     }
   ],
@@ -147,40 +125,40 @@
     "statsmodels": "0.14.5",
     "tqdm": "4.68.1"
   },
-  "script_version": "1.1.0",
+  "script_version": "2.0.0",
   "summary_self_hash_excluded": true,
   "timing_adjustment_interpretation": [
     {
-      "attenuation_percent": 93.58036250531538,
+      "attenuation_percent": 88.9853364517774,
       "direction": "agreement",
-      "duration_adjusted_ci95_high": -0.0002622308956759131,
-      "duration_adjusted_ci95_low": -0.000662205694855946,
-      "duration_adjusted_coefficient": -0.00046221829526592957,
-      "duration_attenuation_percent": 92.7794748462276,
-      "duration_status": "direction_preserved_and_interval_excludes_zero",
-      "gap_overlap_incremental_attenuation_percent": 11.091820082772497,
-      "status": "direction_preserved_and_interval_excludes_zero",
+      "duration_adjusted_ci95_high": 0.0036662114688016155,
+      "duration_adjusted_ci95_low": 0.0015792899414285532,
+      "duration_adjusted_coefficient": 0.0026227507051150845,
+      "duration_attenuation_percent": 88.80774021959968,
+      "duration_status": "sign_reversed_after_duration_adjustment",
+      "gap_overlap_incremental_attenuation_percent": 1.5867772519784773,
+      "paper_baseline_coefficient": -0.02343361176898337,
+      "status": "sign_reversed_after_timing_adjustment",
       "term": "agree_move",
-      "timing_adjusted_ci95_high": -0.00021263302740520289,
-      "timing_adjusted_ci95_low": -0.0006092667197255461,
-      "timing_adjusted_coefficient": -0.0004109498735653745,
-      "token_normalized_coefficient": -0.006401449831172486
+      "timing_adjusted_ci95_high": 0.0036243484595958092,
+      "timing_adjusted_ci95_low": 0.001537918527504617,
+      "timing_adjusted_coefficient": 0.002581133493550213
     },
     {
-      "attenuation_percent": 88.41125753693994,
+      "attenuation_percent": 49.54009288591058,
       "direction": "disagreement",
-      "duration_adjusted_ci95_high": -1.6445612709930016e-05,
-      "duration_adjusted_ci95_low": -0.0005431730432455031,
-      "duration_adjusted_coefficient": -0.00027980932797771655,
-      "duration_attenuation_percent": 94.24245780576562,
+      "duration_adjusted_ci95_high": -0.007449486843875964,
+      "duration_adjusted_ci95_low": -0.010281169618621171,
+      "duration_adjusted_coefficient": -0.008865328231248568,
+      "duration_attenuation_percent": 48.664815194000376,
       "duration_status": "sign_reversed_after_duration_adjustment",
-      "gap_overlap_incremental_attenuation_percent": -101.27933191119412,
+      "gap_overlap_incremental_attenuation_percent": 1.705024916571285,
+      "paper_baseline_coefficient": 0.017269497060839377,
       "status": "sign_reversed_after_timing_adjustment",
       "term": "disagree_move",
-      "timing_adjusted_ci95_high": -0.0002999773478841115,
-      "timing_adjusted_ci95_low": -0.0008264193440733881,
-      "timing_adjusted_coefficient": -0.0005631983459787498,
-      "token_normalized_coefficient": 0.004859874553032694
+      "timing_adjusted_ci95_high": -0.007291708400240625,
+      "timing_adjusted_ci95_low": -0.010136635951699276,
+      "timing_adjusted_coefficient": -0.008714172175969951
     }
   ],
   "transition_count": 241284
