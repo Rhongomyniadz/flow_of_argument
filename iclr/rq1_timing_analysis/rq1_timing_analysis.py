@@ -886,51 +886,190 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
             "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
         ) from error
 
-    model_labels = {
-        PER_SECOND_MODEL: "Per-second",
-        TOKEN_MODEL: "Token-normalized",
-        TIMING_MODEL: "Token + timing",
-    }
-    colors = {
-        PER_SECOND_MODEL: "#777777",
-        TOKEN_MODEL: "#377eb8",
-        TIMING_MODEL: "#e41a1c",
-    }
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.8), sharex=False, constrained_layout=True)
-    for axis, term, title in zip(axes, STANCE_TERMS, ("Agreement movement", "Disagreement movement")):
-        selected = comparison[comparison["term"] == term].set_index("model_name").loc[list(HEADLINE_MODELS)]
-        y_positions = np.arange(len(HEADLINE_MODELS), dtype=float)
-        for position, model_name in enumerate(HEADLINE_MODELS):
-            row = selected.loc[model_name]
-            coefficient = float(row["coefficient"])
-            low = float(row["ci95_low"])
-            high = float(row["ci95_high"])
-            axis.errorbar(
-                coefficient,
-                float(position),
-                xerr=np.asarray([[coefficient - low], [high - coefficient]]),
-                fmt="o",
-                color=colors[model_name],
-                ecolor=colors[model_name],
-                capsize=4,
-                markersize=6,
-            )
-        axis.axvline(0.0, color="black", linewidth=0.8, linestyle="--")
-        axis.set_yticks(y_positions, [model_labels[name] for name in HEADLINE_MODELS])
-        axis.invert_yaxis()
-        axis.set_xlabel("Coefficient with episode-clustered 95% CI")
-        axis.set_title(title)
-        axis.grid(axis="x", alpha=0.25)
-    fig.suptitle("RQ1 stance-density estimates under explicit timing adjustment")
+    from matplotlib.lines import Line2D
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    png_path = output_dir / "rq1_timing_comparison.png"
-    pdf_path = output_dir / "rq1_timing_comparison.pdf"
-    png_temporary = png_path.with_suffix(".png.tmp")
-    pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
-    fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
-    fig.savefig(pdf_temporary, format="pdf", bbox_inches="tight")
-    plt.close(fig)
+    model_labels: tuple[str, str, str] = (
+        "Per-second\n(pacing included)",
+        "Per-token\n(duration removed)",
+        "Per-token + timing\n(duration, gap, overlap)",
+    )
+    term_labels: dict[str, str] = {
+        "agree_move": "Agreement movement",
+        "disagree_move": "Disagreement movement",
+    }
+    colors: dict[str, str] = {
+        "agree_move": "#0072B2",
+        "disagree_move": "#D55E00",
+    }
+    markers: dict[str, str] = {
+        "agree_move": "o",
+        "disagree_move": "D",
+    }
+    selected_by_term: dict[str, pd.DataFrame] = {
+        term: comparison[comparison["term"] == term]
+        .set_index("model_name")
+        .loc[list(HEADLINE_MODELS)]
+        for term in STANCE_TERMS
+    }
+    x_positions: np.ndarray = np.arange(len(HEADLINE_MODELS), dtype=float)
+
+    with plt.rc_context(
+        {
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "font.size": 10,
+        }
+    ):
+        fig, (path_axis, detail_axis) = plt.subplots(
+            1,
+            2,
+            figsize=(11.5, 5.2),
+            gridspec_kw={"width_ratios": [1.55, 1.0]},
+            constrained_layout=True,
+        )
+
+        for term in STANCE_TERMS:
+            selected = selected_by_term[term]
+            coefficients = selected["coefficient"].to_numpy(dtype=float)
+            lows = selected["ci95_low"].to_numpy(dtype=float)
+            highs = selected["ci95_high"].to_numpy(dtype=float)
+            path_axis.plot(
+                x_positions,
+                coefficients,
+                color=colors[term],
+                linewidth=2.0,
+                zorder=2,
+            )
+            path_axis.errorbar(
+                x_positions,
+                coefficients,
+                yerr=np.vstack((coefficients - lows, highs - coefficients)),
+                fmt=markers[term],
+                color=colors[term],
+                ecolor=colors[term],
+                capsize=3,
+                markersize=7,
+                markeredgecolor="white",
+                markeredgewidth=0.8,
+                linewidth=1.5,
+                zorder=3,
+                label=term_labels[term],
+            )
+
+        path_axis.axhline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
+        path_axis.set_xticks(x_positions, model_labels)
+        path_axis.set_ylabel("Coefficient (episode-clustered 95% CI)")
+        path_axis.set_title("A  Estimates across specifications", loc="left", fontweight="bold")
+        path_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
+        path_axis.legend(frameon=False, loc="lower right")
+
+        row_positions: dict[str, float] = {"agree_move": 1.0, "disagree_move": 0.0}
+        for term in STANCE_TERMS:
+            selected = selected_by_term[term]
+            token_row = selected.loc[TOKEN_MODEL]
+            timing_row = selected.loc[TIMING_MODEL]
+            y_position = row_positions[term]
+            token_coefficient = float(token_row["coefficient"])
+            timing_coefficient = float(timing_row["coefficient"])
+            attenuation = float(timing_row["timing_attenuation_percent"])
+
+            detail_axis.annotate(
+                "",
+                xy=(timing_coefficient, y_position),
+                xytext=(token_coefficient, y_position),
+                arrowprops={
+                    "arrowstyle": "-|>",
+                    "color": colors[term],
+                    "linewidth": 2.0,
+                    "mutation_scale": 11,
+                },
+                zorder=1,
+            )
+            for coefficient, row, marker_face_color in (
+                (token_coefficient, token_row, "white"),
+                (timing_coefficient, timing_row, colors[term]),
+            ):
+                low = float(row["ci95_low"])
+                high = float(row["ci95_high"])
+                detail_axis.errorbar(
+                    coefficient,
+                    y_position,
+                    xerr=np.asarray([[coefficient - low], [high - coefficient]]),
+                    fmt=markers[term],
+                    color=colors[term],
+                    ecolor=colors[term],
+                    markerfacecolor=marker_face_color,
+                    markeredgewidth=1.5,
+                    capsize=3,
+                    markersize=7,
+                    linewidth=1.5,
+                    zorder=3,
+                )
+
+            annotation: str = f"{attenuation:.1f}% attenuation"
+            if term == "disagree_move" and np.sign(token_coefficient) != np.sign(
+                timing_coefficient
+            ):
+                annotation += " · sign reversed"
+            detail_axis.text(
+                (token_coefficient + timing_coefficient) / 2.0,
+                y_position + 0.15,
+                annotation,
+                color=colors[term],
+                horizontalalignment="center",
+                verticalalignment="bottom",
+                fontsize=9,
+                fontweight="bold",
+            )
+
+        detail_axis.axvline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
+        detail_axis.set_yticks(
+            [row_positions[term] for term in STANCE_TERMS],
+            [term_labels[term].replace(" movement", "") for term in STANCE_TERMS],
+        )
+        detail_axis.set_ylim(-0.35, 1.45)
+        detail_axis.set_xlabel("Coefficient (episode-clustered 95% CI)")
+        detail_axis.set_title("B  Effect of adding timing controls", loc="left", fontweight="bold")
+        detail_axis.grid(axis="x", color="#D9D9D9", linewidth=0.7)
+        detail_axis.legend(
+            handles=[
+                Line2D(
+                    [0],
+                    [0],
+                    marker="o",
+                    color="#555555",
+                    markerfacecolor="white",
+                    markeredgewidth=1.5,
+                    linestyle="none",
+                    label="Token-normalized",
+                ),
+                Line2D(
+                    [0],
+                    [0],
+                    marker="o",
+                    color="#555555",
+                    markerfacecolor="#555555",
+                    linestyle="none",
+                    label="Token + timing",
+                ),
+            ],
+            frameon=False,
+            loc="lower right",
+        )
+        fig.suptitle(
+            "Timing adjustment attenuates both RQ1 stance-density associations",
+            fontsize=15,
+            fontweight="bold",
+        )
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        png_path = output_dir / "rq1_timing_comparison.png"
+        pdf_path = output_dir / "rq1_timing_comparison.pdf"
+        png_temporary = png_path.with_suffix(".png.tmp")
+        pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
+        fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
+        fig.savefig(pdf_temporary, format="pdf", bbox_inches="tight")
+        plt.close(fig)
     png_temporary.replace(png_path)
     pdf_temporary.replace(pdf_path)
     return [pdf_path, png_path]

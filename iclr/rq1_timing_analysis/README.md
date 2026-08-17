@@ -76,7 +76,8 @@ and PDF/PNG figures are intended to remain reviewable in git. The observation-le
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and timing-adjustment interpretation.
-- `rq1_timing_comparison.pdf` and `.png`: forest plot for the three headline models.
+- `rq1_timing_comparison.pdf` and `.png`: coefficient paths across the three headline
+  models, with a focused view of attenuation after adding timing controls.
 
 Timing attenuation is
 `100 * (1 - abs(beta_timing) / abs(beta_token))`. Positive values mean attenuation and
