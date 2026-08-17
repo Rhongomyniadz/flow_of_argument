@@ -31,20 +31,22 @@ preceding boundary retained as a lag control.
 
 ## Models
 
-Four OLS specifications use the identical retained sample and episode-clustered standard
+Five OLS specifications use the identical retained sample and episode-clustered standard
 errors:
 
 1. `per_second`: the original duration-dependent outcome.
 2. `token_normalized`: the duration-free outcome.
-3. `token_timing_adjusted`: token normalization plus current duration, pre-turn gap, and
+3. `token_duration_adjusted`: token normalization plus current-turn duration only.
+4. `token_timing_adjusted`: token normalization plus current duration, pre-turn gap, and
    overlap.
-4. `token_timing_previous_duration`: a robustness model that also controls for previous-turn
+5. `token_timing_previous_duration`: a robustness model that also controls for previous-turn
    duration.
 
 The first model estimates a combined density-pacing association. The second removes duration
-from the outcome. The third conditions on observed timing. These are different estimands, and
-none supports a causal claim; duration may be a mediator rather than a conventional
-confound.
+from the outcome. The third isolates the change associated with current-turn duration. The
+fourth then shows the incremental change associated with pre-turn gap and overlap. These are
+different estimands, and none supports a causal claim; duration may be a mediator rather than
+a conventional confound.
 
 ## Run
 
@@ -76,13 +78,15 @@ and PDF/PNG figures are intended to remain reviewable in git. The observation-le
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and timing-adjustment interpretation.
-- `rq1_timing_comparison.pdf` and `.png`: coefficient paths across the three headline
-  models, with a focused view of attenuation after adding timing controls.
+- `rq1_timing_comparison.pdf` and `.png`: coefficient paths across the four headline models,
+  with duration separated from the incremental gap/overlap adjustment.
 
 Timing attenuation is
 `100 * (1 - abs(beta_timing) / abs(beta_token))`. Positive values mean attenuation and
-negative values mean amplification. Because the dataset is large, coefficient movement and
-confidence intervals should be emphasized over statistical significance alone.
+negative values mean amplification. The comparison CSV reports both attenuation from the
+token baseline and incremental attenuation from duration-only to the full timing model.
+Because the dataset is large, coefficient movement and confidence intervals should be
+emphasized over statistical significance alone.
 
 ## Tests
 

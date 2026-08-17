@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.1.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
@@ -27,15 +27,17 @@ WORD_PATTERN = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
 PER_SECOND_MODEL = "per_second"
 TOKEN_MODEL = "token_normalized"
+DURATION_MODEL = "token_duration_adjusted"
 TIMING_MODEL = "token_timing_adjusted"
 PREVIOUS_DURATION_MODEL = "token_timing_previous_duration"
 MODEL_ORDER = (
     PER_SECOND_MODEL,
     TOKEN_MODEL,
+    DURATION_MODEL,
     TIMING_MODEL,
     PREVIOUS_DURATION_MODEL,
 )
-HEADLINE_MODELS = (PER_SECOND_MODEL, TOKEN_MODEL, TIMING_MODEL)
+HEADLINE_MODELS = (PER_SECOND_MODEL, TOKEN_MODEL, DURATION_MODEL, TIMING_MODEL)
 STANCE_TERMS = ("agree_move", "disagree_move")
 MANUSCRIPT_REFERENCE_COEFFICIENTS = {
     "agree_move": -0.0056,
@@ -52,6 +54,11 @@ FORMULAS = {
         "delta_log_density_per_token ~ agree_move + disagree_move + "
         "lag_delta_stance + previous_log_density_per_token + timeline_position + "
         "I(timeline_position ** 2) + C(category)"
+    ),
+    DURATION_MODEL: (
+        "delta_log_density_per_token ~ agree_move + disagree_move + "
+        "lag_delta_stance + previous_log_density_per_token + timeline_position + "
+        "I(timeline_position ** 2) + C(category) + log_duration"
     ),
     TIMING_MODEL: (
         "delta_log_density_per_token ~ agree_move + disagree_move + "
@@ -799,11 +806,23 @@ def stance_comparison_frame(
     rows: list[dict[str, object]] = []
     for term in STANCE_TERMS:
         token = extract_coefficient(coefficients, TOKEN_MODEL, term)
+        duration = extract_coefficient(coefficients, DURATION_MODEL, term)
         timing = extract_coefficient(coefficients, TIMING_MODEL, term)
-        attenuation = attenuation_percent(
-            float(cast(float, token["coefficient"])),
-            float(cast(float, timing["coefficient"])),
-        )
+        token_coefficient = float(cast(float, token["coefficient"]))
+        duration_coefficient = float(cast(float, duration["coefficient"]))
+        timing_coefficient = float(cast(float, timing["coefficient"]))
+        attenuation_from_token: dict[str, float] = {
+            DURATION_MODEL: attenuation_percent(token_coefficient, duration_coefficient),
+            TIMING_MODEL: attenuation_percent(token_coefficient, timing_coefficient),
+        }
+        incremental_attenuation: dict[str, float] = {
+            DURATION_MODEL: attenuation_percent(token_coefficient, duration_coefficient),
+            TIMING_MODEL: attenuation_percent(duration_coefficient, timing_coefficient),
+        }
+        incremental_reference: dict[str, str] = {
+            DURATION_MODEL: TOKEN_MODEL,
+            TIMING_MODEL: DURATION_MODEL,
+        }
         for model_name in HEADLINE_MODELS:
             coefficient = extract_coefficient(coefficients, model_name, term)
             rows.append(
@@ -818,39 +837,89 @@ def stance_comparison_frame(
                     "p_value": coefficient["p_value"],
                     "transition_count": len(frame),
                     "episode_count": int(frame["episode"].nunique()),
-                    "timing_attenuation_percent": attenuation if model_name == TIMING_MODEL else None,
-                    "attenuation_reference_model": TOKEN_MODEL if model_name == TIMING_MODEL else None,
+                    "attenuation_from_token_percent": attenuation_from_token.get(model_name),
+                    "attenuation_reference_model": (
+                        TOKEN_MODEL if model_name in attenuation_from_token else None
+                    ),
+                    "incremental_attenuation_percent": incremental_attenuation.get(model_name),
+                    "incremental_reference_model": incremental_reference.get(model_name),
+                    "timing_attenuation_percent": (
+                        attenuation_from_token.get(model_name)
+                        if model_name == TIMING_MODEL
+                        else None
+                    ),
                 }
             )
     return pd.DataFrame(rows)
 
 
+def direction_status(
+    term: str,
+    baseline_coefficient: float,
+    adjusted_coefficient: float,
+    adjusted_ci95_low: float,
+    adjusted_ci95_high: float,
+) -> str:
+    if term not in STANCE_TERMS:
+        raise ValueError(f"Unsupported stance term: {term}")
+    expected_negative = term == "agree_move"
+    interval_expected = (
+        adjusted_ci95_high < 0.0 if expected_negative else adjusted_ci95_low > 0.0
+    )
+    if int(np.sign(baseline_coefficient)) != int(np.sign(adjusted_coefficient)):
+        return "sign_reversed_after_adjustment"
+    if interval_expected:
+        return "direction_preserved_and_interval_excludes_zero"
+    return "direction_preserved_but_interval_includes_zero_or_wrong_direction"
+
+
 def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str, object]:
-    token = comparison[(comparison["term"] == term) & (comparison["model_name"] == TOKEN_MODEL)].iloc[0]
+    token = comparison[
+        (comparison["term"] == term) & (comparison["model_name"] == TOKEN_MODEL)
+    ].iloc[0]
+    duration = comparison[
+        (comparison["term"] == term) & (comparison["model_name"] == DURATION_MODEL)
+    ].iloc[0]
     timing = comparison[(comparison["term"] == term) & (comparison["model_name"] == TIMING_MODEL)].iloc[0]
     expected_negative = term == "agree_move"
-    token_sign = int(np.sign(float(token["coefficient"])))
-    timing_sign = int(np.sign(float(timing["coefficient"])))
-    interval_expected = (
-        float(timing["ci95_high"]) < 0.0
-        if expected_negative
-        else float(timing["ci95_low"]) > 0.0
+    token_coefficient = float(token["coefficient"])
+    duration_coefficient = float(duration["coefficient"])
+    timing_coefficient = float(timing["coefficient"])
+    duration_status = direction_status(
+        term,
+        token_coefficient,
+        duration_coefficient,
+        float(duration["ci95_low"]),
+        float(duration["ci95_high"]),
     )
-    if token_sign != timing_sign:
-        status = "sign_reversed_after_timing_adjustment"
-    elif interval_expected:
-        status = "direction_preserved_and_interval_excludes_zero"
-    else:
-        status = "direction_preserved_but_interval_includes_zero_or_wrong_direction"
+    timing_status = direction_status(
+        term,
+        token_coefficient,
+        timing_coefficient,
+        float(timing["ci95_low"]),
+        float(timing["ci95_high"]),
+    )
+    if duration_status == "sign_reversed_after_adjustment":
+        duration_status = "sign_reversed_after_duration_adjustment"
+    if timing_status == "sign_reversed_after_adjustment":
+        timing_status = "sign_reversed_after_timing_adjustment"
     return {
         "term": term,
         "direction": "agreement" if expected_negative else "disagreement",
-        "token_normalized_coefficient": float(token["coefficient"]),
-        "timing_adjusted_coefficient": float(timing["coefficient"]),
+        "token_normalized_coefficient": token_coefficient,
+        "duration_adjusted_coefficient": duration_coefficient,
+        "duration_adjusted_ci95_low": float(duration["ci95_low"]),
+        "duration_adjusted_ci95_high": float(duration["ci95_high"]),
+        "duration_attenuation_percent": float(duration["attenuation_from_token_percent"]),
+        "duration_status": duration_status,
+        "timing_adjusted_coefficient": timing_coefficient,
         "timing_adjusted_ci95_low": float(timing["ci95_low"]),
         "timing_adjusted_ci95_high": float(timing["ci95_high"]),
-        "attenuation_percent": float(timing["timing_attenuation_percent"]),
-        "status": status,
+        "attenuation_percent": float(timing["attenuation_from_token_percent"]),
+        "gap_overlap_incremental_attenuation_percent": float(
+            timing["incremental_attenuation_percent"]
+        ),
+        "status": timing_status,
     }
 
 
@@ -888,10 +957,11 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
 
     from matplotlib.lines import Line2D
 
-    model_labels: tuple[str, str, str] = (
+    model_labels: tuple[str, str, str, str] = (
         "Per-second\n(pacing included)",
-        "Per-token\n(duration removed)",
-        "Per-token + timing\n(duration, gap, overlap)",
+        "Per-token\n(no timing controls)",
+        "+ duration",
+        "+ gap & overlap",
     )
     term_labels: dict[str, str] = {
         "agree_move": "Agreement movement",
@@ -904,6 +974,11 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
     markers: dict[str, str] = {
         "agree_move": "o",
         "disagree_move": "D",
+    }
+    detail_markers: dict[str, str] = {
+        TOKEN_MODEL: "o",
+        DURATION_MODEL: "s",
+        TIMING_MODEL: "X",
     }
     selected_by_term: dict[str, pd.DataFrame] = {
         term: comparison[comparison["term"] == term]
@@ -923,8 +998,8 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         fig, (path_axis, detail_axis) = plt.subplots(
             1,
             2,
-            figsize=(11.5, 5.2),
-            gridspec_kw={"width_ratios": [1.55, 1.0]},
+            figsize=(12.8, 5.2),
+            gridspec_kw={"width_ratios": [1.7, 1.0]},
             constrained_layout=True,
         )
 
@@ -967,27 +1042,36 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         for term in STANCE_TERMS:
             selected = selected_by_term[term]
             token_row = selected.loc[TOKEN_MODEL]
+            duration_row = selected.loc[DURATION_MODEL]
             timing_row = selected.loc[TIMING_MODEL]
             y_position = row_positions[term]
             token_coefficient = float(token_row["coefficient"])
+            duration_coefficient = float(duration_row["coefficient"])
             timing_coefficient = float(timing_row["coefficient"])
-            attenuation = float(timing_row["timing_attenuation_percent"])
+            duration_attenuation = float(duration_row["attenuation_from_token_percent"])
+            gap_overlap_attenuation = float(timing_row["incremental_attenuation_percent"])
+            full_attenuation = float(timing_row["attenuation_from_token_percent"])
 
-            detail_axis.annotate(
-                "",
-                xy=(timing_coefficient, y_position),
-                xytext=(token_coefficient, y_position),
-                arrowprops={
-                    "arrowstyle": "-|>",
-                    "color": colors[term],
-                    "linewidth": 2.0,
-                    "mutation_scale": 11,
-                },
-                zorder=1,
-            )
-            for coefficient, row, marker_face_color in (
-                (token_coefficient, token_row, "white"),
-                (timing_coefficient, timing_row, colors[term]),
+            for start, end in (
+                (token_coefficient, duration_coefficient),
+                (duration_coefficient, timing_coefficient),
+            ):
+                detail_axis.annotate(
+                    "",
+                    xy=(end, y_position),
+                    xytext=(start, y_position),
+                    arrowprops={
+                        "arrowstyle": "-|>",
+                        "color": colors[term],
+                        "linewidth": 2.0,
+                        "mutation_scale": 11,
+                    },
+                    zorder=1,
+                )
+            for model_name, coefficient, row, marker_face_color in (
+                (TOKEN_MODEL, token_coefficient, token_row, "white"),
+                (DURATION_MODEL, duration_coefficient, duration_row, colors[term]),
+                (TIMING_MODEL, timing_coefficient, timing_row, colors[term]),
             ):
                 low = float(row["ci95_low"])
                 high = float(row["ci95_high"])
@@ -995,7 +1079,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
                     coefficient,
                     y_position,
                     xerr=np.asarray([[coefficient - low], [high - coefficient]]),
-                    fmt=markers[term],
+                    fmt=detail_markers[model_name],
                     color=colors[term],
                     ecolor=colors[term],
                     markerfacecolor=marker_face_color,
@@ -1006,19 +1090,27 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
                     zorder=3,
                 )
 
-            annotation: str = f"{attenuation:.1f}% attenuation"
+            annotation = (
+                f"Duration: {duration_attenuation:.1f}% from baseline\n"
+                f"Gap/overlap: {gap_overlap_attenuation:.1f}% additional; "
+                f"full: {full_attenuation:.1f}%"
+            )
             if term == "disagree_move" and np.sign(token_coefficient) != np.sign(
                 timing_coefficient
             ):
                 annotation += " · sign reversed"
             detail_axis.text(
-                (token_coefficient + timing_coefficient) / 2.0,
+                (
+                    min(token_coefficient, duration_coefficient, timing_coefficient)
+                    + max(token_coefficient, duration_coefficient, timing_coefficient)
+                )
+                / 2.0,
                 y_position + 0.15,
                 annotation,
                 color=colors[term],
                 horizontalalignment="center",
                 verticalalignment="bottom",
-                fontsize=9,
+                fontsize=8.5,
                 fontweight="bold",
             )
 
@@ -1029,7 +1121,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         )
         detail_axis.set_ylim(-0.35, 1.45)
         detail_axis.set_xlabel("Coefficient (episode-clustered 95% CI)")
-        detail_axis.set_title("B  Effect of adding timing controls", loc="left", fontweight="bold")
+        detail_axis.set_title("B  Where timing adjustment enters", loc="left", fontweight="bold")
         detail_axis.grid(axis="x", color="#D9D9D9", linewidth=0.7)
         detail_axis.legend(
             handles=[
@@ -1041,23 +1133,32 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
                     markerfacecolor="white",
                     markeredgewidth=1.5,
                     linestyle="none",
-                    label="Token-normalized",
+                    label="Token baseline",
                 ),
                 Line2D(
                     [0],
                     [0],
-                    marker="o",
+                    marker="s",
                     color="#555555",
                     markerfacecolor="#555555",
                     linestyle="none",
-                    label="Token + timing",
+                    label="+ duration",
+                ),
+                Line2D(
+                    [0],
+                    [0],
+                    marker="X",
+                    color="#555555",
+                    markerfacecolor="#555555",
+                    linestyle="none",
+                    label="+ gap & overlap",
                 ),
             ],
             frameon=False,
             loc="lower right",
         )
         fig.suptitle(
-            "Timing adjustment attenuates both RQ1 stance-density associations",
+            "RQ1 estimates across normalization and timing specifications",
             fontsize=15,
             fontweight="bold",
         )
@@ -1199,7 +1300,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "estimands": {
             PER_SECOND_MODEL: "combined stance-density-pacing association",
             TOKEN_MODEL: "association after removing duration from the outcome",
-            TIMING_MODEL: "conditional association holding observed duration and response timing constant",
+            DURATION_MODEL: "conditional association holding current-turn duration constant",
+            TIMING_MODEL: (
+                "conditional association holding current-turn duration and response timing constant"
+            ),
         },
         "causal_claim": False,
         "duration_note": "Duration may be a mediator rather than a conventional confound.",

@@ -211,6 +211,14 @@ class RegressionIntegrationTests(unittest.TestCase):
         results = analysis.fit_models(frame)
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
+        duration_terms = set(results[analysis.DURATION_MODEL].params.index)
+        self.assertIn("log_duration", duration_terms)
+        self.assertNotIn("log_gap", duration_terms)
+        self.assertNotIn("overlap", duration_terms)
+        timing_terms = set(results[analysis.TIMING_MODEL].params.index)
+        self.assertIn("log_duration", timing_terms)
+        self.assertIn("log_gap", timing_terms)
+        self.assertIn("overlap", timing_terms)
         coefficients = analysis.coefficient_frame(results)
         for model_name in analysis.MODEL_ORDER:
             for term in analysis.STANCE_TERMS:
@@ -245,8 +253,19 @@ class RegressionIntegrationTests(unittest.TestCase):
             {path.name for key, path in paths.items() if key != "summary"},
         )
         comparison = pd.read_csv(paths["stance_comparison"])
-        self.assertEqual(len(comparison), 6)
+        self.assertEqual(len(comparison), 8)
         self.assertEqual(set(comparison["model_name"]), set(analysis.HEADLINE_MODELS))
+        duration_rows = comparison[comparison["model_name"] == analysis.DURATION_MODEL]
+        self.assertEqual(len(duration_rows), 2)
+        self.assertTrue(duration_rows["attenuation_from_token_percent"].notna().all())
+        self.assertTrue(duration_rows["timing_attenuation_percent"].isna().all())
+        self.assertTrue(duration_rows["incremental_attenuation_percent"].notna().all())
+        self.assertTrue(
+            all(
+                f"{analysis.DURATION_MODEL}:{term}" in summary["headline_coefficients"]
+                for term in analysis.STANCE_TERMS
+            )
+        )
         audit = json.loads(paths["data_audit"].read_text(encoding="utf-8"))
         self.assertTrue(audit["common_model_sample_verified"])
         self.assertEqual(audit["retained_observation_count"], 360)
