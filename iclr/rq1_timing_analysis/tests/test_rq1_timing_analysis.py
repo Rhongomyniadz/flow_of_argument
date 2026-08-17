@@ -103,6 +103,8 @@ class FeatureConstructionTests(unittest.TestCase):
         self.assertAlmostEqual(first["lag_delta_stance"], 0.2)
         self.assertAlmostEqual(first["agree_move"], 0.4)
         self.assertEqual(first["disagree_move"], 0.0)
+        self.assertAlmostEqual(first["lag_agree_move"], 0.2)
+        self.assertEqual(first["lag_disagree_move"], 0.0)
         self.assertAlmostEqual(first["previous_density_per_second"], 0.5)
         self.assertAlmostEqual(first["density_per_second"], 0.5)
         self.assertAlmostEqual(first["delta_log_density_per_second"], 0.0)
@@ -169,7 +171,7 @@ class FeatureConstructionTests(unittest.TestCase):
     def test_attenuation_formula_and_amplification(self) -> None:
         self.assertAlmostEqual(analysis.attenuation_percent(-0.01, -0.008), 20.0)
         self.assertAlmostEqual(analysis.attenuation_percent(0.01, 0.012), -20.0)
-        with self.assertRaisesRegex(ZeroDivisionError, "zero token-normalized coefficient"):
+        with self.assertRaisesRegex(ZeroDivisionError, "zero baseline coefficient"):
             analysis.attenuation_percent(0.0, 0.1)
 
     def test_bulk_observation_csv_is_the_only_new_ignored_result(self) -> None:
@@ -211,6 +213,10 @@ class RegressionIntegrationTests(unittest.TestCase):
         results = analysis.fit_models(frame)
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
+        baseline_terms = set(results[analysis.PER_SECOND_MODEL].params.index)
+        self.assertIn("lag_agree_move", baseline_terms)
+        self.assertIn("lag_disagree_move", baseline_terms)
+        self.assertNotIn("lag_delta_stance", baseline_terms)
         duration_terms = set(results[analysis.DURATION_MODEL].params.index)
         self.assertIn("log_duration", duration_terms)
         self.assertNotIn("log_gap", duration_terms)
@@ -231,6 +237,8 @@ class RegressionIntegrationTests(unittest.TestCase):
         model_fit = analysis.model_fit_frame(results, frame)
         self.assertEqual(model_fit["transition_count"].nunique(), 1)
         self.assertEqual(model_fit["episode_count"].nunique(), 1)
+        self.assertEqual(set(model_fit["response_variable"]), {"delta_log_density_per_second"})
+        self.assertTrue(model_fit["aic_bic_comparable_to_other_models"].all())
 
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:
         output_dir = self.root / "output"
@@ -253,11 +261,11 @@ class RegressionIntegrationTests(unittest.TestCase):
             {path.name for key, path in paths.items() if key != "summary"},
         )
         comparison = pd.read_csv(paths["stance_comparison"])
-        self.assertEqual(len(comparison), 8)
+        self.assertEqual(len(comparison), 6)
         self.assertEqual(set(comparison["model_name"]), set(analysis.HEADLINE_MODELS))
         duration_rows = comparison[comparison["model_name"] == analysis.DURATION_MODEL]
         self.assertEqual(len(duration_rows), 2)
-        self.assertTrue(duration_rows["attenuation_from_token_percent"].notna().all())
+        self.assertTrue(duration_rows["attenuation_from_baseline_percent"].notna().all())
         self.assertTrue(duration_rows["timing_attenuation_percent"].isna().all())
         self.assertTrue(duration_rows["incremental_attenuation_percent"].notna().all())
         self.assertTrue(
