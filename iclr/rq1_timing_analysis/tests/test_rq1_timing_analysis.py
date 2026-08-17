@@ -105,9 +105,12 @@ class FeatureConstructionTests(unittest.TestCase):
         self.assertEqual(first["disagree_move"], 0.0)
         self.assertAlmostEqual(first["lag_agree_move"], 0.2)
         self.assertEqual(first["lag_disagree_move"], 0.0)
-        self.assertAlmostEqual(first["previous_density_per_second"], 0.5)
-        self.assertAlmostEqual(first["density_per_second"], 0.5)
-        self.assertAlmostEqual(first["delta_log_density_per_second"], 0.0)
+        self.assertAlmostEqual(first["previous_iceberg_ratio"], 1.0)
+        self.assertAlmostEqual(first["iceberg_ratio"], 2.0)
+        self.assertAlmostEqual(
+            first["delta_log_iceberg_ratio"],
+            math.log1p(2.0) - math.log1p(1.0),
+        )
         self.assertAlmostEqual(first["previous_density_per_token"], 0.125)
         self.assertAlmostEqual(first["density_per_token"], 0.2)
         self.assertAlmostEqual(
@@ -213,7 +216,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         results = analysis.fit_models(frame)
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
-        baseline_terms = set(results[analysis.PER_SECOND_MODEL].params.index)
+        baseline_terms = set(results[analysis.RATIO_MODEL].params.index)
         self.assertIn("lag_agree_move", baseline_terms)
         self.assertIn("lag_disagree_move", baseline_terms)
         self.assertNotIn("lag_delta_stance", baseline_terms)
@@ -237,7 +240,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         model_fit = analysis.model_fit_frame(results, frame)
         self.assertEqual(model_fit["transition_count"].nunique(), 1)
         self.assertEqual(model_fit["episode_count"].nunique(), 1)
-        self.assertEqual(set(model_fit["response_variable"]), {"delta_log_density_per_second"})
+        self.assertEqual(set(model_fit["response_variable"]), {"delta_log_iceberg_ratio"})
         self.assertTrue(model_fit["aic_bic_comparable_to_other_models"].all())
 
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:

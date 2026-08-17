@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Timing sensitivity analysis for the paper RQ1 regression."""
+"""Timing sensitivity analysis for the duration-free RQ1 iceberg ratio."""
 
 import argparse
 import hashlib
@@ -18,24 +18,24 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "2.0.0"
+SCRIPT_VERSION = "3.0.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_PLOT_DPI = 300
 WORD_PATTERN = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
-PER_SECOND_MODEL = "per_second"
-DURATION_MODEL = "per_second_duration_adjusted"
-TIMING_MODEL = "per_second_timing_adjusted"
-PREVIOUS_DURATION_MODEL = "per_second_timing_previous_duration"
+RATIO_MODEL = "iceberg_ratio"
+DURATION_MODEL = "iceberg_ratio_duration_adjusted"
+TIMING_MODEL = "iceberg_ratio_timing_adjusted"
+PREVIOUS_DURATION_MODEL = "iceberg_ratio_timing_previous_duration"
 MODEL_ORDER = (
-    PER_SECOND_MODEL,
+    RATIO_MODEL,
     DURATION_MODEL,
     TIMING_MODEL,
     PREVIOUS_DURATION_MODEL,
 )
-HEADLINE_MODELS = (PER_SECOND_MODEL, DURATION_MODEL, TIMING_MODEL)
+HEADLINE_MODELS = (RATIO_MODEL, DURATION_MODEL, TIMING_MODEL)
 STANCE_TERMS = ("agree_move", "disagree_move")
 MANUSCRIPT_REFERENCE_COEFFICIENTS = {
     "agree_move": -0.0056,
@@ -43,25 +43,25 @@ MANUSCRIPT_REFERENCE_COEFFICIENTS = {
 }
 
 FORMULAS = {
-    PER_SECOND_MODEL: (
-        "delta_log_density_per_second ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
+    RATIO_MODEL: (
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category)"
     ),
     DURATION_MODEL: (
-        "delta_log_density_per_second ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration"
     ),
     TIMING_MODEL: (
-        "delta_log_density_per_second ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap"
     ),
     PREVIOUS_DURATION_MODEL: (
-        "delta_log_density_per_second ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap + previous_log_duration"
     ),
@@ -134,11 +134,11 @@ class Observation(TypedDict):
     log_gap: float
     overlap: int
     timeline_position: float
-    previous_density_per_second: float
-    density_per_second: float
-    previous_log_density_per_second: float
-    log_density_per_second: float
-    delta_log_density_per_second: float
+    previous_iceberg_ratio: float
+    iceberg_ratio: float
+    previous_log_iceberg_ratio: float
+    log_iceberg_ratio: float
+    delta_log_iceberg_ratio: float
     previous_density_per_token: float
     density_per_token: float
     previous_log_density_per_token: float
@@ -379,10 +379,18 @@ def window_exclusion_reason(window: tuple[TurnRecord, TurnRecord, TurnRecord]) -
     return None
 
 
-def density(explicit_count: int, assumption_count: int, denominator: float) -> float:
+def iceberg_ratio(explicit_count: int, assumption_count: int) -> float:
+    return float(explicit_count) / float(assumption_count + 1)
+
+
+def normalized_iceberg_ratio(
+    explicit_count: int,
+    assumption_count: int,
+    denominator: float,
+) -> float:
     if denominator <= 0.0:
-        raise ValueError(f"Density denominator must be positive, received {denominator}")
-    return (float(explicit_count) / float(assumption_count + 1)) / denominator
+        raise ValueError(f"Normalization denominator must be positive, received {denominator}")
+    return iceberg_ratio(explicit_count, assumption_count) / denominator
 
 
 def build_observation(
@@ -409,12 +417,20 @@ def build_observation(
     current_stance = cast(float, current["stance"])
     lag_stance = cast(float, lag_turn["stance"])
 
-    previous_per_second = density(previous_explicit, previous_assumptions, previous_duration)
-    current_per_second = density(current_explicit, current_assumptions, current_duration)
-    previous_per_token = density(previous_explicit, previous_assumptions, float(previous["word_count"]))
-    current_per_token = density(current_explicit, current_assumptions, float(current["word_count"]))
-    previous_log_per_second = math.log1p(previous_per_second)
-    current_log_per_second = math.log1p(current_per_second)
+    previous_ratio = iceberg_ratio(previous_explicit, previous_assumptions)
+    current_ratio = iceberg_ratio(current_explicit, current_assumptions)
+    previous_per_token = normalized_iceberg_ratio(
+        previous_explicit,
+        previous_assumptions,
+        float(previous["word_count"]),
+    )
+    current_per_token = normalized_iceberg_ratio(
+        current_explicit,
+        current_assumptions,
+        float(current["word_count"]),
+    )
+    previous_log_ratio = math.log1p(previous_ratio)
+    current_log_ratio = math.log1p(current_ratio)
     previous_log_per_token = math.log1p(previous_per_token)
     current_log_per_token = math.log1p(current_per_token)
     delta_stance = (current_stance - previous_stance) / 5.0
@@ -465,11 +481,11 @@ def build_observation(
         "log_gap": math.log1p(pre_turn_gap),
         "overlap": int(raw_gap < 0.0),
         "timeline_position": timeline_position,
-        "previous_density_per_second": previous_per_second,
-        "density_per_second": current_per_second,
-        "previous_log_density_per_second": previous_log_per_second,
-        "log_density_per_second": current_log_per_second,
-        "delta_log_density_per_second": current_log_per_second - previous_log_per_second,
+        "previous_iceberg_ratio": previous_ratio,
+        "iceberg_ratio": current_ratio,
+        "previous_log_iceberg_ratio": previous_log_ratio,
+        "log_iceberg_ratio": current_log_ratio,
+        "delta_log_iceberg_ratio": current_log_ratio - previous_log_ratio,
         "previous_density_per_token": previous_per_token,
         "density_per_token": current_per_token,
         "previous_log_density_per_token": previous_log_per_token,
@@ -678,12 +694,12 @@ def validate_model_frame(frame: pd.DataFrame) -> None:
     required = {
         "category",
         "episode",
-        "delta_log_density_per_second",
+        "delta_log_iceberg_ratio",
         "agree_move",
         "disagree_move",
         "lag_agree_move",
         "lag_disagree_move",
-        "previous_log_density_per_second",
+        "previous_log_iceberg_ratio",
         "timeline_position",
         "log_duration",
         "log_gap",
@@ -755,14 +771,14 @@ def model_fit_frame(
         rows.append(
             {
                 "model_name": model_name,
-                "response_variable": "delta_log_density_per_second",
+                "response_variable": "delta_log_iceberg_ratio",
                 "transition_count": len(frame),
                 "episode_count": int(frame["episode"].nunique()),
                 "r_squared": float(result.rsquared),
                 "adjusted_r_squared": float(result.rsquared_adj),
                 "aic": float(result.aic),
                 "bic": float(result.bic),
-                "aic_bic_comparison_group": "paper_per_second_outcome",
+                "aic_bic_comparison_group": "duration_free_iceberg_ratio_outcome",
                 "aic_bic_comparable_to_other_models": True,
             }
         )
@@ -797,7 +813,7 @@ def stance_comparison_frame(
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for term in STANCE_TERMS:
-        baseline = extract_coefficient(coefficients, PER_SECOND_MODEL, term)
+        baseline = extract_coefficient(coefficients, RATIO_MODEL, term)
         duration = extract_coefficient(coefficients, DURATION_MODEL, term)
         timing = extract_coefficient(coefficients, TIMING_MODEL, term)
         baseline_coefficient = float(cast(float, baseline["coefficient"]))
@@ -812,7 +828,7 @@ def stance_comparison_frame(
             TIMING_MODEL: attenuation_percent(duration_coefficient, timing_coefficient),
         }
         incremental_reference: dict[str, str] = {
-            DURATION_MODEL: PER_SECOND_MODEL,
+            DURATION_MODEL: RATIO_MODEL,
             TIMING_MODEL: DURATION_MODEL,
         }
         for model_name in HEADLINE_MODELS:
@@ -833,7 +849,7 @@ def stance_comparison_frame(
                         model_name
                     ),
                     "attenuation_reference_model": (
-                        PER_SECOND_MODEL if model_name in attenuation_from_baseline else None
+                        RATIO_MODEL if model_name in attenuation_from_baseline else None
                     ),
                     "incremental_attenuation_percent": incremental_attenuation.get(model_name),
                     "incremental_reference_model": incremental_reference.get(model_name),
@@ -869,7 +885,7 @@ def direction_status(
 
 def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str, object]:
     baseline = comparison[
-        (comparison["term"] == term) & (comparison["model_name"] == PER_SECOND_MODEL)
+        (comparison["term"] == term) & (comparison["model_name"] == RATIO_MODEL)
     ].iloc[0]
     duration = comparison[
         (comparison["term"] == term) & (comparison["model_name"] == DURATION_MODEL)
@@ -900,7 +916,7 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
     return {
         "term": term,
         "direction": "agreement" if expected_negative else "disagreement",
-        "paper_baseline_coefficient": baseline_coefficient,
+        "iceberg_ratio_baseline_coefficient": baseline_coefficient,
         "duration_adjusted_coefficient": duration_coefficient,
         "duration_adjusted_ci95_low": float(duration["ci95_low"]),
         "duration_adjusted_ci95_high": float(duration["ci95_high"]),
@@ -922,19 +938,19 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
 def manuscript_reference_comparison(coefficients: pd.DataFrame) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for term in STANCE_TERMS:
-        strict = extract_coefficient(coefficients, PER_SECOND_MODEL, term)
-        strict_value = float(cast(float, strict["coefficient"]))
+        ratio = extract_coefficient(coefficients, RATIO_MODEL, term)
+        ratio_value = float(cast(float, ratio["coefficient"]))
         reference = MANUSCRIPT_REFERENCE_COEFFICIENTS[term]
         rows.append(
             {
                 "term": term,
-                "manuscript_approximate_coefficient": reference,
-                "strict_adjacency_coefficient": strict_value,
-                "strict_minus_manuscript": strict_value - reference,
-                "sign_matches": int(np.sign(strict_value)) == int(np.sign(reference)),
+                "manuscript_per_second_approximate_coefficient": reference,
+                "iceberg_ratio_coefficient": ratio_value,
+                "sign_matches": int(np.sign(ratio_value)) == int(np.sign(reference)),
+                "outcomes_comparable": False,
                 "comparison_note": (
-                    "The manuscript value came from an earlier sample construction; differences must be "
-                    "reported before changing the paper claim."
+                    "The manuscript used a per-second outcome, while this analysis uses a "
+                    "duration-free iceberg ratio; coefficient magnitudes are not directly comparable."
                 ),
             }
         )
@@ -951,10 +967,8 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
             "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
         ) from error
 
-    from matplotlib.lines import Line2D
-
     model_labels: tuple[str, str, str] = (
-        "Paper baseline\n(per-second density)",
+        "Iceberg-ratio baseline\n(no duration in outcome)",
         "+ duration",
         "+ gap & overlap",
     )
@@ -969,11 +983,6 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
     markers: dict[str, str] = {
         "agree_move": "o",
         "disagree_move": "D",
-    }
-    detail_markers: dict[str, str] = {
-        PER_SECOND_MODEL: "o",
-        DURATION_MODEL: "s",
-        TIMING_MODEL: "X",
     }
     selected_by_term: dict[str, pd.DataFrame] = {
         term: comparison[comparison["term"] == term]
@@ -990,13 +999,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
             "font.size": 10,
         }
     ):
-        fig, (path_axis, detail_axis) = plt.subplots(
-            1,
-            2,
-            figsize=(12.8, 5.2),
-            gridspec_kw={"width_ratios": [1.7, 1.0]},
-            constrained_layout=True,
-        )
+        fig, path_axis = plt.subplots(figsize=(7.6, 5.2), constrained_layout=True)
 
         for term in STANCE_TERMS:
             selected = selected_by_term[term]
@@ -1029,133 +1032,11 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         path_axis.axhline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
         path_axis.set_xticks(x_positions, model_labels)
         path_axis.set_ylabel("Coefficient (episode-clustered 95% CI)")
-        path_axis.set_title("A  Estimates across specifications", loc="left", fontweight="bold")
+        path_axis.set_title("Estimates across specifications", loc="left", fontweight="bold")
         path_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
         path_axis.legend(frameon=False, loc="lower right")
-
-        row_positions: dict[str, float] = {"agree_move": 1.0, "disagree_move": 0.0}
-        for term in STANCE_TERMS:
-            selected = selected_by_term[term]
-            baseline_row = selected.loc[PER_SECOND_MODEL]
-            duration_row = selected.loc[DURATION_MODEL]
-            timing_row = selected.loc[TIMING_MODEL]
-            y_position = row_positions[term]
-            baseline_coefficient = float(baseline_row["coefficient"])
-            duration_coefficient = float(duration_row["coefficient"])
-            timing_coefficient = float(timing_row["coefficient"])
-            duration_attenuation = float(
-                duration_row["attenuation_from_baseline_percent"]
-            )
-            gap_overlap_attenuation = float(timing_row["incremental_attenuation_percent"])
-            full_attenuation = float(timing_row["attenuation_from_baseline_percent"])
-
-            for start, end in (
-                (baseline_coefficient, duration_coefficient),
-                (duration_coefficient, timing_coefficient),
-            ):
-                detail_axis.annotate(
-                    "",
-                    xy=(end, y_position),
-                    xytext=(start, y_position),
-                    arrowprops={
-                        "arrowstyle": "-|>",
-                        "color": colors[term],
-                        "linewidth": 2.0,
-                        "mutation_scale": 11,
-                    },
-                    zorder=1,
-                )
-            for model_name, coefficient, row, marker_face_color in (
-                (PER_SECOND_MODEL, baseline_coefficient, baseline_row, "white"),
-                (DURATION_MODEL, duration_coefficient, duration_row, colors[term]),
-                (TIMING_MODEL, timing_coefficient, timing_row, colors[term]),
-            ):
-                low = float(row["ci95_low"])
-                high = float(row["ci95_high"])
-                detail_axis.errorbar(
-                    coefficient,
-                    y_position,
-                    xerr=np.asarray([[coefficient - low], [high - coefficient]]),
-                    fmt=detail_markers[model_name],
-                    color=colors[term],
-                    ecolor=colors[term],
-                    markerfacecolor=marker_face_color,
-                    markeredgewidth=1.5,
-                    capsize=3,
-                    markersize=7,
-                    linewidth=1.5,
-                    zorder=3,
-                )
-
-            annotation = (
-                f"Duration: {duration_attenuation:.1f}% from baseline\n"
-                f"Gap/overlap: {gap_overlap_attenuation:.1f}% additional; "
-                f"full: {full_attenuation:.1f}%"
-            )
-            if term == "disagree_move" and np.sign(baseline_coefficient) != np.sign(
-                timing_coefficient
-            ):
-                annotation += " · sign reversed"
-            detail_axis.text(
-                (
-                    min(baseline_coefficient, duration_coefficient, timing_coefficient)
-                    + max(baseline_coefficient, duration_coefficient, timing_coefficient)
-                )
-                / 2.0,
-                y_position + 0.15,
-                annotation,
-                color=colors[term],
-                horizontalalignment="center",
-                verticalalignment="bottom",
-                fontsize=8.5,
-                fontweight="bold",
-            )
-
-        detail_axis.axvline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
-        detail_axis.set_yticks(
-            [row_positions[term] for term in STANCE_TERMS],
-            [term_labels[term].replace(" movement", "") for term in STANCE_TERMS],
-        )
-        detail_axis.set_ylim(-0.35, 1.45)
-        detail_axis.set_xlabel("Coefficient (episode-clustered 95% CI)")
-        detail_axis.set_title("B  Where timing adjustment enters", loc="left", fontweight="bold")
-        detail_axis.grid(axis="x", color="#D9D9D9", linewidth=0.7)
-        detail_axis.legend(
-            handles=[
-                Line2D(
-                    [0],
-                    [0],
-                    marker="o",
-                    color="#555555",
-                    markerfacecolor="white",
-                    markeredgewidth=1.5,
-                    linestyle="none",
-                    label="Paper baseline",
-                ),
-                Line2D(
-                    [0],
-                    [0],
-                    marker="s",
-                    color="#555555",
-                    markerfacecolor="#555555",
-                    linestyle="none",
-                    label="+ duration",
-                ),
-                Line2D(
-                    [0],
-                    [0],
-                    marker="X",
-                    color="#555555",
-                    markerfacecolor="#555555",
-                    linestyle="none",
-                    label="+ gap & overlap",
-                ),
-            ],
-            frameon=False,
-            loc="lower right",
-        )
         fig.suptitle(
-            "RQ1 paper model with timing sensitivity checks",
+            "RQ1 iceberg-ratio model with timing sensitivity checks",
             fontsize=15,
             fontweight="bold",
         )
@@ -1243,13 +1124,13 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     versions = package_versions()
     audit.update(
         {
-            "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+            "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
             "script_version": SCRIPT_VERSION,
             "script_sha256": file_sha256(Path(__file__)),
             "formulas": FORMULAS,
             "common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
-            "density_per_second_definition": "(explicit_count / (assumption_count + 1)) / duration_seconds",
+            "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
             "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
             "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
@@ -1271,7 +1152,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         if key != "summary" and path.exists()
     }
     summary: dict[str, object] = {
-        "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+        "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
         "script_version": SCRIPT_VERSION,
         "configuration": {
             "data_dir": str(args.data_dir),
@@ -1295,16 +1176,16 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "manuscript_reference_comparison": manuscript_reference_comparison(coefficients),
         "both_directional_intervals_survive_timing_adjustment": interval_survives,
         "estimands": {
-            PER_SECOND_MODEL: "paper stance-density-pacing association on the timing sample",
+            RATIO_MODEL: "stance association with the duration-free iceberg ratio",
             DURATION_MODEL: (
-                "paper association conditional on current-turn duration"
+                "iceberg-ratio association conditional on current-turn duration"
             ),
             TIMING_MODEL: (
-                "paper association conditional on current-turn duration and response timing"
+                "iceberg-ratio association conditional on current-turn duration and response timing"
             ),
         },
         "causal_claim": False,
-        "duration_note": "Duration may be a mediator rather than a conventional confound.",
+        "duration_note": "Duration is excluded from the outcome and enters only as a predictor.",
         "artifact_sha256": artifact_hashes,
         "summary_self_hash_excluded": True,
     }
@@ -1320,7 +1201,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run the self-contained ICLR RQ1 timing-aware density analysis."
+        description="Run the self-contained ICLR RQ1 timing-aware iceberg-ratio analysis."
     )
     parser.add_argument("--data_dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
