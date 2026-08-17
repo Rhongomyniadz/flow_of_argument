@@ -50,12 +50,13 @@
   "files_examined": 19990,
   "formulas": {
     "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "token_duration_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
     "token_normalized": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category)",
     "token_timing_adjusted": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
     "token_timing_previous_duration": "delta_log_density_per_token ~ agree_move + disagree_move + lag_delta_stance + previous_log_density_per_token + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "d4faf3b2fbc2eb7b8325bdb2a68ce3fe11fd511f",
+    "commit": "5970596182f6108f97ca4810dce9b7a2d58f56a2",
     "dirty": true
   },
   "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
@@ -85,8 +86,8 @@
     "all"
   ],
   "retained_observation_count": 241284,
-  "script_sha256": "4ffeb76dfa3efd2c0f02c3f8880553e26a5cf29201a0b2ac573a32774ebece1a",
-  "script_version": "1.0.0",
+  "script_sha256": "6ad072f95c7e6c963440c88bcf111ab522edc8c2cde1a961bad7fed96b18707f",
+  "script_version": "1.1.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",
