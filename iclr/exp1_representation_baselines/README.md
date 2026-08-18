@@ -11,7 +11,7 @@ cannot be resumed or merged with this run.
 
 ## Five default conditions
 
-For each raw-history budget (default: 128, 256, 512 whitespace tokens), the code prepares:
+At the fixed 256-word raw-history budget, the code prepares:
 
 1. `raw_history`
 2. `raw_history_true_assumptions`

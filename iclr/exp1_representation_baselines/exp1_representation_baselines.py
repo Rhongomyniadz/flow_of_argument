@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "6.0.0"
+SCRIPT_VERSION = "6.0.1"
 PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -50,7 +50,7 @@ DEFAULT_SOURCE_TAIL_WORDS = 100
 DEFAULT_CANDIDATE_HEAD_WORDS = 100
 DEFAULT_ASSUMPTION_BUDGET = 3
 DEFAULT_FUTURE_HORIZONS = (1, 3, 5)
-DEFAULT_REPRESENTATION_BUDGETS = (128, 256, 512)
+DEFAULT_REPRESENTATION_BUDGETS = (256,)
 REPRESENTATION_BUDGET_TOKENIZER = "whitespace_v1"
 EMPTY_EXPLICIT = "None extracted."
 EMPTY_ASSUMPTIONS = "None extracted."

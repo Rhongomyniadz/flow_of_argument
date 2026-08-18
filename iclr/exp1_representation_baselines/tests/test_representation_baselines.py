@@ -367,7 +367,7 @@ class PreparationAndControlTests(unittest.TestCase):
         self.assertTrue(beta_control_pairs)
         self.assertTrue(
             any(
-                not pair["conditions"][baseline.matched_condition_id("raw_history_stale_assumptions", 128)]["available"]
+                not pair["conditions"][baseline.matched_condition_id("raw_history_stale_assumptions", 256)]["available"]
                 for pair in beta_control_pairs
             )
         )
@@ -389,7 +389,7 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
         self.assertEqual(args.source_tail_words, 100)
         self.assertEqual(args.candidate_head_words, 100)
         self.assertEqual(args.future_horizons, [1, 3, 5])
-        self.assertEqual(args.representation_budgets, [128, 256, 512])
+        self.assertEqual(args.representation_budgets, [256])
         self.assertEqual(args.conditions, list(baseline.DEFAULT_CONDITIONS))
 
     def test_forced_choice_parser_and_binary_accuracy(self) -> None:
@@ -553,6 +553,7 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             "raw_history_stale_assumptions",
             "raw_history_explicit",
             "REPRESENTATION_BUDGETS_CSV",
+            'REPRESENTATION_BUDGETS_CSV="${REPRESENTATION_BUDGETS_CSV:-256}"',
             "SOURCE_TAIL_WORDS",
             "CANDIDATE_HEAD_WORDS",
             'FUTURE_HORIZONS_CSV="${FUTURE_HORIZONS_CSV:-1,3,5}"',
