@@ -37,7 +37,6 @@
     "p95": 8.455745685292685
   },
   "data_dir": "data/stance_labeled/1024",
-  "density_per_second_definition": "(explicit_count / (assumption_count + 1)) / duration_seconds",
   "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
   "episode_count_with_observations": 14588,
   "excluded_window_count": 199946,
@@ -45,24 +44,25 @@
     "empty_or_zero_word_turn": 5,
     "non_substantive_window": 199941
   },
-  "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+  "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
   "files_discovered": 19990,
   "files_examined": 19990,
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "240ba755f3352c8bbd71db15885740b7cddc10c7",
+    "commit": "45c0cebe50285bfd37eb8d0117a6a4ba9f4fb16b",
     "dirty": true
   },
+  "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
   "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
   "max_episodes": null,
-  "observation_csv_sha256": "587c1852a08ed30c9e0f81ef64b41723089a30183f4eb623c95491c6681e0397",
+  "observation_csv_sha256": "4db0d2e10ba635e4fb46e58e70ad25e3155eb4424def0e61ee69eed1295e19db",
   "observation_hash_method": "sha256(canonical JSON per row in construction order, newline-delimited)",
-  "observation_rows_sha256": "b24904d39306937f171355ed99c292320b215edbc0b321d22206368f3bc79305",
+  "observation_rows_sha256": "e66daf1023da03dd1642d61317006eec2c0948fa91e202e787d1d6132c531230",
   "overlap_count": 4186,
   "overlap_rate": 0.01734885031746821,
   "package_versions": {
@@ -85,8 +85,8 @@
     "all"
   ],
   "retained_observation_count": 241284,
-  "script_sha256": "2039572285f3b453c2ad03a5a01c476d2616d028913cb95a359c0f8b0946fbcf",
-  "script_version": "2.0.0",
+  "script_sha256": "3886193cf002427bf8c3cebc8645843851871299a8728eff2b1242cfd5a5322e",
+  "script_version": "3.0.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",

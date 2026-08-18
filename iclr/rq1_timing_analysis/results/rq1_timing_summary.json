@@ -1,12 +1,12 @@
 {
   "artifact_sha256": {
-    "rq1_timing_coefficients.csv": "8915ffdcb7f84560ce28933cc24437b7caeda695a9957dfc91a3f4b3c38191ec",
-    "rq1_timing_comparison.pdf": "7d5e60a52ce9fa44d4c7bcf6c960a0b1d61f353027f7ce3f4a5bea98e07a9217",
-    "rq1_timing_comparison.png": "ca240af526db2ea2f2faf2960d60fcb5244b1088e7ea3c72704f7e2105513bd4",
-    "rq1_timing_data_audit.json": "d0885d27b3c2a75ccf4984472c1c0292aa9f5311314a654cce7c4132a039c00a",
-    "rq1_timing_model_fit.csv": "f86b69b4369b35c80069bd2b128fcd7a001403a9520180651ccb26ee8f24e7aa",
-    "rq1_timing_observations.csv": "587c1852a08ed30c9e0f81ef64b41723089a30183f4eb623c95491c6681e0397",
-    "rq1_timing_stance_comparison.csv": "38485d329daad13af9a50b5835ce23db80ea90b594d1f1dff106be28c5ff378d"
+    "rq1_timing_coefficients.csv": "a86cef10e15b183d2f5d13d55212c3ce152f3d2ba88903bf5dc1baa5621352a6",
+    "rq1_timing_comparison.pdf": "750009ecf88b3f38ec237d311aa79b6248765ba8d39072b68677b7a7ef3de17a",
+    "rq1_timing_comparison.png": "0f3f6eae650f281ea3ee32815e11f790adc4ab42ed29f31c8d7433b191426306",
+    "rq1_timing_data_audit.json": "59b8551808ba0f2e7518ae7ce507044dbf28b499dab76d6cc9b736af0b5a6796",
+    "rq1_timing_model_fit.csv": "2c8772e1f976ec695cf7ff31549bac6e5296ba4ef12233a5b7cff897b728bd63",
+    "rq1_timing_observations.csv": "4db0d2e10ba635e4fb46e58e70ad25e3155eb4424def0e61ee69eed1295e19db",
+    "rq1_timing_stance_comparison.csv": "b850cf3b0e150c42ca1c1e3dd55e879624520df2d3da0b9b670c17ce89ab5b6f"
   },
   "both_directional_intervals_survive_timing_adjustment": false,
   "causal_claim": false,
@@ -20,101 +20,101 @@
     "output_dir": "iclr/rq1_timing_analysis/results",
     "plot_dpi": 300
   },
-  "duration_note": "Duration may be a mediator rather than a conventional confound.",
+  "duration_note": "Duration is excluded from the outcome and enters only as a predictor.",
   "episode_count": 14588,
   "estimands": {
-    "per_second": "paper stance-density-pacing association on the timing sample",
-    "per_second_duration_adjusted": "paper association conditional on current-turn duration",
-    "per_second_timing_adjusted": "paper association conditional on current-turn duration and response timing"
+    "iceberg_ratio": "stance association with the duration-free iceberg ratio",
+    "iceberg_ratio_duration_adjusted": "iceberg-ratio association conditional on current-turn duration",
+    "iceberg_ratio_timing_adjusted": "iceberg-ratio association conditional on current-turn duration and response timing"
   },
-  "experiment": "ICLR RQ1 timing-aware explicit-implicit density analysis",
+  "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "240ba755f3352c8bbd71db15885740b7cddc10c7",
+    "commit": "45c0cebe50285bfd37eb8d0117a6a4ba9f4fb16b",
     "dirty": true
   },
   "headline_coefficients": {
-    "per_second:agree_move": {
-      "ci95_high": -0.022107730605531548,
-      "ci95_low": -0.024759492932435193,
-      "clustered_se": 0.0006764824118760367,
-      "coefficient": -0.02343361176898337,
-      "model_name": "per_second",
-      "p_value": 6.234324824687777e-263,
+    "iceberg_ratio:agree_move": {
+      "ci95_high": 0.05672791723042355,
+      "ci95_low": 0.05211423261314576,
+      "clustered_se": 0.001176981988870701,
+      "coefficient": 0.054421074921784655,
+      "model_name": "iceberg_ratio",
+      "p_value": 0.0,
       "term": "agree_move",
-      "z_or_t": -34.64038585126956
+      "z_or_t": 46.237814542940434
     },
-    "per_second:disagree_move": {
-      "ci95_high": 0.018936684399021766,
-      "ci95_low": 0.015602309722656986,
-      "clustered_se": 0.0008506214151550494,
-      "coefficient": 0.017269497060839377,
-      "model_name": "per_second",
-      "p_value": 1.2292281892972538e-91,
+    "iceberg_ratio:disagree_move": {
+      "ci95_high": -0.0627354103987368,
+      "ci95_low": -0.06822066946650708,
+      "clustered_se": 0.0013993264955471907,
+      "coefficient": -0.06547803993262194,
+      "model_name": "iceberg_ratio",
+      "p_value": 0.0,
       "term": "disagree_move",
-      "z_or_t": 20.302212891843936
+      "z_or_t": -46.79253922582056
     },
-    "per_second_duration_adjusted:agree_move": {
-      "ci95_high": 0.0036662114688016155,
-      "ci95_low": 0.0015792899414285532,
-      "clustered_se": 0.0005323877234057445,
-      "coefficient": 0.0026227507051150845,
-      "model_name": "per_second_duration_adjusted",
-      "p_value": 8.376180742196404e-07,
+    "iceberg_ratio_duration_adjusted:agree_move": {
+      "ci95_high": 0.005616074101726033,
+      "ci95_low": 0.001914728179039678,
+      "clustered_se": 0.0009442382492438892,
+      "coefficient": 0.0037654011403828558,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "p_value": 6.669841551807292e-05,
       "term": "agree_move",
-      "z_or_t": 4.926392157086289
+      "z_or_t": 3.9877659514408026
     },
-    "per_second_duration_adjusted:disagree_move": {
-      "ci95_high": -0.007449486843875964,
-      "ci95_low": -0.010281169618621171,
-      "clustered_se": 0.0007223813287083741,
-      "coefficient": -0.008865328231248568,
-      "model_name": "per_second_duration_adjusted",
-      "p_value": 1.2747273223235057e-34,
+    "iceberg_ratio_duration_adjusted:disagree_move": {
+      "ci95_high": -0.013802087068676415,
+      "ci95_low": -0.017764541309195192,
+      "clustered_se": 0.0010108487379804202,
+      "coefficient": -0.015783314188935804,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "p_value": 5.852518533487945e-55,
       "term": "disagree_move",
-      "z_or_t": -12.272366240555904
+      "z_or_t": -15.61392283129261
     },
-    "per_second_timing_adjusted:agree_move": {
-      "ci95_high": 0.0036243484595958092,
-      "ci95_low": 0.001537918527504617,
-      "clustered_se": 0.0005322623141416591,
-      "coefficient": 0.002581133493550213,
-      "model_name": "per_second_timing_adjusted",
-      "p_value": 1.2385820203474848e-06,
+    "iceberg_ratio_timing_adjusted:agree_move": {
+      "ci95_high": 0.004972882351079112,
+      "ci95_low": 0.001292290265610879,
+      "clustered_se": 0.0009389438057281341,
+      "coefficient": 0.003132586308344995,
+      "model_name": "iceberg_ratio_timing_adjusted",
+      "p_value": 0.000849053665367558,
       "term": "agree_move",
-      "z_or_t": 4.8493636031937
+      "z_or_t": 3.3362873147831573
     },
-    "per_second_timing_adjusted:disagree_move": {
-      "ci95_high": -0.007291708400240625,
-      "ci95_low": -0.010136635951699276,
-      "clustered_se": 0.000725760160364955,
-      "coefficient": -0.008714172175969951,
-      "model_name": "per_second_timing_adjusted",
-      "p_value": 3.26638309883573e-33,
+    "iceberg_ratio_timing_adjusted:disagree_move": {
+      "ci95_high": -0.011625625508352675,
+      "ci95_low": -0.015567213836374194,
+      "clustered_se": 0.0010055257033068628,
+      "coefficient": -0.013596419672363434,
+      "model_name": "iceberg_ratio_timing_adjusted",
+      "p_value": 1.1644888478866573e-41,
       "term": "disagree_move",
-      "z_or_t": -12.006958568224455
+      "z_or_t": -13.521702754737168
     }
   },
   "manuscript_reference_comparison": [
     {
-      "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
-      "manuscript_approximate_coefficient": -0.0056,
-      "sign_matches": true,
-      "strict_adjacency_coefficient": -0.02343361176898337,
-      "strict_minus_manuscript": -0.01783361176898337,
+      "comparison_note": "The manuscript used a per-second outcome, while this analysis uses a duration-free iceberg ratio; coefficient magnitudes are not directly comparable.",
+      "iceberg_ratio_coefficient": 0.054421074921784655,
+      "manuscript_per_second_approximate_coefficient": -0.0056,
+      "outcomes_comparable": false,
+      "sign_matches": false,
       "term": "agree_move"
     },
     {
-      "comparison_note": "The manuscript value came from an earlier sample construction; differences must be reported before changing the paper claim.",
-      "manuscript_approximate_coefficient": 0.0049,
-      "sign_matches": true,
-      "strict_adjacency_coefficient": 0.017269497060839377,
-      "strict_minus_manuscript": 0.012369497060839377,
+      "comparison_note": "The manuscript used a per-second outcome, while this analysis uses a duration-free iceberg ratio; coefficient magnitudes are not directly comparable.",
+      "iceberg_ratio_coefficient": -0.06547803993262194,
+      "manuscript_per_second_approximate_coefficient": 0.0049,
+      "outcomes_comparable": false,
+      "sign_matches": false,
       "term": "disagree_move"
     }
   ],
@@ -125,40 +125,40 @@
     "statsmodels": "0.14.5",
     "tqdm": "4.68.1"
   },
-  "script_version": "2.0.0",
+  "script_version": "3.0.0",
   "summary_self_hash_excluded": true,
   "timing_adjustment_interpretation": [
     {
-      "attenuation_percent": 88.9853364517774,
+      "attenuation_percent": 94.24379927657213,
       "direction": "agreement",
-      "duration_adjusted_ci95_high": 0.0036662114688016155,
-      "duration_adjusted_ci95_low": 0.0015792899414285532,
-      "duration_adjusted_coefficient": 0.0026227507051150845,
-      "duration_attenuation_percent": 88.80774021959968,
-      "duration_status": "sign_reversed_after_duration_adjustment",
-      "gap_overlap_incremental_attenuation_percent": 1.5867772519784773,
-      "paper_baseline_coefficient": -0.02343361176898337,
-      "status": "sign_reversed_after_timing_adjustment",
+      "duration_adjusted_ci95_high": 0.005616074101726033,
+      "duration_adjusted_ci95_low": 0.001914728179039678,
+      "duration_adjusted_coefficient": 0.0037654011403828558,
+      "duration_attenuation_percent": 93.08098719881114,
+      "duration_status": "direction_preserved_but_interval_includes_zero_or_wrong_direction",
+      "gap_overlap_incremental_attenuation_percent": 16.806040271542432,
+      "iceberg_ratio_baseline_coefficient": 0.054421074921784655,
+      "status": "direction_preserved_but_interval_includes_zero_or_wrong_direction",
       "term": "agree_move",
-      "timing_adjusted_ci95_high": 0.0036243484595958092,
-      "timing_adjusted_ci95_low": 0.001537918527504617,
-      "timing_adjusted_coefficient": 0.002581133493550213
+      "timing_adjusted_ci95_high": 0.004972882351079112,
+      "timing_adjusted_ci95_low": 0.001292290265610879,
+      "timing_adjusted_coefficient": 0.003132586308344995
     },
     {
-      "attenuation_percent": 49.54009288591058,
+      "attenuation_percent": 79.23514557498301,
       "direction": "disagreement",
-      "duration_adjusted_ci95_high": -0.007449486843875964,
-      "duration_adjusted_ci95_low": -0.010281169618621171,
-      "duration_adjusted_coefficient": -0.008865328231248568,
-      "duration_attenuation_percent": 48.664815194000376,
-      "duration_status": "sign_reversed_after_duration_adjustment",
-      "gap_overlap_incremental_attenuation_percent": 1.705024916571285,
-      "paper_baseline_coefficient": 0.017269497060839377,
-      "status": "sign_reversed_after_timing_adjustment",
+      "duration_adjusted_ci95_high": -0.013802087068676415,
+      "duration_adjusted_ci95_low": -0.017764541309195192,
+      "duration_adjusted_coefficient": -0.015783314188935804,
+      "duration_attenuation_percent": 75.89525556174695,
+      "duration_status": "direction_preserved_but_interval_includes_zero_or_wrong_direction",
+      "gap_overlap_incremental_attenuation_percent": 13.855737080273013,
+      "iceberg_ratio_baseline_coefficient": -0.06547803993262194,
+      "status": "direction_preserved_but_interval_includes_zero_or_wrong_direction",
       "term": "disagree_move",
-      "timing_adjusted_ci95_high": -0.007291708400240625,
-      "timing_adjusted_ci95_low": -0.010136635951699276,
-      "timing_adjusted_coefficient": -0.008714172175969951
+      "timing_adjusted_ci95_high": -0.011625625508352675,
+      "timing_adjusted_ci95_low": -0.015567213836374194,
+      "timing_adjusted_coefficient": -0.013596419672363434
     }
   ],
   "transition_count": 241284
