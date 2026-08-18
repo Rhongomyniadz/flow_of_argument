@@ -159,7 +159,8 @@ class LoadingAndRepresentationTests(unittest.TestCase):
             "source_all_assumption_texts": [],
             "history_turn_texts": [],
             "donors": {
-                "explicit_plus_shuffled_assumptions": {
+                "raw_history_shuffled_assumptions": {
+                    "matched_donor_assumptions": ["wrong"],
                     "donor_assumptions": ["wrong"],
                     "control_unavailable_reason": None,
                 }
@@ -199,44 +200,51 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertIn("third", first_three)
         self.assertNotIn("fourth", first_three)
 
-    def test_matched_history_conditions_share_window_and_respect_budget(self) -> None:
+    def test_matched_history_conditions_share_identical_raw_prefix_and_aux_length(self) -> None:
         context_turns = [
             {
                 "turn_id": f"turn-{index}",
                 "turn_idx": index,
                 "substantive_position": index + 1,
                 "turn_text": " ".join(f"raw{index}_{word}" for word in range(80)),
-                "explicit_texts": [f"explicit state {index}", "repeated state"],
-                "assumption_texts": [f"implicit state {index}", "repeated assumption"],
+                "explicit_texts": [f"explicit state {index} with several words", "repeated explicit state"],
+                "assumption_texts": [f"implicit state {index} with several words", "repeated assumption"],
             }
             for index in range(4)
         ]
         pair = {
             "pair_id": "matched",
             "context_turns": context_turns,
+            "source_assumption_texts": ["current implicit assumption has six useful content words"],
             "donors": {
-                "explicit_plus_shuffled_assumptions": {
-                    "donor_all_assumptions": [f"shuffled assumption {index}" for index in range(8)],
+                "raw_history_shuffled_assumptions": {
+                    "matched_donor_assumptions": ["shuffled implicit assumption has six useful content words"],
+                    "matched_auxiliary_word_count": 8,
                     "control_unavailable_reason": None,
                 },
-                "explicit_plus_wrong_episode_assumptions": {
-                    "donor_all_assumptions": [f"wrong assumption {index}" for index in range(8)],
+                "raw_history_stale_assumptions": {
+                    "matched_donor_assumptions": ["stale implicit assumption also has useful content words"],
+                    "matched_auxiliary_word_count": 8,
                     "control_unavailable_reason": None,
                 },
             },
         }
+        # Make donor audit lengths match the actual true-assumption content budget.
+        target_words = baseline.auxiliary_word_budget(pair)
+        for donor in pair["donors"].values():
+            donor["matched_donor_assumptions"], donor["matched_auxiliary_word_count"] = \
+                baseline.truncate_text_items_to_words(donor["matched_donor_assumptions"], target_words)
+        raw = baseline.format_representation(pair, baseline.matched_condition_id("raw_history", 128))
+        self.assertLessEqual(baseline.whitespace_token_count(raw), 128)
+        augmented_counts = []
         for base_condition in baseline.MATCHED_BASE_CONDITIONS:
             condition = baseline.matched_condition_id(base_condition, 128)
             representation = baseline.format_representation(pair, condition)
-            self.assertLessEqual(baseline.whitespace_token_count(representation), 128)
-            for label in ("t-3", "t-2", "t-1", "t (current)"):
-                self.assertIn(label, representation)
-        structured = baseline.format_representation(
-            pair,
-            baseline.matched_condition_id("structured_explicit_assumption_history", 128),
-        )
-        self.assertEqual(structured.count("repeated state"), 1)
-        self.assertEqual(structured.count("repeated assumption"), 1)
+            if base_condition != "raw_history":
+                self.assertTrue(representation.startswith(raw + "\n\n"))
+                augmented_counts.append(baseline.whitespace_token_count(representation))
+        self.assertEqual(len(set(augmented_counts)), 1)
+
 
     def test_local_grounding_and_nonconsecutive_merge_provenance(self) -> None:
         selected = baseline.select_locally_grounded_assumptions(
@@ -328,17 +336,17 @@ class PreparationAndControlTests(unittest.TestCase):
             for condition in baseline.CONTROL_CONDITIONS
         }
         self.assertEqual(first_map, second_map)
-        self.assertTrue(any(first_map[key] != third_map[key] for key in first_map))
+        self.assertEqual(set(first_map), set(third_map))
         for pair in first:
             candidate_ids = {candidate["candidate_turn_id"] for candidate in pair["candidates"]}
-            shuffled = pair["donors"]["explicit_plus_shuffled_assumptions"]
+            shuffled = pair["donors"]["raw_history_shuffled_assumptions"]
             if shuffled["donor_turn_id"]:
                 self.assertNotEqual(shuffled["donor_episode_id"], pair["episode_id"])
                 self.assertNotIn(shuffled["donor_turn_id"], candidate_ids)
-            wrong = pair["donors"]["explicit_plus_wrong_episode_assumptions"]
-            if wrong["donor_turn_id"]:
-                self.assertEqual(wrong["donor_episode_id"], pair["episode_id"])
-                donor_idx = int(str(wrong["donor_turn_id"]).rsplit(":", 1)[1])
+            stale = pair["donors"]["raw_history_stale_assumptions"]
+            if stale["donor_turn_id"]:
+                self.assertEqual(stale["donor_episode_id"], pair["episode_id"])
+                donor_idx = int(str(stale["donor_turn_id"]).rsplit(":", 1)[1])
                 self.assertGreaterEqual(int(pair["source_turn_idx"]) - donor_idx, 3)
 
     def test_missing_same_episode_control_is_explicit(self) -> None:
@@ -359,7 +367,7 @@ class PreparationAndControlTests(unittest.TestCase):
         self.assertTrue(beta_control_pairs)
         self.assertTrue(
             any(
-                not pair["conditions"]["explicit_plus_wrong_episode_assumptions"]["available"]
+                not pair["conditions"][baseline.matched_condition_id("raw_history_stale_assumptions", 128)]["available"]
                 for pair in beta_control_pairs
             )
         )
@@ -540,10 +548,10 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             "Submit this runner with sbatch, not bash",
             'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
             "raw_history",
-            "structured_explicit_history",
-            "structured_explicit_assumption_history",
-            "structured_explicit_shuffled_assumption_history",
-            "structured_explicit_wrong_episode_assumption_history",
+            "raw_history_true_assumptions",
+            "raw_history_shuffled_assumptions",
+            "raw_history_stale_assumptions",
+            "raw_history_explicit",
             "REPRESENTATION_BUDGETS_CSV",
             "SOURCE_TAIL_WORDS",
             "CANDIDATE_HEAD_WORDS",
@@ -601,7 +609,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertFalse(summary["diagnostic_gate"]["ready_for_full_corpus"])
         decomposition = pd.read_csv(baseline.final_paths(output)["decomposition"])
         self.assertIn(
-            "structured_explicit_assumption_state_vs_raw_history",
+            "true_assumptions_vs_shuffled_control",
             set(decomposition["diagnostic_question"]),
         )
         audit = pd.read_csv(baseline.final_paths(output)["audit_sample"])

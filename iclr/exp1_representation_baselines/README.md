@@ -1,72 +1,158 @@
-# Experiment 1: Matched-History Representation Baselines
+# Experiment 1: Assumption-Augmented Raw-History Baselines
 
-This experiment tests whether an accumulated explicit–implicit discourse state predicts a
-future turn better than raw dialogue history when both representations are built from the
-same source turns and have the same maximum length. It does not train an encoder and it does
-not select a condition after seeing the result.
+This version keeps the original LLM-judge future-turn prediction design, but changes the
+scientific comparison. Instead of asking whether a structured explicit–implicit state can
+replace raw dialogue, it asks whether **externalizing the inferred implicit state helps a
+fixed downstream judge distinguish the true future turn from hard negatives when the
+observed dialogue itself is held constant**.
 
-The prompt identity is `representation-matched-history-v2-json-evidence`, so scores from the
-older representation experiment cannot be resumed or merged. Results remain model-scoped;
-the default Qwen run writes under:
+The prompt identity is `raw-augmentation-v1-json-evidence`, so scores from earlier versions
+cannot be resumed or merged with this run.
+
+## Five default conditions
+
+For each raw-history budget (default: 128, 256, 512 whitespace tokens), the code prepares:
+
+1. `raw_history`
+2. `raw_history_true_assumptions`
+3. `raw_history_shuffled_assumptions`
+4. `raw_history_stale_assumptions`
+5. `raw_history_explicit`
+
+The raw-history block is constructed once for a pair/budget and is reused byte-for-byte in
+all five conditions. The budget therefore applies to the **raw-history block**. Augmented
+conditions append an auxiliary block after the unchanged raw history.
+
+The auxiliary content budget is the number of content words in the candidate-blind,
+locally-grounded assumptions selected for the current source turn (up to
+`ASSUMPTION_BUDGET`, default 3). True, shuffled, stale, and explicit auxiliary blocks are
+matched to that content-word budget. If an exact length-matched control cannot be built, that
+condition is explicitly marked unavailable for the pair.
+
+### True implicit
+
+`raw_history_true_assumptions` appends the selected assumptions from the current source turn.
+
+### Shuffled implicit
+
+`raw_history_shuffled_assumptions` appends assumptions from a **different episode**. The
+control prefers the same category and chooses the most lexically similar eligible donor,
+with length similarity and a deterministic seed-based tie break. This is deliberately harder
+than a random cross-topic shuffle.
+
+### Stale implicit
+
+`raw_history_stale_assumptions` appends assumptions from the **same episode**, at least three
+substantive turns earlier and outside the current history window. The reserved donor is the
+most lexically similar eligible stale turn. It is reserved before negative-candidate sampling
+so it cannot also become a candidate.
+
+### Explicit augmentation
+
+`raw_history_explicit` appends extracted explicit propositions from the same observed context,
+starting from the current turn and moving backward, truncated to the same auxiliary content
+budget as the true assumptions. This controls for the possibility that any extracted semantic
+restatement helps the judge.
+
+## Prespecified contrasts
+
+At horizon 1 and the 256-word raw-history budget, the primary contrast is:
+
+```text
+Raw + True Implicit - Raw + Shuffled Implicit
+```
+
+Secondary contrasts are:
+
+```text
+Raw + True Implicit - Raw + Stale Implicit
+Raw + True Implicit - Raw
+Raw + True Implicit - Raw + Explicit
+```
+
+The intended interpretation hierarchy is:
+
+- **True > Shuffled:** the identity/content of the inferred assumptions matters.
+- **True > Stale:** the assumptions reflect the current conversational state rather than only
+  episode/topic semantics.
+- **True > Explicit:** the effect is specific to implicit state rather than generic extracted
+  semantic text.
+- **True > Raw:** making the inferred state explicit improves a bounded downstream model's
+  access to predictive structure already latent in the transcript.
+
+Because assumptions are inferred from the transcript, `True > Raw` should not be described as
+adding information in a strict information-theoretic sense. The defensible claim is that the
+assumption representation makes useful conversational structure more accessible to the judge.
+
+## Candidate task and judge
+
+Candidate construction remains unchanged: one true future turn plus 24 hard negatives, with
+each true/negative pair shown in both A/B orders. The exact candidate pool is shared across
+all conditions.
+
+The judge prompt is deliberately neutral. It asks which candidate is the more plausible
+continuation and considers:
+
+- semantic relevance to the observed conversation;
+- conversational obligations created by preceding turns;
+- speaker intent, stance, and continuity;
+- supported presuppositions/assumptions;
+- local discourse coherence at the requested horizon.
+
+It no longer explicitly privileges the final dialogue act, because that instruction created
+an avoidable representational asymmetry in the previous structured-vs-raw design.
+
+The judge must return strict JSON with exactly `answer` and `evidence`.
+
+## Statistics
+
+Accuracy is computed from the order-swapped binary judgments. All condition contrasts are
+paired on the same source/candidate decisions. Confidence intervals use the existing
+conversation/episode-clustered bootstrap.
+
+The diagnostic gate now prioritizes:
+
+1. `True - Shuffled`;
+2. `True - Stale`;
+3. `True - Explicit`;
+4. `True - Raw`.
+
+A positive `True - Shuffled` result alone is not treated as sufficient evidence of a dynamic
+latent state; the stale same-episode control is required for the stronger state-specificity
+interpretation.
+
+## Preserving the previous run
+
+The previous structured-vs-raw results should be archived once under:
+
+```text
+iclr/exp1_representation_baselines/results/previous_matched_history_run/
+```
+
+For the default Qwen judge, the old model output directory becomes:
+
+```text
+iclr/exp1_representation_baselines/results/previous_matched_history_run/Qwen__Qwen3-30B-A3B-Instruct-2507/
+```
+
+The experiment code itself keeps the original output logic unchanged. New runs still write to:
 
 ```text
 iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/
 ```
 
-## Prespecified design
-
-For each source turn `t`, the default history is the previous three substantive turns plus
-the current source turn: `t-3, ..., t`. All conditions use this same candidate-blind window.
-The default source-representation caps are 128, 256, and 512 whitespace tokens. The cap
-includes turn and state labels, and the actual realized length is saved with every condition.
-Content is allocated from the current turn backward, then displayed chronologically.
-
-The five default base conditions are expanded at every budget:
-
-1. `raw_history`
-2. `structured_explicit_history`
-3. `structured_explicit_assumption_history`
-4. `structured_explicit_shuffled_assumption_history`
-5. `structured_explicit_wrong_episode_assumption_history`
-
-The structured state keeps temporal turn boundaries. Repeated explicit propositions and
-assumptions are deterministically deduplicated, retaining their most recent occurrence.
-Assumptions are selected within each source turn without looking at candidates. The corrupted
-conditions preserve the explicit history and replace only the implicit content with a
-different-episode donor or a nonadjacent earlier donor from the same episode.
-
-The primary comparison is fixed in advance:
-
-```text
-structured_explicit_assumption_history - raw_history
-```
-
-The 256-token, one-turn-horizon contrast is the primary diagnostic. The 128- and 512-token
-results show the budget curve. Secondary contrasts test incremental assumption value against
-structured explicit-only history and specificity against both corrupted-assumption controls.
-Positive pairwise values always favor the condition on the left. The analysis reports all
-budgets even when the expected ordering does not occur.
-
-The existing legacy single-turn conditions remain available when explicitly requested, but
-they are no longer the default experiment.
-
-## Data and scoring
-
-Preparation reads `data_cleaned/conversation_moves_labeled/`. Regenerate it from the
-repository root before a confirmatory run:
+On an existing checkout, archive the old result directory once before launching this new design:
 
 ```bash
-python deduplicate_data.py --overwrite
+mkdir -p iclr/exp1_representation_baselines/results/previous_matched_history_run
+
+mv iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507 \
+   iclr/exp1_representation_baselines/results/previous_matched_history_run/
 ```
 
-Preparation rejects pairs without contiguous original-turn provenance. The positive at
-horizon `n` is the turn exactly `n` positions after the source. Default horizons are 1, 3,
-and 5; only positive odd horizons are accepted for the cleaned ABAB dialogues.
-
-Each positive is paired with 24 hard negatives. Every pair is shown in both A/B orders, so a
-complete pair-condition contains 48 valid binary judgments. Accuracy is the proportion that
-selects the true future turn. The judge must emit strict JSON with exactly `answer` and
-`evidence`. Fake scoring validates plumbing only and is not an experimental result.
+Do not change `OUTPUT_ROOT` or `OUTPUT_DIR` for the new run unless you intentionally want a
+different destination. This keeps downstream result and Overleaf paths unchanged while preserving
+the previous experiment separately.
 
 ## CPU validation
 
@@ -76,7 +162,7 @@ python -m unittest discover \
   -p 'test_*.py' -v
 ```
 
-For a small end-to-end plumbing run:
+For a small plumbing run:
 
 ```bash
 python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
@@ -85,9 +171,7 @@ python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
   --bootstrap_draws 20
 ```
 
-## Slurm run
-
-Create the log directory, then submit the coordinator:
+## Slurm smoke run
 
 ```bash
 mkdir -p iclr/exp1_representation_baselines/_log
@@ -96,27 +180,31 @@ MAX_EPISODES_PER_CATEGORY=5 \
 sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
 
-The coordinator prepares once, submits a GPU scoring array, then dependent merge and analysis
-jobs. Important overrides include `MODEL_NAME`, `HISTORY_TURNS`,
-`REPRESENTATION_BUDGETS_CSV`, `FUTURE_HORIZONS_CSV`, `CONDITIONS_CSV`,
-`MAX_EPISODES_PER_CATEGORY`, and `EPISODES_PER_PATCH`. The default runner uses two A6000 GPUs
-and `tensor_parallel_size=2`.
+The default runner uses:
 
-An ungated full-corpus submission is blocked unless `ALLOW_FULL_RUN=1`. Even a passing primary
-run advances only to a different-family judge smoke test and manual audit.
+```text
+raw_history
+raw_history_true_assumptions
+raw_history_shuffled_assumptions
+raw_history_stale_assumptions
+raw_history_explicit
+```
 
-## Outputs
+Set `ALLOW_FULL_RUN=1` only after reviewing the smoke-run donor audit, control coverage, and
+diagnostic gate. A different-family judge should be used as a robustness run before making a
+full-corpus claim.
 
-In addition to long/wide metrics, coverage, category/move summaries, and score manifests, the
-analysis emits:
+## Main outputs
 
-- `exp1_representation_decomposition.csv`: all planned matched-budget contrasts.
-- `exp1_representation_audit_sample.csv`: strongest wins, losses, and ties with both primary
-  source representations.
-- `exp1_representation_diagnostic_gate.json`: the prespecified 256-token primary decision and
-  all-budget curve.
-- `exp1_representation_diagnostic_comparison.{pdf,png}`: accuracy by representation budget.
-- `exp1_representation_decomposition_lifts.{pdf,png}`: paired lifts by budget.
+- `exp1_representation_metrics_long.csv`
+- `exp1_representation_pairwise_deltas.csv`
+- `exp1_representation_flip_analysis.csv` (strict helpful/harmful candidate flips plus order-averaged deltas)
+- `exp1_representation_decomposition.csv`
+- `exp1_representation_donors.jsonl`
+- `exp1_representation_audit_sample.csv`
+- `exp1_representation_diagnostic_gate.json`
+- `exp1_representation_diagnostic_comparison.{pdf,png}`
+- `exp1_representation_decomposition_lifts.{pdf,png}`
 
-The preparation manifest records the exact budgeting policy, token-count convention,
-deduplication rule, source window, seed, and hashes needed to audit or reproduce the run.
+The donor audit records donor source, fallback level, target auxiliary length, and the exact
+length-matched assumptions used for shuffled/stale controls.

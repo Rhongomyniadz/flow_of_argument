@@ -29,8 +29,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "5.0.0"
-PROMPT_VERSION = "representation-matched-history-v2-json-evidence"
+SCRIPT_VERSION = "6.0.0"
+PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
 DEFAULT_PREPARED_NAME = "exp1_representation_prepared_pairs.jsonl"
@@ -58,10 +58,10 @@ EMPTY_HISTORY = "No earlier substantive turn available."
 
 MATCHED_BASE_CONDITIONS = (
     "raw_history",
-    "structured_explicit_history",
-    "structured_explicit_assumption_history",
-    "structured_explicit_shuffled_assumption_history",
-    "structured_explicit_wrong_episode_assumption_history",
+    "raw_history_true_assumptions",
+    "raw_history_shuffled_assumptions",
+    "raw_history_stale_assumptions",
+    "raw_history_explicit",
 )
 DEFAULT_CONDITIONS = tuple(
     f"{condition}_b{budget}"
@@ -84,9 +84,13 @@ LEGACY_OPTIONAL_CONDITIONS = (
 )
 ALL_CONDITIONS = DEFAULT_CONDITIONS + LEGACY_CONDITIONS + LEGACY_OPTIONAL_CONDITIONS
 CONTROL_CONDITIONS = (
-    "explicit_plus_shuffled_assumptions",
-    "explicit_plus_wrong_episode_assumptions",
+    "raw_history_shuffled_assumptions",
+    "raw_history_stale_assumptions",
 )
+LEGACY_CONTROL_MAP = {
+    "explicit_plus_shuffled_assumptions": "raw_history_shuffled_assumptions",
+    "explicit_plus_wrong_episode_assumptions": "raw_history_stale_assumptions",
+}
 HEADLINE_CONSTRUCTIVE_MOVES = {
     "Assert / Elaborate",
     "Answer",
@@ -291,10 +295,11 @@ def parse_matched_condition(condition: str) -> tuple[str | None, int | None]:
 
 def condition_donor_key(condition: str) -> str | None:
     base_condition, _ = parse_matched_condition(condition)
-    return {
-        "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
-        "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
-    }.get(base_condition, condition if condition in CONTROL_CONDITIONS else None)
+    if base_condition in CONTROL_CONDITIONS:
+        return base_condition
+    if condition in CONTROL_CONDITIONS:
+        return condition
+    return LEGACY_CONTROL_MAP.get(condition)
 
 
 def normalize_conditions(values: list[str] | None, budgets: list[int]) -> list[str]:
@@ -524,6 +529,7 @@ def final_paths(output_dir: Path) -> dict[str, Path]:
         "by_category": output_dir / "exp1_representation_by_category.csv",
         "by_move": output_dir / "exp1_representation_by_move.csv",
         "pairwise": output_dir / "exp1_representation_pairwise_deltas.csv",
+        "flips": output_dir / "exp1_representation_flip_analysis.csv",
         "decomposition": output_dir / "exp1_representation_decomposition.csv",
         "audit_sample": output_dir / "exp1_representation_audit_sample.csv",
         "diagnostic_gate": output_dir / "exp1_representation_diagnostic_gate.json",
@@ -866,16 +872,20 @@ def build_turn_indexes(turns: list[TurnRecord]) -> dict[str, Any]:
     }
 
 
-def reserve_wrong_episode_donor(
+def reserve_stale_assumption_donor(
     pair: dict[str, Any],
     turns: list[TurnRecord],
     seed: int,
 ) -> str | None:
+    """Reserve a hard same-episode stale donor so candidate sampling cannot select it."""
     excluded_ids = set(pair["history_turn_ids"]) | {
         pair["source_turn_id"],
         pair["true_next_turn_id"],
     }
     source_position = int(pair["source_substantive_position"])
+    target_words = auxiliary_word_budget(pair)
+    if target_words < 1:
+        return None
     eligible = [
         turn
         for turn in turns
@@ -885,22 +895,19 @@ def reserve_wrong_episode_donor(
         and turn["assumption_texts"]
         and turn["assumption_texts"] != pair["source_assumption_texts"]
         and source_position - int(turn["substantive_position"]) >= 3
+        and assumption_word_count(turn.get("all_assumption_texts") or turn["assumption_texts"]) >= target_words
     ]
     if not eligible:
         return None
-    largest_distance = max(
-        source_position - int(turn["substantive_position"]) for turn in eligible
-    )
-    ties = sorted(
-        (
-            turn
-            for turn in eligible
-            if source_position - int(turn["substantive_position"]) == largest_distance
+    ranked = sorted(
+        eligible,
+        key=lambda turn: (
+            -lexical_similarity(pair["source_tail_text"], turn["source_tail_text"]),
+            source_position - int(turn["substantive_position"]),
+            seed_int(f"{pair['pair_id']}:stale:{turn['turn_id']}:{seed}"),
         ),
-        key=lambda row: row["turn_id"],
     )
-    rng = donor_rng(pair["pair_id"], "reserved_wrong_episode_donor", seed)
-    return ties[int(rng.integers(0, len(ties)))]["turn_id"]
+    return ranked[0]["turn_id"]
 
 
 def sample_unique_ids(
@@ -965,9 +972,9 @@ def build_candidates(pair: dict[str, Any], indexes: dict[str, Any], seed: int) -
     history_ids = set(pair["history_turn_ids"])
     history_texts = set(pair["history_turn_texts"])
     excluded_ids = history_ids | {pair["source_turn_id"], pair["true_next_turn_id"]}
-    reserved_wrong_donor_id = pair.get("reserved_wrong_donor_id")
-    if reserved_wrong_donor_id:
-        excluded_ids.add(str(reserved_wrong_donor_id))
+    reserved_stale_donor_id = pair.get("reserved_stale_donor_id")
+    if reserved_stale_donor_id:
+        excluded_ids.add(str(reserved_stale_donor_id))
     if pair["true_next_turn_head_text"] in history_texts:
         pair["coverage_drop_reason"] = "true_candidate_text_in_history"
         return {}
@@ -1074,6 +1081,40 @@ def build_candidates(pair: dict[str, Any], indexes: dict[str, Any], seed: int) -
     return counts
 
 
+def assumption_word_count(values: list[str]) -> int:
+    return sum(len(text_words(value)) for value in values)
+
+
+def truncate_text_items_to_words(values: list[str], budget: int) -> tuple[list[str], int]:
+    """Truncate ordered text items to exactly `budget` content words when possible."""
+    if budget <= 0:
+        return [], 0
+    selected: list[str] = []
+    remaining = int(budget)
+    for value in values:
+        words = text_words(str(value))
+        if not words or remaining <= 0:
+            continue
+        take = min(len(words), remaining)
+        selected.append(" ".join(words[:take]))
+        remaining -= take
+        if remaining == 0:
+            break
+    return selected, budget - remaining
+
+
+def auxiliary_word_budget(pair: dict[str, Any]) -> int:
+    return assumption_word_count(list(pair.get("source_assumption_texts", [])))
+
+
+def context_explicit_values(pair: dict[str, Any]) -> list[str]:
+    context = deduplicate_context_state(list(pair.get("context_turns", [])))
+    values: list[str] = []
+    for turn in reversed(context):
+        values.extend(str(value) for value in turn.get("explicit_texts", []))
+    return values
+
+
 def choose_donors(
     pair: dict[str, Any],
     turns: list[TurnRecord],
@@ -1087,95 +1128,85 @@ def choose_donors(
     }
     source_assumptions = pair["source_assumption_texts"]
     source_position = int(pair["source_substantive_position"])
+    target_words = auxiliary_word_budget(pair)
+
+    def donor_values(turn: TurnRecord) -> list[str]:
+        return list(turn.get("all_assumption_texts") or turn.get("assumption_texts") or [])
 
     def base_eligible(turn: TurnRecord) -> bool:
         return bool(
-            turn["turn_id"] not in excluded_ids
+            target_words > 0
+            and turn["turn_id"] not in excluded_ids
             and turn["assumption_texts"]
             and turn["assumption_texts"] != source_assumptions
+            and assumption_word_count(donor_values(turn)) >= target_words
         )
 
-    shuffled_same_category = sorted(
-        (
-            turn
-            for turn in turns
-            if base_eligible(turn)
-            and turn["episode_id"] != pair["episode_id"]
-            and turn["category"] == pair["category"]
-        ),
-        key=lambda row: row["turn_id"],
-    )
-    shuffled_any = sorted(
-        (
-            turn
-            for turn in turns
-            if base_eligible(turn) and turn["episode_id"] != pair["episode_id"]
-        ),
-        key=lambda row: row["turn_id"],
-    )
-    shuffled_pool = shuffled_same_category or shuffled_any
-    shuffled_level = "same_category" if shuffled_same_category else "any_category"
-    shuffled = None
-    if shuffled_pool:
-        rng = donor_rng(pair["pair_id"], "explicit_plus_shuffled_assumptions", seed)
-        shuffled = shuffled_pool[int(rng.integers(0, len(shuffled_pool)))]
-
-    same_episode = [
+    shuffled_same_category = [
         turn
         for turn in turns
         if base_eligible(turn)
+        and turn["episode_id"] != pair["episode_id"]
         and turn["category"] == pair["category"]
-        and turn["episode_id"] == pair["episode_id"]
-        and source_position - int(turn["substantive_position"]) >= 3
     ]
-    wrong = None
-    reserved_wrong_donor_id = pair.get("reserved_wrong_donor_id")
-    if reserved_wrong_donor_id:
-        reserved_matches = [
-            turn for turn in same_episode if turn["turn_id"] == reserved_wrong_donor_id
-        ]
-        if len(reserved_matches) != 1:
-            raise ValueError(
-                f"Reserved same-episode donor became invalid for {pair['pair_id']}: "
-                f"{reserved_wrong_donor_id}"
-            )
-        wrong = reserved_matches[0]
-    elif same_episode:
-        largest_distance = max(
-            source_position - int(turn["substantive_position"]) for turn in same_episode
-        )
-        ties = sorted(
-            (
-                turn
-                for turn in same_episode
-                if source_position - int(turn["substantive_position"]) == largest_distance
+    shuffled_any = [
+        turn
+        for turn in turns
+        if base_eligible(turn) and turn["episode_id"] != pair["episode_id"]
+    ]
+    shuffled_pool = shuffled_same_category or shuffled_any
+    shuffled_level = "hard_same_category" if shuffled_same_category else "hard_any_category"
+    shuffled = None
+    if shuffled_pool:
+        shuffled = sorted(
+            shuffled_pool,
+            key=lambda turn: (
+                -lexical_similarity(pair["source_tail_text"], turn["source_tail_text"]),
+                -length_similarity(pair["source_word_count"], turn["word_count"]),
+                seed_int(f"{pair['pair_id']}:shuffle:{turn['turn_id']}:{seed}"),
             ),
-            key=lambda row: row["turn_id"],
-        )
-        rng = donor_rng(pair["pair_id"], "explicit_plus_wrong_episode_assumptions", seed)
-        wrong = ties[int(rng.integers(0, len(ties)))]
+        )[0]
+
+    stale = None
+    reserved_stale_donor_id = pair.get("reserved_stale_donor_id")
+    if reserved_stale_donor_id:
+        matches = [turn for turn in turns if turn["turn_id"] == reserved_stale_donor_id]
+        if len(matches) != 1:
+            raise ValueError(
+                f"Reserved stale donor became invalid for {pair['pair_id']}: {reserved_stale_donor_id}"
+            )
+        stale = matches[0]
 
     rows: list[dict[str, Any]] = []
     for condition, donor, fallback, unavailable_reason in (
         (
-            "explicit_plus_shuffled_assumptions",
+            "raw_history_shuffled_assumptions",
             shuffled,
             shuffled_level if shuffled is not None else None,
-            None if shuffled is not None else "no_different_episode_assumption_donor",
+            None if shuffled is not None else (
+                "source_has_no_assumptions" if target_words == 0 else "no_length_matched_different_episode_assumption_donor"
+            ),
         ),
         (
-            "explicit_plus_wrong_episode_assumptions",
-            wrong,
-            "same_episode_farthest_earlier" if wrong is not None else None,
-            None if wrong is not None else "no_valid_same_episode_earlier_nonadjacent_donor",
+            "raw_history_stale_assumptions",
+            stale,
+            "hard_same_episode_gap3" if stale is not None else None,
+            None if stale is not None else (
+                "source_has_no_assumptions" if target_words == 0 else "no_length_matched_same_episode_stale_donor"
+            ),
         ),
     ):
+        donor_all = donor_values(donor) if donor else []
+        matched_assumptions, matched_words = truncate_text_items_to_words(donor_all, target_words)
+        if donor is not None and matched_words != target_words:
+            raise AssertionError(f"Donor word matching failed for {pair['pair_id']} / {condition}")
         audit = {
             "pair_id": pair["pair_id"],
             "future_horizon": int(pair["future_horizon"]),
             "condition": condition,
             "source_turn_id": pair["source_turn_id"],
             "source_substantive_position": source_position,
+            "target_auxiliary_word_count": target_words,
             "donor_turn_id": donor["turn_id"] if donor else None,
             "donor_episode_id": donor["episode_id"] if donor else None,
             "donor_category": donor["category"] if donor else None,
@@ -1183,7 +1214,9 @@ def choose_donors(
             "donor_fallback_level": fallback,
             "donor_assumption_count": len(donor["assumption_texts"]) if donor else 0,
             "donor_assumptions": donor["assumption_texts"] if donor else [],
-            "donor_all_assumptions": donor["all_assumption_texts"] if donor else [],
+            "donor_all_assumptions": donor_all,
+            "matched_donor_assumptions": matched_assumptions,
+            "matched_auxiliary_word_count": matched_words,
             "control_unavailable_reason": unavailable_reason,
         }
         pair["donors"][condition] = audit
@@ -1325,52 +1358,46 @@ def format_structured_history(
 def format_representation(pair: dict[str, Any], condition: str) -> str:
     base_condition, budget = parse_matched_condition(condition)
     if base_condition is not None and budget is not None:
+        raw = format_raw_history(pair, budget)
+        target_words = auxiliary_word_budget(pair)
         if base_condition == "raw_history":
-            return format_raw_history(pair, budget)
-        if base_condition == "structured_explicit_history":
-            return format_structured_history(pair, budget, include_assumptions=False)
-        if base_condition == "structured_explicit_assumption_history":
-            return format_structured_history(pair, budget, include_assumptions=True)
-        donor_key = {
-            "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
-            "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
-        }.get(base_condition)
-        if donor_key is not None:
-            donor = pair["donors"].get(donor_key, {})
+            return raw
+        if base_condition == "raw_history_true_assumptions":
+            selected, observed = truncate_text_items_to_words(
+                list(pair.get("source_assumption_texts", [])), target_words
+            )
+            if target_words < 1 or observed != target_words:
+                raise ValueError(f"Condition {condition} is unavailable for {pair['pair_id']}")
+            return raw + "\n\n[Implicit assumptions]\n" + " ".join(selected)
+        if base_condition in {"raw_history_shuffled_assumptions", "raw_history_stale_assumptions"}:
+            donor = pair["donors"].get(base_condition, {})
             if donor.get("control_unavailable_reason"):
                 raise ValueError(f"Condition {condition} is unavailable for {pair['pair_id']}")
-            donor_assumptions = list(
-                donor.get("donor_all_assumptions") or donor.get("donor_assumptions") or []
-            )
-            return format_structured_history(
-                pair,
-                budget,
-                include_assumptions=True,
-                donor_assumptions=donor_assumptions,
-            )
+            selected = list(donor.get("matched_donor_assumptions") or [])
+            if int(donor.get("matched_auxiliary_word_count") or 0) != target_words:
+                raise ValueError(f"Length-matched donor missing for {pair['pair_id']} / {condition}")
+            return raw + "\n\n[Implicit assumptions]\n" + " ".join(selected)
+        if base_condition == "raw_history_explicit":
+            selected, observed = truncate_text_items_to_words(context_explicit_values(pair), target_words)
+            if target_words < 1 or observed != target_words:
+                raise ValueError(f"Condition {condition} is unavailable for {pair['pair_id']}")
+            return raw + "\n\n[Explicit propositions]\n" + " ".join(selected)
+        raise ValueError(f"Unknown matched-history condition: {condition}")
+
+    # Legacy representations are retained for backwards-compatible reanalysis.
     explicit = format_bullets(pair["source_explicit_texts"], EMPTY_EXPLICIT)
-    assumptions = format_bullets(pair["source_assumption_texts"], EMPTY_ASSUMPTIONS)
     all_assumptions = format_bullets(pair["source_all_assumption_texts"], EMPTY_ASSUMPTIONS)
     top1_assumption = format_bullets(pair["source_assumption_texts"][:1], EMPTY_ASSUMPTIONS)
     top3_assumptions = format_bullets(pair["source_assumption_texts"][:3], EMPTY_ASSUMPTIONS)
     if condition == "raw_turn":
         return f"[Final local window of the current turn]\n{pair['source_tail_text']}"
     if condition == "raw_turn_with_history":
-        if pair["history_turn_texts"]:
-            history = "\n".join(
-                f"Earlier turn {index}: {text}"
-                for index, text in enumerate(pair["history_turn_texts"], start=1)
-            )
-        else:
-            history = EMPTY_HISTORY
-        return (
-            f"[Earlier substantive turn windows]\n{history}\n\n"
-            f"[Final local window of the current turn]\n{pair['source_tail_text']}"
-        )
+        history = "\n\n".join(pair.get("history_turn_texts", [])) or EMPTY_HISTORY
+        return f"[Earlier substantive history]\n{history}\n\n[Final local window of the current turn]\n{pair['source_tail_text']}"
     if condition == "explicit_only":
         return f"[Explicit propositions]\n{explicit}"
     if condition == "assumptions_only":
-        return f"[Implicit assumptions]\n{assumptions}"
+        return f"[Implicit assumptions]\n{all_assumptions}"
     if condition == "explicit_plus_assumptions":
         return f"[Explicit propositions]\n{explicit}\n\n[All extracted implicit assumptions]\n{all_assumptions}"
     if condition == "explicit_plus_top1_assumption":
@@ -1378,28 +1405,28 @@ def format_representation(pair: dict[str, Any], condition: str) -> str:
     if condition == "explicit_plus_top3_assumptions":
         return f"[Explicit propositions]\n{explicit}\n\n[Implicit assumptions: first 3]\n{top3_assumptions}"
     if condition == "raw_turn_plus_assumptions":
-        return (
-            f"[Final local window of the current turn]\n{pair['source_tail_text']}\n\n"
-            f"[Top locally grounded implicit assumptions]\n{assumptions}"
-        )
-    if condition in CONTROL_CONDITIONS:
-        donor = pair["donors"].get(condition, {})
+        return f"[Final local window of the current turn]\n{pair['source_tail_text']}\n\n[Implicit assumptions]\n{top3_assumptions}"
+    if condition in LEGACY_CONTROL_MAP:
+        donor = pair["donors"].get(LEGACY_CONTROL_MAP[condition], {})
         if donor.get("control_unavailable_reason"):
             raise ValueError(f"Condition {condition} is unavailable for {pair['pair_id']}")
-        donor_text = format_bullets(list(donor["donor_assumptions"]), EMPTY_ASSUMPTIONS)
+        donor_text = format_bullets(list(donor.get("matched_donor_assumptions") or donor.get("donor_assumptions") or []), EMPTY_ASSUMPTIONS)
         return f"[Explicit propositions]\n{explicit}\n\n[Implicit assumptions]\n{donor_text}"
     raise ValueError(f"Unknown condition: {condition}")
 
-
 def build_conditions(pair: dict[str, Any], conditions: list[str]) -> None:
+    target_words = auxiliary_word_budget(pair)
     for condition in conditions:
         base_condition, budget = parse_matched_condition(condition)
-        donor_key = {
-            "structured_explicit_shuffled_assumption_history": "explicit_plus_shuffled_assumptions",
-            "structured_explicit_wrong_episode_assumption_history": "explicit_plus_wrong_episode_assumptions",
-        }.get(base_condition)
-        donor = pair["donors"].get(donor_key or condition)
+        donor_key = condition_donor_key(condition)
+        donor = pair["donors"].get(donor_key) if donor_key else None
         unavailable = donor.get("control_unavailable_reason") if donor else None
+        if base_condition in {"raw_history_true_assumptions", "raw_history_explicit"} and target_words < 1:
+            unavailable = "source_has_no_assumptions"
+        if base_condition == "raw_history_explicit" and target_words > 0:
+            _, explicit_words = truncate_text_items_to_words(context_explicit_values(pair), target_words)
+            if explicit_words != target_words:
+                unavailable = "insufficient_explicit_words_for_length_match"
         if unavailable:
             pair["conditions"][condition] = {
                 "available": False,
@@ -1408,19 +1435,30 @@ def build_conditions(pair: dict[str, Any], conditions: list[str]) -> None:
                 "base_condition": base_condition,
                 "representation_budget": budget,
                 "representation_token_count": None,
+                "raw_history_token_count": None,
+                "auxiliary_token_count": None,
+                "raw_history_sha256": None,
                 "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER if budget else None,
             }
-        else:
-            representation = format_representation(pair, condition)
-            pair["conditions"][condition] = {
-                "available": True,
-                "control_unavailable_reason": None,
-                "source_representation": representation,
-                "base_condition": base_condition,
-                "representation_budget": budget,
-                "representation_token_count": whitespace_token_count(representation),
-                "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER if budget else None,
-            }
+            continue
+        representation = format_representation(pair, condition)
+        raw = format_raw_history(pair, budget) if base_condition is not None and budget is not None else None
+        raw_count = whitespace_token_count(raw) if raw is not None else None
+        total_count = whitespace_token_count(representation)
+        auxiliary_count = total_count - raw_count if raw_count is not None else None
+        pair["conditions"][condition] = {
+            "available": True,
+            "control_unavailable_reason": None,
+            "source_representation": representation,
+            "base_condition": base_condition,
+            "representation_budget": budget,
+            "representation_token_count": total_count,
+            "raw_history_token_count": raw_count,
+            "auxiliary_token_count": auxiliary_count,
+            "raw_history_sha256": sha256_text(raw) if raw is not None else None,
+            "target_auxiliary_content_word_count": target_words if base_condition != "raw_history" else 0,
+            "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER if budget else None,
+        }
 
 
 def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], conditions: list[str]) -> None:
@@ -1458,16 +1496,16 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             pair["true_next_turn_id"],
         }:
             raise ValueError(f"Donor/candidate leakage for {pair['pair_id']} / {condition}")
-        if condition == "explicit_plus_wrong_episode_assumptions":
+        if condition == "raw_history_stale_assumptions":
             donor_turn = indexes["lookup"][donor["donor_turn_id"]]
             if donor_turn["episode_id"] != source["episode_id"]:
-                raise ValueError(f"Wrong-episode control crossed episodes for {pair['pair_id']}")
+                raise ValueError(f"Stale control crossed episodes for {pair['pair_id']}")
             donor_distance = int(source["substantive_position"]) - int(
                 donor_turn["substantive_position"]
             )
             if donor_distance < 3:
                 raise ValueError(
-                    f"Wrong-episode control is not an earlier gap-three donor for {pair['pair_id']}"
+                    f"Stale control is not an earlier gap-three donor for {pair['pair_id']}"
                 )
     for condition in conditions:
         metadata = pair["conditions"].get(condition)
@@ -1480,10 +1518,46 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             observed = whitespace_token_count(str(metadata["source_representation"]))
             if observed != int(metadata["representation_token_count"]):
                 raise ValueError(f"Representation token-count mismatch for {pair['pair_id']} / {condition}")
-            if observed > budget:
-                raise ValueError(f"Representation budget exceeded for {pair['pair_id']} / {condition}")
+            raw_count = int(metadata.get("raw_history_token_count") or 0)
+            if raw_count > budget:
+                raise ValueError(f"Raw-history budget exceeded for {pair['pair_id']} / {condition}")
+            if metadata.get("raw_history_sha256") != sha256_text(format_raw_history(pair, budget)):
+                raise ValueError(f"Raw-history mismatch for {pair['pair_id']} / {condition}")
+            if base_condition != "raw_history":
+                raw = format_raw_history(pair, budget)
+                if not str(metadata["source_representation"]).startswith(raw + "\n\n"):
+                    raise ValueError(f"Augmented condition changed raw history for {pair['pair_id']} / {condition}")
             if metadata.get("budget_tokenizer") != REPRESENTATION_BUDGET_TOKENIZER:
                 raise ValueError(f"Missing budget-tokenizer audit field for {pair['pair_id']} / {condition}")
+
+    # For each raw-history budget, every available augmentation must share the same raw block
+    # and the same realized auxiliary length as the true-assumption condition.
+    budgets = sorted(
+        {budget for condition in conditions for _, budget in [parse_matched_condition(condition)] if budget is not None}
+    )
+    for budget in budgets:
+        raw_condition = matched_condition_id("raw_history", budget)
+        true_condition = matched_condition_id("raw_history_true_assumptions", budget)
+        raw_meta = pair["conditions"].get(raw_condition)
+        true_meta = pair["conditions"].get(true_condition)
+        if not raw_meta or not raw_meta.get("available") or not true_meta or not true_meta.get("available"):
+            continue
+        expected_hash = raw_meta.get("raw_history_sha256")
+        expected_aux = true_meta.get("auxiliary_token_count")
+        for base in (
+            "raw_history_true_assumptions",
+            "raw_history_shuffled_assumptions",
+            "raw_history_stale_assumptions",
+            "raw_history_explicit",
+        ):
+            condition = matched_condition_id(base, budget)
+            metadata = pair["conditions"].get(condition)
+            if not metadata or not metadata.get("available"):
+                continue
+            if metadata.get("raw_history_sha256") != expected_hash:
+                raise ValueError(f"Raw-history hash differs across conditions for {pair['pair_id']} / b{budget}")
+            if metadata.get("auxiliary_token_count") != expected_aux:
+                raise ValueError(f"Auxiliary length mismatch for {pair['pair_id']} / {condition}")
 
 
 def pair_csv_row(pair: dict[str, Any]) -> dict[str, Any]:
@@ -1530,7 +1604,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
     if not category_files:
         raise RuntimeError(f"No episode JSON files found under {args.input_dir}")
     logger.info(
-        "Preparing matched-history representation experiment: version=%s prompt=%s input=%s categories=%s files=%d seed=%d budgets=%s conditions=%s",
+        "Preparing raw-history augmentation experiment: version=%s prompt=%s input=%s categories=%s files=%d seed=%d budgets=%s conditions=%s",
         SCRIPT_VERSION,
         PROMPT_VERSION,
         args.input_dir,
@@ -1576,7 +1650,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
     aggregate_negative_counts: dict[str, int] = defaultdict(int)
     donors: list[dict[str, Any]] = []
     for pair in pairs:
-        pair["reserved_wrong_donor_id"] = reserve_wrong_episode_donor(pair, turns, args.seed)
+        pair["reserved_stale_donor_id"] = reserve_stale_assumption_donor(pair, turns, args.seed)
         counts = build_candidates(pair, indexes, args.seed)
         for key, value in counts.items():
             aggregate_negative_counts[key] += value
@@ -1624,7 +1698,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         for category, path in category_files
     ]
     manifest = {
-        "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
+        "experiment": "Experiment 1: Assumption-Augmented Future-Turn Accuracy",
         "stage": "prepare",
         "complete": True,
         "script_version": SCRIPT_VERSION,
@@ -1641,14 +1715,14 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "conditions": args.conditions,
         "representation_budgets": args.representation_budgets,
         "representation_budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
-        "representation_budget_policy": "headers_plus_content_capped; content allocated current-to-earlier; output chronological",
-        "state_deduplication": "exact_normalized_text_keep_most_recent",
+        "representation_budget_policy": "budget_caps_raw_history_only; identical_raw_history_reused_across_conditions; auxiliary_content_length_matched_to_true_assumptions",
+        "state_deduplication": "raw_history_not_deduplicated; explicit_control_uses_exact_normalized_text_keep_most_recent",
         "future_horizons": args.future_horizons,
         "history_turns": args.history_turns,
         "source_tail_words": args.source_tail_words,
         "candidate_head_words": args.candidate_head_words,
         "assumption_budget": args.assumption_budget,
-        "assumption_selection": "candidate_blind_source_tail_lexical_grounding",
+        "assumption_selection": "candidate_blind_source_tail_lexical_grounding_current_source_turn",
         "seed": args.seed,
         "candidate_count_target": EXPECTED_CANDIDATE_COUNT,
         "negative_count_target": HARD_NEGATIVE_TARGET_COUNT,
@@ -1711,11 +1785,11 @@ Your task is to determine which candidate is more likely to be {target_descripti
 
 Evaluate Candidate A and Candidate B comparatively. Prioritize:
 
-* local conversational fit with the immediately preceding context
-* the response expected by the final dialogue act
-* stance, intent, and speaker continuity
-* consistency with supported presuppositions
-* naturalness at the specified future-turn horizon
+* semantic relevance to the observed conversation
+* conversational obligations created by the preceding turns
+* speaker intent, stance, and continuity
+* consistency with supported presuppositions and assumptions
+* local discourse coherence at the specified future-turn horizon
 
 Do not prefer a candidate merely because it repeats words, entities, or topics from the source representation.
 
@@ -1771,11 +1845,11 @@ candidate is more likely to be {target_description} in the conversation.
 
 Evaluate Candidate A and Candidate B comparatively. Prioritize:
 
-- local conversational fit with the immediately preceding context
-- the response expected by the final dialogue act
-- stance, intent, and speaker continuity
-- consistency with supported presuppositions
-- naturalness at the specified future-turn horizon
+- semantic relevance to the observed conversation
+- conversational obligations created by the preceding turns
+- speaker intent, stance, and continuity
+- consistency with supported presuppositions and assumptions
+- local discourse coherence at the specified future-turn horizon
 
 Do not prefer a candidate merely because it repeats words, entities, or topics from the
 source representation.
@@ -2727,27 +2801,24 @@ def contrast_list(conditions: list[str]) -> list[tuple[str, str]]:
     )
     for budget in budgets:
         raw = matched_condition_id("raw_history", budget)
-        explicit = matched_condition_id("structured_explicit_history", budget)
-        combined = matched_condition_id("structured_explicit_assumption_history", budget)
-        shuffled = matched_condition_id("structured_explicit_shuffled_assumption_history", budget)
-        wrong = matched_condition_id("structured_explicit_wrong_episode_assumption_history", budget)
+        true = matched_condition_id("raw_history_true_assumptions", budget)
+        shuffled = matched_condition_id("raw_history_shuffled_assumptions", budget)
+        stale = matched_condition_id("raw_history_stale_assumptions", budget)
+        explicit = matched_condition_id("raw_history_explicit", budget)
         for contrast in (
-            (combined, raw),
-            (combined, explicit),
-            (combined, shuffled),
-            (combined, wrong),
+            (true, shuffled),
+            (true, stale),
+            (true, raw),
+            (true, explicit),
             (explicit, raw),
+            (shuffled, raw),
+            (stale, raw),
         ):
             if contrast[0] in conditions and contrast[1] in conditions:
                 rows.append(contrast)
     for contrast in REQUIRED_CONTRASTS:
         if contrast[0] in conditions and contrast[1] in conditions and contrast not in rows:
             rows.append(contrast)
-    for target in conditions:
-        for baseline in ("raw_turn", "explicit_only"):
-            contrast = (target, baseline)
-            if target != baseline and baseline in conditions and contrast not in rows:
-                rows.append(contrast)
     return rows
 
 
@@ -2841,6 +2912,102 @@ def build_pairwise(long_df: pd.DataFrame, args: argparse.Namespace) -> pd.DataFr
     return pd.DataFrame(rows)
 
 
+
+def build_flip_analysis(
+    pairs: list[dict[str, Any]],
+    scores: list[dict[str, Any]],
+    args: argparse.Namespace,
+) -> pd.DataFrame:
+    """Candidate-level paired flip analysis after averaging the two A/B presentation orders."""
+    pair_lookup = {str(pair["pair_id"]): pair for pair in pairs}
+    selected = [
+        row
+        for row in scores
+        if row.get("model_name") == args.model_name
+        and row.get("prompt_version") == PROMPT_VERSION
+        and score_record_valid(row)
+        and row.get("condition") in args.conditions
+    ]
+    if not selected:
+        return pd.DataFrame()
+    frame = pd.DataFrame(selected)
+    grouped = (
+        frame.groupby(["pair_id", "comparison_id", "condition"], sort=False)
+        .agg(
+            positive_preference=("positive_preference", "mean"),
+            presentation_count=("presentation_order", "nunique"),
+        )
+        .reset_index()
+    )
+    grouped = grouped[grouped["presentation_count"] == 2].copy()
+    rows: list[dict[str, Any]] = []
+    for target, baseline in contrast_list(args.conditions):
+        target_base, target_budget = parse_matched_condition(target)
+        baseline_base, baseline_budget = parse_matched_condition(baseline)
+        if target_base != "raw_history_true_assumptions" or target_budget != baseline_budget:
+            continue
+        target_df = grouped[grouped["condition"] == target].set_index(["pair_id", "comparison_id"])
+        baseline_df = grouped[grouped["condition"] == baseline].set_index(["pair_id", "comparison_id"])
+        common = target_df.index.intersection(baseline_df.index)
+        if common.empty:
+            continue
+        details: list[dict[str, Any]] = []
+        for pair_id, comparison_id in common:
+            pair = pair_lookup[str(pair_id)]
+            target_pref = float(target_df.loc[(pair_id, comparison_id), "positive_preference"])
+            baseline_pref = float(baseline_df.loc[(pair_id, comparison_id), "positive_preference"])
+            details.append(
+                {
+                    "pair_id": str(pair_id),
+                    "comparison_id": str(comparison_id),
+                    "category": pair["category"],
+                    "episode_id": pair["episode_id"],
+                    "future_horizon": int(pair["future_horizon"]),
+                    "delta": target_pref - baseline_pref,
+                    "helpful_flip": int(baseline_pref == 0.0 and target_pref == 1.0),
+                    "harmful_flip": int(baseline_pref == 1.0 and target_pref == 0.0),
+                    "partial_improvement": int(target_pref > baseline_pref),
+                    "partial_harm": int(target_pref < baseline_pref),
+                }
+            )
+        detail_df = pd.DataFrame(details)
+        for horizon in args.future_horizons:
+            group = detail_df[detail_df["future_horizon"] == horizon].copy()
+            if group.empty:
+                continue
+            boot = cluster_bootstrap(
+                group,
+                "delta",
+                seed_label=f"flip:h{horizon}:{target}:{baseline}",
+                seed=args.seed,
+                draws=args.bootstrap_draws,
+            )
+            n = len(group)
+            helpful = int(group["helpful_flip"].sum())
+            harmful = int(group["harmful_flip"].sum())
+            rows.append(
+                {
+                    "future_horizon": int(horizon),
+                    "representation_budget": target_budget,
+                    "target_condition": target,
+                    "baseline_condition": baseline,
+                    "candidate_comparison_count": n,
+                    "helpful_flip_count": helpful,
+                    "harmful_flip_count": harmful,
+                    "helpful_flip_rate": helpful / n,
+                    "harmful_flip_rate": harmful / n,
+                    "net_strict_flip_rate": (helpful - harmful) / n,
+                    "partial_improvement_count": int(group["partial_improvement"].sum()),
+                    "partial_harm_count": int(group["partial_harm"].sum()),
+                    "mean_order_averaged_preference_delta": boot["mean"],
+                    "delta_ci95_low": boot["ci95_low"],
+                    "delta_ci95_high": boot["ci95_high"],
+                    "delta_ci_unstable": boot["ci_unstable"],
+                    "cluster_count": boot["cluster_count"],
+                }
+            )
+    return pd.DataFrame(rows)
+
 def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: argparse.Namespace) -> pd.DataFrame:
     rows = []
     for future_horizon in args.future_horizons:
@@ -2881,72 +3048,43 @@ def coverage_summary(long_df: pd.DataFrame, pairs: list[dict[str, Any]], args: a
 def build_decomposition_table(pairwise: pd.DataFrame) -> pd.DataFrame:
     questions: dict[tuple[str, str], str] = {}
     if not pairwise.empty and "representation_budget" in pairwise:
-        budgets = sorted(
-            int(value)
-            for value in pairwise["representation_budget"].dropna().unique().tolist()
-        )
+        budgets = sorted(int(value) for value in pairwise["representation_budget"].dropna().unique().tolist())
         for budget in budgets:
-            combined = matched_condition_id("structured_explicit_assumption_history", budget)
-            questions.update(
-                {
-                    (combined, matched_condition_id("raw_history", budget)):
-                        "structured_explicit_assumption_state_vs_raw_history",
-                    (combined, matched_condition_id("structured_explicit_history", budget)):
-                        "incremental_assumption_value_in_structured_history",
-                    (combined, matched_condition_id("structured_explicit_shuffled_assumption_history", budget)):
-                        "true_history_assumptions_vs_shuffled_control",
-                    (combined, matched_condition_id("structured_explicit_wrong_episode_assumption_history", budget)):
-                        "true_history_assumptions_vs_wrong_episode_control",
-                }
-            )
+            true = matched_condition_id("raw_history_true_assumptions", budget)
+            questions.update({
+                (true, matched_condition_id("raw_history_shuffled_assumptions", budget)):
+                    "true_assumptions_vs_shuffled_control",
+                (true, matched_condition_id("raw_history_stale_assumptions", budget)):
+                    "true_assumptions_vs_stale_same_episode_control",
+                (true, matched_condition_id("raw_history", budget)):
+                    "incremental_assumption_value_over_raw_history",
+                (true, matched_condition_id("raw_history_explicit", budget)):
+                    "implicit_vs_length_matched_explicit_augmentation",
+            })
     questions.update({
         ("explicit_plus_top3_assumptions", "explicit_only"): "incremental_implicit_value_after_abstraction",
-        (
-            "explicit_plus_top3_assumptions",
-            "explicit_plus_shuffled_assumptions",
-        ): "true_assumptions_vs_shuffled_control",
-        (
-            "explicit_plus_top3_assumptions",
-            "explicit_plus_wrong_episode_assumptions",
-        ): "true_assumptions_vs_wrong_episode_control",
-        ("raw_turn_plus_assumptions", "raw_turn"): "incremental_implicit_value_with_lexical_context",
-        ("raw_turn", "explicit_only"): "information_retained_by_raw_turn",
-        ("raw_turn_with_history", "raw_turn"): "value_of_discourse_history",
-        ("explicit_plus_top1_assumption", "explicit_only"): "first_assumption_budget",
-        ("explicit_plus_assumptions", "explicit_plus_top1_assumption"): "all_assumptions_vs_first_one",
-        ("explicit_plus_assumptions", "explicit_plus_top3_assumptions"): "all_assumptions_vs_first_three",
+        ("explicit_plus_top3_assumptions", "explicit_plus_shuffled_assumptions"): "true_assumptions_vs_shuffled_control_legacy",
+        ("explicit_plus_top3_assumptions", "explicit_plus_wrong_episode_assumptions"): "true_assumptions_vs_stale_control_legacy",
+        ("raw_turn_plus_assumptions", "raw_turn"): "incremental_implicit_value_with_lexical_context_legacy",
     })
     if pairwise.empty:
         return pd.DataFrame(columns=[*pairwise.columns, "diagnostic_question", "contrast"])
-    selected = pairwise[
-        pairwise.apply(
-            lambda row: (str(row["target_condition"]), str(row["baseline_condition"])) in questions,
-            axis=1,
-        )
-    ].copy()
+    selected = pairwise[pairwise.apply(
+        lambda row: (str(row["target_condition"]), str(row["baseline_condition"])) in questions, axis=1
+    )].copy()
     selected["diagnostic_question"] = selected.apply(
-        lambda row: questions[(str(row["target_condition"]), str(row["baseline_condition"]))],
-        axis=1,
+        lambda row: questions[(str(row["target_condition"]), str(row["baseline_condition"]))], axis=1
     )
     selected["contrast"] = selected["target_condition"].astype(str) + " - " + selected["baseline_condition"].astype(str)
     order = {contrast: index for index, contrast in enumerate(questions)}
     selected["_contrast_order"] = selected.apply(
-        lambda row: order[(str(row["target_condition"]), str(row["baseline_condition"]))],
-        axis=1,
+        lambda row: order[(str(row["target_condition"]), str(row["baseline_condition"]))], axis=1
     )
-    subset_order = {
-        "sparse_explicit": 0,
-        "assumption_eligible": 1,
-        "complete_case": 2,
-        "dense_explicit": 3,
-        "full": 4,
-    }
-    metric_order = {"accuracy": 0}
+    subset_order = {"assumption_eligible": 0, "complete_case": 1, "full": 2, "sparse_explicit": 3, "dense_explicit": 4}
     selected["_subset_order"] = selected["analysis_subset"].map(subset_order).fillna(99)
-    selected["_metric_order"] = selected["metric"].map(metric_order).fillna(99)
     return selected.sort_values(
-        ["_contrast_order", "future_horizon", "_subset_order", "_metric_order"], kind="stable"
-    ).drop(columns=["_contrast_order", "_subset_order", "_metric_order"])
+        ["_contrast_order", "future_horizon", "_subset_order"], kind="stable"
+    ).drop(columns=["_contrast_order", "_subset_order"])
 
 
 def build_audit_sample(
@@ -2972,8 +3110,8 @@ def build_audit_sample(
     )
     if available_budgets:
         budget = 256 if 256 in available_budgets else available_budgets[len(available_budgets) // 2]
-        baseline_condition = matched_condition_id("raw_history", budget)
-        target_condition = matched_condition_id("structured_explicit_assumption_history", budget)
+        baseline_condition = matched_condition_id("raw_history_shuffled_assumptions", budget)
+        target_condition = matched_condition_id("raw_history_true_assumptions", budget)
     else:
         budget = None
         baseline_condition = "explicit_only"
@@ -3192,45 +3330,54 @@ def diagnostic_gate(
         return None if match.empty else match.iloc[0].to_dict()
 
     raw = condition("raw_history")
-    explicit = condition("structured_explicit_history")
-    combined = condition("structured_explicit_assumption_history")
-    shuffled = condition("structured_explicit_shuffled_assumption_history")
-    wrong = condition("structured_explicit_wrong_episode_assumption_history")
-    primary = contrast_row(combined, raw)
-    incremental = contrast_row(combined, explicit)
-    shuffled_control = contrast_row(combined, shuffled)
-    wrong_control = contrast_row(combined, wrong)
+    true = condition("raw_history_true_assumptions")
+    shuffled = condition("raw_history_shuffled_assumptions")
+    stale = condition("raw_history_stale_assumptions")
+    explicit = condition("raw_history_explicit")
+
+    primary = contrast_row(true, shuffled)
+    stale_control = contrast_row(true, stale)
+    raw_increment = contrast_row(true, raw)
+    explicit_control = contrast_row(true, explicit)
 
     budget_curve = {
-        str(budget): contrast_row(
-            condition("structured_explicit_assumption_history", budget),
-            condition("raw_history", budget),
-        )
+        str(budget): {
+            "true_vs_shuffled": contrast_row(
+                condition("raw_history_true_assumptions", budget),
+                condition("raw_history_shuffled_assumptions", budget),
+            ),
+            "true_vs_stale": contrast_row(
+                condition("raw_history_true_assumptions", budget),
+                condition("raw_history_stale_assumptions", budget),
+            ),
+            "true_vs_raw": contrast_row(
+                condition("raw_history_true_assumptions", budget),
+                condition("raw_history", budget),
+            ),
+            "true_vs_explicit": contrast_row(
+                condition("raw_history_true_assumptions", budget),
+                condition("raw_history_explicit", budget),
+            ),
+        }
         for budget in budgets
     }
-    target_rows = long_df[long_df["condition"] == combined].set_index("pair_id")
-    baseline_rows = long_df[long_df["condition"] == raw].set_index("pair_id")
+
+    target_rows = long_df[long_df["condition"] == true].set_index("pair_id")
+    baseline_rows = long_df[long_df["condition"] == shuffled].set_index("pair_id")
     category_values: list[dict[str, Any]] = []
     for pair_id in target_rows.index.intersection(baseline_rows.index):
         target_row = target_rows.loc[pair_id]
         baseline_row = baseline_rows.loc[pair_id]
-        if (
-            int(target_row["future_horizon"]) == primary_horizon
-            and bool(target_row["assumption_eligible"] and baseline_row["assumption_eligible"])
+        if int(target_row["future_horizon"]) == primary_horizon and bool(
+            target_row["assumption_eligible"] and baseline_row["assumption_eligible"]
         ):
-            category_values.append(
-                {
-                    "category": str(target_row["category"]),
-                    "delta": float(target_row["accuracy"]) - float(baseline_row["accuracy"]),
-                }
-            )
+            category_values.append({
+                "category": str(target_row["category"]),
+                "delta": float(target_row["accuracy"]) - float(baseline_row["accuracy"]),
+            })
     category_deltas = (
-        {
-            str(key): float(value)
-            for key, value in pd.DataFrame(category_values).groupby("category")["delta"].mean().items()
-        }
-        if category_values
-        else {}
+        {str(key): float(value) for key, value in pd.DataFrame(category_values).groupby("category")["delta"].mean().items()}
+        if category_values else {}
     )
 
     def supported(row: dict[str, Any] | None) -> bool:
@@ -3239,57 +3386,58 @@ def diagnostic_gate(
     relevant_coverage = coverage
     if "representation_budget" in coverage:
         relevant_coverage = coverage[coverage["representation_budget"] == primary_budget]
-    minimum_retained = (
-        float(relevant_coverage["retained_pair_rate"].min()) if not relevant_coverage.empty else 0.0
-    )
+    minimum_retained = float(relevant_coverage["retained_pair_rate"].min()) if not relevant_coverage.empty else 0.0
+
     primary_supported = supported(primary)
-    incremental_supported = supported(incremental)
-    shuffled_supported = supported(shuffled_control)
-    wrong_supported = supported(wrong_control)
-    specificity_supported = shuffled_supported and wrong_supported
+    stale_supported = supported(stale_control)
+    raw_supported = supported(raw_increment)
+    explicit_supported = supported(explicit_control)
+    specificity_supported = primary_supported and stale_supported
     positive_categories = sum(value > 0 for value in category_deltas.values())
     category_breadth = positive_categories >= 2
-    coverage_acceptable = minimum_retained >= 0.98
-    if primary_supported and incremental_supported and specificity_supported:
-        interpretation = "structured_explicit_assumption_history_outperforms_matched_raw_history"
+    coverage_acceptable = minimum_retained >= 0.95
+
+    if primary_supported and stale_supported and explicit_supported and raw_supported:
+        interpretation = "true_assumptions_are_specific_and_incrementally_useful_over_raw_and_explicit_controls"
+    elif primary_supported and stale_supported and explicit_supported:
+        interpretation = "true_assumptions_show_state_specificity_beyond_generated_explicit_augmentation"
+    elif primary_supported and stale_supported:
+        interpretation = "true_assumptions_show_local_state_specificity_but_not_clear_increment_over_raw"
     elif primary_supported:
-        interpretation = "structured_state_gain_without_complete_incremental_or_specificity_support"
+        interpretation = "true_assumptions_beat_cross_episode_shuffle_without_stale_state_specificity"
     else:
-        interpretation = "no_robust_structured_state_advantage_over_matched_raw_history"
+        interpretation = "no_robust_true_assumption_advantage_over_shuffled_control"
+
     ready_for_cross_model = bool(
-        primary_supported
-        and incremental_supported
-        and specificity_supported
-        and category_breadth
-        and coverage_acceptable
+        primary_supported and stale_supported and category_breadth and coverage_acceptable
     )
     return {
-        "gate_version": "matched-history-gate-v5",
+        "gate_version": "raw-augmentation-gate-v1",
         "primary_future_horizon": primary_horizon,
-        "primary_representation_budget": primary_budget,
+        "primary_raw_history_budget": primary_budget,
         "budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
         "primary_contrast": primary,
-        "incremental_assumption_contrast": incremental,
-        "shuffled_control_contrast": shuffled_control,
-        "wrong_episode_control_contrast": wrong_control,
-        "structured_vs_raw_budget_curve": budget_curve,
+        "stale_control_contrast": stale_control,
+        "raw_increment_contrast": raw_increment,
+        "explicit_augmentation_control_contrast": explicit_control,
+        "budget_curve": budget_curve,
         "primary_category_accuracy_deltas": category_deltas,
         "criteria": {
-            "structured_vs_raw_ci_excludes_zero": primary_supported,
-            "structured_ea_vs_structured_e_ci_excludes_zero": incremental_supported,
-            "shuffled_control_ci_excludes_zero": shuffled_supported,
-            "wrong_episode_control_ci_excludes_zero": wrong_supported,
+            "true_vs_shuffled_ci_excludes_zero": primary_supported,
+            "true_vs_stale_ci_excludes_zero": stale_supported,
+            "true_vs_raw_ci_excludes_zero": raw_supported,
+            "true_vs_explicit_ci_excludes_zero": explicit_supported,
             "control_specificity_supported": specificity_supported,
             "positive_category_count": positive_categories,
             "category_breadth_at_least_two": category_breadth,
             "minimum_condition_retained_rate": minimum_retained,
-            "coverage_at_least_98_percent": coverage_acceptable,
+            "coverage_at_least_95_percent": coverage_acceptable,
         },
         "interpretation": interpretation,
         "ready_for_cross_model_smoke": ready_for_cross_model,
         "ready_for_full_corpus": False,
-        "full_corpus_blocker": "A different-family judge smoke run and manual audit are required before a full-corpus claim.",
-        "recommended_next_stage": "cross_model_smoke" if ready_for_cross_model else "manual_audit_or_representation_revision",
+        "full_corpus_blocker": "Run a different-family judge smoke test and manually audit true-vs-shuffled/stale flips before making the full-corpus claim.",
+        "recommended_next_stage": "cross_model_smoke" if ready_for_cross_model else "manual_audit_or_control_revision",
     }
 
 
@@ -3329,10 +3477,10 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         budgets = sorted(int(value) for value in matched["representation_budget"].unique())
         base_labels = {
             "raw_history": "Raw history",
-            "structured_explicit_history": "Structured explicit history",
-            "structured_explicit_assumption_history": "Structured explicit + assumption history",
-            "structured_explicit_shuffled_assumption_history": "Structured + shuffled assumptions",
-            "structured_explicit_wrong_episode_assumption_history": "Structured + wrong-episode assumptions",
+            "raw_history_true_assumptions": "Raw + true implicit",
+            "raw_history_shuffled_assumptions": "Raw + shuffled implicit",
+            "raw_history_stale_assumptions": "Raw + stale implicit",
+            "raw_history_explicit": "Raw + explicit",
         }
         complete = matched[
             (matched["complete_case"] == True)
@@ -3380,10 +3528,10 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
                     )
             axis.axhline(0.5, color="black", linewidth=0.9, linestyle="--", label="Chance")
             axis.set_xticks(budgets)
-            axis.set_xlabel(f"Source-representation budget ({REPRESENTATION_BUDGET_TOKENIZER})")
+            axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
             axis.set_ylabel("Binary accuracy")
             axis.set_ylim(0.0, 1.0)
-            axis.set_title("Matched-history future-turn accuracy (horizon 1)")
+            axis.set_title("Assumption-augmented future-turn accuracy (horizon 1)")
             axis.legend(loc="best", fontsize=8)
             axis.grid(axis="y", alpha=0.25)
         fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
@@ -3391,15 +3539,15 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         plt.close(fig)
 
         contrast_labels = {
-            "raw_history": "Structured E+A - raw history",
-            "structured_explicit_history": "Structured E+A - structured E",
-            "structured_explicit_shuffled_assumption_history": "True - shuffled assumptions",
-            "structured_explicit_wrong_episode_assumption_history": "True - wrong-episode assumptions",
+            "raw_history_shuffled_assumptions": "True implicit - shuffled implicit",
+            "raw_history_stale_assumptions": "True implicit - stale implicit",
+            "raw_history": "True implicit - raw",
+            "raw_history_explicit": "True implicit - explicit augmentation",
         }
         lift = pairwise[
             (pairwise["analysis_subset"] == "assumption_eligible")
             & (pairwise["future_horizon"] == primary_horizon)
-            & (pairwise["target_base_condition"] == "structured_explicit_assumption_history")
+            & (pairwise["target_base_condition"] == "raw_history_true_assumptions")
             & (pairwise["baseline_base_condition"].isin(contrast_labels))
             & (pairwise["metric"] == "accuracy")
         ].copy()
@@ -3428,9 +3576,9 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
                     )
             axis.axhline(0.0, color="black", linewidth=0.8)
             axis.set_xticks(budgets)
-            axis.set_xlabel(f"Source-representation budget ({REPRESENTATION_BUDGET_TOKENIZER})")
+            axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
             axis.set_ylabel("Paired accuracy improvement")
-            axis.set_title("Structured-state lifts over matched controls (horizon 1)")
+            axis.set_title("True-assumption lifts over matched controls (horizon 1)")
             axis.legend(loc="best", fontsize=8)
             axis.grid(axis="y", alpha=0.25)
         fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
@@ -3664,6 +3812,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     category_df = condition_summary(long_df, "category", args)
     move_df = condition_summary(long_df, "true_future_turn_move_label", args)
     pairwise_df = build_pairwise(long_df, args)
+    flip_df = build_flip_analysis(pairs, scores, args)
     coverage_df = coverage_summary(long_df, pairs, args)
     decomposition_df = build_decomposition_table(pairwise_df)
     audit_df = build_audit_sample(pairs, long_df, args)
@@ -3675,6 +3824,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     category_df.to_csv(paths["by_category"], index=False)
     move_df.to_csv(paths["by_move"], index=False)
     pairwise_df.to_csv(paths["pairwise"], index=False)
+    flip_df.to_csv(paths["flips"], index=False)
     decomposition_df.to_csv(paths["decomposition"], index=False)
     audit_df.to_csv(paths["audit_sample"], index=False)
     write_json(paths["diagnostic_gate"], gate)
@@ -3702,11 +3852,9 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         (str(row["target_condition"]), int(row["future_horizon"])): row["mean_improvement"]
         for _, row in pairwise_df.iterrows()
         if row["analysis_subset"] == "complete_case"
-        and (
-            row["baseline_condition"] == "explicit_only"
-            or parse_matched_condition(str(row["baseline_condition"]))[0] == "raw_history"
-        )
         and row["metric"] == "accuracy"
+        and str(row["target_condition"]) in args.conditions
+        and str(row["baseline_condition"]) in args.conditions
     }
     diagnostic_table = [
         {
@@ -3725,7 +3873,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         for condition in args.conditions
     ]
     summary = {
-        "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
+        "experiment": "Experiment 1: Assumption-Augmented Future-Turn Accuracy",
         "analysis_stage": "final_analysis",
         "script_version": SCRIPT_VERSION,
         "prompt_version": PROMPT_VERSION,
@@ -3749,7 +3897,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "max_retry_tokens": args.max_retry_tokens,
             "scoring_mode": "order_swapped_binary_future_turn_accuracy",
             "valid_outputs": ["A", "B"],
-            "parser": "leading_standalone_choice_token",
+            "parser": "strict_json_answer_evidence",
             "comparison_rows_per_pair_condition": EXPECTED_COMPARISONS_PER_CONDITION,
         },
         "seed": args.seed,
@@ -3807,6 +3955,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "condition_metrics": overall_metrics,
         "complete_case_diagnostic_table": diagnostic_table,
         "diagnostic_gate": gate,
+        "flip_analysis_rows": len(flip_df),
         "audit_sample_size": len(audit_df),
         "output_hashes": output_hashes,
         "summary_self_hash_excluded": True,
