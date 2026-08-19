@@ -1,7 +1,7 @@
 {
   "assumption_budget": 3,
   "assumption_eligible_pair_count": 345,
-  "assumption_selection": "candidate_blind_source_tail_lexical_grounding",
+  "assumption_selection": "candidate_blind_source_tail_lexical_grounding_current_source_turn",
   "boundary_provenance_counts": {
     "boundary_invalid_merged_group_count": 678,
     "boundary_unverified_pair_count": 0,
@@ -25,27 +25,27 @@
     "raw_history_b128",
     "raw_history_b256",
     "raw_history_b512",
-    "structured_explicit_history_b128",
-    "structured_explicit_history_b256",
-    "structured_explicit_history_b512",
-    "structured_explicit_assumption_history_b128",
-    "structured_explicit_assumption_history_b256",
-    "structured_explicit_assumption_history_b512",
-    "structured_explicit_shuffled_assumption_history_b128",
-    "structured_explicit_shuffled_assumption_history_b256",
-    "structured_explicit_shuffled_assumption_history_b512",
-    "structured_explicit_wrong_episode_assumption_history_b128",
-    "structured_explicit_wrong_episode_assumption_history_b256",
-    "structured_explicit_wrong_episode_assumption_history_b512"
+    "raw_history_true_assumptions_b128",
+    "raw_history_true_assumptions_b256",
+    "raw_history_true_assumptions_b512",
+    "raw_history_shuffled_assumptions_b128",
+    "raw_history_shuffled_assumptions_b256",
+    "raw_history_shuffled_assumptions_b512",
+    "raw_history_stale_assumptions_b128",
+    "raw_history_stale_assumptions_b256",
+    "raw_history_stale_assumptions_b512",
+    "raw_history_explicit_b128",
+    "raw_history_explicit_b256",
+    "raw_history_explicit_b512"
   ],
   "episode_file_count": 30,
-  "experiment": "Experiment 1: Explicit-Implicit Future-Turn Accuracy",
+  "experiment": "Experiment 1: Assumption-Augmented Future-Turn Accuracy",
   "future_horizons": [
     1,
     3,
     5
   ],
-  "git_commit": "45c0cebe50285bfd37eb8d0117a6a4ba9f4fb16b",
+  "git_commit": "184c4919a0214bf82426e57e4542232d54d24caa",
   "history_turns": 3,
   "input_dir": "data_cleaned/conversation_moves_labeled",
   "input_manifest_sha256": "db383a69df9245c08c74ab3501f8746eceb2e7b5342175670febfedb33504008",
@@ -66,9 +66,9 @@
     "5": 46
   },
   "prepared_pairs_jsonl": "iclr/exp1_representation_baselines/results/Qwen__Qwen3-30B-A3B-Instruct-2507/exp1_representation_prepared_pairs.jsonl",
-  "prepared_pairs_sha256": "133836d1caf33f2e92bea521555b129e637a3a4daf7dc3b2e197c1762642c761",
-  "prompt_version": "representation-matched-history-v2-json-evidence",
-  "representation_budget_policy": "headers_plus_content_capped; content allocated current-to-earlier; output chronological",
+  "prepared_pairs_sha256": "5ec5a8a008caecac5a8a75a12ce7587c6122092e5689f23f81bec1780098cf23",
+  "prompt_version": "raw-augmentation-v1-json-evidence",
+  "representation_budget_policy": "budget_caps_raw_history_only; identical_raw_history_reused_across_conditions; auxiliary_content_length_matched_to_true_assumptions",
   "representation_budget_tokenizer": "whitespace_v1",
   "representation_budgets": [
     128,
@@ -84,7 +84,7 @@
     "torch": "2.11.0+cu129",
     "vllm": "0.22.1"
   },
-  "script_version": "5.0.0",
+  "script_version": "6.0.1",
   "seed": 42,
   "selected_episode_files": [
     {
@@ -271,28 +271,37 @@
   "source_episode_count": 24,
   "source_tail_words": 100,
   "stage": "prepare",
-  "state_deduplication": "exact_normalized_text_keep_most_recent",
+  "state_deduplication": "raw_history_not_deduplicated; explicit_control_uses_exact_normalized_text_keep_most_recent",
   "turn_count": 462,
   "unavailable_control_reasons": {
-    "structured_explicit_shuffled_assumption_history_b128": {},
-    "structured_explicit_shuffled_assumption_history_b256": {},
-    "structured_explicit_shuffled_assumption_history_b512": {},
-    "structured_explicit_wrong_episode_assumption_history_b128": {
-      "no_valid_same_episode_earlier_nonadjacent_donor": 63
+    "raw_history_shuffled_assumptions_b128": {
+      "source_has_no_assumptions": 3
     },
-    "structured_explicit_wrong_episode_assumption_history_b256": {
-      "no_valid_same_episode_earlier_nonadjacent_donor": 63
+    "raw_history_shuffled_assumptions_b256": {
+      "source_has_no_assumptions": 3
     },
-    "structured_explicit_wrong_episode_assumption_history_b512": {
-      "no_valid_same_episode_earlier_nonadjacent_donor": 63
+    "raw_history_shuffled_assumptions_b512": {
+      "source_has_no_assumptions": 3
+    },
+    "raw_history_stale_assumptions_b128": {
+      "no_length_matched_same_episode_stale_donor": 63,
+      "source_has_no_assumptions": 3
+    },
+    "raw_history_stale_assumptions_b256": {
+      "no_length_matched_same_episode_stale_donor": 63,
+      "source_has_no_assumptions": 3
+    },
+    "raw_history_stale_assumptions_b512": {
+      "no_length_matched_same_episode_stale_donor": 63,
+      "source_has_no_assumptions": 3
     }
   },
   "unavailable_controls": {
-    "structured_explicit_shuffled_assumption_history_b128": 0,
-    "structured_explicit_shuffled_assumption_history_b256": 0,
-    "structured_explicit_shuffled_assumption_history_b512": 0,
-    "structured_explicit_wrong_episode_assumption_history_b128": 63,
-    "structured_explicit_wrong_episode_assumption_history_b256": 63,
-    "structured_explicit_wrong_episode_assumption_history_b512": 63
+    "raw_history_shuffled_assumptions_b128": 3,
+    "raw_history_shuffled_assumptions_b256": 3,
+    "raw_history_shuffled_assumptions_b512": 3,
+    "raw_history_stale_assumptions_b128": 66,
+    "raw_history_stale_assumptions_b256": 66,
+    "raw_history_stale_assumptions_b512": 66
   }
 }
