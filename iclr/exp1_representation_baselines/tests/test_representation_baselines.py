@@ -200,6 +200,31 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertIn("third", first_three)
         self.assertNotIn("fourth", first_three)
 
+    def test_raw_history_turn_count_tracks_budgeted_dialogue_tokens(self) -> None:
+        context_turns = [
+            {
+                "turn_id": f"turn-{index}",
+                "turn_idx": index,
+                "turn_text": " ".join(f"w{index}_{word}" for word in range(90)),
+                "explicit_texts": [],
+                "assumption_texts": [],
+            }
+            for index in range(4)
+        ]
+        pair = {"pair_id": "turn-budget", "context_turns": context_turns}
+        counts = [
+            baseline.raw_history_included_turn_count(pair, budget)
+            for budget in (128, 256, 512)
+        ]
+        self.assertEqual(counts, sorted(counts))
+        self.assertGreaterEqual(counts[0], 1)
+        self.assertEqual(counts[-1], 4)
+        for budget in (128, 256, 512):
+            self.assertLessEqual(
+                baseline.whitespace_token_count(baseline.format_raw_history(pair, budget)),
+                budget,
+            )
+
     def test_matched_history_conditions_share_identical_raw_prefix_and_aux_length(self) -> None:
         context_turns = [
             {
@@ -614,6 +639,12 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertEqual(score_manifest["expected_task_count"], score_manifest["valid_task_count"])
         for path in baseline.final_paths(output).values():
             self.assertTrue(path.exists(), path)
+        turn_budget = pd.read_csv(baseline.final_paths(output)["turn_budget_sanity"])
+        self.assertEqual(
+            turn_budget["representation_budget"].tolist(),
+            list(baseline.DEFAULT_REPRESENTATION_BUDGETS),
+        )
+        self.assertTrue((turn_budget["mean_included_turns"].diff().dropna() >= 0).all())
         long_df = pd.read_csv(baseline.final_paths(output)["metrics_long"])
         self.assertTrue((long_df.loc[long_df["full_retained"] == True, "accuracy"] == 1).all())
         pairwise = pd.read_csv(baseline.final_paths(output)["pairwise"])

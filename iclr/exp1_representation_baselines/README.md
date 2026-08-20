@@ -107,6 +107,20 @@ raw-history reference and is shown only as an unlabeled horizontal guide. This p
 not remove the prespecified True-vs-control contrasts from the CSV analysis; it only keeps the visual
 performance reference constant so vertical differences across curves are directly interpretable.
 
+## Token-budget sanity check
+
+The analysis also reports how much conversational context each nominal raw-history budget
+actually contains. For every assumption-eligible, candidate-complete source context, the code
+counts a dialogue turn only when at least one raw-text token from that turn is included after
+budgeting; structural turn headers alone do not count. Source turns are deduplicated across
+future horizons.
+
+For each configured budget (for example 128, 256, and 512), the sanity-check CSV reports the
+mean included-turn count and an episode-clustered bootstrap 95% confidence interval. The
+corresponding plot shows the mean with those confidence-interval error bars. This makes the
+nominal token budgets interpretable in units of conversational turns without changing any
+scoring condition.
+
 ## Candidate task and judge
 
 Candidate construction remains unchanged: one true future turn plus 24 hard negatives, with
@@ -228,6 +242,8 @@ full-corpus claim.
 - `exp1_representation_diagnostic_gate.json`
 - `exp1_representation_diagnostic_comparison.{pdf,png}`
 - `exp1_representation_decomposition_lifts.{pdf,png}`
+- `exp1_representation_turns_per_budget.csv`
+- `exp1_representation_turns_per_budget.{pdf,png}`
 
 The donor audit records donor source, fallback level, target auxiliary length, and the exact
 length-matched assumptions used for Different-Episode and Same-Episode Random Turn controls.

@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "6.0.4"
+SCRIPT_VERSION = "6.0.5"
 PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -541,6 +541,9 @@ def final_paths(output_dir: Path) -> dict[str, Path]:
         "diagnostic_png": output_dir / "exp1_representation_diagnostic_comparison.png",
         "decomposition_pdf": output_dir / "exp1_representation_decomposition_lifts.pdf",
         "decomposition_png": output_dir / "exp1_representation_decomposition_lifts.png",
+        "turn_budget_sanity": output_dir / "exp1_representation_turns_per_budget.csv",
+        "turn_budget_sanity_pdf": output_dir / "exp1_representation_turns_per_budget.pdf",
+        "turn_budget_sanity_png": output_dir / "exp1_representation_turns_per_budget.png",
     }
 
 
@@ -1284,7 +1287,16 @@ def context_turn_header(index: int, count: int, kind: str | None = None) -> str:
     return f"[Turn {turn_name}{suffix}]"
 
 
-def format_raw_history(pair: dict[str, Any], budget: int) -> str:
+def raw_history_budget_allocation(
+    pair: dict[str, Any], budget: int
+) -> tuple[list[str], list[list[str]]]:
+    """Allocate a raw-history budget and expose which turns contribute dialogue tokens.
+
+    Turn headers are structural formatting and may remain even when a turn contributes zero
+    dialogue words.  Sanity checks therefore count only turns whose selected word list is
+    non-empty.  Keeping allocation here ensures the sanity statistic exactly matches the
+    representation seen by the scoring model.
+    """
     context = list(pair["context_turns"])
     headers = [context_turn_header(index, len(context), "raw") for index in range(len(context))]
     remaining = budget - sum(whitespace_token_count(header) for header in headers)
@@ -1298,6 +1310,17 @@ def format_raw_history(pair: dict[str, Any], budget: int) -> str:
         take = min(remaining, len(words))
         selected[index] = words[-take:] if take else []
         remaining -= take
+    return headers, selected
+
+
+def raw_history_included_turn_count(pair: dict[str, Any], budget: int) -> int:
+    """Number of dialogue turns contributing at least one raw-text token at `budget`."""
+    _, selected = raw_history_budget_allocation(pair, budget)
+    return sum(bool(words) for words in selected)
+
+
+def format_raw_history(pair: dict[str, Any], budget: int) -> str:
+    headers, selected = raw_history_budget_allocation(pair, budget)
     lines: list[str] = []
     for header, words in zip(headers, selected):
         lines.append(header)
@@ -3469,7 +3492,77 @@ def diagnostic_gate(
     }
 
 
-def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str, Path], args: argparse.Namespace) -> None:
+def build_turn_budget_sanity(
+    pairs: list[dict[str, Any]], args: argparse.Namespace
+) -> pd.DataFrame:
+    """Summarize how many raw dialogue turns actually fit in each token budget.
+
+    The primary performance analysis is assumption-eligible, so this sanity check uses the
+    same population: candidate-complete source contexts with at least one selected source
+    assumption.  Source turns are deduplicated across future horizons so a context is counted
+    once, not once per prediction horizon.  Error bars are episode-clustered bootstrap 95% CIs.
+    """
+    unique_sources: dict[str, dict[str, Any]] = {}
+    for pair in pairs:
+        if not bool(pair.get("candidate_pool_complete")):
+            continue
+        if not list(pair.get("source_assumption_texts") or []):
+            continue
+        unique_sources.setdefault(str(pair["source_turn_id"]), pair)
+
+    rows: list[dict[str, Any]] = []
+    for budget in args.representation_budgets:
+        detail_rows: list[dict[str, Any]] = []
+        for source_turn_id, pair in unique_sources.items():
+            detail_rows.append(
+                {
+                    "source_turn_id": source_turn_id,
+                    "category": pair["category"],
+                    "episode_id": pair["episode_id"],
+                    "representation_budget": int(budget),
+                    "included_turn_count": raw_history_included_turn_count(pair, int(budget)),
+                    "raw_history_token_count": whitespace_token_count(
+                        format_raw_history(pair, int(budget))
+                    ),
+                }
+            )
+        detail = pd.DataFrame(
+            detail_rows,
+            columns=[
+                "source_turn_id",
+                "category",
+                "episode_id",
+                "representation_budget",
+                "included_turn_count",
+                "raw_history_token_count",
+            ],
+        )
+        boot = cluster_bootstrap(
+            detail,
+            "included_turn_count",
+            seed_label=f"sanity:turns_per_budget:b{int(budget)}",
+            seed=args.seed,
+            draws=args.bootstrap_draws,
+        )
+        rows.append(
+            {
+                "analysis_subset": "assumption_eligible_unique_sources",
+                "representation_budget": int(budget),
+                "source_context_count": int(len(detail)),
+                "episode_cluster_count": int(boot["cluster_count"]),
+                "mean_included_turns": boot["mean"],
+                "ci95_low": boot["ci95_low"],
+                "ci95_high": boot["ci95_high"],
+                "ci_unstable": boot["ci_unstable"],
+                "mean_raw_history_token_count": (
+                    float(detail["raw_history_token_count"].mean()) if not detail.empty else None
+                ),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, turn_budget_sanity: pd.DataFrame, paths: dict[str, Path], args: argparse.Namespace) -> None:
     try:
         import matplotlib
     except ImportError:
@@ -3490,14 +3583,47 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             b"xref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000238 00000 n \n0000000380 00000 n \n"
             b"trailer<</Size 6/Root 1 0 R>>\nstartxref\n450\n%%EOF\n"
         )
-        for key in ("diagnostic_png", "decomposition_png"):
+        for key in ("diagnostic_png", "decomposition_png", "turn_budget_sanity_png"):
             atomic_write_bytes(paths[key], transparent_png)
-        for key in ("diagnostic_pdf", "decomposition_pdf"):
+        for key in ("diagnostic_pdf", "decomposition_pdf", "turn_budget_sanity_pdf"):
             atomic_write_bytes(paths[key], placeholder_pdf)
         return
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    # Sanity check: translate nominal raw-history token budgets into the average number of
+    # dialogue turns that actually contribute at least one raw-text token.
+    fig, axis = plt.subplots(figsize=(7.2, 4.8), constrained_layout=True)
+    sanity = turn_budget_sanity.sort_values("representation_budget").copy()
+    if sanity.empty or sanity["mean_included_turns"].isna().all():
+        axis.text(0.5, 0.5, "No turn-budget sanity data available", ha="center", va="center")
+        axis.set_axis_off()
+    else:
+        x = sanity["representation_budget"].to_numpy(dtype=float)
+        means = sanity["mean_included_turns"].to_numpy(dtype=float)
+        lows = sanity["ci95_low"].to_numpy(dtype=float)
+        highs = sanity["ci95_high"].to_numpy(dtype=float)
+        finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
+        axis.plot(x, means, marker="o", linewidth=1.8)
+        if finite.any():
+            axis.errorbar(
+                x[finite],
+                means[finite],
+                yerr=np.vstack((means[finite] - lows[finite], highs[finite] - means[finite])),
+                fmt="none",
+                color="black",
+                alpha=0.45,
+                capsize=4,
+            )
+        axis.set_xticks(x)
+        axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
+        axis.set_ylabel("Mean number of dialogue turns included")
+        axis.set_title("How much dialogue context fits within each token budget")
+        axis.grid(axis="y", alpha=0.25)
+    fig.savefig(paths["turn_budget_sanity_pdf"], bbox_inches="tight")
+    fig.savefig(paths["turn_budget_sanity_png"], dpi=args.plot_dpi, bbox_inches="tight")
+    plt.close(fig)
 
     matched = long_df[long_df["representation_budget"].notna()].copy()
     if not matched.empty:
@@ -3854,6 +3980,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     audit_df = build_audit_sample(pairs, long_df, args)
     gate = diagnostic_gate(pairwise_df, long_df, coverage_df)
     overall_metrics = overall_condition_summary(long_df, args)
+    turn_budget_sanity_df = build_turn_budget_sanity(pairs, args)
     paths = final_paths(args.output_dir)
     long_df.to_csv(paths["metrics_long"], index=False)
     wide_df.to_csv(paths["metrics_wide"], index=False)
@@ -3865,7 +3992,8 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
     audit_df.to_csv(paths["audit_sample"], index=False)
     write_json(paths["diagnostic_gate"], gate)
     coverage_df.to_csv(paths["coverage"], index=False)
-    plot_results(long_df, pairwise_df, paths, args)
+    turn_budget_sanity_df.to_csv(paths["turn_budget_sanity"], index=False)
+    plot_results(long_df, pairwise_df, turn_budget_sanity_df, paths, args)
     hash_candidates = dict(paths)
     hash_candidates["prepared_pairs"] = prepared
     hash_candidates["prepare_manifest"] = prepare_manifest_path(args)
@@ -3989,6 +4117,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "parse_method_counts": dict(sorted(parse_method_counts.items())),
         },
         "condition_metrics": overall_metrics,
+        "turn_budget_sanity": turn_budget_sanity_df.to_dict(orient="records"),
         "complete_case_diagnostic_table": diagnostic_table,
         "diagnostic_gate": gate,
         "flip_analysis_rows": len(flip_df),
