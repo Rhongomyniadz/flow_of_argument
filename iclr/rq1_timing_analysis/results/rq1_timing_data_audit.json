@@ -54,7 +54,7 @@
     "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "45c0cebe50285bfd37eb8d0117a6a4ba9f4fb16b",
+    "commit": "9a2b2227a4cfb09e9e65a75bf22f119ad6fa4e52",
     "dirty": true
   },
   "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
@@ -85,11 +85,32 @@
     "all"
   ],
   "retained_observation_count": 241284,
-  "script_sha256": "3886193cf002427bf8c3cebc8645843851871299a8728eff2b1242cfd5a5322e",
-  "script_version": "3.0.0",
+  "script_sha256": "ee63f614adc62e90811117c85e3ee4ed93ea4e31d1ffa816c8b705efd3b26beb",
+  "script_version": "3.1.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",
+  "stepwise_added_variable_groups": {
+    "iceberg_ratio": "category fixed effects",
+    "iceberg_ratio_duration_adjusted": "current-turn duration",
+    "iceberg_ratio_timing_adjusted": "pre-turn gap and overlap",
+    "iceberg_ratio_timing_previous_duration": "previous-turn duration",
+    "step_1_stance_only": "stance movement",
+    "step_2_lagged_stance": "lagged stance movement",
+    "step_3_previous_outcome": "previous iceberg ratio",
+    "step_4_timeline": "timeline position"
+  },
+  "stepwise_common_model_sample_verified": true,
+  "stepwise_formulas": {
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "step_1_stance_only": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
+    "step_2_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "step_3_previous_outcome": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio",
+    "step_4_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2)"
+  },
   "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
   "timestamp_source_counts": {
     "start_end": 481210
