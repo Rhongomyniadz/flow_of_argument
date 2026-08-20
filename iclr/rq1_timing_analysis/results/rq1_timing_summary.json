@@ -1,17 +1,24 @@
 {
   "artifact_sha256": {
+    "rq1_specification_panel.csv": "402aa415f70de10a2e234006cb5ca2a9371c9a10fc99893a82b26d8c9fe6dd4e",
+    "rq1_specification_panel.pdf": "54ba7355d2a34559f6371193c946ff729cd6a5ab1fb3502841e707d3b74b65af",
+    "rq1_specification_panel.png": "08315fd6e207726ab30938704d824f526c8311f549325b5a9a926deeb395f1da",
     "rq1_stepwise_coefficients.csv": "2b01741d90698b2af376750fa7a6c8098cae2149f34b2a44ca7b647ef778aa57",
-    "rq1_stepwise_comparison.pdf": "be9d8da86c26ed56eb4271be208e26ae9e05cd5b3d55023488a8a1cb61792680",
+    "rq1_stepwise_comparison.pdf": "5114752ad469cfae4ac357a135b15fe6f931b7612e6f3166a79657c7a8606520",
     "rq1_stepwise_comparison.png": "576dae746477e86c0d97232d91821b2bd58e5fdbf305d62f8fbf9bf014120c58",
     "rq1_stepwise_model_fit.csv": "060e20e81f71563fb388b2383d7b26fee07d89864cf0e1dcca26ac0bb9487ab8",
     "rq1_stepwise_stance_comparison.csv": "8def84796a7ab806b2543831cb036c7b40a9e0420cc9975280c63d408ca6de5c",
     "rq1_timing_coefficients.csv": "8915ffdcb7f84560ce28933cc24437b7caeda695a9957dfc91a3f4b3c38191ec",
-    "rq1_timing_comparison.pdf": "d34fcc15dba1be025f44548d7a30e67d0d5caeb576d47e9e97adcfdcbeef6f90",
+    "rq1_timing_comparison.pdf": "5f8446978b55695e703da6e9a01b885e3d6db68d6e4df442e226b9e9bc947da0",
     "rq1_timing_comparison.png": "86d162ff42c66a6a285359ccbb80aab488e9979da6e185d4c0436e94131b9986",
-    "rq1_timing_data_audit.json": "823317cda197cfd014761b642b77095f609ed29c89d0147f93a0b73d0c18f318",
+    "rq1_timing_data_audit.json": "a7ddb50378d1fea8ad945b881f243f33ce1917e5f505d91504b27211fd48de43",
     "rq1_timing_model_fit.csv": "e082e0b042af4b39df61a38189237196cc806ed69efdf5ab1fed2b0d634bfab0",
     "rq1_timing_observations.csv": "3584af950099a05289aa73f986ab96a6694ca08bd8d6c272afc51f33785f73b8",
     "rq1_timing_stance_comparison.csv": "38485d329daad13af9a50b5835ce23db80ea90b594d1f1dff106be28c5ff378d"
+  },
+  "best_adjusted_r_squared_specification": {
+    "adjusted_r_squared": 0.647829346714069,
+    "model_name": "spec_10_full_timing"
   },
   "both_directional_intervals_survive_timing_adjustment": false,
   "causal_claim": false,
@@ -41,7 +48,7 @@
     "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "5dc1b140e224089dfc3bcd7b1dd433035e644716",
+    "commit": "545020253a69160b575c928fba30ae038857a435",
     "dirty": true
   },
   "headline_coefficients": {
@@ -133,7 +140,190 @@
     "statsmodels": "0.14.5",
     "tqdm": "4.68.1"
   },
-  "script_version": "4.0.0",
+  "script_version": "4.1.0",
+  "specification_fit_metric": "adjusted R-squared; preferred over raw R-squared because model sizes differ",
+  "specification_formulas": {
+    "spec_01_stance_core": "delta_log_density_per_second ~ agree_move + disagree_move",
+    "spec_02_add_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "spec_03_add_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second",
+    "spec_04_add_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "delta_log_density_per_second ~ agree_move + disagree_move + C(category)",
+    "spec_06_add_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + log_duration",
+    "spec_07_add_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + log_gap + overlap",
+    "spec_08_add_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_duration",
+    "spec_09_exp2_baseline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+  },
+  "specification_included_groups": {
+    "spec_01_stance_core": [
+      "current_stance"
+    ],
+    "spec_02_add_lagged_stance": [
+      "current_stance",
+      "lagged_stance"
+    ],
+    "spec_03_add_previous_density": [
+      "current_stance",
+      "previous_density"
+    ],
+    "spec_04_add_timeline": [
+      "current_stance",
+      "timeline"
+    ],
+    "spec_05_add_category": [
+      "current_stance",
+      "category_fixed_effects"
+    ],
+    "spec_06_add_current_duration": [
+      "current_stance",
+      "current_duration"
+    ],
+    "spec_07_add_response_timing": [
+      "current_stance",
+      "response_timing"
+    ],
+    "spec_08_add_previous_duration": [
+      "current_stance",
+      "previous_duration"
+    ],
+    "spec_09_exp2_baseline": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects"
+    ],
+    "spec_10_full_timing": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_11_drop_lagged_stance": [
+      "current_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_12_drop_previous_density": [
+      "current_stance",
+      "lagged_stance",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_13_drop_timeline": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_14_drop_category": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_15_drop_current_duration": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_16_drop_response_timing": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "previous_duration"
+    ],
+    "spec_17_drop_previous_duration": [
+      "current_stance",
+      "lagged_stance",
+      "previous_density",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing"
+    ]
+  },
+  "specification_model_count": 17,
+  "specification_reference_models": {
+    "spec_01_stance_core": null,
+    "spec_02_add_lagged_stance": "spec_01_stance_core",
+    "spec_03_add_previous_density": "spec_01_stance_core",
+    "spec_04_add_timeline": "spec_01_stance_core",
+    "spec_05_add_category": "spec_01_stance_core",
+    "spec_06_add_current_duration": "spec_01_stance_core",
+    "spec_07_add_response_timing": "spec_01_stance_core",
+    "spec_08_add_previous_duration": "spec_01_stance_core",
+    "spec_09_exp2_baseline": "spec_01_stance_core",
+    "spec_10_full_timing": "spec_09_exp2_baseline",
+    "spec_11_drop_lagged_stance": "spec_10_full_timing",
+    "spec_12_drop_previous_density": "spec_10_full_timing",
+    "spec_13_drop_timeline": "spec_10_full_timing",
+    "spec_14_drop_category": "spec_10_full_timing",
+    "spec_15_drop_current_duration": "spec_10_full_timing",
+    "spec_16_drop_response_timing": "spec_10_full_timing",
+    "spec_17_drop_previous_duration": "spec_10_full_timing"
+  },
+  "specification_variable_groups": {
+    "category_fixed_effects": [
+      "C(category)"
+    ],
+    "current_duration": [
+      "log_duration"
+    ],
+    "current_stance": [
+      "agree_move",
+      "disagree_move"
+    ],
+    "lagged_stance": [
+      "lag_agree_move",
+      "lag_disagree_move"
+    ],
+    "previous_density": [
+      "previous_log_density_per_second"
+    ],
+    "previous_duration": [
+      "previous_log_duration"
+    ],
+    "response_timing": [
+      "log_gap",
+      "overlap"
+    ],
+    "timeline": [
+      "timeline_position",
+      "I(timeline_position ** 2)"
+    ]
+  },
   "stepwise_added_variable_groups": {
     "per_second": "category fixed effects",
     "per_second_duration_adjusted": "current-turn duration",
