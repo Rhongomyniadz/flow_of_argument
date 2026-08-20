@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "6.0.2"
+SCRIPT_VERSION = "6.0.4"
 PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -52,6 +52,7 @@ DEFAULT_ASSUMPTION_BUDGET = 3
 DEFAULT_FUTURE_HORIZONS = (1, 3, 5)
 DEFAULT_REPRESENTATION_BUDGETS = (256,)
 REPRESENTATION_BUDGET_TOKENIZER = "whitespace_v1"
+PLOT_REFERENCE_BASE_CONDITION = "raw_history"
 EMPTY_EXPLICIT = "None extracted."
 EMPTY_ASSUMPTIONS = "None extracted."
 EMPTY_HISTORY = "No earlier substantive turn available."
@@ -3503,19 +3504,22 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         primary_horizon = 1
         budgets = sorted(int(value) for value in matched["representation_budget"].unique())
         base_labels = {
-            "raw_history": "Raw history",
-            "raw_history_true_assumptions": "Raw + true implicit",
-            "raw_history_different_episode_assumptions": "Raw + Different-Episode",
-            "raw_history_same_episode_random_turn_assumptions": "Raw + Same-Episode Random Turn",
-            "raw_history_explicit": "Raw + explicit",
+            "raw_history_true_assumptions": "True implicit",
+            "raw_history_different_episode_assumptions": "Different-Episode",
+            "raw_history_same_episode_random_turn_assumptions": "Same-Episode Random Turn",
+            "raw_history_explicit": "Explicit augmentation",
         }
+        plotted_base_conditions = tuple(
+            condition for condition in MATCHED_BASE_CONDITIONS
+            if condition != PLOT_REFERENCE_BASE_CONDITION
+        )
         complete = matched[
             (matched["complete_case"] == True)
             & (matched["full_retained"] == True)
             & (matched["future_horizon"] == primary_horizon)
         ]
         rows: list[dict[str, Any]] = []
-        for base_condition in MATCHED_BASE_CONDITIONS:
+        for base_condition in plotted_base_conditions:
             for budget in budgets:
                 group = complete[
                     (complete["base_condition"] == base_condition)
@@ -3535,7 +3539,7 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
             axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
             axis.set_axis_off()
         else:
-            for base_condition in MATCHED_BASE_CONDITIONS:
+            for base_condition in plotted_base_conditions:
                 group = plot_df[plot_df["base_condition"] == base_condition].set_index("budget").reindex(budgets)
                 means = group["mean"].to_numpy(dtype=float)
                 lows = group["ci95_low"].to_numpy(dtype=float)
@@ -3565,31 +3569,35 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
         fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
         plt.close(fig)
 
-        contrast_labels = {
-            "raw_history_different_episode_assumptions": "True implicit - Different-Episode",
-            "raw_history_same_episode_random_turn_assumptions": "True implicit - Same-Episode Random Turn",
-            "raw_history": "True implicit - raw",
-            "raw_history_explicit": "True implicit - explicit augmentation",
+        # Keep one fixed performance reference for every plotted lift.  Using raw history as
+        # the common baseline makes vertical distances directly comparable across augmentations;
+        # the zero line is the performance of the identical raw-dialogue representation.
+        reference_base = PLOT_REFERENCE_BASE_CONDITION
+        lift_labels = {
+            "raw_history_true_assumptions": "True implicit",
+            "raw_history_different_episode_assumptions": "Different-Episode",
+            "raw_history_same_episode_random_turn_assumptions": "Same-Episode Random Turn",
+            "raw_history_explicit": "Explicit augmentation",
         }
         lift = pairwise[
             (pairwise["analysis_subset"] == "assumption_eligible")
             & (pairwise["future_horizon"] == primary_horizon)
-            & (pairwise["target_base_condition"] == "raw_history_true_assumptions")
-            & (pairwise["baseline_base_condition"].isin(contrast_labels))
+            & (pairwise["target_base_condition"].isin(lift_labels))
+            & (pairwise["baseline_base_condition"] == reference_base)
             & (pairwise["metric"] == "accuracy")
         ].copy()
         fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
         if lift.empty or lift["mean_improvement"].isna().all():
-            axis.text(0.5, 0.5, "No matched-history lift data available", ha="center", va="center")
+            axis.text(0.5, 0.5, "No raw-reference lift data available", ha="center", va="center")
             axis.set_axis_off()
         else:
-            for baseline_base, group in lift.groupby("baseline_base_condition", sort=False):
+            for target_base, group in lift.groupby("target_base_condition", sort=False):
                 ordered = group.set_index("representation_budget").reindex(budgets)
                 means = ordered["mean_improvement"].to_numpy(dtype=float)
                 lows = ordered["ci95_low"].to_numpy(dtype=float)
                 highs = ordered["ci95_high"].to_numpy(dtype=float)
                 x = np.asarray(budgets, dtype=float)
-                axis.plot(x, means, marker="o", linewidth=1.8, label=contrast_labels[str(baseline_base)])
+                axis.plot(x, means, marker="o", linewidth=1.8, label=lift_labels[str(target_base)])
                 finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
                 if finite.any():
                     axis.errorbar(
@@ -3601,11 +3609,12 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, paths: dict[str,
                         alpha=0.35,
                         capsize=3,
                     )
-            axis.axhline(0.0, color="black", linewidth=0.8)
+            # Zero is the fixed Raw-history baseline; keep the visual guide out of the legend.
+            axis.axhline(0.0, color="black", linewidth=0.8, linestyle="--", label="_nolegend_")
             axis.set_xticks(budgets)
             axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
-            axis.set_ylabel("Paired accuracy improvement")
-            axis.set_title("True-assumption lifts over matched controls (horizon 1)")
+            axis.set_ylabel("Paired accuracy change vs. Raw history")
+            axis.set_title("Augmentation performance relative to a fixed raw-history reference (horizon 1)")
             axis.legend(loc="best", fontsize=8)
             axis.grid(axis="y", alpha=0.25)
         fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")

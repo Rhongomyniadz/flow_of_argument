@@ -89,6 +89,24 @@ Because assumptions are inferred from the transcript, `True > Raw` should not be
 adding information in a strict information-theoretic sense. The defensible claim is that the
 assumption representation makes useful conversational structure more accessible to the judge.
 
+## Plotting reference
+
+The paper lift plot uses **Raw history** as one fixed reference condition. Every plotted curve is
+already a paired accuracy change relative to that same raw-history representation, so the legend
+shows only the augmentation names:
+
+```text
+True implicit
+Different-Episode
+Same-Episode Random Turn
+Explicit augmentation
+```
+
+Raw history is not drawn as a separate performance series. In the lift plot, zero denotes the
+raw-history reference and is shown only as an unlabeled horizontal guide. This plotting choice does
+not remove the prespecified True-vs-control contrasts from the CSV analysis; it only keeps the visual
+performance reference constant so vertical differences across curves are directly interpretable.
+
 ## Candidate task and judge
 
 Candidate construction remains unchanged: one true future turn plus 24 hard negatives, with
