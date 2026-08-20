@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "4.0.0"
+SCRIPT_VERSION = "4.1.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
@@ -112,6 +112,181 @@ STEPWISE_FORMULAS = {
     DURATION_MODEL: FORMULAS[DURATION_MODEL],
     TIMING_MODEL: FORMULAS[TIMING_MODEL],
     PREVIOUS_DURATION_MODEL: FORMULAS[PREVIOUS_DURATION_MODEL],
+}
+
+CURRENT_STANCE_GROUP = "current_stance"
+LAGGED_STANCE_GROUP = "lagged_stance"
+PREVIOUS_DENSITY_GROUP = "previous_density"
+TIMELINE_GROUP = "timeline"
+CATEGORY_GROUP = "category_fixed_effects"
+CURRENT_DURATION_GROUP = "current_duration"
+RESPONSE_TIMING_GROUP = "response_timing"
+PREVIOUS_DURATION_GROUP = "previous_duration"
+SPECIFICATION_GROUP_ORDER = (
+    CURRENT_STANCE_GROUP,
+    LAGGED_STANCE_GROUP,
+    PREVIOUS_DENSITY_GROUP,
+    TIMELINE_GROUP,
+    CATEGORY_GROUP,
+    CURRENT_DURATION_GROUP,
+    RESPONSE_TIMING_GROUP,
+    PREVIOUS_DURATION_GROUP,
+)
+CONTROL_GROUP_ORDER = SPECIFICATION_GROUP_ORDER[1:]
+VARIABLE_GROUP_LABELS = {
+    CURRENT_STANCE_GROUP: "Current stance (agreement + disagreement)",
+    LAGGED_STANCE_GROUP: "Lagged stance (agreement + disagreement)",
+    PREVIOUS_DENSITY_GROUP: "Previous per-second density",
+    TIMELINE_GROUP: "Timeline (linear + quadratic)",
+    CATEGORY_GROUP: "Category fixed effects",
+    CURRENT_DURATION_GROUP: "Current-turn duration",
+    RESPONSE_TIMING_GROUP: "Response timing (gap + overlap)",
+    PREVIOUS_DURATION_GROUP: "Previous-turn duration",
+}
+VARIABLE_GROUP_TERMS = {
+    CURRENT_STANCE_GROUP: ("agree_move", "disagree_move"),
+    LAGGED_STANCE_GROUP: ("lag_agree_move", "lag_disagree_move"),
+    PREVIOUS_DENSITY_GROUP: ("previous_log_density_per_second",),
+    TIMELINE_GROUP: ("timeline_position", "I(timeline_position ** 2)"),
+    CATEGORY_GROUP: ("C(category)",),
+    CURRENT_DURATION_GROUP: ("log_duration",),
+    RESPONSE_TIMING_GROUP: ("log_gap", "overlap"),
+    PREVIOUS_DURATION_GROUP: ("previous_log_duration",),
+}
+EXP2_VARIABLE_GROUPS = SPECIFICATION_GROUP_ORDER[:5]
+FULL_VARIABLE_GROUPS = SPECIFICATION_GROUP_ORDER
+
+
+def formula_for_variable_groups(included_groups: tuple[str, ...]) -> str:
+    if not included_groups or included_groups[0] != CURRENT_STANCE_GROUP:
+        raise ValueError("Every specification must begin with the current-stance group")
+    unknown_groups = sorted(set(included_groups).difference(VARIABLE_GROUP_TERMS))
+    if unknown_groups:
+        raise KeyError(f"Unknown specification variable groups: {unknown_groups}")
+    if len(set(included_groups)) != len(included_groups):
+        raise ValueError(f"Specification repeats a variable group: {included_groups}")
+    terms = [
+        term
+        for group_name in included_groups
+        for term in VARIABLE_GROUP_TERMS[group_name]
+    ]
+    return "delta_log_density_per_second ~ " + " + ".join(terms)
+
+
+SPECIFICATION_MODEL_ORDER = (
+    "spec_01_stance_core",
+    "spec_02_add_lagged_stance",
+    "spec_03_add_previous_density",
+    "spec_04_add_timeline",
+    "spec_05_add_category",
+    "spec_06_add_current_duration",
+    "spec_07_add_response_timing",
+    "spec_08_add_previous_duration",
+    "spec_09_exp2_baseline",
+    "spec_10_full_timing",
+    "spec_11_drop_lagged_stance",
+    "spec_12_drop_previous_density",
+    "spec_13_drop_timeline",
+    "spec_14_drop_category",
+    "spec_15_drop_current_duration",
+    "spec_16_drop_response_timing",
+    "spec_17_drop_previous_duration",
+)
+SPECIFICATION_INCLUDED_GROUPS = {
+    SPECIFICATION_MODEL_ORDER[0]: (CURRENT_STANCE_GROUP,),
+    SPECIFICATION_MODEL_ORDER[1]: (CURRENT_STANCE_GROUP, LAGGED_STANCE_GROUP),
+    SPECIFICATION_MODEL_ORDER[2]: (CURRENT_STANCE_GROUP, PREVIOUS_DENSITY_GROUP),
+    SPECIFICATION_MODEL_ORDER[3]: (CURRENT_STANCE_GROUP, TIMELINE_GROUP),
+    SPECIFICATION_MODEL_ORDER[4]: (CURRENT_STANCE_GROUP, CATEGORY_GROUP),
+    SPECIFICATION_MODEL_ORDER[5]: (CURRENT_STANCE_GROUP, CURRENT_DURATION_GROUP),
+    SPECIFICATION_MODEL_ORDER[6]: (CURRENT_STANCE_GROUP, RESPONSE_TIMING_GROUP),
+    SPECIFICATION_MODEL_ORDER[7]: (CURRENT_STANCE_GROUP, PREVIOUS_DURATION_GROUP),
+    SPECIFICATION_MODEL_ORDER[8]: EXP2_VARIABLE_GROUPS,
+    SPECIFICATION_MODEL_ORDER[9]: FULL_VARIABLE_GROUPS,
+    SPECIFICATION_MODEL_ORDER[10]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != LAGGED_STANCE_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[11]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_DENSITY_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[12]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != TIMELINE_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[13]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != CATEGORY_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[14]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != CURRENT_DURATION_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[15]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != RESPONSE_TIMING_GROUP
+    ),
+    SPECIFICATION_MODEL_ORDER[16]: tuple(
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_DURATION_GROUP
+    ),
+}
+SPECIFICATION_SHORT_LABELS = {
+    SPECIFICATION_MODEL_ORDER[0]: "Core",
+    SPECIFICATION_MODEL_ORDER[1]: "+ Lagged stance",
+    SPECIFICATION_MODEL_ORDER[2]: "+ Previous density",
+    SPECIFICATION_MODEL_ORDER[3]: "+ Timeline",
+    SPECIFICATION_MODEL_ORDER[4]: "+ Category FE",
+    SPECIFICATION_MODEL_ORDER[5]: "+ Current duration",
+    SPECIFICATION_MODEL_ORDER[6]: "+ Gap/overlap",
+    SPECIFICATION_MODEL_ORDER[7]: "+ Previous duration",
+    SPECIFICATION_MODEL_ORDER[8]: "Exp2 baseline",
+    SPECIFICATION_MODEL_ORDER[9]: "Full timing",
+    SPECIFICATION_MODEL_ORDER[10]: "− Lagged stance",
+    SPECIFICATION_MODEL_ORDER[11]: "− Previous density",
+    SPECIFICATION_MODEL_ORDER[12]: "− Timeline",
+    SPECIFICATION_MODEL_ORDER[13]: "− Category FE",
+    SPECIFICATION_MODEL_ORDER[14]: "− Current duration",
+    SPECIFICATION_MODEL_ORDER[15]: "− Gap/overlap",
+    SPECIFICATION_MODEL_ORDER[16]: "− Previous duration",
+}
+SPECIFICATION_FAMILIES = {
+    SPECIFICATION_MODEL_ORDER[0]: "reference",
+    **{model_name: "add_one_to_core" for model_name in SPECIFICATION_MODEL_ORDER[1:8]},
+    SPECIFICATION_MODEL_ORDER[8]: "reference",
+    SPECIFICATION_MODEL_ORDER[9]: "reference",
+    **{model_name: "remove_one_from_full" for model_name in SPECIFICATION_MODEL_ORDER[10:]},
+}
+SPECIFICATION_REFERENCE_MODELS: dict[str, str | None] = {
+    SPECIFICATION_MODEL_ORDER[0]: None,
+    **{
+        model_name: SPECIFICATION_MODEL_ORDER[0]
+        for model_name in SPECIFICATION_MODEL_ORDER[1:9]
+    },
+    SPECIFICATION_MODEL_ORDER[9]: SPECIFICATION_MODEL_ORDER[8],
+    **{
+        model_name: SPECIFICATION_MODEL_ORDER[9]
+        for model_name in SPECIFICATION_MODEL_ORDER[10:]
+    },
+}
+SPECIFICATION_CHANGED_GROUPS: dict[str, str] = {
+    SPECIFICATION_MODEL_ORDER[0]: CURRENT_STANCE_GROUP,
+    **{
+        model_name: group_name
+        for model_name, group_name in zip(
+            SPECIFICATION_MODEL_ORDER[1:8],
+            CONTROL_GROUP_ORDER,
+            strict=True,
+        )
+    },
+    SPECIFICATION_MODEL_ORDER[8]: "exp2_control_block",
+    SPECIFICATION_MODEL_ORDER[9]: "timing_control_block",
+    **{
+        model_name: group_name
+        for model_name, group_name in zip(
+            SPECIFICATION_MODEL_ORDER[10:],
+            CONTROL_GROUP_ORDER,
+            strict=True,
+        )
+    },
+}
+SPECIFICATION_FORMULAS = {
+    model_name: formula_for_variable_groups(SPECIFICATION_INCLUDED_GROUPS[model_name])
+    for model_name in SPECIFICATION_MODEL_ORDER
 }
 
 logging.basicConfig(
@@ -823,6 +998,41 @@ def fit_stepwise_models(frame: pd.DataFrame) -> dict[str, RegressionResult]:
     return fit_formula_models(frame, STEPWISE_FORMULAS, STEPWISE_MODEL_ORDER)
 
 
+def fit_specification_models(
+    frame: pd.DataFrame,
+    reusable_results: dict[str, RegressionResult],
+) -> dict[str, RegressionResult]:
+    unknown_reusable_models = sorted(set(reusable_results).difference(STEPWISE_FORMULAS))
+    if unknown_reusable_models:
+        raise KeyError(f"Cannot reuse unknown model results: {unknown_reusable_models}")
+    reusable_by_formula = {
+        STEPWISE_FORMULAS[model_name]: result
+        for model_name, result in reusable_results.items()
+    }
+    missing_model_order = tuple(
+        model_name
+        for model_name in SPECIFICATION_MODEL_ORDER
+        if SPECIFICATION_FORMULAS[model_name] not in reusable_by_formula
+    )
+    missing_formulas = {
+        model_name: SPECIFICATION_FORMULAS[model_name]
+        for model_name in missing_model_order
+    }
+    fitted_results = (
+        fit_formula_models(frame, missing_formulas, missing_model_order)
+        if missing_model_order
+        else {}
+    )
+    results: dict[str, RegressionResult] = {}
+    for model_name in SPECIFICATION_MODEL_ORDER:
+        formula = SPECIFICATION_FORMULAS[model_name]
+        if formula in reusable_by_formula:
+            results[model_name] = reusable_by_formula[formula]
+        else:
+            results[model_name] = fitted_results[model_name]
+    return results
+
+
 def coefficient_frame_for_order(
     results: dict[str, RegressionResult],
     model_order: tuple[str, ...],
@@ -895,6 +1105,68 @@ def stepwise_model_fit_frame(
     frame: pd.DataFrame,
 ) -> pd.DataFrame:
     return model_fit_frame_for_order(results, frame, STEPWISE_MODEL_ORDER)
+
+
+def specification_panel_frame(
+    results: dict[str, RegressionResult],
+    frame: pd.DataFrame,
+) -> pd.DataFrame:
+    if set(results) != set(SPECIFICATION_MODEL_ORDER):
+        missing = sorted(set(SPECIFICATION_MODEL_ORDER).difference(results))
+        extra = sorted(set(results).difference(SPECIFICATION_MODEL_ORDER))
+        raise KeyError(f"Specification results do not match the model order; missing={missing}, extra={extra}")
+    rows: list[dict[str, object]] = []
+    for model_number, model_name in enumerate(SPECIFICATION_MODEL_ORDER, start=1):
+        result = results[model_name]
+        if int(result.nobs) != len(frame):
+            raise RuntimeError(
+                f"Specification {model_name} used {int(result.nobs)} rows; expected {len(frame)}"
+            )
+        intervals = result.conf_int(alpha=0.05)
+        reference_model = SPECIFICATION_REFERENCE_MODELS[model_name]
+        reference_adjusted_r_squared = (
+            None
+            if reference_model is None
+            else float(results[reference_model].rsquared_adj)
+        )
+        adjusted_r_squared = float(result.rsquared_adj)
+        included_groups = SPECIFICATION_INCLUDED_GROUPS[model_name]
+        row: dict[str, object] = {
+            "model_number": model_number,
+            "model_name": model_name,
+            "short_label": SPECIFICATION_SHORT_LABELS[model_name],
+            "comparison_family": SPECIFICATION_FAMILIES[model_name],
+            "reference_model": reference_model,
+            "changed_group": SPECIFICATION_CHANGED_GROUPS[model_name],
+            "included_variable_groups": "|".join(included_groups),
+            "formula": SPECIFICATION_FORMULAS[model_name],
+            "agree_move_coefficient": float(result.params["agree_move"]),
+            "agree_move_clustered_se": float(result.bse["agree_move"]),
+            "agree_move_ci95_low": float(intervals.loc["agree_move", 0]),
+            "agree_move_ci95_high": float(intervals.loc["agree_move", 1]),
+            "disagree_move_coefficient": float(result.params["disagree_move"]),
+            "disagree_move_clustered_se": float(result.bse["disagree_move"]),
+            "disagree_move_ci95_low": float(intervals.loc["disagree_move", 0]),
+            "disagree_move_ci95_high": float(intervals.loc["disagree_move", 1]),
+            "r_squared": float(result.rsquared),
+            "adjusted_r_squared": adjusted_r_squared,
+            "reference_adjusted_r_squared": reference_adjusted_r_squared,
+            "delta_adjusted_r_squared": (
+                None
+                if reference_adjusted_r_squared is None
+                else adjusted_r_squared - reference_adjusted_r_squared
+            ),
+            "transition_count": len(frame),
+            "episode_count": int(frame["episode"].nunique()),
+        }
+        row.update(
+            {
+                f"includes_{group_name}": group_name in included_groups
+                for group_name in SPECIFICATION_GROUP_ORDER
+            }
+        )
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 def extract_coefficient(
@@ -1379,6 +1651,200 @@ def save_stepwise_plot(
     return [pdf_path, png_path]
 
 
+def save_specification_panel(
+    panel: pd.DataFrame,
+    output_dir: Path,
+    plot_dpi: int,
+) -> list[Path]:
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from matplotlib.lines import Line2D
+    except ImportError as error:
+        raise RuntimeError(
+            "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
+        ) from error
+
+    ordered = (
+        panel.set_index("model_name")
+        .loc[list(SPECIFICATION_MODEL_ORDER)]
+        .reset_index()
+    )
+    if ordered["model_number"].tolist() != list(range(1, len(SPECIFICATION_MODEL_ORDER) + 1)):
+        raise ValueError("Specification panel model numbers do not match the configured order")
+    x_positions = np.arange(len(ordered), dtype=float)
+    adjusted_r_squared = ordered["adjusted_r_squared"].to_numpy(dtype=float)
+    r_squared_min = float(np.min(adjusted_r_squared))
+    r_squared_max = float(np.max(adjusted_r_squared))
+    r_squared_padding = max((r_squared_max - r_squared_min) * 0.22, 0.002)
+    family_styles: dict[str, tuple[str, str, str]] = {
+        "reference": ("#333333", "s", "Reference models"),
+        "add_one_to_core": ("#0072B2", "o", "Add one group to stance core"),
+        "remove_one_from_full": ("#D55E00", "D", "Remove one group from full model"),
+    }
+
+    with plt.rc_context(
+        {
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "font.size": 10,
+        }
+    ):
+        figure_width = max(18.0, len(ordered) * 1.1)
+        fig = plt.figure(figsize=(figure_width, 10.2), constrained_layout=True)
+        grid = fig.add_gridspec(2, 1, height_ratios=(1.25, 2.0), hspace=0.05)
+        fit_axis = fig.add_subplot(grid[0, 0])
+        matrix_axis = fig.add_subplot(grid[1, 0], sharex=fit_axis)
+
+        for axis in (fit_axis, matrix_axis):
+            axis.axvspan(0.5, 7.5, color="#0072B2", alpha=0.035, zorder=0)
+            axis.axvspan(9.5, 16.5, color="#D55E00", alpha=0.035, zorder=0)
+            for divider in (0.5, 7.5, 9.5):
+                axis.axvline(divider, color="#A0A0A0", linewidth=0.8, zorder=1)
+
+        for family_name, (color, marker, _) in family_styles.items():
+            selected = ordered[ordered["comparison_family"] == family_name]
+            selected_positions = selected.index.to_numpy(dtype=float)
+            selected_values = selected["adjusted_r_squared"].to_numpy(dtype=float)
+            fit_axis.scatter(
+                selected_positions,
+                selected_values,
+                color=color,
+                marker=marker,
+                s=62,
+                edgecolor="white",
+                linewidth=0.8,
+                zorder=3,
+            )
+        full_r_squared = float(
+            ordered.loc[
+                ordered["model_name"] == SPECIFICATION_MODEL_ORDER[9],
+                "adjusted_r_squared",
+            ].iloc[0]
+        )
+        fit_axis.axhline(
+            full_r_squared,
+            color="#777777",
+            linewidth=1.0,
+            linestyle="--",
+            zorder=1,
+        )
+        for x_position, value in zip(x_positions, adjusted_r_squared, strict=True):
+            fit_axis.annotate(
+                f"{value:.3f}",
+                (x_position, value),
+                xytext=(0, 7),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                rotation=90,
+                fontsize=8,
+            )
+        fit_axis.set_ylim(
+            r_squared_min - r_squared_padding,
+            r_squared_max + r_squared_padding * 2.0,
+        )
+        fit_axis.set_ylabel("Adjusted R²\n(shared sample)")
+        fit_axis.set_title("Model fit", loc="left", fontweight="bold")
+        fit_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
+        fit_axis.tick_params(axis="x", labelbottom=False)
+        legend_handles = [
+            Line2D(
+                [0],
+                [0],
+                color="none",
+                marker=marker,
+                markerfacecolor=color,
+                markeredgecolor="white",
+                markersize=8,
+                label=label,
+            )
+            for color, marker, label in family_styles.values()
+        ]
+        fit_axis.legend(handles=legend_handles, frameon=False, loc="upper left", ncol=3)
+
+        for row_number, group_name in enumerate(SPECIFICATION_GROUP_ORDER):
+            if row_number % 2 == 1:
+                matrix_axis.axhspan(
+                    row_number - 0.5,
+                    row_number + 0.5,
+                    color="#777777",
+                    alpha=0.035,
+                    zorder=0,
+                )
+            included = ordered[f"includes_{group_name}"].astype(bool).to_numpy()
+            matrix_axis.scatter(
+                x_positions,
+                np.full(len(x_positions), row_number, dtype=float),
+                facecolors="none",
+                edgecolors="#B8B8B8",
+                s=34,
+                linewidth=0.8,
+                zorder=2,
+            )
+            matrix_axis.scatter(
+                x_positions[included],
+                np.full(int(np.sum(included)), row_number, dtype=float),
+                color="#0072B2" if group_name != CURRENT_STANCE_GROUP else "#333333",
+                marker="s",
+                s=48,
+                edgecolor="white",
+                linewidth=0.6,
+                zorder=3,
+            )
+        matrix_axis.set_yticks(
+            np.arange(len(SPECIFICATION_GROUP_ORDER), dtype=float),
+            [VARIABLE_GROUP_LABELS[group_name] for group_name in SPECIFICATION_GROUP_ORDER],
+        )
+        matrix_axis.set_ylim(len(SPECIFICATION_GROUP_ORDER) - 0.5, -0.5)
+        matrix_axis.set_xlim(-0.5, len(ordered) - 0.5)
+        matrix_axis.set_xticks(
+            x_positions,
+            [
+                f"({model_number})\n{short_label}"
+                for model_number, short_label in zip(
+                    ordered["model_number"],
+                    ordered["short_label"],
+                    strict=True,
+                )
+            ],
+            rotation=38,
+            ha="right",
+        )
+        matrix_axis.set_ylabel("Variable groups included")
+        matrix_axis.set_xlabel("Specification")
+        matrix_axis.set_title("Grouped controls", loc="left", fontweight="bold")
+        matrix_axis.spines["bottom"].set_visible(False)
+        matrix_axis.tick_params(axis="x", length=0)
+
+        fig.suptitle(
+            "Exp2 grouped specification panel",
+            fontsize=16,
+            fontweight="bold",
+        )
+        fig.text(
+            0.5,
+            0.968,
+            "Add-one models use the stance-only core; remove-one models use the full timing model.",
+            ha="center",
+            va="top",
+            fontsize=10,
+        )
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        png_path = output_dir / "rq1_specification_panel.png"
+        pdf_path = output_dir / "rq1_specification_panel.pdf"
+        png_temporary = png_path.with_suffix(".png.tmp")
+        pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
+        fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
+        fig.savefig(pdf_temporary, format="pdf", bbox_inches="tight")
+        plt.close(fig)
+    png_temporary.replace(png_path)
+    pdf_temporary.replace(pdf_path)
+    return [pdf_path, png_path]
+
+
 def git_state() -> dict[str, object]:
     root = Path(__file__).resolve().parents[2]
     commit = subprocess.run(
@@ -1413,6 +1879,7 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "stepwise_coefficients": output_dir / "rq1_stepwise_coefficients.csv",
         "stepwise_stance_comparison": output_dir / "rq1_stepwise_stance_comparison.csv",
         "stepwise_model_fit": output_dir / "rq1_stepwise_model_fit.csv",
+        "specification_panel": output_dir / "rq1_specification_panel.csv",
         "observations": output_dir / "rq1_timing_observations.csv",
         "data_audit": output_dir / "rq1_timing_data_audit.json",
         "summary": output_dir / "rq1_timing_summary.json",
@@ -1420,6 +1887,8 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "plot_png": output_dir / "rq1_timing_comparison.png",
         "stepwise_plot_pdf": output_dir / "rq1_stepwise_comparison.pdf",
         "stepwise_plot_png": output_dir / "rq1_stepwise_comparison.png",
+        "specification_plot_pdf": output_dir / "rq1_specification_panel.pdf",
+        "specification_plot_png": output_dir / "rq1_specification_panel.png",
     }
 
 
@@ -1448,6 +1917,8 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         stepwise_coefficients,
         frame,
     )
+    specification_results = fit_specification_models(frame, stepwise_results)
+    specification_panel = specification_panel_frame(specification_results, frame)
     output_dir = Path(args.output_dir)
     paths = output_paths(output_dir)
 
@@ -1458,8 +1929,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     write_csv(paths["stepwise_coefficients"], stepwise_coefficients)
     write_csv(paths["stepwise_stance_comparison"], stepwise_comparison)
     write_csv(paths["stepwise_model_fit"], stepwise_model_fit)
+    write_csv(paths["specification_panel"], specification_panel)
     save_comparison_plot(comparison, output_dir, args.plot_dpi)
     save_stepwise_plot(stepwise_comparison, output_dir, args.plot_dpi)
+    save_specification_panel(specification_panel, output_dir, args.plot_dpi)
 
     repository_state = git_state()
     versions = package_versions()
@@ -1471,8 +1944,13 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             "formulas": FORMULAS,
             "stepwise_formulas": STEPWISE_FORMULAS,
             "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
+            "specification_formulas": SPECIFICATION_FORMULAS,
+            "specification_variable_groups": VARIABLE_GROUP_TERMS,
+            "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
+            "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
             "common_model_sample_verified": True,
             "stepwise_common_model_sample_verified": True,
+            "specification_common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "iceberg_density_per_second_definition": (
@@ -1514,6 +1992,23 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "formulas": FORMULAS,
         "stepwise_formulas": STEPWISE_FORMULAS,
         "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
+        "specification_formulas": SPECIFICATION_FORMULAS,
+        "specification_variable_groups": VARIABLE_GROUP_TERMS,
+        "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
+        "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
+        "specification_model_count": len(SPECIFICATION_MODEL_ORDER),
+        "specification_fit_metric": (
+            "adjusted R-squared; preferred over raw R-squared because model sizes differ"
+        ),
+        "best_adjusted_r_squared_specification": {
+            "model_name": str(
+                specification_panel.loc[
+                    specification_panel["adjusted_r_squared"].idxmax(),
+                    "model_name",
+                ]
+            ),
+            "adjusted_r_squared": float(specification_panel["adjusted_r_squared"].max()),
+        },
         "transition_count": len(frame),
         "episode_count": int(frame["episode"].nunique()),
         "headline_coefficients": {

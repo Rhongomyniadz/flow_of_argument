@@ -231,6 +231,26 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertTrue(
             all(int(result.nobs) == 360 for result in stepwise_results.values())
         )
+        specification_results = analysis.fit_specification_models(frame, stepwise_results)
+        self.assertEqual(
+            set(specification_results),
+            set(analysis.SPECIFICATION_MODEL_ORDER),
+        )
+        self.assertTrue(
+            all(int(result.nobs) == 360 for result in specification_results.values())
+        )
+        self.assertIs(
+            specification_results[analysis.SPECIFICATION_MODEL_ORDER[0]],
+            stepwise_results[analysis.STANCE_ONLY_MODEL],
+        )
+        self.assertEqual(
+            analysis.SPECIFICATION_FORMULAS[analysis.SPECIFICATION_MODEL_ORDER[8]],
+            analysis.FORMULAS[analysis.PER_SECOND_MODEL],
+        )
+        self.assertEqual(
+            analysis.SPECIFICATION_FORMULAS[analysis.SPECIFICATION_MODEL_ORDER[9]],
+            analysis.FORMULAS[analysis.PREVIOUS_DURATION_MODEL],
+        )
         stance_only_terms = set(stepwise_results[analysis.STANCE_ONLY_MODEL].params.index)
         self.assertNotIn("lag_agree_move", stance_only_terms)
         lagged_terms = set(stepwise_results[analysis.LAGGED_STANCE_MODEL].params.index)
@@ -294,6 +314,29 @@ class RegressionIntegrationTests(unittest.TestCase):
         ]
         self.assertEqual(len(largest), 2)
         self.assertEqual(set(largest["term"]), set(analysis.STANCE_TERMS))
+        specification_panel = analysis.specification_panel_frame(
+            specification_results,
+            frame,
+        )
+        self.assertEqual(len(specification_panel), 17)
+        self.assertEqual(
+            list(specification_panel["model_number"]),
+            list(range(1, 18)),
+        )
+        core = specification_panel.iloc[0]
+        self.assertTrue(pd.isna(core["delta_adjusted_r_squared"]))
+        self.assertTrue(core["includes_current_stance"])
+        self.assertFalse(core["includes_lagged_stance"])
+        full = specification_panel.iloc[9]
+        self.assertTrue(
+            all(full[f"includes_{group_name}"] for group_name in analysis.SPECIFICATION_GROUP_ORDER)
+        )
+        drop_response_timing = specification_panel.iloc[15]
+        self.assertFalse(drop_response_timing["includes_response_timing"])
+        self.assertEqual(
+            drop_response_timing["reference_model"],
+            analysis.SPECIFICATION_MODEL_ORDER[9],
+        )
 
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:
         output_dir = self.root / "output"
@@ -339,12 +382,20 @@ class RegressionIntegrationTests(unittest.TestCase):
             len(summary["stepwise_largest_coefficient_changes"]),
             2,
         )
+        self.assertEqual(summary["specification_model_count"], 17)
+        specification_panel = pd.read_csv(paths["specification_panel"])
+        self.assertEqual(len(specification_panel), 17)
+        self.assertEqual(
+            set(specification_panel["comparison_family"]),
+            {"reference", "add_one_to_core", "remove_one_from_full"},
+        )
         reference_comparison = summary["original_exp2_reference_comparison"]
         self.assertEqual(len(reference_comparison), 2)
         self.assertTrue(all(row["outcomes_comparable"] for row in reference_comparison))
         audit = json.loads(paths["data_audit"].read_text(encoding="utf-8"))
         self.assertTrue(audit["common_model_sample_verified"])
         self.assertTrue(audit["stepwise_common_model_sample_verified"])
+        self.assertTrue(audit["specification_common_model_sample_verified"])
         self.assertEqual(audit["retained_observation_count"], 360)
         self.assertEqual(audit["observation_csv_sha256"], analysis.file_sha256(paths["observations"]))
 

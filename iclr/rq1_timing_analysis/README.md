@@ -55,6 +55,29 @@ Each stage retains all earlier groups. The panel reports the agreement and disag
 coefficients, their episode-clustered 95% intervals, and the incremental change introduced by
 each group.
 
+### Grouped add/remove specification panel
+
+Because several controls are related, the analysis also fits 17 grouped specifications rather
+than interpreting every term as independent:
+
+1. a stance-only core;
+2. seven models that add one control group to that core;
+3. the original Exp2 baseline;
+4. the full timing specification; and
+5. seven models that remove one control group from the full specification.
+
+The groups are current stance, lagged stance, previous per-second density, linear and
+quadratic timeline position, category fixed effects, current-turn duration, response timing
+(gap plus overlap), and previous-turn duration. Agreement/disagreement terms, lagged
+agreement/disagreement terms, timeline terms, and gap/overlap are added or removed together.
+
+The main fit metric is adjusted R², not raw R², because the specifications contain different
+numbers of predictors. For add-one models, `delta_adjusted_r_squared` is relative to the
+stance-only core. For remove-one models, it is relative to the full timing model. The Exp2
+baseline is compared with the stance-only core, and the full model is compared with Exp2.
+This design shows incremental and conditional fit when controls overlap, but it does not make
+correlated predictors independent or support causal attribution.
+
 Current-turn duration already appears in the outcome denominator. Stages 6–8 are therefore
 sensitivity specifications with a different estimand, not replacements for the original Exp2
 model and not causal models.
@@ -87,11 +110,15 @@ and PDF/PNG figures remain reviewable in git. The observation-level
 - `rq1_stepwise_coefficients.csv`: coefficients from all eight nested specifications.
 - `rq1_stepwise_stance_comparison.csv`: stance estimates and incremental changes by stage.
 - `rq1_stepwise_model_fit.csv`: fit statistics for all eight specifications.
+- `rq1_specification_panel.csv`: grouped add/remove membership, stance estimates, R², adjusted
+  R², and reference-relative changes for all 17 specifications.
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and interpretation fields.
 - `rq1_timing_comparison.pdf` and `.png`: original Exp2 baseline through timing adjustment.
 - `rq1_stepwise_comparison.pdf` and `.png`: two-panel step-wise coefficient paths.
+- `rq1_specification_panel.pdf` and `.png`: adjusted-R² specification plot with a variable-group
+  inclusion matrix.
 
 Attenuation is `100 * (1 - abs(beta_adjusted) / abs(beta_Exp2))`. Positive values indicate
 attenuation and negative values indicate amplification. Because the retained sample is large,
