@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "3.0.0"
+SCRIPT_VERSION = "3.1.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
@@ -29,6 +29,10 @@ RATIO_MODEL = "iceberg_ratio"
 DURATION_MODEL = "iceberg_ratio_duration_adjusted"
 TIMING_MODEL = "iceberg_ratio_timing_adjusted"
 PREVIOUS_DURATION_MODEL = "iceberg_ratio_timing_previous_duration"
+STANCE_ONLY_MODEL = "step_1_stance_only"
+LAGGED_STANCE_MODEL = "step_2_lagged_stance"
+PREVIOUS_OUTCOME_MODEL = "step_3_previous_outcome"
+TIMELINE_MODEL = "step_4_timeline"
 MODEL_ORDER = (
     RATIO_MODEL,
     DURATION_MODEL,
@@ -36,6 +40,26 @@ MODEL_ORDER = (
     PREVIOUS_DURATION_MODEL,
 )
 HEADLINE_MODELS = (RATIO_MODEL, DURATION_MODEL, TIMING_MODEL)
+STEPWISE_MODEL_ORDER = (
+    STANCE_ONLY_MODEL,
+    LAGGED_STANCE_MODEL,
+    PREVIOUS_OUTCOME_MODEL,
+    TIMELINE_MODEL,
+    RATIO_MODEL,
+    DURATION_MODEL,
+    TIMING_MODEL,
+    PREVIOUS_DURATION_MODEL,
+)
+STEPWISE_ADDED_GROUPS = {
+    STANCE_ONLY_MODEL: "stance movement",
+    LAGGED_STANCE_MODEL: "lagged stance movement",
+    PREVIOUS_OUTCOME_MODEL: "previous iceberg ratio",
+    TIMELINE_MODEL: "timeline position",
+    RATIO_MODEL: "category fixed effects",
+    DURATION_MODEL: "current-turn duration",
+    TIMING_MODEL: "pre-turn gap and overlap",
+    PREVIOUS_DURATION_MODEL: "previous-turn duration",
+}
 STANCE_TERMS = ("agree_move", "disagree_move")
 MANUSCRIPT_REFERENCE_COEFFICIENTS = {
     "agree_move": -0.0056,
@@ -65,6 +89,29 @@ FORMULAS = {
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap + previous_log_duration"
     ),
+}
+
+STEPWISE_FORMULAS = {
+    STANCE_ONLY_MODEL: (
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move"
+    ),
+    LAGGED_STANCE_MODEL: (
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move"
+    ),
+    PREVIOUS_OUTCOME_MODEL: (
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio"
+    ),
+    TIMELINE_MODEL: (
+        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "timeline_position + I(timeline_position ** 2)"
+    ),
+    RATIO_MODEL: FORMULAS[RATIO_MODEL],
+    DURATION_MODEL: FORMULAS[DURATION_MODEL],
+    TIMING_MODEL: FORMULAS[TIMING_MODEL],
+    PREVIOUS_DURATION_MODEL: FORMULAS[PREVIOUS_DURATION_MODEL],
 }
 
 logging.basicConfig(
@@ -718,15 +765,21 @@ def validate_model_frame(frame: pd.DataFrame) -> None:
         raise ValueError("Episode-clustered regression requires at least two episodes")
 
 
-def fit_models(frame: pd.DataFrame) -> dict[str, RegressionResult]:
+def fit_formula_models(
+    frame: pd.DataFrame,
+    formulas: dict[str, str],
+    model_order: tuple[str, ...],
+) -> dict[str, RegressionResult]:
     validate_model_frame(frame)
     formula_api = require_analysis_dependencies()
     model_frame = frame.copy()
     model_frame["category"] = model_frame["category"].astype(object)
     model_frame["episode"] = model_frame["episode"].astype(object)
     results: dict[str, RegressionResult] = {}
-    for model_name in MODEL_ORDER:
-        formula = FORMULAS[model_name]
+    for model_name in model_order:
+        if model_name not in formulas:
+            raise KeyError(f"Missing regression formula for model: {model_name}")
+        formula = formulas[model_name]
         model = formula_api.ols(formula=formula, data=model_frame)
         result = cast(
             RegressionResult,
@@ -740,9 +793,20 @@ def fit_models(frame: pd.DataFrame) -> dict[str, RegressionResult]:
     return results
 
 
-def coefficient_frame(results: dict[str, RegressionResult]) -> pd.DataFrame:
+def fit_models(frame: pd.DataFrame) -> dict[str, RegressionResult]:
+    return fit_formula_models(frame, FORMULAS, MODEL_ORDER)
+
+
+def fit_stepwise_models(frame: pd.DataFrame) -> dict[str, RegressionResult]:
+    return fit_formula_models(frame, STEPWISE_FORMULAS, STEPWISE_MODEL_ORDER)
+
+
+def coefficient_frame_for_order(
+    results: dict[str, RegressionResult],
+    model_order: tuple[str, ...],
+) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
-    for model_name in MODEL_ORDER:
+    for model_name in model_order:
         result = results[model_name]
         intervals = result.conf_int(alpha=0.05)
         for term in result.params.index:
@@ -761,12 +825,21 @@ def coefficient_frame(results: dict[str, RegressionResult]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def model_fit_frame(
+def coefficient_frame(results: dict[str, RegressionResult]) -> pd.DataFrame:
+    return coefficient_frame_for_order(results, MODEL_ORDER)
+
+
+def stepwise_coefficient_frame(results: dict[str, RegressionResult]) -> pd.DataFrame:
+    return coefficient_frame_for_order(results, STEPWISE_MODEL_ORDER)
+
+
+def model_fit_frame_for_order(
     results: dict[str, RegressionResult],
     frame: pd.DataFrame,
+    model_order: tuple[str, ...],
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
-    for model_name in MODEL_ORDER:
+    for model_name in model_order:
         result = results[model_name]
         rows.append(
             {
@@ -786,6 +859,20 @@ def model_fit_frame(
     if fit_frame["transition_count"].nunique() != 1 or fit_frame["episode_count"].nunique() != 1:
         raise RuntimeError("Regression specifications did not use identical samples")
     return fit_frame
+
+
+def model_fit_frame(
+    results: dict[str, RegressionResult],
+    frame: pd.DataFrame,
+) -> pd.DataFrame:
+    return model_fit_frame_for_order(results, frame, MODEL_ORDER)
+
+
+def stepwise_model_fit_frame(
+    results: dict[str, RegressionResult],
+    frame: pd.DataFrame,
+) -> pd.DataFrame:
+    return model_fit_frame_for_order(results, frame, STEPWISE_MODEL_ORDER)
 
 
 def extract_coefficient(
@@ -863,6 +950,96 @@ def stance_comparison_frame(
     return pd.DataFrame(rows)
 
 
+def stepwise_stance_comparison_frame(
+    coefficients: pd.DataFrame,
+    frame: pd.DataFrame,
+) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+    for term in STANCE_TERMS:
+        term_rows: list[dict[str, object]] = []
+        previous_coefficient: float | None = None
+        previous_model: str | None = None
+        for stage_number, model_name in enumerate(STEPWISE_MODEL_ORDER, start=1):
+            coefficient = extract_coefficient(coefficients, model_name, term)
+            coefficient_value = float(cast(float, coefficient["coefficient"]))
+            incremental_change = (
+                None
+                if previous_coefficient is None
+                else coefficient_value - previous_coefficient
+            )
+            term_rows.append(
+                {
+                    "stage_number": stage_number,
+                    "stance_direction": (
+                        "agreement" if term == "agree_move" else "disagreement"
+                    ),
+                    "term": term,
+                    "model_name": model_name,
+                    "added_variable_group": STEPWISE_ADDED_GROUPS[model_name],
+                    "reference_model": previous_model,
+                    "coefficient": coefficient_value,
+                    "clustered_se": coefficient["clustered_se"],
+                    "ci95_low": coefficient["ci95_low"],
+                    "ci95_high": coefficient["ci95_high"],
+                    "p_value": coefficient["p_value"],
+                    "coefficient_change_from_previous": incremental_change,
+                    "absolute_change_from_previous": (
+                        None if incremental_change is None else abs(incremental_change)
+                    ),
+                    "sign_changed_from_previous": (
+                        None
+                        if previous_coefficient is None
+                        else int(np.sign(coefficient_value))
+                        != int(np.sign(previous_coefficient))
+                    ),
+                    "ci_excludes_zero": (
+                        float(cast(float, coefficient["ci95_low"])) > 0.0
+                        or float(cast(float, coefficient["ci95_high"])) < 0.0
+                    ),
+                    "transition_count": len(frame),
+                    "episode_count": int(frame["episode"].nunique()),
+                }
+            )
+            previous_coefficient = coefficient_value
+            previous_model = model_name
+        incremental_rows = [
+            row
+            for row in term_rows
+            if row["absolute_change_from_previous"] is not None
+        ]
+        largest_change = max(
+            incremental_rows,
+            key=lambda row: float(cast(float, row["absolute_change_from_previous"])),
+        )
+        largest_stage = int(cast(int, largest_change["stage_number"]))
+        rows.extend(
+            {
+                **row,
+                "largest_incremental_change_for_term": (
+                    int(cast(int, row["stage_number"])) == largest_stage
+                ),
+            }
+            for row in term_rows
+        )
+    return pd.DataFrame(rows)
+
+
+def stepwise_largest_changes(comparison: pd.DataFrame) -> list[dict[str, object]]:
+    selected = comparison[comparison["largest_incremental_change_for_term"]].copy()
+    columns = [
+        "term",
+        "stance_direction",
+        "stage_number",
+        "model_name",
+        "added_variable_group",
+        "reference_model",
+        "coefficient",
+        "coefficient_change_from_previous",
+        "sign_changed_from_previous",
+    ]
+    return [cast(dict[str, object], row) for row in selected[columns].to_dict("records")]
+
+
 def direction_status(
     term: str,
     baseline_coefficient: float,
@@ -872,15 +1049,11 @@ def direction_status(
 ) -> str:
     if term not in STANCE_TERMS:
         raise ValueError(f"Unsupported stance term: {term}")
-    expected_negative = term == "agree_move"
-    interval_expected = (
-        adjusted_ci95_high < 0.0 if expected_negative else adjusted_ci95_low > 0.0
-    )
     if int(np.sign(baseline_coefficient)) != int(np.sign(adjusted_coefficient)):
         return "sign_reversed_after_adjustment"
-    if interval_expected:
+    if adjusted_ci95_low > 0.0 or adjusted_ci95_high < 0.0:
         return "direction_preserved_and_interval_excludes_zero"
-    return "direction_preserved_but_interval_includes_zero_or_wrong_direction"
+    return "direction_preserved_but_interval_includes_zero"
 
 
 def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str, object]:
@@ -1054,6 +1227,134 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
     return [pdf_path, png_path]
 
 
+def save_stepwise_plot(
+    comparison: pd.DataFrame,
+    output_dir: Path,
+    plot_dpi: int,
+) -> list[Path]:
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError as error:
+        raise RuntimeError(
+            "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
+        ) from error
+
+    term_labels: dict[str, str] = {
+        "agree_move": "Agreement movement",
+        "disagree_move": "Disagreement movement",
+    }
+    colors: dict[str, str] = {
+        "agree_move": "#0072B2",
+        "disagree_move": "#D55E00",
+    }
+    markers: dict[str, str] = {
+        "agree_move": "o",
+        "disagree_move": "D",
+    }
+    stage_labels = tuple(
+        (
+            f"{stage_number}. Stance movement only"
+            if stage_number == 1
+            else f"{stage_number}. + {STEPWISE_ADDED_GROUPS[model_name]}"
+        )
+        for stage_number, model_name in enumerate(STEPWISE_MODEL_ORDER, start=1)
+    )
+    y_positions = np.arange(len(STEPWISE_MODEL_ORDER), dtype=float)
+
+    with plt.rc_context(
+        {
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "font.size": 10,
+        }
+    ):
+        fig, axes = plt.subplots(
+            1,
+            2,
+            figsize=(13.2, 6.6),
+            sharex=True,
+            sharey=True,
+            constrained_layout=True,
+        )
+        for axis, term in zip(axes, STANCE_TERMS, strict=True):
+            selected = (
+                comparison[comparison["term"] == term]
+                .set_index("model_name")
+                .loc[list(STEPWISE_MODEL_ORDER)]
+            )
+            coefficients = selected["coefficient"].to_numpy(dtype=float)
+            lows = selected["ci95_low"].to_numpy(dtype=float)
+            highs = selected["ci95_high"].to_numpy(dtype=float)
+            largest = selected[selected["largest_incremental_change_for_term"].astype(bool)]
+            if len(largest) != 1:
+                raise ValueError(
+                    f"Expected one largest stepwise coefficient change for {term}; found {len(largest)}"
+                )
+            largest_stage = int(largest.iloc[0]["stage_number"])
+            largest_group = str(largest.iloc[0]["added_variable_group"])
+            largest_delta = float(largest.iloc[0]["coefficient_change_from_previous"])
+
+            axis.axhspan(
+                largest_stage - 1.45,
+                largest_stage - 0.55,
+                color=colors[term],
+                alpha=0.08,
+                zorder=0,
+            )
+            axis.plot(
+                coefficients,
+                y_positions,
+                color=colors[term],
+                linewidth=1.8,
+                zorder=2,
+            )
+            axis.errorbar(
+                coefficients,
+                y_positions,
+                xerr=np.vstack((coefficients - lows, highs - coefficients)),
+                fmt=markers[term],
+                color=colors[term],
+                ecolor=colors[term],
+                capsize=3,
+                markersize=7,
+                markeredgecolor="white",
+                markeredgewidth=0.8,
+                linewidth=1.4,
+                zorder=3,
+            )
+            axis.axvline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
+            axis.set_title(
+                f"{term_labels[term]}\nLargest shift: + {largest_group} "
+                f"(Δβ={largest_delta:+.3f})",
+                loc="left",
+                fontweight="bold",
+            )
+            axis.grid(axis="x", color="#D9D9D9", linewidth=0.7)
+
+        axes[0].set_yticks(y_positions, stage_labels)
+        axes[0].invert_yaxis()
+        fig.supxlabel("Stance coefficient (episode-clustered 95% CI)")
+        fig.suptitle(
+            "Experiment 1: step-wise stance coefficient stability",
+            fontsize=15,
+            fontweight="bold",
+        )
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        png_path = output_dir / "rq1_stepwise_comparison.png"
+        pdf_path = output_dir / "rq1_stepwise_comparison.pdf"
+        png_temporary = png_path.with_suffix(".png.tmp")
+        pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
+        fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
+        fig.savefig(pdf_temporary, format="pdf", bbox_inches="tight")
+        plt.close(fig)
+    png_temporary.replace(png_path)
+    pdf_temporary.replace(pdf_path)
+    return [pdf_path, png_path]
+
+
 def git_state() -> dict[str, object]:
     root = Path(__file__).resolve().parents[2]
     commit = subprocess.run(
@@ -1085,11 +1386,16 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "coefficients": output_dir / "rq1_timing_coefficients.csv",
         "stance_comparison": output_dir / "rq1_timing_stance_comparison.csv",
         "model_fit": output_dir / "rq1_timing_model_fit.csv",
+        "stepwise_coefficients": output_dir / "rq1_stepwise_coefficients.csv",
+        "stepwise_stance_comparison": output_dir / "rq1_stepwise_stance_comparison.csv",
+        "stepwise_model_fit": output_dir / "rq1_stepwise_model_fit.csv",
         "observations": output_dir / "rq1_timing_observations.csv",
         "data_audit": output_dir / "rq1_timing_data_audit.json",
         "summary": output_dir / "rq1_timing_summary.json",
         "plot_pdf": output_dir / "rq1_timing_comparison.pdf",
         "plot_png": output_dir / "rq1_timing_comparison.png",
+        "stepwise_plot_pdf": output_dir / "rq1_stepwise_comparison.pdf",
+        "stepwise_plot_png": output_dir / "rq1_stepwise_comparison.png",
     }
 
 
@@ -1107,10 +1413,17 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         args.max_episodes,
         not args.no_tqdm,
     )
-    results = fit_models(frame)
+    stepwise_results = fit_stepwise_models(frame)
+    results = {model_name: stepwise_results[model_name] for model_name in MODEL_ORDER}
     coefficients = coefficient_frame(results)
     model_fit = model_fit_frame(results, frame)
     comparison = stance_comparison_frame(coefficients, frame)
+    stepwise_coefficients = stepwise_coefficient_frame(stepwise_results)
+    stepwise_model_fit = stepwise_model_fit_frame(stepwise_results, frame)
+    stepwise_comparison = stepwise_stance_comparison_frame(
+        stepwise_coefficients,
+        frame,
+    )
     output_dir = Path(args.output_dir)
     paths = output_paths(output_dir)
 
@@ -1118,7 +1431,11 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     write_csv(paths["coefficients"], coefficients)
     write_csv(paths["stance_comparison"], comparison)
     write_csv(paths["model_fit"], model_fit)
+    write_csv(paths["stepwise_coefficients"], stepwise_coefficients)
+    write_csv(paths["stepwise_stance_comparison"], stepwise_comparison)
+    write_csv(paths["stepwise_model_fit"], stepwise_model_fit)
     save_comparison_plot(comparison, output_dir, args.plot_dpi)
+    save_stepwise_plot(stepwise_comparison, output_dir, args.plot_dpi)
 
     repository_state = git_state()
     versions = package_versions()
@@ -1128,7 +1445,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             "script_version": SCRIPT_VERSION,
             "script_sha256": file_sha256(Path(__file__)),
             "formulas": FORMULAS,
+            "stepwise_formulas": STEPWISE_FORMULAS,
+            "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
             "common_model_sample_verified": True,
+            "stepwise_common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
@@ -1165,6 +1485,8 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "git": repository_state,
         "package_versions": versions,
         "formulas": FORMULAS,
+        "stepwise_formulas": STEPWISE_FORMULAS,
+        "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
         "transition_count": len(frame),
         "episode_count": int(frame["episode"].nunique()),
         "headline_coefficients": {
@@ -1172,6 +1494,9 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             for model_name in HEADLINE_MODELS
             for term in STANCE_TERMS
         },
+        "stepwise_largest_coefficient_changes": stepwise_largest_changes(
+            stepwise_comparison
+        ),
         "timing_adjustment_interpretation": interpretations,
         "manuscript_reference_comparison": manuscript_reference_comparison(coefficients),
         "both_directional_intervals_survive_timing_adjustment": interval_survives,

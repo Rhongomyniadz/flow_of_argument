@@ -177,6 +177,16 @@ class FeatureConstructionTests(unittest.TestCase):
         with self.assertRaisesRegex(ZeroDivisionError, "zero baseline coefficient"):
             analysis.attenuation_percent(0.0, 0.1)
 
+    def test_direction_status_uses_observed_baseline_direction(self) -> None:
+        self.assertEqual(
+            analysis.direction_status("agree_move", 0.05, 0.01, 0.005, 0.015),
+            "direction_preserved_and_interval_excludes_zero",
+        )
+        self.assertEqual(
+            analysis.direction_status("disagree_move", -0.05, 0.01, 0.005, 0.015),
+            "sign_reversed_after_adjustment",
+        )
+
     def test_bulk_observation_csv_is_the_only_new_ignored_result(self) -> None:
         ignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8")
         self.assertIn(
@@ -213,6 +223,26 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(len(frame), 360)
         self.assertEqual(frame["episode"].nunique(), 30)
         self.assertEqual(audit["retained_observation_count"], 360)
+        stepwise_results = analysis.fit_stepwise_models(frame)
+        self.assertEqual(set(stepwise_results), set(analysis.STEPWISE_MODEL_ORDER))
+        self.assertTrue(
+            all(int(result.nobs) == 360 for result in stepwise_results.values())
+        )
+        stance_only_terms = set(stepwise_results[analysis.STANCE_ONLY_MODEL].params.index)
+        self.assertNotIn("lag_agree_move", stance_only_terms)
+        lagged_terms = set(stepwise_results[analysis.LAGGED_STANCE_MODEL].params.index)
+        self.assertIn("lag_agree_move", lagged_terms)
+        self.assertNotIn("previous_log_iceberg_ratio", lagged_terms)
+        previous_outcome_terms = set(
+            stepwise_results[analysis.PREVIOUS_OUTCOME_MODEL].params.index
+        )
+        self.assertIn("previous_log_iceberg_ratio", previous_outcome_terms)
+        self.assertNotIn("timeline_position", previous_outcome_terms)
+        timeline_terms = set(stepwise_results[analysis.TIMELINE_MODEL].params.index)
+        self.assertIn("timeline_position", timeline_terms)
+        self.assertFalse(any(term.startswith("C(category)") for term in timeline_terms))
+        ratio_terms = set(stepwise_results[analysis.RATIO_MODEL].params.index)
+        self.assertTrue(any(term.startswith("C(category)") for term in ratio_terms))
         results = analysis.fit_models(frame)
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
@@ -242,6 +272,21 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(model_fit["episode_count"].nunique(), 1)
         self.assertEqual(set(model_fit["response_variable"]), {"delta_log_iceberg_ratio"})
         self.assertTrue(model_fit["aic_bic_comparable_to_other_models"].all())
+        stepwise_coefficients = analysis.stepwise_coefficient_frame(stepwise_results)
+        stepwise_comparison = analysis.stepwise_stance_comparison_frame(
+            stepwise_coefficients,
+            frame,
+        )
+        self.assertEqual(len(stepwise_comparison), 16)
+        self.assertEqual(
+            list(stepwise_comparison["stage_number"].unique()),
+            list(range(1, 9)),
+        )
+        largest = stepwise_comparison[
+            stepwise_comparison["largest_incremental_change_for_term"]
+        ]
+        self.assertEqual(len(largest), 2)
+        self.assertEqual(set(largest["term"]), set(analysis.STANCE_TERMS))
 
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:
         output_dir = self.root / "output"
@@ -277,8 +322,19 @@ class RegressionIntegrationTests(unittest.TestCase):
                 for term in analysis.STANCE_TERMS
             )
         )
+        stepwise_comparison = pd.read_csv(paths["stepwise_stance_comparison"])
+        self.assertEqual(len(stepwise_comparison), 16)
+        self.assertEqual(
+            set(stepwise_comparison["model_name"]),
+            set(analysis.STEPWISE_MODEL_ORDER),
+        )
+        self.assertEqual(
+            len(summary["stepwise_largest_coefficient_changes"]),
+            2,
+        )
         audit = json.loads(paths["data_audit"].read_text(encoding="utf-8"))
         self.assertTrue(audit["common_model_sample_verified"])
+        self.assertTrue(audit["stepwise_common_model_sample_verified"])
         self.assertEqual(audit["retained_observation_count"], 360)
         self.assertEqual(audit["observation_csv_sha256"], analysis.file_sha256(paths["observations"]))
 
