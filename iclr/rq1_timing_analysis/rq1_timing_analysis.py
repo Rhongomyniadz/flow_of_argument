@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Timing sensitivity analysis for the duration-free RQ1 iceberg ratio."""
+"""Step-wise timing sensitivity analysis for the original Exp2 model."""
 
 import argparse
 import hashlib
@@ -18,34 +18,34 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "3.1.0"
+SCRIPT_VERSION = "4.0.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_PLOT_DPI = 300
 WORD_PATTERN = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
-RATIO_MODEL = "iceberg_ratio"
-DURATION_MODEL = "iceberg_ratio_duration_adjusted"
-TIMING_MODEL = "iceberg_ratio_timing_adjusted"
-PREVIOUS_DURATION_MODEL = "iceberg_ratio_timing_previous_duration"
+PER_SECOND_MODEL = "per_second"
+DURATION_MODEL = "per_second_duration_adjusted"
+TIMING_MODEL = "per_second_timing_adjusted"
+PREVIOUS_DURATION_MODEL = "per_second_timing_previous_duration"
 STANCE_ONLY_MODEL = "step_1_stance_only"
 LAGGED_STANCE_MODEL = "step_2_lagged_stance"
 PREVIOUS_OUTCOME_MODEL = "step_3_previous_outcome"
 TIMELINE_MODEL = "step_4_timeline"
 MODEL_ORDER = (
-    RATIO_MODEL,
+    PER_SECOND_MODEL,
     DURATION_MODEL,
     TIMING_MODEL,
     PREVIOUS_DURATION_MODEL,
 )
-HEADLINE_MODELS = (RATIO_MODEL, DURATION_MODEL, TIMING_MODEL)
+HEADLINE_MODELS = (PER_SECOND_MODEL, DURATION_MODEL, TIMING_MODEL)
 STEPWISE_MODEL_ORDER = (
     STANCE_ONLY_MODEL,
     LAGGED_STANCE_MODEL,
     PREVIOUS_OUTCOME_MODEL,
     TIMELINE_MODEL,
-    RATIO_MODEL,
+    PER_SECOND_MODEL,
     DURATION_MODEL,
     TIMING_MODEL,
     PREVIOUS_DURATION_MODEL,
@@ -53,39 +53,39 @@ STEPWISE_MODEL_ORDER = (
 STEPWISE_ADDED_GROUPS = {
     STANCE_ONLY_MODEL: "stance movement",
     LAGGED_STANCE_MODEL: "lagged stance movement",
-    PREVIOUS_OUTCOME_MODEL: "previous iceberg ratio",
+    PREVIOUS_OUTCOME_MODEL: "previous per-second density",
     TIMELINE_MODEL: "timeline position",
-    RATIO_MODEL: "category fixed effects",
+    PER_SECOND_MODEL: "category fixed effects",
     DURATION_MODEL: "current-turn duration",
     TIMING_MODEL: "pre-turn gap and overlap",
     PREVIOUS_DURATION_MODEL: "previous-turn duration",
 }
 STANCE_TERMS = ("agree_move", "disagree_move")
-MANUSCRIPT_REFERENCE_COEFFICIENTS = {
-    "agree_move": -0.0056,
-    "disagree_move": 0.0049,
+ORIGINAL_EXP2_REFERENCE_COEFFICIENTS = {
+    "agree_move": -0.024848939290319824,
+    "disagree_move": 0.015577205239494248,
 }
 
 FORMULAS = {
-    RATIO_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+    PER_SECOND_MODEL: (
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
         "timeline_position + I(timeline_position ** 2) + C(category)"
     ),
     DURATION_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration"
     ),
     TIMING_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap"
     ),
     PREVIOUS_DURATION_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap + previous_log_duration"
     ),
@@ -93,22 +93,22 @@ FORMULAS = {
 
 STEPWISE_FORMULAS = {
     STANCE_ONLY_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move"
+        "delta_log_density_per_second ~ agree_move + disagree_move"
     ),
     LAGGED_STANCE_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
         "lag_agree_move + lag_disagree_move"
     ),
     PREVIOUS_OUTCOME_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio"
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second"
     ),
     TIMELINE_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "delta_log_density_per_second ~ agree_move + disagree_move + "
+        "lag_agree_move + lag_disagree_move + previous_log_density_per_second + "
         "timeline_position + I(timeline_position ** 2)"
     ),
-    RATIO_MODEL: FORMULAS[RATIO_MODEL],
+    PER_SECOND_MODEL: FORMULAS[PER_SECOND_MODEL],
     DURATION_MODEL: FORMULAS[DURATION_MODEL],
     TIMING_MODEL: FORMULAS[TIMING_MODEL],
     PREVIOUS_DURATION_MODEL: FORMULAS[PREVIOUS_DURATION_MODEL],
@@ -186,6 +186,11 @@ class Observation(TypedDict):
     previous_log_iceberg_ratio: float
     log_iceberg_ratio: float
     delta_log_iceberg_ratio: float
+    previous_density_per_second: float
+    density_per_second: float
+    previous_log_density_per_second: float
+    log_density_per_second: float
+    delta_log_density_per_second: float
     previous_density_per_token: float
     density_per_token: float
     previous_log_density_per_token: float
@@ -466,6 +471,16 @@ def build_observation(
 
     previous_ratio = iceberg_ratio(previous_explicit, previous_assumptions)
     current_ratio = iceberg_ratio(current_explicit, current_assumptions)
+    previous_per_second = normalized_iceberg_ratio(
+        previous_explicit,
+        previous_assumptions,
+        previous_duration,
+    )
+    current_per_second = normalized_iceberg_ratio(
+        current_explicit,
+        current_assumptions,
+        current_duration,
+    )
     previous_per_token = normalized_iceberg_ratio(
         previous_explicit,
         previous_assumptions,
@@ -478,6 +493,8 @@ def build_observation(
     )
     previous_log_ratio = math.log1p(previous_ratio)
     current_log_ratio = math.log1p(current_ratio)
+    previous_log_per_second = math.log1p(previous_per_second)
+    current_log_per_second = math.log1p(current_per_second)
     previous_log_per_token = math.log1p(previous_per_token)
     current_log_per_token = math.log1p(current_per_token)
     delta_stance = (current_stance - previous_stance) / 5.0
@@ -533,6 +550,11 @@ def build_observation(
         "previous_log_iceberg_ratio": previous_log_ratio,
         "log_iceberg_ratio": current_log_ratio,
         "delta_log_iceberg_ratio": current_log_ratio - previous_log_ratio,
+        "previous_density_per_second": previous_per_second,
+        "density_per_second": current_per_second,
+        "previous_log_density_per_second": previous_log_per_second,
+        "log_density_per_second": current_log_per_second,
+        "delta_log_density_per_second": current_log_per_second - previous_log_per_second,
         "previous_density_per_token": previous_per_token,
         "density_per_token": current_per_token,
         "previous_log_density_per_token": previous_log_per_token,
@@ -741,12 +763,12 @@ def validate_model_frame(frame: pd.DataFrame) -> None:
     required = {
         "category",
         "episode",
-        "delta_log_iceberg_ratio",
+        "delta_log_density_per_second",
         "agree_move",
         "disagree_move",
         "lag_agree_move",
         "lag_disagree_move",
-        "previous_log_iceberg_ratio",
+        "previous_log_density_per_second",
         "timeline_position",
         "log_duration",
         "log_gap",
@@ -844,14 +866,14 @@ def model_fit_frame_for_order(
         rows.append(
             {
                 "model_name": model_name,
-                "response_variable": "delta_log_iceberg_ratio",
+                "response_variable": "delta_log_density_per_second",
                 "transition_count": len(frame),
                 "episode_count": int(frame["episode"].nunique()),
                 "r_squared": float(result.rsquared),
                 "adjusted_r_squared": float(result.rsquared_adj),
                 "aic": float(result.aic),
                 "bic": float(result.bic),
-                "aic_bic_comparison_group": "duration_free_iceberg_ratio_outcome",
+                "aic_bic_comparison_group": "exp2_per_second_outcome",
                 "aic_bic_comparable_to_other_models": True,
             }
         )
@@ -900,7 +922,7 @@ def stance_comparison_frame(
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for term in STANCE_TERMS:
-        baseline = extract_coefficient(coefficients, RATIO_MODEL, term)
+        baseline = extract_coefficient(coefficients, PER_SECOND_MODEL, term)
         duration = extract_coefficient(coefficients, DURATION_MODEL, term)
         timing = extract_coefficient(coefficients, TIMING_MODEL, term)
         baseline_coefficient = float(cast(float, baseline["coefficient"]))
@@ -915,7 +937,7 @@ def stance_comparison_frame(
             TIMING_MODEL: attenuation_percent(duration_coefficient, timing_coefficient),
         }
         incremental_reference: dict[str, str] = {
-            DURATION_MODEL: RATIO_MODEL,
+            DURATION_MODEL: PER_SECOND_MODEL,
             TIMING_MODEL: DURATION_MODEL,
         }
         for model_name in HEADLINE_MODELS:
@@ -936,7 +958,7 @@ def stance_comparison_frame(
                         model_name
                     ),
                     "attenuation_reference_model": (
-                        RATIO_MODEL if model_name in attenuation_from_baseline else None
+                        PER_SECOND_MODEL if model_name in attenuation_from_baseline else None
                     ),
                     "incremental_attenuation_percent": incremental_attenuation.get(model_name),
                     "incremental_reference_model": incremental_reference.get(model_name),
@@ -1058,7 +1080,7 @@ def direction_status(
 
 def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str, object]:
     baseline = comparison[
-        (comparison["term"] == term) & (comparison["model_name"] == RATIO_MODEL)
+        (comparison["term"] == term) & (comparison["model_name"] == PER_SECOND_MODEL)
     ].iloc[0]
     duration = comparison[
         (comparison["term"] == term) & (comparison["model_name"] == DURATION_MODEL)
@@ -1089,7 +1111,7 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
     return {
         "term": term,
         "direction": "agreement" if expected_negative else "disagreement",
-        "iceberg_ratio_baseline_coefficient": baseline_coefficient,
+        "exp2_per_second_baseline_coefficient": baseline_coefficient,
         "duration_adjusted_coefficient": duration_coefficient,
         "duration_adjusted_ci95_low": float(duration["ci95_low"]),
         "duration_adjusted_ci95_high": float(duration["ci95_high"]),
@@ -1108,22 +1130,23 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
     }
 
 
-def manuscript_reference_comparison(coefficients: pd.DataFrame) -> list[dict[str, object]]:
+def exp2_reference_comparison(coefficients: pd.DataFrame) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for term in STANCE_TERMS:
-        ratio = extract_coefficient(coefficients, RATIO_MODEL, term)
-        ratio_value = float(cast(float, ratio["coefficient"]))
-        reference = MANUSCRIPT_REFERENCE_COEFFICIENTS[term]
+        strict_sample = extract_coefficient(coefficients, PER_SECOND_MODEL, term)
+        strict_sample_value = float(cast(float, strict_sample["coefficient"]))
+        reference = ORIGINAL_EXP2_REFERENCE_COEFFICIENTS[term]
         rows.append(
             {
                 "term": term,
-                "manuscript_per_second_approximate_coefficient": reference,
-                "iceberg_ratio_coefficient": ratio_value,
-                "sign_matches": int(np.sign(ratio_value)) == int(np.sign(reference)),
-                "outcomes_comparable": False,
+                "original_exp2_full_sample_coefficient": reference,
+                "strict_timing_sample_per_second_coefficient": strict_sample_value,
+                "strict_minus_original_exp2": strict_sample_value - reference,
+                "sign_matches": int(np.sign(strict_sample_value)) == int(np.sign(reference)),
+                "outcomes_comparable": True,
                 "comparison_note": (
-                    "The manuscript used a per-second outcome, while this analysis uses a "
-                    "duration-free iceberg ratio; coefficient magnitudes are not directly comparable."
+                    "Both analyses use the Exp2 per-second outcome. This analysis instead uses "
+                    "strict timing-complete, three-turn, speaker-alternating windows."
                 ),
             }
         )
@@ -1141,7 +1164,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         ) from error
 
     model_labels: tuple[str, str, str] = (
-        "Iceberg-ratio baseline\n(no duration in outcome)",
+        "Exp2 baseline\n(per-second density)",
         "+ duration",
         "+ gap & overlap",
     )
@@ -1209,7 +1232,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         path_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
         path_axis.legend(frameon=False, loc="lower right")
         fig.suptitle(
-            "RQ1 iceberg-ratio model with timing sensitivity checks",
+            "Exp2 per-second model with timing sensitivity checks",
             fontsize=15,
             fontweight="bold",
         )
@@ -1257,6 +1280,8 @@ def save_stepwise_plot(
         (
             f"{stage_number}. Stance movement only"
             if stage_number == 1
+            else f"{stage_number}. + {STEPWISE_ADDED_GROUPS[model_name]} (Exp2 baseline)"
+            if model_name == PER_SECOND_MODEL
             else f"{stage_number}. + {STEPWISE_ADDED_GROUPS[model_name]}"
         )
         for stage_number, model_name in enumerate(STEPWISE_MODEL_ORDER, start=1)
@@ -1293,7 +1318,6 @@ def save_stepwise_plot(
                     f"Expected one largest stepwise coefficient change for {term}; found {len(largest)}"
                 )
             largest_stage = int(largest.iloc[0]["stage_number"])
-            largest_group = str(largest.iloc[0]["added_variable_group"])
             largest_delta = float(largest.iloc[0]["coefficient_change_from_previous"])
 
             axis.axhspan(
@@ -1326,7 +1350,7 @@ def save_stepwise_plot(
             )
             axis.axvline(0.0, color="#333333", linewidth=1.0, linestyle="--", zorder=1)
             axis.set_title(
-                f"{term_labels[term]}\nLargest shift: + {largest_group} "
+                f"{term_labels[term]}\nLargest shift: stage {largest_stage} "
                 f"(Δβ={largest_delta:+.3f})",
                 loc="left",
                 fontweight="bold",
@@ -1337,7 +1361,7 @@ def save_stepwise_plot(
         axes[0].invert_yaxis()
         fig.supxlabel("Stance coefficient (episode-clustered 95% CI)")
         fig.suptitle(
-            "Experiment 1: step-wise stance coefficient stability",
+            "Experiment 2: step-wise stance coefficient stability",
             fontsize=15,
             fontweight="bold",
         )
@@ -1441,7 +1465,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     versions = package_versions()
     audit.update(
         {
-            "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
+            "experiment": "Exp2 step-wise timing sensitivity analysis",
             "script_version": SCRIPT_VERSION,
             "script_sha256": file_sha256(Path(__file__)),
             "formulas": FORMULAS,
@@ -1451,6 +1475,9 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             "stepwise_common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
+            "iceberg_density_per_second_definition": (
+                "(explicit_count / (assumption_count + 1)) / duration_seconds"
+            ),
             "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
             "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
             "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
@@ -1472,7 +1499,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         if key != "summary" and path.exists()
     }
     summary: dict[str, object] = {
-        "experiment": "ICLR RQ1 timing-aware duration-free iceberg-ratio analysis",
+        "experiment": "Exp2 step-wise timing sensitivity analysis",
         "script_version": SCRIPT_VERSION,
         "configuration": {
             "data_dir": str(args.data_dir),
@@ -1498,19 +1525,29 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             stepwise_comparison
         ),
         "timing_adjustment_interpretation": interpretations,
-        "manuscript_reference_comparison": manuscript_reference_comparison(coefficients),
+        "original_exp2_reference_comparison": exp2_reference_comparison(coefficients),
         "both_directional_intervals_survive_timing_adjustment": interval_survives,
         "estimands": {
-            RATIO_MODEL: "stance association with the duration-free iceberg ratio",
+            PER_SECOND_MODEL: (
+                "original Exp2 directional association with per-second iceberg density on "
+                "the strict timing sample"
+            ),
             DURATION_MODEL: (
-                "iceberg-ratio association conditional on current-turn duration"
+                "Exp2 association conditional on current-turn duration"
             ),
             TIMING_MODEL: (
-                "iceberg-ratio association conditional on current-turn duration and response timing"
+                "Exp2 association conditional on current-turn duration and response timing"
+            ),
+            PREVIOUS_DURATION_MODEL: (
+                "Exp2 association conditional on current- and previous-turn duration and "
+                "response timing"
             ),
         },
         "causal_claim": False,
-        "duration_note": "Duration is excluded from the outcome and enters only as a predictor.",
+        "duration_note": (
+            "Current-turn duration is already part of the outcome denominator; duration-adjusted "
+            "stages are sensitivity analyses with a different estimand."
+        ),
         "artifact_sha256": artifact_hashes,
         "summary_self_hash_excluded": True,
     }
@@ -1526,7 +1563,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run the self-contained ICLR RQ1 timing-aware iceberg-ratio analysis."
+        description="Run the self-contained Exp2 step-wise timing sensitivity analysis."
     )
     parser.add_argument("--data_dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
