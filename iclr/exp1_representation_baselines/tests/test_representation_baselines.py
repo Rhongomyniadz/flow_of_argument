@@ -159,7 +159,7 @@ class LoadingAndRepresentationTests(unittest.TestCase):
             "source_all_assumption_texts": [],
             "history_turn_texts": [],
             "donors": {
-                "raw_history_shuffled_assumptions": {
+                "raw_history_different_episode_assumptions": {
                     "matched_donor_assumptions": ["wrong"],
                     "donor_assumptions": ["wrong"],
                     "control_unavailable_reason": None,
@@ -173,13 +173,13 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         first_one = baseline.format_representation(pair, "explicit_plus_top1_assumption")
         first_three = baseline.format_representation(pair, "explicit_plus_top3_assumptions")
         raw_plus = baseline.format_representation(pair, "raw_turn_plus_assumptions")
-        corrupt = baseline.format_representation(pair, "explicit_plus_shuffled_assumptions")
+        corrupt = baseline.format_representation(pair, "explicit_plus_different_episode_assumptions")
         self.assertIn("[All extracted implicit assumptions]", real)
         self.assertIn("first 1", first_one)
         self.assertIn("first 3", first_three)
         self.assertIn("[Final local window of the current turn]", raw_plus)
         self.assertIn("[Implicit assumptions]", corrupt)
-        self.assertNotIn("shuffled", corrupt.casefold())
+        self.assertNotIn("different_episode", corrupt.casefold())
         self.assertNotIn("wrong", real)
 
     def test_assumption_budget_conditions_preserve_extraction_order(self) -> None:
@@ -217,13 +217,13 @@ class LoadingAndRepresentationTests(unittest.TestCase):
             "context_turns": context_turns,
             "source_assumption_texts": ["current implicit assumption has six useful content words"],
             "donors": {
-                "raw_history_shuffled_assumptions": {
-                    "matched_donor_assumptions": ["shuffled implicit assumption has six useful content words"],
+                "raw_history_different_episode_assumptions": {
+                    "matched_donor_assumptions": ["different episode implicit assumption has six useful content words"],
                     "matched_auxiliary_word_count": 8,
                     "control_unavailable_reason": None,
                 },
-                "raw_history_stale_assumptions": {
-                    "matched_donor_assumptions": ["stale implicit assumption also has useful content words"],
+                "raw_history_same_episode_random_turn_assumptions": {
+                    "matched_donor_assumptions": ["same episode random turn assumption also has useful content words"],
                     "matched_auxiliary_word_count": 8,
                     "control_unavailable_reason": None,
                 },
@@ -246,26 +246,44 @@ class LoadingAndRepresentationTests(unittest.TestCase):
         self.assertEqual(len(set(augmented_counts)), 1)
 
 
-    def test_local_grounding_and_nonconsecutive_merge_provenance(self) -> None:
-        selected = baseline.select_locally_grounded_assumptions(
+    def test_confidence_ranking_and_nonconsecutive_merge_provenance(self) -> None:
+        assumptions = [
+            {
+                "text": "The speaker expects the budget question to be answered.",
+                "confidence": 0.2,
+            },
+            {"text": "Highest-confidence unrelated assumption.", "confidence": 0.95},
+            {"text": "First tied assumption.", "confidence": 0.7},
+            {"text": "Second tied assumption.", "confidence_score": 0.7},
+            "Legacy unscored assumption.",
+            "Highest-confidence unrelated assumption.",
+        ]
+        ranked = baseline.rank_assumptions_by_confidence(assumptions)
+        self.assertEqual(
+            ranked,
             [
-                "Institutions generally value social identity.",
+                "Highest-confidence unrelated assumption.",
+                "First tied assumption.",
+                "Second tied assumption.",
                 "The speaker expects the budget question to be answered.",
-                "People often hold broad cultural beliefs.",
+                "Legacy unscored assumption.",
             ],
-            "What is your answer to the budget question?",
-            1,
         )
-        self.assertEqual(selected, ["The speaker expects the budget question to be answered."])
+        with self.assertRaisesRegex(ValueError, "between 0 and 1"):
+            baseline.rank_assumptions_by_confidence([{"text": "Invalid", "confidence": 1.1}])
+        with self.assertRaisesRegex(TypeError, "must be a number"):
+            baseline.rank_assumptions_by_confidence([{"text": "Invalid", "confidence": "high"}])
 
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "provenance.json"
             source = synthetic_turn("news", "provenance", 0)
             source["merged_from_turn_indices"] = [0, 2]
+            source["assumptions"] = assumptions
             target = synthetic_turn("news", "provenance", 1)
             target["merged_from_turn_indices"] = [3]
             path.write_text(json.dumps([source, target]), encoding="utf-8")
-            _, pairs, counts = build_records("news", path, history_turns=3)
+            turns, pairs, counts = build_records("news", path, history_turns=3)
+        self.assertEqual(turns[0]["assumption_texts"], ranked[:3])
         self.assertEqual(pairs, [])
         self.assertEqual(counts["boundary_invalid_merged_group_count"], 1)
 
@@ -339,14 +357,14 @@ class PreparationAndControlTests(unittest.TestCase):
         self.assertEqual(set(first_map), set(third_map))
         for pair in first:
             candidate_ids = {candidate["candidate_turn_id"] for candidate in pair["candidates"]}
-            shuffled = pair["donors"]["raw_history_shuffled_assumptions"]
-            if shuffled["donor_turn_id"]:
-                self.assertNotEqual(shuffled["donor_episode_id"], pair["episode_id"])
-                self.assertNotIn(shuffled["donor_turn_id"], candidate_ids)
-            stale = pair["donors"]["raw_history_stale_assumptions"]
-            if stale["donor_turn_id"]:
-                self.assertEqual(stale["donor_episode_id"], pair["episode_id"])
-                donor_idx = int(str(stale["donor_turn_id"]).rsplit(":", 1)[1])
+            different_episode = pair["donors"]["raw_history_different_episode_assumptions"]
+            if different_episode["donor_turn_id"]:
+                self.assertNotEqual(different_episode["donor_episode_id"], pair["episode_id"])
+                self.assertNotIn(different_episode["donor_turn_id"], candidate_ids)
+            same_episode_random_turn = pair["donors"]["raw_history_same_episode_random_turn_assumptions"]
+            if same_episode_random_turn["donor_turn_id"]:
+                self.assertEqual(same_episode_random_turn["donor_episode_id"], pair["episode_id"])
+                donor_idx = int(str(same_episode_random_turn["donor_turn_id"]).rsplit(":", 1)[1])
                 self.assertGreaterEqual(int(pair["source_turn_idx"]) - donor_idx, 3)
 
     def test_missing_same_episode_control_is_explicit(self) -> None:
@@ -367,7 +385,7 @@ class PreparationAndControlTests(unittest.TestCase):
         self.assertTrue(beta_control_pairs)
         self.assertTrue(
             any(
-                not pair["conditions"][baseline.matched_condition_id("raw_history_stale_assumptions", 256)]["available"]
+                not pair["conditions"][baseline.matched_condition_id("raw_history_same_episode_random_turn_assumptions", 256)]["available"]
                 for pair in beta_control_pairs
             )
         )
@@ -474,7 +492,7 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
                     "analysis_subset": "sparse_explicit",
                     "future_horizon": 1,
                     "target_condition": "explicit_plus_top3_assumptions",
-                    "baseline_condition": "explicit_plus_shuffled_assumptions",
+                    "baseline_condition": "explicit_plus_different_episode_assumptions",
                     "metric": "accuracy",
                     "mean_improvement": 0.02,
                     "ci95_low": 0.005,
@@ -484,7 +502,7 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
                     "analysis_subset": "sparse_explicit",
                     "future_horizon": 1,
                     "target_condition": "explicit_plus_top3_assumptions",
-                    "baseline_condition": "explicit_plus_wrong_episode_assumptions",
+                    "baseline_condition": "explicit_plus_same_episode_random_turn_assumptions",
                     "metric": "accuracy",
                     "mean_improvement": 0.02,
                     "ci95_low": 0.004,
@@ -507,8 +525,8 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             for condition, value in (
                 ("explicit_only", 0.4),
                 ("explicit_plus_top3_assumptions", 0.5),
-                ("explicit_plus_shuffled_assumptions", 0.45),
-                ("explicit_plus_wrong_episode_assumptions", 0.44),
+                ("explicit_plus_different_episode_assumptions", 0.45),
+                ("explicit_plus_same_episode_random_turn_assumptions", 0.44),
                 ("raw_turn", 0.6),
                 ("raw_turn_plus_assumptions", 0.7),
             ):
@@ -549,8 +567,8 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             'MODEL_OUTPUT_NAME="${MODEL_NAME//\\//__}"',
             "raw_history",
             "raw_history_true_assumptions",
-            "raw_history_shuffled_assumptions",
-            "raw_history_stale_assumptions",
+            "raw_history_different_episode_assumptions",
+            "raw_history_same_episode_random_turn_assumptions",
             "raw_history_explicit",
             "REPRESENTATION_BUDGETS_CSV",
             'REPRESENTATION_BUDGETS_CSV="${REPRESENTATION_BUDGETS_CSV:-256}"',
@@ -610,7 +628,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         self.assertFalse(summary["diagnostic_gate"]["ready_for_full_corpus"])
         decomposition = pd.read_csv(baseline.final_paths(output)["decomposition"])
         self.assertIn(
-            "true_assumptions_vs_shuffled_control",
+            "true_assumptions_vs_different_episode_control",
             set(decomposition["diagnostic_question"]),
         )
         audit = pd.read_csv(baseline.final_paths(output)["audit_sample"])

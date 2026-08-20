@@ -15,8 +15,8 @@ At the fixed 256-word raw-history budget, the code prepares:
 
 1. `raw_history`
 2. `raw_history_true_assumptions`
-3. `raw_history_shuffled_assumptions`
-4. `raw_history_stale_assumptions`
+3. `raw_history_different_episode_assumptions`
+4. `raw_history_same_episode_random_turn_assumptions`
 5. `raw_history_explicit`
 
 The raw-history block is constructed once for a pair/budget and is reused byte-for-byte in
@@ -24,8 +24,10 @@ all five conditions. The budget therefore applies to the **raw-history block**. 
 conditions append an auxiliary block after the unchanged raw history.
 
 The auxiliary content budget is the number of content words in the candidate-blind,
-locally-grounded assumptions selected for the current source turn (up to
-`ASSUMPTION_BUDGET`, default 3). True, shuffled, stale, and explicit auxiliary blocks are
+confidence-ranked assumptions selected for the current source turn (up to
+`ASSUMPTION_BUDGET`, default 3). Assumptions are ranked by descending extraction confidence;
+ties retain extraction order, and legacy entries without confidence follow scored entries.
+True, Different-Episode, Same-Episode Random Turn, and explicit auxiliary blocks are
 matched to that content-word budget. If an exact length-matched control cannot be built, that
 condition is explicitly marked unavailable for the pair.
 
@@ -33,19 +35,22 @@ condition is explicitly marked unavailable for the pair.
 
 `raw_history_true_assumptions` appends the selected assumptions from the current source turn.
 
-### Shuffled implicit
+### Different-Episode
 
-`raw_history_shuffled_assumptions` appends assumptions from a **different episode**. The
+`raw_history_different_episode_assumptions` appends assumptions from a **different episode**. The
 control prefers the same category and chooses the most lexically similar eligible donor,
 with length similarity and a deterministic seed-based tie break. This is deliberately harder
-than a random cross-topic shuffle.
+than a random cross-topic donor.
 
-### Stale implicit
+### Same-Episode Random Turn
 
-`raw_history_stale_assumptions` appends assumptions from the **same episode**, at least three
+`raw_history_same_episode_random_turn_assumptions` appends assumptions from the **same episode**, at least three
 substantive turns earlier and outside the current history window. The reserved donor is the
-most lexically similar eligible stale turn. It is reserved before negative-candidate sampling
+most lexically similar eligible earlier same-episode turn. It is reserved before negative-candidate sampling
 so it cannot also become a candidate.
+
+The name is a clearer presentation label; the sampling logic is unchanged from the previous version of this control.
+It is not a uniform random draw: among eligible earlier turns, the implementation still uses the matched hard donor.
 
 ### Explicit augmentation
 
@@ -59,21 +64,21 @@ restatement helps the judge.
 At horizon 1 and the 256-word raw-history budget, the primary contrast is:
 
 ```text
-Raw + True Implicit - Raw + Shuffled Implicit
+Raw + True Implicit - Raw + Different-Episode
 ```
 
 Secondary contrasts are:
 
 ```text
-Raw + True Implicit - Raw + Stale Implicit
+Raw + True Implicit - Raw + Same-Episode Random Turn
 Raw + True Implicit - Raw
 Raw + True Implicit - Raw + Explicit
 ```
 
 The intended interpretation hierarchy is:
 
-- **True > Shuffled:** the identity/content of the inferred assumptions matters.
-- **True > Stale:** the assumptions reflect the current conversational state rather than only
+- **True > Different-Episode:** the identity/content of the inferred assumptions matters.
+- **True > Same-Episode Random Turn:** the assumptions reflect the current conversational state rather than only
   episode/topic semantics.
 - **True > Explicit:** the effect is specific to implicit state rather than generic extracted
   semantic text.
@@ -112,13 +117,13 @@ conversation/episode-clustered bootstrap.
 
 The diagnostic gate now prioritizes:
 
-1. `True - Shuffled`;
-2. `True - Stale`;
+1. `True - Different-Episode`;
+2. `True - Same-Episode Random Turn`;
 3. `True - Explicit`;
 4. `True - Raw`.
 
-A positive `True - Shuffled` result alone is not treated as sufficient evidence of a dynamic
-latent state; the stale same-episode control is required for the stronger state-specificity
+A positive `True - Different-Episode` result alone is not treated as sufficient evidence of a dynamic
+latent state; the Same-Episode Random Turn control is required for the stronger state-specificity
 interpretation.
 
 ## Preserving the previous run
@@ -185,8 +190,8 @@ The default runner uses:
 ```text
 raw_history
 raw_history_true_assumptions
-raw_history_shuffled_assumptions
-raw_history_stale_assumptions
+raw_history_different_episode_assumptions
+raw_history_same_episode_random_turn_assumptions
 raw_history_explicit
 ```
 
@@ -207,4 +212,4 @@ full-corpus claim.
 - `exp1_representation_decomposition_lifts.{pdf,png}`
 
 The donor audit records donor source, fallback level, target auxiliary length, and the exact
-length-matched assumptions used for shuffled/stale controls.
+length-matched assumptions used for Different-Episode and Same-Episode Random Turn controls.
