@@ -232,6 +232,12 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertTrue(
             all(int(result.nobs) == 360 for result in stepwise_results.values())
         )
+        self.assertTrue(
+            all(
+                result.model.endog_names == "delta_log_iceberg_ratio"
+                for result in stepwise_results.values()
+            )
+        )
         specification_results = analysis.fit_specification_models(frame, stepwise_results)
         self.assertEqual(
             set(specification_results),
@@ -240,13 +246,19 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertTrue(
             all(int(result.nobs) == 360 for result in specification_results.values())
         )
+        self.assertTrue(
+            all(
+                result.model.endog_names == "delta_log_iceberg_ratio"
+                for result in specification_results.values()
+            )
+        )
         self.assertIs(
             specification_results[analysis.SPECIFICATION_MODEL_ORDER[0]],
             stepwise_results[analysis.STANCE_ONLY_MODEL],
         )
         self.assertEqual(
             analysis.SPECIFICATION_FORMULAS[analysis.SPECIFICATION_MODEL_ORDER[8]],
-            analysis.FORMULAS[analysis.PER_SECOND_MODEL],
+            analysis.FORMULAS[analysis.RATIO_MODEL],
         )
         self.assertEqual(
             analysis.SPECIFICATION_FORMULAS[analysis.SPECIFICATION_MODEL_ORDER[9]],
@@ -272,24 +284,24 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertNotIn("lag_agree_move", stance_only_terms)
         lagged_terms = set(stepwise_results[analysis.LAGGED_STANCE_MODEL].params.index)
         self.assertIn("lag_agree_move", lagged_terms)
-        self.assertNotIn("previous_log_density_per_second", lagged_terms)
+        self.assertNotIn("previous_log_iceberg_ratio", lagged_terms)
         previous_outcome_terms = set(
             stepwise_results[analysis.PREVIOUS_OUTCOME_MODEL].params.index
         )
-        self.assertIn("previous_log_density_per_second", previous_outcome_terms)
+        self.assertIn("previous_log_iceberg_ratio", previous_outcome_terms)
         self.assertNotIn("timeline_position", previous_outcome_terms)
         timeline_terms = set(stepwise_results[analysis.TIMELINE_MODEL].params.index)
         self.assertIn("timeline_position", timeline_terms)
         self.assertFalse(any(term.startswith("C(category)") for term in timeline_terms))
-        exp2_terms = set(stepwise_results[analysis.PER_SECOND_MODEL].params.index)
-        self.assertTrue(any(term.startswith("C(category)") for term in exp2_terms))
+        ratio_terms = set(stepwise_results[analysis.RATIO_MODEL].params.index)
+        self.assertTrue(any(term.startswith("C(category)") for term in ratio_terms))
         results = analysis.fit_models(frame)
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
-        baseline_terms = set(results[analysis.PER_SECOND_MODEL].params.index)
+        baseline_terms = set(results[analysis.RATIO_MODEL].params.index)
         self.assertIn("lag_agree_move", baseline_terms)
         self.assertIn("lag_disagree_move", baseline_terms)
-        self.assertIn("previous_log_density_per_second", baseline_terms)
+        self.assertIn("previous_log_iceberg_ratio", baseline_terms)
         self.assertNotIn("lag_delta_stance", baseline_terms)
         duration_terms = set(results[analysis.DURATION_MODEL].params.index)
         self.assertIn("log_duration", duration_terms)
@@ -313,7 +325,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(model_fit["episode_count"].nunique(), 1)
         self.assertEqual(
             set(model_fit["response_variable"]),
-            {"delta_log_density_per_second"},
+            {"delta_log_iceberg_ratio"},
         )
         self.assertTrue(model_fit["aic_bic_comparable_to_other_models"].all())
         stepwise_coefficients = analysis.stepwise_coefficient_frame(stepwise_results)
@@ -426,7 +438,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         )
         reference_comparison = summary["original_exp2_reference_comparison"]
         self.assertEqual(len(reference_comparison), 2)
-        self.assertTrue(all(row["outcomes_comparable"] for row in reference_comparison))
+        self.assertTrue(all(not row["outcomes_comparable"] for row in reference_comparison))
         audit = json.loads(paths["data_audit"].read_text(encoding="utf-8"))
         self.assertTrue(audit["common_model_sample_verified"])
         self.assertTrue(audit["stepwise_common_model_sample_verified"])

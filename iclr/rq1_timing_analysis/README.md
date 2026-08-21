@@ -1,10 +1,9 @@
-# Exp2 Timing Sensitivity Analysis
+# Duration-Free Iceberg-Ratio Timing Sensitivity Analysis
 
-This experiment restores the directional model used in the original Exp2 analysis and then
-fits a step-wise specification panel around it. The outcome, stance variables, lagged stance
-controls, previous outcome, timeline terms, category fixed effects, and episode-clustered
-inference match `experiments/exp2_iceberg/`. The sample is narrower because every retained
-transition must belong to a timing-complete, three-turn, speaker-alternating window.
+This experiment keeps the directional stance variables and control structure from the original
+Exp2 analysis but removes duration from the outcome denominator. It then fits a step-wise
+specification panel around that duration-free outcome. The sample is narrower because every
+retained transition must belong to a timing-complete, three-turn, speaker-alternating window.
 
 ## Observation contract
 
@@ -19,12 +18,15 @@ Timing for the current and previous turns must be recoverable from `start_time` 
 reported and excluded. A negative transition gap is represented by `overlap=1` and a zero
 non-overlap gap.
 
-The restored Exp2 outcome is iceberg density per second:
+The outcome is the change in the raw iceberg ratio:
 
 ```text
-D(t) = [explicit_count / (assumption_count + 1)] / duration_seconds
-Y(t) = log1p(D(t)) - log1p(D(t-1))
+R(t) = explicit_count / (assumption_count + 1)
+Y(t) = log1p(R(t)) - log1p(R(t-1))
 ```
+
+Duration does not appear in `R(t)` or `Y(t)`. Current- and previous-turn duration enter only
+as explicit predictors in specifications that include those control groups.
 
 Directional stance movement is calculated from `(stance_t - stance_t-1) / 5` and split into
 agreement and disagreement components. The preceding boundary is split into the same two
@@ -35,18 +37,19 @@ lagged directional controls.
 Four headline OLS specifications use the identical timing-complete sample and
 episode-clustered standard errors:
 
-1. `per_second`: the original Exp2 directional specification.
-2. `per_second_duration_adjusted`: Exp2 plus current-turn duration.
-3. `per_second_timing_adjusted`: Exp2 plus current duration, pre-turn gap, and overlap.
-4. `per_second_timing_previous_duration`: the preceding model plus previous-turn duration.
+1. `iceberg_ratio`: the duration-free outcome with the original Exp2 control structure.
+2. `iceberg_ratio_duration_adjusted`: the baseline plus current-turn duration.
+3. `iceberg_ratio_timing_adjusted`: the baseline plus current duration, pre-turn gap, and
+   overlap.
+4. `iceberg_ratio_timing_previous_duration`: the preceding model plus previous-turn duration.
 
 The eight-stage specification panel is:
 
 1. stance movement only;
 2. lagged stance movement;
-3. previous per-second iceberg density;
+3. previous iceberg ratio;
 4. linear and quadratic timeline position;
-5. category fixed effects, completing the original Exp2 directional model;
+5. category fixed effects, completing the original Exp2 control structure;
 6. current-turn duration;
 7. pre-turn gap and overlap; and
 8. previous-turn duration.
@@ -62,11 +65,11 @@ than interpreting every term as independent:
 
 1. a stance-only core;
 2. seven models that add one control group to that core;
-3. the original Exp2 baseline;
+3. the duration-free ratio model with the original Exp2 controls;
 4. the full timing specification; and
 5. seven models that remove one control group from the full specification.
 
-The groups are current stance, lagged stance, previous per-second density, linear and
+The groups are current stance, lagged stance, previous iceberg ratio, linear and
 quadratic timeline position, category fixed effects, current-turn duration, response timing
 (gap plus overlap), and previous-turn duration. Agreement/disagreement terms, lagged
 agreement/disagreement terms, timeline terms, and gap/overlap are added or removed together.
@@ -74,23 +77,24 @@ agreement/disagreement terms, timeline terms, and gap/overlap are added or remov
 The main fit metric is adjusted R², not raw R², because the specifications contain different
 numbers of predictors. For add-one models, `delta_adjusted_r_squared` is relative to the
 stance-only core. For remove-one models, it is relative to the full timing model. The Exp2
-baseline is compared with the stance-only core, and the full model is compared with Exp2.
+control-structure baseline is compared with the stance-only core, and the full model is compared
+with that baseline.
 This design shows incremental and conditional fit when controls overlap, but it does not make
 correlated predictors independent or support causal attribution.
 
 The specification figure is formatted as two stacked regression tables: agreement movement
 and disagreement movement. Rows are direction-specific stance terms plus shared control
 variables, columns are the 17 model configurations, and populated cells report the coefficient
-for change in `delta_log_density_per_second` with the episode-clustered standard error in
+for change in `delta_log_iceberg_ratio` with the episode-clustered standard error in
 parentheses. Both stance directions are still estimated jointly in every regression; the two
 panels only separate their presentation. Sample size, episode clusters, and adjusted R² appear
 at the bottom of each panel. The final row converts the panel's current-stance coefficient into
-the estimated percentage change in the per-second iceberg ratio as
+the estimated percentage change in the iceberg ratio as
 `100 * (exp(beta_stance) - 1)`.
 
-Current-turn duration already appears in the outcome denominator. Stages 6–8 are therefore
-sensitivity specifications with a different estimand, not replacements for the original Exp2
-model and not causal models.
+The duration controls no longer duplicate a denominator component of the outcome. They still
+change the estimand from the unadjusted duration-free association to an association conditional
+on turn timing; none of the specifications is a causal model.
 
 ## Run
 
@@ -127,12 +131,12 @@ and PDF/PNG figures remain reviewable in git. The observation-level
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and interpretation fields.
-- `rq1_timing_comparison.pdf` and `.png`: original Exp2 baseline through timing adjustment.
+- `rq1_timing_comparison.pdf` and `.png`: duration-free ratio baseline through timing adjustment.
 - `rq1_stepwise_comparison.pdf` and `.png`: two-panel step-wise coefficient paths.
 - `rq1_specification_panel.pdf` and `.png`: agreement and disagreement regression-table panels
   across all grouped specifications.
 
-Attenuation is `100 * (1 - abs(beta_adjusted) / abs(beta_Exp2))`. Positive values indicate
+Attenuation is `100 * (1 - abs(beta_adjusted) / abs(beta_ratio_baseline))`. Positive values indicate
 attenuation and negative values indicate amplification. Because the retained sample is large,
 coefficient movement and confidence intervals should be emphasized over significance alone.
 
