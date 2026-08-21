@@ -1,4 +1,8 @@
 {
+  "alternative_response_variable_definitions": {
+    "delta_log_assumption_count": "log1p(current_assumption_count) - log1p(previous_assumption_count)",
+    "delta_log_explicit_count": "log1p(current_explicit_count) - log1p(previous_explicit_count)"
+  },
   "candidate_window_count": 441230,
   "category_data_subdir": "parsed",
   "category_episode_counts": {
@@ -45,6 +49,26 @@
     "non_substantive_window": 199941
   },
   "experiment": "Duration-free iceberg-ratio timing sensitivity analysis",
+  "explicit_claim_specification_common_model_sample_verified": true,
+  "explicit_claim_specification_formulas": {
+    "spec_01_stance_core": "delta_log_explicit_count ~ agree_move + disagree_move",
+    "spec_02_add_lagged_stance": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "spec_03_add_previous_outcome": "delta_log_explicit_count ~ agree_move + disagree_move + previous_log_explicit_count",
+    "spec_04_add_timeline": "delta_log_explicit_count ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "delta_log_explicit_count ~ agree_move + disagree_move + C(category)",
+    "spec_06_add_current_duration": "delta_log_explicit_count ~ agree_move + disagree_move + log_duration",
+    "spec_07_add_response_timing": "delta_log_explicit_count ~ agree_move + disagree_move + log_gap + overlap",
+    "spec_08_add_previous_duration": "delta_log_explicit_count ~ agree_move + disagree_move + previous_log_duration",
+    "spec_09_exp2_baseline": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "delta_log_explicit_count ~ agree_move + disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_outcome": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "delta_log_explicit_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_explicit_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+  },
   "files_discovered": 19990,
   "files_examined": 19990,
   "formulas": {
@@ -54,16 +78,36 @@
     "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "a2bea7bd68327a9599571468a640e9a6cc3c9402",
+    "commit": "456e823f995807b94f5ce992193400e8b79f6a5d",
     "dirty": true
   },
   "iceberg_density_per_second_definition": "(explicit_count / (assumption_count + 1)) / duration_seconds",
   "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
+  "implicit_assumption_specification_common_model_sample_verified": true,
+  "implicit_assumption_specification_formulas": {
+    "spec_01_stance_core": "delta_log_assumption_count ~ agree_move + disagree_move",
+    "spec_02_add_lagged_stance": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "spec_03_add_previous_outcome": "delta_log_assumption_count ~ agree_move + disagree_move + previous_log_assumption_count",
+    "spec_04_add_timeline": "delta_log_assumption_count ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "delta_log_assumption_count ~ agree_move + disagree_move + C(category)",
+    "spec_06_add_current_duration": "delta_log_assumption_count ~ agree_move + disagree_move + log_duration",
+    "spec_07_add_response_timing": "delta_log_assumption_count ~ agree_move + disagree_move + log_gap + overlap",
+    "spec_08_add_previous_duration": "delta_log_assumption_count ~ agree_move + disagree_move + previous_log_duration",
+    "spec_09_exp2_baseline": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "delta_log_assumption_count ~ agree_move + disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_outcome": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "delta_log_assumption_count ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_assumption_count + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+  },
   "inference": "OLS with episode-clustered covariance and two-sided 95% Wald intervals",
   "max_episodes": null,
-  "observation_csv_sha256": "3584af950099a05289aa73f986ab96a6694ca08bd8d6c272afc51f33785f73b8",
+  "observation_csv_sha256": "1bf8e0b697c66bbcc4b188950e36794bd1fea069871d64a3ceb703339a1ec4a3",
   "observation_hash_method": "sha256(canonical JSON per row in construction order, newline-delimited)",
-  "observation_rows_sha256": "5d35afbda7ecb9c662f42e5218875fa755f99c08cede87ba6f6b96288f215833",
+  "observation_rows_sha256": "c6a2d031242f426d6fe025b6e170819111b73ecc94eab05270215a0dbfd5b6d3",
   "overlap_count": 4186,
   "overlap_rate": 0.01734885031746821,
   "package_versions": {
@@ -87,8 +131,8 @@
   ],
   "response_variable_definition": "delta_log_iceberg_ratio = log1p(current_iceberg_ratio) - log1p(previous_iceberg_ratio); duration is not in the outcome",
   "retained_observation_count": 241284,
-  "script_sha256": "14bb72e8eb6125591d54a2608d46c51f15f1cd418d59d795c350b9bbf2fa50ea",
-  "script_version": "5.0.0",
+  "script_sha256": "366a2d74399121dd7b672fcc5500047bd8472f12312ba51c8dab38cab169c2a1",
+  "script_version": "5.1.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",
@@ -97,7 +141,7 @@
   "specification_formulas": {
     "spec_01_stance_core": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
     "spec_02_add_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
-    "spec_03_add_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio",
+    "spec_03_add_previous_outcome": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio",
     "spec_04_add_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
     "spec_05_add_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + C(category)",
     "spec_06_add_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + log_duration",
@@ -106,7 +150,7 @@
     "spec_09_exp2_baseline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
     "spec_10_full_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
     "spec_11_drop_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_12_drop_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_outcome": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
     "spec_13_drop_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + C(category) + log_duration + log_gap + overlap + previous_log_duration",
     "spec_14_drop_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
     "spec_15_drop_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
@@ -121,9 +165,9 @@
       "current_stance",
       "lagged_stance"
     ],
-    "spec_03_add_previous_ratio": [
+    "spec_03_add_previous_outcome": [
       "current_stance",
-      "previous_ratio"
+      "previous_outcome"
     ],
     "spec_04_add_timeline": [
       "current_stance",
@@ -148,14 +192,14 @@
     "spec_09_exp2_baseline": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects"
     ],
     "spec_10_full_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -164,14 +208,14 @@
     ],
     "spec_11_drop_lagged_stance": [
       "current_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
       "previous_duration"
     ],
-    "spec_12_drop_previous_ratio": [
+    "spec_12_drop_previous_outcome": [
       "current_stance",
       "lagged_stance",
       "timeline",
@@ -183,7 +227,7 @@
     "spec_13_drop_timeline": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
@@ -192,7 +236,7 @@
     "spec_14_drop_category": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "current_duration",
       "response_timing",
@@ -201,7 +245,7 @@
     "spec_15_drop_current_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects",
       "response_timing",
@@ -210,7 +254,7 @@
     "spec_16_drop_response_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -219,17 +263,22 @@
     "spec_17_drop_previous_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_ratio",
+      "previous_outcome",
       "timeline",
       "category_fixed_effects",
       "current_duration",
       "response_timing"
     ]
   },
+  "specification_previous_outcome_terms": {
+    "explicit_claims": "previous_log_explicit_count",
+    "iceberg_ratio": "previous_log_iceberg_ratio",
+    "implicit_assumptions": "previous_log_assumption_count"
+  },
   "specification_reference_models": {
     "spec_01_stance_core": null,
     "spec_02_add_lagged_stance": "spec_01_stance_core",
-    "spec_03_add_previous_ratio": "spec_01_stance_core",
+    "spec_03_add_previous_outcome": "spec_01_stance_core",
     "spec_04_add_timeline": "spec_01_stance_core",
     "spec_05_add_category": "spec_01_stance_core",
     "spec_06_add_current_duration": "spec_01_stance_core",
@@ -238,7 +287,7 @@
     "spec_09_exp2_baseline": "spec_01_stance_core",
     "spec_10_full_timing": "spec_09_exp2_baseline",
     "spec_11_drop_lagged_stance": "spec_10_full_timing",
-    "spec_12_drop_previous_ratio": "spec_10_full_timing",
+    "spec_12_drop_previous_outcome": "spec_10_full_timing",
     "spec_13_drop_timeline": "spec_10_full_timing",
     "spec_14_drop_category": "spec_10_full_timing",
     "spec_15_drop_current_duration": "spec_10_full_timing",
@@ -263,7 +312,7 @@
     "previous_duration": [
       "previous_log_duration"
     ],
-    "previous_ratio": [
+    "previous_outcome": [
       "previous_log_iceberg_ratio"
     ],
     "response_timing": [
