@@ -210,12 +210,23 @@ python -u iclr/exp1_representation_baselines/exp1_representation_baselines.py \
 
 ## Slurm smoke run
 
-```bash
-mkdir -p iclr/exp1_representation_baselines/_log
+Run CPU-only preparation directly, without Slurm:
 
+```bash
+python -u iclr/exp1_representation_baselines/prepare_exp1_representation.py \
+  --max_episodes_per_category 5
+```
+
+After that job finishes successfully, submit GPU scoring:
+
+```bash
 MAX_EPISODES_PER_CATEGORY=5 \
 sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 ```
+
+`prepare_exp1_representation.py` writes the prepared pairs and preparation manifest without
+loading `vllm`. The scoring runner does not repeat preparation; it fails clearly if those artifacts
+are absent. Use matching settings for preparation and scoring, especially the episode limit.
 
 The default runner uses:
 

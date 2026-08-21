@@ -582,10 +582,11 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             "#SBATCH --gres=gpu:A6000:2",
             "iclr/exp1_representation_baselines/_log/exp1_repr_diagnostic_",
             "EXP1_BASELINE_STAGE",
-            "prepare)",
             "patch)",
             "merge)",
             "analysis)",
+            "Prepared data is missing",
+            "prepare_exp1_representation.py",
             "ALLOW_FULL_RUN",
             "TENSOR_PARALLEL_SIZE=2",
             "Submit this runner with sbatch, not bash",
@@ -613,7 +614,14 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             'PLOT_DPI="${PLOT_DPI:-300}"',
         ):
             self.assertIn(expected, text)
+        self.assertNotIn("dispatch)", text)
         self.assertNotIn("experiments/exp1_relevance_bridge/run_exp1.sh", text)
+
+        prepare_path = EXPERIMENT_ROOT / "prepare_exp1_representation.py"
+        prepare_text = prepare_path.read_text(encoding="utf-8")
+        self.assertIn('run_experiment(["--prepare_only", *argv])', prepare_text)
+        self.assertNotIn("sbatch", prepare_text)
+        self.assertNotIn("vllm", prepare_text)
 
         source = (EXPERIMENT_ROOT / "exp1_representation_baselines.py").read_text(encoding="utf-8")
         self.assertIn('tensor_parallel_size=args.tensor_parallel_size', source)

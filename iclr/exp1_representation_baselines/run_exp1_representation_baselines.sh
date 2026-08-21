@@ -145,8 +145,10 @@ submit_stages() {
     echo "Refusing an ungated full-corpus submission. Run the five-episode diagnostic smoke test first, then review the audit and diagnostic gate before setting ALLOW_FULL_RUN=1." >&2
     exit 1
   fi
-  build_common_args
-  run_python "${COMMON_ARGS[@]}" --prepare_only
+  if [[ ! -f "${OUTPUT_DIR}/exp1_representation_prepare_manifest.json" || ! -f "${PREPARED_PAIRS_JSONL}" ]]; then
+    echo "Prepared data is missing. Run prepare_exp1_representation.py first and wait for it to finish." >&2
+    exit 1
+  fi
   TOTAL_EPISODES="$(prepared_episode_count)"
   if (( TOTAL_EPISODES < 1 )); then
     echo "Preparation selected no source episodes." >&2
@@ -183,9 +185,6 @@ fi
 
 build_common_args
 case "${EXP1_BASELINE_STAGE}" in
-  prepare)
-    run_python "${COMMON_ARGS[@]}" --prepare_only
-    ;;
   patch)
     configure_cuda
     NUM_PATCHES="${NUM_PATCHES:?Set NUM_PATCHES for patch scoring.}"
@@ -207,7 +206,7 @@ case "${EXP1_BASELINE_STAGE}" in
     run_python "${COMMON_ARGS[@]}" --analysis_only
     ;;
   *)
-    echo "Unknown EXP1_BASELINE_STAGE=${EXP1_BASELINE_STAGE}; expected submit, prepare, patch, merge, or analysis." >&2
+    echo "Unknown EXP1_BASELINE_STAGE=${EXP1_BASELINE_STAGE}; expected submit, patch, merge, or analysis." >&2
     exit 1
     ;;
 esac
