@@ -44,17 +44,17 @@
     "empty_or_zero_word_turn": 5,
     "non_substantive_window": 199941
   },
-  "experiment": "Exp2 step-wise timing sensitivity analysis",
+  "experiment": "Duration-free iceberg-ratio timing sensitivity analysis",
   "files_discovered": 19990,
   "files_examined": 19990,
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "d78f0f37838c93152a7c75442ae45d0444bf2849",
+    "commit": "a2bea7bd68327a9599571468a640e9a6cc3c9402",
     "dirty": true
   },
   "iceberg_density_per_second_definition": "(explicit_count / (assumption_count + 1)) / duration_seconds",
@@ -85,32 +85,33 @@
   "requested_categories": [
     "all"
   ],
+  "response_variable_definition": "delta_log_iceberg_ratio = log1p(current_iceberg_ratio) - log1p(previous_iceberg_ratio); duration is not in the outcome",
   "retained_observation_count": 241284,
-  "script_sha256": "00395e593be0a9818e78247dc5e1b92b8221ef4535db2ab5f238bc7f06aa91e4",
-  "script_version": "4.2.0",
+  "script_sha256": "14bb72e8eb6125591d54a2608d46c51f15f1cd418d59d795c350b9bbf2fa50ea",
+  "script_version": "5.0.0",
   "selected_episode_count": 19990,
   "selected_input_manifest_hash_method": "sha256(canonical JSON of sorted path and file-sha256 records)",
   "selected_input_manifest_sha256": "b99de1fd3b917f1820eb6a4be7afc02aabbc38c4438ea9ea9ba27183621603ad",
   "specification_common_model_sample_verified": true,
   "specification_estimated_change_percent_definition": "100 * (exp(current_stance_coefficient) - 1)",
   "specification_formulas": {
-    "spec_01_stance_core": "delta_log_density_per_second ~ agree_move + disagree_move",
-    "spec_02_add_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
-    "spec_03_add_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second",
-    "spec_04_add_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
-    "spec_05_add_category": "delta_log_density_per_second ~ agree_move + disagree_move + C(category)",
-    "spec_06_add_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + log_duration",
-    "spec_07_add_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + log_gap + overlap",
-    "spec_08_add_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_duration",
-    "spec_09_exp2_baseline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "spec_10_full_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_11_drop_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_12_drop_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_13_drop_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_14_drop_category": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_15_drop_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
-    "spec_16_drop_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
-    "spec_17_drop_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+    "spec_01_stance_core": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
+    "spec_02_add_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "spec_03_add_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio",
+    "spec_04_add_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + C(category)",
+    "spec_06_add_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + log_duration",
+    "spec_07_add_response_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + log_gap + overlap",
+    "spec_08_add_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_duration",
+    "spec_09_exp2_baseline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
   },
   "specification_included_groups": {
     "spec_01_stance_core": [
@@ -120,9 +121,9 @@
       "current_stance",
       "lagged_stance"
     ],
-    "spec_03_add_previous_density": [
+    "spec_03_add_previous_ratio": [
       "current_stance",
-      "previous_density"
+      "previous_ratio"
     ],
     "spec_04_add_timeline": [
       "current_stance",
@@ -147,14 +148,14 @@
     "spec_09_exp2_baseline": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects"
     ],
     "spec_10_full_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -163,14 +164,14 @@
     ],
     "spec_11_drop_lagged_stance": [
       "current_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
       "previous_duration"
     ],
-    "spec_12_drop_previous_density": [
+    "spec_12_drop_previous_ratio": [
       "current_stance",
       "lagged_stance",
       "timeline",
@@ -182,7 +183,7 @@
     "spec_13_drop_timeline": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
@@ -191,7 +192,7 @@
     "spec_14_drop_category": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "current_duration",
       "response_timing",
@@ -200,7 +201,7 @@
     "spec_15_drop_current_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "response_timing",
@@ -209,7 +210,7 @@
     "spec_16_drop_response_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -218,7 +219,7 @@
     "spec_17_drop_previous_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -228,7 +229,7 @@
   "specification_reference_models": {
     "spec_01_stance_core": null,
     "spec_02_add_lagged_stance": "spec_01_stance_core",
-    "spec_03_add_previous_density": "spec_01_stance_core",
+    "spec_03_add_previous_ratio": "spec_01_stance_core",
     "spec_04_add_timeline": "spec_01_stance_core",
     "spec_05_add_category": "spec_01_stance_core",
     "spec_06_add_current_duration": "spec_01_stance_core",
@@ -237,7 +238,7 @@
     "spec_09_exp2_baseline": "spec_01_stance_core",
     "spec_10_full_timing": "spec_09_exp2_baseline",
     "spec_11_drop_lagged_stance": "spec_10_full_timing",
-    "spec_12_drop_previous_density": "spec_10_full_timing",
+    "spec_12_drop_previous_ratio": "spec_10_full_timing",
     "spec_13_drop_timeline": "spec_10_full_timing",
     "spec_14_drop_category": "spec_10_full_timing",
     "spec_15_drop_current_duration": "spec_10_full_timing",
@@ -259,11 +260,11 @@
       "lag_agree_move",
       "lag_disagree_move"
     ],
-    "previous_density": [
-      "previous_log_density_per_second"
-    ],
     "previous_duration": [
       "previous_log_duration"
+    ],
+    "previous_ratio": [
+      "previous_log_iceberg_ratio"
     ],
     "response_timing": [
       "log_gap",
@@ -275,25 +276,25 @@
     ]
   },
   "stepwise_added_variable_groups": {
-    "per_second": "category fixed effects",
-    "per_second_duration_adjusted": "current-turn duration",
-    "per_second_timing_adjusted": "pre-turn gap and overlap",
-    "per_second_timing_previous_duration": "previous-turn duration",
+    "iceberg_ratio": "category fixed effects",
+    "iceberg_ratio_duration_adjusted": "current-turn duration",
+    "iceberg_ratio_timing_adjusted": "pre-turn gap and overlap",
+    "iceberg_ratio_timing_previous_duration": "previous-turn duration",
     "step_1_stance_only": "stance movement",
     "step_2_lagged_stance": "lagged stance movement",
-    "step_3_previous_outcome": "previous per-second density",
+    "step_3_previous_outcome": "previous iceberg ratio",
     "step_4_timeline": "timeline position"
   },
   "stepwise_common_model_sample_verified": true,
   "stepwise_formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "step_1_stance_only": "delta_log_density_per_second ~ agree_move + disagree_move",
-    "step_2_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
-    "step_3_previous_outcome": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second",
-    "step_4_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2)"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "step_1_stance_only": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
+    "step_2_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "step_3_previous_outcome": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio",
+    "step_4_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2)"
   },
   "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
   "timestamp_source_counts": {

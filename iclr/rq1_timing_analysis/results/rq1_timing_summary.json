@@ -1,27 +1,27 @@
 {
   "artifact_sha256": {
-    "rq1_specification_coefficients.csv": "4535fcb9677062ab3086831698c1675c70ba5c4b28e6d8d3e60defd53f97ddd4",
-    "rq1_specification_panel.csv": "46fa01a3a51471733363c89f6fcd11508b6dd84e391c979b14514998be8b0e86",
-    "rq1_specification_panel.pdf": "40e042cd0ceb5dcba75d2a0897b5cc7010622b6c86cca73d58bd19bc0f132a84",
-    "rq1_specification_panel.png": "c3cb51d484076e09c4a3bbc85f289440c58be33ab6c2f35133f050c0ad36e8af",
-    "rq1_stepwise_coefficients.csv": "2b01741d90698b2af376750fa7a6c8098cae2149f34b2a44ca7b647ef778aa57",
-    "rq1_stepwise_comparison.pdf": "f640b209e027b387ca4d6e70931f647ba818cc4a1e79c09e54c95aaa4e79d447",
-    "rq1_stepwise_comparison.png": "576dae746477e86c0d97232d91821b2bd58e5fdbf305d62f8fbf9bf014120c58",
-    "rq1_stepwise_model_fit.csv": "060e20e81f71563fb388b2383d7b26fee07d89864cf0e1dcca26ac0bb9487ab8",
-    "rq1_stepwise_stance_comparison.csv": "8def84796a7ab806b2543831cb036c7b40a9e0420cc9975280c63d408ca6de5c",
-    "rq1_timing_coefficients.csv": "8915ffdcb7f84560ce28933cc24437b7caeda695a9957dfc91a3f4b3c38191ec",
-    "rq1_timing_comparison.pdf": "7c3efb5d2c488b2f68441cff0e3bd7d55bb77595d54f73dfacbcbafe48c85dcc",
-    "rq1_timing_comparison.png": "86d162ff42c66a6a285359ccbb80aab488e9979da6e185d4c0436e94131b9986",
-    "rq1_timing_data_audit.json": "1025c89762b0af9cb0809f4bc73f95bb5b04a05fe21dd8ac641433fe39390b31",
-    "rq1_timing_model_fit.csv": "e082e0b042af4b39df61a38189237196cc806ed69efdf5ab1fed2b0d634bfab0",
+    "rq1_specification_coefficients.csv": "cc36faca2cbf65e34dbbd9dd6f7a07031e314b9dc23450dfbb04102e512cc43e",
+    "rq1_specification_panel.csv": "bdca87d36220b39d12949d37e74396065b638b8113820bb7193301b635074720",
+    "rq1_specification_panel.pdf": "9b6333b3afb7d3046329f9bc232096f19c98262e360143b78eb0a5966a14aa3e",
+    "rq1_specification_panel.png": "0b588bb2ab476068035227afae08ba63f0c66b00f6f7c34514964263b7e2c397",
+    "rq1_stepwise_coefficients.csv": "f757ce6bfa8ba56b9fc68d327203fea6631ceea05d1c30c04292e00c19e3d12e",
+    "rq1_stepwise_comparison.pdf": "bb7dc07bd21d9dd57be6e03525909914c018c3ea95ebac62c93cd6f94b3e05e4",
+    "rq1_stepwise_comparison.png": "5d9ae8504be18246bfe03a381232733b36ba1c6df4d40d3af216187c560d65cc",
+    "rq1_stepwise_model_fit.csv": "b1a8eba78dd391c7e7300dc636d0a2382592f6bb2b4a528b1c996cf1b8552252",
+    "rq1_stepwise_stance_comparison.csv": "51c08cd2ddf627811284d38f46f25cbb697c2b5ff29960f749386908f820ae42",
+    "rq1_timing_coefficients.csv": "a86cef10e15b183d2f5d13d55212c3ce152f3d2ba88903bf5dc1baa5621352a6",
+    "rq1_timing_comparison.pdf": "79d7c6f1faf1f79a245f4ab05f7fbebdde846e29fb7c25f3ba44dd763b993a74",
+    "rq1_timing_comparison.png": "4514e46386ba520968ad75d4aff6cef75823a9b863f54595fcaff988aa40a145",
+    "rq1_timing_data_audit.json": "f44ce817f8f09939fa3e6e699c80d4ed845e203468e8140ce1bde06871b2e015",
+    "rq1_timing_model_fit.csv": "2c8772e1f976ec695cf7ff31549bac6e5296ba4ef12233a5b7cff897b728bd63",
     "rq1_timing_observations.csv": "3584af950099a05289aa73f986ab96a6694ca08bd8d6c272afc51f33785f73b8",
-    "rq1_timing_stance_comparison.csv": "38485d329daad13af9a50b5835ce23db80ea90b594d1f1dff106be28c5ff378d"
+    "rq1_timing_stance_comparison.csv": "b850cf3b0e150c42ca1c1e3dd55e879624520df2d3da0b9b670c17ce89ab5b6f"
   },
   "best_adjusted_r_squared_specification": {
-    "adjusted_r_squared": 0.647829346714069,
+    "adjusted_r_squared": 0.721978721299426,
     "model_name": "spec_10_full_timing"
   },
-  "both_directional_intervals_survive_timing_adjustment": false,
+  "both_directional_intervals_survive_timing_adjustment": true,
   "causal_claim": false,
   "configuration": {
     "categories": [
@@ -33,104 +33,100 @@
     "output_dir": "iclr/rq1_timing_analysis/results",
     "plot_dpi": 300
   },
-  "duration_note": "Current-turn duration is already part of the outcome denominator; duration-adjusted stages are sensitivity analyses with a different estimand.",
+  "duration_note": "Duration is excluded from the outcome denominator and enters only as an explicit predictor in duration-adjusted specifications.",
   "episode_count": 14588,
   "estimands": {
-    "per_second": "original Exp2 directional association with per-second iceberg density on the strict timing sample",
-    "per_second_duration_adjusted": "Exp2 association conditional on current-turn duration",
-    "per_second_timing_adjusted": "Exp2 association conditional on current-turn duration and response timing",
-    "per_second_timing_previous_duration": "Exp2 association conditional on current- and previous-turn duration and response timing"
+    "iceberg_ratio": "directional association with the duration-free iceberg ratio using the original Exp2 control structure on the strict timing sample",
+    "iceberg_ratio_duration_adjusted": "duration-free iceberg-ratio association conditional on current-turn duration",
+    "iceberg_ratio_timing_adjusted": "duration-free iceberg-ratio association conditional on current-turn duration and response timing",
+    "iceberg_ratio_timing_previous_duration": "duration-free iceberg-ratio association conditional on current- and previous-turn duration and response timing"
   },
-  "experiment": "Exp2 step-wise timing sensitivity analysis",
+  "experiment": "Duration-free iceberg-ratio timing sensitivity analysis",
   "formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
   },
   "git": {
-    "commit": "d78f0f37838c93152a7c75442ae45d0444bf2849",
+    "commit": "a2bea7bd68327a9599571468a640e9a6cc3c9402",
     "dirty": true
   },
   "headline_coefficients": {
-    "per_second:agree_move": {
-      "ci95_high": -0.022107730605531548,
-      "ci95_low": -0.024759492932435193,
-      "clustered_se": 0.0006764824118760367,
-      "coefficient": -0.02343361176898337,
-      "model_name": "per_second",
-      "p_value": 6.234324824687777e-263,
+    "iceberg_ratio:agree_move": {
+      "ci95_high": 0.05672791723042355,
+      "ci95_low": 0.05211423261314576,
+      "clustered_se": 0.001176981988870701,
+      "coefficient": 0.054421074921784655,
+      "model_name": "iceberg_ratio",
+      "p_value": 0.0,
       "term": "agree_move",
-      "z_or_t": -34.64038585126956
+      "z_or_t": 46.237814542940434
     },
-    "per_second:disagree_move": {
-      "ci95_high": 0.018936684399021766,
-      "ci95_low": 0.015602309722656986,
-      "clustered_se": 0.0008506214151550494,
-      "coefficient": 0.017269497060839377,
-      "model_name": "per_second",
-      "p_value": 1.2292281892972538e-91,
+    "iceberg_ratio:disagree_move": {
+      "ci95_high": -0.0627354103987368,
+      "ci95_low": -0.06822066946650708,
+      "clustered_se": 0.0013993264955471907,
+      "coefficient": -0.06547803993262194,
+      "model_name": "iceberg_ratio",
+      "p_value": 0.0,
       "term": "disagree_move",
-      "z_or_t": 20.302212891843936
+      "z_or_t": -46.79253922582056
     },
-    "per_second_duration_adjusted:agree_move": {
-      "ci95_high": 0.0036662114688016155,
-      "ci95_low": 0.0015792899414285532,
-      "clustered_se": 0.0005323877234057445,
-      "coefficient": 0.0026227507051150845,
-      "model_name": "per_second_duration_adjusted",
-      "p_value": 8.376180742196404e-07,
+    "iceberg_ratio_duration_adjusted:agree_move": {
+      "ci95_high": 0.005616074101726033,
+      "ci95_low": 0.001914728179039678,
+      "clustered_se": 0.0009442382492438892,
+      "coefficient": 0.0037654011403828558,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "p_value": 6.669841551807292e-05,
       "term": "agree_move",
-      "z_or_t": 4.926392157086289
+      "z_or_t": 3.9877659514408026
     },
-    "per_second_duration_adjusted:disagree_move": {
-      "ci95_high": -0.007449486843875964,
-      "ci95_low": -0.010281169618621171,
-      "clustered_se": 0.0007223813287083741,
-      "coefficient": -0.008865328231248568,
-      "model_name": "per_second_duration_adjusted",
-      "p_value": 1.2747273223235057e-34,
+    "iceberg_ratio_duration_adjusted:disagree_move": {
+      "ci95_high": -0.013802087068676415,
+      "ci95_low": -0.017764541309195192,
+      "clustered_se": 0.0010108487379804202,
+      "coefficient": -0.015783314188935804,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "p_value": 5.852518533487945e-55,
       "term": "disagree_move",
-      "z_or_t": -12.272366240555904
+      "z_or_t": -15.61392283129261
     },
-    "per_second_timing_adjusted:agree_move": {
-      "ci95_high": 0.0036243484595958092,
-      "ci95_low": 0.001537918527504617,
-      "clustered_se": 0.0005322623141416591,
-      "coefficient": 0.002581133493550213,
-      "model_name": "per_second_timing_adjusted",
-      "p_value": 1.2385820203474848e-06,
+    "iceberg_ratio_timing_adjusted:agree_move": {
+      "ci95_high": 0.004972882351079112,
+      "ci95_low": 0.001292290265610879,
+      "clustered_se": 0.0009389438057281341,
+      "coefficient": 0.003132586308344995,
+      "model_name": "iceberg_ratio_timing_adjusted",
+      "p_value": 0.000849053665367558,
       "term": "agree_move",
-      "z_or_t": 4.8493636031937
+      "z_or_t": 3.3362873147831573
     },
-    "per_second_timing_adjusted:disagree_move": {
-      "ci95_high": -0.007291708400240625,
-      "ci95_low": -0.010136635951699276,
-      "clustered_se": 0.000725760160364955,
-      "coefficient": -0.008714172175969951,
-      "model_name": "per_second_timing_adjusted",
-      "p_value": 3.26638309883573e-33,
+    "iceberg_ratio_timing_adjusted:disagree_move": {
+      "ci95_high": -0.011625625508352675,
+      "ci95_low": -0.015567213836374194,
+      "clustered_se": 0.0010055257033068628,
+      "coefficient": -0.013596419672363434,
+      "model_name": "iceberg_ratio_timing_adjusted",
+      "p_value": 1.1644888478866573e-41,
       "term": "disagree_move",
-      "z_or_t": -12.006958568224455
+      "z_or_t": -13.521702754737168
     }
   },
   "original_exp2_reference_comparison": [
     {
-      "comparison_note": "Both analyses use the Exp2 per-second outcome. This analysis instead uses strict timing-complete, three-turn, speaker-alternating windows.",
+      "comparison_note": "The original Exp2 coefficient used per-second iceberg density; this analysis uses the duration-free iceberg ratio, so magnitudes and signs must not be treated as a direct replication comparison.",
+      "duration_free_ratio_coefficient": 0.054421074921784655,
       "original_exp2_full_sample_coefficient": -0.024848939290319824,
-      "outcomes_comparable": true,
-      "sign_matches": true,
-      "strict_minus_original_exp2": 0.0014153275213364541,
-      "strict_timing_sample_per_second_coefficient": -0.02343361176898337,
+      "outcomes_comparable": false,
       "term": "agree_move"
     },
     {
-      "comparison_note": "Both analyses use the Exp2 per-second outcome. This analysis instead uses strict timing-complete, three-turn, speaker-alternating windows.",
+      "comparison_note": "The original Exp2 coefficient used per-second iceberg density; this analysis uses the duration-free iceberg ratio, so magnitudes and signs must not be treated as a direct replication comparison.",
+      "duration_free_ratio_coefficient": -0.06547803993262194,
       "original_exp2_full_sample_coefficient": 0.015577205239494248,
-      "outcomes_comparable": true,
-      "sign_matches": true,
-      "strict_minus_original_exp2": 0.0016922918213451293,
-      "strict_timing_sample_per_second_coefficient": 0.017269497060839377,
+      "outcomes_comparable": false,
       "term": "disagree_move"
     }
   ],
@@ -141,27 +137,27 @@
     "statsmodels": "0.14.5",
     "tqdm": "4.68.1"
   },
-  "script_version": "4.2.0",
+  "script_version": "5.0.0",
   "specification_estimated_change_percent_definition": "100 * (exp(current_stance_coefficient) - 1)",
   "specification_fit_metric": "adjusted R-squared; preferred over raw R-squared because model sizes differ",
   "specification_formulas": {
-    "spec_01_stance_core": "delta_log_density_per_second ~ agree_move + disagree_move",
-    "spec_02_add_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
-    "spec_03_add_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second",
-    "spec_04_add_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
-    "spec_05_add_category": "delta_log_density_per_second ~ agree_move + disagree_move + C(category)",
-    "spec_06_add_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + log_duration",
-    "spec_07_add_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + log_gap + overlap",
-    "spec_08_add_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_duration",
-    "spec_09_exp2_baseline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "spec_10_full_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_11_drop_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_12_drop_previous_density": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_13_drop_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_14_drop_category": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
-    "spec_15_drop_current_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
-    "spec_16_drop_response_timing": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
-    "spec_17_drop_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+    "spec_01_stance_core": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
+    "spec_02_add_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "spec_03_add_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio",
+    "spec_04_add_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + C(category)",
+    "spec_06_add_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + log_duration",
+    "spec_07_add_response_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + log_gap + overlap",
+    "spec_08_add_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_duration",
+    "spec_09_exp2_baseline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
   },
   "specification_included_groups": {
     "spec_01_stance_core": [
@@ -171,9 +167,9 @@
       "current_stance",
       "lagged_stance"
     ],
-    "spec_03_add_previous_density": [
+    "spec_03_add_previous_ratio": [
       "current_stance",
-      "previous_density"
+      "previous_ratio"
     ],
     "spec_04_add_timeline": [
       "current_stance",
@@ -198,14 +194,14 @@
     "spec_09_exp2_baseline": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects"
     ],
     "spec_10_full_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -214,14 +210,14 @@
     ],
     "spec_11_drop_lagged_stance": [
       "current_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
       "previous_duration"
     ],
-    "spec_12_drop_previous_density": [
+    "spec_12_drop_previous_ratio": [
       "current_stance",
       "lagged_stance",
       "timeline",
@@ -233,7 +229,7 @@
     "spec_13_drop_timeline": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "category_fixed_effects",
       "current_duration",
       "response_timing",
@@ -242,7 +238,7 @@
     "spec_14_drop_category": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "current_duration",
       "response_timing",
@@ -251,7 +247,7 @@
     "spec_15_drop_current_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "response_timing",
@@ -260,7 +256,7 @@
     "spec_16_drop_response_timing": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -269,7 +265,7 @@
     "spec_17_drop_previous_duration": [
       "current_stance",
       "lagged_stance",
-      "previous_density",
+      "previous_ratio",
       "timeline",
       "category_fixed_effects",
       "current_duration",
@@ -280,7 +276,7 @@
   "specification_reference_models": {
     "spec_01_stance_core": null,
     "spec_02_add_lagged_stance": "spec_01_stance_core",
-    "spec_03_add_previous_density": "spec_01_stance_core",
+    "spec_03_add_previous_ratio": "spec_01_stance_core",
     "spec_04_add_timeline": "spec_01_stance_core",
     "spec_05_add_category": "spec_01_stance_core",
     "spec_06_add_current_duration": "spec_01_stance_core",
@@ -289,7 +285,7 @@
     "spec_09_exp2_baseline": "spec_01_stance_core",
     "spec_10_full_timing": "spec_09_exp2_baseline",
     "spec_11_drop_lagged_stance": "spec_10_full_timing",
-    "spec_12_drop_previous_density": "spec_10_full_timing",
+    "spec_12_drop_previous_ratio": "spec_10_full_timing",
     "spec_13_drop_timeline": "spec_10_full_timing",
     "spec_14_drop_category": "spec_10_full_timing",
     "spec_15_drop_current_duration": "spec_10_full_timing",
@@ -311,11 +307,11 @@
       "lag_agree_move",
       "lag_disagree_move"
     ],
-    "previous_density": [
-      "previous_log_density_per_second"
-    ],
     "previous_duration": [
       "previous_log_duration"
+    ],
+    "previous_ratio": [
+      "previous_log_iceberg_ratio"
     ],
     "response_timing": [
       "log_gap",
@@ -327,44 +323,44 @@
     ]
   },
   "stepwise_added_variable_groups": {
-    "per_second": "category fixed effects",
-    "per_second_duration_adjusted": "current-turn duration",
-    "per_second_timing_adjusted": "pre-turn gap and overlap",
-    "per_second_timing_previous_duration": "previous-turn duration",
+    "iceberg_ratio": "category fixed effects",
+    "iceberg_ratio_duration_adjusted": "current-turn duration",
+    "iceberg_ratio_timing_adjusted": "pre-turn gap and overlap",
+    "iceberg_ratio_timing_previous_duration": "previous-turn duration",
     "step_1_stance_only": "stance movement",
     "step_2_lagged_stance": "lagged stance movement",
-    "step_3_previous_outcome": "previous per-second density",
+    "step_3_previous_outcome": "previous iceberg ratio",
     "step_4_timeline": "timeline position"
   },
   "stepwise_formulas": {
-    "per_second": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category)",
-    "per_second_duration_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
-    "per_second_timing_adjusted": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
-    "per_second_timing_previous_duration": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
-    "step_1_stance_only": "delta_log_density_per_second ~ agree_move + disagree_move",
-    "step_2_lagged_stance": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
-    "step_3_previous_outcome": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second",
-    "step_4_timeline": "delta_log_density_per_second ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_density_per_second + timeline_position + I(timeline_position ** 2)"
+    "iceberg_ratio": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "iceberg_ratio_duration_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "iceberg_ratio_timing_adjusted": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "iceberg_ratio_timing_previous_duration": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "step_1_stance_only": "delta_log_iceberg_ratio ~ agree_move + disagree_move",
+    "step_2_lagged_stance": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move",
+    "step_3_previous_outcome": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio",
+    "step_4_timeline": "delta_log_iceberg_ratio ~ agree_move + disagree_move + lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2)"
   },
   "stepwise_largest_coefficient_changes": [
     {
       "added_variable_group": "current-turn duration",
-      "coefficient": 0.0026227507051150845,
-      "coefficient_change_from_previous": 0.026056362474098455,
-      "model_name": "per_second_duration_adjusted",
-      "reference_model": "per_second",
-      "sign_changed_from_previous": true,
+      "coefficient": 0.0037654011403828558,
+      "coefficient_change_from_previous": -0.0506556737814018,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "reference_model": "iceberg_ratio",
+      "sign_changed_from_previous": false,
       "stage_number": 6,
       "stance_direction": "agreement",
       "term": "agree_move"
     },
     {
       "added_variable_group": "current-turn duration",
-      "coefficient": -0.008865328231248568,
-      "coefficient_change_from_previous": -0.026134825292087945,
-      "model_name": "per_second_duration_adjusted",
-      "reference_model": "per_second",
-      "sign_changed_from_previous": true,
+      "coefficient": -0.015783314188935804,
+      "coefficient_change_from_previous": 0.049694725743686136,
+      "model_name": "iceberg_ratio_duration_adjusted",
+      "reference_model": "iceberg_ratio",
+      "sign_changed_from_previous": false,
       "stage_number": 6,
       "stance_direction": "disagreement",
       "term": "disagree_move"
@@ -373,36 +369,36 @@
   "summary_self_hash_excluded": true,
   "timing_adjustment_interpretation": [
     {
-      "attenuation_percent": 88.9853364517774,
+      "attenuation_percent": 94.24379927657213,
       "direction": "agreement",
-      "duration_adjusted_ci95_high": 0.0036662114688016155,
-      "duration_adjusted_ci95_low": 0.0015792899414285532,
-      "duration_adjusted_coefficient": 0.0026227507051150845,
-      "duration_attenuation_percent": 88.80774021959968,
-      "duration_status": "sign_reversed_after_duration_adjustment",
-      "exp2_per_second_baseline_coefficient": -0.02343361176898337,
-      "gap_overlap_incremental_attenuation_percent": 1.5867772519784773,
-      "status": "sign_reversed_after_timing_adjustment",
+      "duration_adjusted_ci95_high": 0.005616074101726033,
+      "duration_adjusted_ci95_low": 0.001914728179039678,
+      "duration_adjusted_coefficient": 0.0037654011403828558,
+      "duration_attenuation_percent": 93.08098719881114,
+      "duration_status": "direction_preserved_and_interval_excludes_zero",
+      "gap_overlap_incremental_attenuation_percent": 16.806040271542432,
+      "ratio_baseline_coefficient": 0.054421074921784655,
+      "status": "direction_preserved_and_interval_excludes_zero",
       "term": "agree_move",
-      "timing_adjusted_ci95_high": 0.0036243484595958092,
-      "timing_adjusted_ci95_low": 0.001537918527504617,
-      "timing_adjusted_coefficient": 0.002581133493550213
+      "timing_adjusted_ci95_high": 0.004972882351079112,
+      "timing_adjusted_ci95_low": 0.001292290265610879,
+      "timing_adjusted_coefficient": 0.003132586308344995
     },
     {
-      "attenuation_percent": 49.54009288591058,
+      "attenuation_percent": 79.23514557498301,
       "direction": "disagreement",
-      "duration_adjusted_ci95_high": -0.007449486843875964,
-      "duration_adjusted_ci95_low": -0.010281169618621171,
-      "duration_adjusted_coefficient": -0.008865328231248568,
-      "duration_attenuation_percent": 48.664815194000376,
-      "duration_status": "sign_reversed_after_duration_adjustment",
-      "exp2_per_second_baseline_coefficient": 0.017269497060839377,
-      "gap_overlap_incremental_attenuation_percent": 1.705024916571285,
-      "status": "sign_reversed_after_timing_adjustment",
+      "duration_adjusted_ci95_high": -0.013802087068676415,
+      "duration_adjusted_ci95_low": -0.017764541309195192,
+      "duration_adjusted_coefficient": -0.015783314188935804,
+      "duration_attenuation_percent": 75.89525556174695,
+      "duration_status": "direction_preserved_and_interval_excludes_zero",
+      "gap_overlap_incremental_attenuation_percent": 13.855737080273013,
+      "ratio_baseline_coefficient": -0.06547803993262194,
+      "status": "direction_preserved_and_interval_excludes_zero",
       "term": "disagree_move",
-      "timing_adjusted_ci95_high": -0.007291708400240625,
-      "timing_adjusted_ci95_low": -0.010136635951699276,
-      "timing_adjusted_coefficient": -0.008714172175969951
+      "timing_adjusted_ci95_high": -0.011625625508352675,
+      "timing_adjusted_ci95_low": -0.015567213836374194,
+      "timing_adjusted_coefficient": -0.013596419672363434
     }
   ],
   "transition_count": 241284
