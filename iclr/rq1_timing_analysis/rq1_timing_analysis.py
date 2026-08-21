@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "4.1.0"
+SCRIPT_VERSION = "4.2.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
@@ -1065,6 +1065,27 @@ def stepwise_coefficient_frame(results: dict[str, RegressionResult]) -> pd.DataF
     return coefficient_frame_for_order(results, STEPWISE_MODEL_ORDER)
 
 
+def specification_coefficient_frame(
+    results: dict[str, RegressionResult],
+) -> pd.DataFrame:
+    coefficients = coefficient_frame_for_order(results, SPECIFICATION_MODEL_ORDER)
+    model_numbers = {
+        model_name: model_number
+        for model_number, model_name in enumerate(SPECIFICATION_MODEL_ORDER, start=1)
+    }
+    coefficients.insert(
+        0,
+        "model_number",
+        coefficients["model_name"].map(model_numbers).astype(int),
+    )
+    coefficients.insert(
+        2,
+        "short_label",
+        coefficients["model_name"].map(SPECIFICATION_SHORT_LABELS),
+    )
+    return coefficients
+
+
 def model_fit_frame_for_order(
     results: dict[str, RegressionResult],
     frame: pd.DataFrame,
@@ -1141,10 +1162,14 @@ def specification_panel_frame(
             "included_variable_groups": "|".join(included_groups),
             "formula": SPECIFICATION_FORMULAS[model_name],
             "agree_move_coefficient": float(result.params["agree_move"]),
+            "agree_move_estimated_change_percent": 100.0
+            * math.expm1(float(result.params["agree_move"])),
             "agree_move_clustered_se": float(result.bse["agree_move"]),
             "agree_move_ci95_low": float(intervals.loc["agree_move", 0]),
             "agree_move_ci95_high": float(intervals.loc["agree_move", 1]),
             "disagree_move_coefficient": float(result.params["disagree_move"]),
+            "disagree_move_estimated_change_percent": 100.0
+            * math.expm1(float(result.params["disagree_move"])),
             "disagree_move_clustered_se": float(result.bse["disagree_move"]),
             "disagree_move_ci95_low": float(intervals.loc["disagree_move", 0]),
             "disagree_move_ci95_high": float(intervals.loc["disagree_move", 1]),
@@ -1651,7 +1676,26 @@ def save_stepwise_plot(
     return [pdf_path, png_path]
 
 
+def significance_stars(p_value: float) -> str:
+    if p_value < 0.001:
+        return "***"
+    if p_value < 0.01:
+        return "**"
+    if p_value < 0.05:
+        return "*"
+    return ""
+
+
+def coefficient_cell_text(coefficient: float, clustered_se: float, p_value: float) -> str:
+    displayed_coefficient = 0.0 if abs(coefficient) < 0.00005 else coefficient
+    return (
+        f"{displayed_coefficient:.4f}{significance_stars(p_value)}\n"
+        f"({clustered_se:.4f})"
+    )
+
+
 def save_specification_panel(
+    coefficients: pd.DataFrame,
     panel: pd.DataFrame,
     output_dir: Path,
     plot_dpi: int,
@@ -1660,176 +1704,224 @@ def save_specification_panel(
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        from matplotlib.lines import Line2D
     except ImportError as error:
         raise RuntimeError(
             "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
         ) from error
 
-    ordered = (
+    ordered_panel = (
         panel.set_index("model_name")
         .loc[list(SPECIFICATION_MODEL_ORDER)]
         .reset_index()
     )
-    if ordered["model_number"].tolist() != list(range(1, len(SPECIFICATION_MODEL_ORDER) + 1)):
+    if ordered_panel["model_number"].tolist() != list(
+        range(1, len(SPECIFICATION_MODEL_ORDER) + 1)
+    ):
         raise ValueError("Specification panel model numbers do not match the configured order")
-    x_positions = np.arange(len(ordered), dtype=float)
-    adjusted_r_squared = ordered["adjusted_r_squared"].to_numpy(dtype=float)
-    r_squared_min = float(np.min(adjusted_r_squared))
-    r_squared_max = float(np.max(adjusted_r_squared))
-    r_squared_padding = max((r_squared_max - r_squared_min) * 0.22, 0.002)
-    family_styles: dict[str, tuple[str, str, str]] = {
-        "reference": ("#333333", "s", "Reference models"),
-        "add_one_to_core": ("#0072B2", "o", "Add one group to stance core"),
-        "remove_one_from_full": ("#D55E00", "D", "Remove one group from full model"),
+    if coefficients.duplicated(["model_name", "term"]).any():
+        raise ValueError("Specification coefficient table contains duplicate model-term rows")
+
+    category_terms = tuple(
+        sorted(
+            term
+            for term in coefficients["term"].astype(str).unique()
+            if term.startswith("C(category)[T.")
+        )
+    )
+    shared_terms = (
+        "previous_log_density_per_second",
+        "timeline_position",
+        "I(timeline_position ** 2)",
+        *category_terms,
+        "log_duration",
+        "log_gap",
+        "overlap",
+        "previous_log_duration",
+        "Intercept",
+    )
+    agreement_terms = ("agree_move", "lag_agree_move", *shared_terms)
+    disagreement_terms = ("disagree_move", "lag_disagree_move", *shared_terms)
+    term_labels: dict[str, str] = {
+        "agree_move": "Current agreement movement",
+        "lag_agree_move": "Lagged agreement movement",
+        "disagree_move": "Current disagreement movement",
+        "lag_disagree_move": "Lagged disagreement movement",
+        "previous_log_density_per_second": "Previous per-second density",
+        "timeline_position": "Timeline position",
+        "I(timeline_position ** 2)": "Timeline position²",
+        "log_duration": "Current-turn duration (log)",
+        "log_gap": "Pre-turn gap (log)",
+        "overlap": "Overlap",
+        "previous_log_duration": "Previous-turn duration (log)",
+        "Intercept": "Intercept",
     }
+    term_labels.update(
+        {
+            term: f"Category: {term.removeprefix('C(category)[T.').removesuffix(']')}"
+            for term in category_terms
+        }
+    )
+    statistic_labels = (
+        "N",
+        "Episode clusters",
+        "Adjusted R²",
+        "Estimated change in per-second iceberg ratio (%)",
+    )
+    x_positions = np.arange(len(SPECIFICATION_MODEL_ORDER), dtype=float)
+    coefficient_lookup = coefficients.set_index(["model_name", "term"])
+    compact_labels = (
+        "Core",
+        "+ Lag",
+        "+ Prev. density",
+        "+ Timeline",
+        "+ Category FE",
+        "+ Current dur.",
+        "+ Gap/overlap",
+        "+ Previous dur.",
+        "Exp2 baseline",
+        "Full timing",
+        "− Lag",
+        "− Prev. density",
+        "− Timeline",
+        "− Category FE",
+        "− Current dur.",
+        "− Gap/overlap",
+        "− Previous dur.",
+    )
 
     with plt.rc_context(
         {
-            "axes.spines.top": False,
+            "axes.spines.top": True,
             "axes.spines.right": False,
-            "font.size": 10,
+            "font.size": 9,
         }
     ):
-        figure_width = max(18.0, len(ordered) * 1.1)
-        fig = plt.figure(figsize=(figure_width, 10.2), constrained_layout=True)
-        grid = fig.add_gridspec(2, 1, height_ratios=(1.25, 2.0), hspace=0.05)
-        fit_axis = fig.add_subplot(grid[0, 0])
-        matrix_axis = fig.add_subplot(grid[1, 0], sharex=fit_axis)
+        row_count = len(agreement_terms) + len(statistic_labels)
+        figure_width = max(19.0, len(SPECIFICATION_MODEL_ORDER) * 0.95 + 4.0)
+        figure_height = max(20.0, row_count * 1.15)
+        fig, axes = plt.subplots(2, 1, figsize=(figure_width, figure_height))
+        fig.subplots_adjust(
+            left=0.19,
+            right=0.995,
+            top=0.91,
+            bottom=0.055,
+            hspace=0.42,
+        )
 
-        for axis in (fit_axis, matrix_axis):
-            axis.axvspan(0.5, 7.5, color="#0072B2", alpha=0.035, zorder=0)
-            axis.axvspan(9.5, 16.5, color="#D55E00", alpha=0.035, zorder=0)
+        panel_definitions = (
+            ("Agreement movement", "agree_move", agreement_terms),
+            ("Disagreement movement", "disagree_move", disagreement_terms),
+        )
+        for axis, (direction_label, current_stance_term, terms) in zip(
+            axes,
+            panel_definitions,
+            strict=True,
+        ):
+            all_row_labels = [term_labels[term] for term in terms] + list(statistic_labels)
+            statistic_start = len(terms)
+            for row_number in range(row_count):
+                if row_number % 2 == 1:
+                    axis.axhspan(
+                        row_number - 0.5,
+                        row_number + 0.5,
+                        color="#777777",
+                        alpha=0.035,
+                        zorder=0,
+                    )
+                axis.axhline(
+                    row_number + 0.5,
+                    color="#E1E1E1",
+                    linewidth=0.55,
+                    zorder=1,
+                )
+            axis.axhline(
+                statistic_start - 0.5,
+                color="#333333",
+                linewidth=1.1,
+                zorder=2,
+            )
+            axis.axhline(
+                row_count - 1.5,
+                color="#333333",
+                linewidth=1.1,
+                zorder=2,
+            )
             for divider in (0.5, 7.5, 9.5):
                 axis.axvline(divider, color="#A0A0A0", linewidth=0.8, zorder=1)
 
-        for family_name, (color, marker, _) in family_styles.items():
-            selected = ordered[ordered["comparison_family"] == family_name]
-            selected_positions = selected.index.to_numpy(dtype=float)
-            selected_values = selected["adjusted_r_squared"].to_numpy(dtype=float)
-            fit_axis.scatter(
-                selected_positions,
-                selected_values,
-                color=color,
-                marker=marker,
-                s=62,
-                edgecolor="white",
-                linewidth=0.8,
-                zorder=3,
-            )
-        full_r_squared = float(
-            ordered.loc[
-                ordered["model_name"] == SPECIFICATION_MODEL_ORDER[9],
-                "adjusted_r_squared",
-            ].iloc[0]
-        )
-        fit_axis.axhline(
-            full_r_squared,
-            color="#777777",
-            linewidth=1.0,
-            linestyle="--",
-            zorder=1,
-        )
-        for x_position, value in zip(x_positions, adjusted_r_squared, strict=True):
-            fit_axis.annotate(
-                f"{value:.3f}",
-                (x_position, value),
-                xytext=(0, 7),
-                textcoords="offset points",
-                ha="center",
-                va="bottom",
-                rotation=90,
-                fontsize=8,
-            )
-        fit_axis.set_ylim(
-            r_squared_min - r_squared_padding,
-            r_squared_max + r_squared_padding * 2.0,
-        )
-        fit_axis.set_ylabel("Adjusted R²\n(shared sample)")
-        fit_axis.set_title("Model fit", loc="left", fontweight="bold")
-        fit_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
-        fit_axis.tick_params(axis="x", labelbottom=False)
-        legend_handles = [
-            Line2D(
-                [0],
-                [0],
-                color="none",
-                marker=marker,
-                markerfacecolor=color,
-                markeredgecolor="white",
-                markersize=8,
-                label=label,
-            )
-            for color, marker, label in family_styles.values()
-        ]
-        fit_axis.legend(handles=legend_handles, frameon=False, loc="upper left", ncol=3)
+            for model_position, model_name in enumerate(SPECIFICATION_MODEL_ORDER):
+                for row_number, term in enumerate(terms):
+                    key = (model_name, term)
+                    if key not in coefficient_lookup.index:
+                        continue
+                    selected = coefficient_lookup.loc[key]
+                    axis.text(
+                        model_position,
+                        row_number,
+                        coefficient_cell_text(
+                            float(selected["coefficient"]),
+                            float(selected["clustered_se"]),
+                            float(selected["p_value"]),
+                        ),
+                        ha="center",
+                        va="center",
+                        fontsize=6.7,
+                        linespacing=1.2,
+                        zorder=3,
+                    )
+                model_row = ordered_panel.iloc[model_position]
+                statistic_values = (
+                    f"{int(model_row['transition_count']):,}",
+                    f"{int(model_row['episode_count']):,}",
+                    f"{float(model_row['adjusted_r_squared']):.3f}",
+                    f"{float(model_row[f'{current_stance_term}_estimated_change_percent']):+.2f}%",
+                )
+                for statistic_offset, statistic_value in enumerate(statistic_values):
+                    axis.text(
+                        model_position,
+                        statistic_start + statistic_offset,
+                        statistic_value,
+                        ha="center",
+                        va="center",
+                        fontsize=7.2,
+                        zorder=3,
+                    )
 
-        for row_number, group_name in enumerate(SPECIFICATION_GROUP_ORDER):
-            if row_number % 2 == 1:
-                matrix_axis.axhspan(
-                    row_number - 0.5,
-                    row_number + 0.5,
-                    color="#777777",
-                    alpha=0.035,
-                    zorder=0,
-                )
-            included = ordered[f"includes_{group_name}"].astype(bool).to_numpy()
-            matrix_axis.scatter(
+            axis.set_xlim(-0.5, len(SPECIFICATION_MODEL_ORDER) - 0.5)
+            axis.set_ylim(row_count - 0.5, -0.5)
+            axis.set_yticks(np.arange(row_count, dtype=float), all_row_labels)
+            axis.set_xticks(
                 x_positions,
-                np.full(len(x_positions), row_number, dtype=float),
-                facecolors="none",
-                edgecolors="#B8B8B8",
-                s=34,
-                linewidth=0.8,
-                zorder=2,
+                [
+                    f"({model_number})\n{compact_label}"
+                    for model_number, compact_label in enumerate(compact_labels, start=1)
+                ],
+                rotation=38,
+                ha="left",
             )
-            matrix_axis.scatter(
-                x_positions[included],
-                np.full(int(np.sum(included)), row_number, dtype=float),
-                color="#0072B2" if group_name != CURRENT_STANCE_GROUP else "#333333",
-                marker="s",
-                s=48,
-                edgecolor="white",
-                linewidth=0.6,
-                zorder=3,
-            )
-        matrix_axis.set_yticks(
-            np.arange(len(SPECIFICATION_GROUP_ORDER), dtype=float),
-            [VARIABLE_GROUP_LABELS[group_name] for group_name in SPECIFICATION_GROUP_ORDER],
-        )
-        matrix_axis.set_ylim(len(SPECIFICATION_GROUP_ORDER) - 0.5, -0.5)
-        matrix_axis.set_xlim(-0.5, len(ordered) - 0.5)
-        matrix_axis.set_xticks(
-            x_positions,
-            [
-                f"({model_number})\n{short_label}"
-                for model_number, short_label in zip(
-                    ordered["model_number"],
-                    ordered["short_label"],
-                    strict=True,
-                )
-            ],
-            rotation=38,
-            ha="right",
-        )
-        matrix_axis.set_ylabel("Variable groups included")
-        matrix_axis.set_xlabel("Specification")
-        matrix_axis.set_title("Grouped controls", loc="left", fontweight="bold")
-        matrix_axis.spines["bottom"].set_visible(False)
-        matrix_axis.tick_params(axis="x", length=0)
+            axis.xaxis.tick_top()
+            axis.tick_params(axis="x", length=0, pad=5, labelsize=7.5)
+            axis.tick_params(axis="y", length=0, labelsize=8.2)
+            axis.set_title(direction_label, loc="left", pad=84, fontweight="bold")
+            axis.spines["bottom"].set_visible(False)
 
         fig.suptitle(
-            "Exp2 grouped specification panel",
+            "Exp2 coefficient tables across grouped specifications",
             fontsize=16,
             fontweight="bold",
         )
         fig.text(
             0.5,
-            0.968,
-            "Add-one models use the stance-only core; remove-one models use the full timing model.",
+            0.018,
+            (
+                "Cells report β for change in Δ log1p(per-second iceberg density), with "
+                "episode-clustered SE in parentheses. Both stance directions are jointly "
+                "estimated. Bottom-row change = 100 × [exp(β stance) − 1]. "
+                "* p<.05, ** p<.01, *** p<.001."
+            ),
             ha="center",
-            va="top",
-            fontsize=10,
+            va="bottom",
+            fontsize=8.5,
         )
 
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -1880,6 +1972,7 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "stepwise_stance_comparison": output_dir / "rq1_stepwise_stance_comparison.csv",
         "stepwise_model_fit": output_dir / "rq1_stepwise_model_fit.csv",
         "specification_panel": output_dir / "rq1_specification_panel.csv",
+        "specification_coefficients": output_dir / "rq1_specification_coefficients.csv",
         "observations": output_dir / "rq1_timing_observations.csv",
         "data_audit": output_dir / "rq1_timing_data_audit.json",
         "summary": output_dir / "rq1_timing_summary.json",
@@ -1918,6 +2011,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         frame,
     )
     specification_results = fit_specification_models(frame, stepwise_results)
+    specification_coefficients = specification_coefficient_frame(specification_results)
     specification_panel = specification_panel_frame(specification_results, frame)
     output_dir = Path(args.output_dir)
     paths = output_paths(output_dir)
@@ -1930,9 +2024,15 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     write_csv(paths["stepwise_stance_comparison"], stepwise_comparison)
     write_csv(paths["stepwise_model_fit"], stepwise_model_fit)
     write_csv(paths["specification_panel"], specification_panel)
+    write_csv(paths["specification_coefficients"], specification_coefficients)
     save_comparison_plot(comparison, output_dir, args.plot_dpi)
     save_stepwise_plot(stepwise_comparison, output_dir, args.plot_dpi)
-    save_specification_panel(specification_panel, output_dir, args.plot_dpi)
+    save_specification_panel(
+        specification_coefficients,
+        specification_panel,
+        output_dir,
+        args.plot_dpi,
+    )
 
     repository_state = git_state()
     versions = package_versions()
@@ -1955,6 +2055,9 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "iceberg_density_per_second_definition": (
                 "(explicit_count / (assumption_count + 1)) / duration_seconds"
+            ),
+            "specification_estimated_change_percent_definition": (
+                "100 * (exp(current_stance_coefficient) - 1)"
             ),
             "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
             "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
@@ -1997,6 +2100,9 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
         "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
         "specification_model_count": len(SPECIFICATION_MODEL_ORDER),
+        "specification_estimated_change_percent_definition": (
+            "100 * (exp(current_stance_coefficient) - 1)"
+        ),
         "specification_fit_metric": (
             "adjusted R-squared; preferred over raw R-squared because model sizes differ"
         ),

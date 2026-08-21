@@ -10,6 +10,7 @@ import unittest
 from pathlib import Path
 from types import ModuleType
 
+import numpy as np
 import pandas as pd
 
 
@@ -251,6 +252,22 @@ class RegressionIntegrationTests(unittest.TestCase):
             analysis.SPECIFICATION_FORMULAS[analysis.SPECIFICATION_MODEL_ORDER[9]],
             analysis.FORMULAS[analysis.PREVIOUS_DURATION_MODEL],
         )
+        specification_coefficients = analysis.specification_coefficient_frame(
+            specification_results
+        )
+        self.assertEqual(
+            set(specification_coefficients["model_name"]),
+            set(analysis.SPECIFICATION_MODEL_ORDER),
+        )
+        for model_name in analysis.SPECIFICATION_MODEL_ORDER:
+            selected_terms = set(
+                specification_coefficients.loc[
+                    specification_coefficients["model_name"] == model_name,
+                    "term",
+                ]
+            )
+            self.assertIn("agree_move", selected_terms)
+            self.assertIn("disagree_move", selected_terms)
         stance_only_terms = set(stepwise_results[analysis.STANCE_ONLY_MODEL].params.index)
         self.assertNotIn("lag_agree_move", stance_only_terms)
         lagged_terms = set(stepwise_results[analysis.LAGGED_STANCE_MODEL].params.index)
@@ -388,6 +405,24 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(
             set(specification_panel["comparison_family"]),
             {"reference", "add_one_to_core", "remove_one_from_full"},
+        )
+        for direction in ("agree_move", "disagree_move"):
+            expected_change = 100.0 * np.expm1(
+                specification_panel[f"{direction}_coefficient"].astype(float)
+            )
+            np.testing.assert_allclose(
+                specification_panel[f"{direction}_estimated_change_percent"].astype(float),
+                expected_change,
+            )
+        specification_coefficients = pd.read_csv(paths["specification_coefficients"])
+        self.assertEqual(
+            set(specification_coefficients["model_name"]),
+            set(analysis.SPECIFICATION_MODEL_ORDER),
+        )
+        self.assertTrue(
+            {"coefficient", "clustered_se", "p_value"}.issubset(
+                specification_coefficients.columns
+            )
         )
         reference_comparison = summary["original_exp2_reference_comparison"]
         self.assertEqual(len(reference_comparison), 2)

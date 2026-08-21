@@ -78,6 +78,16 @@ baseline is compared with the stance-only core, and the full model is compared w
 This design shows incremental and conditional fit when controls overlap, but it does not make
 correlated predictors independent or support causal attribution.
 
+The specification figure is formatted as two stacked regression tables: agreement movement
+and disagreement movement. Rows are direction-specific stance terms plus shared control
+variables, columns are the 17 model configurations, and populated cells report the coefficient
+for change in `delta_log_density_per_second` with the episode-clustered standard error in
+parentheses. Both stance directions are still estimated jointly in every regression; the two
+panels only separate their presentation. Sample size, episode clusters, and adjusted R² appear
+at the bottom of each panel. The final row converts the panel's current-stance coefficient into
+the estimated percentage change in the per-second iceberg ratio as
+`100 * (exp(beta_stance) - 1)`.
+
 Current-turn duration already appears in the outcome denominator. Stages 6–8 are therefore
 sensitivity specifications with a different estimand, not replacements for the original Exp2
 model and not causal models.
@@ -112,13 +122,15 @@ and PDF/PNG figures remain reviewable in git. The observation-level
 - `rq1_stepwise_model_fit.csv`: fit statistics for all eight specifications.
 - `rq1_specification_panel.csv`: grouped add/remove membership, stance estimates, R², adjusted
   R², and reference-relative changes for all 17 specifications.
+- `rq1_specification_coefficients.csv`: every coefficient and episode-clustered inferential
+  statistic used in the two regression-table panels.
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and interpretation fields.
 - `rq1_timing_comparison.pdf` and `.png`: original Exp2 baseline through timing adjustment.
 - `rq1_stepwise_comparison.pdf` and `.png`: two-panel step-wise coefficient paths.
-- `rq1_specification_panel.pdf` and `.png`: adjusted-R² specification plot with a variable-group
-  inclusion matrix.
+- `rq1_specification_panel.pdf` and `.png`: agreement and disagreement regression-table panels
+  across all grouped specifications.
 
 Attenuation is `100 * (1 - abs(beta_adjusted) / abs(beta_Exp2))`. Positive values indicate
 attenuation and negative values indicate amplification. Because the retained sample is large,
