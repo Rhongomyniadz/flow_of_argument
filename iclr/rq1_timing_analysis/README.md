@@ -28,6 +28,13 @@ Y(t) = log1p(R(t)) - log1p(R(t-1))
 Duration does not appear in `R(t)` or `Y(t)`. Current- and previous-turn duration enter only
 as explicit predictors in specifications that include those control groups.
 
+Two decomposition outcomes use the same transition:
+
+```text
+Y_implicit(t) = log1p(assumption_count_t) - log1p(assumption_count_t-1)
+Y_explicit(t) = log1p(explicit_count_t) - log1p(explicit_count_t-1)
+```
+
 Directional stance movement is calculated from `(stance_t - stance_t-1) / 5` and split into
 agreement and disagreement components. The preceding boundary is split into the same two
 lagged directional controls.
@@ -69,10 +76,12 @@ than interpreting every term as independent:
 4. the full timing specification; and
 5. seven models that remove one control group from the full specification.
 
-The groups are current stance, lagged stance, previous iceberg ratio, linear and
-quadratic timeline position, category fixed effects, current-turn duration, response timing
-(gap plus overlap), and previous-turn duration. Agreement/disagreement terms, lagged
-agreement/disagreement terms, timeline terms, and gap/overlap are added or removed together.
+The groups are current stance, lagged stance, previous outcome, linear and quadratic timeline
+position, category fixed effects, current-turn duration, response timing (gap plus overlap), and
+previous-turn duration. The previous-outcome term matches each dependent variable: previous
+iceberg ratio, previous implicit-assumption count, or previous explicit-claim count.
+Agreement/disagreement terms, lagged agreement/disagreement terms, timeline terms, and
+gap/overlap are added or removed together.
 
 The main fit metric is adjusted R², not raw R², because the specifications contain different
 numbers of predictors. For add-one models, `delta_adjusted_r_squared` is relative to the
@@ -82,15 +91,15 @@ with that baseline.
 This design shows incremental and conditional fit when controls overlap, but it does not make
 correlated predictors independent or support causal attribution.
 
-The specification figure is formatted as two stacked regression tables: agreement movement
-and disagreement movement. Rows are direction-specific stance terms plus shared control
-variables, columns are the 17 model configurations, and populated cells report the coefficient
-for change in `delta_log_iceberg_ratio` with the episode-clustered standard error in
-parentheses. Both stance directions are still estimated jointly in every regression; the two
-panels only separate their presentation. Sample size, episode clusters, and adjusted R² appear
-at the bottom of each panel. The final row converts the panel's current-stance coefficient into
-the estimated percentage change in the iceberg ratio as
-`100 * (exp(beta_stance) - 1)`.
+Three specification figures are produced for `delta_log_iceberg_ratio`,
+`delta_log_assumption_count`, and `delta_log_explicit_count`. Each is formatted as two stacked
+regression tables: agreement movement and disagreement movement. Rows are direction-specific
+stance terms plus shared control variables, columns are the same 17 model configurations, and
+populated cells report coefficients with episode-clustered standard errors in parentheses.
+Both stance directions are still estimated jointly in every regression; the two panels only
+separate their presentation. Sample size, episode clusters, and adjusted R² appear at the
+bottom of each panel. The final row reports `100 * (exp(beta_stance) - 1)` for the displayed
+log-change outcome.
 
 The duration controls no longer duplicate a denominator component of the outcome. They still
 change the estimand from the unadjusted duration-free association to an association conditional
@@ -115,6 +124,8 @@ python -u iclr/rq1_timing_analysis/rq1_timing_analysis.py \
 The default output directory is `iclr/rq1_timing_analysis/results/`. Summary CSVs, JSON files,
 and PDF/PNG figures remain reviewable in git. The observation-level
 `rq1_timing_observations.csv` is ignored by the repository-level `.gitignore`.
+Each successful run removes the obsolete `rq1_timing_comparison` and
+`rq1_stepwise_comparison` PDF/PNG files from the selected output directory.
 
 ## Outputs
 
@@ -127,14 +138,22 @@ and PDF/PNG figures remain reviewable in git. The observation-level
 - `rq1_specification_panel.csv`: grouped add/remove membership, stance estimates, R², adjusted
   R², and reference-relative changes for all 17 specifications.
 - `rq1_specification_coefficients.csv`: every coefficient and episode-clustered inferential
-  statistic used in the two regression-table panels.
+  statistic used in the iceberg-ratio regression-table panels.
+- `rq1_specification_panel_implicit_assumptions.csv` and
+  `rq1_specification_coefficients_implicit_assumptions.csv`: model summaries and coefficients
+  for `delta_log_assumption_count`.
+- `rq1_specification_panel_explicit_claims.csv` and
+  `rq1_specification_coefficients_explicit_claims.csv`: model summaries and coefficients for
+  `delta_log_explicit_count`.
 - `rq1_timing_observations.csv`: observation-level audit data.
 - `rq1_timing_data_audit.json`: exclusions, hashes, formulas, timing coverage, and versions.
 - `rq1_timing_summary.json`: headline estimates and interpretation fields.
-- `rq1_timing_comparison.pdf` and `.png`: duration-free ratio baseline through timing adjustment.
-- `rq1_stepwise_comparison.pdf` and `.png`: two-panel step-wise coefficient paths.
 - `rq1_specification_panel.pdf` and `.png`: agreement and disagreement regression-table panels
-  across all grouped specifications.
+  for the iceberg-ratio outcome.
+- `rq1_specification_panel_implicit_assumptions.pdf` and `.png`: matching panels for change in
+  implicit assumptions.
+- `rq1_specification_panel_explicit_claims.pdf` and `.png`: matching panels for change in
+  explicit claims.
 
 Attenuation is `100 * (1 - abs(beta_adjusted) / abs(beta_ratio_baseline))`. Positive values indicate
 attenuation and negative values indicate amplification. Because the retained sample is large,

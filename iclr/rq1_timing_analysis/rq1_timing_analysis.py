@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "5.0.0"
+SCRIPT_VERSION = "5.1.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
@@ -116,7 +116,7 @@ STEPWISE_FORMULAS = {
 
 CURRENT_STANCE_GROUP = "current_stance"
 LAGGED_STANCE_GROUP = "lagged_stance"
-PREVIOUS_RATIO_GROUP = "previous_ratio"
+PREVIOUS_OUTCOME_GROUP = "previous_outcome"
 TIMELINE_GROUP = "timeline"
 CATEGORY_GROUP = "category_fixed_effects"
 CURRENT_DURATION_GROUP = "current_duration"
@@ -125,7 +125,7 @@ PREVIOUS_DURATION_GROUP = "previous_duration"
 SPECIFICATION_GROUP_ORDER = (
     CURRENT_STANCE_GROUP,
     LAGGED_STANCE_GROUP,
-    PREVIOUS_RATIO_GROUP,
+    PREVIOUS_OUTCOME_GROUP,
     TIMELINE_GROUP,
     CATEGORY_GROUP,
     CURRENT_DURATION_GROUP,
@@ -136,7 +136,7 @@ CONTROL_GROUP_ORDER = SPECIFICATION_GROUP_ORDER[1:]
 VARIABLE_GROUP_LABELS = {
     CURRENT_STANCE_GROUP: "Current stance (agreement + disagreement)",
     LAGGED_STANCE_GROUP: "Lagged stance (agreement + disagreement)",
-    PREVIOUS_RATIO_GROUP: "Previous iceberg ratio",
+    PREVIOUS_OUTCOME_GROUP: "Previous outcome",
     TIMELINE_GROUP: "Timeline (linear + quadratic)",
     CATEGORY_GROUP: "Category fixed effects",
     CURRENT_DURATION_GROUP: "Current-turn duration",
@@ -146,7 +146,7 @@ VARIABLE_GROUP_LABELS = {
 VARIABLE_GROUP_TERMS = {
     CURRENT_STANCE_GROUP: ("agree_move", "disagree_move"),
     LAGGED_STANCE_GROUP: ("lag_agree_move", "lag_disagree_move"),
-    PREVIOUS_RATIO_GROUP: ("previous_log_iceberg_ratio",),
+    PREVIOUS_OUTCOME_GROUP: ("previous_log_iceberg_ratio",),
     TIMELINE_GROUP: ("timeline_position", "I(timeline_position ** 2)"),
     CATEGORY_GROUP: ("C(category)",),
     CURRENT_DURATION_GROUP: ("log_duration",),
@@ -157,7 +157,11 @@ EXP2_VARIABLE_GROUPS = SPECIFICATION_GROUP_ORDER[:5]
 FULL_VARIABLE_GROUPS = SPECIFICATION_GROUP_ORDER
 
 
-def formula_for_variable_groups(included_groups: tuple[str, ...]) -> str:
+def formula_for_variable_groups(
+    included_groups: tuple[str, ...],
+    response_variable: str,
+    previous_outcome_term: str,
+) -> str:
     if not included_groups or included_groups[0] != CURRENT_STANCE_GROUP:
         raise ValueError("Every specification must begin with the current-stance group")
     unknown_groups = sorted(set(included_groups).difference(VARIABLE_GROUP_TERMS))
@@ -168,15 +172,19 @@ def formula_for_variable_groups(included_groups: tuple[str, ...]) -> str:
     terms = [
         term
         for group_name in included_groups
-        for term in VARIABLE_GROUP_TERMS[group_name]
+        for term in (
+            (previous_outcome_term,)
+            if group_name == PREVIOUS_OUTCOME_GROUP
+            else VARIABLE_GROUP_TERMS[group_name]
+        )
     ]
-    return "delta_log_iceberg_ratio ~ " + " + ".join(terms)
+    return response_variable + " ~ " + " + ".join(terms)
 
 
 SPECIFICATION_MODEL_ORDER = (
     "spec_01_stance_core",
     "spec_02_add_lagged_stance",
-    "spec_03_add_previous_ratio",
+    "spec_03_add_previous_outcome",
     "spec_04_add_timeline",
     "spec_05_add_category",
     "spec_06_add_current_duration",
@@ -185,7 +193,7 @@ SPECIFICATION_MODEL_ORDER = (
     "spec_09_exp2_baseline",
     "spec_10_full_timing",
     "spec_11_drop_lagged_stance",
-    "spec_12_drop_previous_ratio",
+    "spec_12_drop_previous_outcome",
     "spec_13_drop_timeline",
     "spec_14_drop_category",
     "spec_15_drop_current_duration",
@@ -195,7 +203,7 @@ SPECIFICATION_MODEL_ORDER = (
 SPECIFICATION_INCLUDED_GROUPS = {
     SPECIFICATION_MODEL_ORDER[0]: (CURRENT_STANCE_GROUP,),
     SPECIFICATION_MODEL_ORDER[1]: (CURRENT_STANCE_GROUP, LAGGED_STANCE_GROUP),
-    SPECIFICATION_MODEL_ORDER[2]: (CURRENT_STANCE_GROUP, PREVIOUS_RATIO_GROUP),
+    SPECIFICATION_MODEL_ORDER[2]: (CURRENT_STANCE_GROUP, PREVIOUS_OUTCOME_GROUP),
     SPECIFICATION_MODEL_ORDER[3]: (CURRENT_STANCE_GROUP, TIMELINE_GROUP),
     SPECIFICATION_MODEL_ORDER[4]: (CURRENT_STANCE_GROUP, CATEGORY_GROUP),
     SPECIFICATION_MODEL_ORDER[5]: (CURRENT_STANCE_GROUP, CURRENT_DURATION_GROUP),
@@ -207,7 +215,7 @@ SPECIFICATION_INCLUDED_GROUPS = {
         group_name for group_name in FULL_VARIABLE_GROUPS if group_name != LAGGED_STANCE_GROUP
     ),
     SPECIFICATION_MODEL_ORDER[11]: tuple(
-        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_RATIO_GROUP
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_OUTCOME_GROUP
     ),
     SPECIFICATION_MODEL_ORDER[12]: tuple(
         group_name for group_name in FULL_VARIABLE_GROUPS if group_name != TIMELINE_GROUP
@@ -228,7 +236,7 @@ SPECIFICATION_INCLUDED_GROUPS = {
 SPECIFICATION_SHORT_LABELS = {
     SPECIFICATION_MODEL_ORDER[0]: "Core",
     SPECIFICATION_MODEL_ORDER[1]: "+ Lagged stance",
-    SPECIFICATION_MODEL_ORDER[2]: "+ Previous ratio",
+    SPECIFICATION_MODEL_ORDER[2]: "+ Previous outcome",
     SPECIFICATION_MODEL_ORDER[3]: "+ Timeline",
     SPECIFICATION_MODEL_ORDER[4]: "+ Category FE",
     SPECIFICATION_MODEL_ORDER[5]: "+ Current duration",
@@ -237,7 +245,7 @@ SPECIFICATION_SHORT_LABELS = {
     SPECIFICATION_MODEL_ORDER[8]: "Exp2 controls",
     SPECIFICATION_MODEL_ORDER[9]: "Full timing",
     SPECIFICATION_MODEL_ORDER[10]: "− Lagged stance",
-    SPECIFICATION_MODEL_ORDER[11]: "− Previous ratio",
+    SPECIFICATION_MODEL_ORDER[11]: "− Previous outcome",
     SPECIFICATION_MODEL_ORDER[12]: "− Timeline",
     SPECIFICATION_MODEL_ORDER[13]: "− Category FE",
     SPECIFICATION_MODEL_ORDER[14]: "− Current duration",
@@ -285,7 +293,27 @@ SPECIFICATION_CHANGED_GROUPS: dict[str, str] = {
     },
 }
 SPECIFICATION_FORMULAS = {
-    model_name: formula_for_variable_groups(SPECIFICATION_INCLUDED_GROUPS[model_name])
+    model_name: formula_for_variable_groups(
+        SPECIFICATION_INCLUDED_GROUPS[model_name],
+        "delta_log_iceberg_ratio",
+        "previous_log_iceberg_ratio",
+    )
+    for model_name in SPECIFICATION_MODEL_ORDER
+}
+IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS = {
+    model_name: formula_for_variable_groups(
+        SPECIFICATION_INCLUDED_GROUPS[model_name],
+        "delta_log_assumption_count",
+        "previous_log_assumption_count",
+    )
+    for model_name in SPECIFICATION_MODEL_ORDER
+}
+EXPLICIT_CLAIM_SPECIFICATION_FORMULAS = {
+    model_name: formula_for_variable_groups(
+        SPECIFICATION_INCLUDED_GROUPS[model_name],
+        "delta_log_explicit_count",
+        "previous_log_explicit_count",
+    )
     for model_name in SPECIFICATION_MODEL_ORDER
 }
 
@@ -361,6 +389,12 @@ class Observation(TypedDict):
     previous_log_iceberg_ratio: float
     log_iceberg_ratio: float
     delta_log_iceberg_ratio: float
+    previous_log_assumption_count: float
+    log_assumption_count: float
+    delta_log_assumption_count: float
+    previous_log_explicit_count: float
+    log_explicit_count: float
+    delta_log_explicit_count: float
     previous_density_per_second: float
     density_per_second: float
     previous_log_density_per_second: float
@@ -387,6 +421,41 @@ class RegressionResult(Protocol):
 
     def conf_int(self, alpha: float) -> pd.DataFrame:
         ...
+
+
+class SpecificationPlotConfig(TypedDict):
+    previous_outcome_term: str
+    previous_outcome_label: str
+    figure_title: str
+    response_label: str
+    estimated_change_label: str
+    output_stem: str
+
+
+RATIO_SPECIFICATION_PLOT: SpecificationPlotConfig = {
+    "previous_outcome_term": "previous_log_iceberg_ratio",
+    "previous_outcome_label": "Previous iceberg ratio",
+    "figure_title": "Iceberg ratio: grouped specifications",
+    "response_label": "Δ log(1 + iceberg ratio)",
+    "estimated_change_label": "Estimated change in 1 + iceberg ratio (%)",
+    "output_stem": "rq1_specification_panel",
+}
+IMPLICIT_ASSUMPTION_SPECIFICATION_PLOT: SpecificationPlotConfig = {
+    "previous_outcome_term": "previous_log_assumption_count",
+    "previous_outcome_label": "Previous implicit assumptions",
+    "figure_title": "Implicit assumptions: grouped specifications",
+    "response_label": "Δ log(1 + implicit assumptions)",
+    "estimated_change_label": "Estimated change in 1 + implicit assumptions (%)",
+    "output_stem": "rq1_specification_panel_implicit_assumptions",
+}
+EXPLICIT_CLAIM_SPECIFICATION_PLOT: SpecificationPlotConfig = {
+    "previous_outcome_term": "previous_log_explicit_count",
+    "previous_outcome_label": "Previous explicit claims",
+    "figure_title": "Explicit claims: grouped specifications",
+    "response_label": "Δ log(1 + explicit claims)",
+    "estimated_change_label": "Estimated change in 1 + explicit claims (%)",
+    "output_stem": "rq1_specification_panel_explicit_claims",
+}
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -668,6 +737,10 @@ def build_observation(
     )
     previous_log_ratio = math.log1p(previous_ratio)
     current_log_ratio = math.log1p(current_ratio)
+    previous_log_assumptions = math.log1p(previous_assumptions)
+    current_log_assumptions = math.log1p(current_assumptions)
+    previous_log_explicit = math.log1p(previous_explicit)
+    current_log_explicit = math.log1p(current_explicit)
     previous_log_per_second = math.log1p(previous_per_second)
     current_log_per_second = math.log1p(current_per_second)
     previous_log_per_token = math.log1p(previous_per_token)
@@ -725,6 +798,14 @@ def build_observation(
         "previous_log_iceberg_ratio": previous_log_ratio,
         "log_iceberg_ratio": current_log_ratio,
         "delta_log_iceberg_ratio": current_log_ratio - previous_log_ratio,
+        "previous_log_assumption_count": previous_log_assumptions,
+        "log_assumption_count": current_log_assumptions,
+        "delta_log_assumption_count": (
+            current_log_assumptions - previous_log_assumptions
+        ),
+        "previous_log_explicit_count": previous_log_explicit,
+        "log_explicit_count": current_log_explicit,
+        "delta_log_explicit_count": current_log_explicit - previous_log_explicit,
         "previous_density_per_second": previous_per_second,
         "density_per_second": current_per_second,
         "previous_log_density_per_second": previous_log_per_second,
@@ -939,11 +1020,15 @@ def validate_model_frame(frame: pd.DataFrame) -> None:
         "category",
         "episode",
         "delta_log_iceberg_ratio",
+        "delta_log_assumption_count",
+        "delta_log_explicit_count",
         "agree_move",
         "disagree_move",
         "lag_agree_move",
         "lag_disagree_move",
         "previous_log_iceberg_ratio",
+        "previous_log_assumption_count",
+        "previous_log_explicit_count",
         "timeline_position",
         "log_duration",
         "log_gap",
@@ -1131,11 +1216,19 @@ def stepwise_model_fit_frame(
 def specification_panel_frame(
     results: dict[str, RegressionResult],
     frame: pd.DataFrame,
+    formulas: dict[str, str],
 ) -> pd.DataFrame:
     if set(results) != set(SPECIFICATION_MODEL_ORDER):
         missing = sorted(set(SPECIFICATION_MODEL_ORDER).difference(results))
         extra = sorted(set(results).difference(SPECIFICATION_MODEL_ORDER))
         raise KeyError(f"Specification results do not match the model order; missing={missing}, extra={extra}")
+    if set(formulas) != set(SPECIFICATION_MODEL_ORDER):
+        missing = sorted(set(SPECIFICATION_MODEL_ORDER).difference(formulas))
+        extra = sorted(set(formulas).difference(SPECIFICATION_MODEL_ORDER))
+        raise KeyError(
+            "Specification formulas do not match the model order; "
+            f"missing={missing}, extra={extra}"
+        )
     rows: list[dict[str, object]] = []
     for model_number, model_name in enumerate(SPECIFICATION_MODEL_ORDER, start=1):
         result = results[model_name]
@@ -1160,7 +1253,7 @@ def specification_panel_frame(
             "reference_model": reference_model,
             "changed_group": SPECIFICATION_CHANGED_GROUPS[model_name],
             "included_variable_groups": "|".join(included_groups),
-            "formula": SPECIFICATION_FORMULAS[model_name],
+            "formula": formulas[model_name],
             "agree_move_coefficient": float(result.params["agree_move"]),
             "agree_move_estimated_change_percent": 100.0
             * math.expm1(float(result.params["agree_move"])),
@@ -1698,6 +1791,7 @@ def save_specification_panel(
     panel: pd.DataFrame,
     output_dir: Path,
     plot_dpi: int,
+    plot_config: SpecificationPlotConfig,
 ) -> list[Path]:
     try:
         import matplotlib
@@ -1728,7 +1822,7 @@ def save_specification_panel(
         )
     )
     shared_terms = (
-        "previous_log_iceberg_ratio",
+        plot_config["previous_outcome_term"],
         "timeline_position",
         "I(timeline_position ** 2)",
         *category_terms,
@@ -1745,7 +1839,7 @@ def save_specification_panel(
         "lag_agree_move": "Lagged agreement movement",
         "disagree_move": "Current disagreement movement",
         "lag_disagree_move": "Lagged disagreement movement",
-        "previous_log_iceberg_ratio": "Previous iceberg ratio",
+        plot_config["previous_outcome_term"]: plot_config["previous_outcome_label"],
         "timeline_position": "Timeline position",
         "I(timeline_position ** 2)": "Timeline position²",
         "log_duration": "Current-turn duration (log)",
@@ -1764,14 +1858,14 @@ def save_specification_panel(
         "N",
         "Episode clusters",
         "Adjusted R²",
-        "Estimated change in iceberg ratio (%)",
+        plot_config["estimated_change_label"],
     )
     x_positions = np.arange(len(SPECIFICATION_MODEL_ORDER), dtype=float)
     coefficient_lookup = coefficients.set_index(["model_name", "term"])
     compact_labels = (
         "Core",
         "+ Lag",
-        "+ Prev. ratio",
+        "+ Prev. outcome",
         "+ Timeline",
         "+ Category FE",
         "+ Current dur.",
@@ -1780,7 +1874,7 @@ def save_specification_panel(
         "Exp2 controls",
         "Full timing",
         "− Lag",
-        "− Prev. ratio",
+        "− Prev. outcome",
         "− Timeline",
         "− Category FE",
         "− Current dur.",
@@ -1905,7 +1999,7 @@ def save_specification_panel(
             axis.spines["bottom"].set_visible(False)
 
         fig.suptitle(
-            "Iceberg-ratio coefficient tables across grouped specifications",
+            plot_config["figure_title"],
             fontsize=16,
             fontweight="bold",
         )
@@ -1913,7 +2007,7 @@ def save_specification_panel(
             0.5,
             0.018,
             (
-                "Cells report β for change in Δ log1p(iceberg ratio), with "
+                f"Cells report β for {plot_config['response_label']}, with "
                 "episode-clustered SE in parentheses. Both stance directions are jointly "
                 "estimated. Bottom-row change = 100 × [exp(β stance) − 1]. "
                 "* p<.05, ** p<.01, *** p<.001."
@@ -1924,8 +2018,8 @@ def save_specification_panel(
         )
 
         output_dir.mkdir(parents=True, exist_ok=True)
-        png_path = output_dir / "rq1_specification_panel.png"
-        pdf_path = output_dir / "rq1_specification_panel.pdf"
+        png_path = output_dir / f"{plot_config['output_stem']}.png"
+        pdf_path = output_dir / f"{plot_config['output_stem']}.pdf"
         png_temporary = png_path.with_suffix(".png.tmp")
         pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
         fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
@@ -1972,16 +2066,48 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "stepwise_model_fit": output_dir / "rq1_stepwise_model_fit.csv",
         "specification_panel": output_dir / "rq1_specification_panel.csv",
         "specification_coefficients": output_dir / "rq1_specification_coefficients.csv",
+        "implicit_assumption_specification_panel": (
+            output_dir / "rq1_specification_panel_implicit_assumptions.csv"
+        ),
+        "implicit_assumption_specification_coefficients": (
+            output_dir / "rq1_specification_coefficients_implicit_assumptions.csv"
+        ),
+        "explicit_claim_specification_panel": (
+            output_dir / "rq1_specification_panel_explicit_claims.csv"
+        ),
+        "explicit_claim_specification_coefficients": (
+            output_dir / "rq1_specification_coefficients_explicit_claims.csv"
+        ),
         "observations": output_dir / "rq1_timing_observations.csv",
         "data_audit": output_dir / "rq1_timing_data_audit.json",
         "summary": output_dir / "rq1_timing_summary.json",
-        "plot_pdf": output_dir / "rq1_timing_comparison.pdf",
-        "plot_png": output_dir / "rq1_timing_comparison.png",
-        "stepwise_plot_pdf": output_dir / "rq1_stepwise_comparison.pdf",
-        "stepwise_plot_png": output_dir / "rq1_stepwise_comparison.png",
         "specification_plot_pdf": output_dir / "rq1_specification_panel.pdf",
         "specification_plot_png": output_dir / "rq1_specification_panel.png",
+        "implicit_assumption_specification_plot_pdf": (
+            output_dir / "rq1_specification_panel_implicit_assumptions.pdf"
+        ),
+        "implicit_assumption_specification_plot_png": (
+            output_dir / "rq1_specification_panel_implicit_assumptions.png"
+        ),
+        "explicit_claim_specification_plot_pdf": (
+            output_dir / "rq1_specification_panel_explicit_claims.pdf"
+        ),
+        "explicit_claim_specification_plot_png": (
+            output_dir / "rq1_specification_panel_explicit_claims.png"
+        ),
     }
+
+
+def remove_obsolete_comparison_plots(output_dir: Path) -> None:
+    obsolete_paths = (
+        output_dir / "rq1_timing_comparison.pdf",
+        output_dir / "rq1_timing_comparison.png",
+        output_dir / "rq1_stepwise_comparison.pdf",
+        output_dir / "rq1_stepwise_comparison.png",
+    )
+    for obsolete_path in obsolete_paths:
+        if obsolete_path.exists():
+            obsolete_path.unlink()
 
 
 def run_analysis(args: argparse.Namespace) -> dict[str, object]:
@@ -2011,8 +2137,39 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     )
     specification_results = fit_specification_models(frame, stepwise_results)
     specification_coefficients = specification_coefficient_frame(specification_results)
-    specification_panel = specification_panel_frame(specification_results, frame)
+    specification_panel = specification_panel_frame(
+        specification_results,
+        frame,
+        SPECIFICATION_FORMULAS,
+    )
+    implicit_assumption_specification_results = fit_formula_models(
+        frame,
+        IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
+        SPECIFICATION_MODEL_ORDER,
+    )
+    implicit_assumption_specification_coefficients = specification_coefficient_frame(
+        implicit_assumption_specification_results
+    )
+    implicit_assumption_specification_panel = specification_panel_frame(
+        implicit_assumption_specification_results,
+        frame,
+        IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
+    )
+    explicit_claim_specification_results = fit_formula_models(
+        frame,
+        EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
+        SPECIFICATION_MODEL_ORDER,
+    )
+    explicit_claim_specification_coefficients = specification_coefficient_frame(
+        explicit_claim_specification_results
+    )
+    explicit_claim_specification_panel = specification_panel_frame(
+        explicit_claim_specification_results,
+        frame,
+        EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
+    )
     output_dir = Path(args.output_dir)
+    remove_obsolete_comparison_plots(output_dir)
     paths = output_paths(output_dir)
 
     write_csv(paths["observations"], frame)
@@ -2024,13 +2181,42 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     write_csv(paths["stepwise_model_fit"], stepwise_model_fit)
     write_csv(paths["specification_panel"], specification_panel)
     write_csv(paths["specification_coefficients"], specification_coefficients)
-    save_comparison_plot(comparison, output_dir, args.plot_dpi)
-    save_stepwise_plot(stepwise_comparison, output_dir, args.plot_dpi)
+    write_csv(
+        paths["implicit_assumption_specification_panel"],
+        implicit_assumption_specification_panel,
+    )
+    write_csv(
+        paths["implicit_assumption_specification_coefficients"],
+        implicit_assumption_specification_coefficients,
+    )
+    write_csv(
+        paths["explicit_claim_specification_panel"],
+        explicit_claim_specification_panel,
+    )
+    write_csv(
+        paths["explicit_claim_specification_coefficients"],
+        explicit_claim_specification_coefficients,
+    )
     save_specification_panel(
         specification_coefficients,
         specification_panel,
         output_dir,
         args.plot_dpi,
+        RATIO_SPECIFICATION_PLOT,
+    )
+    save_specification_panel(
+        implicit_assumption_specification_coefficients,
+        implicit_assumption_specification_panel,
+        output_dir,
+        args.plot_dpi,
+        IMPLICIT_ASSUMPTION_SPECIFICATION_PLOT,
+    )
+    save_specification_panel(
+        explicit_claim_specification_coefficients,
+        explicit_claim_specification_panel,
+        output_dir,
+        args.plot_dpi,
+        EXPLICIT_CLAIM_SPECIFICATION_PLOT,
     )
 
     repository_state = git_state()
@@ -2044,18 +2230,40 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             "stepwise_formulas": STEPWISE_FORMULAS,
             "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
             "specification_formulas": SPECIFICATION_FORMULAS,
+            "implicit_assumption_specification_formulas": (
+                IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS
+            ),
+            "explicit_claim_specification_formulas": (
+                EXPLICIT_CLAIM_SPECIFICATION_FORMULAS
+            ),
             "specification_variable_groups": VARIABLE_GROUP_TERMS,
+            "specification_previous_outcome_terms": {
+                "iceberg_ratio": "previous_log_iceberg_ratio",
+                "implicit_assumptions": "previous_log_assumption_count",
+                "explicit_claims": "previous_log_explicit_count",
+            },
             "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
             "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
             "common_model_sample_verified": True,
             "stepwise_common_model_sample_verified": True,
             "specification_common_model_sample_verified": True,
+            "implicit_assumption_specification_common_model_sample_verified": True,
+            "explicit_claim_specification_common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "response_variable_definition": (
                 "delta_log_iceberg_ratio = log1p(current_iceberg_ratio) - "
                 "log1p(previous_iceberg_ratio); duration is not in the outcome"
             ),
+            "alternative_response_variable_definitions": {
+                "delta_log_assumption_count": (
+                    "log1p(current_assumption_count) - "
+                    "log1p(previous_assumption_count)"
+                ),
+                "delta_log_explicit_count": (
+                    "log1p(current_explicit_count) - log1p(previous_explicit_count)"
+                ),
+            },
             "iceberg_density_per_second_definition": (
                 "(explicit_count / (assumption_count + 1)) / duration_seconds"
             ),
@@ -2099,7 +2307,16 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "stepwise_formulas": STEPWISE_FORMULAS,
         "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
         "specification_formulas": SPECIFICATION_FORMULAS,
+        "implicit_assumption_specification_formulas": (
+            IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS
+        ),
+        "explicit_claim_specification_formulas": EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
         "specification_variable_groups": VARIABLE_GROUP_TERMS,
+        "specification_previous_outcome_terms": {
+            "iceberg_ratio": "previous_log_iceberg_ratio",
+            "implicit_assumptions": "previous_log_assumption_count",
+            "explicit_claims": "previous_log_explicit_count",
+        },
         "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
         "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
         "specification_model_count": len(SPECIFICATION_MODEL_ORDER),
@@ -2117,6 +2334,36 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
                 ]
             ),
             "adjusted_r_squared": float(specification_panel["adjusted_r_squared"].max()),
+        },
+        "alternative_specification_outcomes": {
+            "implicit_assumptions": {
+                "response_variable": "delta_log_assumption_count",
+                "best_model_name": str(
+                    implicit_assumption_specification_panel.loc[
+                        implicit_assumption_specification_panel[
+                            "adjusted_r_squared"
+                        ].idxmax(),
+                        "model_name",
+                    ]
+                ),
+                "best_adjusted_r_squared": float(
+                    implicit_assumption_specification_panel["adjusted_r_squared"].max()
+                ),
+            },
+            "explicit_claims": {
+                "response_variable": "delta_log_explicit_count",
+                "best_model_name": str(
+                    explicit_claim_specification_panel.loc[
+                        explicit_claim_specification_panel[
+                            "adjusted_r_squared"
+                        ].idxmax(),
+                        "model_name",
+                    ]
+                ),
+                "best_adjusted_r_squared": float(
+                    explicit_claim_specification_panel["adjusted_r_squared"].max()
+                ),
+            },
         },
         "transition_count": len(frame),
         "episode_count": int(frame["episode"].nunique()),

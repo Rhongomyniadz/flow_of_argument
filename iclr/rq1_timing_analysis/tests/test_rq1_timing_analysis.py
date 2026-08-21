@@ -112,6 +112,16 @@ class FeatureConstructionTests(unittest.TestCase):
             first["delta_log_iceberg_ratio"],
             math.log1p(2.0) - math.log1p(1.0),
         )
+        self.assertAlmostEqual(
+            first["delta_log_assumption_count"],
+            math.log1p(first["assumption_count"])
+            - math.log1p(first["previous_assumption_count"]),
+        )
+        self.assertAlmostEqual(
+            first["delta_log_explicit_count"],
+            math.log1p(first["explicit_count"])
+            - math.log1p(first["previous_explicit_count"]),
+        )
         self.assertAlmostEqual(first["previous_density_per_second"], 0.5)
         self.assertAlmostEqual(first["density_per_second"], 0.5)
         self.assertAlmostEqual(first["delta_log_density_per_second"], 0.0)
@@ -346,6 +356,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         specification_panel = analysis.specification_panel_frame(
             specification_results,
             frame,
+            analysis.SPECIFICATION_FORMULAS,
         )
         self.assertEqual(len(specification_panel), 17)
         self.assertEqual(
@@ -366,9 +377,52 @@ class RegressionIntegrationTests(unittest.TestCase):
             drop_response_timing["reference_model"],
             analysis.SPECIFICATION_MODEL_ORDER[9],
         )
+        alternative_specifications = (
+            (
+                analysis.IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
+                "delta_log_assumption_count",
+                "previous_log_assumption_count",
+            ),
+            (
+                analysis.EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
+                "delta_log_explicit_count",
+                "previous_log_explicit_count",
+            ),
+        )
+        for formulas, response_variable, previous_outcome_term in alternative_specifications:
+            alternative_results = analysis.fit_formula_models(
+                frame,
+                formulas,
+                analysis.SPECIFICATION_MODEL_ORDER,
+            )
+            self.assertTrue(
+                all(
+                    result.model.endog_names == response_variable
+                    for result in alternative_results.values()
+                )
+            )
+            previous_outcome_model = alternative_results[
+                analysis.SPECIFICATION_MODEL_ORDER[2]
+            ]
+            self.assertIn(previous_outcome_term, previous_outcome_model.params.index)
+            alternative_panel = analysis.specification_panel_frame(
+                alternative_results,
+                frame,
+                formulas,
+            )
+            self.assertEqual(len(alternative_panel), 17)
 
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:
         output_dir = self.root / "output"
+        output_dir.mkdir()
+        obsolete_plot_names = (
+            "rq1_timing_comparison.pdf",
+            "rq1_timing_comparison.png",
+            "rq1_stepwise_comparison.pdf",
+            "rq1_stepwise_comparison.png",
+        )
+        for obsolete_plot_name in obsolete_plot_names:
+            (output_dir / obsolete_plot_name).write_bytes(b"obsolete")
         args = argparse.Namespace(
             data_dir=self.input_dir,
             output_dir=output_dir,
@@ -380,6 +434,11 @@ class RegressionIntegrationTests(unittest.TestCase):
         )
         summary = analysis.run_analysis(args)
         paths = analysis.output_paths(output_dir)
+        self.assertNotIn("plot_pdf", paths)
+        self.assertNotIn("stepwise_plot_pdf", paths)
+        self.assertTrue(
+            all(not (output_dir / name).exists() for name in obsolete_plot_names)
+        )
         self.assertTrue(all(path.exists() and path.stat().st_size > 0 for path in paths.values()))
         self.assertEqual(summary["transition_count"], 360)
         self.assertEqual(summary["episode_count"], 30)
@@ -436,6 +495,29 @@ class RegressionIntegrationTests(unittest.TestCase):
                 specification_coefficients.columns
             )
         )
+        alternative_outputs = (
+            (
+                "implicit_assumption_specification_panel",
+                "implicit_assumption_specification_coefficients",
+                "delta_log_assumption_count",
+            ),
+            (
+                "explicit_claim_specification_panel",
+                "explicit_claim_specification_coefficients",
+                "delta_log_explicit_count",
+            ),
+        )
+        for panel_key, coefficient_key, response_variable in alternative_outputs:
+            alternative_panel = pd.read_csv(paths[panel_key])
+            alternative_coefficients = pd.read_csv(paths[coefficient_key])
+            self.assertEqual(len(alternative_panel), 17)
+            self.assertTrue(
+                alternative_panel["formula"].str.startswith(response_variable + " ~ ").all()
+            )
+            self.assertEqual(
+                set(alternative_coefficients["model_name"]),
+                set(analysis.SPECIFICATION_MODEL_ORDER),
+            )
         reference_comparison = summary["original_exp2_reference_comparison"]
         self.assertEqual(len(reference_comparison), 2)
         self.assertTrue(all(not row["outcomes_comparable"] for row in reference_comparison))
