@@ -106,14 +106,14 @@ build_common_args() {
 }
 
 configure_cuda() {
-  if [[ "${TENSOR_PARALLEL_SIZE}" != "2" ]]; then
-    echo "This runner requests two A6000 GPUs and requires TENSOR_PARALLEL_SIZE=2 for vLLM tensor parallelism." >&2
+  if ! [[ "${TENSOR_PARALLEL_SIZE}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "TENSOR_PARALLEL_SIZE must be a positive integer; received ${TENSOR_PARALLEL_SIZE}." >&2
     exit 1
   fi
   if [[ -n "${CUDA_VISIBLE_DEVICES:-}" ]]; then
     IFS=',' read -r -a CUDA_DEVICE_VALUES <<< "${CUDA_VISIBLE_DEVICES}"
-    if (( ${#CUDA_DEVICE_VALUES[@]} != 2 )); then
-      echo "Expected exactly two allocated GPUs in CUDA_VISIBLE_DEVICES, found ${CUDA_VISIBLE_DEVICES}." >&2
+    if (( ${#CUDA_DEVICE_VALUES[@]} != TENSOR_PARALLEL_SIZE )); then
+      echo "Expected ${TENSOR_PARALLEL_SIZE} allocated GPU(s) for vLLM tensor parallelism, but CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}." >&2
       exit 1
     fi
   fi
@@ -164,7 +164,7 @@ submit_stages() {
   export BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
   export AUDIT_SAMPLE_SIZE_PER_OUTCOME PLOT_DPI
   export ALLOW_FULL_RUN
-  PATCH_SUBMISSION="$(sbatch --parsable --array="${ARRAY_RANGE}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"
+  PATCH_SUBMISSION="$(sbatch --parsable --gres="gpu:A6000:${TENSOR_PARALLEL_SIZE}" --array="${ARRAY_RANGE}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"
   PATCH_JOB_ID="${PATCH_SUBMISSION%%;*}"
   MERGE_SUBMISSION="$(sbatch --parsable --dependency="afterok:${PATCH_JOB_ID}" --export="ALL,EXP1_BASELINE_STAGE=merge" "$0")"
   MERGE_JOB_ID="${MERGE_SUBMISSION%%;*}"
