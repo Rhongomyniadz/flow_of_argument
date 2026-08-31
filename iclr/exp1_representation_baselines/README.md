@@ -251,8 +251,8 @@ full-corpus claim.
 - `exp1_representation_donors.jsonl`
 - `exp1_representation_audit_sample.csv`
 - `exp1_representation_diagnostic_gate.json`
-- `exp1_representation_diagnostic_comparison.{pdf,png}`
-- `exp1_representation_decomposition_lifts.{pdf,png}`
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: strict complete-case accuracy across future horizons.
+- `exp1_representation_decomposition_lifts.{pdf,png}`: paired true-assumption accuracy differences against each comparator across horizons.
 - `exp1_representation_turns_per_budget.csv`
 - `exp1_representation_turns_per_budget.{pdf,png}`
 

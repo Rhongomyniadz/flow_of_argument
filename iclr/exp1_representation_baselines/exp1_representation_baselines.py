@@ -3591,6 +3591,7 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, turn_budget_sani
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.ticker import PercentFormatter
 
     # Sanity check: translate nominal raw-history token budgets into the average number of
     # dialogue turns that actually contribute at least one raw-text token.
@@ -3599,6 +3600,35 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, turn_budget_sani
     if sanity.empty or sanity["mean_included_turns"].isna().all():
         axis.text(0.5, 0.5, "No turn-budget sanity data available", ha="center", va="center")
         axis.set_axis_off()
+    elif len(sanity) == 1:
+        row = sanity.iloc[0]
+        mean = float(row["mean_included_turns"])
+        low = float(row["ci95_low"])
+        high = float(row["ci95_high"])
+        budget = int(row["representation_budget"])
+        mean_tokens = float(row["mean_raw_history_token_count"])
+        padding = max(0.02, 0.75 * (high - low))
+        axis.errorbar(
+            [mean],
+            [0.0],
+            xerr=np.asarray([[mean - low], [high - mean]]),
+            fmt="o",
+            linewidth=2.0,
+            capsize=5,
+        )
+        axis.set_xlim(low - padding, high + padding)
+        axis.set_yticks([])
+        axis.set_xlabel("Mean number of dialogue turns included")
+        axis.set_title(f"A {budget}-token budget contains less than two dialogue turns")
+        axis.text(
+            0.5,
+            0.30,
+            f"Mean {mean:.2f} turns (95% CI {low:.2f}-{high:.2f}); "
+            f"{mean_tokens:.1f} of {budget} raw-history tokens used",
+            transform=axis.transAxes,
+            ha="center",
+        )
+        axis.grid(axis="x", alpha=0.25)
     else:
         x = sanity["representation_budget"].to_numpy(dtype=float)
         means = sanity["mean_included_turns"].to_numpy(dtype=float)
@@ -3627,103 +3657,195 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, turn_budget_sani
 
     matched = long_df[long_df["representation_budget"].notna()].copy()
     if not matched.empty:
-        primary_horizon = 1
         budgets = sorted(int(value) for value in matched["representation_budget"].unique())
+        if len(budgets) != 1:
+            raise ValueError(
+                "Matched-condition plotting requires exactly one representation budget; "
+                f"found {budgets}"
+            )
+        representation_budget = budgets[0]
+        horizons = sorted(int(value) for value in matched["future_horizon"].unique())
         base_labels = {
-            "raw_history_true_assumptions": "True implicit",
-            "raw_history_different_episode_assumptions": "Different-Episode",
-            "raw_history_same_episode_random_turn_assumptions": "Same-Episode Random Turn",
-            "raw_history_explicit": "Explicit augmentation",
+            "raw_history": "Raw history",
+            "raw_history_true_assumptions": "True assumptions",
+            "raw_history_different_episode_assumptions": "Different-episode assumptions",
+            "raw_history_same_episode_random_turn_assumptions": "Same-episode random-turn assumptions",
+            "raw_history_explicit": "Explicit propositions",
         }
-        plotted_base_conditions = tuple(
-            condition for condition in MATCHED_BASE_CONDITIONS
-            if condition != PLOT_REFERENCE_BASE_CONDITION
-        )
+        plotted_base_conditions = tuple(base_labels)
         complete = matched[
             (matched["complete_case"] == True)
             & (matched["full_retained"] == True)
-            & (matched["future_horizon"] == primary_horizon)
+            & (matched["representation_budget"] == representation_budget)
         ]
         rows: list[dict[str, Any]] = []
         for base_condition in plotted_base_conditions:
-            for budget in budgets:
+            for horizon in horizons:
                 group = complete[
                     (complete["base_condition"] == base_condition)
-                    & (complete["representation_budget"] == budget)
+                    & (complete["future_horizon"] == horizon)
                 ]
                 result = cluster_bootstrap(
                     group,
                     "accuracy",
-                    seed_label=f"plot:matched:h{primary_horizon}:{base_condition}:b{budget}",
+                    seed_label=(
+                        f"plot:matched:h{horizon}:{base_condition}:"
+                        f"b{representation_budget}"
+                    ),
                     seed=args.seed,
                     draws=args.bootstrap_draws,
                 )
-                rows.append({"base_condition": base_condition, "budget": budget, **result})
+                rows.append(
+                    {
+                        "base_condition": base_condition,
+                        "future_horizon": horizon,
+                        **result,
+                    }
+                )
         plot_df = pd.DataFrame(rows)
-        fig, axis = plt.subplots(figsize=(10.5, 5.8), constrained_layout=True)
+        sample_sizes = {
+            horizon: int(
+                len(
+                    complete[
+                        (complete["base_condition"] == PLOT_REFERENCE_BASE_CONDITION)
+                        & (complete["future_horizon"] == horizon)
+                    ]
+                )
+            )
+            for horizon in horizons
+        }
+        markers = ("o", "s", "^", "D", "P")
+        fig, axes = plt.subplots(
+            1,
+            len(horizons),
+            figsize=(12.4, 5.2),
+            sharey=True,
+            constrained_layout=True,
+        )
+        axes_array = np.atleast_1d(axes)
         if complete.empty:
-            axis.text(0.5, 0.5, "No complete-case data available", ha="center", va="center")
-            axis.set_axis_off()
+            axes_array[0].text(
+                0.5,
+                0.5,
+                "No complete-case data available",
+                ha="center",
+                va="center",
+            )
+            for axis in axes_array:
+                axis.set_axis_off()
         else:
-            for base_condition in plotted_base_conditions:
-                group = plot_df[plot_df["base_condition"] == base_condition].set_index("budget").reindex(budgets)
-                means = group["mean"].to_numpy(dtype=float)
-                lows = group["ci95_low"].to_numpy(dtype=float)
-                highs = group["ci95_high"].to_numpy(dtype=float)
-                x = np.asarray(budgets, dtype=float)
-                axis.plot(x, means, marker="o", linewidth=1.8, label=base_labels[base_condition])
-                finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
-                if finite.any():
-                    axis.errorbar(
-                        x[finite],
-                        means[finite],
-                        yerr=np.vstack((means[finite] - lows[finite], highs[finite] - means[finite])),
-                        fmt="none",
-                        color="black",
-                        alpha=0.35,
-                        capsize=3,
+            y_positions = np.arange(len(plotted_base_conditions), dtype=float)
+            for panel_index, (axis, horizon) in enumerate(
+                zip(axes_array, horizons, strict=True)
+            ):
+                panel = (
+                    plot_df[plot_df["future_horizon"] == horizon]
+                    .set_index("base_condition")
+                    .reindex(plotted_base_conditions)
+                )
+                means = panel["mean"].to_numpy(dtype=float)
+                lows = panel["ci95_low"].to_numpy(dtype=float)
+                highs = panel["ci95_high"].to_numpy(dtype=float)
+                finite_bounds = np.concatenate(
+                    (lows[np.isfinite(lows)], highs[np.isfinite(highs)])
+                )
+                if finite_bounds.size == 0:
+                    finite_bounds = means[np.isfinite(means)]
+                span = float(finite_bounds.max() - finite_bounds.min())
+                padding = max(0.003, 0.12 * span)
+                axis.set_xlim(float(finite_bounds.min() - padding), float(finite_bounds.max() + padding))
+                for row_index, (marker, base_condition) in enumerate(
+                    zip(markers, plotted_base_conditions, strict=True)
+                ):
+                    mean = means[row_index]
+                    low = lows[row_index]
+                    high = highs[row_index]
+                    if np.isfinite(low) and np.isfinite(high):
+                        axis.errorbar(
+                            [mean],
+                            [y_positions[row_index]],
+                            xerr=np.asarray([[mean - low], [high - mean]]),
+                            fmt=marker,
+                            markersize=6,
+                            capsize=3,
+                            linewidth=1.5,
+                        )
+                    else:
+                        axis.plot(mean, y_positions[row_index], marker=marker, markersize=6)
+                    axis.annotate(
+                        f"{100.0 * mean:.2f}%",
+                        (mean, y_positions[row_index]),
+                        xytext=(0, 8),
+                        textcoords="offset points",
+                        ha="center",
+                        fontsize=7,
                     )
-            axis.axhline(0.5, color="black", linewidth=0.9, linestyle="--", label="Chance")
-            axis.set_xticks(budgets)
-            axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
-            axis.set_ylabel("Binary accuracy")
-            axis.set_ylim(0.0, 1.0)
-            axis.set_title("Assumption-augmented future-turn accuracy (horizon 1)")
-            axis.legend(loc="best", fontsize=8)
-            axis.grid(axis="y", alpha=0.25)
+                axis.set_title(f"n={horizon}   N={sample_sizes[horizon]:,}")
+                axis.set_xlabel("Accuracy")
+                axis.xaxis.set_major_formatter(PercentFormatter(1.0, decimals=1))
+                axis.grid(axis="x", alpha=0.25)
+                axis.set_yticks(y_positions)
+                if panel_index == 0:
+                    axis.set_yticklabels(
+                        [base_labels[condition] for condition in plotted_base_conditions]
+                    )
+                    axis.set_ylabel("Representation condition")
+                else:
+                    axis.tick_params(axis="y", labelleft=False)
+            axes_array[0].invert_yaxis()
+            fig.suptitle("Condition accuracy within each future-turn horizon")
+            fig.text(
+                0.5,
+                0.01,
+                "Strict complete cases with episode-clustered 95% confidence intervals; "
+                "each panel uses a local accuracy scale.",
+                ha="center",
+                fontsize=8,
+            )
         fig.savefig(paths["diagnostic_pdf"], bbox_inches="tight")
         fig.savefig(paths["diagnostic_png"], dpi=args.plot_dpi, bbox_inches="tight")
         plt.close(fig)
 
-        # Keep one fixed performance reference for every plotted lift.  Using raw history as
-        # the common baseline makes vertical distances directly comparable across augmentations;
-        # the zero line is the performance of the identical raw-dialogue representation.
-        reference_base = PLOT_REFERENCE_BASE_CONDITION
-        lift_labels = {
-            "raw_history_true_assumptions": "True implicit",
-            "raw_history_different_episode_assumptions": "Different-Episode",
-            "raw_history_same_episode_random_turn_assumptions": "Same-Episode Random Turn",
-            "raw_history_explicit": "Explicit augmentation",
+        target_base = "raw_history_true_assumptions"
+        comparator_labels = {
+            "raw_history": "vs. raw history",
+            "raw_history_different_episode_assumptions": "vs. different-episode assumptions",
+            "raw_history_same_episode_random_turn_assumptions": (
+                "vs. same-episode random-turn assumptions"
+            ),
+            "raw_history_explicit": "vs. explicit propositions",
         }
         lift = pairwise[
-            (pairwise["analysis_subset"] == "assumption_eligible")
-            & (pairwise["future_horizon"] == primary_horizon)
-            & (pairwise["target_base_condition"].isin(lift_labels))
-            & (pairwise["baseline_base_condition"] == reference_base)
+            (pairwise["analysis_subset"] == "complete_case")
+            & (pairwise["target_base_condition"] == target_base)
+            & (pairwise["baseline_base_condition"].isin(comparator_labels))
+            & (pairwise["representation_budget"] == representation_budget)
+            & (pairwise["future_horizon"].isin(horizons))
             & (pairwise["metric"] == "accuracy")
         ].copy()
-        fig, axis = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
+        fig, axis = plt.subplots(figsize=(9.4, 5.2), constrained_layout=True)
         if lift.empty or lift["mean_improvement"].isna().all():
-            axis.text(0.5, 0.5, "No raw-reference lift data available", ha="center", va="center")
+            axis.text(0.5, 0.5, "No complete-case contrast data available", ha="center", va="center")
             axis.set_axis_off()
         else:
-            for target_base, group in lift.groupby("target_base_condition", sort=False):
-                ordered = group.set_index("representation_budget").reindex(budgets)
-                means = ordered["mean_improvement"].to_numpy(dtype=float)
-                lows = ordered["ci95_low"].to_numpy(dtype=float)
-                highs = ordered["ci95_high"].to_numpy(dtype=float)
-                x = np.asarray(budgets, dtype=float)
-                axis.plot(x, means, marker="o", linewidth=1.8, label=lift_labels[str(target_base)])
+            for marker, comparator in zip(markers, comparator_labels, strict=False):
+                ordered = (
+                    lift[lift["baseline_base_condition"] == comparator]
+                    .set_index("future_horizon")
+                    .reindex(horizons)
+                )
+                means = 100.0 * ordered["mean_improvement"].to_numpy(dtype=float)
+                lows = 100.0 * ordered["ci95_low"].to_numpy(dtype=float)
+                highs = 100.0 * ordered["ci95_high"].to_numpy(dtype=float)
+                x = np.asarray(horizons, dtype=float)
+                line = axis.plot(
+                    x,
+                    means,
+                    marker=marker,
+                    linewidth=1.8,
+                    markersize=6,
+                    label=comparator_labels[comparator],
+                )[0]
                 finite = np.isfinite(means) & np.isfinite(lows) & np.isfinite(highs)
                 if finite.any():
                     axis.errorbar(
@@ -3731,17 +3853,20 @@ def plot_results(long_df: pd.DataFrame, pairwise: pd.DataFrame, turn_budget_sani
                         means[finite],
                         yerr=np.vstack((means[finite] - lows[finite], highs[finite] - means[finite])),
                         fmt="none",
-                        color="black",
-                        alpha=0.35,
+                        color=line.get_color(),
+                        alpha=0.7,
                         capsize=3,
                     )
-            # Zero is the fixed Raw-history baseline; keep the visual guide out of the legend.
             axis.axhline(0.0, color="black", linewidth=0.8, linestyle="--", label="_nolegend_")
-            axis.set_xticks(budgets)
-            axis.set_xlabel(f"Raw-history budget ({REPRESENTATION_BUDGET_TOKENIZER})")
-            axis.set_ylabel("Paired accuracy change vs. Raw history")
-            axis.set_title("Augmentation performance relative to a fixed raw-history reference (horizon 1)")
-            axis.legend(loc="best", fontsize=8)
+            axis.set_xticks(
+                horizons,
+                [f"{horizon}\nN={sample_sizes[horizon]:,}" for horizon in horizons],
+            )
+            axis.set_xlabel("Future-turn horizon n (strict complete-case pairs)")
+            axis.set_ylabel("Accuracy difference (percentage points)")
+            axis.set_title("What do true assumptions add?")
+            axis.set_ylim(-0.8, 2.0)
+            axis.legend(loc="upper right", fontsize=8, frameon=False, ncol=2)
             axis.grid(axis="y", alpha=0.25)
         fig.savefig(paths["decomposition_pdf"], bbox_inches="tight")
         fig.savefig(paths["decomposition_png"], dpi=args.plot_dpi, bbox_inches="tight")
