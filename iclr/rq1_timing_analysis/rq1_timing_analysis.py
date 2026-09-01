@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""Step-wise timing sensitivity analysis with a duration-free iceberg-ratio outcome."""
+"""Raw-stance timing sensitivity analysis predicting absolute stance change."""
 
 import argparse
 import hashlib
@@ -18,20 +18,20 @@ import numpy as np
 import pandas as pd
 
 
-SCRIPT_VERSION = "5.1.0"
+SCRIPT_VERSION = "7.1.0"
 DEFAULT_DATA_DIR = Path("data/stance_labeled/1024")
 DEFAULT_OUTPUT_DIR = Path("iclr/rq1_timing_analysis/results")
 DEFAULT_CATEGORY_DATA_SUBDIR = "parsed"
 DEFAULT_PLOT_DPI = 300
 WORD_PATTERN = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
-RATIO_MODEL = "iceberg_ratio"
-DURATION_MODEL = "iceberg_ratio_duration_adjusted"
-TIMING_MODEL = "iceberg_ratio_timing_adjusted"
-PREVIOUS_DURATION_MODEL = "iceberg_ratio_timing_previous_duration"
+RATIO_MODEL = "absolute_stance_change"
+DURATION_MODEL = "absolute_stance_change_duration_adjusted"
+TIMING_MODEL = "absolute_stance_change_timing_adjusted"
+PREVIOUS_DURATION_MODEL = "absolute_stance_change_timing_previous_duration"
 STANCE_ONLY_MODEL = "step_1_stance_only"
 LAGGED_STANCE_MODEL = "step_2_lagged_stance"
-PREVIOUS_OUTCOME_MODEL = "step_3_previous_outcome"
+PREVIOUS_OUTCOME_MODEL = "step_3_previous_ratio"
 TIMELINE_MODEL = "step_4_timeline"
 MODEL_ORDER = (
     RATIO_MODEL,
@@ -51,8 +51,8 @@ STEPWISE_MODEL_ORDER = (
     PREVIOUS_DURATION_MODEL,
 )
 STEPWISE_ADDED_GROUPS = {
-    STANCE_ONLY_MODEL: "stance movement",
-    LAGGED_STANCE_MODEL: "lagged stance movement",
+    STANCE_ONLY_MODEL: "current raw stance",
+    LAGGED_STANCE_MODEL: "previous raw stance",
     PREVIOUS_OUTCOME_MODEL: "previous iceberg ratio",
     TIMELINE_MODEL: "timeline position",
     RATIO_MODEL: "category fixed effects",
@@ -60,52 +60,43 @@ STEPWISE_ADDED_GROUPS = {
     TIMING_MODEL: "pre-turn gap and overlap",
     PREVIOUS_DURATION_MODEL: "previous-turn duration",
 }
-STANCE_TERMS = ("agree_move", "disagree_move")
-ORIGINAL_EXP2_REFERENCE_COEFFICIENTS = {
-    "agree_move": -0.024848939290319824,
-    "disagree_move": 0.015577205239494248,
-}
+STANCE_TERMS = ("current_stance",)
 
 FORMULAS = {
     RATIO_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category)"
     ),
     DURATION_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration"
     ),
     TIMING_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap"
     ),
     PREVIOUS_DURATION_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2) + C(category) + log_duration + "
         "log_gap + overlap + previous_log_duration"
     ),
 }
 
 STEPWISE_FORMULAS = {
-    STANCE_ONLY_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move"
-    ),
-    LAGGED_STANCE_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move"
-    ),
+    STANCE_ONLY_MODEL: "absolute_stance_change ~ current_stance",
+    LAGGED_STANCE_MODEL: "absolute_stance_change ~ current_stance + previous_stance",
     PREVIOUS_OUTCOME_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio"
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio"
     ),
     TIMELINE_MODEL: (
-        "delta_log_iceberg_ratio ~ agree_move + disagree_move + "
-        "lag_agree_move + lag_disagree_move + previous_log_iceberg_ratio + "
+        "absolute_stance_change ~ current_stance + previous_stance + "
+        "previous_log_iceberg_ratio + "
         "timeline_position + I(timeline_position ** 2)"
     ),
     RATIO_MODEL: FORMULAS[RATIO_MODEL],
@@ -116,7 +107,7 @@ STEPWISE_FORMULAS = {
 
 CURRENT_STANCE_GROUP = "current_stance"
 LAGGED_STANCE_GROUP = "lagged_stance"
-PREVIOUS_OUTCOME_GROUP = "previous_outcome"
+PREVIOUS_RATIO_GROUP = "previous_iceberg_ratio"
 TIMELINE_GROUP = "timeline"
 CATEGORY_GROUP = "category_fixed_effects"
 CURRENT_DURATION_GROUP = "current_duration"
@@ -125,7 +116,7 @@ PREVIOUS_DURATION_GROUP = "previous_duration"
 SPECIFICATION_GROUP_ORDER = (
     CURRENT_STANCE_GROUP,
     LAGGED_STANCE_GROUP,
-    PREVIOUS_OUTCOME_GROUP,
+    PREVIOUS_RATIO_GROUP,
     TIMELINE_GROUP,
     CATEGORY_GROUP,
     CURRENT_DURATION_GROUP,
@@ -134,9 +125,9 @@ SPECIFICATION_GROUP_ORDER = (
 )
 CONTROL_GROUP_ORDER = SPECIFICATION_GROUP_ORDER[1:]
 VARIABLE_GROUP_LABELS = {
-    CURRENT_STANCE_GROUP: "Current stance (agreement + disagreement)",
-    LAGGED_STANCE_GROUP: "Lagged stance (agreement + disagreement)",
-    PREVIOUS_OUTCOME_GROUP: "Previous outcome",
+    CURRENT_STANCE_GROUP: "Current raw stance",
+    LAGGED_STANCE_GROUP: "Previous raw stance",
+    PREVIOUS_RATIO_GROUP: "Previous iceberg ratio",
     TIMELINE_GROUP: "Timeline (linear + quadratic)",
     CATEGORY_GROUP: "Category fixed effects",
     CURRENT_DURATION_GROUP: "Current-turn duration",
@@ -144,9 +135,9 @@ VARIABLE_GROUP_LABELS = {
     PREVIOUS_DURATION_GROUP: "Previous-turn duration",
 }
 VARIABLE_GROUP_TERMS = {
-    CURRENT_STANCE_GROUP: ("agree_move", "disagree_move"),
-    LAGGED_STANCE_GROUP: ("lag_agree_move", "lag_disagree_move"),
-    PREVIOUS_OUTCOME_GROUP: ("previous_log_iceberg_ratio",),
+    CURRENT_STANCE_GROUP: ("current_stance",),
+    LAGGED_STANCE_GROUP: ("previous_stance",),
+    PREVIOUS_RATIO_GROUP: ("previous_log_iceberg_ratio",),
     TIMELINE_GROUP: ("timeline_position", "I(timeline_position ** 2)"),
     CATEGORY_GROUP: ("C(category)",),
     CURRENT_DURATION_GROUP: ("log_duration",),
@@ -174,7 +165,7 @@ def formula_for_variable_groups(
         for group_name in included_groups
         for term in (
             (previous_outcome_term,)
-            if group_name == PREVIOUS_OUTCOME_GROUP
+            if group_name == PREVIOUS_RATIO_GROUP
             else VARIABLE_GROUP_TERMS[group_name]
         )
     ]
@@ -184,7 +175,7 @@ def formula_for_variable_groups(
 SPECIFICATION_MODEL_ORDER = (
     "spec_01_stance_core",
     "spec_02_add_lagged_stance",
-    "spec_03_add_previous_outcome",
+    "spec_03_add_previous_ratio",
     "spec_04_add_timeline",
     "spec_05_add_category",
     "spec_06_add_current_duration",
@@ -193,7 +184,7 @@ SPECIFICATION_MODEL_ORDER = (
     "spec_09_exp2_baseline",
     "spec_10_full_timing",
     "spec_11_drop_lagged_stance",
-    "spec_12_drop_previous_outcome",
+    "spec_12_drop_previous_ratio",
     "spec_13_drop_timeline",
     "spec_14_drop_category",
     "spec_15_drop_current_duration",
@@ -203,7 +194,7 @@ SPECIFICATION_MODEL_ORDER = (
 SPECIFICATION_INCLUDED_GROUPS = {
     SPECIFICATION_MODEL_ORDER[0]: (CURRENT_STANCE_GROUP,),
     SPECIFICATION_MODEL_ORDER[1]: (CURRENT_STANCE_GROUP, LAGGED_STANCE_GROUP),
-    SPECIFICATION_MODEL_ORDER[2]: (CURRENT_STANCE_GROUP, PREVIOUS_OUTCOME_GROUP),
+    SPECIFICATION_MODEL_ORDER[2]: (CURRENT_STANCE_GROUP, PREVIOUS_RATIO_GROUP),
     SPECIFICATION_MODEL_ORDER[3]: (CURRENT_STANCE_GROUP, TIMELINE_GROUP),
     SPECIFICATION_MODEL_ORDER[4]: (CURRENT_STANCE_GROUP, CATEGORY_GROUP),
     SPECIFICATION_MODEL_ORDER[5]: (CURRENT_STANCE_GROUP, CURRENT_DURATION_GROUP),
@@ -215,7 +206,7 @@ SPECIFICATION_INCLUDED_GROUPS = {
         group_name for group_name in FULL_VARIABLE_GROUPS if group_name != LAGGED_STANCE_GROUP
     ),
     SPECIFICATION_MODEL_ORDER[11]: tuple(
-        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_OUTCOME_GROUP
+        group_name for group_name in FULL_VARIABLE_GROUPS if group_name != PREVIOUS_RATIO_GROUP
     ),
     SPECIFICATION_MODEL_ORDER[12]: tuple(
         group_name for group_name in FULL_VARIABLE_GROUPS if group_name != TIMELINE_GROUP
@@ -236,7 +227,7 @@ SPECIFICATION_INCLUDED_GROUPS = {
 SPECIFICATION_SHORT_LABELS = {
     SPECIFICATION_MODEL_ORDER[0]: "Core",
     SPECIFICATION_MODEL_ORDER[1]: "+ Lagged stance",
-    SPECIFICATION_MODEL_ORDER[2]: "+ Previous outcome",
+    SPECIFICATION_MODEL_ORDER[2]: "+ Previous ratio",
     SPECIFICATION_MODEL_ORDER[3]: "+ Timeline",
     SPECIFICATION_MODEL_ORDER[4]: "+ Category FE",
     SPECIFICATION_MODEL_ORDER[5]: "+ Current duration",
@@ -245,7 +236,7 @@ SPECIFICATION_SHORT_LABELS = {
     SPECIFICATION_MODEL_ORDER[8]: "Exp2 controls",
     SPECIFICATION_MODEL_ORDER[9]: "Full timing",
     SPECIFICATION_MODEL_ORDER[10]: "− Lagged stance",
-    SPECIFICATION_MODEL_ORDER[11]: "− Previous outcome",
+    SPECIFICATION_MODEL_ORDER[11]: "− Previous ratio",
     SPECIFICATION_MODEL_ORDER[12]: "− Timeline",
     SPECIFICATION_MODEL_ORDER[13]: "− Category FE",
     SPECIFICATION_MODEL_ORDER[14]: "− Current duration",
@@ -295,24 +286,8 @@ SPECIFICATION_CHANGED_GROUPS: dict[str, str] = {
 SPECIFICATION_FORMULAS = {
     model_name: formula_for_variable_groups(
         SPECIFICATION_INCLUDED_GROUPS[model_name],
-        "delta_log_iceberg_ratio",
+        "absolute_stance_change",
         "previous_log_iceberg_ratio",
-    )
-    for model_name in SPECIFICATION_MODEL_ORDER
-}
-IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS = {
-    model_name: formula_for_variable_groups(
-        SPECIFICATION_INCLUDED_GROUPS[model_name],
-        "delta_log_assumption_count",
-        "previous_log_assumption_count",
-    )
-    for model_name in SPECIFICATION_MODEL_ORDER
-}
-EXPLICIT_CLAIM_SPECIFICATION_FORMULAS = {
-    model_name: formula_for_variable_groups(
-        SPECIFICATION_INCLUDED_GROUPS[model_name],
-        "delta_log_explicit_count",
-        "previous_log_explicit_count",
     )
     for model_name in SPECIFICATION_MODEL_ORDER
 }
@@ -361,12 +336,7 @@ class Observation(TypedDict):
     current_speaker_id: str
     previous_stance: float
     current_stance: float
-    delta_stance: float
-    lag_delta_stance: float
-    agree_move: float
-    disagree_move: float
-    lag_agree_move: float
-    lag_disagree_move: float
+    absolute_stance_change: float
     previous_explicit_count: int
     previous_assumption_count: int
     previous_word_count: int
@@ -435,26 +405,10 @@ class SpecificationPlotConfig(TypedDict):
 RATIO_SPECIFICATION_PLOT: SpecificationPlotConfig = {
     "previous_outcome_term": "previous_log_iceberg_ratio",
     "previous_outcome_label": "Previous iceberg ratio",
-    "figure_title": "Iceberg ratio: grouped specifications",
-    "response_label": "Δ log(1 + iceberg ratio)",
-    "estimated_change_label": "Estimated change in 1 + iceberg ratio (%)",
+    "figure_title": "Absolute stance change: raw-stance grouped specifications",
+    "response_label": "absolute stance change (raw scale points)",
+    "estimated_change_label": "Estimated change in absolute stance (points)",
     "output_stem": "rq1_specification_panel",
-}
-IMPLICIT_ASSUMPTION_SPECIFICATION_PLOT: SpecificationPlotConfig = {
-    "previous_outcome_term": "previous_log_assumption_count",
-    "previous_outcome_label": "Previous implicit assumptions",
-    "figure_title": "Implicit assumptions: grouped specifications",
-    "response_label": "Δ log(1 + implicit assumptions)",
-    "estimated_change_label": "Estimated change in 1 + implicit assumptions (%)",
-    "output_stem": "rq1_specification_panel_implicit_assumptions",
-}
-EXPLICIT_CLAIM_SPECIFICATION_PLOT: SpecificationPlotConfig = {
-    "previous_outcome_term": "previous_log_explicit_count",
-    "previous_outcome_label": "Previous explicit claims",
-    "figure_title": "Explicit claims: grouped specifications",
-    "response_label": "Δ log(1 + explicit claims)",
-    "estimated_change_label": "Estimated change in 1 + explicit claims (%)",
-    "output_stem": "rq1_specification_panel_explicit_claims",
 }
 
 
@@ -711,7 +665,6 @@ def build_observation(
     current_assumptions = cast(int, current["assumption_count"])
     previous_stance = cast(float, previous["stance"])
     current_stance = cast(float, current["stance"])
-    lag_stance = cast(float, lag_turn["stance"])
 
     previous_ratio = iceberg_ratio(previous_explicit, previous_assumptions)
     current_ratio = iceberg_ratio(current_explicit, current_assumptions)
@@ -745,8 +698,7 @@ def build_observation(
     current_log_per_second = math.log1p(current_per_second)
     previous_log_per_token = math.log1p(previous_per_token)
     current_log_per_token = math.log1p(current_per_token)
-    delta_stance = (current_stance - previous_stance) / 5.0
-    lag_delta_stance = (previous_stance - lag_stance) / 5.0
+    absolute_stance_change = abs(current_stance - previous_stance)
     raw_gap = current_start - previous_end
     pre_turn_gap = max(raw_gap, 0.0)
     episode_start, episode_end = timeline_bounds
@@ -770,12 +722,7 @@ def build_observation(
         "current_speaker_id": cast(str, current["speaker_id"]),
         "previous_stance": previous_stance,
         "current_stance": current_stance,
-        "delta_stance": delta_stance,
-        "lag_delta_stance": lag_delta_stance,
-        "agree_move": max(delta_stance, 0.0),
-        "disagree_move": max(-delta_stance, 0.0),
-        "lag_agree_move": max(lag_delta_stance, 0.0),
-        "lag_disagree_move": max(-lag_delta_stance, 0.0),
+        "absolute_stance_change": absolute_stance_change,
         "previous_explicit_count": previous_explicit,
         "previous_assumption_count": previous_assumptions,
         "previous_word_count": previous["word_count"],
@@ -1019,13 +966,12 @@ def validate_model_frame(frame: pd.DataFrame) -> None:
     required = {
         "category",
         "episode",
+        "absolute_stance_change",
         "delta_log_iceberg_ratio",
         "delta_log_assumption_count",
         "delta_log_explicit_count",
-        "agree_move",
-        "disagree_move",
-        "lag_agree_move",
-        "lag_disagree_move",
+        "current_stance",
+        "previous_stance",
         "previous_log_iceberg_ratio",
         "previous_log_assumption_count",
         "previous_log_explicit_count",
@@ -1182,14 +1128,14 @@ def model_fit_frame_for_order(
         rows.append(
             {
                 "model_name": model_name,
-                "response_variable": "delta_log_iceberg_ratio",
+                "response_variable": "absolute_stance_change",
                 "transition_count": len(frame),
                 "episode_count": int(frame["episode"].nunique()),
                 "r_squared": float(result.rsquared),
                 "adjusted_r_squared": float(result.rsquared_adj),
                 "aic": float(result.aic),
                 "bic": float(result.bic),
-                "aic_bic_comparison_group": "duration_free_iceberg_ratio_outcome",
+                "aic_bic_comparison_group": "absolute_raw_stance_change_outcome",
                 "aic_bic_comparable_to_other_models": True,
             }
         )
@@ -1254,18 +1200,13 @@ def specification_panel_frame(
             "changed_group": SPECIFICATION_CHANGED_GROUPS[model_name],
             "included_variable_groups": "|".join(included_groups),
             "formula": formulas[model_name],
-            "agree_move_coefficient": float(result.params["agree_move"]),
-            "agree_move_estimated_change_percent": 100.0
-            * math.expm1(float(result.params["agree_move"])),
-            "agree_move_clustered_se": float(result.bse["agree_move"]),
-            "agree_move_ci95_low": float(intervals.loc["agree_move", 0]),
-            "agree_move_ci95_high": float(intervals.loc["agree_move", 1]),
-            "disagree_move_coefficient": float(result.params["disagree_move"]),
-            "disagree_move_estimated_change_percent": 100.0
-            * math.expm1(float(result.params["disagree_move"])),
-            "disagree_move_clustered_se": float(result.bse["disagree_move"]),
-            "disagree_move_ci95_low": float(intervals.loc["disagree_move", 0]),
-            "disagree_move_ci95_high": float(intervals.loc["disagree_move", 1]),
+            "current_stance_coefficient": float(result.params["current_stance"]),
+            "current_stance_estimated_change_points": float(
+                result.params["current_stance"]
+            ),
+            "current_stance_clustered_se": float(result.bse["current_stance"]),
+            "current_stance_ci95_low": float(intervals.loc["current_stance", 0]),
+            "current_stance_ci95_high": float(intervals.loc["current_stance", 1]),
             "r_squared": float(result.rsquared),
             "adjusted_r_squared": adjusted_r_squared,
             "reference_adjusted_r_squared": reference_adjusted_r_squared,
@@ -1334,7 +1275,7 @@ def stance_comparison_frame(
             coefficient = extract_coefficient(coefficients, model_name, term)
             rows.append(
                 {
-                    "stance_direction": "agreement" if term == "agree_move" else "disagreement",
+                    "stance_measure": "current_raw_stance",
                     "term": term,
                     "model_name": model_name,
                     "coefficient": coefficient["coefficient"],
@@ -1382,9 +1323,7 @@ def stepwise_stance_comparison_frame(
             term_rows.append(
                 {
                     "stage_number": stage_number,
-                    "stance_direction": (
-                        "agreement" if term == "agree_move" else "disagreement"
-                    ),
+                    "stance_measure": "current_raw_stance",
                     "term": term,
                     "model_name": model_name,
                     "added_variable_group": STEPWISE_ADDED_GROUPS[model_name],
@@ -1440,7 +1379,7 @@ def stepwise_largest_changes(comparison: pd.DataFrame) -> list[dict[str, object]
     selected = comparison[comparison["largest_incremental_change_for_term"]].copy()
     columns = [
         "term",
-        "stance_direction",
+        "stance_measure",
         "stage_number",
         "model_name",
         "added_variable_group",
@@ -1476,7 +1415,6 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
         (comparison["term"] == term) & (comparison["model_name"] == DURATION_MODEL)
     ].iloc[0]
     timing = comparison[(comparison["term"] == term) & (comparison["model_name"] == TIMING_MODEL)].iloc[0]
-    expected_negative = term == "agree_move"
     baseline_coefficient = float(baseline["coefficient"])
     duration_coefficient = float(duration["coefficient"])
     timing_coefficient = float(timing["coefficient"])
@@ -1500,8 +1438,8 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
         timing_status = "sign_reversed_after_timing_adjustment"
     return {
         "term": term,
-        "direction": "agreement" if expected_negative else "disagreement",
-        "ratio_baseline_coefficient": baseline_coefficient,
+        "stance_measure": "current raw stance (one scale-point increase)",
+        "baseline_coefficient": baseline_coefficient,
         "duration_adjusted_coefficient": duration_coefficient,
         "duration_adjusted_ci95_low": float(duration["ci95_low"]),
         "duration_adjusted_ci95_high": float(duration["ci95_high"]),
@@ -1520,28 +1458,6 @@ def coefficient_interpretation(comparison: pd.DataFrame, term: str) -> dict[str,
     }
 
 
-def exp2_reference_comparison(coefficients: pd.DataFrame) -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
-    for term in STANCE_TERMS:
-        ratio_sample = extract_coefficient(coefficients, RATIO_MODEL, term)
-        ratio_sample_value = float(cast(float, ratio_sample["coefficient"]))
-        reference = ORIGINAL_EXP2_REFERENCE_COEFFICIENTS[term]
-        rows.append(
-            {
-                "term": term,
-                "original_exp2_full_sample_coefficient": reference,
-                "duration_free_ratio_coefficient": ratio_sample_value,
-                "outcomes_comparable": False,
-                "comparison_note": (
-                    "The original Exp2 coefficient used per-second iceberg density; this "
-                    "analysis uses the duration-free iceberg ratio, so magnitudes and signs "
-                    "must not be treated as a direct replication comparison."
-                ),
-            }
-        )
-    return rows
-
-
 def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: int) -> list[Path]:
     try:
         import matplotlib
@@ -1553,21 +1469,18 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         ) from error
 
     model_labels: tuple[str, str, str] = (
-        "Ratio baseline\n(no duration denominator)",
+        "Baseline",
         "+ duration",
         "+ gap & overlap",
     )
     term_labels: dict[str, str] = {
-        "agree_move": "Agreement movement",
-        "disagree_move": "Disagreement movement",
+        "current_stance": "Current raw stance",
     }
     colors: dict[str, str] = {
-        "agree_move": "#0072B2",
-        "disagree_move": "#D55E00",
+        "current_stance": "#0072B2",
     }
     markers: dict[str, str] = {
-        "agree_move": "o",
-        "disagree_move": "D",
+        "current_stance": "o",
     }
     selected_by_term: dict[str, pd.DataFrame] = {
         term: comparison[comparison["term"] == term]
@@ -1621,7 +1534,7 @@ def save_comparison_plot(comparison: pd.DataFrame, output_dir: Path, plot_dpi: i
         path_axis.grid(axis="y", color="#D9D9D9", linewidth=0.7)
         path_axis.legend(frameon=False, loc="lower right")
         fig.suptitle(
-            "Duration-free iceberg-ratio model with timing sensitivity checks",
+            "Absolute stance-change model with timing sensitivity checks",
             fontsize=15,
             fontweight="bold",
         )
@@ -1654,20 +1567,17 @@ def save_stepwise_plot(
         ) from error
 
     term_labels: dict[str, str] = {
-        "agree_move": "Agreement movement",
-        "disagree_move": "Disagreement movement",
+        "current_stance": "Current raw stance",
     }
     colors: dict[str, str] = {
-        "agree_move": "#0072B2",
-        "disagree_move": "#D55E00",
+        "current_stance": "#0072B2",
     }
     markers: dict[str, str] = {
-        "agree_move": "o",
-        "disagree_move": "D",
+        "current_stance": "o",
     }
     stage_labels = tuple(
         (
-            f"{stage_number}. Stance movement only"
+            f"{stage_number}. Current raw stance only"
             if stage_number == 1
             else f"{stage_number}. + {STEPWISE_ADDED_GROUPS[model_name]} (Exp2 controls)"
             if model_name == RATIO_MODEL
@@ -1684,14 +1594,16 @@ def save_stepwise_plot(
             "font.size": 10,
         }
     ):
-        fig, axes = plt.subplots(
+        fig, axes_grid = plt.subplots(
             1,
-            2,
-            figsize=(13.2, 6.6),
+            len(STANCE_TERMS),
+            figsize=(7.6, 6.6),
             sharex=True,
             sharey=True,
+            squeeze=False,
             constrained_layout=True,
         )
+        axes = axes_grid[0]
         for axis, term in zip(axes, STANCE_TERMS, strict=True):
             selected = (
                 comparison[comparison["term"] == term]
@@ -1748,9 +1660,9 @@ def save_stepwise_plot(
 
         axes[0].set_yticks(y_positions, stage_labels)
         axes[0].invert_yaxis()
-        fig.supxlabel("Stance coefficient (episode-clustered 95% CI)")
+        fig.supxlabel("Raw-stance coefficient (episode-clustered 95% CI)")
         fig.suptitle(
-            "Experiment 2: step-wise stance coefficient stability",
+            "Raw stance: step-wise coefficient stability",
             fontsize=15,
             fontweight="bold",
         )
@@ -1784,6 +1696,152 @@ def coefficient_cell_text(coefficient: float, clustered_se: float, p_value: floa
         f"{displayed_coefficient:.4f}{significance_stars(p_value)}\n"
         f"({clustered_se:.4f})"
     )
+
+
+def duration_iceberg_summary_frame(
+    frame: pd.DataFrame,
+    requested_bin_count: int,
+) -> pd.DataFrame:
+    required_columns = {"duration", "iceberg_ratio"}
+    missing_columns = sorted(required_columns.difference(frame.columns))
+    if missing_columns:
+        raise ValueError(
+            f"Duration–iceberg plot is missing observation columns: {missing_columns}"
+        )
+    if requested_bin_count < 2:
+        raise ValueError("Duration–iceberg plot requires at least two requested bins")
+    selected = frame.loc[:, ["duration", "iceberg_ratio"]].astype(float)
+    if selected.empty:
+        raise ValueError("Duration–iceberg plot requires at least one observation")
+    if selected.isna().any().any() or not np.isfinite(selected.to_numpy()).all():
+        raise ValueError("Duration–iceberg plot requires finite duration and ratio values")
+    if (selected["duration"] <= 0.0).any():
+        raise ValueError("Duration–iceberg plot requires strictly positive durations")
+    if (selected["iceberg_ratio"] < 0.0).any():
+        raise ValueError("Duration–iceberg plot requires nonnegative iceberg ratios")
+
+    selected = selected.assign(duration_for_binning=selected["duration"].round(3))
+    quantiles = np.linspace(0.0, 1.0, requested_bin_count + 1)
+    bin_edges = np.unique(
+        np.quantile(selected["duration_for_binning"].to_numpy(dtype=float), quantiles)
+    )
+    if len(bin_edges) < 3:
+        raise ValueError(
+            "Duration–iceberg plot requires at least two distinct duration intervals"
+        )
+    selected = selected.assign(
+        duration_bin=pd.cut(
+            selected["duration_for_binning"],
+            bins=bin_edges,
+            labels=False,
+            include_lowest=True,
+        )
+    )
+    if selected["duration_bin"].isna().any():
+        raise RuntimeError("Duration binning left observations unassigned")
+
+    grouped = selected.groupby("duration_bin", sort=True, observed=True)
+    summary = grouped.agg(
+        observation_count=("iceberg_ratio", "size"),
+        duration_min_seconds=("duration", "min"),
+        duration_median_seconds=("duration", "median"),
+        duration_max_seconds=("duration", "max"),
+        iceberg_ratio_q25=("iceberg_ratio", lambda values: values.quantile(0.25)),
+        iceberg_ratio_median=("iceberg_ratio", "median"),
+        iceberg_ratio_q75=("iceberg_ratio", lambda values: values.quantile(0.75)),
+        iceberg_ratio_mean=("iceberg_ratio", "mean"),
+    ).reset_index(drop=True)
+    summary.insert(0, "duration_bin", np.arange(1, len(summary) + 1, dtype=int))
+    if len(summary) < 2:
+        raise ValueError(
+            "Duration–iceberg plot requires at least two populated duration bins"
+        )
+    return summary
+
+
+def save_duration_iceberg_plot(
+    summary: pd.DataFrame,
+    output_dir: Path,
+    plot_dpi: int,
+) -> list[Path]:
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError as error:
+        raise RuntimeError(
+            "RQ1 plotting requires matplotlib. Install the dependencies declared in pyproject.toml."
+        ) from error
+
+    required_columns = {
+        "duration_median_seconds",
+        "iceberg_ratio_q25",
+        "iceberg_ratio_median",
+        "iceberg_ratio_q75",
+    }
+    missing_columns = sorted(required_columns.difference(summary.columns))
+    if missing_columns:
+        raise ValueError(
+            f"Duration–iceberg summary is missing plot columns: {missing_columns}"
+        )
+    x_values = summary["duration_median_seconds"].to_numpy(dtype=float)
+    medians = summary["iceberg_ratio_median"].to_numpy(dtype=float)
+    lower = summary["iceberg_ratio_q25"].to_numpy(dtype=float)
+    upper = summary["iceberg_ratio_q75"].to_numpy(dtype=float)
+    if not np.isfinite(np.column_stack((x_values, lower, medians, upper))).all():
+        raise ValueError("Duration–iceberg summary contains nonfinite plot values")
+
+    with plt.rc_context(
+        {
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "font.size": 10,
+        }
+    ):
+        fig, axis = plt.subplots(figsize=(8.0, 5.4), constrained_layout=True)
+        axis.fill_between(
+            x_values,
+            lower,
+            upper,
+            color="#56B4E9",
+            alpha=0.22,
+            linewidth=0.0,
+            label="Interquartile range",
+        )
+        axis.plot(
+            x_values,
+            medians,
+            color="#0072B2",
+            linewidth=2.1,
+            marker="o",
+            markersize=5.5,
+            markeredgecolor="white",
+            markeredgewidth=0.7,
+            label="Median iceberg ratio",
+        )
+        axis.set_xscale("log")
+        axis.set_xlabel("Current-turn duration (seconds, log scale)")
+        axis.set_ylabel("Iceberg ratio: explicit claims / (implicit assumptions + 1)")
+        axis.set_title(
+            "Iceberg ratio relative to turn duration\n"
+            "Equal-frequency duration bins; median with interquartile range",
+            loc="left",
+            fontweight="bold",
+        )
+        axis.grid(axis="both", color="#D9D9D9", linewidth=0.7)
+        axis.legend(frameon=False, loc="best")
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        png_path = output_dir / "rq1_iceberg_ratio_by_duration.png"
+        pdf_path = output_dir / "rq1_iceberg_ratio_by_duration.pdf"
+        png_temporary = png_path.with_suffix(".png.tmp")
+        pdf_temporary = pdf_path.with_suffix(".pdf.tmp")
+        fig.savefig(png_temporary, format="png", dpi=plot_dpi, bbox_inches="tight")
+        fig.savefig(pdf_temporary, format="pdf", bbox_inches="tight")
+        plt.close(fig)
+    png_temporary.replace(png_path)
+    pdf_temporary.replace(pdf_path)
+    return [pdf_path, png_path]
 
 
 def save_specification_panel(
@@ -1832,13 +1890,10 @@ def save_specification_panel(
         "previous_log_duration",
         "Intercept",
     )
-    agreement_terms = ("agree_move", "lag_agree_move", *shared_terms)
-    disagreement_terms = ("disagree_move", "lag_disagree_move", *shared_terms)
+    raw_stance_terms = ("current_stance", "previous_stance", *shared_terms)
     term_labels: dict[str, str] = {
-        "agree_move": "Current agreement movement",
-        "lag_agree_move": "Lagged agreement movement",
-        "disagree_move": "Current disagreement movement",
-        "lag_disagree_move": "Lagged disagreement movement",
+        "current_stance": "Current raw stance",
+        "previous_stance": "Previous raw stance",
         plot_config["previous_outcome_term"]: plot_config["previous_outcome_label"],
         "timeline_position": "Timeline position",
         "I(timeline_position ** 2)": "Timeline position²",
@@ -1864,8 +1919,8 @@ def save_specification_panel(
     coefficient_lookup = coefficients.set_index(["model_name", "term"])
     compact_labels = (
         "Core",
-        "+ Lag",
-        "+ Prev. outcome",
+        "+ Prev. stance",
+        "+ Prev. ratio",
         "+ Timeline",
         "+ Category FE",
         "+ Current dur.",
@@ -1873,8 +1928,8 @@ def save_specification_panel(
         "+ Previous dur.",
         "Exp2 controls",
         "Full timing",
-        "− Lag",
-        "− Prev. outcome",
+        "− Prev. stance",
+        "− Prev. ratio",
         "− Timeline",
         "− Category FE",
         "− Current dur.",
@@ -1889,21 +1944,25 @@ def save_specification_panel(
             "font.size": 9,
         }
     ):
-        row_count = len(agreement_terms) + len(statistic_labels)
+        row_count = len(raw_stance_terms) + len(statistic_labels)
         figure_width = max(19.0, len(SPECIFICATION_MODEL_ORDER) * 0.95 + 4.0)
-        figure_height = max(20.0, row_count * 1.15)
-        fig, axes = plt.subplots(2, 1, figsize=(figure_width, figure_height))
+        figure_height = max(11.0, row_count * 0.72)
+        fig, axes_grid = plt.subplots(
+            1,
+            1,
+            figsize=(figure_width, figure_height),
+            squeeze=False,
+        )
+        axes = axes_grid[0]
         fig.subplots_adjust(
             left=0.19,
             right=0.995,
-            top=0.91,
-            bottom=0.055,
-            hspace=0.42,
+            top=0.86,
+            bottom=0.09,
         )
 
         panel_definitions = (
-            ("Agreement movement", "agree_move", agreement_terms),
-            ("Disagreement movement", "disagree_move", disagreement_terms),
+            ("Raw stance", "current_stance", raw_stance_terms),
         )
         for axis, (direction_label, current_stance_term, terms) in zip(
             axes,
@@ -1967,7 +2026,7 @@ def save_specification_panel(
                     f"{int(model_row['transition_count']):,}",
                     f"{int(model_row['episode_count']):,}",
                     f"{float(model_row['adjusted_r_squared']):.3f}",
-                    f"{float(model_row[f'{current_stance_term}_estimated_change_percent']):+.2f}%",
+                    f"{float(model_row[f'{current_stance_term}_estimated_change_points']):+.3f}",
                 )
                 for statistic_offset, statistic_value in enumerate(statistic_values):
                     axis.text(
@@ -2008,8 +2067,9 @@ def save_specification_panel(
             0.018,
             (
                 f"Cells report β for {plot_config['response_label']}, with "
-                "episode-clustered SE in parentheses. Both stance directions are jointly "
-                "estimated. Bottom-row change = 100 × [exp(β stance) − 1]. "
+                "episode-clustered SE in parentheses. Current and previous raw stance are "
+                "entered directly. Bottom-row change equals β for a one-point increase in "
+                "current stance. "
                 "* p<.05, ** p<.01, *** p<.001."
             ),
             ha="center",
@@ -2066,44 +2126,31 @@ def output_paths(output_dir: Path) -> dict[str, Path]:
         "stepwise_model_fit": output_dir / "rq1_stepwise_model_fit.csv",
         "specification_panel": output_dir / "rq1_specification_panel.csv",
         "specification_coefficients": output_dir / "rq1_specification_coefficients.csv",
-        "implicit_assumption_specification_panel": (
-            output_dir / "rq1_specification_panel_implicit_assumptions.csv"
-        ),
-        "implicit_assumption_specification_coefficients": (
-            output_dir / "rq1_specification_coefficients_implicit_assumptions.csv"
-        ),
-        "explicit_claim_specification_panel": (
-            output_dir / "rq1_specification_panel_explicit_claims.csv"
-        ),
-        "explicit_claim_specification_coefficients": (
-            output_dir / "rq1_specification_coefficients_explicit_claims.csv"
-        ),
+        "duration_iceberg_summary": output_dir / "rq1_iceberg_ratio_by_duration.csv",
         "observations": output_dir / "rq1_timing_observations.csv",
         "data_audit": output_dir / "rq1_timing_data_audit.json",
         "summary": output_dir / "rq1_timing_summary.json",
         "specification_plot_pdf": output_dir / "rq1_specification_panel.pdf",
         "specification_plot_png": output_dir / "rq1_specification_panel.png",
-        "implicit_assumption_specification_plot_pdf": (
-            output_dir / "rq1_specification_panel_implicit_assumptions.pdf"
-        ),
-        "implicit_assumption_specification_plot_png": (
-            output_dir / "rq1_specification_panel_implicit_assumptions.png"
-        ),
-        "explicit_claim_specification_plot_pdf": (
-            output_dir / "rq1_specification_panel_explicit_claims.pdf"
-        ),
-        "explicit_claim_specification_plot_png": (
-            output_dir / "rq1_specification_panel_explicit_claims.png"
-        ),
+        "duration_iceberg_plot_pdf": output_dir / "rq1_iceberg_ratio_by_duration.pdf",
+        "duration_iceberg_plot_png": output_dir / "rq1_iceberg_ratio_by_duration.png",
     }
 
 
-def remove_obsolete_comparison_plots(output_dir: Path) -> None:
+def remove_obsolete_outputs(output_dir: Path) -> None:
     obsolete_paths = (
         output_dir / "rq1_timing_comparison.pdf",
         output_dir / "rq1_timing_comparison.png",
         output_dir / "rq1_stepwise_comparison.pdf",
         output_dir / "rq1_stepwise_comparison.png",
+        output_dir / "rq1_specification_panel_implicit_assumptions.csv",
+        output_dir / "rq1_specification_coefficients_implicit_assumptions.csv",
+        output_dir / "rq1_specification_panel_implicit_assumptions.pdf",
+        output_dir / "rq1_specification_panel_implicit_assumptions.png",
+        output_dir / "rq1_specification_panel_explicit_claims.csv",
+        output_dir / "rq1_specification_coefficients_explicit_claims.csv",
+        output_dir / "rq1_specification_panel_explicit_claims.pdf",
+        output_dir / "rq1_specification_panel_explicit_claims.png",
     )
     for obsolete_path in obsolete_paths:
         if obsolete_path.exists():
@@ -2142,34 +2189,9 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         frame,
         SPECIFICATION_FORMULAS,
     )
-    implicit_assumption_specification_results = fit_formula_models(
-        frame,
-        IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
-        SPECIFICATION_MODEL_ORDER,
-    )
-    implicit_assumption_specification_coefficients = specification_coefficient_frame(
-        implicit_assumption_specification_results
-    )
-    implicit_assumption_specification_panel = specification_panel_frame(
-        implicit_assumption_specification_results,
-        frame,
-        IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
-    )
-    explicit_claim_specification_results = fit_formula_models(
-        frame,
-        EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
-        SPECIFICATION_MODEL_ORDER,
-    )
-    explicit_claim_specification_coefficients = specification_coefficient_frame(
-        explicit_claim_specification_results
-    )
-    explicit_claim_specification_panel = specification_panel_frame(
-        explicit_claim_specification_results,
-        frame,
-        EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
-    )
+    duration_iceberg_summary = duration_iceberg_summary_frame(frame, 20)
     output_dir = Path(args.output_dir)
-    remove_obsolete_comparison_plots(output_dir)
+    remove_obsolete_outputs(output_dir)
     paths = output_paths(output_dir)
 
     write_csv(paths["observations"], frame)
@@ -2181,22 +2203,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
     write_csv(paths["stepwise_model_fit"], stepwise_model_fit)
     write_csv(paths["specification_panel"], specification_panel)
     write_csv(paths["specification_coefficients"], specification_coefficients)
-    write_csv(
-        paths["implicit_assumption_specification_panel"],
-        implicit_assumption_specification_panel,
-    )
-    write_csv(
-        paths["implicit_assumption_specification_coefficients"],
-        implicit_assumption_specification_coefficients,
-    )
-    write_csv(
-        paths["explicit_claim_specification_panel"],
-        explicit_claim_specification_panel,
-    )
-    write_csv(
-        paths["explicit_claim_specification_coefficients"],
-        explicit_claim_specification_coefficients,
-    )
+    write_csv(paths["duration_iceberg_summary"], duration_iceberg_summary)
     save_specification_panel(
         specification_coefficients,
         specification_panel,
@@ -2204,71 +2211,47 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         args.plot_dpi,
         RATIO_SPECIFICATION_PLOT,
     )
-    save_specification_panel(
-        implicit_assumption_specification_coefficients,
-        implicit_assumption_specification_panel,
-        output_dir,
-        args.plot_dpi,
-        IMPLICIT_ASSUMPTION_SPECIFICATION_PLOT,
-    )
-    save_specification_panel(
-        explicit_claim_specification_coefficients,
-        explicit_claim_specification_panel,
-        output_dir,
-        args.plot_dpi,
-        EXPLICIT_CLAIM_SPECIFICATION_PLOT,
-    )
+    save_duration_iceberg_plot(duration_iceberg_summary, output_dir, args.plot_dpi)
 
     repository_state = git_state()
     versions = package_versions()
     audit.update(
         {
-            "experiment": "Duration-free iceberg-ratio timing sensitivity analysis",
+            "experiment": "Absolute raw stance-change timing sensitivity analysis",
             "script_version": SCRIPT_VERSION,
             "script_sha256": file_sha256(Path(__file__)),
             "formulas": FORMULAS,
             "stepwise_formulas": STEPWISE_FORMULAS,
             "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
             "specification_formulas": SPECIFICATION_FORMULAS,
-            "implicit_assumption_specification_formulas": (
-                IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS
-            ),
-            "explicit_claim_specification_formulas": (
-                EXPLICIT_CLAIM_SPECIFICATION_FORMULAS
-            ),
             "specification_variable_groups": VARIABLE_GROUP_TERMS,
-            "specification_previous_outcome_terms": {
-                "iceberg_ratio": "previous_log_iceberg_ratio",
-                "implicit_assumptions": "previous_log_assumption_count",
-                "explicit_claims": "previous_log_explicit_count",
-            },
+            "specification_previous_ratio_term": "previous_log_iceberg_ratio",
             "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
             "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
             "common_model_sample_verified": True,
             "stepwise_common_model_sample_verified": True,
             "specification_common_model_sample_verified": True,
-            "implicit_assumption_specification_common_model_sample_verified": True,
-            "explicit_claim_specification_common_model_sample_verified": True,
             "word_count_definition": r"count of Unicode regex matches for \b\w+\b in turn_text",
             "iceberg_ratio_definition": "explicit_count / (assumption_count + 1)",
             "response_variable_definition": (
-                "delta_log_iceberg_ratio = log1p(current_iceberg_ratio) - "
-                "log1p(previous_iceberg_ratio); duration is not in the outcome"
+                "absolute_stance_change = abs(current_stance - previous_stance), "
+                "using raw stance-scale points"
             ),
-            "alternative_response_variable_definitions": {
-                "delta_log_assumption_count": (
-                    "log1p(current_assumption_count) - "
-                    "log1p(previous_assumption_count)"
-                ),
-                "delta_log_explicit_count": (
-                    "log1p(current_explicit_count) - log1p(previous_explicit_count)"
-                ),
-            },
+            "target_predictor_overlap_note": (
+                "Current and previous raw stance appear on the right-hand side and also "
+                "algebraically define the dependent variable; coefficients are descriptive"
+            ),
             "iceberg_density_per_second_definition": (
                 "(explicit_count / (assumption_count + 1)) / duration_seconds"
             ),
-            "specification_estimated_change_percent_definition": (
-                "100 * (exp(current_stance_coefficient) - 1)"
+            "specification_estimated_change_definition": (
+                "current_stance_coefficient: absolute stance-change points associated with "
+                "a one-point increase in current raw stance"
+            ),
+            "duration_iceberg_plot_definition": (
+                "Current-turn duration is rounded to milliseconds and divided into up to 20 "
+                "quantile intervals; the plot shows the median raw iceberg ratio and its "
+                "interquartile range per interval"
             ),
             "density_per_token_definition": "(explicit_count / (assumption_count + 1)) / word_count",
             "strict_window_definition": "three consecutive raw substantive turns with speaker changes at both boundaries",
@@ -2291,7 +2274,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         if key != "summary" and path.exists()
     }
     summary: dict[str, object] = {
-        "experiment": "Duration-free iceberg-ratio timing sensitivity analysis",
+        "experiment": "Absolute raw stance-change timing sensitivity analysis",
         "script_version": SCRIPT_VERSION,
         "configuration": {
             "data_dir": str(args.data_dir),
@@ -2307,22 +2290,23 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
         "stepwise_formulas": STEPWISE_FORMULAS,
         "stepwise_added_variable_groups": STEPWISE_ADDED_GROUPS,
         "specification_formulas": SPECIFICATION_FORMULAS,
-        "implicit_assumption_specification_formulas": (
-            IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS
-        ),
-        "explicit_claim_specification_formulas": EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
         "specification_variable_groups": VARIABLE_GROUP_TERMS,
-        "specification_previous_outcome_terms": {
-            "iceberg_ratio": "previous_log_iceberg_ratio",
-            "implicit_assumptions": "previous_log_assumption_count",
-            "explicit_claims": "previous_log_explicit_count",
-        },
+        "specification_previous_ratio_term": "previous_log_iceberg_ratio",
         "specification_included_groups": SPECIFICATION_INCLUDED_GROUPS,
         "specification_reference_models": SPECIFICATION_REFERENCE_MODELS,
         "specification_model_count": len(SPECIFICATION_MODEL_ORDER),
-        "specification_estimated_change_percent_definition": (
-            "100 * (exp(current_stance_coefficient) - 1)"
+        "specification_estimated_change_definition": (
+            "current_stance_coefficient: absolute stance-change points associated with "
+            "a one-point increase in current raw stance"
         ),
+        "duration_iceberg_plot": {
+            "requested_quantile_bins": 20,
+            "populated_bins": len(duration_iceberg_summary),
+            "x_variable": "current-turn duration in seconds (log-scaled axis)",
+            "y_variable": "raw iceberg ratio",
+            "summary": "median and interquartile range within duration bins",
+            "duration_binning_precision": "rounded to 0.001 seconds",
+        },
         "specification_fit_metric": (
             "adjusted R-squared; preferred over raw R-squared because model sizes differ"
         ),
@@ -2335,36 +2319,6 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             ),
             "adjusted_r_squared": float(specification_panel["adjusted_r_squared"].max()),
         },
-        "alternative_specification_outcomes": {
-            "implicit_assumptions": {
-                "response_variable": "delta_log_assumption_count",
-                "best_model_name": str(
-                    implicit_assumption_specification_panel.loc[
-                        implicit_assumption_specification_panel[
-                            "adjusted_r_squared"
-                        ].idxmax(),
-                        "model_name",
-                    ]
-                ),
-                "best_adjusted_r_squared": float(
-                    implicit_assumption_specification_panel["adjusted_r_squared"].max()
-                ),
-            },
-            "explicit_claims": {
-                "response_variable": "delta_log_explicit_count",
-                "best_model_name": str(
-                    explicit_claim_specification_panel.loc[
-                        explicit_claim_specification_panel[
-                            "adjusted_r_squared"
-                        ].idxmax(),
-                        "model_name",
-                    ]
-                ),
-                "best_adjusted_r_squared": float(
-                    explicit_claim_specification_panel["adjusted_r_squared"].max()
-                ),
-            },
-        },
         "transition_count": len(frame),
         "episode_count": int(frame["episode"].nunique()),
         "headline_coefficients": {
@@ -2376,29 +2330,34 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
             stepwise_comparison
         ),
         "timing_adjustment_interpretation": interpretations,
-        "original_exp2_reference_comparison": exp2_reference_comparison(coefficients),
-        "both_directional_intervals_survive_timing_adjustment": interval_survives,
+        "raw_stance_interval_survives_timing_adjustment": interval_survives,
         "estimands": {
             RATIO_MODEL: (
-                "directional association with the duration-free iceberg ratio using the "
-                "original Exp2 control structure on the strict timing sample"
+                "association between current raw stance and absolute raw stance change "
+                "using the Exp2 control structure on the strict timing sample"
             ),
             DURATION_MODEL: (
-                "duration-free iceberg-ratio association conditional on current-turn duration"
+                "raw-stance association with absolute stance change conditional on "
+                "current-turn duration"
             ),
             TIMING_MODEL: (
-                "duration-free iceberg-ratio association conditional on current-turn duration "
-                "and response timing"
+                "raw-stance association with absolute stance change conditional on "
+                "current-turn duration and response timing"
             ),
             PREVIOUS_DURATION_MODEL: (
-                "duration-free iceberg-ratio association conditional on current- and "
-                "previous-turn duration and response timing"
+                "raw-stance association with absolute stance change conditional on current- "
+                "and previous-turn duration and response timing"
             ),
         },
         "causal_claim": False,
         "duration_note": (
-            "Duration is excluded from the outcome denominator and enters only as an explicit "
-            "predictor in duration-adjusted specifications."
+            "The outcome is expressed in raw stance points and contains no duration term; "
+            "duration enters only as an explicit predictor in adjusted specifications."
+        ),
+        "stance_note": (
+            "Current and previous raw stance are entered directly and also algebraically define "
+            "the absolute-change outcome, so their coefficients are descriptive and partly "
+            "mechanical."
         ),
         "artifact_sha256": artifact_hashes,
         "summary_self_hash_excluded": True,
@@ -2415,7 +2374,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, object]:
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run the duration-free iceberg-ratio timing sensitivity analysis."
+        description="Run the absolute raw stance-change timing sensitivity analysis."
     )
     parser.add_argument("--data_dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)

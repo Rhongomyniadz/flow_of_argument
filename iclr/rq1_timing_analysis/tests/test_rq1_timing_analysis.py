@@ -100,12 +100,7 @@ class FeatureConstructionTests(unittest.TestCase):
 
         first = observations[0]
         self.assertEqual(first["current_turn_raw_index"], 2)
-        self.assertAlmostEqual(first["delta_stance"], 0.4)
-        self.assertAlmostEqual(first["lag_delta_stance"], 0.2)
-        self.assertAlmostEqual(first["agree_move"], 0.4)
-        self.assertEqual(first["disagree_move"], 0.0)
-        self.assertAlmostEqual(first["lag_agree_move"], 0.2)
-        self.assertEqual(first["lag_disagree_move"], 0.0)
+        self.assertAlmostEqual(first["absolute_stance_change"], 2.0)
         self.assertAlmostEqual(first["previous_iceberg_ratio"], 1.0)
         self.assertAlmostEqual(first["iceberg_ratio"], 2.0)
         self.assertAlmostEqual(
@@ -193,11 +188,11 @@ class FeatureConstructionTests(unittest.TestCase):
 
     def test_direction_status_uses_observed_baseline_direction(self) -> None:
         self.assertEqual(
-            analysis.direction_status("agree_move", 0.05, 0.01, 0.005, 0.015),
+            analysis.direction_status("current_stance", 0.05, 0.01, 0.005, 0.015),
             "direction_preserved_and_interval_excludes_zero",
         )
         self.assertEqual(
-            analysis.direction_status("disagree_move", -0.05, 0.01, 0.005, 0.015),
+            analysis.direction_status("current_stance", -0.05, 0.01, 0.005, 0.015),
             "sign_reversed_after_adjustment",
         )
 
@@ -244,7 +239,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                result.model.endog_names == "delta_log_iceberg_ratio"
+                result.model.endog_names == "absolute_stance_change"
                 for result in stepwise_results.values()
             )
         )
@@ -258,7 +253,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                result.model.endog_names == "delta_log_iceberg_ratio"
+                result.model.endog_names == "absolute_stance_change"
                 for result in specification_results.values()
             )
         )
@@ -288,12 +283,11 @@ class RegressionIntegrationTests(unittest.TestCase):
                     "term",
                 ]
             )
-            self.assertIn("agree_move", selected_terms)
-            self.assertIn("disagree_move", selected_terms)
+            self.assertIn("current_stance", selected_terms)
         stance_only_terms = set(stepwise_results[analysis.STANCE_ONLY_MODEL].params.index)
-        self.assertNotIn("lag_agree_move", stance_only_terms)
+        self.assertNotIn("previous_stance", stance_only_terms)
         lagged_terms = set(stepwise_results[analysis.LAGGED_STANCE_MODEL].params.index)
-        self.assertIn("lag_agree_move", lagged_terms)
+        self.assertIn("previous_stance", lagged_terms)
         self.assertNotIn("previous_log_iceberg_ratio", lagged_terms)
         previous_outcome_terms = set(
             stepwise_results[analysis.PREVIOUS_OUTCOME_MODEL].params.index
@@ -309,10 +303,18 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(set(results), set(analysis.MODEL_ORDER))
         self.assertTrue(all(int(result.nobs) == 360 for result in results.values()))
         baseline_terms = set(results[analysis.RATIO_MODEL].params.index)
-        self.assertIn("lag_agree_move", baseline_terms)
-        self.assertIn("lag_disagree_move", baseline_terms)
+        self.assertIn("current_stance", baseline_terms)
+        self.assertIn("previous_stance", baseline_terms)
         self.assertIn("previous_log_iceberg_ratio", baseline_terms)
-        self.assertNotIn("lag_delta_stance", baseline_terms)
+        removed_stance_columns = {
+            "delta_stance",
+            "lag_delta_stance",
+            "agree_move",
+            "disagree_move",
+            "lag_agree_move",
+            "lag_disagree_move",
+        }
+        self.assertTrue(removed_stance_columns.isdisjoint(frame.columns))
         duration_terms = set(results[analysis.DURATION_MODEL].params.index)
         self.assertIn("log_duration", duration_terms)
         self.assertNotIn("log_gap", duration_terms)
@@ -335,7 +337,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         self.assertEqual(model_fit["episode_count"].nunique(), 1)
         self.assertEqual(
             set(model_fit["response_variable"]),
-            {"delta_log_iceberg_ratio"},
+            {"absolute_stance_change"},
         )
         self.assertTrue(model_fit["aic_bic_comparable_to_other_models"].all())
         stepwise_coefficients = analysis.stepwise_coefficient_frame(stepwise_results)
@@ -343,7 +345,7 @@ class RegressionIntegrationTests(unittest.TestCase):
             stepwise_coefficients,
             frame,
         )
-        self.assertEqual(len(stepwise_comparison), 16)
+        self.assertEqual(len(stepwise_comparison), 8)
         self.assertEqual(
             list(stepwise_comparison["stage_number"].unique()),
             list(range(1, 9)),
@@ -351,7 +353,7 @@ class RegressionIntegrationTests(unittest.TestCase):
         largest = stepwise_comparison[
             stepwise_comparison["largest_incremental_change_for_term"]
         ]
-        self.assertEqual(len(largest), 2)
+        self.assertEqual(len(largest), 1)
         self.assertEqual(set(largest["term"]), set(analysis.STANCE_TERMS))
         specification_panel = analysis.specification_panel_frame(
             specification_results,
@@ -377,41 +379,6 @@ class RegressionIntegrationTests(unittest.TestCase):
             drop_response_timing["reference_model"],
             analysis.SPECIFICATION_MODEL_ORDER[9],
         )
-        alternative_specifications = (
-            (
-                analysis.IMPLICIT_ASSUMPTION_SPECIFICATION_FORMULAS,
-                "delta_log_assumption_count",
-                "previous_log_assumption_count",
-            ),
-            (
-                analysis.EXPLICIT_CLAIM_SPECIFICATION_FORMULAS,
-                "delta_log_explicit_count",
-                "previous_log_explicit_count",
-            ),
-        )
-        for formulas, response_variable, previous_outcome_term in alternative_specifications:
-            alternative_results = analysis.fit_formula_models(
-                frame,
-                formulas,
-                analysis.SPECIFICATION_MODEL_ORDER,
-            )
-            self.assertTrue(
-                all(
-                    result.model.endog_names == response_variable
-                    for result in alternative_results.values()
-                )
-            )
-            previous_outcome_model = alternative_results[
-                analysis.SPECIFICATION_MODEL_ORDER[2]
-            ]
-            self.assertIn(previous_outcome_term, previous_outcome_model.params.index)
-            alternative_panel = analysis.specification_panel_frame(
-                alternative_results,
-                frame,
-                formulas,
-            )
-            self.assertEqual(len(alternative_panel), 17)
-
     def test_end_to_end_writes_every_artifact_and_hash(self) -> None:
         output_dir = self.root / "output"
         output_dir.mkdir()
@@ -420,6 +387,14 @@ class RegressionIntegrationTests(unittest.TestCase):
             "rq1_timing_comparison.png",
             "rq1_stepwise_comparison.pdf",
             "rq1_stepwise_comparison.png",
+            "rq1_specification_panel_implicit_assumptions.csv",
+            "rq1_specification_coefficients_implicit_assumptions.csv",
+            "rq1_specification_panel_implicit_assumptions.pdf",
+            "rq1_specification_panel_implicit_assumptions.png",
+            "rq1_specification_panel_explicit_claims.csv",
+            "rq1_specification_coefficients_explicit_claims.csv",
+            "rq1_specification_panel_explicit_claims.pdf",
+            "rq1_specification_panel_explicit_claims.png",
         )
         for obsolete_plot_name in obsolete_plot_names:
             (output_dir / obsolete_plot_name).write_bytes(b"obsolete")
@@ -447,10 +422,10 @@ class RegressionIntegrationTests(unittest.TestCase):
             {path.name for key, path in paths.items() if key != "summary"},
         )
         comparison = pd.read_csv(paths["stance_comparison"])
-        self.assertEqual(len(comparison), 6)
+        self.assertEqual(len(comparison), 3)
         self.assertEqual(set(comparison["model_name"]), set(analysis.HEADLINE_MODELS))
         duration_rows = comparison[comparison["model_name"] == analysis.DURATION_MODEL]
-        self.assertEqual(len(duration_rows), 2)
+        self.assertEqual(len(duration_rows), 1)
         self.assertTrue(duration_rows["attenuation_from_baseline_percent"].notna().all())
         self.assertTrue(duration_rows["timing_attenuation_percent"].isna().all())
         self.assertTrue(duration_rows["incremental_attenuation_percent"].notna().all())
@@ -461,14 +436,14 @@ class RegressionIntegrationTests(unittest.TestCase):
             )
         )
         stepwise_comparison = pd.read_csv(paths["stepwise_stance_comparison"])
-        self.assertEqual(len(stepwise_comparison), 16)
+        self.assertEqual(len(stepwise_comparison), 8)
         self.assertEqual(
             set(stepwise_comparison["model_name"]),
             set(analysis.STEPWISE_MODEL_ORDER),
         )
         self.assertEqual(
             len(summary["stepwise_largest_coefficient_changes"]),
-            2,
+            1,
         )
         self.assertEqual(summary["specification_model_count"], 17)
         specification_panel = pd.read_csv(paths["specification_panel"])
@@ -477,14 +452,10 @@ class RegressionIntegrationTests(unittest.TestCase):
             set(specification_panel["comparison_family"]),
             {"reference", "add_one_to_core", "remove_one_from_full"},
         )
-        for direction in ("agree_move", "disagree_move"):
-            expected_change = 100.0 * np.expm1(
-                specification_panel[f"{direction}_coefficient"].astype(float)
-            )
-            np.testing.assert_allclose(
-                specification_panel[f"{direction}_estimated_change_percent"].astype(float),
-                expected_change,
-            )
+        np.testing.assert_allclose(
+            specification_panel["current_stance_estimated_change_points"].astype(float),
+            specification_panel["current_stance_coefficient"].astype(float),
+        )
         specification_coefficients = pd.read_csv(paths["specification_coefficients"])
         self.assertEqual(
             set(specification_coefficients["model_name"]),
@@ -495,32 +466,18 @@ class RegressionIntegrationTests(unittest.TestCase):
                 specification_coefficients.columns
             )
         )
-        alternative_outputs = (
-            (
-                "implicit_assumption_specification_panel",
-                "implicit_assumption_specification_coefficients",
-                "delta_log_assumption_count",
-            ),
-            (
-                "explicit_claim_specification_panel",
-                "explicit_claim_specification_coefficients",
-                "delta_log_explicit_count",
-            ),
+        self.assertTrue(
+            specification_panel["formula"].str.startswith(
+                "absolute_stance_change ~ "
+            ).all()
         )
-        for panel_key, coefficient_key, response_variable in alternative_outputs:
-            alternative_panel = pd.read_csv(paths[panel_key])
-            alternative_coefficients = pd.read_csv(paths[coefficient_key])
-            self.assertEqual(len(alternative_panel), 17)
-            self.assertTrue(
-                alternative_panel["formula"].str.startswith(response_variable + " ~ ").all()
-            )
-            self.assertEqual(
-                set(alternative_coefficients["model_name"]),
-                set(analysis.SPECIFICATION_MODEL_ORDER),
-            )
-        reference_comparison = summary["original_exp2_reference_comparison"]
-        self.assertEqual(len(reference_comparison), 2)
-        self.assertTrue(all(not row["outcomes_comparable"] for row in reference_comparison))
+        self.assertNotIn("implicit_assumption_specification_panel", paths)
+        self.assertNotIn("explicit_claim_specification_panel", paths)
+        self.assertNotIn("original_exp2_reference_comparison", summary)
+        duration_iceberg = pd.read_csv(paths["duration_iceberg_summary"])
+        self.assertGreaterEqual(len(duration_iceberg), 2)
+        self.assertTrue((duration_iceberg["duration_median_seconds"] > 0.0).all())
+        self.assertTrue((duration_iceberg["iceberg_ratio_median"] >= 0.0).all())
         audit = json.loads(paths["data_audit"].read_text(encoding="utf-8"))
         self.assertTrue(audit["common_model_sample_verified"])
         self.assertTrue(audit["stepwise_common_model_sample_verified"])
