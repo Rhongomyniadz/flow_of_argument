@@ -1,0 +1,277 @@
+{
+  "assumption_budget": 3,
+  "assumption_eligible_pair_count": 345,
+  "assumption_selection": "candidate_blind_descending_extraction_confidence_current_source_turn; original_order_tie_break; unscored_legacy_items_last",
+  "boundary_provenance_counts": {
+    "boundary_invalid_merged_group_count": 678,
+    "boundary_unverified_pair_count": 0,
+    "boundary_verified_pair_count": 348
+  },
+  "candidate_complete_pair_count": 348,
+  "candidate_count_target": 25,
+  "candidate_head_words": 100,
+  "candidate_incomplete_pair_count": 0,
+  "categories": [
+    "business",
+    "commentary",
+    "news",
+    "political",
+    "religion",
+    "sports"
+  ],
+  "comparison_rows_per_pair_condition": 48,
+  "complete": true,
+  "conditions": [
+    "raw_history_b256",
+    "raw_history_true_assumptions_b256",
+    "raw_history_different_episode_assumptions_b256",
+    "raw_history_same_episode_random_turn_assumptions_b256",
+    "raw_history_explicit_b256"
+  ],
+  "episode_file_count": 30,
+  "experiment": "Experiment 1: Assumption-Augmented Future-Turn Accuracy",
+  "future_horizons": [
+    1,
+    3,
+    5
+  ],
+  "git_commit": "c527ddbeeb2892b5660de194224d30a766e8bae8",
+  "history_turns": 3,
+  "input_dir": "data_cleaned/conversation_moves_labeled",
+  "input_manifest_sha256": "db383a69df9245c08c74ab3501f8746eceb2e7b5342175670febfedb33504008",
+  "negative_count_target": 24,
+  "negative_sampling_counts": {
+    "negative_count_global_topic_length": 0,
+    "negative_count_same_category_same_move": 1882,
+    "negative_count_same_category_topic_length": 2772,
+    "negative_count_same_episode_hard": 3698
+  },
+  "normalization_error_count": 0,
+  "normalization_errors": [],
+  "output_dir": "iclr/exp1_representation_baselines/results/google__gemma-3-4b-it",
+  "pair_count_before_candidate_filter": 348,
+  "pair_count_by_horizon": {
+    "1": 214,
+    "3": 88,
+    "5": 46
+  },
+  "prepared_pairs_jsonl": "iclr/exp1_representation_baselines/results/google__gemma-3-4b-it/exp1_representation_prepared_pairs.jsonl",
+  "prepared_pairs_sha256": "438789b1902abccc5f8621a2180e6115a0271e0183669587e3e8111e99a1952e",
+  "prompt_version": "raw-augmentation-v1-json-evidence",
+  "representation_budget_policy": "budget_caps_raw_history_only; identical_raw_history_reused_across_conditions; auxiliary_content_length_matched_to_true_assumptions",
+  "representation_budget_tokenizer": "whitespace_v1",
+  "representation_budgets": [
+    256
+  ],
+  "runtime": {
+    "matplotlib": "3.10.3",
+    "numpy": "2.2.6",
+    "pandas": "3.0.2",
+    "platform": "Linux-6.8.0-134-generic-x86_64-with-glibc2.39",
+    "python": "3.12.11",
+    "torch": "2.11.0+cu129",
+    "vllm": "0.22.1"
+  },
+  "script_version": "6.0.5",
+  "seed": 42,
+  "selected_episode_files": [
+    {
+      "category": "business",
+      "modified_ns": 1786350159848982214,
+      "path": "data_cleaned/conversation_moves_labeled/business/0003_-_The_Game_Chat_with_Ruth_and_Allen.json",
+      "size": 55085
+    },
+    {
+      "category": "business",
+      "modified_ns": 1786350159876982213,
+      "path": "data_cleaned/conversation_moves_labeled/business/0004__Bhang___Jamie_Pearson.json",
+      "size": 35964
+    },
+    {
+      "category": "business",
+      "modified_ns": 1786350159912982211,
+      "path": "data_cleaned/conversation_moves_labeled/business/0007__Talaria_Transportation___Ari_Raptis.json",
+      "size": 42845
+    },
+    {
+      "category": "business",
+      "modified_ns": 1786350159936982210,
+      "path": "data_cleaned/conversation_moves_labeled/business/0008__Jay_Rush___Moose_Labs___MouthPeace.json",
+      "size": 34232
+    },
+    {
+      "category": "business",
+      "modified_ns": 1786350159976982208,
+      "path": "data_cleaned/conversation_moves_labeled/business/001._Magic_Dust.json",
+      "size": 60802
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1786350650012961475,
+      "path": "data_cleaned/conversation_moves_labeled/commentary/0014_-QUALITY_CONTENT_W__SIMON_LUCKHOFF.json",
+      "size": 148562
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1786350650124961470,
+      "path": "data_cleaned/conversation_moves_labeled/commentary/004_-__Dance_Floor_Anthem__I_Don_t_Wanna_Be_In_Love__x_Angela_Mastrogiacomo.json",
+      "size": 201685
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1786350650296961463,
+      "path": "data_cleaned/conversation_moves_labeled/commentary/087__Charlie_Marie.json",
+      "size": 240157
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1786350650480961455,
+      "path": "data_cleaned/conversation_moves_labeled/commentary/099__Daniel_Fluitt_of_Thrift_Store_Cowboys.json",
+      "size": 288401
+    },
+    {
+      "category": "commentary",
+      "modified_ns": 1786350650564961451,
+      "path": "data_cleaned/conversation_moves_labeled/commentary/108_BRIDGET_MENDEL.json",
+      "size": 61320
+    },
+    {
+      "category": "news",
+      "modified_ns": 1786350696348959514,
+      "path": "data_cleaned/conversation_moves_labeled/news/13_Live__Love__Laugh_with_Lexie_in_Lockdown__-_Dancing_Leopard__Dalgonas___Dangerously_tight_shorts.json",
+      "size": 73233
+    },
+    {
+      "category": "news",
+      "modified_ns": 1786350696564959505,
+      "path": "data_cleaned/conversation_moves_labeled/news/226__MLS_Tournament__Orlando_Or_Bust.json",
+      "size": 250475
+    },
+    {
+      "category": "news",
+      "modified_ns": 1786350696716959499,
+      "path": "data_cleaned/conversation_moves_labeled/news/5_Talking_youth_engagement__libraries_and_graphic_novels_with_Leonee_Ariel_Derr.json",
+      "size": 165787
+    },
+    {
+      "category": "news",
+      "modified_ns": 1786350696840959493,
+      "path": "data_cleaned/conversation_moves_labeled/news/ASI_SheepCast__International_Market_Outlook_with_Angus_Gidley-Baird.json",
+      "size": 27348
+    },
+    {
+      "category": "news",
+      "modified_ns": 1786350696752959497,
+      "path": "data_cleaned/conversation_moves_labeled/news/Alana_Goodman.json",
+      "size": 42928
+    },
+    {
+      "category": "political",
+      "modified_ns": 1786350703596959208,
+      "path": "data_cleaned/conversation_moves_labeled/political/42060.json",
+      "size": 44158
+    },
+    {
+      "category": "political",
+      "modified_ns": 1786350703632959206,
+      "path": "data_cleaned/conversation_moves_labeled/political/42061.json",
+      "size": 44694
+    },
+    {
+      "category": "political",
+      "modified_ns": 1786350703684959204,
+      "path": "data_cleaned/conversation_moves_labeled/political/42073.json",
+      "size": 69178
+    },
+    {
+      "category": "political",
+      "modified_ns": 1786350703736959202,
+      "path": "data_cleaned/conversation_moves_labeled/political/42077.json",
+      "size": 78345
+    },
+    {
+      "category": "political",
+      "modified_ns": 1786350703820959198,
+      "path": "data_cleaned/conversation_moves_labeled/political/42088.json",
+      "size": 123094
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1786350876432951895,
+      "path": "data_cleaned/conversation_moves_labeled/religion/001-LIFE_IN_RHYTHM___THE_RHYTHM_OF_PRAYER.json",
+      "size": 112189
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1786350876520951891,
+      "path": "data_cleaned/conversation_moves_labeled/religion/001_How_Can_I_Help_My_Children_Gain_their_own_Testimony.json",
+      "size": 135084
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1786350876596951888,
+      "path": "data_cleaned/conversation_moves_labeled/religion/002_Never_Give_Up_On_Your_Dreams.json",
+      "size": 33656
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1786350876656951885,
+      "path": "data_cleaned/conversation_moves_labeled/religion/003_Living_a__Let_it_Go__Life__Even_as_a_Go-Getter__with_Stephanie_O_Hara.json",
+      "size": 78636
+    },
+    {
+      "category": "religion",
+      "modified_ns": 1786350876708951883,
+      "path": "data_cleaned/conversation_moves_labeled/religion/004-_MEMORY_LANE_WITH_DAD.json",
+      "size": 71703
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1786351298992934016,
+      "path": "data_cleaned/conversation_moves_labeled/sports/006_-_Greg_Bielecki__La_Salle_College_High_School_2.json",
+      "size": 187210
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1786351162280939800,
+      "path": "data_cleaned/conversation_moves_labeled/sports/034__Looking_Ahead.json",
+      "size": 196678
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1786351162368939797,
+      "path": "data_cleaned/conversation_moves_labeled/sports/037_-_Haley_Carter__United_Soccer_Coaches_Women_s_Advocacy_Chair.json",
+      "size": 96193
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1786351162436939794,
+      "path": "data_cleaned/conversation_moves_labeled/sports/05.20.20__How_Volkswagen_Helps_Ski_and_Snowboard_Instructors_Get_to_the_Slopes.json",
+      "size": 38390
+    },
+    {
+      "category": "sports",
+      "modified_ns": 1786351162516939791,
+      "path": "data_cleaned/conversation_moves_labeled/sports/06.09.2020__The_Bucks_are_headed_to_Disney_World_as_basketball_sets_return.json",
+      "size": 150962
+    }
+  ],
+  "source_episode_count": 24,
+  "source_tail_words": 100,
+  "stage": "prepare",
+  "state_deduplication": "raw_history_not_deduplicated; explicit_control_uses_exact_normalized_text_keep_most_recent",
+  "turn_count": 462,
+  "unavailable_control_reasons": {
+    "raw_history_different_episode_assumptions_b256": {
+      "source_has_no_assumptions": 3
+    },
+    "raw_history_same_episode_random_turn_assumptions_b256": {
+      "no_length_matched_same_episode_random_turn_donor": 63,
+      "source_has_no_assumptions": 3
+    }
+  },
+  "unavailable_controls": {
+    "raw_history_different_episode_assumptions_b256": 3,
+    "raw_history_same_episode_random_turn_assumptions_b256": 66
+  }
+}

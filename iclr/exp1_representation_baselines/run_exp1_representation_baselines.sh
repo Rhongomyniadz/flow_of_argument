@@ -2,10 +2,10 @@
 #SBATCH --job-name=exp1_repr_diagnostic
 #SBATCH --output=iclr/exp1_representation_baselines/_log/exp1_repr_diagnostic_%A_%a.out
 #SBATCH --partition=gpu
-#SBATCH --time=48:00:00
+#SBATCH --time=01:00:00
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:A6000:2
-#SBATCH --mem=64G
+#SBATCH --gres=gpu:A6000:1
+#SBATCH --mem=32G
 #SBATCH --chdir=/shared/6/projects/flow_of_argument
 
 set -euo pipefail
