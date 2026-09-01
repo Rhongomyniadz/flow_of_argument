@@ -139,7 +139,9 @@ continuation and considers:
 It no longer explicitly privileges the final dialogue act, because that instruction created
 an avoidable representational asymmetry in the previous structured-vs-raw design.
 
-The judge must return strict JSON with exactly `answer` and `evidence`.
+The judge must return strict JSON with exactly `answer` and `evidence`. For cross-model
+normalization, the parser also accepts one complete `json`-fenced object with no text before or
+after the fence; all key, answer, and evidence constraints remain identical.
 
 ## Statistics
 

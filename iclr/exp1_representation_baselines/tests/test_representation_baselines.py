@@ -442,6 +442,10 @@ class ParsingAccuracyAndGoldenTests(unittest.TestCase):
             self.assertEqual(parsed["choice"], case["choice"])
             self.assertEqual(parsed["parse_success"], case["parse_success"])
             self.assertEqual(parsed["parse_error"], case["parse_error"])
+        fenced = baseline.parse_llm_choice(
+            '```json\n{"answer": "B", "evidence": "Candidate B fits better."}\n```'
+        )
+        self.assertEqual(fenced["parse_method"], "single_fenced_json_answer_evidence")
 
         accuracy_fixture = golden["binary_accuracy"]
         rows = []
@@ -775,12 +779,14 @@ class EndToEndAndPatchTests(unittest.TestCase):
             positive_preference=None,
             parse_success=False,
             parse_error="invalid_json",
-            raw_output=json.dumps(
+            raw_output="```json\n"
+            + json.dumps(
                 {
                     "answer": patch_zero_rows[0]["choice"],
                     "evidence": "The selected candidate is the better immediate continuation.",
                 }
-            ),
+            )
+            + "\n```",
         )
         baseline.write_jsonl(patch_zero_scores, [repairable, *patch_zero_rows[1:]])
         merge_args = make_args(
@@ -798,7 +804,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         repaired_rows = [row for row in merged_rows if baseline.task_key(row) == baseline.task_key(repairable)]
         self.assertEqual(len(repaired_rows), 1)
         self.assertTrue(repaired_rows[0]["parse_success"])
-        self.assertEqual(repaired_rows[0]["parse_method"], "strict_json_answer_evidence")
+        self.assertEqual(repaired_rows[0]["parse_method"], "single_fenced_json_answer_evidence")
         merged_order = [
             (
                 row["pair_id"],

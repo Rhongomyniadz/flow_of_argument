@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "6.0.5"
+SCRIPT_VERSION = "6.0.6"
 PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -1944,16 +1944,35 @@ Output requirements:
 
 
 def parse_llm_choice(raw_output: str) -> ParsedChoice:
+    candidate = raw_output.strip()
+    parse_method = "strict_json_answer_evidence"
     try:
-        payload = json.loads(raw_output)
+        payload = json.loads(candidate)
     except json.JSONDecodeError:
-        return {
-            "choice": None,
-            "evidence": None,
-            "parse_success": False,
-            "parse_error": "invalid_json",
-            "parse_method": None,
-        }
+        fenced = re.fullmatch(
+            r"```(?:json)?[ \t]*\r?\n(?P<payload>.*)\r?\n```",
+            candidate,
+            flags=re.DOTALL | re.IGNORECASE,
+        )
+        if fenced is None:
+            return {
+                "choice": None,
+                "evidence": None,
+                "parse_success": False,
+                "parse_error": "invalid_json",
+                "parse_method": None,
+            }
+        try:
+            payload = json.loads(fenced.group("payload"))
+        except json.JSONDecodeError:
+            return {
+                "choice": None,
+                "evidence": None,
+                "parse_success": False,
+                "parse_error": "invalid_json",
+                "parse_method": None,
+            }
+        parse_method = "single_fenced_json_answer_evidence"
     if not isinstance(payload, dict):
         return {
             "choice": None,
@@ -1993,7 +2012,7 @@ def parse_llm_choice(raw_output: str) -> ParsedChoice:
         "evidence": evidence.strip(),
         "parse_success": True,
         "parse_error": None,
-        "parse_method": "strict_json_answer_evidence",
+        "parse_method": parse_method,
     }
 
 
@@ -4186,7 +4205,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "max_retry_tokens": args.max_retry_tokens,
             "scoring_mode": "order_swapped_binary_future_turn_accuracy",
             "valid_outputs": ["A", "B"],
-            "parser": "strict_json_answer_evidence",
+            "parser": "strict_or_single_fenced_json_answer_evidence",
             "comparison_rows_per_pair_condition": EXPECTED_COMPARISONS_PER_CONDITION,
         },
         "seed": args.seed,
