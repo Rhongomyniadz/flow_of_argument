@@ -91,9 +91,9 @@ assumption representation makes useful conversational structure more accessible 
 
 ## Plotting reference
 
-The paper lift plot uses **Raw history** as one fixed reference condition. Every plotted curve is
-already a paired accuracy change relative to that same raw-history representation, so the legend
-shows only the augmentation names:
+The paper comparison plot uses **Raw history** as one fixed reference condition. Every plotted
+point is a paired accuracy change relative to that same raw-history representation, so the
+condition labels show only the augmentation names:
 
 ```text
 True implicit
@@ -102,8 +102,8 @@ Same-Episode Random Turn
 Explicit augmentation
 ```
 
-Raw history is not drawn as a separate performance series. In the lift plot, zero denotes the
-raw-history reference and is shown only as an unlabeled horizontal guide. This plotting choice does
+Raw history is not drawn as a separate performance series. In the comparison plot, zero denotes the
+raw-history reference and is shown only as an unlabeled vertical guide. This plotting choice does
 not remove the prespecified True-vs-control contrasts from the CSV analysis; it only keeps the visual
 performance reference constant so vertical differences across curves are directly interpretable.
 
@@ -253,7 +253,7 @@ full-corpus claim.
 - `exp1_representation_donors.jsonl`
 - `exp1_representation_audit_sample.csv`
 - `exp1_representation_diagnostic_gate.json`
-- `exp1_representation_diagnostic_comparison.{pdf,png}`: strict complete-case accuracy across future horizons.
+- `exp1_representation_diagnostic_comparison.{pdf,png}`: strict complete-case paired accuracy change relative to raw history across future horizons.
 - `exp1_representation_decomposition_lifts.{pdf,png}`: paired true-assumption accuracy differences against each comparator across horizons.
 - `exp1_representation_turns_per_budget.csv`
 - `exp1_representation_turns_per_budget.{pdf,png}`
