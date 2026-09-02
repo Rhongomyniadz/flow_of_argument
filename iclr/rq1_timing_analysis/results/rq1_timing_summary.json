@@ -1,0 +1,339 @@
+{
+  "artifact_sha256": {
+    "rq1_iceberg_ratio_by_duration.csv": "8724c258d344d5ce3b9a254ac424e710d86a6944a9e3774f614699d24178884c",
+    "rq1_iceberg_ratio_by_duration.pdf": "f7dcbb773510f8d3e355fe2cde613fec242bc3f7029e4f7652720bf6074ac41b",
+    "rq1_iceberg_ratio_by_duration.png": "a9ff6a90e18857ecffce1d1390a0159fff36ea5c072d184d8bc6b83312ead59f",
+    "rq1_specification_coefficients.csv": "fd55145d2ede68a669f9f95a472bd8dcb1fdb5a8165e86e960115086f1598bd3",
+    "rq1_specification_panel.csv": "0b7dc3232a494aab9c47feeff09e049503fb6ef73fe82a35467fdfe12e5ff6d3",
+    "rq1_specification_panel.pdf": "b3f304f3e9980c23d7b3a3800ceec66758aaba188feb90f7395fc7f80d855edf",
+    "rq1_specification_panel.png": "c916ca983143dbfc6374de723b8e51557efe2b70d5448cbc57756e503415ed5a",
+    "rq1_stepwise_coefficients.csv": "81ba809f576d359bdd4c110a6d36d847118e073d182cd5be8ca0c16f1fca9fb4",
+    "rq1_stepwise_model_fit.csv": "10b5f60d96a605218ad3364f6ecc1bf1f9cf85ed5bbcfeb2d9297805e2a5064e",
+    "rq1_stepwise_stance_comparison.csv": "985e85478855dea06e84236c6fc3cc33d2ea1947ee038e2e10fe493952bc2c89",
+    "rq1_timing_coefficients.csv": "7a05feef08a3a4d49366733782e7c9d61734e03faf55e6981c9efd5d18a20869",
+    "rq1_timing_data_audit.json": "ef73b765852e749e47ce7699e38cdbebfad1086bfb81d41445788d2cc47bfcca",
+    "rq1_timing_model_fit.csv": "17d8adb6aa66e3e0b0e874742aee02bb4be53489919bb5cfa20bcb0739a02058",
+    "rq1_timing_observations.csv": "25397fea4e6dae77df43f895adea0e0c1f8be0eea65f8278d74ae668a311c2db",
+    "rq1_timing_stance_comparison.csv": "0b71d48657a8fddfea089dad50ffc2221d9dc086ecd46cb7c30020e03df4eb1b"
+  },
+  "best_adjusted_r_squared_specification": {
+    "adjusted_r_squared": 0.0235616603942177,
+    "model_name": "spec_10_full_timing"
+  },
+  "causal_claim": false,
+  "configuration": {
+    "categories": [
+      "all"
+    ],
+    "category_data_subdir": "parsed",
+    "data_dir": "data/stance_labeled/1024",
+    "max_episodes": null,
+    "output_dir": "iclr/rq1_timing_analysis/results",
+    "plot_dpi": 300
+  },
+  "duration_iceberg_plot": {
+    "duration_binning_precision": "rounded to 0.001 seconds",
+    "populated_bins": 20,
+    "requested_quantile_bins": 20,
+    "summary": "median and interquartile range within duration bins",
+    "x_variable": "current-turn duration in seconds (log-scaled axis)",
+    "y_variable": "raw iceberg ratio"
+  },
+  "duration_note": "The outcome is expressed in raw stance points and contains no duration term; duration enters only as an explicit predictor in adjusted specifications.",
+  "episode_count": 14588,
+  "estimands": {
+    "absolute_stance_change": "association between current raw stance and absolute raw stance change using the Exp2 control structure on the strict timing sample",
+    "absolute_stance_change_duration_adjusted": "raw-stance association with absolute stance change conditional on current-turn duration",
+    "absolute_stance_change_timing_adjusted": "raw-stance association with absolute stance change conditional on current-turn duration and response timing",
+    "absolute_stance_change_timing_previous_duration": "raw-stance association with absolute stance change conditional on current- and previous-turn duration and response timing"
+  },
+  "experiment": "Absolute raw stance-change timing sensitivity analysis",
+  "formulas": {
+    "absolute_stance_change": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "absolute_stance_change_duration_adjusted": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "absolute_stance_change_timing_adjusted": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "absolute_stance_change_timing_previous_duration": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration"
+  },
+  "git": {
+    "commit": "665f4bc58a41cb95162397c16725ddcf5cba0514",
+    "dirty": true
+  },
+  "headline_coefficients": {
+    "absolute_stance_change:current_stance": {
+      "ci95_high": 0.034484874324893305,
+      "ci95_low": 0.024403682833317404,
+      "clustered_se": 0.0025717797804181747,
+      "coefficient": 0.029444278579105355,
+      "model_name": "absolute_stance_change",
+      "p_value": 2.3790376488482168e-30,
+      "term": "current_stance",
+      "z_or_t": 11.448989063253961
+    },
+    "absolute_stance_change_duration_adjusted:current_stance": {
+      "ci95_high": 0.03328888633975471,
+      "ci95_low": 0.022926564714605538,
+      "clustered_se": 0.0026434979690662286,
+      "coefficient": 0.028107725527180123,
+      "model_name": "absolute_stance_change_duration_adjusted",
+      "p_value": 2.0977054956378335e-26,
+      "term": "current_stance",
+      "z_or_t": 10.632777424492861
+    },
+    "absolute_stance_change_timing_adjusted:current_stance": {
+      "ci95_high": 0.035466610490745926,
+      "ci95_low": 0.025017839570320933,
+      "clustered_se": 0.0026655517659619167,
+      "coefficient": 0.030242225030533428,
+      "model_name": "absolute_stance_change_timing_adjusted",
+      "p_value": 7.80092193520614e-30,
+      "term": "current_stance",
+      "z_or_t": 11.345577833721014
+    }
+  },
+  "package_versions": {
+    "matplotlib": "3.10.3",
+    "numpy": "2.2.6",
+    "pandas": "3.0.2",
+    "statsmodels": "0.14.5",
+    "tqdm": "4.68.1"
+  },
+  "raw_stance_interval_survives_timing_adjustment": true,
+  "script_version": "7.1.0",
+  "specification_estimated_change_definition": "current_stance_coefficient: absolute stance-change points associated with a one-point increase in current raw stance",
+  "specification_fit_metric": "adjusted R-squared; preferred over raw R-squared because model sizes differ",
+  "specification_formulas": {
+    "spec_01_stance_core": "absolute_stance_change ~ current_stance",
+    "spec_02_add_lagged_stance": "absolute_stance_change ~ current_stance + previous_stance",
+    "spec_03_add_previous_ratio": "absolute_stance_change ~ current_stance + previous_log_iceberg_ratio",
+    "spec_04_add_timeline": "absolute_stance_change ~ current_stance + timeline_position + I(timeline_position ** 2)",
+    "spec_05_add_category": "absolute_stance_change ~ current_stance + C(category)",
+    "spec_06_add_current_duration": "absolute_stance_change ~ current_stance + log_duration",
+    "spec_07_add_response_timing": "absolute_stance_change ~ current_stance + log_gap + overlap",
+    "spec_08_add_previous_duration": "absolute_stance_change ~ current_stance + previous_log_duration",
+    "spec_09_exp2_baseline": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "spec_10_full_timing": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_11_drop_lagged_stance": "absolute_stance_change ~ current_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_12_drop_previous_ratio": "absolute_stance_change ~ current_stance + previous_stance + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_13_drop_timeline": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_14_drop_category": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + log_duration + log_gap + overlap + previous_log_duration",
+    "spec_15_drop_current_duration": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_gap + overlap + previous_log_duration",
+    "spec_16_drop_response_timing": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + previous_log_duration",
+    "spec_17_drop_previous_duration": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap"
+  },
+  "specification_included_groups": {
+    "spec_01_stance_core": [
+      "current_stance"
+    ],
+    "spec_02_add_lagged_stance": [
+      "current_stance",
+      "lagged_stance"
+    ],
+    "spec_03_add_previous_ratio": [
+      "current_stance",
+      "previous_iceberg_ratio"
+    ],
+    "spec_04_add_timeline": [
+      "current_stance",
+      "timeline"
+    ],
+    "spec_05_add_category": [
+      "current_stance",
+      "category_fixed_effects"
+    ],
+    "spec_06_add_current_duration": [
+      "current_stance",
+      "current_duration"
+    ],
+    "spec_07_add_response_timing": [
+      "current_stance",
+      "response_timing"
+    ],
+    "spec_08_add_previous_duration": [
+      "current_stance",
+      "previous_duration"
+    ],
+    "spec_09_exp2_baseline": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects"
+    ],
+    "spec_10_full_timing": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_11_drop_lagged_stance": [
+      "current_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_12_drop_previous_ratio": [
+      "current_stance",
+      "lagged_stance",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_13_drop_timeline": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_14_drop_category": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "current_duration",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_15_drop_current_duration": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects",
+      "response_timing",
+      "previous_duration"
+    ],
+    "spec_16_drop_response_timing": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "previous_duration"
+    ],
+    "spec_17_drop_previous_duration": [
+      "current_stance",
+      "lagged_stance",
+      "previous_iceberg_ratio",
+      "timeline",
+      "category_fixed_effects",
+      "current_duration",
+      "response_timing"
+    ]
+  },
+  "specification_model_count": 17,
+  "specification_previous_ratio_term": "previous_log_iceberg_ratio",
+  "specification_reference_models": {
+    "spec_01_stance_core": null,
+    "spec_02_add_lagged_stance": "spec_01_stance_core",
+    "spec_03_add_previous_ratio": "spec_01_stance_core",
+    "spec_04_add_timeline": "spec_01_stance_core",
+    "spec_05_add_category": "spec_01_stance_core",
+    "spec_06_add_current_duration": "spec_01_stance_core",
+    "spec_07_add_response_timing": "spec_01_stance_core",
+    "spec_08_add_previous_duration": "spec_01_stance_core",
+    "spec_09_exp2_baseline": "spec_01_stance_core",
+    "spec_10_full_timing": "spec_09_exp2_baseline",
+    "spec_11_drop_lagged_stance": "spec_10_full_timing",
+    "spec_12_drop_previous_ratio": "spec_10_full_timing",
+    "spec_13_drop_timeline": "spec_10_full_timing",
+    "spec_14_drop_category": "spec_10_full_timing",
+    "spec_15_drop_current_duration": "spec_10_full_timing",
+    "spec_16_drop_response_timing": "spec_10_full_timing",
+    "spec_17_drop_previous_duration": "spec_10_full_timing"
+  },
+  "specification_variable_groups": {
+    "category_fixed_effects": [
+      "C(category)"
+    ],
+    "current_duration": [
+      "log_duration"
+    ],
+    "current_stance": [
+      "current_stance"
+    ],
+    "lagged_stance": [
+      "previous_stance"
+    ],
+    "previous_duration": [
+      "previous_log_duration"
+    ],
+    "previous_iceberg_ratio": [
+      "previous_log_iceberg_ratio"
+    ],
+    "response_timing": [
+      "log_gap",
+      "overlap"
+    ],
+    "timeline": [
+      "timeline_position",
+      "I(timeline_position ** 2)"
+    ]
+  },
+  "stance_note": "Current and previous raw stance are entered directly and also algebraically define the absolute-change outcome, so their coefficients are descriptive and partly mechanical.",
+  "stepwise_added_variable_groups": {
+    "absolute_stance_change": "category fixed effects",
+    "absolute_stance_change_duration_adjusted": "current-turn duration",
+    "absolute_stance_change_timing_adjusted": "pre-turn gap and overlap",
+    "absolute_stance_change_timing_previous_duration": "previous-turn duration",
+    "step_1_stance_only": "current raw stance",
+    "step_2_lagged_stance": "previous raw stance",
+    "step_3_previous_ratio": "previous iceberg ratio",
+    "step_4_timeline": "timeline position"
+  },
+  "stepwise_formulas": {
+    "absolute_stance_change": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category)",
+    "absolute_stance_change_duration_adjusted": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration",
+    "absolute_stance_change_timing_adjusted": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap",
+    "absolute_stance_change_timing_previous_duration": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2) + C(category) + log_duration + log_gap + overlap + previous_log_duration",
+    "step_1_stance_only": "absolute_stance_change ~ current_stance",
+    "step_2_lagged_stance": "absolute_stance_change ~ current_stance + previous_stance",
+    "step_3_previous_ratio": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio",
+    "step_4_timeline": "absolute_stance_change ~ current_stance + previous_stance + previous_log_iceberg_ratio + timeline_position + I(timeline_position ** 2)"
+  },
+  "stepwise_largest_coefficient_changes": [
+    {
+      "added_variable_group": "previous raw stance",
+      "coefficient": 0.026127196206180665,
+      "coefficient_change_from_previous": -0.00838418272295029,
+      "model_name": "step_2_lagged_stance",
+      "reference_model": "step_1_stance_only",
+      "sign_changed_from_previous": false,
+      "stage_number": 2,
+      "stance_measure": "current_raw_stance",
+      "term": "current_stance"
+    }
+  ],
+  "summary_self_hash_excluded": true,
+  "timing_adjustment_interpretation": [
+    {
+      "attenuation_percent": -2.710022082165464,
+      "baseline_coefficient": 0.029444278579105355,
+      "duration_adjusted_ci95_high": 0.03328888633975471,
+      "duration_adjusted_ci95_low": 0.022926564714605538,
+      "duration_adjusted_coefficient": 0.028107725527180123,
+      "duration_attenuation_percent": 4.539262350525696,
+      "duration_status": "direction_preserved_and_interval_excludes_zero",
+      "gap_overlap_incremental_attenuation_percent": -7.5939958261270535,
+      "stance_measure": "current raw stance (one scale-point increase)",
+      "status": "direction_preserved_and_interval_excludes_zero",
+      "term": "current_stance",
+      "timing_adjusted_ci95_high": 0.035466610490745926,
+      "timing_adjusted_ci95_low": 0.025017839570320933,
+      "timing_adjusted_coefficient": 0.030242225030533428
+    }
+  ],
+  "transition_count": 241284
+}
