@@ -4,7 +4,7 @@
 #SBATCH --partition=gpu
 #SBATCH --time=01:00:00
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:A6000:1
+#SBATCH --gres=gpu:A6000:2
 #SBATCH --mem=32G
 #SBATCH --chdir=/shared/6/projects/flow_of_argument
 
@@ -141,6 +141,7 @@ prepared_episode_count() {
 }
 
 submit_stages() {
+  build_common_args
   if [[ -z "${MAX_EPISODES_PER_CATEGORY}" && "${ALLOW_FULL_RUN}" != "1" ]]; then
     echo "Refusing an ungated full-corpus submission. Run the five-episode diagnostic smoke test first, then review the audit and diagnostic gate before setting ALLOW_FULL_RUN=1." >&2
     exit 1
@@ -155,7 +156,10 @@ submit_stages() {
     exit 1
   fi
   NUM_PATCHES="${NUM_PATCHES:-$(( (TOTAL_EPISODES + EPISODES_PER_PATCH - 1) / EPISODES_PER_PATCH ))}"
-  ARRAY_RANGE="0-$((NUM_PATCHES - 1))"
+  PENDING_PATCHES="$(python -u iclr/exp1_representation_baselines/pending_exp1_representation_patches.py \
+    "${COMMON_ARGS[@]}" \
+    --num_patches "${NUM_PATCHES}" \
+    --episodes_per_patch "${EPISODES_PER_PATCH}")"
   export INPUT_DIR OUTPUT_ROOT OUTPUT_DIR PREPARED_PAIRS_JSONL EPISODES_PER_PATCH NUM_PATCHES
   export MAX_EPISODES_PER_CATEGORY CATEGORIES_CSV CONDITIONS_CSV MODEL_NAME DOWNLOAD_DIR
   export TENSOR_PARALLEL_SIZE GPU_MEMORY_UTILIZATION PROMPT_BATCH_SIZE MAX_TOKENS MAX_SCORE_RETRIES MAX_RETRY_TOKENS
@@ -164,13 +168,19 @@ submit_stages() {
   export BOOTSTRAP_DRAWS NO_TQDM DRY_RUN STRICT_ALL_CONDITIONS OVERWRITE_SCORES
   export AUDIT_SAMPLE_SIZE_PER_OUTCOME PLOT_DPI
   export ALLOW_FULL_RUN
-  PATCH_SUBMISSION="$(sbatch --parsable --gres="gpu:A6000:${TENSOR_PARALLEL_SIZE}" --array="${ARRAY_RANGE}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"
-  PATCH_JOB_ID="${PATCH_SUBMISSION%%;*}"
-  MERGE_SUBMISSION="$(sbatch --parsable --dependency="afterok:${PATCH_JOB_ID}" --export="ALL,EXP1_BASELINE_STAGE=merge" "$0")"
+  if [[ -n "${PENDING_PATCHES}" ]]; then
+    PATCH_SUBMISSION="$(sbatch --parsable --gres="gpu:A6000:${TENSOR_PARALLEL_SIZE}" --array="${PENDING_PATCHES}" --export="ALL,EXP1_BASELINE_STAGE=patch" "$0")"
+    PATCH_JOB_ID="${PATCH_SUBMISSION%%;*}"
+    MERGE_SUBMISSION="$(sbatch --parsable --dependency="afterok:${PATCH_JOB_ID}" --export="ALL,EXP1_BASELINE_STAGE=merge" "$0")"
+    PATCH_MESSAGE="submitted changed scoring patches ${PENDING_PATCHES} (${PATCH_JOB_ID})"
+  else
+    MERGE_SUBMISSION="$(sbatch --parsable --export="ALL,EXP1_BASELINE_STAGE=merge" "$0")"
+    PATCH_MESSAGE="found no changed scoring tasks"
+  fi
   MERGE_JOB_ID="${MERGE_SUBMISSION%%;*}"
   ANALYSIS_SUBMISSION="$(sbatch --parsable --dependency="afterok:${MERGE_JOB_ID}" --export="ALL,EXP1_BASELINE_STAGE=analysis" "$0")"
   ANALYSIS_JOB_ID="${ANALYSIS_SUBMISSION%%;*}"
-  echo "Prepared ${TOTAL_EPISODES} episodes and submitted ${NUM_PATCHES} scoring patches (${PATCH_JOB_ID}), merge (${MERGE_JOB_ID}), and analysis (${ANALYSIS_JOB_ID})."
+  echo "Prepared ${TOTAL_EPISODES} episodes, ${PATCH_MESSAGE}, and submitted merge (${MERGE_JOB_ID}) and analysis (${ANALYSIS_JOB_ID})."
 }
 
 EXP1_BASELINE_STAGE="${EXP1_BASELINE_STAGE:-submit}"

@@ -225,6 +225,22 @@ class LoadingAndRepresentationTests(unittest.TestCase):
                 budget,
             )
 
+    def test_raw_history_expands_only_to_include_current_turn_in_full(self) -> None:
+        current_words = [f"current-{index}" for index in range(300)]
+        pair = {
+            "pair_id": "long-current",
+            "context_turns": [
+                {"turn_text": "earlier words"},
+                {"turn_text": " ".join(current_words)},
+            ],
+        }
+        effective_budget = baseline.effective_raw_history_budget(pair, 256)
+        headers, selected = baseline.raw_history_budget_allocation(pair, 256)
+        self.assertEqual(effective_budget, sum(map(baseline.whitespace_token_count, headers)) + 300)
+        self.assertEqual(selected[-1], current_words)
+        self.assertEqual(selected[0], [])
+        self.assertGreater(baseline.whitespace_token_count(baseline.format_raw_history(pair, 256)), 256)
+
     def test_matched_history_conditions_share_identical_raw_prefix_and_aux_length(self) -> None:
         context_turns = [
             {
@@ -390,7 +406,9 @@ class PreparationAndControlTests(unittest.TestCase):
             if same_episode_random_turn["donor_turn_id"]:
                 self.assertEqual(same_episode_random_turn["donor_episode_id"], pair["episode_id"])
                 donor_idx = int(str(same_episode_random_turn["donor_turn_id"]).rsplit(":", 1)[1])
-                self.assertGreaterEqual(int(pair["source_turn_idx"]) - donor_idx, 3)
+                excluded_min = int(pair["source_turn_idx"]) - 1
+                excluded_max = int(pair["true_next_turn_idx"]) + 1
+                self.assertFalse(excluded_min <= donor_idx <= excluded_max)
 
     def test_missing_same_episode_control_is_explicit(self) -> None:
         args = make_args(
@@ -826,7 +844,15 @@ class EndToEndAndPatchTests(unittest.TestCase):
         merged_again = baseline.merge_patch_scores(merge_args)
         self.assertEqual(merged_again["merged_score_count"], merged["merged_score_count"])
 
-        conflicting = dict(duplicate, raw_output="conflicting duplicate")
+        conflicting = dict(
+            duplicate,
+            raw_output=json.dumps(
+                {
+                    "answer": duplicate["choice"],
+                    "evidence": "A different valid output for the same task key.",
+                }
+            ),
+        )
         baseline.append_jsonl(patch_zero_scores, [conflicting])
         with self.assertRaisesRegex(RuntimeError, "Conflicting duplicate"):
             baseline.merge_patch_scores(merge_args)
@@ -900,6 +926,7 @@ class EndToEndAndPatchTests(unittest.TestCase):
         score_args = make_args(self.input_dir, output, "--dry_run", "--score_only")
         first = baseline.score_dataset(score_args)
         self.assertGreater(first["attempted_this_run"], 0)
+        self.assertEqual(baseline.pending_patch_indices(score_args), [])
 
         episode_path = self.input_dir / "alpha" / "alpha-episode-0.json"
         turns = json.loads(episode_path.read_text(encoding="utf-8"))
@@ -907,8 +934,14 @@ class EndToEndAndPatchTests(unittest.TestCase):
         episode_path.write_text(json.dumps(turns), encoding="utf-8")
 
         baseline.prepare_dataset(prepare_args)
+        self.assertEqual(baseline.pending_patch_indices(score_args), [0])
         rescored = baseline.score_dataset(score_args)
-        self.assertEqual(rescored["attempted_this_run"], rescored["expected_task_count"])
+        self.assertGreater(rescored["attempted_this_run"], 0)
+        self.assertLess(rescored["attempted_this_run"], rescored["expected_task_count"])
+        self.assertEqual(
+            rescored["reused_task_count"] + rescored["attempted_this_run"],
+            rescored["expected_task_count"],
+        )
 
 
 if __name__ == "__main__":

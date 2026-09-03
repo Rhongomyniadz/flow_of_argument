@@ -11,7 +11,7 @@ cannot be resumed or merged with this run.
 
 ## Five default conditions
 
-At the fixed 256-word raw-history budget, the code prepares:
+At the nominal 256-word raw-history budget, the code prepares:
 
 1. `raw_history`
 2. `raw_history_true_assumptions`
@@ -20,8 +20,11 @@ At the fixed 256-word raw-history budget, the code prepares:
 5. `raw_history_explicit`
 
 The raw-history block is constructed once for a pair/budget and is reused byte-for-byte in
-all five conditions. The budget therefore applies to the **raw-history block**. Augmented
-conditions append an auxiliary block after the unchanged raw history.
+all five conditions. The budget therefore applies to the **raw-history block**. If 256 words
+would truncate the current turn, that pair's raw-history budget is increased only enough to
+retain the current turn in full. The nominal budget, effective budget, and added word count are
+stored in the prepared and score records. Augmented conditions append an auxiliary block after
+the unchanged raw history.
 
 The auxiliary content budget is the number of content words in the candidate-blind,
 confidence-ranked assumptions selected for the current source turn (up to
@@ -44,13 +47,14 @@ than a random cross-topic donor.
 
 ### Same-Episode Random Turn
 
-`raw_history_same_episode_random_turn_assumptions` appends assumptions from the **same episode**, at least three
-substantive turns earlier and outside the current history window. The reserved donor is the
-most lexically similar eligible earlier same-episode turn. It is reserved before negative-candidate sampling
-so it cannot also become a candidate.
+`raw_history_same_episode_random_turn_assumptions` appends assumptions from the **same episode**.
+An eligible donor must be outside the inclusive raw-turn interval from
+`current_turn - 1` through `predicted_turn + 1`. The reserved donor is the most lexically
+similar eligible same-episode turn. It is reserved before negative-candidate sampling so it
+cannot also become a candidate.
 
-The name is a clearer presentation label; the sampling logic is unchanged from the previous version of this control.
-It is not a uniform random draw: among eligible earlier turns, the implementation still uses the matched hard donor.
+It is not a uniform random draw: among eligible turns outside that interval, the implementation
+still uses the matched hard donor.
 
 ### Explicit augmentation
 
@@ -229,6 +233,11 @@ sbatch iclr/exp1_representation_baselines/run_exp1_representation_baselines.sh
 `prepare_exp1_representation.py` writes the prepared pairs and preparation manifest without
 loading `vllm`. The scoring runner does not repeat preparation; it fails clearly if those artifacts
 are absent. Use matching settings for preparation and scoring, especially the episode limit.
+
+For a resumed run, preparation records which version-6.0.x pair-condition prompts changed.
+The runner hashes the complete task input, submits only array patches containing changed or
+missing tasks, and reuses all valid unaffected rows. Within a submitted patch, `vllm` receives
+only the changed tasks. Merge revalidates every retained row against the current task hash.
 
 The default runner uses:
 

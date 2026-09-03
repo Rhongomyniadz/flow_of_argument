@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import hashlib
 import importlib.metadata
 import json
@@ -29,7 +30,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-SCRIPT_VERSION = "6.0.7"
+SCRIPT_VERSION = "6.1.0"
 PROMPT_VERSION = "raw-augmentation-v1-json-evidence"
 DEFAULT_INPUT_DIR = Path("data_cleaned/conversation_moves_labeled")
 DEFAULT_OUTPUT_ROOT = Path("iclr/exp1_representation_baselines/results")
@@ -908,7 +909,46 @@ def reserve_same_episode_random_turn_assumption_donor(
     turns: list[TurnRecord],
     seed: int,
 ) -> str | None:
-    """Reserve an eligible prior-turn donor from the same episode so candidate sampling cannot select it."""
+    """Reserve a same-episode donor outside the source/prediction neighborhood."""
+    excluded_ids = set(pair["history_turn_ids"]) | {
+        pair["source_turn_id"],
+        pair["true_next_turn_id"],
+    }
+    excluded_turn_min = int(pair["source_turn_idx"]) - 1
+    excluded_turn_max = int(pair["true_next_turn_idx"]) + 1
+    target_words = auxiliary_word_budget(pair)
+    if target_words < 1:
+        return None
+    eligible = [
+        turn
+        for turn in turns
+        if turn["turn_id"] not in excluded_ids
+        and turn["category"] == pair["category"]
+        and turn["episode_id"] == pair["episode_id"]
+        and turn["assumption_texts"]
+        and turn["assumption_texts"] != pair["source_assumption_texts"]
+        and not excluded_turn_min <= int(turn["turn_idx"]) <= excluded_turn_max
+        and assumption_word_count(turn.get("all_assumption_texts") or turn["assumption_texts"]) >= target_words
+    ]
+    if not eligible:
+        return None
+    ranked = sorted(
+        eligible,
+        key=lambda turn: (
+            -lexical_similarity(pair["source_tail_text"], turn["source_tail_text"]),
+            abs(int(pair["source_turn_idx"]) - int(turn["turn_idx"])),
+            seed_int(f"{pair['pair_id']}:same_episode_random_turn:{turn['turn_id']}:{seed}"),
+        ),
+    )
+    return ranked[0]["turn_id"]
+
+
+def reserve_legacy_same_episode_random_turn_assumption_donor(
+    pair: dict[str, Any],
+    turns: list[TurnRecord],
+    seed: int,
+) -> str | None:
+    """Reproduce version 6.0.x donor selection for targeted score migration."""
     excluded_ids = set(pair["history_turn_ids"]) | {
         pair["source_turn_id"],
         pair["true_next_turn_id"],
@@ -1221,7 +1261,7 @@ def choose_donors(
         (
             "raw_history_same_episode_random_turn_assumptions",
             same_episode_random_turn,
-            "same_episode_prior_turn_gap3" if same_episode_random_turn is not None else None,
+            "same_episode_outside_prediction_window" if same_episode_random_turn is not None else None,
             None if same_episode_random_turn is not None else (
                 "source_has_no_assumptions" if target_words == 0 else "no_length_matched_same_episode_random_turn_donor"
             ),
@@ -1241,7 +1281,10 @@ def choose_donors(
             "donor_turn_id": donor["turn_id"] if donor else None,
             "donor_episode_id": donor["episode_id"] if donor else None,
             "donor_category": donor["category"] if donor else None,
+            "donor_turn_idx": donor["turn_idx"] if donor else None,
             "donor_substantive_position": donor["substantive_position"] if donor else None,
+            "excluded_turn_idx_min": int(pair["source_turn_idx"]) - 1 if condition == "raw_history_same_episode_random_turn_assumptions" else None,
+            "excluded_turn_idx_max": int(pair["true_next_turn_idx"]) + 1 if condition == "raw_history_same_episode_random_turn_assumptions" else None,
             "donor_fallback_level": fallback,
             "donor_assumption_count": len(donor["assumption_texts"]) if donor else 0,
             "donor_assumptions": donor["assumption_texts"] if donor else [],
@@ -1298,10 +1341,13 @@ def raw_history_budget_allocation(
     representation seen by the scoring model.
     """
     context = list(pair["context_turns"])
+    if not context:
+        raise ValueError(f"Pair {pair.get('pair_id')!r} has no context turns")
     headers = [context_turn_header(index, len(context), "raw") for index in range(len(context))]
-    remaining = budget - sum(whitespace_token_count(header) for header in headers)
+    effective_budget = effective_raw_history_budget(pair, budget)
+    remaining = effective_budget - sum(whitespace_token_count(header) for header in headers)
     if remaining < 0:
-        raise ValueError(f"Budget {budget} is too small for {len(context)} turn headers")
+        raise ValueError(f"Budget {effective_budget} is too small for {len(context)} turn headers")
     selected: list[list[str]] = [[] for _ in context]
     for index in range(len(context) - 1, -1, -1):
         if remaining == 0:
@@ -1311,6 +1357,19 @@ def raw_history_budget_allocation(
         selected[index] = words[-take:] if take else []
         remaining -= take
     return headers, selected
+
+
+def effective_raw_history_budget(pair: dict[str, Any], nominal_budget: int) -> int:
+    """Expand a nominal budget only enough to retain the current turn in full."""
+    context = list(pair["context_turns"])
+    if not context:
+        raise ValueError(f"Pair {pair.get('pair_id')!r} has no context turns")
+    header_words = sum(
+        whitespace_token_count(context_turn_header(index, len(context), "raw"))
+        for index in range(len(context))
+    )
+    current_turn_words = whitespace_token_count(str(context[-1]["turn_text"]))
+    return max(nominal_budget, header_words + current_turn_words)
 
 
 def raw_history_included_turn_count(pair: dict[str, Any], budget: int) -> int:
@@ -1327,7 +1386,7 @@ def format_raw_history(pair: dict[str, Any], budget: int) -> str:
         if words:
             lines.append(" ".join(words))
     representation = "\n".join(lines)
-    if whitespace_token_count(representation) > budget:
+    if whitespace_token_count(representation) > effective_raw_history_budget(pair, budget):
         raise AssertionError("Raw history exceeded its representation budget")
     return representation
 
@@ -1479,12 +1538,18 @@ def build_conditions(pair: dict[str, Any], conditions: list[str]) -> None:
             if explicit_words != target_words:
                 unavailable = "insufficient_explicit_words_for_length_match"
         if unavailable:
+            effective_budget = effective_raw_history_budget(pair, budget) if budget is not None else None
             pair["conditions"][condition] = {
                 "available": False,
                 "control_unavailable_reason": unavailable,
                 "source_representation": None,
                 "base_condition": base_condition,
                 "representation_budget": budget,
+                "effective_raw_history_budget": effective_budget,
+                "raw_history_budget_expanded": bool(effective_budget is not None and effective_budget > budget),
+                "raw_history_budget_extra_tokens": (
+                    effective_budget - budget if effective_budget is not None and budget is not None else None
+                ),
                 "representation_token_count": None,
                 "raw_history_token_count": None,
                 "auxiliary_token_count": None,
@@ -1497,12 +1562,18 @@ def build_conditions(pair: dict[str, Any], conditions: list[str]) -> None:
         raw_count = whitespace_token_count(raw) if raw is not None else None
         total_count = whitespace_token_count(representation)
         auxiliary_count = total_count - raw_count if raw_count is not None else None
+        effective_budget = effective_raw_history_budget(pair, budget) if budget is not None else None
         pair["conditions"][condition] = {
             "available": True,
             "control_unavailable_reason": None,
             "source_representation": representation,
             "base_condition": base_condition,
             "representation_budget": budget,
+            "effective_raw_history_budget": effective_budget,
+            "raw_history_budget_expanded": bool(effective_budget is not None and effective_budget > budget),
+            "raw_history_budget_extra_tokens": (
+                effective_budget - budget if effective_budget is not None and budget is not None else None
+            ),
             "representation_token_count": total_count,
             "raw_history_token_count": raw_count,
             "auxiliary_token_count": auxiliary_count,
@@ -1551,12 +1622,12 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             donor_turn = indexes["lookup"][donor["donor_turn_id"]]
             if donor_turn["episode_id"] != source["episode_id"]:
                 raise ValueError(f"Stale control crossed episodes for {pair['pair_id']}")
-            donor_distance = int(source["substantive_position"]) - int(
-                donor_turn["substantive_position"]
-            )
-            if donor_distance < 3:
+            excluded_turn_min = int(pair["source_turn_idx"]) - 1
+            excluded_turn_max = int(pair["true_next_turn_idx"]) + 1
+            if excluded_turn_min <= int(donor_turn["turn_idx"]) <= excluded_turn_max:
                 raise ValueError(
-                    f"Stale control is not an earlier gap-three donor for {pair['pair_id']}"
+                    f"Same-episode control falls inside [{excluded_turn_min}, {excluded_turn_max}] "
+                    f"for {pair['pair_id']}"
                 )
     for condition in conditions:
         metadata = pair["conditions"].get(condition)
@@ -1570,8 +1641,15 @@ def validate_prepared_pair(pair: dict[str, Any], indexes: dict[str, Any], condit
             if observed != int(metadata["representation_token_count"]):
                 raise ValueError(f"Representation token-count mismatch for {pair['pair_id']} / {condition}")
             raw_count = int(metadata.get("raw_history_token_count") or 0)
-            if raw_count > budget:
+            effective_budget = int(metadata.get("effective_raw_history_budget") or budget)
+            if effective_budget != effective_raw_history_budget(pair, budget):
+                raise ValueError(f"Effective raw-history budget mismatch for {pair['pair_id']} / {condition}")
+            if raw_count > effective_budget:
                 raise ValueError(f"Raw-history budget exceeded for {pair['pair_id']} / {condition}")
+            current_words = str(pair["context_turns"][-1]["turn_text"]).split()
+            _, selected_words = raw_history_budget_allocation(pair, budget)
+            if selected_words[-1] != current_words:
+                raise ValueError(f"Current turn is truncated for {pair['pair_id']} / {condition}")
             if metadata.get("raw_history_sha256") != sha256_text(format_raw_history(pair, budget)):
                 raise ValueError(f"Raw-history mismatch for {pair['pair_id']} / {condition}")
             if base_condition != "raw_history":
@@ -1642,10 +1720,57 @@ def pair_csv_row(pair: dict[str, Any]) -> dict[str, Any]:
         "candidate_pool_complete": pair["candidate_pool_complete"],
         "candidate_pool_sha256": pair["candidate_pool_sha256"],
         "coverage_drop_reason": pair["coverage_drop_reason"],
+        "requires_legacy_score_rescore": bool(pair["score_migration"]["requires_rescore_conditions"]),
+        "requires_rescore_conditions_json": json.dumps(
+            pair["score_migration"]["requires_rescore_conditions"], ensure_ascii=False
+        ),
         "available_conditions_json": json.dumps(
             [name for name, value in pair["conditions"].items() if value["available"]],
             ensure_ascii=False,
         ),
+    }
+
+
+def build_score_migration_metadata(
+    pair: dict[str, Any],
+    legacy_pair: dict[str, Any],
+    conditions: list[str],
+) -> dict[str, Any]:
+    """Identify exactly which version-6.0.x pair-condition scores are no longer reusable."""
+    reasons: dict[str, list[str]] = {condition: [] for condition in conditions}
+    candidate_pool_changed = (
+        bool(pair["candidate_pool_complete"]) != bool(legacy_pair["candidate_pool_complete"])
+        or pair.get("candidate_pool_sha256") != legacy_pair.get("candidate_pool_sha256")
+    )
+    if candidate_pool_changed:
+        for condition in conditions:
+            reasons[condition].append("candidate_pool_changed_after_random_donor_exclusion")
+
+    new_donor_id = pair.get("reserved_same_episode_random_turn_donor_id")
+    legacy_donor_id = legacy_pair.get("reserved_same_episode_random_turn_donor_id")
+    if new_donor_id != legacy_donor_id and not candidate_pool_changed:
+        for condition in conditions:
+            if condition_donor_key(condition) == "raw_history_same_episode_random_turn_assumptions":
+                reasons[condition].append("same_episode_random_donor_changed")
+
+    for condition in conditions:
+        _, budget = parse_matched_condition(condition)
+        if budget is not None and effective_raw_history_budget(pair, budget) > budget:
+            reasons[condition].append("current_turn_required_budget_expansion")
+
+    reason_rows = {
+        condition: condition_reasons
+        for condition, condition_reasons in reasons.items()
+        if condition_reasons
+    }
+    return {
+        "migration_from_script_versions": ["6.0.5", "6.0.6", "6.0.7"],
+        "legacy_same_episode_random_turn_donor_id": legacy_donor_id,
+        "current_same_episode_random_turn_donor_id": new_donor_id,
+        "legacy_candidate_pool_sha256": legacy_pair.get("candidate_pool_sha256"),
+        "current_candidate_pool_sha256": pair.get("candidate_pool_sha256"),
+        "requires_rescore_conditions": sorted(reason_rows),
+        "reasons_by_condition": reason_rows,
     }
 
 
@@ -1701,6 +1826,11 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
     aggregate_negative_counts: dict[str, int] = defaultdict(int)
     donors: list[dict[str, Any]] = []
     for pair in pairs:
+        legacy_pair = copy.deepcopy(pair)
+        legacy_pair["reserved_same_episode_random_turn_donor_id"] = (
+            reserve_legacy_same_episode_random_turn_assumption_donor(legacy_pair, turns, args.seed)
+        )
+        build_candidates(legacy_pair, indexes, args.seed)
         pair["reserved_same_episode_random_turn_donor_id"] = reserve_same_episode_random_turn_assumption_donor(pair, turns, args.seed)
         counts = build_candidates(pair, indexes, args.seed)
         for key, value in counts.items():
@@ -1724,6 +1854,11 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
                 pair["donors"][condition] = audit
                 donors.append(audit)
         build_conditions(pair, args.conditions)
+        pair["score_migration"] = build_score_migration_metadata(
+            pair,
+            legacy_pair,
+            args.conditions,
+        )
         validate_prepared_pair(pair, indexes, args.conditions)
     pairs.sort(
         key=lambda row: (
@@ -1766,7 +1901,7 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "conditions": args.conditions,
         "representation_budgets": args.representation_budgets,
         "representation_budget_tokenizer": REPRESENTATION_BUDGET_TOKENIZER,
-        "representation_budget_policy": "budget_caps_raw_history_only; identical_raw_history_reused_across_conditions; auxiliary_content_length_matched_to_true_assumptions",
+        "representation_budget_policy": "256_is_nominal_raw_history_budget; expand_only_when_needed_to_include_current_turn_in_full; identical_raw_history_reused_across_conditions; auxiliary_content_length_matched_to_true_assumptions",
         "state_deduplication": "raw_history_not_deduplicated; explicit_control_uses_exact_normalized_text_keep_most_recent",
         "future_horizons": args.future_horizons,
         "history_turns": args.history_turns,
@@ -1789,6 +1924,27 @@ def prepare_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "candidate_complete_pair_count": sum(bool(pair["candidate_pool_complete"]) for pair in pairs),
         "candidate_incomplete_pair_count": sum(not pair["candidate_pool_complete"] for pair in pairs),
         "assumption_eligible_pair_count": sum(bool(pair["source_assumption_texts"]) for pair in pairs),
+        "expanded_raw_history_pair_count": sum(
+            any(
+                (budget is not None and effective_raw_history_budget(pair, budget) > budget)
+                for condition in args.conditions
+                for _, budget in [parse_matched_condition(condition)]
+            )
+            for pair in pairs
+        ),
+        "legacy_rescore_pair_count": sum(
+            bool(pair["score_migration"]["requires_rescore_conditions"])
+            for pair in pairs
+        ),
+        "legacy_rescore_pair_condition_count": sum(
+            len(pair["score_migration"]["requires_rescore_conditions"])
+            for pair in pairs
+        ),
+        "legacy_rescore_source_paths": sorted({
+            str(pair["source_path"])
+            for pair in pairs
+            if pair["score_migration"]["requires_rescore_conditions"]
+        }),
         "unavailable_controls": {
             condition: sum(
                 pair["conditions"].get(condition, {}).get("available") is False for pair in pairs
@@ -2049,6 +2205,80 @@ def task_key(row: dict[str, Any]) -> tuple[str, str, str, str, str, str]:
     )
 
 
+def task_input_sha256(task: dict[str, Any], model_name: str, prompt_version: str) -> str:
+    """Hash every value that can change the judge prompt or its scoring identity."""
+    return stable_hash(
+        {
+            "pair_id": task["pair"]["pair_id"],
+            "comparison_id": task["comparison_id"],
+            "presentation_order": task["presentation_order"],
+            "condition": task["condition"],
+            "model_name": model_name,
+            "prompt_version": prompt_version,
+            "future_horizon": int(task["future_horizon"]),
+            "source_representation": task["source_representation"],
+            "candidate_a_id": task["candidate_a"]["candidate_id"],
+            "candidate_a_text": task["candidate_a"]["candidate_text"],
+            "candidate_b_id": task["candidate_b"]["candidate_id"],
+            "candidate_b_text": task["candidate_b"]["candidate_text"],
+        }
+    )
+
+
+def score_row_task_input_sha256(row: dict[str, Any]) -> str | None:
+    """Derive the task-input hash for legacy rows that saved their source representation."""
+    required = (
+        "pair_id",
+        "comparison_id",
+        "presentation_order",
+        "condition",
+        "model_name",
+        "prompt_version",
+        "future_horizon",
+        "source_representation",
+        "candidate_a_id",
+        "candidate_b_id",
+        "positive_candidate_id",
+        "positive_candidate_text",
+        "negative_candidate_id",
+        "negative_candidate_text",
+    )
+    if any(row.get(field) is None for field in required):
+        return None
+    candidate_text_by_id = {
+        str(row["positive_candidate_id"]): str(row["positive_candidate_text"]),
+        str(row["negative_candidate_id"]): str(row["negative_candidate_text"]),
+    }
+    candidate_a_id = str(row["candidate_a_id"])
+    candidate_b_id = str(row["candidate_b_id"])
+    if candidate_a_id not in candidate_text_by_id or candidate_b_id not in candidate_text_by_id:
+        return None
+    return stable_hash(
+        {
+            "pair_id": str(row["pair_id"]),
+            "comparison_id": str(row["comparison_id"]),
+            "presentation_order": str(row["presentation_order"]),
+            "condition": str(row["condition"]),
+            "model_name": str(row["model_name"]),
+            "prompt_version": str(row["prompt_version"]),
+            "future_horizon": int(row["future_horizon"]),
+            "source_representation": str(row["source_representation"]),
+            "candidate_a_id": candidate_a_id,
+            "candidate_a_text": candidate_text_by_id[candidate_a_id],
+            "candidate_b_id": candidate_b_id,
+            "candidate_b_text": candidate_text_by_id[candidate_b_id],
+        }
+    )
+
+
+def legacy_rescore_pair_conditions(pairs: list[dict[str, Any]]) -> set[tuple[str, str]]:
+    return {
+        (str(pair["pair_id"]), str(condition))
+        for pair in pairs
+        for condition in pair.get("score_migration", {}).get("requires_rescore_conditions", [])
+    }
+
+
 def score_record_valid(row: dict[str, Any]) -> bool:
     return bool(
         row.get("parse_success")
@@ -2063,7 +2293,8 @@ def compact_existing_scores(
     model_name: str,
     prompt_version: str,
     overwrite: bool,
-    allowed_keys: set[tuple[str, str, str, str, str, str]] | None = None,
+    allowed_task_hashes: dict[tuple[str, str, str, str, str, str], str],
+    legacy_rescore_keys: set[tuple[str, str]],
 ) -> tuple[list[dict[str, Any]], set[tuple[str, str, str, str, str, str]]]:
     if not path.exists():
         return [], set()
@@ -2089,9 +2320,24 @@ def compact_existing_scores(
             changed = True
         row = normalized_row
         key = task_key(row)
-        if allowed_keys is not None and key not in allowed_keys:
+        expected_task_hash = allowed_task_hashes.get(key)
+        if expected_task_hash is None:
             changed = True
             continue
+        observed_task_hash = row.get("task_input_sha256")
+        if observed_task_hash is not None and str(observed_task_hash) != expected_task_hash:
+            changed = True
+            continue
+        if observed_task_hash is None:
+            derived_task_hash = score_row_task_input_sha256(row)
+            if derived_task_hash is not None and derived_task_hash != expected_task_hash:
+                changed = True
+                continue
+            if derived_task_hash is None and (key[0], key[3]) in legacy_rescore_keys:
+                changed = True
+                continue
+            row = dict(row, task_input_sha256=expected_task_hash)
+            changed = True
         selected_config = key[4] == model_name and key[5] == prompt_version
         if selected_config and (overwrite or not score_record_valid(row)):
             changed = True
@@ -2148,20 +2394,24 @@ def build_tasks(pairs: list[dict[str, Any]], args: argparse.Namespace) -> list[d
                 for presentation_order in ("positive_first", "positive_second"):
                     candidate_a = positive if presentation_order == "positive_first" else negative
                     candidate_b = negative if presentation_order == "positive_first" else positive
-                    tasks.append(
-                        {
-                            "pair": pair,
-                            "positive_candidate": positive,
-                            "negative_candidate": negative,
-                            "candidate_a": candidate_a,
-                            "candidate_b": candidate_b,
-                            "comparison_id": comparison_id,
-                            "presentation_order": presentation_order,
-                            "future_horizon": int(pair["future_horizon"]),
-                            "condition": condition,
-                            "source_representation": metadata["source_representation"],
-                        }
+                    task = {
+                        "pair": pair,
+                        "positive_candidate": positive,
+                        "negative_candidate": negative,
+                        "candidate_a": candidate_a,
+                        "candidate_b": candidate_b,
+                        "comparison_id": comparison_id,
+                        "presentation_order": presentation_order,
+                        "future_horizon": int(pair["future_horizon"]),
+                        "condition": condition,
+                        "source_representation": metadata["source_representation"],
+                    }
+                    task["task_input_sha256"] = task_input_sha256(
+                        task,
+                        args.model_name,
+                        PROMPT_VERSION,
                     )
+                    tasks.append(task)
     tasks.sort(
         key=lambda task: (
             task["pair"]["pair_id"],
@@ -2174,6 +2424,41 @@ def build_tasks(pairs: list[dict[str, Any]], args: argparse.Namespace) -> list[d
         order = np.asarray(build_rng("representation_task_order", args.seed).permutation(len(tasks))).tolist()
         tasks = [tasks[int(index)] for index in order]
     return tasks
+
+
+def pending_patch_indices(args: argparse.Namespace) -> list[int]:
+    """Return patch indices with missing, invalid, or changed score tasks."""
+    load_prepare_manifest(args)
+    pairs = read_jsonl(prepared_path(args))
+    pending_indices: list[int] = []
+    for patch_index in range(args.num_patches):
+        patch_args = argparse.Namespace(**{**vars(args), "patch_index": patch_index})
+        selected_pairs = select_patch_pairs(pairs, patch_args)
+        if not selected_pairs:
+            continue
+        tasks = build_tasks(selected_pairs, patch_args)
+        expected_hashes = {
+            (
+                task["pair"]["pair_id"],
+                task["comparison_id"],
+                task["presentation_order"],
+                task["condition"],
+                args.model_name,
+                PROMPT_VERSION,
+            ): str(task["task_input_sha256"])
+            for task in tasks
+        }
+        _, completed = compact_existing_scores(
+            score_path(patch_dir(args.output_dir, patch_index, args.num_patches)),
+            model_name=args.model_name,
+            prompt_version=PROMPT_VERSION,
+            overwrite=args.overwrite_scores,
+            allowed_task_hashes=expected_hashes,
+            legacy_rescore_keys=legacy_rescore_pair_conditions(selected_pairs),
+        )
+        if len(completed) != len(expected_hashes):
+            pending_indices.append(patch_index)
+    return pending_indices
 
 
 class LLMInterface:
@@ -2246,11 +2531,16 @@ def score_row(
         "condition": task["condition"],
         "base_condition": condition_metadata.get("base_condition"),
         "representation_budget": condition_metadata.get("representation_budget"),
+        "effective_raw_history_budget": condition_metadata.get("effective_raw_history_budget"),
+        "raw_history_budget_expanded": condition_metadata.get("raw_history_budget_expanded"),
+        "raw_history_budget_extra_tokens": condition_metadata.get("raw_history_budget_extra_tokens"),
         "representation_token_count": condition_metadata.get("representation_token_count"),
         "budget_tokenizer": condition_metadata.get("budget_tokenizer"),
         "future_horizon": int(pair["future_horizon"]),
         "model_name": args.model_name,
         "prompt_version": PROMPT_VERSION,
+        "task_input_sha256": task["task_input_sha256"],
+        "source_representation_sha256": sha256_text(str(task["source_representation"])),
         "source_turn_id": pair["source_turn_id"],
         "positive_candidate_id": positive["candidate_id"],
         "positive_candidate_turn_id": positive["candidate_turn_id"],
@@ -2303,7 +2593,7 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         prepare_manifest["prepared_pairs_sha256"],
     )
     tasks = build_tasks(selected_pairs, args)
-    selected_keys = {
+    selected_task_hashes = {
         (
             task["pair"]["pair_id"],
             task["comparison_id"],
@@ -2311,9 +2601,11 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
             task["condition"],
             args.model_name,
             PROMPT_VERSION,
-        )
+        ): str(task["task_input_sha256"])
         for task in tasks
     }
+    selected_keys = set(selected_task_hashes)
+    selected_legacy_rescore_keys = legacy_rescore_pair_conditions(selected_pairs)
     selected_source_paths = sorted({str(pair["source_path"]) for pair in selected_pairs})
     config = {
         "model_name": args.model_name,
@@ -2347,7 +2639,6 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
     if patch_manifest_path.exists():
         previous_manifest = json.loads(patch_manifest_path.read_text(encoding="utf-8"))
         previous_identity = {
-            "prepared_pairs_sha256": previous_manifest.get("prepared_pairs_sha256"),
             "config_sha256": previous_manifest.get("config_sha256"),
             "patch_index": previous_manifest.get("patch_index"),
             "num_patches": previous_manifest.get("num_patches"),
@@ -2355,7 +2646,6 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
             "selected_source_paths": previous_manifest.get("selected_source_paths"),
         }
         current_identity = {
-            "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
             "config_sha256": config_sha256,
             "patch_index": args.patch_index,
             "num_patches": args.num_patches,
@@ -2364,16 +2654,22 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         }
         if canonical_json(previous_identity) != canonical_json(current_identity):
             logger.warning(
-                "Patch identity changed for %s; discarding stale score rows before scoring",
+                "Patch scoring configuration or partition changed for %s; discarding stale score rows before scoring",
                 output,
             )
             write_jsonl(scores_file, [])
+        elif previous_manifest.get("prepared_pairs_sha256") != prepare_manifest["prepared_pairs_sha256"]:
+            logger.info(
+                "Prepared data changed for %s; retaining only rows whose task-input hashes remain valid",
+                output,
+            )
     existing, completed = compact_existing_scores(
         scores_file,
         model_name=args.model_name,
         prompt_version=PROMPT_VERSION,
         overwrite=args.overwrite_scores,
-        allowed_keys=selected_keys,
+        allowed_task_hashes=selected_task_hashes,
+        legacy_rescore_keys=selected_legacy_rescore_keys,
     )
     pending = []
     for task in tasks:
@@ -2521,7 +2817,12 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
     if not scores_file.exists():
         write_jsonl(scores_file, [])
     all_rows = read_jsonl(scores_file) if scores_file.exists() else existing
-    valid_count = sum(score_record_valid(row) and task_key(row) in selected_keys for row in all_rows)
+    valid_count = sum(
+        score_record_valid(row)
+        and task_key(row) in selected_keys
+        and str(row.get("task_input_sha256")) == selected_task_hashes[task_key(row)]
+        for row in all_rows
+    )
     manifest = {
         "stage": "score_patch",
         "complete": valid_count == len(tasks),
@@ -2537,6 +2838,8 @@ def score_dataset(args: argparse.Namespace) -> dict[str, Any]:
         "selected_pair_count": len(selected_pairs),
         "expected_task_count": len(tasks),
         "valid_task_count": valid_count,
+        "legacy_rescore_pair_condition_count": len(selected_legacy_rescore_keys),
+        "reused_task_count": len(tasks) - len(pending),
         "attempted_this_run": attempted,
         "generation_attempts_this_run": generation_attempts,
         "retry_generation_count_this_run": retry_generation_count,
@@ -4266,7 +4569,7 @@ def analyze_dataset(args: argparse.Namespace) -> dict[str, Any]:
 
 def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
     expected_dirs = [patch_dir(args.output_dir, index, args.num_patches) for index in range(args.num_patches)]
-    manifests = []
+    manifests: list[dict[str, Any]] = []
     for expected_index, directory in enumerate(expected_dirs):
         manifest_path = directory / "patch_manifest.json"
         scores_file = score_path(directory)
@@ -4280,22 +4583,12 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         if int(manifest.get("num_patches", -1)) != args.num_patches:
             raise RuntimeError(f"Patch count mismatch in {manifest_path}")
         manifests.append(manifest)
-    for key in ("prepared_pairs_sha256", "config_sha256", "num_patches", "episodes_per_patch"):
+    for key in ("config_sha256", "num_patches", "episodes_per_patch"):
         values = {canonical_json(manifest.get(key)) for manifest in manifests}
         if len(values) != 1:
             raise RuntimeError(f"Mixed {key} values across patches")
 
-    source_path_owner: dict[str, int] = {}
-    for patch_index, manifest in enumerate(manifests):
-        for source_path in manifest.get("selected_source_paths", []):
-            source_path = str(source_path)
-            previous_patch = source_path_owner.get(source_path)
-            if previous_patch is not None and previous_patch != patch_index:
-                raise RuntimeError(
-                    f"Overlapping source path across patches {previous_patch} and {patch_index}: {source_path}"
-                )
-            source_path_owner[source_path] = patch_index
-
+    prepare_manifest = load_prepare_manifest(args)
     prepared_pairs = read_jsonl(prepared_path(args))
     pair_source_paths: dict[str, set[str]] = defaultdict(set)
     for pair in prepared_pairs:
@@ -4313,9 +4606,88 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         )
     pair_source_path = {pair_id: next(iter(paths)) for pair_id, paths in pair_source_paths.items()}
 
+    expected_hashes_by_patch: list[dict[tuple[str, str, str, str, str, str], str]] = []
+    compacted_repair_counts: list[int] = []
+    source_path_owner: dict[str, int] = {}
+    for patch_index, directory in enumerate(expected_dirs):
+        manifest = manifests[patch_index]
+        patch_args = argparse.Namespace(**{**vars(args), "patch_index": patch_index})
+        selected_pairs = select_patch_pairs(prepared_pairs, patch_args)
+        selected_source_paths = sorted({str(pair["source_path"]) for pair in selected_pairs})
+        if selected_source_paths != sorted(str(path) for path in manifest.get("selected_source_paths", [])):
+            raise RuntimeError(
+                f"Patch {patch_index} episode selection changed; rerun that patch before merging"
+            )
+        for source_path in selected_source_paths:
+            previous_patch = source_path_owner.get(source_path)
+            if previous_patch is not None:
+                raise RuntimeError(
+                    f"Overlapping source path across patches {previous_patch} and {patch_index}: {source_path}"
+                )
+            source_path_owner[source_path] = patch_index
+
+        tasks = build_tasks(selected_pairs, patch_args)
+        expected_hashes = {
+            (
+                task["pair"]["pair_id"],
+                task["comparison_id"],
+                task["presentation_order"],
+                task["condition"],
+                args.model_name,
+                PROMPT_VERSION,
+            ): str(task["task_input_sha256"])
+            for task in tasks
+        }
+        repair_count = 0
+        for original_row in read_jsonl(score_path(directory)):
+            required_identity = {
+                "pair_id",
+                "comparison_id",
+                "presentation_order",
+                "condition",
+                "model_name",
+                "prompt_version",
+            }
+            if not required_identity.issubset(original_row):
+                continue
+            normalized_row = normalize_score_choice(original_row)
+            if any(
+                original_row.get(field) != normalized_row.get(field)
+                for field in ("choice", "positive_preference", "parse_success", "parse_error")
+            ) and score_record_valid(normalized_row):
+                repair_count += 1
+        _, completed = compact_existing_scores(
+            score_path(directory),
+            model_name=args.model_name,
+            prompt_version=PROMPT_VERSION,
+            overwrite=False,
+            allowed_task_hashes=expected_hashes,
+            legacy_rescore_keys=legacy_rescore_pair_conditions(selected_pairs),
+        )
+        compacted_repair_counts.append(repair_count)
+        missing_count = len(expected_hashes) - len(completed)
+        if missing_count:
+            raise RuntimeError(
+                f"Patch {patch_index} has {missing_count} changed or missing tasks; rerun only patch "
+                f"{patch_index} before merging"
+            )
+        expected_hashes_by_patch.append(expected_hashes)
+        refreshed_manifest = {
+            **manifest,
+            "script_version": SCRIPT_VERSION,
+            "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
+            "selected_pair_count": len(selected_pairs),
+            "expected_task_count": len(tasks),
+            "valid_task_count": len(completed),
+            "scores_sha256": file_hash(score_path(directory)),
+            "complete": True,
+        }
+        write_json(directory / "patch_manifest.json", refreshed_manifest)
+        manifests[patch_index] = refreshed_manifest
+
     merged: list[dict[str, Any]] = []
     seen: dict[tuple[str, str, str, str, str, str], str] = {}
-    repaired_score_count = 0
+    repaired_score_count = sum(compacted_repair_counts)
     parse_method_counts: Counter[str] = Counter()
     for patch_index, directory in enumerate(expected_dirs):
         manifest = manifests[patch_index]
@@ -4323,6 +4695,7 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         expected_model_name = str(manifest.get("config", {}).get("model_name"))
         expected_prompt_version = str(manifest.get("config", {}).get("prompt_version"))
         expected_conditions = {str(value) for value in manifest.get("config", {}).get("conditions", [])}
+        expected_hashes = expected_hashes_by_patch[patch_index]
         for original_row in read_jsonl(score_path(directory)):
             row = normalize_score_choice(original_row)
             was_repaired = any(
@@ -4349,6 +4722,11 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
                     f"Stale score condition in patch {patch_index} for pair_id {pair_id!r}: {row.get('condition')!r}"
                 )
             key = task_key(row)
+            expected_task_hash = expected_hashes.get(key)
+            if expected_task_hash is None or str(row.get("task_input_sha256")) != expected_task_hash:
+                raise RuntimeError(
+                    f"Stale task input in patch {patch_index} for task key {key}"
+                )
             canonical = canonical_json(row)
             previous = seen.get(key)
             if previous is not None:
@@ -4359,7 +4737,7 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
             repaired_score_count += int(was_repaired)
             parse_method_counts[str(row.get("parse_method") or "unparsed")] += 1
             merged.append(row)
-    expected_score_count = sum(int(manifest.get("expected_task_count", -1)) for manifest in manifests)
+    expected_score_count = sum(len(expected_hashes) for expected_hashes in expected_hashes_by_patch)
     if expected_score_count < 0 or len(merged) != expected_score_count:
         raise RuntimeError(
             f"Merged score count mismatch: expected {expected_score_count}, observed {len(merged)}"
@@ -4387,7 +4765,7 @@ def merge_patch_scores(args: argparse.Namespace) -> dict[str, Any]:
         "complete": True,
         "patch_count": len(expected_dirs),
         "patch_dirs": [str(path) for path in expected_dirs],
-        "prepared_pairs_sha256": manifests[0]["prepared_pairs_sha256"],
+        "prepared_pairs_sha256": prepare_manifest["prepared_pairs_sha256"],
         "config_sha256": manifests[0]["config_sha256"],
         "merged_score_count": len(merged),
         "valid_score_count": len(merged) - len(unresolved),
