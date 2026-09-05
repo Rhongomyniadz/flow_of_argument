@@ -284,11 +284,21 @@ def parse_source_turn(
     if not isinstance(value, dict):
         raise InputValidationError(f"{context}: expected an object, found {type(value).__name__}")
     row = cast(dict[str, object], value)
-    category = require_nonempty_string(row.get("category"), "category", context)
-    if category != category_hint:
-        raise InputValidationError(
-            f"{context}: category '{category}' does not match directory category '{category_hint}'"
-        )
+
+    # The directory layout (<category>/parsed/*.json) is the authoritative
+    # source of category. Some original extraction rows omit "category" or
+    # contain an empty value, so fall back to category_hint in that case.
+    # If a row does provide a category, keep the strict mismatch check so a
+    # genuinely misplaced/corrupted file still fails loudly.
+    raw_category = row.get("category")
+    if raw_category is None or (isinstance(raw_category, str) and not raw_category.strip()):
+        category = category_hint
+    else:
+        category = require_nonempty_string(raw_category, "category", context)
+        if category != category_hint:
+            raise InputValidationError(
+                f"{context}: category '{category}' does not match directory category '{category_hint}'"
+            )
     episode_id = normalize_episode_id(row.get("episode_id"), context)
     turn_idx = require_integer(row.get("turn_idx"), "turn_idx", context)
     raw_text = row.get("turn_text")
